@@ -51,6 +51,7 @@ import org.objectweb.proactive.core.body.exceptions.FutureCreationException;
 import org.objectweb.proactive.core.body.exceptions.SendRequestCommunicationException;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FutureProxy;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.mop.MethodCall;
@@ -265,6 +266,13 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
                 "Exception occured in reifyAsSynchronous while sending request for methodcall = " +
                     methodCall.getName(), e);
         }
+
+        // PROACTIVE_1180
+        // explicit waitfor with PA_FUTURE_TIMEOUT to leave a chance
+        // to have synchronous method calls
+        // useful when the call can block for ever and is made by a threadpool.
+        // 
+        fp.waitFor(CentralPAPropertyRepository.PA_FUTURE_SYNCHREQUEST_TIMEOUT.getValue());
 
         // Returns the result or throws the exception
         if (fp.getRaisedException() != null) {

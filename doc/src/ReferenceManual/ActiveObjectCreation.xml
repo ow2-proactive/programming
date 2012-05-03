@@ -1870,6 +1870,15 @@
                   it is actually null, we get a <literal>NullPointerException</literal>.
                </para>
 				</listitem>
+				<listitem>
+				<para>
+				While using synchronous calls within your code is discouraged, it happens that sometimes you cannot avoid using them. 
+				To mimic the behaviour of a synchronous call on top of our asynchronous framework, synchronous calls are blocked within the ProActive Programming layer until the result is computed and the future filled with the result.
+				If the future is not filled for any reason, the call is going to be blocked for ever and there is nothing you can do. To address this issue, it is possible to set a timeout for this kind of method call. 
+				The property to modify is <code>proactive.future.synchrequest.timeout</code>. By default, the value is 0, meaning an unlimited timeout. When this value is set to a positive long value, this value is used as timeout value.
+				When the timeout is reached, a <code>ProActiveTimeoutException</code> is thrown. To catch the exception, just enclosed the synchronous method call within a try/catch block and define the appropriate treatment in the catch block.     
+				</para>
+				</listitem>
 			</itemizedlist>
 		</section>
 		<section xml:id="Lightweightfailuredetection_71"><info><title>Lightweight failure detection</title></info>

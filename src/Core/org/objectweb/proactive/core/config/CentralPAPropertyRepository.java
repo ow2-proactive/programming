@@ -171,6 +171,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyBoolean PA_FUTURE_AC = new PAPropertyBoolean("proactive.future.ac", false);
 
     /**
+     * Timeout value for future in synchronous requests.
+     * can be used to set timeout on synchronous calls. Impossible otherwise 
+     * default value 0, no timeout
+     */
+    static public PAPropertyLong PA_FUTURE_SYNCHREQUEST_TIMEOUT = new PAPropertyLong(
+        "proactive.future.synchrequest.timeout", false, 0);
+
+    /**
      * Period of the future monitoring ping, in milliseconds
      *
      * If set to 0, then future monitoring is disabled
@@ -659,7 +667,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /**
      * Web services framework
      *
-     * Suppported values are: axis2, cxf
+     * Suppported value is cxf
      */
     static public PAPropertyString PA_WEBSERVICES_FRAMEWORK = new PAPropertyString(
         "proactive.webservices.framework", false);

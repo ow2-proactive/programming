@@ -48,7 +48,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * 
  * @since 4.0
  */
-public class ProActiveTimeoutException extends Exception {
+public class ProActiveTimeoutException extends ProActiveRuntimeException {
 
     public ProActiveTimeoutException() {
         super();

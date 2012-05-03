@@ -138,8 +138,7 @@ public class ServiceDeployer implements ServiceDeployerItf {
 
         } else {
             String interfaceName = serviceName.substring(serviceName.lastIndexOf('_') + 1);
-            Interface interface_;
-            interface_ = (Interface) ((Component) o).getFcInterface(interfaceName);
+            Interface interface_ = (Interface) ((Component) o).getFcInterface(interfaceName);
             implClass = ((InterfaceType) interface_.getFcItfType()).getFcItfSignature();
             superclass = Class.forName(implClass, true, interface_.getClass().getClassLoader());
 
@@ -166,20 +165,16 @@ public class ServiceDeployer implements ServiceDeployerItf {
         if (logger.getLevel() != null && logger.getLevel() == Level.DEBUG) {
 
             /*
-             * Attaches a list of in-interceptors
+             * Attaches in-interceptors
              */
-            List<Interceptor> inInterceptors = new ArrayList<Interceptor>();
             LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor();
-            inInterceptors.add(loggingInInterceptor);
-            svrFactory.setInInterceptors(inInterceptors);
+            svrFactory.getInInterceptors().add(loggingInInterceptor);
 
             /*
-             * Attaches a list of out-interceptors
+             * Attaches out-interceptors
              */
-            List<Interceptor> outInterceptors = new ArrayList<Interceptor>();
             LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor();
-            outInterceptors.add(loggingOutInterceptor);
-            svrFactory.setOutInterceptors(outInterceptors);
+            svrFactory.getOutInterceptors().add(loggingOutInterceptor);
         }
 
         svrFactory.create();

@@ -40,7 +40,7 @@ import org.objectweb.proactive.extensions.webservices.exceptions.WebServicesExce
 
 
 /**
- * This factory is used to get a WebServices instance corresponding to its framework (axis2 or cxf)
+ * This factory is used to get a WebServices instance corresponding to its framework (cxf)
  * and a given URL.
  *
  * @author The ProActive Team

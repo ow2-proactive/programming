@@ -82,26 +82,6 @@
 	<!-- Common web service properties -->
 	<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices" />
 	<property name="webservices.class.dir" value="${cl.extensions.dir}/${extensions.path}/webservices" />
-	<property name="ws.common.lib.dir" value="${lib.dir}/ws-common" />
-	<path id="ws.common.libs">
-		<fileset dir="${ws.common.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-
-
-	<!-- Axis2 properties -->
-	<property name="axis2.dir" value="${webservices.dir}/axis2" />
-	<property name="axis2.lib.dir" value="${lib.dir}/axis2" />
-	<property name="axis2.servicedeployer.class.dir" value="${webservices.class.dir}/axis2/servicedeployer" />
-	<property name="axis2.class.dir" value="${webservices.class.dir}/axis2" />
-	<property name="services.path" value="repository/services" />
-	<property name="temp.class.dir" value="${axis2.class.dir}/temp" />
-	<path id="axis2.libs">
-		<fileset dir="${axis2.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
 
 	<!-- CXF properties -->
 	<property name="cxf.dir" value="${webservices.dir}/cxf" />
@@ -152,8 +132,6 @@
 
 	<path id="project.with.ws.classpath">
 		<path refid="project.classpath" />
-		<path refid="ws.common.libs" />
-		<path refid="axis2.libs" />
 		<path refid="cxf.libs" />
 	</path>
 

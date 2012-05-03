@@ -36,14 +36,18 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
 
 
 /**
- * A simple example to expose an active object as a web service.
+ * A simple example to unexpose a web service of an active object.
  *
  * @author The ProActive Team
  */
@@ -51,20 +55,32 @@ public class Undeploy {
 
     public static void main(String[] args) {
         String url = "";
-        String serviceName = "";
         String wsFrameWork = "";
-        if (args.length == 2) {
+        String serviceName = "";
+        if (args.length == 1) {
             url = "http://localhost:8080/";
+            wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
             serviceName = args[0];
-            wsFrameWork = args[1];
+        } else if (args.length == 2) {
+            try {
+                new URL(args[0]);
+                url = args[0];
+                wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+                serviceName = args[1];
+            } catch (MalformedURLException me) {
+                // Given argument is not the URL to use to expose the web service, it should be the web service framework to use
+                url = "http://localhost:8080/";
+                wsFrameWork = args[0];
+                serviceName = args[1];
+            }
         } else if (args.length == 3) {
             url = args[0];
-            serviceName = args[1];
-            wsFrameWork = args[2];
+            wsFrameWork = args[1];
+            serviceName = args[2];
         } else {
             System.out.println("Wrong number of arguments:");
-            System.out.println("Usage: java Undeploy [url] serviceName wsFrameWork");
-            System.out.println("with wsFrameWork should be either \"axis2\" or \"cxf\" ");
+            System.out.println("Usage: java Undeploy [url] [wsFrameWork] serviceName");
+            System.out.println("with wsFrameWork should be 'cxf'");
             return;
         }
 

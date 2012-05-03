@@ -123,7 +123,7 @@ public class ComponentMembraneActivityPriority extends ComponentActivityPriority
                     // 3.1. init object Activity
                     // life cycle started : starting activity of the object
                     if (functionalInitActive != null) {
-                        functionalInitActive.initActivity(activeBody);
+                        functionalInitActive.initActivity(body);
                         //functionalInitActive = null; // we won't do it again
                     }
 

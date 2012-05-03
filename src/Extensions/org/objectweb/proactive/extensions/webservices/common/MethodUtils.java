@@ -47,8 +47,8 @@ import org.objectweb.proactive.extensions.webservices.exceptions.WebServicesExce
 /**
  * This class supply methods to convert methods to be exposed (specified as arguments of
  * expose methods) into methods to be excluded.
- * Whether it be Axis2 or Cxf, during the creation of a service, we can specify in an array of String
- * for Axis2 or of Method for CXF, the methods we want to exclude from the service.
+ * During the creation of a service, we can specify in an array of
+ * Method for CXF, the methods we want to exclude from the service.
  * However, from the user side, it is more convenient to specify the methods we want to expose
  * (in particular when only one method has to be exposed).
  * This class is therefore in charge of this conversion.

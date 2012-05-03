@@ -37,6 +37,10 @@
 //@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.webservice;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.examples.userguide.cmagent.simple.State;
 import org.objectweb.proactive.extensions.webservices.client.AbstractClientFactory;
 import org.objectweb.proactive.extensions.webservices.client.Client;
@@ -55,16 +59,26 @@ public class CMAgentWebServiceClient {
         try {
             String url = "";
             String wsFrameWork = "";
-            if (args.length == 1) {
+            if (args.length == 0) {
                 url = "http://localhost:8080/";
-                wsFrameWork = args[0];
+                wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+            } else if (args.length == 1) {
+                try {
+                    new URL(args[0]);
+                    url = args[0];
+                    wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+                } catch (MalformedURLException me) {
+                    // Given argument is not the URL to use to expose the web service, it should be the web service framework to use
+                    url = "http://localhost:8080/";
+                    wsFrameWork = args[0];
+                }
             } else if (args.length == 2) {
                 url = args[0];
                 wsFrameWork = args[1];
             } else {
                 System.out.println("Wrong number of arguments:");
-                System.out.println("Usage: java CMAgentWebServiceClient [url] wsFrameWork");
-                System.out.println("where wsFrameWork is either 'axis2' or 'cxf'");
+                System.out.println("Usage: java CMAgentWebServiceClient [url] [wsFrameWork]");
+                System.out.println("where wsFrameWork should be 'cxf'");
                 return;
             }
 

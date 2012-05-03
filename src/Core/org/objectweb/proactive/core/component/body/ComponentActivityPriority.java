@@ -73,7 +73,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
     }
 
     public ComponentActivityPriority(Active activity, Object reifiedObject) {
-        super();
+        super(activity, reifiedObject);
 
         // RunActive
         if ((activity != null) && activity instanceof RunActive) {
@@ -108,12 +108,15 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
             try {
                 Service componentService = new Service(body);
                 NFRequestFilterImpl nfRequestFilter = new NFRequestFilterImpl();
+
                 while (body.isActive()) {
                     ComponentBody componentBody = (ComponentBody) body;
+
                     while (LifeCycleController.STOPPED.equals(GCM.getGCMLifeCycleController(
                             componentBody.getPAComponentImpl()).getFcState())) {
                         PriorityController pc = GCM.getPriorityController(componentBody.getPAComponentImpl());
                         NF3RequestFilter nf3RequestFilter = new NF3RequestFilter(pc);
+
                         if (componentService.getOldest(nf3RequestFilter) != null) {
                             // NF3 bypass all other request 
                             // System.err.println(
@@ -128,6 +131,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
                             break;
                         }
                     }
+
                     if (!body.isActive()) {
                         // in case of a migration 
                         break;
@@ -136,7 +140,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
                     // 3.1. init object Activity
                     // life cycle started : starting activity of the object
                     if (functionalInitActive != null) {
-                        functionalInitActive.initActivity(activeBody);
+                        functionalInitActive.initActivity(body);
                         //functionalInitActive = null; // we won't do it again
                     }
 
@@ -145,6 +149,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
                     // componentServe (includes filter on priority)
                     functionalRunActive.runActivity(body);
                     ((ComponentBody) body).finishedFunctionalActivity();
+
                     if (functionalEndActive != null) {
                         functionalEndActive.endActivity(body);
                     }

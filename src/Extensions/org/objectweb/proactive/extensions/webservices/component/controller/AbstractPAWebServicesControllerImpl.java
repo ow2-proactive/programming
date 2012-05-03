@@ -71,11 +71,6 @@ public abstract class AbstractPAWebServicesControllerImpl extends AbstractPACont
         controllerFileUrls = new HashMap<String, URL>();
         controllerFileUrls
                 .put(
-                        "axis2",
-                        AbstractPAWebServicesControllerImpl.class
-                                .getResource("/org/objectweb/proactive/extensions/webservices/axis2/component/controller/axis2-component-config.xml"));
-        controllerFileUrls
-                .put(
                         "cxf",
                         AbstractPAWebServicesControllerImpl.class
                                 .getResource("/org/objectweb/proactive/extensions/webservices/cxf/component/controller/cxf-component-config.xml"));

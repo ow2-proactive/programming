@@ -30,7 +30,7 @@ rem 	FOR %%j IN ("%PROACTIVE%\lib\*.jar") DO SET JARS=!JARS!;%%j
 rem 	SET CLASSPATH=!CLASSPATH!;!JARS!
 rem 	rem IF EXIST "%PROACTIVE%\ProActive_examples.jar" set CLASSPATH=%CLASSPATH%;%PROACTIVE%\ProActive_examples.jar
 rem ) ELSE (
-	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar;%PROACTIVE%\dist\lib\ProActive_examples.jar;%PROACTIVE%\dist\lib\ibis-1.4.jar;%PROACTIVE%\dist\lib\ibis-connect-1.0.jar;%PROACTIVE%\dist\lib\ibis-util-1.0.jar
+	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar;%PROACTIVE%\dist\lib\ProActive_examples.jar;%PROACTIVE%\dist\lib\cxf-2.5.2.jar;%PROACTIVE%\dist\lib\ibis-1.4.jar;%PROACTIVE%\dist\lib\ibis-connect-1.0.jar;%PROACTIVE%\dist\lib\ibis-util-1.0.jar
 rem )
 
 set JAVA_CMD="%JAVA_HOME%\bin\java.exe" -Dproactive.home="%PROACTIVE%"  -Dos="windows" -Djava.security.manager -Djava.security.policy="%PROACTIVE%\examples\proactive.java.policy"

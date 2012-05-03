@@ -48,7 +48,6 @@ import org.objectweb.proactive.EndActive;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
-import org.objectweb.proactive.core.body.ActiveBody;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -67,7 +66,6 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
     private transient InitActive componentInitActive; // used only once
     protected RunActive componentRunActive;
     protected EndActive componentEndActive;
-    protected ActiveBody activeBody;
     protected InitActive functionalInitActive;
     protected RunActive functionalRunActive;
     protected EndActive functionalEndActive;
@@ -178,7 +176,7 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
                     // 3.1. init object Activity
                     // life cycle started : starting activity of the object
                     if (functionalInitActive != null) {
-                        functionalInitActive.initActivity(activeBody);
+                        functionalInitActive.initActivity(body);
                         //functionalInitActive = null; // we won't do it again
                     }
 

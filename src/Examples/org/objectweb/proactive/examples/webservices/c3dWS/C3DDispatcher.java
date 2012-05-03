@@ -40,6 +40,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Vector;
 
@@ -51,10 +53,10 @@ import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.migration.MigrationStrategyManagerImpl;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -962,24 +964,35 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
      * Instantiates a new active C3DDispatcher on the local machine
      * @param argv Name of the descriptor file
      */
-    public static void main(String[] args) throws NodeException {
+    public static void main(String[] args) {
 
         try {
             String url = "";
             String fileName = "";
             String wsFrameWork = "";
-            if (args.length == 2) {
-                url = AbstractWebServicesFactory.getLocalUrl();
+            if (args.length == 1) {
                 fileName = args[0];
-                wsFrameWork = args[1];
+                url = "http://localhost:8080/";
+                wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+            } else if (args.length == 2) {
+                fileName = args[0];
+                try {
+                    new URL(args[1]);
+                    url = args[1];
+                    wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+                } catch (MalformedURLException me) {
+                    // Given argument is not the URL to use to expose the web service, it should be the web service framework to use
+                    url = AbstractWebServicesFactory.getLocalUrl();
+                    wsFrameWork = args[1];
+                }
             } else if (args.length == 3) {
                 fileName = args[0];
                 url = args[1];
                 wsFrameWork = args[2];
             } else {
                 System.out.println("Wrong number of arguments:");
-                System.out.println("Usage: java C3DDispatcher GCMA [url] wsFrameWork");
-                System.out.println("with wsFrameWork should be either \"axis2\" or \"cxf\" ");
+                System.out.println("Usage: java C3DDispatcher GCMA [url] [wsFrameWork]");
+                System.out.println("with wsFrameWork should be 'cxf'");
                 return;
             }
 

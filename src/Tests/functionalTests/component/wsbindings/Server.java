@@ -48,7 +48,7 @@ public class Server implements Services, Service {
         return i + Services.INCREMENT_VALUE;
     }
 
-    public double[] decrementArrayDouble(Double[] array) {
+    public double[] decrementArrayDouble(double[] array) {
         double[] arrayResult = new double[array.length];
         for (int i = 0; i < array.length; i++) {
             arrayResult[i] = array[i] - Services.DECREMENT_VALUE;
@@ -67,7 +67,7 @@ public class Server implements Services, Service {
     public AnObject modifyObject(AnObject object) {
         object.setId(object.getId() + "Modified");
         object.setIntField(incrementInt(object.getIntField()));
-        Double[] array = new Double[object.getArrayField().length];
+        double[] array = new double[object.getArrayField().length];
         for (int i = 0; i < array.length; i++) {
             array[i] = object.getArrayField()[i];
         }

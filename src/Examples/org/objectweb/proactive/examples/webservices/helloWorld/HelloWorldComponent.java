@@ -38,6 +38,8 @@ package org.objectweb.proactive.examples.webservices.helloWorld;
 
 import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
@@ -53,6 +55,7 @@ import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.factory.PAGenericFactory;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
@@ -63,7 +66,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
- * A simple example to expose an active object as a web service.
+ * A simple example to expose a component as a web service.
  *
  * @author The ProActive Team
  */
@@ -101,23 +104,52 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf, Seri
 
     //@snippet-break helloworldcomponent
     public static void main(String[] args) {
+        File applicationDescriptor = null;
         String url = "";
         String wsFrameWork = "";
-        File applicationDescriptor = null;
-        if (args.length == 1) {
+        if (args.length == 0) {
             url = AbstractWebServicesFactory.getLocalUrl();
-            wsFrameWork = args[0];
+            wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+        } else if (args.length == 1) {
+            if (args[0].endsWith(".xml")) {
+                applicationDescriptor = new File(args[0]);
+                url = AbstractWebServicesFactory.getLocalUrl();
+                wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+            } else {
+                try {
+                    new URL(args[0]);
+                    url = args[0];
+                    wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+                } catch (MalformedURLException me) {
+                    // Given argument is not the URL to use to expose the web service, it should be the web service framework to use
+                    url = AbstractWebServicesFactory.getLocalUrl();
+                    wsFrameWork = args[0];
+                }
+            }
         } else if (args.length == 2) {
-            url = args[0];
-            wsFrameWork = args[1];
+            if (args[0].endsWith(".xml")) {
+                applicationDescriptor = new File(args[0]);
+                try {
+                    new URL(args[1]);
+                    url = args[1];
+                    wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+                } catch (MalformedURLException me) {
+                    // Given argument is not the URL to use to expose the web service, it should be the web service framework to use
+                    url = AbstractWebServicesFactory.getLocalUrl();
+                    wsFrameWork = args[1];
+                }
+            } else {
+                url = args[0];
+                wsFrameWork = args[1];
+            }
         } else if (args.length == 3) {
-            url = args[0];
-            applicationDescriptor = new File(args[1]);
+            applicationDescriptor = new File(args[0]);
+            url = args[1];
             wsFrameWork = args[2];
         } else {
             System.out.println("Wrong number of arguments");
-            System.out.println("Usage: HelloWorldComponent [url [GCMA]] wsFrameWork");
-            System.out.println("with wsFrameWork should be either \"axis2\" or \"cxf\" ");
+            System.out.println("Usage: HelloWorldComponent [GCMA] [url] [wsFrameWork]");
+            System.out.println("with wsFrameWork should be 'cxf'");
             System.exit(0);
         }
 
@@ -147,10 +179,12 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf, Seri
                 gcmad.startDeployment();
 
                 GCMVirtualNode hello = gcmad.getVirtualNode("Hello");
-                Node node1 = hello.getANode();
 
-                if (hello == null)
+                if (hello == null) {
                     throw new ProActiveException("'Hello' virtual node is not defined");
+                }
+
+                Node node1 = hello.getANode();
 
                 // create server component
                 String controllersConfigFileLocation = AbstractPAWebServicesControllerImpl

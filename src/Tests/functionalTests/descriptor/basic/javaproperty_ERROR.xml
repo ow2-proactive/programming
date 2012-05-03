@@ -86,8 +86,6 @@
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/ws/saaj-api.jar" />
 						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/ws/axis.jar" />
-						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/ws/servlet-api.jar" />
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/ws/jaxrpc.jar" />

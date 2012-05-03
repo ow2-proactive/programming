@@ -36,21 +36,34 @@
  */
 package functionalTests.component.wsbindings;
 
+import static org.junit.Assert.fail;
+
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.Assert;
 
 import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
 import org.junit.Test;
+import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.webservices.WSInfo;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
+import org.objectweb.proactive.core.xml.VariableContractType;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+
+import functionalTests.GCMFunctionalTest;
 
 
 /**
@@ -58,6 +71,7 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
  *
  * @author The ProActive Team
  */
+// TODO Uncomment multicast parts (in this file and in adl/Client.fractal and adl/Composite.fractal) when PROACTIVE-743 has been fixed
 public class TestCXFWSBindings extends CommonSetup {
     @Before
     public void setUpAndDeploy() throws Exception {
@@ -69,20 +83,112 @@ public class TestCXFWSBindings extends CommonSetup {
     public void testCXFWebServiceBindingsWithPrimitiveComponent() throws Exception {
         Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
             Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
-        GCM.getBindingController(client).bindFc(
-                Client.SERVICES_NAME,
-                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME + "(" +
-                    WSInfo.CXFWSCALLER_ID + ")");
+        GCM.getBindingController(client).bindFc(Client.SERVICES_NAME,
+                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
         for (int i = 0; i < NUMBER_SERVERS; i++) {
             GCM.getBindingController(client).bindFc(
                     Client.SERVICEMULTICASTREAL_NAME,
                     url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + i + "_" +
-                        SERVER_SERVICEMULTICAST_NAME + "(" + WSInfo.CXFWSCALLER_ID + ")");
+                        SERVER_SERVICEMULTICAST_NAME);
         }
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
         Assert.assertTrue("Failed to invoke web services with primitive component", runner.execute()
                 .getBooleanValue());
+    }
+
+    @Test
+    public void testCXFWebServiceBindingsWithCompositeComponent() throws Exception {
+        Component composite = gf.newFcInstance(componentType, new ControllerDescription("Composite",
+            Constants.COMPOSITE), null);
+        Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
+            Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
+        GCM.getContentController(composite).addFcSubComponent(client);
+        GCM.getBindingController(composite).bindFc("Runner", client.getFcInterface("Runner"));
+        GCM.getBindingController(client).bindFc(Client.SERVICES_NAME,
+                composite.getFcInterface(Client.SERVICES_NAME));
+        //        GCM.getBindingController(client).bindFc(Client.SERVICEMULTICASTFALSE_NAME,
+        //                composite.getFcInterface(Client.SERVICEMULTICASTREAL_NAME));
+        GCM.getBindingController(composite).bindFc(Client.SERVICES_NAME,
+                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
+        //        for (int i = 0; i < NUMBER_SERVERS; i++) {
+        //            GCM.getBindingController(composite).bindFc(
+        //                    Client.SERVICEMULTICASTREAL_NAME,
+        //                    url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + i + "_" +
+        //                        SERVER_SERVICEMULTICAST_NAME);
+        //        }
+        GCM.getGCMLifeCycleController(composite).startFc();
+        Runner runner = (Runner) composite.getFcInterface("Runner");
+        Assert.assertTrue("Failed to invoke web services with composite component", runner.execute()
+                .getBooleanValue());
+    }
+
+    @Test
+    public void testCXFWebServiceBindingsWithADL() throws Exception {
+        Factory factory = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
+        Map<Object, Object> context = new HashMap<Object, Object>();
+        Component composite = (Component) factory.newComponent(
+                "functionalTests.component.wsbindings.adl.Composite", context);
+        GCM.getGCMLifeCycleController(composite).startFc();
+        Runner runner = (Runner) composite.getFcInterface("Runner");
+        Assert.assertTrue("Failed to invoke web services with composite component", runner.execute()
+                .getBooleanValue());
+    }
+
+    @Test
+    public void testMigrationWithCXFWebServiceBindings() throws Exception {
+        Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
+            Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
+        GCM.getBindingController(client).bindFc(Client.SERVICES_NAME,
+                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
+        for (int i = 0; i < NUMBER_SERVERS; i++) {
+            GCM.getBindingController(client).bindFc(
+                    Client.SERVICEMULTICASTREAL_NAME,
+                    url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + i + "_" +
+                        SERVER_SERVICEMULTICAST_NAME);
+        }
+        GCM.getGCMLifeCycleController(client).startFc();
+        URL descriptorPath = functionalTests.component.deployment.Test.class
+                .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
+        VariableContractImpl vc = super.getVariableContract();
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_HOSTCAPACITY, Integer.valueOf(4).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_VMCAPACITY, Integer.valueOf(1).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vc);
+        gcma.startDeployment();
+        GCM.getMigrationController(client).migrateGCMComponentTo(
+                gcma.getVirtualNodes().values().iterator().next().getANode());
+        Runner runner = (Runner) client.getFcInterface("Runner");
+        Assert.assertTrue("Failed to invoke web services with primitive component", runner.execute()
+                .getBooleanValue());
+    }
+
+    @Test
+    public void testCXFWebServiceBindingsWithWSCallerError() throws Exception {
+        Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
+            Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
+        try {
+            GCM.getBindingController(client).bindFc(
+                    Client.SERVICES_NAME,
+                    url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME +
+                        "(WSCallerError)");
+            fail();
+        } catch (IllegalBindingException ibe) {
+            ibe.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testCXFWebServiceBindingsWithURLError() throws Exception {
+        Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
+            Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
+        try {
+            GCM.getBindingController(client).bindFc(Client.SERVICES_NAME, "ErrorURL");
+            fail();
+        } catch (IllegalBindingException ibe) {
+            ibe.printStackTrace();
+        }
     }
 
     @Test
@@ -94,10 +200,8 @@ public class TestCXFWSBindings extends CommonSetup {
                         TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
         Component client = gf.newFcInstance(cType, new ControllerDescription("Client", Constants.PRIMITIVE),
                 new ContentDescription(Client.class.getName()));
-        GCM.getBindingController(client).bindFc(
-                Client.SERVICEERROR_NAME,
-                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME + "(" +
-                    WSInfo.CXFWSCALLER_ID + ")");
+        GCM.getBindingController(client).bindFc(Client.SERVICEERROR_NAME,
+                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
         Assert.assertFalse("Successful access to a non existing method", runner.execute().getBooleanValue());

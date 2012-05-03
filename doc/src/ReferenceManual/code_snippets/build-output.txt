@@ -60,8 +60,8 @@ Main targets:
  junit.rmissl                        Run all non regression tests on the current host only
  microTimer                          Deprecated, see compile.microTimer
  proActiveJar                        Deprecated, see deploy
- proActiveWarAxis2                   build the proactive.war archive with Axis2 embedded
- proActiveWarCXF                     build the proactive.war archive with CXF embedded
+ proActiveWar                        Build the proactive.war archive with CXF embedded
+ proActiveWarCXF                     Deprecated, see proActiveWar
  runPerformanceTest                  Run performance test on the current host.
  stubGenerator                       Deprecated, see compile.stubGenerator
  tutorials                           Extracts tutorials from sources and creates the tutorials directory with building and launching scripts

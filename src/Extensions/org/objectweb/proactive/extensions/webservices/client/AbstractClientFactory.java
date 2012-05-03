@@ -45,7 +45,6 @@ import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
-import org.objectweb.proactive.extensions.webservices.client.axis2.Axis2ClientFactory;
 import org.objectweb.proactive.extensions.webservices.client.cxf.CXFClientFactory;
 import org.objectweb.proactive.extensions.webservices.exceptions.UnknownFrameWorkException;
 import org.objectweb.proactive.extensions.webservices.exceptions.WebServicesException;
@@ -67,7 +66,6 @@ public abstract class AbstractClientFactory implements ClientFactory {
         activatedClientFactory = new HashMap<String, ClientFactory>();
         clientFactories = new HashMap<String, Class<? extends ClientFactory>>();
         activatedClients = new HashMap<URI, Client>();
-        clientFactories.put("axis2", Axis2ClientFactory.class);
         clientFactories.put("cxf", CXFClientFactory.class);
     }
 
