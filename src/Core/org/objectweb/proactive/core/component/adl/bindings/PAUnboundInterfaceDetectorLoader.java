@@ -72,6 +72,8 @@ public class PAUnboundInterfaceDetectorLoader extends UnboundInterfaceDetectorLo
 
     public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
+    private static final String WS_BINDING_ID = "WSBinding";
+
     @Override
     public Definition load(final String name, final Map<Object, Object> context) throws ADLException {
         // Load the definition with the next loader.
@@ -277,47 +279,60 @@ public class PAUnboundInterfaceDetectorLoader extends UnboundInterfaceDetectorLo
         }
 
         ComponentContainer toComponent = node;
-        // the TO component is not "this"
-        if (!toComponentName.equals("this")) {
-            // find the TO component from the subcomponents
-            for (Component c : node.getComponents()) {
-                if (c.getName().equals(toComponentName)) {
-                    toComponent = c;
+        // if not a binding to a web service 
+        if (!toComponentName.equals(WS_BINDING_ID)) {
+            // the TO component is not "this"
+            if (!toComponentName.equals("this")) {
+                // find the TO component from the subcomponents
+                for (Component c : node.getComponents()) {
+                    if (c.getName().equals(toComponentName)) {
+                        toComponent = c;
+                    }
                 }
-            }
-            // it may also be inside the membrane
-            if (node instanceof ControllerContainer) {
-                Controller ctrl = ((ControllerContainer) node).getController();
-                if (ctrl != null) {
-                    if (ctrl instanceof ComponentContainer) {
-                        for (Component c : ((ComponentContainer) ctrl).getComponents()) {
-                            if (c.getName().equals(toComponentName)) {
-                                toComponent = c;
+                // it may also be inside the membrane
+                if (node instanceof ControllerContainer) {
+                    Controller ctrl = ((ControllerContainer) node).getController();
+                    if (ctrl != null) {
+                        if (ctrl instanceof ComponentContainer) {
+                            for (Component c : ((ComponentContainer) ctrl).getComponents()) {
+                                if (c.getName().equals(toComponentName)) {
+                                    toComponent = c;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-        }
-        // find the TO interface
-        Set<Interface> toInterfaces = unboundInterfaces.get(toComponent);
-        Interface toInterface = getInterface(toInterfaceName, toInterfaces);
-        // remove the interface from the list of unboundInterfaces
-        if (toInterface != null) {
-            toInterfaces.remove(toInterface);
+            }
+            // find the TO interface
+            Set<Interface> toInterfaces = unboundInterfaces.get(toComponent);
+            Interface toInterface = getInterface(toInterfaceName, toInterfaces);
+            // remove the interface from the list of unboundInterfaces
+            if (toInterface != null) {
+                toInterfaces.remove(toInterface);
+            }
         }
 
     }
 
     protected String getComponentName(String description) {
-        final int i = description.indexOf('.');
-        return description.substring(0, i);
+        // if not a binding to a web service
+        if (!description.contains("://")) {
+            final int i = description.indexOf('.');
+            return description.substring(0, i);
+        } else {
+            return WS_BINDING_ID;
+        }
     }
 
     protected String getInterfaceName(String description) {
-        final int i = description.indexOf('.');
-        return description.substring(i + 1);
+        // if not a binding to a web service
+        if (!description.contains("://")) {
+            final int i = description.indexOf('.');
+            return description.substring(i + 1);
+        } else {
+            return description;
+        }
     }
 
     protected Interface getInterface(String itfName, Set<Interface> interfaces) {
