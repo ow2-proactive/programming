@@ -83,16 +83,6 @@ public class WSInfo implements Serializable {
     public static final String JAXWSCXFWSCALLER_CLASSNAME = JaxWsCXFWSCaller.class.getName();
 
     /**
-     * Shortcut ID to specify that CXF configured for JAX-WS must be used to call the web service.
-     */
-    public static final String JAXWSCXFWSCALLER_ID = "JaxWsCXF";
-
-    /**
-     * Full name of the class calling web services using CXF configured for JAX-WS.
-     */
-    public static final String JAXWSCXFWSCALLER_CLASSNAME = JaxWsCXFWSCaller.class.getName();
-
-    /**
      * Shortcut ID to specify that CXF configured for an Aegis data binding must be used to call the web service.
      */
     public static final String CXFAEGISWSCALLER_ID = "CXFAegis";
