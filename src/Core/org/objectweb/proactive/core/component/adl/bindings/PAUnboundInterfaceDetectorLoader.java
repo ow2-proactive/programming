@@ -122,20 +122,22 @@ public class PAUnboundInterfaceDetectorLoader extends UnboundInterfaceDetectorLo
 				for(Interface itf : unbound ) {
 					// if the interface is optional, ignore it
 					if(itf instanceof TypeInterface) {
-						// default contingency is null?
+						// default contingency is null
 						String contingency = ((TypeInterface)itf).getContingency();
 						String role = ((TypeInterface)itf).getRole();
-						if( (contingency==null || TypeInterface.MANDATORY_CONTINGENCY.equals(contingency)) && TypeInterface.CLIENT_ROLE.equals(role)) {
+						// unbound interface detected if interface is: client + mandatory + does not belong to the root component
+						if( (contingency==null || TypeInterface.MANDATORY_CONTINGENCY.equals(contingency)) && TypeInterface.CLIENT_ROLE.equals(role) && !comp.equals(node) ) {
 							logger.debug("[PAUnboundInterfaceDetectorLoader] Unbound mandatory interface. Component: "+ componentName + " Interface: "+ itf.getName() + " Contingency: "+ ((TypeInterface)itf).getContingency());
 							// TODO should throw a list of errors (containing every unbound interface)
 							throw new ADLException(BindingErrors.UNBOUND_CLIENT_INTERFACE, comp,
 									itf, componentName);
+							// TO THINK: if we want to created several components to have them available, and bind them later,
+							// is it necessary to all the bindings be described at loading time?
+							// It makes more sense to check unbound interfaces when starting the lifecycle.
 
 						}
 					}
-
-				}				
-
+				}
 			}
 		}
 	}
