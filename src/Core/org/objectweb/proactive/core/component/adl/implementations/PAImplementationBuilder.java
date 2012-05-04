@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 
 
 /**
+ * The {@link PAImplementationBuilder} extends the {@link ImplementationBuilder} to include
+ * a parameter that describes a {@link VirtualNode}, and an indication if the component is
+ * Functional or Non-Functional (component in the membrane).
+ * 
  * @author The ProActive Team
  */
 public interface PAImplementationBuilder extends ImplementationBuilder {
@@ -57,11 +61,12 @@ public interface PAImplementationBuilder extends ImplementationBuilder {
      * @param controllerDesc the description of the controller
      * @param contentDesc the description of the content
      * @param adlVN the virtual node where the component should be deployed
+     * @param isFunctional F/NF component
      * @param context context
      * @return an instance of the specified component
      * @throws Exception if the creation of the component failed
      */
     public Object createComponent(Object type, String name, String definition,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
-            Map<Object, Object> context) throws Exception;
+            boolean isFunctional, Map<Object, Object> context) throws Exception;
 }

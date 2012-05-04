@@ -19,7 +19,7 @@
 
 	<!-- Scheduler component -->
 	<component name="scheduler" definition="org.objectweb.fractal.task.core.BasicScheduler"/>
-
+	
 	<binding client="this.factory" server="factory.factory"/>
 	<binding client="factory.loader" server="loader.loader"/>
 	<binding client="factory.compiler" server="compiler.compiler"/>
