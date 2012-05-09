@@ -42,6 +42,7 @@ import java.net.URISyntaxException;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+import org.objectweb.proactive.utils.JVMPropertiesPreloader;
 
 
 /**
@@ -79,6 +80,7 @@ public class PADataserverStarter {
     }
 
     private static void parseArgs(String[] args) {
+        args = JVMPropertiesPreloader.overrideJVMProperties(args);
         final int len = args.length;
 
         if (len == 0 || len > 2 || (len == 1 && "--help".equals(args[0])))
