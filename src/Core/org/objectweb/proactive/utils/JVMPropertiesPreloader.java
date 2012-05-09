@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -47,7 +47,7 @@ import java.util.List;
  *
  * @author The ProActive Team
  * @since ProActive Scheduling 2.0 (removed 3.2.0)
- * @since ProActive Programming 5.3.0
+ * @since ProActive Programming 5.2.0
  */
 public final class JVMPropertiesPreloader {
 
