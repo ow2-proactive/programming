@@ -44,13 +44,15 @@ import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 
+import functionalTests.FunctionalTest;
+
 
 /**
  * a junit test that tries to check if the protocol keeps the fifo ordering  
  *
  */
 
-public class FifoPropertyTest {
+public class FifoPropertyTest extends FunctionalTest {
 
     @org.junit.Test
     public void fifoPropertyTester() throws Exception {
@@ -58,21 +60,21 @@ public class FifoPropertyTest {
         int range = 100000;
 
         // get an object
-        FifoPropertyTesterObject f = new FifoPropertyTesterObject(range);
+        FifoPropertyObject f = new FifoPropertyObject(range);
         ;
 
         // create a remote object exposer for this object
-        RemoteObjectExposer<FifoPropertyTesterObject> roe = PARemoteObject.newRemoteObject(
-                FifoPropertyTesterObject.class.getName(), f);
+        RemoteObjectExposer<FifoPropertyObject> roe = PARemoteObject.newRemoteObject(FifoPropertyObject.class
+                .getName(), f);
 
         // create the remote object 
         RemoteRemoteObject rro = roe.createRemoteObject("fifo-1", true);
 
         // get a protocol-specific reference onto the remote object
-        RemoteObject<FifoPropertyTesterObject> ro = roe
+        RemoteObject<FifoPropertyObject> ro = roe
                 .getRemoteObject(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
 
-        FifoPropertyTesterObject f2 = ro.getObjectProxy();
+        FifoPropertyObject f2 = ro.getObjectProxy();
 
         // call iteratively the same method
         // accumulating a value

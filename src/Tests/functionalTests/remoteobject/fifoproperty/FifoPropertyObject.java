@@ -46,15 +46,15 @@ import java.util.List;
  * that all that each value as the following property : L(x) = L(x-1) + 1
  * 
  */
-public class FifoPropertyTesterObject implements Serializable {
+public class FifoPropertyObject implements Serializable {
 
     protected List<Integer> accumulator;
     protected int range;
 
-    public FifoPropertyTesterObject() {
+    public FifoPropertyObject() {
     }
 
-    public FifoPropertyTesterObject(int range) {
+    public FifoPropertyObject(int range) {
         accumulator = new ArrayList<Integer>();
         this.range = range;
     }
