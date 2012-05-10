@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -41,7 +41,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,6 +52,8 @@ import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.utils.SafeTimerTask;
 
 
 /**
@@ -92,7 +93,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
         startFlushingThread();
 
         this.timer = new Timer();
-        this.timer.schedule(new ConsolePinter(), GRACE_TIME);
+        this.timer.schedule(new ConsolePrinter(), GRACE_TIME);
     }
 
     public ProActiveAppender(LoggingEventSenderSPI spi, ProActiveLogCollector collector) {
@@ -218,9 +219,9 @@ public final class ProActiveAppender extends AppenderSkeleton {
         }
     }
 
-    class ConsolePinter extends TimerTask {
+    class ConsolePrinter extends SafeTimerTask {
         @Override
-        public void run() {
+        public void safeRun() {
             if (collectorKnow.get()) {
                 // The collector has been retrieved
                 // The buffered log event can safely be discarded
@@ -239,7 +240,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
                 }
             }
 
-            timer.schedule(new ConsolePinter(), GRACE_TIME);
+            timer.schedule(new ConsolePrinter(), GRACE_TIME);
         }
     }
 

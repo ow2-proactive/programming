@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -50,7 +50,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * <br>
  * The class in charge to call the web service must implement the {@link PAWSCaller} interface.
  * <br>
- * By default, the class {@link Axis2WSCaller}, using the <a href="http://ws.apache.org/axis2/">Axis2</a> API,
+ * By default, the class {@link CXFWSCaller}, using the <a href="http://cxf.apache.org/">CXF</a> API,
  * is used.
  *
  * @author The ProActive Team
@@ -63,16 +63,6 @@ public class WSInfo implements Serializable {
     public static final String PAWSCALLER_ITF_NAME = PAWSCaller.class.getName();
 
     /**
-     * Shortcut ID to specify that Axis2 must be used to call the web service.
-     */
-    public static final String AXIS2WSCALLER_ID = "Axis2";
-
-    /**
-     * Full name of the class calling web services using Axis2.
-     */
-    public static final String AXIS2WSCALLER_CLASSNAME = Axis2WSCaller.class.getName();
-
-    /**
      * Shortcut ID to specify that CXF must be used to call the web service.
      */
     public static final String CXFWSCALLER_ID = "CXF";
@@ -81,6 +71,16 @@ public class WSInfo implements Serializable {
      * Full name of the class calling web services using CXF.
      */
     public static final String CXFWSCALLER_CLASSNAME = CXFWSCaller.class.getName();
+
+    /**
+     * Shortcut ID to specify that CXF configured for JAX-WS must be used to call the web service.
+     */
+    public static final String JAXWSCXFWSCALLER_ID = "JaxWsCXF";
+
+    /**
+     * Full name of the class calling web services using CXF configured for JAX-WS.
+     */
+    public static final String JAXWSCXFWSCALLER_CLASSNAME = JaxWsCXFWSCaller.class.getName();
 
     /**
      * Shortcut ID to specify that CXF configured for an Aegis data binding must be used to call the web service.
@@ -126,22 +126,22 @@ public class WSInfo implements Serializable {
      * Main constructor.
      * <br>
      * The String passed as argument is the URL of the web service (not the WSDL address).
-     * By default the Axis2 API is used to call the web service, but it is also possible to
+     * By default the CXF API is used to call the web service, but it is also possible to
      * specify another library. If so, the URL must be followed, in parenthesis, by the ID
      * or the full name of the class to use to call the web service. The ID (not case
-     * sensitive) may be Axis2 or CXF to use one of these library to call the web service.
-     * Otherwise, the full class name given must be the one of a class implementing the
-     * {@link PAWSCaller} interface.
+     * sensitive) may be CXF, JaxWsCXF, CXFAegis, DynamicCXF or CXFRESTful to use one of
+     * these client configuration to call the web service. Otherwise, the full class name
+     * given must be the one of a class implementing the {@link PAWSCaller} interface.
      * <br>
      * For instance:
      * <br>
-     * "http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.Axis2WSCaller)"
+     * "http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.CXFWSCaller)"
      * <br>
      * which is equivalent to:
      * <br>
-     * "http://localhost:8080/proactive/services/Server_HelloWorld(Axis2)"
+     * "http://localhost:8080/proactive/services/Server_HelloWorld(CXF)"
      * <br>
-     * and which, as Axis2 is used by default, is also equivalent to:
+     * and which, as CXF is used by default, is also equivalent to:
      * <br>
      * "http://localhost:8080/proactive/services/Server_HelloWorld"
      *
@@ -169,7 +169,7 @@ public class WSInfo implements Serializable {
     }
 
     /*
-     * Check if the given URL is valid.
+     * Checks if the given URL is valid.
      */
     private String checkWSURL(String wsUrl) throws IllegalBindingException {
         try {
@@ -184,7 +184,7 @@ public class WSInfo implements Serializable {
     }
 
     /*
-     * Check if the given class exists and implements the PROACTIVEWSCALLER_ITF_NAME interface.
+     * Checks if the given class exists and implements the PROACTIVEWSCALLER_ITF_NAME interface.
      */
     private String checkClassName(String className) throws IllegalBindingException {
         try {
@@ -203,23 +203,25 @@ public class WSInfo implements Serializable {
     }
 
     /*
-     * Select the appropriate name of the class to use to call the web service.
+     * Selects the appropriate name of the class to use to call the web service.
      */
     private String selectWSCallerClassName(String[] wsInfo) throws IllegalBindingException {
         if (wsInfo.length == 2) {
-            if (wsInfo[1].equalsIgnoreCase(AXIS2WSCALLER_ID)) {
-                return AXIS2WSCALLER_CLASSNAME;
-            } else if (wsInfo[1].equalsIgnoreCase(CXFWSCALLER_ID)) {
+            if (wsInfo[1].equalsIgnoreCase(CXFWSCALLER_ID)) {
                 return CXFWSCALLER_CLASSNAME;
+            } else if (wsInfo[1].equalsIgnoreCase(JAXWSCXFWSCALLER_ID)) {
+                return JAXWSCXFWSCALLER_CLASSNAME;
             } else if (wsInfo[1].equalsIgnoreCase(CXFAEGISWSCALLER_ID)) {
                 return CXFAEGISWSCALLER_CLASSNAME;
             } else if (wsInfo[1].equalsIgnoreCase(DYNAMICCXFWSCALLER_ID)) {
                 return DYNAMICCXFWSCALLER_CLASSNAME;
+            } else if (wsInfo[1].equalsIgnoreCase(CXFRESTFULSERVICECALLER_ID)) {
+                return CXFRESTFULSERVICECALLER_CLASSNAME;
             } else {
                 return checkClassName(wsInfo[1]);
             }
         } else {
-            return AXIS2WSCALLER_CLASSNAME;
+            return CXFWSCALLER_CLASSNAME;
         }
     }
 

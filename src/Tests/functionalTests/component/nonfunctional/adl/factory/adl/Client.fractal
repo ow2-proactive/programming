@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<definition name="functionalTests.component.nonfunctional.adl.factory.adl.Client" extends="functionalTests.component.nonfunctional.adl.factory.adl.ClientType">
+
+   <content class="functionalTests.component.nonfunctional.adl.factory.ClientImpl"/>
+
+   <!-- NF part -->
+   <controller>
+      <interface name="dumb-monitor-controller"     signature="functionalTests.component.nonfunctional.adl.factory.nf.NFService" role="server" />
+      <interface name="dumb-monitor-ref-controller" signature="functionalTests.component.nonfunctional.adl.factory.nf.NFService" role="client" />
+      <component name="client-dumb-monitor" definition="functionalTests.component.nonfunctional.adl.factory.adl.nf.NFType" >
+        <content class="functionalTests.component.nonfunctional.adl.factory.nf.ClientNFImpl"/>
+      </component>
+      
+      <binding client="this.dumb-monitor-controller" server="client-dumb-monitor.service" />
+      <binding client="client-dumb-monitor.ref" server="this.dumb-monitor-ref-controller" />
+   </controller>
+   
+</definition>

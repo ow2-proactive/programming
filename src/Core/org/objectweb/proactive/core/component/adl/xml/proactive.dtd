@@ -18,7 +18,9 @@
 <?add ast="component"  itf="org.objectweb.fractal.adl.interfaces.InterfaceContainer" ?>
 
 <!-- types module -->
-<?add ast="interface"  itf="org.objectweb.fractal.adl.types.TypeInterface" ?>
+<!-- <?add ast="interface"  itf="org.objectweb.fractal.adl.types.TypeInterface" ?> -->
+<?add ast="interface"  itf="org.objectweb.proactive.core.component.adl.types.PATypeInterface" ?>
+
 
 <!-- bindings module -->
 <?add ast="binding"    itf="org.objectweb.fractal.adl.bindings.Binding" ?>
@@ -84,6 +86,10 @@
 <?add ast="composedFrom" itf="org.objectweb.proactive.core.component.adl.vnexportation.ComposingVirtualNodeContainer" ?>
 
 
+<?add ast="controller"     itf="org.objectweb.fractal.adl.components.ComponentContainer" ?>
+<?add ast="controller"     itf="org.objectweb.fractal.adl.interfaces.InterfaceContainer" ?>
+<?add ast="controller"     itf="org.objectweb.fractal.adl.bindings.BindingContainer" ?>
+
 
 <!-- ********************************************************************** -->
 <!--                   Mapping from XML names to AST names                  -->
@@ -119,7 +125,7 @@
 <!ELEMENT interface (comment*) >
 <!ATTLIST interface
   name CDATA #REQUIRED
-  role (client | server) #IMPLIED
+  role (client | server | internal-client | internal-server ) #IMPLIED
   signature CDATA #IMPLIED
   contingency (mandatory | optional) #IMPLIED
   cardinality (singleton | collection | multicast | gathercast) #IMPLIED
@@ -142,9 +148,9 @@
   value CDATA #REQUIRED
 >
 
-<!ELEMENT controller (comment*) >
+<!ELEMENT controller (comment*,interface*,component*,binding*) >
 <!ATTLIST controller
-  desc CDATA #REQUIRED
+  desc CDATA #IMPLIED
 >
 
 <!ELEMENT content (comment*) >

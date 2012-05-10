@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -40,14 +40,15 @@ import java.util.Queue;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.ThreadPools;
 
 
 /**
@@ -88,9 +89,8 @@ public class Dispatcher {
 
         body = PAActiveObject.getBodyOnThis();
         // thread pool is configurable
-        threadPool = new ThreadPoolExecutor(1, 1, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-            GroupThreadFactory.instance());
-
+        ThreadFactory tf = new NamedThreadFactory("PAGroup", true);
+        threadPool = ThreadPools.newFixedThreadPool(1, tf);
     }
 
     protected int getOptimalPoolSize(int nbMembers) {
@@ -183,45 +183,6 @@ public class Dispatcher {
             doneSignal.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * Currently just for naming thread created by group communications. <br>
-     * It may be extended by customizing the group threads in order to add other
-     * features, such as logging, checkpointing, communication error management
-     * etc...
-     * 
-     * @author The ProActive Team
-     * 
-     */
-    protected static class GroupThreadFactory implements java.util.concurrent.ThreadFactory {
-
-        private static GroupThreadFactory instance = null;
-
-        private static final String genericPoolName = "PAGroup pool ";
-        private static int poolIndex = 0;
-        private final String poolName;
-
-        private int threadIndex = 0;
-
-        private GroupThreadFactory() {
-            this.poolName = genericPoolName + poolIndex++;
-        }
-
-        public static GroupThreadFactory instance() {
-            if (instance == null) {
-                return instance = new GroupThreadFactory();
-            } else {
-                return instance;
-            }
-        }
-
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, poolName + " - thread " + threadIndex++);
-            t.setDaemon(true);
-            return t;
         }
 
     }

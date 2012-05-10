@@ -3,29 +3,29 @@
  *
  * ProActive Parallel Suite(TM): The Java(TM) library for
  *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds 
+ *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -702,19 +702,23 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 // (e.g. InvalidClassException)
                 try {
                     reply.send(request.getSender());
-                } catch (IOException e1) {
+                } catch (Throwable e1) {
+                    // see PROACTIVE-1172
+                    // previously only IOException were caught but now that new communication protocols
+                    // can be added dynamically (remote objects) we can no longer suppose that only IOException
+                    // will be thrown i.e. a runtime exception sent by the protocol can go through the stack and
+                    // kill the service thread if not caught here.
+                    // We do not want the AO to be killed if he cannot send the result.
                     try {
+                        // trying to send the exception as result to fill the future.
+                        // we want to inform the caller that the result cannot be set in
+                        // the future for any reason. let's see if we can put the exception instead.
+                        // works only if the exception is not due to a communication issue.
                         this.retrySendReplyWithException(reply, e1, request.getSender());
-                    } catch (Exception retryException1) {
-                        // the stacktraced exception must be the first one
-                        sendReplyExceptionsLogger.error(e1.getMessage(), e1);
-                    }
-                } catch (ProActiveRuntimeException e2) {
-                    try {
-                        this.retrySendReplyWithException(reply, e2, request.getSender());
-                    } catch (Exception retryException2) {
-                        // the stacktraced exception must be the first one
-                        sendReplyExceptionsLogger.error(e2.getMessage(), e2);
+                    } catch (Throwable retryException1) {
+                        // log the issue on the AO side for debugging purpose
+                        // the initial exception must be the one to appear in the log.
+                        sendReplyExceptionsLogger.error("Failed to send reply to " + request, e1);
                     }
                 }
             }
@@ -740,7 +744,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         }
 
         // If a reply sending has failed, try to send the exception as reply
-        private void retrySendReplyWithException(Reply reply, Exception e, UniversalBody destination)
+        private void retrySendReplyWithException(Reply reply, Throwable e, UniversalBody destination)
                 throws Exception {
 
             //            Get current request TAGs from current context

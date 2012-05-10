@@ -1,3 +1,4 @@
+#! /bin/sh
 # script to test if we can run as a given user
 # it works both with passwordless and password-enabled user changing
 
@@ -41,7 +42,7 @@ else
       echo $error 1>&2;
       exit 1;
     fi
-    "$2/suer64" "$username" "$passw" whoami;
+    echo "$passw" | "$2"/suer64 $username whoami
   else
     if [ ! -e "$2/suer32" ];
     then 
@@ -49,7 +50,7 @@ else
       echo $error 1>&2;
       exit 1;
     fi
-    "$2/suer32" "$username" "$passw" whoami;
+    echo "$passw" | "$2"/suer32 $username whoami
   fi  
   ###### DEVELOPER NOTE:
   #	In case the 'suer' solution does not meet all requirements, it is possible to conveniently replace

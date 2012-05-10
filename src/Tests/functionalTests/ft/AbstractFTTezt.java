@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -43,22 +43,24 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.FunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Common methods for FT non functional tests
  */
-public class AbstractFTTezt extends FunctionalTest {
+public class AbstractFTTezt extends GCMFunctionalTest {
 
     protected JVMProcessImpl server;
     public static int AWAITED_RESULT = 1771014405;
+
+    public AbstractFTTezt(URL gcma, int hostCapacity, int vmCapacity) {
+        super(gcma);
+        super.setHostCapacity(hostCapacity);
+        super.setVmCapacity(vmCapacity);
+    }
 
     /**
      * Create a FT server on localhost:1100
@@ -89,19 +91,11 @@ public class AbstractFTTezt extends FunctionalTest {
      * @param gcmApplicationFile the deployment file  
      * @return the result of the computation
      */
-    protected int deployAndStartAgents(URL gcmApplicationFile) throws ProActiveException {
-        GCMApplication gcma;
+    protected int deployAndStartAgents() throws ProActiveException {
         GCMVirtualNode vnode;
 
-        //	create nodes
-        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
-                VariableContractType.DescriptorDefaultVariable);
-        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
-                VariableContractType.DescriptorDefaultVariable);
-
-        gcma = PAGCMDeployment.loadApplicationDescriptor(gcmApplicationFile, vContract);
-        gcma.startDeployment();
-        vnode = gcma.getVirtualNode("Workers");
+        super.startDeployment();
+        vnode = super.gcmad.getVirtualNode("Workers");
         Node[] nodes = new Node[2];
         nodes[0] = vnode.getANode();
         nodes[1] = vnode.getANode();

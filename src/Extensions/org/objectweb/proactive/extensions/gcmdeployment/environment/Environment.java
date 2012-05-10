@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -41,8 +41,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,7 +66,7 @@ public class Environment {
      */
     synchronized public static InputSource replaceVariables(URL descriptor, VariableContractImpl vContract,
             XPath xpath, String namespace) throws IOException, SAXException, XPathExpressionException,
-            TransformerException {
+            TransformerException, URISyntaxException {
 
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
@@ -74,9 +74,7 @@ public class Environment {
 
         // Get the variable map
         EnvironmentParser environmentParser;
-        Map<String, String> variableMap;
         environmentParser = new EnvironmentParser(descriptor, vContract, domFactory, xpath, namespace);
-        variableMap = environmentParser.getVariableMap();
 
         DocumentBuilder newDocumentBuilder = GCMParserHelper.getNewDocumentBuilder(domFactory);
 
@@ -104,7 +102,8 @@ public class Environment {
         }
 
         EnvironmentTransformer environmentTransformer;
-        environmentTransformer = new EnvironmentTransformer(variableMap, baseDocument);
+        environmentTransformer = new EnvironmentTransformer(environmentParser.getVariableContract(),
+            descriptor);
 
         // We get the file name from the url
         // TODO test it on linux / windows

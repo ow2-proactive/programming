@@ -25,19 +25,19 @@
 			
 			<!-- since the permissions are not preserved by <copy>, we use the cp command -->
 			<exec executable="cp" os="Linux">
-				<arg line="${pb.linux}/launch.sh ${pb.linux}/command_step.sh ${pb.linux}/user_step.sh ${pb.linux}/check_sudo.sh ${pb.dist}/scripts/processbuilder/linux" />
+				<arg line="&quot;${pb.linux}/launch.sh&quot; &quot;${pb.linux}/command_step.sh&quot; &quot;${pb.linux}/user_step.sh&quot; &quot;${pb.linux}/check_sudo.sh&quot; &quot;${pb.dist}/scripts/processbuilder/linux&quot;" />
 			</exec>
 			<exec executable="cp" os="Linux" failonerror="false">
-				<arg line="${pb.linux}/suer32 ${pb.dist}/scripts/processbuilder/linux" />
+				<arg line="&quot;${pb.linux}/suer32&quot; &quot;${pb.dist}/scripts/processbuilder/linux&quot;" />
 			</exec>
 			<exec executable="cp" os="Linux" failonerror="false">
-				<arg line="${pb.linux}/suer64 ${pb.dist}/scripts/processbuilder/linux" />
+				<arg line="&quot;${pb.linux}/suer64&quot; &quot;${pb.dist}/scripts/processbuilder/linux&quot;" />
 			</exec>
 			
 
 			<!-- housekeeping -->
-			<delete file="${pb.linux}/suer32" />
-			<delete file="${pb.linux}/suer64" />
+			<delete file="&quot;${pb.linux}/suer32&quot;" />
+			<delete file="&quot;${pb.linux}/suer64&quot;" />
 			
 			<else>
 				<echo level="warning" message="ProcessBuilder for Unix most be compiled under Unix and gcc must be in the path" />

@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- *              Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -41,7 +41,7 @@ import java.net.Socket;
 import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 import org.objectweb.proactive.core.filetransfer.FileTransferService;
 import org.objectweb.proactive.core.runtime.broadcast.BTCallbackDefaultImpl;
-import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**
@@ -169,6 +169,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * Boolean to activate automatic continuations for this runtime.
      */
     static public PAPropertyBoolean PA_FUTURE_AC = new PAPropertyBoolean("proactive.future.ac", false);
+
+    /**
+     * Timeout value for future in synchronous requests.
+     * can be used to set timeout on synchronous calls. Impossible otherwise 
+     * default value 0, no timeout
+     */
+    static public PAPropertyLong PA_FUTURE_SYNCHREQUEST_TIMEOUT = new PAPropertyLong(
+        "proactive.future.synchrequest.timeout", false, 0);
 
     /**
      * Period of the future monitoring ping, in milliseconds
@@ -462,7 +470,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /** The class to use for doing remoteObject Benchmark, must implement BenchmarkObject */
     public static PAPropertyString PA_BENCHMARK_CLASS = new PAPropertyString(
         "proactive.communication.benchmark.class", false,
-        "org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly");
+        org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly.class.getName());
 
     /* ------------------------------------
      *  SECURITY
@@ -633,7 +641,8 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      *
      * If 0 no timeout.
      */
-    static public PAPropertyInteger PA_TEST_TIMEOUT = new PAPropertyInteger("proactive.test.timeout", false);
+    static public PAPropertyInteger PA_TEST_TIMEOUT = new PAPropertyInteger("proactive.test.timeout", false,
+        300000);
 
     /**
      * TODO vlegrand Describe this property
@@ -658,7 +667,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /**
      * Web services framework
      *
-     * Suppported values are: axis2, cxf
+     * Suppported value is cxf
      */
     static public PAPropertyString PA_WEBSERVICES_FRAMEWORK = new PAPropertyString(
         "proactive.webservices.framework", false);

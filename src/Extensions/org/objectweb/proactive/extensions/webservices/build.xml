@@ -13,9 +13,5 @@
 			</additionalclasspath>
 		</compile_extension>
 
-		<subant target="compile-axis2" inheritall="true" failonerror="true">
-			<fileset dir="${axis2.dir}" includes="build-axis2.xml" />
-		</subant>
-
 	</target>
 </project>

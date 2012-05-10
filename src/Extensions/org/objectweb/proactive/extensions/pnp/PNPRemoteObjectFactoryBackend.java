@@ -5,34 +5,34 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
+ * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnp;
 
@@ -65,7 +65,7 @@ import org.objectweb.proactive.extensions.pnp.exception.PNPException;
  * The real PNP remote object factory
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory implements RemoteObjectFactory {
     static final Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP);
@@ -73,23 +73,32 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
     final private String protoId;
     final private PNPAgent agent;
     final private PNPRegistry registry;
+    /** Exception that should have been thrown by ctor.
+     *
+     * ROF ctor are not allowed to throw exception. To ease troubleshooting, we keep a
+     * reference on the exception.
+     */
+    final private Exception ctorException;
 
     public PNPRemoteObjectFactoryBackend(String proto, PNPConfig config, PNPExtraHandlers extraHandlers) {
         PNPAgent agent = null;
+        Exception exception = null;
         try {
             agent = new PNPAgent(config, extraHandlers);
         } catch (Exception e) {
+            exception = e;
             logger.error("Failed to instanciate the PNP remote object factory", e);
         }
         this.agent = agent;
+        this.ctorException = exception;
         this.registry = PNPRegistry.singleton;
         this.protoId = proto;
     }
 
     private void throwIfAgentIsNul(String msg) throws ProActiveException {
         if (this.agent == null) {
-            throw new PNPException(msg +
-                ". The PNP remote object factory is not properly configured, agent is null");
+            throw new PNPException(msg + ". PNP not properly configured, agent is null (cause follows)",
+                this.ctorException);
         }
 
         return;
@@ -168,8 +177,8 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
             } else {
                 return new RemoteObjectAdapter(result);
             }
-        } catch (PNPException e) {
-            throw new ProActiveException(e);
+        } catch (IOException e) {
+            throw new ProActiveException("Lookup of " + uri + "failed due to network error", e);
         }
     }
 
@@ -205,8 +214,9 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
             }
 
             return uris;
-        } catch (PNPException e) {
-            throw new ProActiveException(e);
+        } catch (IOException e) {
+            throw new ProActiveException("Listing registered remote objects on " + uri +
+                " failed due to network error", e);
         }
     }
 

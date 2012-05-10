@@ -1,0 +1,37 @@
+
+# /
+/.classpath
+/.project
+/.settings
+/classes
+/dist
+/docs
+/doc-files
+/junitReports
+/log
+/.machinefile_*
+/output
+/timitOutputDirectory
+/.classpath*
+/generated
+
+# /compile/
+/compile/eclipse_formatter_config.properties
+/compile/Manifest.mf
+
+# /lib/
+/lib/script-js.jar
+/lib/script-api.jar
+/lib/js.jar
+
+# /scripts/unix/
+/scripts/unix/.machinefile*
+
+# /src/Core/org/objectweb/proactive/core/body/proxy/
+/src/Core/org/objectweb/proactive/core/body/proxy/SendingQueueOld.java
+
+# /src/Core/org/objectweb/proactive/core/component/config/
+/src/Core/org/objectweb/proactive/core/component/config/schemaDiagrams
+
+# /src/Tests/functionalTests/component/conform/membranes/
+/src/Tests/functionalTests/component/conform/membranes/julia.cfg

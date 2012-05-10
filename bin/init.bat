@@ -38,9 +38,7 @@ set JAVA_CMD="%JAVA_HOME%\bin\java.exe" -Dproactive.home="%PROACTIVE%"  -Djava.s
 
 rem Adding java tools to the path
 SET OK=1
-
-rem The following has resulted in weird behaviour on XP: FOR /F "delims=;" %%i IN ("%PATH%") DO ( -- changed
-FOR /D %%i IN (%PATH%) DO (
+FOR /F "delims=;" %%i IN ("%PATH%") DO (
 IF /I "%%i" == "%JAVA_HOME%\bin" SET OK=0
 )
 IF /I %OK%==1 SET PATH=%JAVA_HOME%\bin;%PATH%

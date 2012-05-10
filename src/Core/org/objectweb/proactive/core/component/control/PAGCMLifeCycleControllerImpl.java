@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -40,6 +40,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.api.control.GCMLifeCycleController;
 import org.etsi.uri.gcm.api.type.GCMInterfaceType;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
@@ -96,8 +97,6 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
      */
     public String getFcState() {
         return fcState;
-        //        return getRequestQueue().isStarted() ? LifeCycleController.STARTED
-        //                                             : LifeCycleController.STOPPED;
     }
 
     /**
@@ -199,23 +198,18 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                                         if (((GCMInterfaceType) ((Interface) subComponents[j]
                                                 .getFcInterface(subComponentItfs[k])).getFcItfType())
                                                 .isGCMMulticastItf()) {
-                                            isBound = true;
-                                            break;
-                                            //                                            ProxyForComponentInterfaceGroup<?> delegatee = Fractive
-                                            //                                                    .getMulticastController(subComponents[j])
-                                            //                                                    .lookupFcMulticast(subComponentItfs[k])
-                                            //                                                    .getDelegatee();
-                                            //                                            if ((delegatee != null) && !delegatee.isEmpty()) {
-                                            //                                                PAInterface[] delegatees = delegatee
-                                            //                                                        .toArray(new PAInterface[] {});
-                                            //                                                for (int l = 0; l < delegatees.length; l++) {
-                                            //                                                    if (((PAComponent) delegatees[l].getFcItfOwner())
-                                            //                                                            .getID().equals(owner.getID())) {
-                                            //                                                        isBound = true;
-                                            //                                                        break;
-                                            //                                                    }
-                                            //                                                }
-                                            //                                            }
+                                            Object[] serverItfs = GCM
+                                                    .getMulticastController(subComponents[j])
+                                                    .lookupGCMMulticast(subComponentItfs[k]);
+                                            if ((serverItfs != null) && (serverItfs.length != 0)) {
+                                                for (int l = 0; l < serverItfs.length; l++) {
+                                                    if (((PAComponent) ((Interface) serverItfs[l])
+                                                            .getFcItfOwner()).getID().equals(owner.getID())) {
+                                                        isBound = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
                                         } else {
                                             Object subComponentItfImpl = null;
                                             try {
@@ -277,6 +271,11 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                         (GCM.getGCMLifeCycleController(inner_components[i])).startFc();
                     }
                 }
+            } else {
+                // primitive component: check if the implementation class implements LifeCycleController
+                if (owner.getReferenceOnBaseObject() instanceof LifeCycleController) {
+                    ((LifeCycleController) owner.getReferenceOnBaseObject()).startFc();
+                }
             }
 
             //getRequestQueue().start();
@@ -314,6 +313,11 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                         (GCM.getGCMLifeCycleController(inner_components[i])).stopFc();
                     }
                 }
+            } else {
+                // primitive component: check if the implementation class implements LifeCycleController
+                if (owner.getReferenceOnBaseObject() instanceof LifeCycleController) {
+                    ((LifeCycleController) owner.getReferenceOnBaseObject()).stopFc();
+                }
             }
 
             //getRequestQueue().stop();
@@ -330,6 +334,13 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
 
     public void terminateGCMComponent() throws IllegalLifeCycleException {
         if (fcState.equals(LifeCycleController.STOPPED)) {
+            String hierarchical_type = owner.getComponentParameters().getHierarchicalType();
+            if (hierarchical_type.equals(Constants.PRIMITIVE)) {
+                // primitive component: check if the implementation class implements GCMLifeCycleController
+                if (owner.getReferenceOnBaseObject() instanceof GCMLifeCycleController) {
+                    ((GCMLifeCycleController) owner.getReferenceOnBaseObject()).terminateGCMComponent();
+                }
+            }
             PAActiveObject.terminateActiveObject(true);
         } else {
             throw new IllegalLifeCycleException(

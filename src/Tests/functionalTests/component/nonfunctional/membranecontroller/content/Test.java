@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -80,7 +80,7 @@ public class Test extends ComponentTest {
         GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot); /*Getting the GCM-ProActive type factory*/
         PAGenericFactory cf = Utils.getPAGenericFactory(boot); /*Getting the GCM-ProActive generic factory*/
 
-        dummyNFComponent = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
+        dummyNFComponent = cf.newNfFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("dummy-controller-membrane", DummyControllerItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), }),
                 new ControllerDescription("dummyController", Constants.PRIMITIVE), new ContentDescription(
@@ -94,14 +94,14 @@ public class Test extends ComponentTest {
                     "/functionalTests/component/nonfunctional/membranecontroller/content/config.xml")
                     .getPath()), new ContentDescription(DummyFunctionalComponentImpl.class.getName()));
 
-        Utils.getPAMembraneController(dummyFComponent).addNFSubComponent(dummyNFComponent);
-        Component[] components = Utils.getPAMembraneController(dummyFComponent).getNFcSubComponents();
+        Utils.getPAMembraneController(dummyFComponent).nfAddFcSubComponent(dummyNFComponent);
+        Component[] components = Utils.getPAMembraneController(dummyFComponent).nfGetFcSubComponents();
         System.out.println("Name : " + GCM.getNameController(components[0]).getFcName());
-        Utils.getPAMembraneController(dummyFComponent).startNFc("dummyController");
-        Utils.getPAMembraneController(dummyFComponent).stopNFc("dummyController");
+        Utils.getPAMembraneController(dummyFComponent).nfStartFc("dummyController");
+        Utils.getPAMembraneController(dummyFComponent).nfStopFc("dummyController");
         System.out.println("Lifecycle state :" +
-            Utils.getPAMembraneController(dummyFComponent).getNFcState("dummyController"));
-        Utils.getPAMembraneController(dummyFComponent).removeNFSubComponent(dummyNFComponent);
+            Utils.getPAMembraneController(dummyFComponent).nfGetFcState("dummyController"));
+        Utils.getPAMembraneController(dummyFComponent).nfRemoveFcSubComponent(dummyNFComponent);
     }
 
     /**

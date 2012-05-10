@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -36,7 +36,12 @@
  */
 package org.objectweb.proactive.core.remoteobject.ibis;
 
+import ibis.io.BufferedArrayInputStream;
+import ibis.io.BufferedArrayOutputStream;
+import ibis.io.IbisSerializationOutputStream;
+import ibis.rmi.Remote;
 import ibis.rmi.RemoteException;
+import ibis.rmi.server.UnicastRemoteObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,8 +53,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.rmi.NoSuchObjectException;
-import java.rmi.Remote;
-import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
@@ -236,13 +239,10 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
     public void unexport(RemoteRemoteObject rro) throws ProActiveException {
         if (rro instanceof IbisRemoteObject) {
-            try {
-                UnicastRemoteObject.unexportObject((Remote) rro, false);
-            } catch (NoSuchObjectException e) {
-                throw new ProActiveException(e);
-            }
+            // unexport does not exist under ibis 1.4
+            // just silently fails
         } else {
-            throw new ProActiveException("the remote object is not a rmi remote object");
+            throw new ProActiveException("the remote object is not an ibis remote object");
         }
 
     }
@@ -268,23 +268,25 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         try {
             final Class cl_isis = Class.forName(IBIS_SERIALIZATION_INPUT_STREAM);
             final Constructor c_isis = cl_isis.getConstructor(new Class[] { Class
-                    .forName("java.io.DataInputStream") });
-            final ObjectInputStream i_isis = (ObjectInputStream) c_isis.newInstance(new Object[] { in });
-            return i_isis;
+                    .forName("ibis.io.DataInputStream") });
+            final ibis.io.IbisSerializationInputStream i_isis = (ibis.io.IbisSerializationInputStream) c_isis
+                    .newInstance(new Object[] { new BufferedArrayInputStream(in) });
+            final ObjectInputStream s_isis = i_isis.getJavaObjectInputStream();
+            return s_isis;
         } catch (ClassNotFoundException cnfe) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", cnfe);
         } catch (IllegalArgumentException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (InstantiationException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (IllegalAccessException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (InvocationTargetException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (SecurityException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (NoSuchMethodException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         }
         return null;
     }
@@ -295,23 +297,26 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             cl_isos = Class.forName(IBIS_SERIALIZATION_OUTPUT_STREAM);
 
             final Constructor c_isos = cl_isos.getConstructor(new Class[] { Class
-                    .forName("java.io.DataOutputStream") });
-            final ObjectOutputStream i_isos = (ObjectOutputStream) c_isos.newInstance(new Object[] { out });
-            return i_isos;
+                    .forName("ibis.io.DataOutputStream") });
+            final IbisSerializationOutputStream i_isos = (IbisSerializationOutputStream) c_isos
+                    .newInstance(new Object[] { new BufferedArrayOutputStream(out) });
+            i_isos.setReplacer(new IbisRMIReplacer());
+            final ObjectOutputStream o_isos = i_isos.getJavaObjectOutputStream();
+            return o_isos;
         } catch (ClassNotFoundException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (SecurityException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (NoSuchMethodException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (IllegalArgumentException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (InstantiationException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (IllegalAccessException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         } catch (InvocationTargetException e) {
-            logger.warn("Check your classpath for ibis jars ");
+            logger.warn("Check your classpath for ibis jars ", e);
         }
         return null;
     }

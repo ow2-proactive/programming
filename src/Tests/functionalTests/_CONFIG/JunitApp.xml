@@ -20,8 +20,8 @@
 				<java base="root" relpath="${java.home}/bin/java"/>		
 				<jvmarg value="${JVM_PARAMETERS}"/>
 				<jvmarg value="${jvmargDefinedByTest}"/>
-				<jvmarg value="-Dclover.initstring=${proactive.home}/compile/ProActiveCoverage.db"/>
-				<jvmarg value="-Dproactive.home=${proactive.home}"/>
+				<jvmarg value="-Dclover.initstring=&quot;${proactive.home}/compile/ProActiveCoverage.db&quot;"/>
+				<jvmarg value="-Dproactive.home=&quot;${proactive.home}&quot;"/>
                 <jvmarg value="-Djava.security.egd=file:/dev/urandom"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="classes/Tests"/>

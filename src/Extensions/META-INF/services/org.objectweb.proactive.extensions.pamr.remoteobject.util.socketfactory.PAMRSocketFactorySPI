@@ -1,0 +1,2 @@
+org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRPlainSocketFactory
+org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSshSocketFactory

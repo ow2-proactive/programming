@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -38,6 +38,7 @@ package unitTests.gcmdeployment.descriptorParser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +61,8 @@ import functionalTests.FunctionalTest;
 
 
 public class TestApplicationDescriptorParser extends FunctionalTest {
-    final static String TEST_APP_DIR = TestApplicationDescriptorParser.class.getClass().getResource(
-            "/unitTests/gcmdeployment/descriptorParser/testfiles/application").getFile();
+    final static URL TEST_APP_DIR = TestApplicationDescriptorParser.class.getClass().getResource(
+            "/unitTests/gcmdeployment/descriptorParser/testfiles/application");
 
     final static String[] skipDescriptors = { "script_ext.xml", "oldDescriptor.xml", "scriptInvalid.xml",
             "script6.xml" };
@@ -141,7 +142,7 @@ public class TestApplicationDescriptorParser extends FunctionalTest {
     }
 
     //    @Test
-    public void doit() throws ProActiveException, FileNotFoundException {
+    public void doit() throws ProActiveException, FileNotFoundException, URISyntaxException {
         for (File file : getApplicationDescriptors()) {
             if (!file.toString().contains("scriptHostname") || file.toString().contains("Invalid") ||
                 file.toString().contains("oldDesc")) {
@@ -153,9 +154,10 @@ public class TestApplicationDescriptorParser extends FunctionalTest {
         }
     }
 
-    private List<File> getApplicationDescriptors() {
+    private List<File> getApplicationDescriptors() throws URISyntaxException {
         List<File> ret = new ArrayList<File>();
-        File dir = new File(TEST_APP_DIR);
+        File dir = null;
+        dir = new File(TEST_APP_DIR.toURI());
 
         for (String file : dir.list()) {
             if (file.endsWith(".xml")) {

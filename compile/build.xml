@@ -12,6 +12,7 @@
 
 	<taskdef name="if" classname="ise.antelope.tasks.IfTask" />
 
+
 	<!-- emma -->
 	<path id="emma.lib">
 		<pathelement location="${base.dir}/compile/lib/emma_ant.jar" />
@@ -132,38 +133,6 @@
 	<!-- <target name="all" depends="compile,docs" description="build the class files and the documentation" />-->
 
 
-	<macrodef name="generate_stub_for_pkg">
-		<attribute name="srcDir" />
-		<attribute name="package" />
-		<element name="extra.exclusion.pattern" optional="yes" />
-		<sequential>
-			<java classname="org.objectweb.proactive.ext.util.QuietStubGenerator" fork="true" >
-				<classpath refid="project.classpath" />
-				<arg value="-srcDir" />
-				<arg value="@{srcDir}" />
-				<arg value="-pkg" />
-				<arg value="@{package}" />
-			</java>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="generate_stub_for_class">
-		<attribute name="srcDir" />
-		<attribute name="class" />
-		<element name="extra.exclusion.pattern" optional="yes" />
-		<sequential>
-			<java classname="org.objectweb.proactive.ext.util.QuietStubGenerator" fork="true">
-				<classpath refid="project.classpath" />
-				<arg value="-srcDir" />
-				<arg value="@{srcDir}" />
-				<arg value="-class" />
-				<arg value="@{class}" />
-			</java>
-		</sequential>
-	</macrodef>
-
-
-
 
 	<!-- ************
 		Compilation
@@ -172,7 +141,7 @@
 	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.examples, compile.tests, compile.benchmarks" description="Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)" />
 
 
-	<target name="compile.core" depends="-configurationCopy" description="Compile ProActive core classes">
+	<target name="compile.core" depends="-configurationCopy, compile.util" description="Compile ProActive core classes">
 		<!-- update ProActive.getVersion(). If -Dversion is not set, then ${version} is a timestamp for this build -->
 		<replaceregexp file="${src.proactive.dir}/${proactive.path}/Main.java" match="\$Id.*\$" replace="${version}" byline="true" />
 		<replaceregexp file="${base.dir}/README.txt" match="\$Id.*\$" replace="${version}" byline="true" />
@@ -191,13 +160,31 @@
 			<include name="org/objectweb/proactive/core/remoteobject/rmi/RmiRemoteObjectImpl.class" />
 		</rmic>
 
-		<echo message="Java primitive type wrapper stubs generating..." />
-		<generate_stub_for_pkg srcDir="${cl.proactive.dir}" package="org.objectweb.proactive.core.util.wrapper" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/runtime/ProActiveRuntime" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/body/UniversalBody" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/component/type/Composite" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/jmx/util/JMXNotificationListener" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/util/log/remote/ProActiveLogCollector" />
+		<stubGenerator srcDir="${cl.proactive.dir}" refclasspath="project.classpath">
+			<class name="org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.BooleanWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.DoubleMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.DoubleWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.FloatMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.FloatWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.IntMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.IntWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.LongMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.LongWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.StringMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.StringWrapper" />
+
+			<class name="org.objectweb.proactive.core.runtime.ProActiveRuntime" />
+			<class name="org.objectweb.proactive.core.body.UniversalBody" />
+			<class name="org.objectweb.proactive.core.component.type.Composite" />
+			<class name="org.objectweb.proactive.core.jmx.util.JMXNotificationListener" />
+			<class name="org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector" />
+			<class name="org.objectweb.proactive.core.jmx.ProActiveConnection" />
+			<class name="org.objectweb.proactive.core.jmx.server.ProActiveServerImpl" />
+			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketServer" />
+			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketClient" />
+		</stubGenerator>
 
 		<antcall target="ibis" />
 	</target>
@@ -205,7 +192,7 @@
 
 	<target name="compile.extensions" depends="compile.core, -deploy.mkdir" description="Compile ProActive Extensions classes">
 		<copy todir="${cl.extensions.dir}">
-			<fileset dir="${src.extensions.dir}" includes="META-INF/**"/>
+			<fileset dir="${src.extensions.dir}" includes="META-INF/**" />
 		</copy>
 		<subant target="-compile" inheritall="yes" failonerror="true">
 			<fileset dir="${src.extensions.dir}" includes="**/build.xml" />
@@ -215,7 +202,7 @@
 
 	<target name="compile.extra" depends="compile.core" description="Compile ProActive Extensions classes">
 		<copy todir="${cl.extra.dir}">
-			<fileset dir="${src.extra.dir}" includes="META-INF/**"/>
+			<fileset dir="${src.extra.dir}" includes="META-INF/**" />
 		</copy>
 		<subant target="-compile" inheritall="yes" failonerror="true">
 			<fileset dir="${src.extra.dir}" includes="**/build.xml" />
@@ -323,6 +310,9 @@
 		<javac srcdir="${src.utils.dir}" destdir="${cl.utils.dir}" includes="**" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
 		</javac>
+
+		<taskdef name="stubGenerator" classname="ant.AntStubGenerator" classpath="${cl.utils.dir}" />
+		<typedef name="class" classname="ant.AntStubGeneratorClass" classpath="${cl.utils.dir}" />
 	</target>
 
 
@@ -367,8 +357,8 @@
 
 
 		<taskdef name="smerger" classname="ant.ServiceMerger" classpath="${cl.utils.dir}" />
-		
-		<mkdir dir="${classes.dir}/META-INF/services"/>
+
+		<mkdir dir="${classes.dir}/META-INF/services" />
 		<smerger destdir="${classes.dir}/META-INF/services">
 			<fileset dir="${cl.extensions.dir}" includes="META-INF/services/**" />
 			<fileset dir="${cl.extra.dir}" includes="META-INF/services/**" />
@@ -376,37 +366,33 @@
 		</smerger>
 
 		<jar manifest="${compile.dir}/Manifest.mf" destfile="${deploy.lib.dir}/ProActive.jar" index="true">
-			<fileset dir="${classes.dir}" includes="META-INF/**"/>
-			<fileset dir="${cl.proactive.dir}" >
-				<include name="**"/>
-				<exclude name="META-INF/**"/>	
+			<fileset dir="${classes.dir}" includes="META-INF/**" />
+			<fileset dir="${cl.proactive.dir}">
+				<include name="**" />
+				<exclude name="META-INF/**" />
 			</fileset>
 			<fileset dir="${cl.extensions.dir}">
 				<include name="**" />
-				<exclude name="META-INF/**"/>	
+				<exclude name="META-INF/**" />
 				<exclude name="org/objectweb/proactive/extensions/annotation/**/*CTree*" />
 			</fileset>
 			<fileset dir="${cl.extra.dir}">
-				<include name="**"/>
-				<exclude name="META-INF/**"/>	
+				<include name="**" />
+				<exclude name="META-INF/**" />
 			</fileset>
 			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
 			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
-			<fileset dir="${cxf.dir}/etc">
-				<include name="META-INF/cxf/**" />
-			</fileset>
 			<indexjars>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${ws.common.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
 				<fileset dir="${cxf.lib.dir}">
 					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${axis2.lib.dir}">
-					<include name="*.jar" />
+					<!-- It is mandatory to exclude the cxf jar of the jar index
+					and to explicity include it in the classpath. CXF is not able to
+					find its configuration files if they are not directly accessible
+					through the classpath. -->
+					<exclude name="cxf-2.5.2.jar" />
 				</fileset>
 			</indexjars>
 		</jar>
@@ -419,12 +405,6 @@
 				<include name="**/*.dll" />
 			</fileset>
 			<fileset dir="${cxf.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${axis2.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ws.common.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
@@ -604,12 +584,12 @@
 
 			<delete dir="${junit.dir}" />
 			<mkdir dir="${junit.dir}" />
-			<junit printsummary="yes" forkmode="perTest" showoutput="${junit.showoutput}">
+			<junit printsummary="yes" forkmode="perTest" showoutput="${junit.showoutput}" timeout="300000">
 				<jvmarg value="-Dproactive.home=${base.dir}" />
 
 				<classpath>
 					<additionalClasspath>
-						<!--  it  is mandatory to explicity include the ibis jar in the
+						<!-- It is mandatory to explicity include the ibis jar in the
 						classpath. Ibis is not able to find the classes if they are
 						not directly accessible through the classpath.
 						i.e. we cannot use the jar index tip -->
@@ -619,7 +599,6 @@
 				</classpath>
 
 				<jvmarg value="-Dproactive.communication.protocol=@{communication.protocol}" />
-				<jvmarg value="-Dproactive.http.jetty.xml=${base.dir}/src/Tests/functionalTests/jetty.xml" />
 				<jvmarg value="-Djava.security.policy=${base.dir}/compile/proactive.java.policy" />
 				<jvmarg value="-Dlog4j.configuration=file:${base.dir}/compile/proactive-log4j" />
 				<jvmarg value="-DfunctionalTests.descriptor.defaultnodes.file=@{nodeDescriptor}" />
@@ -669,7 +648,7 @@
 
 
 	<target name="junit.pnps" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
-		<junitMacro communication.protocol="pnps" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" >
+		<junitMacro communication.protocol="pnps" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite">
 			<jvmargs>
 				<jvmarg value="-Djava.security.egd=file:/dev/urandom" />
 			</jvmargs>
@@ -679,13 +658,8 @@
 	<target name="junit.ibis" depends="deploy.all">
 		<junitMacro communication.protocol="ibis" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocalIbis.xml" testsuite="testsuite">
 			<jvmargs>
-				<jvmarg value="-Dproactive.rmi=ibis" />
-				<jvmarg value="-Dibis.serialization=sun" />
-				<jvmarg value="-Dibis.name_server.host=localhost" />
-				<jvmarg value="-Dibis.name_server.pool=rutget" />
-				<jvmarg value="-Dibis.pool.host_number=1" />
-				<jvmarg value="-Dibis.name_server.key=12" />
-				<jvmarg value="-Dibis.property.file=/home1/fabrice/workIbis/Ibis/properties" />
+				<jvmarg value="-Dproactive.communication.protocol=ibis" />
+				<jvmarg value="-Dibis.serialization=ibis" />
 			</jvmargs>
 		</junitMacro>
 	</target>
@@ -700,7 +674,7 @@
 	</target>
 
 	<target name="junit.pnp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
-		<junitMacro communication.protocol="pnp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
+		<junitMacro communication.protocol="pnp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
 	</target>
 
 	<target name="with.clover">
@@ -912,7 +886,6 @@
 		<delete dir="${junit.dir}" />
 		<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices/" />
 		<delete dir="${webservices.dir}/servicedeployer/build" />
-		<delete file="${axis2.dir}/repository/services/ServiceDeployer.aar" />
 		<delete dir="${tutorials.dir}" />
 		<subant target="doc.clean" inheritall="true">
 			<fileset dir="../doc/toolchain" includes="doc.xml" />
@@ -947,7 +920,7 @@
 				<include name="org/**/*.png" />
 				<include name="org/objectweb/proactive/core/component/adl/xml/proactive.dtd" />
 				<include name="org/**/jaas.config" />
-				<include name="META-INF/**"/>
+				<include name="META-INF/**" />
 			</fileset>
 		</copy>
 		<copy toDir="${cl.utils.dir}">
@@ -955,13 +928,6 @@
 				<include name="sources/*.txt" />
 			</fileset>
 		</copy>
-	</target>
-
-
-	<target name="stub" depends="compile.stubGenerator, compile.core">
-		<property name="stub.classdir" value="${cl.proactive.dir}" />
-
-		<generate_stub_for_pkg srcDir="${cl.proactive.dir}" package="org.objectweb.proactive" />
 	</target>
 
 
@@ -1005,19 +971,6 @@
 
 		<jdependMacro outputfile="jdepend_core" classesdir="${cl.proactive.dir}" />
 		<jdependMacro outputfile="jdepend_all" classesdir="${classes.dir}" />
-	</target>
-
-
-	<!-- ================================================================ -->
-	<!--                      Create Scilab javasci.jar                   -->
-	<!--  =============================================================== -->
-	<target name="scilabJar">
-		<delete dir="${dev.dir}/scilab/classes" />
-		<mkdir dir="${dev.dir}/scilab/classes" />
-		<javac srcdir="${dev.dir}/scilab/src" destdir="${dev.dir}/scilab/classes" deprecation="on" source="${source}" debug="${debug}">
-			<include name="**/*.java" />
-		</javac>
-		<jar jarfile="${lib.dir}/javasci.jar" basedir="${dev.dir}/scilab/classes" />
 	</target>
 
 
@@ -1100,47 +1053,12 @@
 	<!-- ================================================================================ -->
 	<!--    Create the proactive Web Archive to be used with the web service framework    -->
 	<!-- ================================================================================ -->
-	<target name="proActiveWarAxis2" depends="deploy.all" description="build the proactive.war archive with Axis2 embedded">
-
-		<war destfile="${deploy.dir}/proactive.war" webxml="${axis2.dir}/webapp/WEB-INF/web.xml">
-			<lib dir="${axis2.lib.dir}">
-				<include name="**" />
-				<exclude name="**servlet**" />
-				<exclude name="ant*.jar" />
-				<exclude name="axis2-adb-codegen*.jar" />
-				<exclude name="axis2-codegen*.jar" />
-				<exclude name="jibx-bind*.jar" />
-			</lib>
-			<lib dir="${ws.common.lib.dir}">
-				<include name="**" />
-			</lib>
-			<lib dir="${deploy.dir}/lib">
-				<include name="*.jar" />
-			</lib>
-			<webinf dir="${temp.class.dir}/WEB-INF" />
-			<fileset dir="${temp.class.dir}">
-				<include name="**/axis2-web/**" />
-			</fileset>
-		</war>
-		<delete dir="${temp.class.dir}" />
-	</target>
-
-	<target name="proActiveWarCXF" depends="deploy.all" description="build the proactive.war archive with CXF embedded">
+	<target name="proActiveWar"  depends="deploy.all" description="Build the proactive.war archive with CXF embedded">
 		<war destfile="${deploy.dir}/proactive.war" webxml="${cxf.dir}/etc/web.xml">
 			<webinf dir="${cxf.dir}/wsdl">
 				<include name="cxf-servlet.xml" />
 			</webinf>
 			<lib dir="${deploy.dir}/lib">
-				<include name="*.jar" />
-			</lib>
-			<lib dir="${cxf.lib.dir}">
-				<include name="*.jar" />
-				<exclude name="servlet-api-*.jar" />
-				<exclude name="geronimo-servlet_*.jar" />
-				<exclude name="jetty-*.jar" />
-				<exclude name="WHICH_JARS" />
-			</lib>
-			<lib dir="${ws.common.lib.dir}">
 				<include name="*.jar" />
 			</lib>
 			<fileset dir="${cxf.dir}/etc">
@@ -1149,9 +1067,11 @@
 		</war>
 	</target>
 
+	<target name="proActiveWarCXF" depends="proActiveWar" description="Deprecated, see proActiveWar"/>
+
 
 	<!-- MUST BE CALLED FROM AN INRIA MACHINE ON PRODUCTION NETWORK -->
-	<target name="uploadSchemas" description="upload schemas on web site">
+	<target name="uploadSchemas" description="Upload schemas on web site">
 		<property name="schemas.website.dir" value="/net/servers/www-sop/teams/oasis/proactive/schemas/gcm/1.0/" />
 		<mkdir dir="${schemas.website.dir}" />
 		<copy todir="${schemas.website.dir}" includeEmptyDirs="no" overwrite="true">

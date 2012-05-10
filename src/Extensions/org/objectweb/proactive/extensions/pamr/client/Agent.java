@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -39,7 +39,7 @@ package org.objectweb.proactive.extensions.pamr.client;
 import java.net.URI;
 
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.extensions.pamr.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 
@@ -67,10 +67,10 @@ public interface Agent {
      * @param oneWay
      * 			  if a response is expected or not.
      * @return the data response.
-     * @throws MessageRoutingException
+     * @throws PAMRException
      *             if the message cannot be send to the recipient
      */
-    public byte[] sendMsg(AgentID targetID, byte[] data, boolean oneWay) throws MessageRoutingException;
+    public byte[] sendMsg(AgentID targetID, byte[] data, boolean oneWay) throws PAMRException;
 
     /** Send a message to a remote {@link Agent}.
      * 
@@ -86,7 +86,7 @@ public interface Agent {
      * @throws ForwardingException
      *             if the timeout is reached.
      */
-    public byte[] sendMsg(URI targetURI, byte[] data, boolean oneWay) throws MessageRoutingException;
+    public byte[] sendMsg(URI targetURI, byte[] data, boolean oneWay) throws PAMRException;
 
     /** Send the reply to a message
      * 
@@ -94,12 +94,20 @@ public interface Agent {
      * 			The request correlated to this response
      * @param data
      * 			The response
-     * @throws MessageRoutingException
+     * @throws PAMRException
      * 			If the response cannot be sent
      */
-    public void sendReply(DataRequestMessage request, byte[] data) throws MessageRoutingException;
+    public void sendReply(DataRequestMessage request, byte[] data) throws PAMRException;
 
     /** Return the local Agent ID */
     public AgentID getAgentID();
 
+    /** Close the current tunnel
+     *
+     * The agent will eventually reconnect to the router.
+     *
+     * @param cause
+     *          Cause of the failure
+     */
+    public void closeTunnel(PAMRException cause);
 }

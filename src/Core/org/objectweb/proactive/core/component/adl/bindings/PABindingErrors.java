@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- *              Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -47,9 +47,25 @@ import org.objectweb.fractal.adl.error.ErrorTemplate;
  * @author The ProActive Team
  */
 public enum PABindingErrors implements ErrorTemplate {
+
     /** */
-    INVALID_MULTICAST_SIGNATURE(
-            "Invalid binding: incompatible binding between multicast client interface defined at \"%s\" and server interface defined at \"%s\": there is not the same number of methods.",
+    INVALID_SIGNATURE(
+            "Invalid binding: client interface signature is not compatible with server interface signature, and none of them is collective.\nClient interface defined at \"%s\".\nServer interface defined at \"%s\".",
+            "fromlocation", "tolocation"),
+
+    /** */
+    INVALID_FROM_INTERNAL(
+            "Invalid binding: client interface \"%s\" of enclosing component is not a server interface, nor it is internal-client. Interface defined at %s.",
+            "itfName", "location"),
+
+    /** */
+    INVALID_TO_INTERNAL(
+            "Invalid binding: server interface \"%s\" of enclosing component is not a client interface, nor it is internal-server. Interface defined at %s.",
+            "itfName", "location"),
+
+    /** */
+    INVALID_COLLECTIVE_SIGNATURE(
+            "Invalid binding: incompatible binding involving a multicast or gathercast interface. Client interface defined at \"%s\" and server interface defined at \"%s\" do not have the same number of methods.",
             "fromlocation", "tolocation");
 
     /** The groupId of ErrorTemplates defined in this enumeration. */

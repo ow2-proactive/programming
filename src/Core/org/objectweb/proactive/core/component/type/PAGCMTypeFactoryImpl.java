@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -72,7 +72,8 @@ public class PAGCMTypeFactoryImpl implements PAGCMTypeFactory {
     }
 
     /*
-     * @see org.objectweb.fractal.api.type.TypeFactory#createFcItfType(String, String, boolean, boolean, boolean)
+     * @see org.objectweb.fractal.api.type.TypeFactory#createFcItfType(String, String, boolean,
+     * boolean, boolean)
      */
     public InterfaceType createFcItfType(String name, String signature, boolean isClient, boolean isOptional,
             boolean isCollection) throws InstantiationException {
@@ -83,23 +84,43 @@ public class PAGCMTypeFactoryImpl implements PAGCMTypeFactory {
     /*
      * @see org.objectweb.fractal.api.type.TypeFactory#createFcType(InterfaceType[])
      */
-    public ComponentType createFcType(InterfaceType[] interfaceTypes) throws InstantiationException {
-
+    public ComponentType createFcType(InterfaceType[] fInterfaceTypes) throws InstantiationException {
         /*
-         * Workaround for null component types.
-         * AOKell and ProActive/Fractal assumes a component type is non null, whereas Julia envisions
-         * situations where this can be the case. To preserve a kind of
-         * compatibility, we bypass null component types with empty arrays of
+         * Workaround for null component types. AOKell and ProActive/Fractal assumes a component
+         * type is non null, whereas Julia envisions situations where this can be the case. To
+         * preserve a kind of compatibility, we bypass null component types with empty arrays of
          * interface types.
          */
-        if (interfaceTypes == null) {
-            interfaceTypes = new InterfaceType[] {};
+        if (fInterfaceTypes == null) {
+            fInterfaceTypes = new InterfaceType[] {};
         }
-        return new PAComponentTypeImpl(interfaceTypes);
+        return new PAComponentTypeImpl(fInterfaceTypes);
     }
 
     /*
-     * @see org.objectweb.proactive.core.component.type.PATypeFactory#createFcItfType(java.lang.String, java.lang.String, boolean, boolean, java.lang.String)
+     * @see org.objectweb.fractal.api.type.TypeFactory#createFcType(InterfaceType[])
+     */
+    public ComponentType createFcType(InterfaceType[] fInterfaceTypes, InterfaceType[] nfInterfaceTypes)
+            throws InstantiationException {
+        /*
+         * Workaround for null component types. AOKell and ProActive/Fractal assumes a component
+         * type is non null, whereas Julia envisions situations where this can be the case. To
+         * preserve a kind of compatibility, we bypass null component types with empty arrays of
+         * interface types.
+         */
+        if (fInterfaceTypes == null) {
+            fInterfaceTypes = new InterfaceType[] {};
+        }
+        if (nfInterfaceTypes == null) {
+            nfInterfaceTypes = new InterfaceType[] {};
+        }
+        return new PAComponentTypeImpl(fInterfaceTypes, nfInterfaceTypes);
+    }
+
+    /*
+     * @see
+     * org.objectweb.proactive.core.component.type.PATypeFactory#createFcItfType(java.lang.String,
+     * java.lang.String, boolean, boolean, java.lang.String)
      */
     public InterfaceType createGCMItfType(String name, String signature, boolean isClient,
             boolean isOptional, String cardinality) throws InstantiationException {

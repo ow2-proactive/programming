@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -68,7 +68,7 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
  */
 public class Attachment {
 
-    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
     /** The id of this attachment
      * 
@@ -197,20 +197,18 @@ public class Attachment {
     }
 
     public void send(ByteBuffer byteBuffer) throws IOException {
-        /*
-         * SocketChannel ARE thread safe. Extra locking to ensure serialization
-         * of the calls is useless
-         */
-        byteBuffer.clear();
-        while (byteBuffer.remaining() > 0) {
-            int bytes = this.socketChannel.write(byteBuffer);
+        synchronized (this.socketChannel) {
+            byteBuffer.clear();
+            while (byteBuffer.remaining() > 0) {
+                int bytes = this.socketChannel.write(byteBuffer);
 
-            if (logger.isDebugEnabled()) {
-                String dstClient = this.client == null ? "unknown" : client.getAgentId().toString();
-                String remaining = byteBuffer.remaining() > 0 ? byteBuffer.remaining() + " remaining to send"
-                        : "";
-                logger.debug("Sent a " + bytes + " bytes message to client " + dstClient + " with " +
-                    this.socketChannel.socket() + ". " + remaining);
+                if (logger.isDebugEnabled()) {
+                    String dstClient = this.client == null ? "unknown" : client.getAgentId().toString();
+                    String remaining = byteBuffer.remaining() > 0 ? byteBuffer.remaining() +
+                        " remaining to send" : "";
+                    logger.debug("Sent a " + bytes + " bytes message to client " + dstClient + " with " +
+                        this.socketChannel.socket() + ". " + remaining);
+                }
             }
         }
     }

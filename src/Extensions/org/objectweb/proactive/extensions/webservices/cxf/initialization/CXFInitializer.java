@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- *              Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -36,13 +36,9 @@
  */
 package org.objectweb.proactive.extensions.webservices.cxf.initialization;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.frontend.ServerFactoryBean;
-import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -93,24 +89,20 @@ public class CXFInitializer {
         if (logger.getLevel() != null && logger.getLevel() == Level.DEBUG) {
 
             /*
-             * Attaches a list of in-interceptors
+             * Attaches in-interceptors
              * In our case, only a logger is attached in order to be able
              * to see input soap messages
              */
-            List<Interceptor> inInterceptors = new ArrayList<Interceptor>();
             LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor();
-            inInterceptors.add(loggingInInterceptor);
-            svrFactory.setInInterceptors(inInterceptors);
+            svrFactory.getInInterceptors().add(loggingInInterceptor);
 
             /*
-             * Attaches a list of out-interceptors
+             * Attaches out-interceptors
              * In our case, only a logger is attached in order to be able
              * to see output soap messages
              */
-            List<Interceptor> outInterceptors = new ArrayList<Interceptor>();
             LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor();
-            outInterceptors.add(loggingOutInterceptor);
-            svrFactory.setOutInterceptors(outInterceptors);
+            svrFactory.getOutInterceptors().add(loggingOutInterceptor);
         }
 
         // Creates the service

@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -48,16 +48,13 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
-import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.component.deployment.Test;
 
 
@@ -65,20 +62,22 @@ import functionalTests.component.deployment.Test;
 // therefore, future pool must be serialized, which poses a problem if there is a reference on a HalfBody (from main)
 // solution : we run the test from an active object (no HalfBody involved)
 public class DummyAO implements Serializable {
-
+    private VariableContractImpl vc;
     private GCMApplication newDeploymentDescriptor = null;
+
+    public DummyAO() {
+    }
+
+    public DummyAO(VariableContractImpl vc) {
+        this.vc = vc;
+    }
 
     public boolean goOldDeployment() throws Exception {
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map<String, ProActiveDescriptor> context = new HashMap<String, ProActiveDescriptor>();
 
-        VariableContractImpl vContract = new VariableContractImpl();
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
-                .getJvmParameters(), VariableContractType.ProgramVariable);
-
         ProActiveDescriptor deploymentDescriptor = PADeployment.getProactiveDescriptor(Test.class
-                .getResource("/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(),
-                vContract);
+                .getResource("/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(), vc);
         context.put("deployment-descriptor", deploymentDescriptor);
 
         Component x = (Component) f.newComponent("functionalTests.component.migration.x", context);
@@ -141,17 +140,12 @@ public class DummyAO implements Serializable {
         URL descriptorPath = Test.class
                 .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
 
-        VariableContractImpl vContract = new VariableContractImpl();
-        vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
-                .name(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
-                .getJvmParameters(), VariableContractType.ProgramVariable);
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_HOSTCAPACITY, Integer.valueOf(4).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_VMCAPACITY, Integer.valueOf(1).toString(),
+                VariableContractType.DescriptorDefaultVariable);
 
-        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
+        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vc);
 
         newDeploymentDescriptor.startDeployment();
 

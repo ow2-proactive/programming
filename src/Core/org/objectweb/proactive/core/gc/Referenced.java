@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -38,36 +38,26 @@ package org.objectweb.proactive.core.gc;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Level;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.ThreadPools;
 
-
-/**
- * Just to give a name to our threads
- */
-class GCThreadPool implements ThreadFactory {
-    static int id;
-
-    public Thread newThread(Runnable r) {
-        return new Thread(r, "ProActive GC Broadcasting Thread " + (id++));
-    }
-}
 
 public class Referenced implements Comparable<Referenced> {
 
     /**
      * The threaded broadcaster
      */
-    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(2, Integer.MAX_VALUE,
-        GarbageCollector.TTA * 2, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(),
-        new GCThreadPool());
+    // Initial code expected to create a dynamic thread pool but a wrong usage of the ThreadPoolExecutor 
+    // API resulted of only 2 threads being created.
+    // Since this code is working (or broken) since years we stick to this behavior even if it was a bug
+    private static final ThreadPoolExecutor executor = ThreadPools.newFixedThreadPool(2,
+            new NamedThreadFactory("ProActive GC Broadcasting Thread "));
 
     /**
      * The body we use to communicate with the proxy

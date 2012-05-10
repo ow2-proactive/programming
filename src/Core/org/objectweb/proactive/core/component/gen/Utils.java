@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -48,7 +48,6 @@ import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
 
-import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.util.ClassDataCache;
@@ -111,7 +110,8 @@ public class Utils {
     }
 
     public static boolean isMetaObjectClassName(String classname) {
-        throw new ProActiveRuntimeException("not implemented yet");
+        return classname.startsWith(GENERATED_DEFAULT_PREFIX) && !isRepresentativeClassName(classname) &&
+            !isGathercastProxyClassName(classname) && !isWebServiceProxyClassName(classname);
     }
 
     public static boolean isGathercastProxyClassName(String classname) {
@@ -119,15 +119,55 @@ public class Utils {
                 .endsWith(GATHERCAST_ITF_PROXY_DEFAULT_SUFFIX));
     }
 
+    public static boolean isWebServiceProxyClassName(String classname) {
+        return (classname.startsWith(GENERATED_DEFAULT_PREFIX) && classname.endsWith(WEBSERVICE_PROXY_SUFFIX));
+    }
+
     /**
-     * Parse a representative classname and rebuild the interface signature i.e. the Java interface name.
-     * @param className
-     * @return the interface signature
+     * Parses a meta object classname and rebuilds the interface signature i.e. the Java interface name.
+     *
+     * @param className Name of the class.
+     * @return The interface signature.
+     */
+    public static String getInterfaceSignatureFromMetaObjectClassName(String className) {
+        if (!isMetaObjectClassName(className)) {
+            return null;
+        }
+
+        String tmp = className.replaceAll("^" + GENERATED_DEFAULT_PREFIX, "");
+        tmp = unEscapeClassesName(tmp, false).get(0).toString();
+
+        return tmp;
+    }
+
+    /**
+     * Parses a meta object classname and rebuilds the interface name.
+     *
+     * @param className Name of the class.
+     * @return The interface name.
+     */
+    public static String getInterfaceNameFromMetaObjectClassName(String className) {
+        if (!isMetaObjectClassName(className)) {
+            return null;
+        }
+
+        String tmp = className.replaceAll("^" + GENERATED_DEFAULT_PREFIX, "");
+        tmp = unEscapeClassesName(tmp, true).get(1).toString();
+
+        return tmp;
+    }
+
+    /**
+     * Parses a representative classname and rebuilds the interface signature i.e. the Java interface name.
+     *
+     * @param className Name of the class.
+     * @return The interface signature.
      */
     public static String getInterfaceSignatureFromRepresentativeClassName(String className) {
         if (!isRepresentativeClassName(className)) {
             return null;
         }
+
         String tmp = className.replaceAll("^" + GENERATED_DEFAULT_PREFIX, "");
         tmp = tmp.replaceAll(REPRESENTATIVE_DEFAULT_SUFFIX + "$", "");
         tmp = unEscapeClassesName(tmp, false).get(0).toString();
@@ -135,10 +175,17 @@ public class Utils {
         return tmp;
     }
 
+    /**
+     * Parses a representative classname and rebuilds the interface name.
+     *
+     * @param className Name of the class.
+     * @return The interface name.
+     */
     public static String getInterfaceNameFromRepresentativeClassName(String className) {
         if (!isRepresentativeClassName(className)) {
             return null;
         }
+
         String tmp = className.replaceAll("^" + GENERATED_DEFAULT_PREFIX, "");
         tmp = tmp.replaceAll(REPRESENTATIVE_DEFAULT_SUFFIX + "$", "");
         tmp = unEscapeClassesName(tmp, true).get(1).toString();
@@ -150,6 +197,7 @@ public class Utils {
         if (!isGathercastProxyClassName(className)) {
             return null;
         }
+
         String tmp = className.replaceAll("^" + GENERATED_DEFAULT_PREFIX, "");
         tmp = tmp.replaceAll(GATHERCAST_ITF_PROXY_DEFAULT_SUFFIX + "$", "");
         tmp = unEscapeClassesName(tmp, false).get(0).toString();
@@ -228,8 +276,23 @@ public class Utils {
         if (bytecode != null) {
             return bytecode;
         }
+
+        if (Utils.isMetaObjectClassName(classname)) {
+            // try to generate a meta object class
+            try {
+                bytecode = MetaObjectInterfaceClassGenerator.generateInterfaceByteCode(classname, null);
+            } catch (Exception e) {
+                ProActiveLogger.getLogger(Loggers.COMPONENTS_GEN_ITFS).error(
+                        "Meta object class generation for " + classname + " has failed", e);
+            }
+
+            if (bytecode != null) {
+                return bytecode;
+            }
+        }
+
         if (Utils.isRepresentativeClassName(classname)) {
-            // special case for GathercastProxy representative, we have to generate the proxy 
+            // special case for GathercastProxy representative, we have to generate the proxy
             // before generating its representative
             if (Utils.isGathercastProxyRepresentativeClassName(classname)) {
                 String proxyClassname = Utils.getInterfaceSignatureFromRepresentativeClassName(classname);
@@ -320,7 +383,7 @@ public class Utils {
             } else {
                 i++;
                 switch (generatedClassName.charAt(i)) {
-                    // one char Flags : 'GEN_ESCAPE_CHAR''a_char' 
+                    // one char Flags : 'GEN_ESCAPE_CHAR''a_char'
                     case GEN_ESCAPE_CHAR:
                         sb.append(GEN_ESCAPE_CHAR);
                         break;

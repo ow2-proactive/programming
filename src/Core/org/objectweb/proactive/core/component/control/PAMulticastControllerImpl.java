@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -66,6 +66,7 @@ import org.objectweb.proactive.core.component.collectiveitfs.MulticastBindingChe
 import org.objectweb.proactive.core.component.exceptions.ParameterDispatchException;
 import org.objectweb.proactive.core.component.group.PAComponentGroup;
 import org.objectweb.proactive.core.component.group.ProxyForComponentInterfaceGroup;
+import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatch;
@@ -96,7 +97,14 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
     @Override
     public void initController() {
         // this method is called once the component is fully instantiated with all its interfaces created
-        InterfaceType[] itfTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
+        InterfaceType[] itfTypes = null;
+        ComponentType componentType = (ComponentType) owner.getFcType();
+        if (componentType instanceof PAComponentType) {
+            itfTypes = ((PAComponentType) componentType).getAllFcInterfaceTypes();
+        } else {
+            itfTypes = componentType.getFcInterfaceTypes();
+        }
+
         for (int i = 0; i < itfTypes.length; i++) {
             PAGCMInterfaceType type = (PAGCMInterfaceType) itfTypes[i];
             if (type.isGCMMulticastItf()) {
@@ -108,8 +116,7 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
                 }
             }
         }
-        List<InterfaceType> interfaceTypes = Arrays.asList(((ComponentType) owner.getFcType())
-                .getFcInterfaceTypes());
+        List<InterfaceType> interfaceTypes = Arrays.asList(itfTypes);
         Iterator<InterfaceType> it = interfaceTypes.iterator();
 
         while (it.hasNext()) {

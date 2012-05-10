@@ -18,11 +18,12 @@
 			<configuration>
 				<java base="root" relpath="${java.home}/bin/java"/>	
 <!--				<jvmarg value="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8012" />	-->
-				<jvmarg value="-Dproactive.test=true ${jvmargDefinedByTest} -Dclover.initstring=${proactive.home}/compile/ProActiveCoverage.db"/>
+				<jvmarg value="-Dproactive.test=true ${jvmargDefinedByTest} -Dclover.initstring=&quot;${proactive.home}/compile/ProActiveCoverage.db&quot;"/>
 				<jvmarg value="${JVM_PARAMETERS}"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="classes/Tests"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
+					<pathElement base="proactive" relpath="dist/lib/cxf-2.5.2.jar"/>
 					<pathElement base="proactive" relpath="compile/lib/junit-4.8.2.jar"/>
 				</proactiveClasspath>		
 				

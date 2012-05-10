@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -236,52 +236,6 @@ public class NodeFactory {
         } catch (Exception e) {
             throw new NodeException("Failed to create a local node. name=" + nodeName, e);
         }
-    }
-
-    /** Creates a new node on the local ProActive runtime
-     * 
-     * The node URL can be in the form:
-     * <ul>
-     *  <li>nodeName</li>
-     *  <li>//localhost/nodeName</li>
-     *  <li>//<hostname>/nodeName</li>
-     *  <li>protocol://hostname[:port]/nodeName</li>
-     * </ul>
-     * 
-     * @param nodeURL the URL of the node to create
-     * @return the newly created node on the local JVM
-     * @exception NodeException if the node cannot be created
-     * 
-     * @deprecated replaced by {@link #createLocalNode(String, boolean, ProActiveSecurityManager, String, String)}
-     */
-    @Deprecated
-    public static Node createNode(String nodeURL) throws NodeException, AlreadyBoundException {
-        String nodeName = URIBuilder.getNameFromURI(nodeURL);
-        return createLocalNode(nodeName, false, null, null);
-    }
-
-    /** Creates a new node on the local ProActive runtime
-     * 
-     * The node URL can be in the form:
-     * <ul>
-     *  <li>nodeName</li>
-     *  <li>//localhost/nodeName</li>
-     *  <li>//<hostname>/nodeName</li>
-     *  <li>protocol://hostname[:port]/nodeName</li>
-     * </ul>
-     * 
-     * @param nodeURL the URL of the node to create
-     * @param replacePreviousBinding
-     * @return the newly created node on the local JVM
-     * @exception NodeException if the node cannot be created
-     * 
-     * @deprecated replaced by {@link #createLocalNode(String, boolean, ProActiveSecurityManager, String, String)}
-     */
-    @Deprecated
-    public static Node createNode(String nodeURL, boolean replacePreviousBinding,
-            ProActiveSecurityManager psm, String vnname) throws NodeException, AlreadyBoundException {
-        String nodeName = URIBuilder.getNameFromURI(nodeURL);
-        return createLocalNode(nodeName, replacePreviousBinding, psm, vnname);
     }
 
     /**

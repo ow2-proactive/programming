@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -54,6 +54,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurationMessage;
 
@@ -63,11 +64,12 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurat
  * @since ProActive 4.1.0
  */
 class Main {
-    static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
     private Options options;
 
     public static void main(String[] args) throws IOException {
+        new PAMRLog4jCompat().ensureCompat();
         new Main(args);
     }
 
@@ -129,7 +131,7 @@ class Main {
                     port = RouterImpl.DEFAULT_PORT;
                 } else {
                     try {
-                        port = new Short(arg);
+                        port = Integer.parseInt(arg);
                     } catch (NumberFormatException e) {
                         printHelpAndExit("Invalid port number: " + arg);
                     } catch (IllegalArgumentException e) {
@@ -164,7 +166,7 @@ class Main {
                 }
 
                 if (line.hasOption("v")) {
-                    Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
+                    Logger l = Logger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
                     l.setLevel(Level.DEBUG);
                 }
 
@@ -202,7 +204,7 @@ class Main {
                     config.setPort(RouterImpl.DEFAULT_PORT);
                 } else {
                     try {
-                        short i = new Short(arg);
+                        int i = Integer.parseInt(arg);
                         config.setPort(i);
                     } catch (NumberFormatException e) {
                         printHelpAndExit("Invalid port number: " + arg);
@@ -262,7 +264,7 @@ class Main {
                 }
 
                 if (line.hasOption("v")) {
-                    Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
+                    Logger l = Logger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
                     l.setLevel(Level.DEBUG);
                 }
 

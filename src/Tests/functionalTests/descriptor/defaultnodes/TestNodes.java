@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -36,6 +36,10 @@
  */
 package functionalTests.descriptor.defaultnodes;
 
+import java.io.File;
+import java.net.URL;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -52,19 +56,19 @@ import functionalTests.FunctionalTest;
  *
  */
 public class TestNodes extends FunctionalTest {
-    private static String XML_LOCATION;
+    private static URL XML_LOCATION;
 
     static {
         String value = System.getProperty("functionalTests.descriptor.defaultnodes.file");
         if (value != null) {
-            XML_LOCATION = TestNodes.class.getResource(value).getPath();
+            XML_LOCATION = TestNodes.class.getResource(value);
         } else {
             if ("ibis".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
-                XML_LOCATION = TestNodes.class.getResource(
-                        "/functionalTests/descriptor/defaultnodes/NodesIbis.xml").getPath();
+                XML_LOCATION = TestNodes.class
+                        .getResource("/functionalTests/descriptor/defaultnodes/NodesIbis.xml");
             } else {
-                XML_LOCATION = TestNodes.class.getResource(
-                        "/functionalTests/descriptor/defaultnodes/Nodes.xml").getPath();
+                XML_LOCATION = TestNodes.class
+                        .getResource("/functionalTests/descriptor/defaultnodes/Nodes.xml");
             }
         }
     }
@@ -77,9 +81,11 @@ public class TestNodes extends FunctionalTest {
     private static Node remoteACVMNode = null;
     private static String remoteHostname = "localhost";
 
+    @Ignore
     @Test
     public void action() throws Exception {
-        proActiveDescriptor = PADeployment.getProactiveDescriptor("file:" + XML_LOCATION, super.vContract);
+        proActiveDescriptor = PADeployment.getProactiveDescriptor(new File(XML_LOCATION.toURI())
+                .getAbsolutePath(), super.getVariableContract());
         proActiveDescriptor.activateMappings();
         TestNodes.virtualNodes = proActiveDescriptor.getVirtualNodes();
         for (int i = 0; i < virtualNodes.length; i++) {

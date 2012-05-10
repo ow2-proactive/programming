@@ -83,7 +83,7 @@
 					<jvmParameters>
 						<parameter value="-Dproactive.rmi.port=7199" />
 						<parameter value="-Dproactive.test=true"/>
-						<parameter value="-Dclover.initstring=${proactive.home}/compile/ProActiveCoverage.db"/>
+						<parameter value="-Dclover.initstring=&quot;${proactive.home}/compile/ProActiveCoverage.db&quot;"/>
 					</jvmParameters>
 					<policyFile><absolutePath value="${proactive.home}/compile/proactive.java.policy"/></policyFile>
 				</jvmProcess>

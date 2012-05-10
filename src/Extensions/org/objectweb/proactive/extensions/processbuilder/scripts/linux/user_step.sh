@@ -1,3 +1,4 @@
+#! /bin/sh
 # This script will try to proceed with the next step of the launching mechanism, i.e. 
 # it will SUDO the command_step.
 #
@@ -6,10 +7,11 @@
 # error immediately, and ignore any follow-up
 
 # parameters:
-#	$1 - temp file for the return value of the user command
-#	$2 - working dir for user command (absolute)
-# 	$3 - user name
-#	$4... - command to execute
+#	$1 - token
+#	$2 - temp file for the return value of the user command
+#	$3 - working dir for user command (absolute)
+# 	$4 - user name
+#	$5... - command to execute
 
 # IMPORTANT: On error messages refer to the JavaDoc of OSProcessBuilder
 
@@ -19,18 +21,20 @@ OSPL_E_CAUSE="CAUSE";
 OSLP_PACKAGE="org.objectweb.proactive.extensions.processbuilder.exception."
 #---------------
 
-# temp file
-tmp=$1
+token=$1 
 
-# user name
-usr=$3
+# temp file
+tmp=$2
 
 # user command's working dir
-workdir=$2
+workdir=$3
+
+# user name
+usr=$4
 
 # simulating password input, in order not to get blocked in case "sudo -u root" happens for instance.
-# also, we shift the first 3 parameters; this way $@ will contain only the user command
-shift; shift; shift;
+# also, we shift the first 4 parameters; this way $@ will contain only the user command
+shift; shift; shift; shift;
 
 passw=$PA_OSPB_USER_PASSWORD
 keycont=$PA_OSPB_USER_KEY_CONTENT
@@ -41,21 +45,25 @@ export PA_OSPB_USER_KEY_CONTENT=***
 if [ "$passw" == "" ]; then 
   if [ "$keycont" == "" ]; then 
     # use sudo
-    echo 0 | sudo -ESHu $usr ./command_step.sh $tmp "$workdir" "$@";
+    echo 0 | sudo -ESHu $usr `pwd`/command_step.sh $token $tmp "$workdir" "$@"
     exitc=$?
   else 
     # use ssh
-    export >> $tmp;
+    # PROACTIVE-970 : default env is used
+    # Note that tmp is still used fo return value
+    # export >> $tmp;
     
+    OLD_UMASK=`umask`
+    umask 0177
     keyfile=`mktemp`
+    umask $OLD_UMASK
     echo "$keycont" > $keyfile
-    chmod 400 $keyfile
 
     for i in "$@" 
-      do 
+      do
       args="${args} ""'"${i//\'/\'\"\'\"\'}"'"
     done
-    ssh -n -i $keyfile $usr@localhost `pwd`/command_step.sh $tmp "$workdir" $args
+    ssh -n -o PasswordAuthentication=no -i $keyfile $usr@localhost `pwd`/command_step.sh $token $tmp "$workdir" $args
     exitc=$?
     rm $keyfile
   fi;
@@ -78,10 +86,10 @@ else
   # target architecture used at compilation time.
   if [[ `uname -i` == *64* ]];
   then
-    echo "$passw" | ./suer64 $usr ./command_step.sh $tmp "$workdir" $args;
+    echo "$passw" | ./suer64 $usr ./command_step.sh $token $tmp "$workdir" $args;
     exitc=$?
   else
-    echo "$passw" | ./suer32 $usr ./command_step.sh $tmp "$workdir" $args;
+    echo "$passw" | ./suer32 $usr ./command_step.sh $token $tmp "$workdir" $args;
     exitc=$?
   fi  
   ###### DEVELOPER NOTE:
@@ -96,7 +104,7 @@ fi;
 # sudo should exit with error code 1 only in case it was unsuccessful
 # the command which is executed inside will pass its return value through a tempfile
 if [ $exitc != 0 ]; then
-  error="$OSPL_E_PREFIX ${OSLP_PACKAGE}OSUserException $OSPL_E_CAUSE Cannot execute as user $usr! (Code=$exitc)";
+  error="$OSPL_E_PREFIX ${OSLP_PACKAGE}OSUserException $OSPL_E_CAUSE Cannot execute as user $usr! (Code=$exitc) token:$token tmp:$tmp user:$usr";
   echo $error 1>&2;
   exit 1;
 fi;

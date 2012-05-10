@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -36,11 +36,13 @@
  */
 package org.objectweb.proactive.core.httpserver;
 
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.mortbay.thread.ThreadPool;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.ThreadPools;
 
 
 /** An unbounded ThreadPool using Java 5 ThreadPoolExecutor
@@ -63,8 +65,8 @@ class UnboundedThreadPool implements ThreadPool {
     private final ThreadPoolExecutor exec;
 
     public UnboundedThreadPool() {
-        this.exec = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 1L, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>());
+        ThreadFactory tf = new NamedThreadFactory("ProActive Http Server Thread", false);
+        exec = ThreadPools.newCachedThreadPool(1L, TimeUnit.SECONDS, tf);
     }
 
     public boolean dispatch(Runnable job) {

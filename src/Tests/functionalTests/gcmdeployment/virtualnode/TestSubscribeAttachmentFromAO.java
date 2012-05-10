@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -47,37 +47,41 @@ import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestSubscribeAttachmentFromAO extends FunctionalTest {
+public class TestSubscribeAttachmentFromAO extends GCMFunctionalTest {
+
+    public TestSubscribeAttachmentFromAO() {
+        super(1, 1);
+    }
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {
         TestSubscribeAttachmentFromAODeployer ao = (TestSubscribeAttachmentFromAODeployer) PAActiveObject
-                .newActive(TestSubscribeAttachmentFromAODeployer.class.getName(), new Object[] {});
+                .newActive(TestSubscribeAttachmentFromAODeployer.class.getName(), new Object[] { super
+                        .getFinalVariableContract() });
         ao.deploy();
         Assert.assertTrue(ao.waitUntilCallbackOccur());
     }
 
     static public class TestSubscribeAttachmentFromAODeployer implements Serializable, InitActive {
         GCMApplication gcma;
+        VariableContractImpl vc;
         boolean notified = false;
 
         public TestSubscribeAttachmentFromAODeployer() {
 
         }
 
-        public TestSubscribeAttachmentFromAODeployer(GCMApplication gcma) {
-            this.gcma = gcma;
+        public TestSubscribeAttachmentFromAODeployer(VariableContractImpl vc) {
+            this.vc = vc;
         }
 
         public void initActivity(Body body) {
@@ -87,14 +91,8 @@ public class TestSubscribeAttachmentFromAO extends FunctionalTest {
         public void deploy() {
             try {
                 URL appDesc = this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml");
-
-                VariableContractImpl vContract = new VariableContractImpl();
-                vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_OS, OperatingSystem
-                        .getOperatingSystem().name(), VariableContractType.DescriptorDefaultVariable);
-
-                vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest
-                        .getJvmParameters(), VariableContractType.ProgramVariable);
-                GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(appDesc, vContract);
+                GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(appDesc,
+                        (VariableContractImpl) vc);
 
                 GCMVirtualNode vn = gcma.getVirtualNode("nodes");
                 vn.subscribeNodeAttachment(PAActiveObject.getStubOnThis(), "callback", true);

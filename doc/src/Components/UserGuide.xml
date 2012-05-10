@@ -2090,9 +2090,8 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							making transparent the unmarshalling of the
 							request and the marshalling of the response. Thus,
 							the service developer doesn't have to worry with
-							SOAP. In our case, we can use Axis2 (used by
-							default) or CXF which can be installed into any
-							HTTP server.
+							SOAP. In our case, we use Apache CXF which can be
+							installed into any HTTP server.
 						</para>
 					</listitem>
 					<listitem>
@@ -2101,9 +2100,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							Client's role is to consume a web service. It is
 							the producer of the SOAP message. The client
 							developer doesn't have to worry about how the
-							service is implemented. The Axis2 and CXF java
-							libraries provide classes to easily invoke a
-							service (see examples).
+							service is implemented. The CXF java libraries
+							provide classes to easily invoke a service
+							(see examples).
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -2131,7 +2130,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					archive. For this, you have to go into your
 					<literal>compile</literal> directory of your ProActive
 					home and type
-					<literal>build proActiveWar[Axis2|CXF]</literal>. The
+					<literal>build proActiveWar</literal>. The
 					<literal>proactive.war</literal> file will be built into
 					the <literal>dist</literal> directory.
 				</para>
@@ -2198,8 +2197,6 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_6.snip" /></textobject></programlisting>
 						<para>or</para>
-						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_8.snip" /></textobject></programlisting>
-						<para>or else</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_7.snip" /></textobject></programlisting>
 					</listitem>
 					<listitem>
@@ -2222,7 +2219,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 					<listitem>
 						<para>
-							And finally, you can used one of the
+							And finally, you can use one of the
 							<literal>WebServices</literal> methods:
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/WebServices_Methods_Components.snip" /></textobject></programlisting>
@@ -2274,10 +2271,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						<para>
 							The first line is meant to retrieve the path of the
 							controller file. This file is located at
-							<literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/axis2/initialization/axis2-component-config.xml"</literal>
-							for the Axis2 controller or at
-							<literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/cxf/initialization/cxf-component-config.xml"</literal>
-							for the CXF controller.
+							<literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/cxf/initialization/cxf-component-config.xml"</literal>.
 						</para>
 					</listitem>
 					<listitem>
@@ -2303,7 +2297,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 					<listitem>
 						<para>
-							And finally, you can used one of the
+							And finally, you can use one of the
 							<literal>PAWebServicesController</literal> methods:
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/PAWebServicesController_expose_methods.snip" /></textobject></programlisting>
@@ -2336,10 +2330,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 			<section xml:id="exposeonremotejettyservers_29"><info><title>Exposing as a web service on remote Jetty servers launched during the deployment</title></info>
 				<para>
-					When you call the exposition of your component, the Axis2
-					servlet or the CXF one is deployed on the local Jetty server.
-					It is therefore possible to expose your object locally
-					without doing anything else.
+					When you call the exposition of your component, the CXF
+					servlet is deployed on the local Jetty server. It is
+					therefore possible to expose your object locally without
+					doing anything else.
 				</para>
 
 				<para>
@@ -2354,9 +2348,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<para>
 					The web service extension provides classes that implements the
 					<literal>InitActive</literal> interface which are in charge of
-					deploying the CXF or the Axis2 servlet on the host where your
-					object has been initialized. Thus, you just have to instantiate
-					your component using this implementation of
+					deploying the CXF servlet on the host where your object has
+					been initialized. Thus, you just have to instantiate your
+					component using this implementation of
 					<literal>InitActive</literal>.
 				</para>
 
@@ -2402,9 +2396,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					Once the component interface exposed, you can access it via
-					any web service client (such as C#, SoapUI, Axis2 API, CXF
-					API...) or with your favorite browser (only if the returned
-					type of your service methods are primitive types).
+					any web service client (such as C#, SoapUI, Apache CXF API,
+					Apache Axis2 API, ...) or with your favorite browser (only if
+					the returned type of your service methods are primitive
+					types).
 				</para>
 
 				<para>
@@ -2433,9 +2428,15 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					using Apache SOAP, this new version which uses Axis2 or CXF
 					can handle complex types. That is, with this version, you can
 					implement a service which exposes a method returning or taking
-					in argument an instance of any class. However, the class of
-					this instance has to respect some criterion due to the
-					serialization and Axis2/CXF restrictions:
+					in argument an instance of any class. By using CXF and JAX-WS
+					annotations, there is no limitation on the type of this class.
+					It only implies to use the appropriate adapters (see the
+					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://cxf.apache.org/docs/index.html">
+						CXF documentation
+					</link> for more details). However, if you do not want to use
+					JAX-WS annotations or CXF, the class of this instance has to
+					respect some criterion due to the serialization and Axis2/CXF
+					restrictions:
 				</para>
 
 				<itemizedlist>
@@ -2463,37 +2464,6 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						</para>
 					</listitem>
 				</itemizedlist>
-
-				<para>
-					Axis2 and CXF are not fully compatible. In particular, clients
-					behave differently. Axis2 client uses to send SOAP requests
-					using "argn" as name for the n-th argument of the requested
-					method. However, CXF creates the WSDL service using parameter
-					names as written into the Java code. Thus, there is a
-					difference of names and the service cannot find argument names
-					in the SOAP message matching with the argument names of the
-					requested method. Null value is therefore used as parameters.
-					To easily solve this issue, you can change the argument names
-					of your service to match with "argn". If you cannot change the
-					service, you have to use another client as those used in the
-					ProActive extension.
-				</para>
-
-				<para>
-					If you want to use the CXF client provided by ProActive for
-					calling an Axis2 service, you will also face difficulties since
-					this client waits for a returned SOAP message that the Axis2
-					service will not return for a void method. One thing but not the
-					best you can do, is to modify ProActive CXF client in order to
-					ignore the exception for oneWayCall. This is not the best
-					solution since other exceptions will be ignored too.
-				</para>
-
-				<para>
-					In a general manner, we advise you to use the same framework for
-					the exposition as a web service and for the client consuming
-					this service.
-				</para>
 
 			</section>
 
@@ -2558,8 +2528,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					You can also call a webservice using the ProActive client which
-					uses, depending on the chosen framework, either an Axis2 or a CXF
-					client. Here is an example:
+					uses a CXF client. Here is an example:
 				</para>
 
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_5.snip" /></textobject></programlisting>
@@ -2618,13 +2587,12 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</para>
 
 			<para>
-				By default, the Axis2 API is used to call the web service, but
+				By default, the CXF API is used to call the web service, but
 				it is also possible to specify another library. If so, the URL
 				has to be followed, in parenthesis, by the ID or the full name
 				of the class to use to call the web service. Thus, ProActive
-				offers several ways to call web services: using Axis2 API or
-				using various configurations of CXF API. IDs are defined in
-				the class
+				offers several ways to call web services by using various
+				configurations of CXF API. IDs are defined in the class
 				<literal>org.objectweb.proactive.core.component.webservices.WSInfo</literal>.
 				Otherwise, the full	class name has to be the one of a class
 				implementing the
@@ -2639,18 +2607,18 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<itemizedlist>
 					<listitem>
 						<para>
-							"http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.Axis2WSCaller)"
+							"http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.CXFWSCaller)"
 						</para>
 					</listitem>
 					<listitem>
 						<para>
-							which is equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld(" + org.objectweb.proactive.core.component.webservices.WSInfo.AXIS2WSCALLER_ID + ")"
+							which is equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld(" + org.objectweb.proactive.core.component.webservices.WSInfo.CXFWSCALLER_ID + ")"
 						</para>
 					</listitem>
 					<listitem>
 						<para>
 							which is also equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld"
-							since Axis2 is used by default.
+							since CXF is used by default.
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -2817,8 +2785,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					<listitem>
 						<para>
 							Methods dedicated to component instantiation:
-							they allow the specification of a NF type of a
-							component and the instantiation of NF components;
+							they allow the specification of the NF part of
+							the type of a component and the instantiation
+							of NF components.
 						</para>
 					</listitem>
 					<listitem>
@@ -2828,7 +2797,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							and managing the life-cycle of the membrane.
 							Those methods are proposed as an extension of the
 							Fractal component model and consequently of the
-							GCM model;
+							GCM model.
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -2907,7 +2876,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					object controller and two component controllers, the component
 					controllers are connected together and with the outside of the
 					membrane by different bindings. For the moment, we do not specify
-					whether components are localized with the membrane, or distributed.
+					whether components are localized with the membrane or distributed.
 				</para>
 
 				<para>
@@ -2966,7 +2935,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						parallel with the membrane, this method can also induce a
 						significant speedup, and a better availability of the membrane.
 						To summarize, controllers invoked frequently and performing very
-						short treatments, would be more efficiently implemented by local
+						short treatments would be more efficiently implemented by local
 						objects or local components. For controllers called less frequently
 						or which involve long computations, making them distributed would
 						improve performances and availability of the membrane.
@@ -2981,19 +2950,31 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<section xml:id="NonfunctionalTypeandNonfunctionalComponents_53"><info><title>Non-functional Type and Non-functional Components</title></info>
 
 					<para>
-						To typecheck bindings between membranes, we have to extend the GCM
-						model with a new concept: the non-functional type of a component.
-						This type is defined as the union of the types of NF interfaces the
-						membrane exposes. To specify the NF type of a component, we propose
-						to overload the <literal>newFcInstance</literal> method (the one to
-						create functional components) as follows:
-						<programlisting language="java">public Component newFcInstance(Type fType,Type nfType, any contentDesc, any controllerDesc);</programlisting>
-						In this method, nfType represents the NF type of the component; it
-						can be specified by hand. Soon, it should be possible to specify the
-						NF type within a configuration file: the controller descriptor
-						argument (controllerDesc) can be a file written in Architecture
-						Description Language (ADL) containing the whole description of the
-						NF system.
+						To type check bindings between membranes, we have to extend the GCM
+						model: the type of a component must includes a non-functional part.
+						This part is defined as the union of the types of NF interfaces the
+						membrane exposes. To specify the NF part in the type of a component,
+						we defined the classes:
+						<itemizedlist>
+							<listitem>
+								<para>
+									<literal>PAComponentType</literal> which is an extension
+									of the <literal>ComponentType</literal> class and adds
+									methods to access to the non functional interface types
+									of a component type. 
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<literal>PAGCMTypeFactory</literal> which is an extension
+									of the <literal>GCMTypeFactory</literal> class and adds a
+									method to create a <literal>PAComponentType</literal>.
+								</para>
+							</listitem>
+						</itemizedlist>
+						Then the component can be instantiated as usually by using the
+						<literal>newFcInstance</literal> method where the type given as
+						parameter is an instance of <literal>PAComponentType</literal>.
 					</para>
 
 					<para>
@@ -3007,9 +2988,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						Inversely, a functional component cannot be added inside a membrane.
 						As a consequence, direct bindings between functional interfaces of NF
 						and functional components are forbidden. In the generic factory, a
-						method named newNFcInstance that creates this new kind of components
+						method named newNfFcInstance that creates this new kind of components
 						has been added:
-						<programlisting language="java">public Component newNFcInstance(Type fType,Type nfType, any contentDesc, any controllerDesc);</programlisting>
+						<programlisting language="java">public Component newNfFcInstance(Type fType, any contentDesc, any controllerDesc);</programlisting>
 						Parameters of this method are identical to its functional equivalent and
 						NF components are created in the same way as functional ones.
 					</para>
@@ -3045,25 +3026,25 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						<itemizedlist mark="opencircle">
 							<listitem>
 								<para>
-									<literal>addNFSubComponent(Component component)</literal>:
+									<literal>nfAddFcSubComponent(Component component)</literal>:
 									adds the NF component given as argument to the membrane;
 								</para>
 							</listitem>
 							<listitem>
 								<para>
-									<literal>removeNFSubComponent(Component component)</literal>:
+									<literal>nfRemoveFcSubComponent(Component component)</literal>:
 									removes the specified NF component from the membrane;
 								</para>
 							</listitem>
 							<listitem>
 								<para>
-									<literal>getNFcSubComponents()</literal>: returns an array
+									<literal>nfGetFcSubComponents()</literal>: returns an array
 									containing all the NF components;
 								</para>
 							</listitem>
 							<listitem>
 								<para>
-									<literal>getNFcSubComponent(string name)</literal>: returns
+									<literal>nfGetFcSubComponent(string name)</literal>: returns
 									the specified NF component, the string argument is the name
 									of the NF component;
 								</para>
@@ -3118,24 +3099,22 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						the interface “i1” of the component “nfComp1” inside the membrane to the
 						interface “i2” of the component “nfComp2”. Suppose "mc" is a reference to
 						the membrane controller of the host component.
-						<programlisting language="java">Component nfComp1=mc.getNFcSubComponent("nfComp1");
-Component nfComp2=mc.getNFcSubComponent("nfComp2");
-GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));
-						</programlisting>
+						<programlisting language="java">Component nfComp1=mc.nfGetFcSubComponent("nfComp1");
+Component nfComp2=mc.nfGetFcSubComponent("nfComp2");
+GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));</programlisting>
 					</para>
 
 					<para>
 						Using the API of <xref linkend="codeAPI2"/>, this binding can be realized
 						by the following code, that binds the component “nfComp1” correctly.
-						<programlisting language="java">mc.bindNFc("nfComp1.i1","nfComp2.i2");</programlisting>
+						<programlisting language="java">mc.nfBindFc("nfComp1.i1","nfComp2.i2");</programlisting>
 						Similarly to the example above, all the methods of
 						<xref linkend="codeAPI2"/> result in calls on well-known Fractal controllers.
 						Interfaces are represented as strings of the form component.interface, where
 						component is the name of the inner component and interface is the name of
 						its client or server interface. We use the name “membrane” to represent the
 						membrane of the host component, e.g. membrane.i1 is the NF interface i1 of
-						the host component; in this case interface is the name of an interface from
-						the NF type. For example, <literal>bindNFc(string, string)</literal>
+						the host component. For example, <literal>nfBindFc(string, string)</literal>
 						allows to perform the bindings: <emphasis>b1</emphasis>,
 						<emphasis>b2</emphasis>, <emphasis>b4</emphasis>, <emphasis>b3</emphasis>,
 						<emphasis>b9</emphasis>, <emphasis>b7</emphasis> and <emphasis>b5</emphasis>
@@ -3152,7 +3131,7 @@ GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));
 						address space, there are two alternatives: create a remote reference on this
 						entity; or make a copy of it. When considering a copy of a NF local component,
 						the NF calls are not consistent. If an invocation on
-						<literal>getNFcSubComponent(string name)</literal> returns a copy of the
+						<literal>nfGetFcSubComponent(string name)</literal> returns a copy of the
 						specified NF component, calls performed on this copy will not be performed
 						on the “real” NF component inside the membrane. Methods introduced in
 						<xref linkend="codeAPI2"/> solve this problem.

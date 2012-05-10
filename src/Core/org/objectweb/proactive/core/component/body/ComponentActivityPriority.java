@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -73,7 +73,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
     }
 
     public ComponentActivityPriority(Active activity, Object reifiedObject) {
-        super();
+        super(activity, reifiedObject);
 
         // RunActive
         if ((activity != null) && activity instanceof RunActive) {
@@ -108,12 +108,15 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
             try {
                 Service componentService = new Service(body);
                 NFRequestFilterImpl nfRequestFilter = new NFRequestFilterImpl();
+
                 while (body.isActive()) {
                     ComponentBody componentBody = (ComponentBody) body;
+
                     while (LifeCycleController.STOPPED.equals(GCM.getGCMLifeCycleController(
                             componentBody.getPAComponentImpl()).getFcState())) {
                         PriorityController pc = GCM.getPriorityController(componentBody.getPAComponentImpl());
                         NF3RequestFilter nf3RequestFilter = new NF3RequestFilter(pc);
+
                         if (componentService.getOldest(nf3RequestFilter) != null) {
                             // NF3 bypass all other request 
                             // System.err.println(
@@ -128,6 +131,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
                             break;
                         }
                     }
+
                     if (!body.isActive()) {
                         // in case of a migration 
                         break;
@@ -136,7 +140,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
                     // 3.1. init object Activity
                     // life cycle started : starting activity of the object
                     if (functionalInitActive != null) {
-                        functionalInitActive.initActivity(activeBody);
+                        functionalInitActive.initActivity(body);
                         //functionalInitActive = null; // we won't do it again
                     }
 
@@ -145,6 +149,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
                     // componentServe (includes filter on priority)
                     functionalRunActive.runActivity(body);
                     ((ComponentBody) body).finishedFunctionalActivity();
+
                     if (functionalEndActive != null) {
                         functionalEndActive.endActivity(body);
                     }

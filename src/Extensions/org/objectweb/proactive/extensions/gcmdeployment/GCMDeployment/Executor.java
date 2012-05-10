@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -44,12 +44,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 public class Executor {
@@ -75,49 +76,51 @@ public class Executor {
         try {
             logger.info("executing command=" + command);
 
-            Process p = null;
+            ProcessBuilder pb = null;
             switch (OperatingSystem.getOperatingSystem()) {
                 case unix:
-                    p = Runtime.getRuntime().exec(
-                            new String[] { CentralPAPropertyRepository.PA_GCMD_UNIX_SHELL.getValue(), "-c",
-                                    command });
+                    pb = new ProcessBuilder(CentralPAPropertyRepository.PA_GCMD_UNIX_SHELL.getValue(), "-c",
+                        command);
                     break;
                 case windows:
-                    p = Runtime.getRuntime().exec(command);
+                    // if command is passed to the ProcessBuilder as single string it can be corrupted on windows 
+                    // (see PROACTIVE-1176)
+                    String[] tokenizedCommand = tokenizeCommand(command);
+                    pb = new ProcessBuilder(tokenizedCommand);
                     break;
             }
 
-            InputStreamMonitor stdoutM = new InputStreamMonitor(MonitorType.STDOUT, p.getInputStream(),
-                command, logger);
-            InputStreamMonitor stderrM = new InputStreamMonitor(MonitorType.STDERR, p.getErrorStream(),
-                command, logger);
-            stderrM.start();
-            stdoutM.start();
-            threads.add(stdoutM);
-            threads.add(stderrM);
+            pb.redirectErrorStream(true);
+            Process p = pb.start();
+            InputStreamMonitor streamMonitor = new InputStreamMonitor(p.getInputStream(), command, logger);
+            streamMonitor.start();
+            threads.add(streamMonitor);
         } catch (IOException e) {
             logger.warn("Cannot execute: " + command, e);
         }
     }
 
-    private enum MonitorType {
-        STDOUT, STDERR;
+    private static String[] tokenizeCommand(String command) {
+        StringTokenizer st = new StringTokenizer(command);
+        String[] cmdarray = new String[st.countTokens()];
+        for (int i = 0; st.hasMoreTokens(); i++) {
+            cmdarray[i] = st.nextToken();
+        }
+        return cmdarray;
     }
 
     static private class InputStreamMonitor extends Thread {
-        MonitorType type;
         InputStream stream;
         String cmd;
         Logger logger;
 
-        public InputStreamMonitor(MonitorType type, InputStream stream, String cmd, Logger logger) {
+        public InputStreamMonitor(InputStream stream, String cmd, Logger logger) {
             this.logger = logger;
-            logger.trace("Monitor started: " + type.name() + " " + cmd);
-            this.type = type;
+            logger.trace("Monitor started: " + cmd);
             this.stream = stream;
             this.cmd = cmd;
             setDaemon(true);
-            setName("GCM Deployment" + type.toString() + " Monitor for " + cmd.subSequence(0, 100));
+            setName("GCM Deployment Monitor for " + cmd.subSequence(0, 100));
         }
 
         @Override
@@ -130,7 +133,7 @@ public class Executor {
                 while ((line = br.readLine()) != null) {
                     logger.info(line);
                 }
-                logger.trace("Monitor exited: " + type.name() + " " + cmd);
+                logger.trace("Monitor exited: " + cmd);
             } catch (IOException e) {
                 // TODO: handle exception
                 e.printStackTrace();

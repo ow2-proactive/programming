@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -42,17 +42,14 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.URI;
-import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.objectweb.proactive.api.PARemoteObject;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 
@@ -82,18 +79,14 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     //
     // -- CONSTRUCTOR -----------------------------------------------
     //
-    private RTBroadcaster() {
+    private RTBroadcaster() throws BroadcastDisabledException {
         // --Address
         try {
             address = InetAddress.getByName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_ADDRESS
                     .getValueAsString());
-        } catch (UnknownHostException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
 
-        //--The property is specified
-        try {
+            //--The property is specified
+
             Class<? extends LocalBTCallback> btCallbackClass;
             btCallbackClass = (Class<? extends LocalBTCallback>) Class
                     .forName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_CALLBACK_CLASS
@@ -101,50 +94,37 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
 
             myBtCallback = btCallbackClass.newInstance();
 
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            isAlive = true;
+            issetCallback = false;
 
-        isAlive = true;
-        issetCallback = false;
+            // create a remote object exposer for this object
+            RemoteObjectExposer<BTCallback> roe = PARemoteObject.newRemoteObject(BTCallback.class.getName(),
+                    (BTCallback) myBtCallback);
 
-        // create a remote object exposer for this object
-        RemoteObjectExposer<BTCallback> roe = PARemoteObject.newRemoteObject(BTCallback.class.getName(),
-                (BTCallback) myBtCallback);
+            String name = ProActiveRuntimeImpl.getProActiveRuntime().getURL() + "_rtBroadcast";
 
-        String name = ProActiveRuntimeImpl.getProActiveRuntime().getURL() + "_rtBroadcast";
+            // generate an uri where to rebind the runtime
+            uriMyBtCallback = URI.create(name);
 
-        // generate an uri where to rebind the runtime
-        uriMyBtCallback = URI.create(name);
-
-        try {
             remoteBtCallback = PARemoteObject.bind(roe, uriMyBtCallback);
-        } catch (UnknownProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+        } catch (Exception e) {
+            throw new BroadcastDisabledException(
+                "An exception occured when creating the RTBroadcaster. It is now disabled", e);
         }
     }
 
     //
     // -- GETTER SINGLETON -----------------------------------------------
     //
-
     /**
-     * Returns the instance of {@link RTBroadcaster} is enabled or null is disabled.
+     * Returns the instance of the RTBroadcaster associated to this runtime.
+     *
      */
-    public static synchronized RTBroadcaster getInstance() {
-        if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.getValue() == false) {
-            return null;
+    public static synchronized RTBroadcaster getInstance() throws BroadcastDisabledException {
+
+        if (!CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.isTrue()) {
+            throw new BroadcastDisabledException("broadcast discovery is disabled for this runtime");
         }
 
         if (rtBroadcaster == null) {
@@ -182,47 +162,41 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
             while (getIsAlive()) // add a isAlive variable (kill() must be synchronized !!)
             {
 
-                try {
-                    /***************************************************************
-                     * Receive *
-                     **************************************************************/
+                /***************************************************************
+                 * Receive *
+                 **************************************************************/
 
-                    byte[] buf = new byte[BUFFER_SIZE];
-                    packet = new DatagramPacket(buf, buf.length);
+                byte[] buf = new byte[BUFFER_SIZE];
+                packet = new DatagramPacket(buf, buf.length);
 
-                    // --Wait new packet
-                    socket.receive(packet);
+                // --Wait new packet
+                socket.receive(packet);
 
-                    // --Display packet
-                    String received = new String(packet.getData(), 0, packet.getLength());
+                // --Display packet
+                String received = new String(packet.getData(), 0, packet.getLength());
 
-                    // --creationHandler
-                    Pattern patternCreation = Pattern.compile(CREATION_HEADER + ".+");
-                    Matcher m = patternCreation.matcher(received);
+                // --creationHandler
+                Pattern patternCreation = Pattern.compile(CREATION_HEADER + ".+");
+                Matcher m = patternCreation.matcher(received);
+                if (m.find()) {
+                    received = received.replaceFirst(CREATION_HEADER, "");
+                    // action.creationHandler(received);
+                    for (Iterator iterator = rtAction.iterator(); iterator.hasNext();) {
+                        RTBroadcastAction aRTBroadcastAction = (RTBroadcastAction) iterator.next();
+                        aRTBroadcastAction.creationHandler(received);
+                    }
+                } else {
+                    // --discoverHandler
+                    Pattern patternDiscover = Pattern.compile(DISCOVER_HEADER + ".+");
+                    m = patternDiscover.matcher(received);
                     if (m.find()) {
-                        received = received.replaceFirst(CREATION_HEADER, "");
-                        // action.creationHandler(received);
+                        received = received.replaceFirst(DISCOVER_HEADER, "");
+                        // action.discoverHandler(received);
                         for (Iterator iterator = rtAction.iterator(); iterator.hasNext();) {
                             RTBroadcastAction aRTBroadcastAction = (RTBroadcastAction) iterator.next();
-                            aRTBroadcastAction.creationHandler(received);
-                        }
-                    } else {
-                        // --discoverHandler
-                        Pattern patternDiscover = Pattern.compile(DISCOVER_HEADER + ".+");
-                        m = patternDiscover.matcher(received);
-                        if (m.find()) {
-                            received = received.replaceFirst(DISCOVER_HEADER, "");
-                            // action.discoverHandler(received);
-                            for (Iterator iterator = rtAction.iterator(); iterator.hasNext();) {
-                                RTBroadcastAction aRTBroadcastAction = (RTBroadcastAction) iterator.next();
-                                aRTBroadcastAction.discoverHandler(received);
-                            }
+                            aRTBroadcastAction.discoverHandler(received);
                         }
                     }
-
-                } catch (Exception e) {
-                    // TODO: handle exception
-                    e.printStackTrace();
                 }
 
             }
@@ -231,6 +205,8 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
             socket.leaveGroup(address);
             socket.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BroadcastDisabledException e) {
             e.printStackTrace();
         }
 
@@ -254,7 +230,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     // -- On signale notre pr�sence � tout le monde
     // -----------------------------------------------
     //
-    public void sendCreation() {
+    public void sendCreation() throws IOException {
         // declare the new runtime on the network
         sendToAll(CREATION_HEADER + uriMyBtCallback);
     }
@@ -263,7 +239,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     // -- Which runtime are available ?
     // -----------------------------------------------
     //
-    public void sendDiscover() {
+    public void sendDiscover() throws IOException {
         // hello who's there ?
         sendToAll(DISCOVER_HEADER + uriMyBtCallback);
     }
@@ -271,23 +247,20 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     //
     // -- Broadcast a message -----------------------------------------------
     //
-    private void sendToAll(String msg) {
-        try {
-            // --Initialize
-            DatagramSocket socket = new DatagramSocket();
-            byte[] buf = new byte[BUFFER_SIZE];
-            buf = msg.getBytes();
+    private void sendToAll(String msg) throws IOException {
 
-            // send it
-            InetAddress group = InetAddress
-                    .getByName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_ADDRESS.getValueAsString());
-            DatagramPacket packet = new DatagramPacket(buf, buf.length, group,
-                CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_PORT.getValue());
-            socket.send(packet);
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
+        // --Initialize
+        DatagramSocket socket = new DatagramSocket();
+        byte[] buf = new byte[BUFFER_SIZE];
+        buf = msg.getBytes();
+
+        // send it
+        InetAddress group = InetAddress.getByName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_ADDRESS
+                .getValueAsString());
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, group,
+            CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_PORT.getValue());
+        socket.send(packet);
+
     }
 
     //

@@ -7,12 +7,6 @@
 <web-app>
   <display-name>Apache-SOAP</display-name>
   <description>no description</description>
-  <servlet>
-    <servlet-name>AxisServlet</servlet-name>
-    <display-name>Axis Servlet</display-name>
-    <description>no description</description>
-    <servlet-class>org.apache.axis2.transport.http</servlet-class>
-  </servlet>
 
   <servlet>
     <servlet-name>CXFServlet</servlet-name>
@@ -21,11 +15,6 @@
         org.apache.cxf.transport.servlet.CXFServlet
     </servlet-class>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>AxisServlet</servlet-name>
-	 <url-pattern>/proactive/services/*</url-pattern>
-  </servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>CXFServlet</servlet-name>

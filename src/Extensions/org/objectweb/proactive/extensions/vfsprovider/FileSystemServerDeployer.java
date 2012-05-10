@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -42,6 +42,7 @@ import java.net.URISyntaxException;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
@@ -117,11 +118,27 @@ public final class FileSystemServerDeployer {
      */
     public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing, boolean rebind)
             throws IOException {
+        this(name, rootPath, autoclosing, rebind, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
+                .getValue());
+    }
+
+    /**
+     * Deploys locally a FileSystemServer as a RemoteObject with a given name.
+     *
+     * @param name of deployed RemoteObject
+     * @param rootPath the real path on which to bind the server
+     * @param autoclosing
+     * @param rebind true if the service must rebind an existing one, false otherwise.
+     * @param protocol RemoteObjectFactory protocol
+     * @throws IOException
+     */
+    public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing, boolean rebind,
+            String protocol) throws IOException {
         fileSystemServer = new FileSystemServerImpl(rootPath);
         try {
             roe = PARemoteObject.newRemoteObject(FileSystemServer.class.getName(), this.fileSystemServer);
-            roe.createRemoteObject(name, rebind);
-            url = roe.getURL();
+            roe.createRemoteObject(name, rebind, protocol);
+            url = roe.getURL(protocol);
         } catch (ProActiveException e) {
             // Ugly but createRemoteObject interface changed
             throw new IOException6("", e);

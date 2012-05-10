@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -67,7 +67,7 @@ public class TestDeploymentDescriptorParser {
 
     @Test
     public void test() throws Exception {
-        File descriptor = new File(this.getClass().getResource("testfiles/deployment.xml").getFile());
+        File descriptor = new File(this.getClass().getResource("testfiles/deployment.xml").toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(Helpers.fileToURL(descriptor), null);
@@ -79,7 +79,7 @@ public class TestDeploymentDescriptorParser {
     @Test
     public void allGroupsTest() throws Exception {
         File descriptor = new File(this.getClass().getResource("testfiles/deployment/allGroupsExample.xml")
-                .getFile());
+                .toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(Helpers.fileToURL(descriptor), null);
@@ -151,7 +151,7 @@ public class TestDeploymentDescriptorParser {
     @Test
     public void userSchemaTest() throws Exception {
         File descriptor = new File(getClass().getResource("testfiles/deployment/group_bridge_ext.xml")
-                .getFile());
+                .toURI());
 
         URL userSchema = getClass().getResource("testfiles/deployment/SampleDeploymentExtension.xsd");
 
@@ -170,7 +170,7 @@ public class TestDeploymentDescriptorParser {
     }
 
     protected void idConstraintTest(String descriptorLocation) throws Exception {
-        File descriptor = new File(this.getClass().getResource(descriptorLocation).getFile());
+        File descriptor = new File(this.getClass().getResource(descriptorLocation).toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         boolean gotException = false;
@@ -205,7 +205,7 @@ public class TestDeploymentDescriptorParser {
     }
 
     protected void refConstraintTest(String descriptorLocation) throws Exception {
-        File descriptor = new File(this.getClass().getResource(descriptorLocation).getFile());
+        File descriptor = new File(this.getClass().getResource(descriptorLocation).toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         boolean gotException = false;

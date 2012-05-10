@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
@@ -61,9 +61,9 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.StartPARuntime;
-import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.Sleeper;
 
 
 public class DebuggerConnection implements Serializable, NotificationListener {
@@ -112,7 +112,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
         return result;
     }
 
-    private int findDebuggerPort() throws ProActiveException {
+    private int findDebuggerPort() throws DebuggerException {
         RuntimeMXBean rtb = ManagementFactory.getRuntimeMXBean();
         String processName = rtb.getName();
         Integer pid = tryPattern1(processName);
@@ -129,39 +129,51 @@ public class DebuggerConnection implements Serializable, NotificationListener {
                     vm = attachMethod.invoke(null, pid.toString());
                 } catch (Exception e) {
                     // Failed to attach 
-                    throw new ProActiveException("Failed to attach to the current JVM", e);
+                    throw new DebuggerException("Failed to attach to the current JVM", e);
                 }
 
                 Method getAgentPropertiesMethod = vm.getClass().getMethod("getAgentProperties");
                 try {
                     Properties props = (Properties) getAgentPropertiesMethod.invoke(vm);
                     address = props.getProperty("sun.jdwp.listenerAddress");
+
+                    if ((address == null) || "".equals(address.trim())) {
+                        throw new DebuggerException(
+                            "The JVM is either not in debug mode or is not listening for a debugger to attach (probably one is already attached)");
+                    }
+
                 } catch (Exception e) {
                     // Probably an IOException
-                    throw new ProActiveException("Failed to get the sun.jdwp.listenerAddress property", e);
+                    throw new DebuggerException("Failed to get the sun.jdwp.listenerAddress property", e);
                 } finally {
                     Method detachMethod = vm.getClass().getMethod("detach");
                     detachMethod.invoke(vm);
                 }
             } catch (Exception e) {
                 // Java 6 but something gone wrong
-                throw new ProActiveException("Failed to attach to the current VM", e);
+                throw new DebuggerException("Failed to attach to the current VM", e);
             }
 
         } catch (ClassNotFoundException e) {
             String version = System.getProperty("java.specification.version");
             if ("1.5".equals(version)) { // Java 4 and older are not supported
-                throw new ProActiveException(
+                throw new DebuggerException(
                     "Remote debugging not yet available with Java 5. Please use a JDK 6");
             } else {
-                throw new ProActiveException(
+                throw new DebuggerException(
                     "Remote debbuging not available. Attach API not found in the classpath. $JDK6/lib/tools.jar must be in the classpath",
                     e);
             }
         }
 
-        System.out.println("DebuggerConnection.findDebuggerPort() >>>>>>" + address);
+        System.out.println("DebuggerConnection.findDebuggerPort() >>>>>>'" + address + "'");
         listeningPort = Integer.parseInt(address.split(":")[1]);
+
+        if (listeningPort < 1) {
+            throw new DebuggerException("cannot determine the port to attach to, answer was '" +
+                listeningPort + "'");
+        }
+
         return listeningPort;
     }
 
@@ -172,7 +184,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
      * @return DebuggerInformation
      * @throws ProActiveException 
      */
-    public synchronized DebuggerInformation getDebugInfo() throws ProActiveException {
+    public synchronized DebuggerInformation getDebugInformation() throws DebuggerException {
         int port = -3;
 
         port = findDebuggerPort();

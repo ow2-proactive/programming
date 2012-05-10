@@ -5,27 +5,27 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
@@ -40,15 +40,13 @@ import static junit.framework.Assert.assertTrue;
 
 import java.net.URL;
 
+import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.TestDisabler;
 import functionalTests.ft.AbstractFTTezt;
 import functionalTests.ft.cic.TestCIC;
 
@@ -58,6 +56,15 @@ public class TestFaultTolerance extends AbstractFTTezt {
     private JVMProcessImpl server;
     private static URL FT_XML_LOCATION_UNIX = TestCIC.class
             .getResource("/functionalTests/ft/cic/testFT_CIC.xml");
+
+    public TestFaultTolerance() {
+        super(FT_XML_LOCATION_UNIX, 4, 1);
+    }
+
+    @Before
+    final public void disable() {
+        TestDisabler.unstable();
+    }
 
     /**
      * We will try to perform a failure during a sending, and then verify that the sending restart
@@ -70,19 +77,11 @@ public class TestFaultTolerance extends AbstractFTTezt {
 
         this.startFTServer("cic");
 
-        GCMApplication gcma;
         GCMVirtualNode vnode;
 
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
-                VariableContractType.DescriptorDefaultVariable);
-
         //	create nodes
-
-        gcma = PAGCMDeployment.loadApplicationDescriptor(FT_XML_LOCATION_UNIX, vContract);
-        gcma.startDeployment();
-        vnode = gcma.getVirtualNode("Workers");
+        super.startDeployment();
+        vnode = super.gcmad.getVirtualNode("Workers");
         Node[] nodes = new Node[2];
         nodes[0] = vnode.getANode();
         nodes[1] = vnode.getANode();

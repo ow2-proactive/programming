@@ -5,34 +5,34 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of
- *              Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2012 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
+ * modify it under the terms of the GNU Affero General Public License
  * as published by the Free Software Foundation; version 3 of
  * the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2
- * or a different license than the GPL.
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
- * $$ACTIVEEON_CONTRIBUTOR$$
+ * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.runtime;
 
@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -89,6 +90,7 @@ import org.objectweb.proactive.core.event.RuntimeRegistrationEventProducerImpl;
 import org.objectweb.proactive.core.filetransfer.FileTransferEngine;
 import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
+import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.jmx.mbean.JMXClassLoader;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapper;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
@@ -110,6 +112,7 @@ import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.rmi.FileProcess;
+import org.objectweb.proactive.core.runtime.broadcast.BroadcastDisabledException;
 import org.objectweb.proactive.core.runtime.broadcast.RTBroadcaster;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurity;
@@ -175,15 +178,21 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                     new PARTPinger().start();
                 }
 
-                RTBroadcaster rtBrodcaster = RTBroadcaster.getInstance();
-                if (rtBrodcaster != null) {
-                    rtBrodcaster.sendDiscover();
+                RTBroadcaster rtBrodcaster;
+                try {
+                    rtBrodcaster = RTBroadcaster.getInstance();
+                    // notify our presence on the lan
+                    rtBrodcaster.sendCreation();
+                } catch (Exception e) {
+                    // just keep it the feature is disabled
+                    logger.debug("unable to activate RTBroadcast, reason is " + e.getMessage());
+                    ProActiveLogger.logEatedException(logger, e);
                 }
 
             } catch (UnknownProtocolException e) {
-                e.printStackTrace();
+                logger.error(e);
             } catch (ProActiveException e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             return proActiveRuntime;
         } else {
@@ -740,10 +749,39 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             mbean = null;
         }
 
-        //  terminate the broadcast thread
-        RTBroadcaster rtBroadcaster = RTBroadcaster.getInstance();
-        if (rtBroadcaster != null) {
-            rtBroadcaster.kill();
+        //  terminate the broadcast thread if exist
+        RTBroadcaster broadcaster;
+        try {
+            broadcaster = RTBroadcaster.getInstance();
+            broadcaster.kill();
+        } catch (BroadcastDisabledException e1) {
+            // just display the message
+            logger.debug(e1.getMessage());
+        }
+
+        Iterator<UniversalBody> bodies = LocalBodyStore.getInstance().getLocalBodies().bodiesIterator();
+        UniversalBody body;
+
+        while (bodies.hasNext()) {
+            try {
+                body = bodies.next();
+                ((Body) body).terminate();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+
+        Iterator<UniversalBody> halfBodies = LocalBodyStore.getInstance().getLocalHalfBodies()
+                .bodiesIterator();
+        UniversalBody halfBody;
+
+        while (halfBodies.hasNext()) {
+            try {
+                halfBody = halfBodies.next();
+                ((Body) halfBody).terminate();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
 
         // unexport the runtime
@@ -751,6 +789,14 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             this.roe.unexportAll();
         } catch (ProActiveException e) {
             logger.warn("unable to unexport the runtime", e);
+        }
+
+        try {
+            HTTPServer.get().stop();
+            HTTPServer.get().destroy();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         this.roe = null;
@@ -1609,7 +1655,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * 
      * 
      * 
-     * @since ProActive 4.4.0
+     * @since ProActive 5.0.0
      * 
      * @return The value of {@link CentralPAPropertyRepository#PA_HOME} if it is set. Otherwise
      * the path is computed according to the class or jar location. 
