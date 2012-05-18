@@ -125,5 +125,7 @@
 	<classpathentry kind="lib" path="lib/cxf/spring-web-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/xmlschema-core-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/rabbitmq-client.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.2.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
