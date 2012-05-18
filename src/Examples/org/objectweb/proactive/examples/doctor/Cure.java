@@ -37,6 +37,8 @@
 package org.objectweb.proactive.examples.doctor;
 
 public class Cure implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     public Cure() {
     }
 }

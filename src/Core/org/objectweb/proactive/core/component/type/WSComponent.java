@@ -75,6 +75,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 @PublicAPI
 public class WSComponent implements Serializable, Component, NameController, LifeCycleController {
+
+    private static final long serialVersionUID = 52;
     protected static final transient Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 
     /**

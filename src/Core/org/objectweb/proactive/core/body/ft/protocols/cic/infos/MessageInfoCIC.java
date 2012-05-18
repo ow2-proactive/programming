@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.util.MutableLong;
  */
 public class MessageInfoCIC implements MessageInfo {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

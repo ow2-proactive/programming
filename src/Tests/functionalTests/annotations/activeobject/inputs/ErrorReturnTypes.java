@@ -44,6 +44,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class ErrorReturnTypes implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     public int _counter;
 
     public void setCounter(int counter) {

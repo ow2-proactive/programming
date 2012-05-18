@@ -56,6 +56,8 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 
 public class DummySecurityEntity implements SecurityEntity {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

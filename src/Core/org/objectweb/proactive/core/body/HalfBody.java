@@ -69,6 +69,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class HalfBody extends AbstractBody {
 
+    private static final long serialVersionUID = 52;
+
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -212,6 +214,8 @@ public class HalfBody extends AbstractBody {
     // -- inner classes -----------------------------------------------
     //
     private class HalfLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
 
         /**
          *

@@ -44,4 +44,6 @@ import org.objectweb.proactive.extensions.annotation.Migratable;
 @Migratable
 public class ErrorNotActiveObject implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
 }

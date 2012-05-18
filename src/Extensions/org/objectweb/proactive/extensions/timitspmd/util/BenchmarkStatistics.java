@@ -52,6 +52,8 @@ import org.objectweb.proactive.api.PAVersion;
  */
 public class BenchmarkStatistics implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

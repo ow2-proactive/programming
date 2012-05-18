@@ -46,6 +46,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class EnvironmentException extends Exception {
+
+    private static final long serialVersionUID = 52;
     public EnvironmentException(String msg) {
         super(msg);
     }

@@ -44,6 +44,8 @@ import org.objectweb.proactive.core.node.Node;
 
 public class C implements java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private String name;
     private String services;
     private int fooASerializer;

@@ -44,6 +44,8 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
 public class ForInst<P> implements Instruction<P, P> {
+
+    private static final long serialVersionUID = 52;
     int times;
     Vector<Instruction> childStack;
 

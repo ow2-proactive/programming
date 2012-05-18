@@ -48,6 +48,8 @@ import java.util.Arrays;
  */
 public class Permutation implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * Return the next permutation. Warning, the parmeter are modified.
      *

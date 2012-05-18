@@ -57,6 +57,8 @@ import org.objectweb.proactive.core.ProActiveException;
 @PublicAPI
 public class NodeException extends ProActiveException {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * Constructs a <code>NodeException</code> with no specified
      * detail message.

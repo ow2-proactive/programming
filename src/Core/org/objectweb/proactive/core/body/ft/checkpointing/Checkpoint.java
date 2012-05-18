@@ -59,6 +59,8 @@ import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
  */
 public class Checkpoint implements java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

@@ -44,6 +44,8 @@ import java.io.Serializable;
  * @author The ProActive Team
  */
 public class MutableLong implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private long value;
 
     public MutableLong() {

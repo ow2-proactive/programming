@@ -56,6 +56,8 @@ import org.objectweb.proactive.extensions.calcium.system.WSpace;
 // @snippet-start calcium_ConquerResults
 @PrefetchFilesMatching(name = "merged.*")
 public class ConquerResults implements Conquer<File, File> {
+
+    private static final long serialVersionUID = 52;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_APPLICATION);
 
     public File conquer(File[] param, SkeletonSystem system) throws Exception {

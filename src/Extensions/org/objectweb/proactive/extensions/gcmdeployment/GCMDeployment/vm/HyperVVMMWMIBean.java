@@ -41,6 +41,8 @@ import org.ow2.proactive.virtualizing.hypervwmi.HyperVVMM;
 
 
 public class HyperVVMMWMIBean implements VMMBean {
+
+    private static final long serialVersionUID = 52;
     private String uri, user, pwd;
 
     HyperVVMMWMIBean(String uri, String user, String pwd) {

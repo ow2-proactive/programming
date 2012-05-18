@@ -47,6 +47,8 @@ import java.util.Vector;
  *
  */
 public class RealEventObservable implements EventObservable {
+
+    private static final long serialVersionUID = 52;
     private boolean changed = false;
     private Vector<EventObserver> eventDataObservers;
 

@@ -66,6 +66,8 @@ import org.objectweb.proactive.examples.c3d.Dispatcher;
  * It is used to select a dispatcher host and a user name.
  * Inspired from the java Swing Dialog tutorial */
 public class NameAndHostDialog extends JDialog implements ActionListener, PropertyChangeListener {
+
+    private static final long serialVersionUID = 52;
     private String userName = "Bob";
     private JTextField userTextField;
     protected JTextField hostNameTextField;

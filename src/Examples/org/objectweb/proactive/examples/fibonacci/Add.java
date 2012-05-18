@@ -55,6 +55,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class Add implements Serializable, InitActive, RunActive {
+
+    private static final long serialVersionUID = 52;
     private Cons1 cons1;
     private BigInteger fibN_1;
     private BigInteger fibN_2;

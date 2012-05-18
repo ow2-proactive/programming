@@ -41,4 +41,6 @@ import java.util.ArrayList;
 
 
 public class GCMessage extends ArrayList<GCSimpleMessage> implements Serializable {
+
+    private static final long serialVersionUID = 52;
 }

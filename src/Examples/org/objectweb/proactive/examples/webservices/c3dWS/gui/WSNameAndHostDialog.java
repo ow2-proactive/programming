@@ -62,6 +62,8 @@ import org.objectweb.proactive.extensions.webservices.WebServicesFrameWorkFactor
  * It is used to select a dispatcher host and a user name.
  * Inspired from the java Swing Dialog tutorial */
 public class WSNameAndHostDialog extends JDialog implements ActionListener, PropertyChangeListener {
+
+    private static final long serialVersionUID = 52;
     private String userName = "Bob";
     private JTextField userTextField;
     private JOptionPane optionPane;

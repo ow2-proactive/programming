@@ -52,6 +52,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public abstract class AbstractPAComponentController implements Serializable, HostComponentSetter {
+
+    private static final long serialVersionUID = 52;
     protected static Logger controllerLogger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     PAComponent hostComponent;
 

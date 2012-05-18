@@ -50,6 +50,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Resul
  */
 public class ResultInternImpl implements ResultIntern<Serializable> {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

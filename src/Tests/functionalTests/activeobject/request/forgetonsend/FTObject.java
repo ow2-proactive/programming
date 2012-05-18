@@ -43,6 +43,8 @@ import org.objectweb.proactive.api.PAActiveObject;
 
 public class FTObject implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private String name;
     private String services;
     private FTObject b;

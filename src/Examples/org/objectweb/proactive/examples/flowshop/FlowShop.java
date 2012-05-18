@@ -46,6 +46,8 @@ import java.io.Serializable;
  *
  */
 public class FlowShop implements Serializable {
+
+    private static final long serialVersionUID = 52;
     public int[][] jobs;
     public int nbMachine;
     public long cumulateTimeOnLastMachine = 0;

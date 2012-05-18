@@ -69,6 +69,8 @@ import org.osgi.framework.ServiceReference;
 
 public class ServiceInfo implements Serializable, IJmx, DynamicMBean, ServiceListener {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

@@ -48,6 +48,8 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
 public class HelloExecutableMPI implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     //@snippet-break Hello_MPI_example
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

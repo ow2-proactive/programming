@@ -50,6 +50,8 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
  *
  */
 public class InterStageParam implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     Task<?> task;
     FileStaging fstaging;
     SkeletonSystemImpl system;

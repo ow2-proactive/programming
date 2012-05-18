@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.UniqueID;
  */
 public class BodyNotificationData implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** The unique id of the body */
     private UniqueID id;
 

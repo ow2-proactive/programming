@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.UniqueID;
  */
 public class HistoryUpdater implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

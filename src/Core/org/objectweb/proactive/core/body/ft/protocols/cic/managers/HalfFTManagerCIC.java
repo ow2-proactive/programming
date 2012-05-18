@@ -70,6 +70,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class HalfFTManagerCIC extends FTManager {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

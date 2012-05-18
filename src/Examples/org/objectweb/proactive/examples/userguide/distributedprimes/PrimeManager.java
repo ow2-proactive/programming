@@ -46,6 +46,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class PrimeManager implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private Vector<PrimeWorker> workers = new Vector<PrimeWorker>();
 
     public PrimeManager() {

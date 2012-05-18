@@ -44,6 +44,8 @@ import org.objectweb.proactive.examples.c3d.geom.Vec;
  */
 
 public class View implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     public Vec from;
     public Vec at;
     public Vec up;

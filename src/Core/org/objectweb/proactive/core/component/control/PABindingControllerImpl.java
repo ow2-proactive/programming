@@ -87,6 +87,8 @@ import org.objectweb.proactive.core.component.webservices.WSInfo;
  */
 public class PABindingControllerImpl extends AbstractPAController implements PABindingController,
         Serializable, ControllerStateDuplication {
+
+    private static final long serialVersionUID = 52;
     protected Bindings bindings; // key = clientInterfaceName ; value = Binding
 
     //    private Map<String, Map<PAComponent, List<String>>> bindingsOnServerItfs = new HashMap<String, Map<ProActiveComponent,List<String>>>(0);

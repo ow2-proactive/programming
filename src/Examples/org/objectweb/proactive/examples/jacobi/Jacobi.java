@@ -60,6 +60,8 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 @ActiveObject
 public class Jacobi implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * Number of columns of SubMatrix
      */

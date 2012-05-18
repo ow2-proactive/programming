@@ -46,6 +46,8 @@ package org.objectweb.proactive.extensions.timitspmd.util;
  */
 public class SecuredHierarchicalTimer extends HierarchicalTimer {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

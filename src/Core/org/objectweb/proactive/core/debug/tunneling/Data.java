@@ -45,6 +45,8 @@ import java.io.UnsupportedEncodingException;
 
 public class Data implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** data readed */
     private byte[] data;
 

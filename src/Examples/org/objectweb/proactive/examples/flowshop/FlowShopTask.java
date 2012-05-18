@@ -57,6 +57,8 @@ import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsExcept
  * @author The ProActive Team
  */
 public class FlowShopTask extends Task {
+
+    private static final long serialVersionUID = 52;
     //in ms
     private static final long MAX_TIME_TO_SPLIT = 120000; // 2'
     private FlowShop fs;

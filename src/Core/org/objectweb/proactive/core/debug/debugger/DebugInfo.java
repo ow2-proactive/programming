@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.body.AbstractBody;
 
 public class DebugInfo implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private UniqueID activeObjectId;
     private String nodeUrl;
     private boolean stepByStepMode;

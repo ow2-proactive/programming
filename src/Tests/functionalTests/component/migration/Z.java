@@ -43,6 +43,8 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 public class Z implements D, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

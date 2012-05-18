@@ -90,6 +90,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class FTManagerCIC extends org.objectweb.proactive.core.body.ft.protocols.FTManager {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

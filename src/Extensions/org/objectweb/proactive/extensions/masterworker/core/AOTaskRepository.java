@@ -70,6 +70,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskR
 @ActiveObject
 public class AOTaskRepository implements TaskRepository, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * logger of the task repository
      */

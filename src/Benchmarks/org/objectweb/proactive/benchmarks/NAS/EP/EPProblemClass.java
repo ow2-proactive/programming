@@ -48,6 +48,8 @@ import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
  */
 public class EPProblemClass extends NASProblemClass {
 
+    private static final long serialVersionUID = 52;
+
     public int m;
     public int npm;
 }

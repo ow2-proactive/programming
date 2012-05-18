@@ -58,6 +58,8 @@ import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
 
 public class ReplyImpl extends MessageImpl implements Reply, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * The hypothetic result
      */

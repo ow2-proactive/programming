@@ -40,6 +40,8 @@ import java.io.Serializable;
 
 
 public class EmptyFuture implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private String name;
 
     public EmptyFuture() {

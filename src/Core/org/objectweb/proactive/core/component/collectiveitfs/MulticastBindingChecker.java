@@ -65,6 +65,8 @@ import org.objectweb.proactive.core.component.type.annotations.multicast.Reduce;
  */
 public class MulticastBindingChecker implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * client method List&lst;A&gt; foo (B, List<C>) throws E; <br>
      * must be matched by <br>

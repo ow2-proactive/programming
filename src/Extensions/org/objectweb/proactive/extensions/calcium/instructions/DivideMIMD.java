@@ -62,6 +62,8 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
  * @param <X> The type of the objects resulting from the division.
  */
 public class DivideMIMD<P, X> implements Instruction<P, X> {
+
+    private static final long serialVersionUID = 52;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_STRUCTURE);
     Divide<P, X> div;
     private Vector<Stack<Instruction>> stages; //multiple instruction stacks

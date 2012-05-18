@@ -63,6 +63,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RequestReceiverImpl implements RequestReceiver, java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     public static Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);
 
     // time of inactivity after which a thread for caller is stopped (in sec)
@@ -75,6 +77,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     }
 
     private static class AnyParametersClass implements Serializable {
+
+    private static final long serialVersionUID = 52;
     }
 
     /**
@@ -82,6 +86,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
      * be used as key in a Map.
      */
     private static final class ClassArrayWrapper implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private final Class<?>[] wrappedClassArray;
         // cached hashcode since CAW is final
         private final int myHashcode;

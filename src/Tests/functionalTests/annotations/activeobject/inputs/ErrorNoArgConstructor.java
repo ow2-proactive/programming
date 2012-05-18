@@ -44,6 +44,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class ErrorNoArgConstructor implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     public ErrorNoArgConstructor(int n) {
     }
 }

@@ -47,6 +47,8 @@ import org.objectweb.proactive.ext.hpc.MethodCallDummy;
 
 public class RequestExchange extends RequestImpl {
 
+    private static final long serialVersionUID = 52;
+
     // Variables related to source and destination ranks
     transient private int tagID;
     transient private int destinationUID;

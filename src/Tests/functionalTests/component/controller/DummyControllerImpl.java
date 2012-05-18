@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
  */
 public class DummyControllerImpl extends AbstractPAController implements DummyController {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

@@ -46,6 +46,8 @@ import java.io.Serializable;
  */
 public class BarrierState implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** The number of calls awaited to finish the barrier */
     private int awaitedCalls = 0;
 

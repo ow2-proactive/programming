@@ -66,6 +66,8 @@ import org.objectweb.proactive.utils.OperatingSystem;
  * @since   ProActive 0.9.4
  */
 public class SSHJVMProcess extends SSHProcess implements JVMProcess {
+
+    private static final long serialVersionUID = 52;
     protected JVMProcessImpl jvmProcess;
 
     //

@@ -46,6 +46,8 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
  * As it is currently, a Surface can only be homogeneous.
  */
 public class Surface implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     private Vec color;
     private double kd;
     private double ks;

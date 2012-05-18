@@ -68,6 +68,8 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
  */
 @ActiveObject
 public class Chat implements java.io.Serializable, RunActive {
+
+    private static final long serialVersionUID = 52;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** The name of the user */

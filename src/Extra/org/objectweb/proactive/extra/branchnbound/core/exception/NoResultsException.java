@@ -52,6 +52,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class NoResultsException extends Exception implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * Create a new Excpeiton.
      */

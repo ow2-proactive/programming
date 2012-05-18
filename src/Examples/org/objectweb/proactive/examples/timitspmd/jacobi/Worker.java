@@ -54,6 +54,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.commobserv.Co
 @ActiveObject
 public class Worker extends Timed implements java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

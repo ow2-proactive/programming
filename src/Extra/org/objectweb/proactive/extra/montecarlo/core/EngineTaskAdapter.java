@@ -51,6 +51,8 @@ import org.objectweb.proactive.extra.montecarlo.EngineTask;
  */
 public class EngineTaskAdapter<T extends Serializable> implements DivisibleTask<T> {
 
+    private static final long serialVersionUID = 52;
+
     private EngineTask<T> task;
     private SubMasterLock lock = new SubMasterLock();
 

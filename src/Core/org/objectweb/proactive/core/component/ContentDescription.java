@@ -52,6 +52,8 @@ import org.objectweb.proactive.core.body.MetaObjectFactory;
  */
 @PublicAPI
 public class ContentDescription implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private String className;
     private Object[] constructorParameters;
     private Active activity;

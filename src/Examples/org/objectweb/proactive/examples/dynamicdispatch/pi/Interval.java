@@ -46,6 +46,8 @@ import java.io.Serializable;
  *
  */
 public class Interval implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private Integer beginning;
     private Integer end;
 

@@ -53,6 +53,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class Election implements RunActive, Serializable {
+
+    private static final long serialVersionUID = 52;
     private static final int WAITMSECS = 4000; // Duration of one election round in milliseconds
     private C3DDispatcher c3ddispatcher; // to give back results
     private int nbUsers = 0; // To know when the election is over
@@ -157,6 +159,8 @@ public class Election implements RunActive, Serializable {
      * This allows us to have ballots.size == 1 <==> all votes are equal
      * To make a democracy, ie winner has most votes, you need to change winner and add methods. */
     private class Ballots extends Vector implements Serializable {
+
+    private static final long serialVersionUID = 52;
         public Vec winner() {
             if (size() == 1) {
                 return (Vec) get(0);

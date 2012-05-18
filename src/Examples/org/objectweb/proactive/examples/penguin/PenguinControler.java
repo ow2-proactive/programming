@@ -53,6 +53,8 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 public class PenguinControler implements org.objectweb.proactive.RunActive, PenguinMessageReceiver,
         java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     //The image panel
     private transient PenguinApplet display;
     @SuppressWarnings("unchecked")

@@ -43,6 +43,8 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
  * Represents a punctual light source
  */
 public class Light implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     public Vec pos;
     public double brightness;
 

@@ -44,6 +44,8 @@ import org.objectweb.proactive.core.runtime.VMInformation;
 
 public class MOCKVMInformation implements VMInformation {
 
+    private static final long serialVersionUID = 52;
+
     final private String name;
 
     public MOCKVMInformation(String runtimeId) {

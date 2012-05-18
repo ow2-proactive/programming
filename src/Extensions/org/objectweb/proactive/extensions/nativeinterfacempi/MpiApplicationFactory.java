@@ -43,6 +43,8 @@ import org.objectweb.proactive.extensions.nativeinterface.application.NativeMess
 
 public class MpiApplicationFactory implements NativeApplicationFactory {
 
+    private static final long serialVersionUID = 52;
+
     public NativeMessageAdapter createMsgAdapter() {
         return new ProActiveMPIMessageAdapter();
     }

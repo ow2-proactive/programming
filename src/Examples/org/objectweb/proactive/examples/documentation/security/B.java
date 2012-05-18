@@ -46,6 +46,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class B implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     String text;
 
     public B() {

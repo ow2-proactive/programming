@@ -49,6 +49,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.EventStatistics;
  */
 public class EventDataBag implements java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

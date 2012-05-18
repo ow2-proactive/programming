@@ -47,6 +47,8 @@ import java.util.Iterator;
  */
 @SuppressWarnings("serial")
 public class UserBag implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private ArrayList<Troika> list = new ArrayList<Troika>();
 
     /** Create an empty Bag. */
@@ -150,6 +152,8 @@ public class UserBag implements Serializable {
     //    }
     // A container for (int -> C3DUser -> String)
     private class Troika implements Serializable {
+
+    private static final long serialVersionUID = 52;
         int key;
         User user;
         String name;

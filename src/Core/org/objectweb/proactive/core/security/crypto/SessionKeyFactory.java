@@ -44,6 +44,8 @@ import javax.crypto.KeyGenerator;
 
 
 public class SessionKeyFactory implements Serializable {
+
+    private static final long serialVersionUID = 52;
     // private SecureRandom      rand = new FixedSecureRandom();
     private KeyGenerator keyGen;
 

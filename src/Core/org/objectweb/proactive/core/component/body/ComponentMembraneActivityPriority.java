@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.component.control.PAMembraneController;
  */
 public class ComponentMembraneActivityPriority extends ComponentActivityPriority {
 
+    private static final long serialVersionUID = 52;
+
     public ComponentMembraneActivityPriority() {
         super();
     }

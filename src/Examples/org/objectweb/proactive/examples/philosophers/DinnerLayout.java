@@ -176,6 +176,8 @@ public class DinnerLayout {
 
     protected class UserFrame extends javax.swing.JPanel implements java.awt.event.ActionListener,
             java.awt.event.MouseListener {
+
+    private static final long serialVersionUID = 52;
         protected javax.swing.JButton bQuit;
         protected javax.swing.JButton bAuto;
 
@@ -375,6 +377,8 @@ public class DinnerLayout {
 
     private class PhilPanel extends javax.swing.JLabel {
 
+    private static final long serialVersionUID = 52;
+
         /**
          * The array holding the images
          */
@@ -411,6 +415,8 @@ public class DinnerLayout {
     }
 
     private class ForkPanel extends javax.swing.JLabel {
+
+    private static final long serialVersionUID = 52;
 
         /**
          * The array holding the images (shared with the phils)

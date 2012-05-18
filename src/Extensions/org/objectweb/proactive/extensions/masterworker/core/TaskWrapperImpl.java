@@ -54,6 +54,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskI
  */
 public class TaskWrapperImpl implements TaskIntern<Serializable> {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

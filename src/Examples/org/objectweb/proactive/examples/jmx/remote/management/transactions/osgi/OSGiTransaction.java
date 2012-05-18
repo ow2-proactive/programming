@@ -67,6 +67,8 @@ import org.objectweb.proactive.examples.jmx.remote.management.transactions.Trans
 
 public class OSGiTransaction extends Transaction implements OSGiTransactionMBean, IJmx, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

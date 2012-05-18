@@ -54,6 +54,8 @@ import org.objectweb.proactive.extensions.calcium.system.WSpace;
 
 //@PrefetchFilesMatching(name="db.*")
 public class DivideDB implements Divide<BlastParams, BlastParams> {
+
+    private static final long serialVersionUID = 52;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_APPLICATION);
 
     public BlastParams[] divide(BlastParams param, SkeletonSystem system) throws Exception {

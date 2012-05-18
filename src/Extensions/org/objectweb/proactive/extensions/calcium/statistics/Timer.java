@@ -42,6 +42,8 @@ import java.lang.management.ThreadMXBean;
 
 
 public class Timer implements Serializable {
+
+    private static final long serialVersionUID = 52;
     long t;
     long accumulated;
     int numberActivatedTimes;

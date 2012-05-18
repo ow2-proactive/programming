@@ -48,6 +48,8 @@ import java.util.List;
  */
 public class FifoPropertyObject implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     protected List<Integer> accumulator;
     protected int range;
 

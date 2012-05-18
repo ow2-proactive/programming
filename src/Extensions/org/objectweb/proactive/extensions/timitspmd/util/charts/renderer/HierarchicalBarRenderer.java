@@ -69,6 +69,8 @@ import org.jfree.util.ObjectList;
  */
 public class HierarchicalBarRenderer extends BarRenderer {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

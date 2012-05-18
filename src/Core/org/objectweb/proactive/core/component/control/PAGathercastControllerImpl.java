@@ -77,6 +77,8 @@ import org.objectweb.proactive.core.node.Node;
 public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceController implements
         GathercastController, ControllerStateDuplication {
 
+    private static final long serialVersionUID = 52;
+
     private Map<String, List<Object>> bindingsOnServerItfs = new HashMap<String, List<Object>>();
     private Map<String, PAInterface> gatherItfs = new HashMap<String, PAInterface>();
     private GatherRequestsQueues gatherRequestsHandler;
@@ -255,6 +257,8 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
     }
 
     class GatherCastItfState implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private HashMap<String, List<Object>> bindingsOnServerItfs;
         private HashMap<String, PAInterface> gatherItfs;
         private GatherRequestsQueues gatherRequestsHandler;

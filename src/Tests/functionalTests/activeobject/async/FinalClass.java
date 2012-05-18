@@ -41,4 +41,6 @@ import java.io.Serializable;
 
 public final class FinalClass implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
 }

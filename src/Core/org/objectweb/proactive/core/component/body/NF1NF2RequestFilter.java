@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.body.request.RequestFilter;
  * @author The ProActive Team
  */
 public class NF1NF2RequestFilter implements RequestFilter {
+
+    private static final long serialVersionUID = 52;
     PriorityController pc = null;
     NFRequestFilterImpl nfRequestFilter = null;
 

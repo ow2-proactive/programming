@@ -55,6 +55,8 @@ import org.objectweb.proactive.ext.locationserver.LocationServerFactory;
 
 
 public class MigrationManagerWithMixedLocation extends MigrationManagerImpl implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     protected UniversalBodyWrapper wrapper;
 

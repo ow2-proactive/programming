@@ -74,6 +74,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAGCMLifeCycleControllerImpl extends AbstractPAController implements PAGCMLifeCycleController,
         Serializable, ControllerStateDuplication {
+
+    private static final long serialVersionUID = 52;
     static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     protected String fcState = LifeCycleController.STOPPED;
 

@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.util.wrapper.IntWrapper;
  * @author The ProActive Team
  */
 public class ActiveObjectClass implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     private static final int customWaitTimeInMillis = 200;
     private ActiveObjectClass remoteReference;
     private ActiveObjectClass localReference;

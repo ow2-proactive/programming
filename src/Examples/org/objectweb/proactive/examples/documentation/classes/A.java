@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
  */
 //@snippet-start class_A
 public class A implements Serializable {
+
+    private static final long serialVersionUID = 52;
     protected String str = "Hello";
 
     /**

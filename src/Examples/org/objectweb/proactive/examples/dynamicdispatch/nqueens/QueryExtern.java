@@ -46,6 +46,8 @@ public class QueryExtern
         implements
         Serializable,
         org.objectweb.proactive.extensions.masterworker.interfaces.Task<org.objectweb.proactive.examples.masterworker.util.Pair<Long, Long>> {
+
+    private static final long serialVersionUID = 52;
     private Query query;
 
     public QueryExtern(Query query) {

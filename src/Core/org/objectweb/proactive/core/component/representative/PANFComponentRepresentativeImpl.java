@@ -62,6 +62,8 @@ import org.objectweb.proactive.core.component.ComponentParameters;
  */
 public class PANFComponentRepresentativeImpl extends PAComponentRepresentativeImpl implements
         PANFComponentRepresentative {
+
+    private static final long serialVersionUID = 52;
     public PANFComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
         super(componentType, hierarchicalType, controllersConfigFileLocation);

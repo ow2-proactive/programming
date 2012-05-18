@@ -76,6 +76,8 @@ import org.objectweb.proactive.utils.NamedThreadFactory;
  */
 public class PAContentControllerImpl extends AbstractPAController implements PAContentController,
         Serializable, ControllerStateDuplication {
+
+    private static final long serialVersionUID = 52;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     protected List<Component> fcSubComponents;
 
@@ -413,6 +415,8 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
     }
 
     class ContentControllerState implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private ArrayList<Component> fcSubComponents;
 
         public ContentControllerState(ArrayList<Component> fcSubComponents) {

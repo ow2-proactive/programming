@@ -52,6 +52,8 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  */
 public class SimulationSetTask implements Task<Serializable> {
 
+    private static final long serialVersionUID = 52;
+
     private SimulationSet exp;
 
     public SimulationSetTask(SimulationSet exp) {

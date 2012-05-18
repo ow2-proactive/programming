@@ -168,6 +168,8 @@ class TaskDispatcher extends Thread {
     }
 
     class QueueingFuture extends FutureTask<Task> implements Serializable {
+
+    private static final long serialVersionUID = 52;
         CallableInterpreter callable;
 
         QueueingFuture(CallableInterpreter c) {

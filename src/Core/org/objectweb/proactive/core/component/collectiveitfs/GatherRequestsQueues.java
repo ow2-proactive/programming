@@ -87,6 +87,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class GatherRequestsQueues implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_GATHERCAST);
     Map<String, Map<SerializableMethod, List<GatherRequestsQueue>>> queues = new HashMap<String, Map<SerializableMethod, List<GatherRequestsQueue>>>();
     PAComponent owner;

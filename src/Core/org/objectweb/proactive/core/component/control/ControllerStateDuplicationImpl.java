@@ -53,6 +53,8 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 public class ControllerStateDuplicationImpl extends AbstractPAController implements
         ControllerStateDuplication {
 
+    private static final long serialVersionUID = 52;
+
     public ControllerStateDuplicationImpl(Component owner) {
         super(owner);
 

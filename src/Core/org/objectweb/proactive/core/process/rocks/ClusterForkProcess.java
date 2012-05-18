@@ -42,6 +42,8 @@ import org.objectweb.proactive.core.process.UniversalProcess;
 
 
 public class ClusterForkProcess extends AbstractExternalProcessDecorator {
+
+    private static final long serialVersionUID = 52;
     final protected String DEFAULT_COMMAND = "cluster-fork";
 
     public ClusterForkProcess() {

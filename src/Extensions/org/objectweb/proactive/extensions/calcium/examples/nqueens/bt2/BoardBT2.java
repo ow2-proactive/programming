@@ -40,6 +40,8 @@ import org.objectweb.proactive.extensions.calcium.examples.nqueens.Board;
 
 
 public class BoardBT2 extends Board {
+
+    private static final long serialVersionUID = 52;
     int bound2;
     int sidemask;
     int lastmask;

@@ -53,6 +53,8 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
  *
  */
 public abstract class AbstractSequentialListProcessDecorator implements ExternalProcessDecorator {
+
+    private static final long serialVersionUID = 52;
     boolean isFirstElementService = false;
 
     //Array of processes

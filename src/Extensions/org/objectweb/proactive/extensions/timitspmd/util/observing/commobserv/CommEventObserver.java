@@ -49,6 +49,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventObserver
  */
 public class CommEventObserver implements EventObserver {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

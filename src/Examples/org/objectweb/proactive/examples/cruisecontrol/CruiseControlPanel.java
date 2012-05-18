@@ -46,6 +46,8 @@ import javax.swing.JPanel;
  * and to change the desired speed
  */
 public class CruiseControlPanel extends JPanel {
+
+    private static final long serialVersionUID = 52;
     // Fields
 
     /** constants : represents the controller on */

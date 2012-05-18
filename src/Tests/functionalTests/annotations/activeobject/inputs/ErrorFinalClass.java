@@ -44,4 +44,6 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public final class ErrorFinalClass implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
 }

@@ -48,6 +48,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.H
 
 
 public abstract class AbstractBridge implements Bridge {
+
+    private static final long serialVersionUID = 52;
     private String commandPath;
     private String env;
     private String hostname;

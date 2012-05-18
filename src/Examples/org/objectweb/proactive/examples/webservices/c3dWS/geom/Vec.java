@@ -42,6 +42,8 @@ package org.objectweb.proactive.examples.webservices.c3dWS.geom;
 @SuppressWarnings("serial")
 public class Vec implements java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** The x coordinate */
     private double x;
 

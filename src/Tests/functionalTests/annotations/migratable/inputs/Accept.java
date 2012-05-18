@@ -46,4 +46,6 @@ import org.objectweb.proactive.extensions.annotation.Migratable;
 @ActiveObject
 public class Accept implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
 }

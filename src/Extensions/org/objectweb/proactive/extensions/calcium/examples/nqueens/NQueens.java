@@ -57,6 +57,8 @@ import org.objectweb.proactive.extensions.calcium.skeletons.Skeleton;
 
 
 public class NQueens implements Serializable {
+
+    private static final long serialVersionUID = 52;
     public Skeleton<Board, Result> root;
 
     public static void main(String[] args) throws Exception {

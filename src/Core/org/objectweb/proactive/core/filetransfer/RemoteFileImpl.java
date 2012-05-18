@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.node.NodeFactory;
 
 
 public class RemoteFileImpl implements RemoteFile {
+
+    private static final long serialVersionUID = 52;
     Node node;
     File file;
     OperationStatus status;

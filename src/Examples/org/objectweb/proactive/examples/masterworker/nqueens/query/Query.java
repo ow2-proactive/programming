@@ -41,6 +41,8 @@ import java.util.Vector;
 
 
 public abstract class Query implements Serializable {
+
+    private static final long serialVersionUID = 52;
     public int n;
     public int done;
     public int left;

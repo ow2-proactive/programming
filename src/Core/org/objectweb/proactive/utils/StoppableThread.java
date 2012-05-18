@@ -131,6 +131,8 @@ public abstract class StoppableThread extends Thread {
      * @since  ProActive 5.0.0
      */
     final public static class NotStoppedException extends Exception {
+
+    private static final long serialVersionUID = 52;
         /**
          * @param t The unresponsive thread
          * @param timeout the exceeded timeout in milliseconds
@@ -148,6 +150,8 @@ public abstract class StoppableThread extends Thread {
      * @since  ProActive 5.0.0
      */
     final public static class ThreadIsBlockedOnException extends Exception {
+
+    private static final long serialVersionUID = 52;
 
         private ThreadIsBlockedOnException(final StackTraceElement[] ste) {
             super("Thread is blocked on:");

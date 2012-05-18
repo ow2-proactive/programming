@@ -42,6 +42,8 @@ import org.objectweb.proactive.core.util.ProActiveRandom;
 
 
 public class TaskId implements Serializable {
+
+    private static final long serialVersionUID = 52;
     static final public TaskId DEFAULT_ROOT_PARENT_ID = null;
     private TaskId familyId; //Id of the root task
     private TaskId parentId;

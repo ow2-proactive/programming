@@ -50,6 +50,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class CMAgentChained extends CMAgentInitialized implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private CMAgentChained previousNeighbour;
     private CMAgentChained nextNeighbour;
 

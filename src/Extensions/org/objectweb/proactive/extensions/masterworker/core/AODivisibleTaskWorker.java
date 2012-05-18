@@ -61,6 +61,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worke
 @ActiveObject
 public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitActive {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * log4j logger of the worker
      */

@@ -37,6 +37,8 @@
 package org.objectweb.proactive.core.security.crypto;
 
 public class KeyExchangeException extends Exception {
+
+    private static final long serialVersionUID = 52;
     String type;
 
     public KeyExchangeException() {

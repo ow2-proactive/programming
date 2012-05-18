@@ -42,6 +42,8 @@ import java.util.List;
 
 
 public abstract class MethodStatisticsAbstract implements MethodStatistics, Serializable {
+
+    private static final long serialVersionUID = 52;
     protected String itfName;
 
     protected String methodName;
@@ -244,6 +246,8 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
     }
 
     class RequestStatistics implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private long arrivalTime;
 
         private long departureTime;

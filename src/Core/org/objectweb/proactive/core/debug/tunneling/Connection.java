@@ -45,6 +45,8 @@ import java.net.Socket;
 
 public class Connection implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private transient Socket socket;
     private transient InputStream reader;
     private transient OutputStream writer;

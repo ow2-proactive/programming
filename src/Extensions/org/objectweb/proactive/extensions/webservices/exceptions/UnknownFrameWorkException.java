@@ -44,6 +44,8 @@ package org.objectweb.proactive.extensions.webservices.exceptions;
  */
 public class UnknownFrameWorkException extends WebServicesException {
 
+    private static final long serialVersionUID = 52;
+
     public UnknownFrameWorkException() {
         super();
     }

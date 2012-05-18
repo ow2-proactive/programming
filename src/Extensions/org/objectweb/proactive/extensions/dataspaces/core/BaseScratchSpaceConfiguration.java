@@ -56,6 +56,8 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
  * @see ScratchSpaceConfiguration
  */
 public class BaseScratchSpaceConfiguration implements Serializable {
+
+    private static final long serialVersionUID = 52;
     /**
      *
      */

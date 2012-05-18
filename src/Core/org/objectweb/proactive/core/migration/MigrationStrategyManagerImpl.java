@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.mop.MethodCall;
 public class MigrationStrategyManagerImpl implements MigrationStrategyManager, MigrationEventListener,
         java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * Name of the method to be called when the agent reaches a new site
      */

@@ -41,4 +41,6 @@ import java.util.ArrayList;
 
 
 public class GCResponse extends ArrayList<GCSimpleResponse> implements Serializable {
+
+    private static final long serialVersionUID = 52;
 }

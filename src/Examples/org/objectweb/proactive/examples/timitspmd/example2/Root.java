@@ -58,6 +58,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.TimerCounter;
 // A timed class MUST extends Timed
 public class Root extends Timed {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

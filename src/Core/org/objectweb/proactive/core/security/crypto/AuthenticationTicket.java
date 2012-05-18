@@ -41,6 +41,8 @@ import java.security.cert.X509Certificate;
 
 
 public class AuthenticationTicket implements Serializable {
+
+    private static final long serialVersionUID = 52;
     public X509Certificate certificate;
     public String identity;
     public long random;

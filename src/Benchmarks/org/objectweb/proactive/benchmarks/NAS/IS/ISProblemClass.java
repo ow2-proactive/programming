@@ -50,6 +50,8 @@ import java.io.Serializable;
  */
 public class ISProblemClass extends NASProblemClass implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     public int[] test_index_array;
     public int[] test_rank_array;
 

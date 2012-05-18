@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.body.migration.MigrationException;
 
 public class A implements Serializable, RunActive {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

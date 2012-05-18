@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 
 public class CertificatedRuleEntity extends RuleEntity {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

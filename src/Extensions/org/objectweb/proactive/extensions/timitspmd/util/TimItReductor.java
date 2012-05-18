@@ -56,6 +56,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventDataBag;
 
 public class TimItReductor implements ProActiveInternalObject, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

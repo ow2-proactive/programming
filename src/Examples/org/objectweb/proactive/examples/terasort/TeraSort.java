@@ -104,6 +104,8 @@ public class TeraSort {
      * </ul>
      */
     public static class Master implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private List<Node> nodes;
         private Dispatcher[] dispatchers;
         private Sorter[] sorters;
@@ -176,6 +178,8 @@ public class TeraSort {
      * The drawback is the overhead of creating the record objects (memory + GC).
      */
     final static class Record implements Comparable<Record>, Serializable {
+
+    private static final long serialVersionUID = 52;
         private byte[] buf;
 
         public Record(byte[] line) {
@@ -221,6 +225,8 @@ public class TeraSort {
      * The partition must fit in memory or an OOM will occur.
      */
     public static class Sorter implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private int id;
         private ArrayList<Record> lines;
 
@@ -263,6 +269,8 @@ public class TeraSort {
      * We assume a normal distribution of the keys
      */
     public static class Dispatcher implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private Sorter[] sorters;
 
         private LinkedList<Record>[] buf;

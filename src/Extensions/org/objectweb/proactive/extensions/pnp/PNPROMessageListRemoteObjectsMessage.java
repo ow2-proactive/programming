@@ -49,6 +49,8 @@ import java.net.URI;
 
 class PNPROMessageListRemoteObjectsMessage extends PNPROMessage implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * Construct a list message
      *

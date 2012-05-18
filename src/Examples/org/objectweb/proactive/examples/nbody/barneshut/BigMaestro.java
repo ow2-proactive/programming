@@ -50,6 +50,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class BigMaestro implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** Counts the number of Maestro that have respond */
     private int nbFinished = 0;
 

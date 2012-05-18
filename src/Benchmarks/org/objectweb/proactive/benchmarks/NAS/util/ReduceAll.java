@@ -42,6 +42,8 @@ import org.objectweb.proactive.api.PAActiveObject;
 
 
 public abstract class ReduceAll implements Serializable {
+
+    private static final long serialVersionUID = 52;
     protected Object typedGroup;
     private int nbOperand;
     private int nbOperandServed;

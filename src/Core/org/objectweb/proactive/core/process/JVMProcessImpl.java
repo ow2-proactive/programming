@@ -72,6 +72,8 @@ import org.objectweb.proactive.utils.OperatingSystem;
  * @since   ProActive 0.9.4
  */
 public class JVMProcessImpl extends AbstractExternalProcess implements JVMProcess, Serializable {
+
+    private static final long serialVersionUID = 52;
     static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_PROCESS);
 
     //private final static String POLICY_FILE = "proactive.java.policy";

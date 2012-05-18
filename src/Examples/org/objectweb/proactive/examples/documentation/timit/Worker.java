@@ -48,6 +48,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.commobserv.Co
 //@snippet-start TimIt_Worker_Class
 public class Worker extends Timed {
 
+    private static final long serialVersionUID = 52;
+
     /* Declaration of all TimerCounters and EventObservers */
 
     /** Total time */

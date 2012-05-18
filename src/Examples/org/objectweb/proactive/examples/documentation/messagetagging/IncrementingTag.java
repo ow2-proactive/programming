@@ -42,6 +42,8 @@ import org.objectweb.proactive.core.body.tags.Tag;
 // @snippet-start IncrementingTag
 public class IncrementingTag extends Tag {
 
+    private static final long serialVersionUID = 52;
+
     private Integer depth;
 
     public IncrementingTag(String id) {

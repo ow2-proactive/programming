@@ -45,6 +45,8 @@ import org.ow2.proactive.virtualizing.libvirt.LibvirtVMM;
  *
  */
 public class LibvirtVMMBean implements VMMBean {
+
+    private static final long serialVersionUID = 52;
     private String uri;
 
     LibvirtVMMBean(String uri) {

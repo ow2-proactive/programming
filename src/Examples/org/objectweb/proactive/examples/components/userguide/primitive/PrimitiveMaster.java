@@ -46,6 +46,8 @@ import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 
 
 public class PrimitiveMaster implements Runnable, Serializable, BindingController {
+
+    private static final long serialVersionUID = 52;
     private static final String COMPUTER_CLIENT_ITF = "compute-itf";
     private ComputeItf computer;
 

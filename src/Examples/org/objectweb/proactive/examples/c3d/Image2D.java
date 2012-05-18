@@ -46,6 +46,8 @@ import java.io.Serializable;
  * the complete image being made up of the sum of all these partial images.
  */
 public class Image2D implements Serializable {
+
+    private static final long serialVersionUID = 52;
     // integer array representing the pixels, starting from interval.yfrom * interval.width 
     private int[] pixels;
 

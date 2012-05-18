@@ -53,6 +53,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class ActiveNotificationListener implements Serializable, NotificationListener {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

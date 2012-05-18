@@ -113,6 +113,8 @@ public class TestFinal extends GCMFunctionalTest {
     }
 
     public static class Receiver implements Serializable {
+
+    private static final long serialVersionUID = 52;
         Data data;
 
         public Receiver() {
@@ -133,6 +135,8 @@ public class TestFinal extends GCMFunctionalTest {
     }
 
     public static class Data1 implements Data, Serializable {
+
+    private static final long serialVersionUID = 52;
         final UniqueID uniqueID = new UniqueID();
 
         public UniqueID get() {
@@ -141,6 +145,8 @@ public class TestFinal extends GCMFunctionalTest {
     }
 
     public static class Data2 implements Data, Serializable {
+
+    private static final long serialVersionUID = 52;
         final UniqueID uniqueID;
 
         public Data2() {

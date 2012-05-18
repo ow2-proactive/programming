@@ -42,4 +42,6 @@ package org.objectweb.proactive.extensions.masterworker.core;
  * @author The ProActive Team
  */
 public class MWFTError extends Error {
+
+    private static final long serialVersionUID = 52;
 }

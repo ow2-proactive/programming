@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.debug.tunneling;
 
 public class TunnelingTimeOutException extends java.lang.Exception {
 
+    private static final long serialVersionUID = 52;
+
     public TunnelingTimeOutException() {
     }
 

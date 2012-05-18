@@ -72,6 +72,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RemoteObjectSet implements Serializable, Observer {
+
+    private static final long serialVersionUID = 52;
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
     // *transient * Each RRO need a special marshalling processing
@@ -281,6 +283,8 @@ public class RemoteObjectSet implements Serializable, Observer {
      * Exception thrown an communication error, internal use only
      */
     public class RemoteRemoteObjectException extends Exception {
+
+    private static final long serialVersionUID = 52;
         RemoteRemoteObjectException(Exception e) {
             super(e);
         }
@@ -298,6 +302,8 @@ public class RemoteObjectSet implements Serializable, Observer {
      * The Object isn't already exposed with this protocol
      */
     public class NotYetExposedException extends Exception {
+
+    private static final long serialVersionUID = 52;
         public NotYetExposedException(Exception e) {
             super(e);
         }

@@ -41,6 +41,8 @@ import org.objectweb.proactive.examples.jmx.remote.management.transactions.Trans
 
 
 public class UpdateCommand extends OSGiCommand implements UpdateCommandMBean {
+
+    private static final long serialVersionUID = 52;
     private long idBundle;
 
     public UpdateCommand(Transaction t, long id) {

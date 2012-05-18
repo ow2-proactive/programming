@@ -67,6 +67,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worke
 @ActiveObject
 public class AOPinger implements WorkerWatcher, RunActive, InitActive, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

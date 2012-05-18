@@ -45,6 +45,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class CorrectedReject implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     public CorrectedReject() {
     }
 

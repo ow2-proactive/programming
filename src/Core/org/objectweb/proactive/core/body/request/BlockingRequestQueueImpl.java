@@ -58,6 +58,8 @@ import org.objectweb.proactive.utils.TimeoutAccounter;
 
 public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.io.Serializable,
         BlockingRequestQueue {
+
+    private static final long serialVersionUID = 52;
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //

@@ -45,6 +45,8 @@ import org.objectweb.fractal.api.Interface;
  * @author The ProActive Team
  */
 public class NFBinding extends Binding {
+
+    private static final long serialVersionUID = 52;
     private final String clientComponent;
     private final String serverComponent;
     private final String serverInterfaceName;

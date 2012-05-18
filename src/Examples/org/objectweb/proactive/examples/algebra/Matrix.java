@@ -44,6 +44,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class Matrix implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private int m; // height
     private int n; // width

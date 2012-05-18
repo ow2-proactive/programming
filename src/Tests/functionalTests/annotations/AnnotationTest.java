@@ -177,6 +177,8 @@ public abstract class AnnotationTest extends FunctionalTest {
 
     public final class CompilationExecutionException extends Exception {
 
+    private static final long serialVersionUID = 52;
+
         public CompilationExecutionException(String str) {
             super(str);
         }
@@ -190,6 +192,8 @@ public abstract class AnnotationTest extends FunctionalTest {
     // if I don't find a compiler...
 
     public class NoCompilerDetectedException extends Exception {
+
+    private static final long serialVersionUID = 52;
 
         public NoCompilerDetectedException(String message) {
             super(message);

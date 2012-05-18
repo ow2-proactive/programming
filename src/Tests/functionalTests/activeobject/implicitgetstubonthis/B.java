@@ -43,6 +43,8 @@ import org.objectweb.proactive.core.mop.StubObject;
 
 public class B implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     int toto;
     private A a;
 

@@ -78,6 +78,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *         that the remote object called is distant.
  */
 public class RemoteObjectAdapter implements RemoteObject {
+
+    private static final long serialVersionUID = 52;
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
     protected RemoteObjectSet remoteObjectSet;

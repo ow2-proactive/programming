@@ -46,6 +46,8 @@ import java.text.DecimalFormat;
  */
 public class Complex implements Cloneable, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private static int quantity = 0;// DEBUG
     public double real;
     public double img;

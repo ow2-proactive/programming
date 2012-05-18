@@ -46,6 +46,8 @@ import org.objectweb.proactive.ext.locationserver.TimedRequestWithLocationServer
 
 
 public class TimedRequestWithMixedLocation extends TimedRequestWithLocationServer {
+
+    private static final long serialVersionUID = 52;
     private static final int MAX_TRIES = 30;
     private static int counter = 0;
     private int tries;

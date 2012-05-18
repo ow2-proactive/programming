@@ -67,6 +67,8 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
  *
  */
 public class Interpreter implements Serializable {
+
+    private static final long serialVersionUID = 52;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_STRUCTURE);
 
     public Task interpret(FileServerClient fserver, Task task, Timer tUnusedCPU) {

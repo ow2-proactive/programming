@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.node.NodeException;
 
 public class A implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private B activeB;
 
     public A() {
@@ -60,6 +62,8 @@ public class A implements Serializable {
     public int propagateTag() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_00") {
+
+    private static final long serialVersionUID = 52;
             public Tag apply() {
                 return this;
             }
@@ -71,6 +75,8 @@ public class A implements Serializable {
     public boolean stopPropagateTag() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_01") {
+
+    private static final long serialVersionUID = 52;
             public Tag apply() {
                 return null;
             }
@@ -81,6 +87,8 @@ public class A implements Serializable {
     public Integer localMemory1() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_02") {
+
+    private static final long serialVersionUID = 52;
             public Tag apply() {
                 Integer i = (Integer) getLocalMemory().get("MT_00");
                 if (i != null) {
@@ -101,6 +109,8 @@ public class A implements Serializable {
     public Integer localMemory2() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_02") {
+
+    private static final long serialVersionUID = 52;
             public Tag apply() {
                 return this;
             }
@@ -111,6 +121,8 @@ public class A implements Serializable {
     public boolean checkNoLocalMemoryOnB() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_02") {
+
+    private static final long serialVersionUID = 52;
             public Tag apply() {
                 return this;
             }
@@ -121,6 +133,8 @@ public class A implements Serializable {
     public boolean localMemoryLeaseExceeded() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_03-A") {
+
+    private static final long serialVersionUID = 52;
             public Tag apply() {
                 return this;
             }
@@ -138,6 +152,8 @@ public class A implements Serializable {
     public boolean localMemoryLeaseClean2() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_04") {
+
+    private static final long serialVersionUID = 52;
             public Tag apply() {
                 return this;
             }

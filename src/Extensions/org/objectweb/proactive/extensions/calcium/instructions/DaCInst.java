@@ -51,6 +51,8 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
 public class DaCInst<P extends Serializable, R extends Serializable> implements Instruction<P, P> {
+
+    private static final long serialVersionUID = 52;
     Divide<P, P> div;
     Conquer<R, R> conq;
     Condition<P> cond;

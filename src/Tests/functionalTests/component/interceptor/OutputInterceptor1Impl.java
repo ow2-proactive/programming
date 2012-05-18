@@ -52,6 +52,8 @@ import functionalTests.component.controller.DummyController;
 public class OutputInterceptor1Impl extends AbstractPAController implements OutputInterceptor1,
         OutputInterceptor {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

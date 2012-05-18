@@ -86,6 +86,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAMembraneControllerImpl extends AbstractPAController implements PAMembraneController,
         Serializable, ControllerStateDuplication {
+
+    private static final long serialVersionUID = 52;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 
     private Map<String, Component> nfComponents;

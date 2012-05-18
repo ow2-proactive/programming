@@ -40,6 +40,8 @@ import java.io.Serializable;
 
 
 public class Row extends Vector implements Serializable, Cloneable {
+
+    private static final long serialVersionUID = 52;
     public Row(int _size) {
         super(_size);
     }

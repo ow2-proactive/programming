@@ -67,6 +67,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class MethodCall implements java.io.Serializable, Cloneable {
+
+    private static final long serialVersionUID = 52;
     //
     // --- STATIC MEMBERS -----------------------------------------------------------------------
     //
@@ -737,6 +739,8 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     // --- INNER CLASSES -----------------------------------------------------------------------
     //
     public class FixWrapper implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
         public boolean isPrimitive;
         public Class<?> encapsulated;
 

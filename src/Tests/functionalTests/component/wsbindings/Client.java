@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 
 public class Client implements Serializable, BindingController, Runner {
+
+    private static final long serialVersionUID = 52;
     public static final String SERVICES_NAME = "Services";
     public static final String SERVICEMULTICASTREAL_NAME = "ServiceMulticastReal";
     public static final String SERVICEMULTICASTFALSE_NAME = "ServiceMulticastFalse";

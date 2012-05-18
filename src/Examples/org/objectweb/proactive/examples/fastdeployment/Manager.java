@@ -55,6 +55,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class Manager implements Serializable, InitActive, RunActive {
 
+    private static final long serialVersionUID = 52;
+
     /** The application logger */
     final static private Logger logger = ProActiveLogger.getLogger(Loggers.CORE + ".app");
     /** List of slaves already in the computation */

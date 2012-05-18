@@ -40,6 +40,8 @@ import java.io.Serializable;
 
 
 public class Pair<P extends Serializable, R extends Serializable> implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private P first;
     private R second;
 

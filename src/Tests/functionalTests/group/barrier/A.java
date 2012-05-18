@@ -43,6 +43,8 @@ import org.objectweb.proactive.api.PASPMD;
 //@snippet-start spmd_typical_class
 public class A implements Active, java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private String name;
     private int fooCounter = 0;
     private int barCounter = 0;

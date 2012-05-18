@@ -43,6 +43,8 @@ import org.objectweb.proactive.core.mop.MethodCall;
 
 public class MethodCallDummy extends MethodCall {
 
+    private static final long serialVersionUID = 52;
+
     private static MethodCallDummy immediate_mc_dummy = new MethodCallDummy(true);
     private static MethodCallDummy mc_dummy = new MethodCallDummy(false);
     private Method dummyMethod;

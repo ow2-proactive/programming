@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.component.representative.PAComponentRepresen
  * @author The ProActive Team
  */
 public abstract class PAInterfaceImpl implements PAInterface, Serializable {
+
+    private static final long serialVersionUID = 52;
     private Component owner;
     private String name;
     private Type type;

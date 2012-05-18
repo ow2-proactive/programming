@@ -56,6 +56,8 @@ import org.objectweb.proactive.core.body.tags.MessageTags;
 
 public class MessageImpl implements Message, java.io.Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** The name of the method called */
     protected String methodName;
 

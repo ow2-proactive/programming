@@ -45,6 +45,8 @@ import javax.swing.JTable;
 
 
 public class SearchPane extends JPanel {
+
+    private static final long serialVersionUID = 52;
     private JScrollPane scrollPane;
     private JTable research;
     private SearchModel model;

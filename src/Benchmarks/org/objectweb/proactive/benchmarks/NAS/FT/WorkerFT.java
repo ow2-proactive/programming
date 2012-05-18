@@ -73,6 +73,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
 
 public class WorkerFT extends Timed implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
 
     // Timers

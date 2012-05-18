@@ -55,6 +55,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Maste
  */
 public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable>, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     private final MasterIntern master;
     private final String originatorName;
     private boolean initCalled = false;

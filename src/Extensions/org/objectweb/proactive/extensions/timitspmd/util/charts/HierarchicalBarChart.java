@@ -62,6 +62,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.charts.renderer.Hierarc
 
 public class HierarchicalBarChart implements Chart {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

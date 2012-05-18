@@ -42,6 +42,8 @@ import org.objectweb.proactive.extensions.webservices.AbstractWebServicesInitAct
 
 public class CXFInitActive extends AbstractWebServicesInitActive {
 
+    private static final long serialVersionUID = 52;
+
     public void initActivity(Body body) {
         CXFInitializer.init();
     }

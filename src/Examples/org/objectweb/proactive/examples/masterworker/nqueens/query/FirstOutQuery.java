@@ -40,6 +40,8 @@ import java.util.Vector;
 
 
 public class FirstOutQuery extends Query {
+
+    private static final long serialVersionUID = 52;
     public FirstOutQuery(int n) {
         super(n, 0, 0, ~((1 << n) - 1), 0);
     }

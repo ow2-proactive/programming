@@ -45,6 +45,8 @@ import java.io.Serializable;
  * @author The ProActive Team
  */
 public class ControllerState implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private Serializable state;
 
     public ControllerState(Serializable state) {

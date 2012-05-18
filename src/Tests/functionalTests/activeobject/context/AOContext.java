@@ -46,6 +46,8 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public class AOContext implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     private UniqueID myID;
     private StringWrapper name;
     private AOContext stubOnCaller;

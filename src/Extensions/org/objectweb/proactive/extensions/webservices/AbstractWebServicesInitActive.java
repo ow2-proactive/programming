@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.node.NodeException;
 
 public abstract class AbstractWebServicesInitActive implements InitActive, Serializable {
 
+    private static final long serialVersionUID = 52;
+
     public void initServlet(Node node) throws ActiveObjectCreationException, NodeException {
         PAActiveObject.newActive(this.getClass().getName(), null, node);
     }

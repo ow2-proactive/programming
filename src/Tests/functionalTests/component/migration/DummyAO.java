@@ -62,6 +62,8 @@ import functionalTests.component.deployment.Test;
 // therefore, future pool must be serialized, which poses a problem if there is a reference on a HalfBody (from main)
 // solution : we run the test from an active object (no HalfBody involved)
 public class DummyAO implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private VariableContractImpl vc;
     private GCMApplication newDeploymentDescriptor = null;
 

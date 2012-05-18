@@ -40,6 +40,8 @@ import java.io.Serializable;
 
 
 public abstract class NASProblemClass implements Serializable {
+
+    private static final long serialVersionUID = 52;
     /**
      * Benchmark name
      */

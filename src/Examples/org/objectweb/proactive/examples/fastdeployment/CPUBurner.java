@@ -49,6 +49,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class CPUBurner implements Serializable, InitActive {
+
+    private static final long serialVersionUID = 52;
     private int id;
     private Manager manager;
 

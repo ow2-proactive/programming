@@ -63,6 +63,8 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 
 public class DummySender implements UniversalBody {
 
+    private static final long serialVersionUID = 52;
+
     //
     // ---- DUMMY SENDER ---
     //

@@ -72,6 +72,8 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
  */
 public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObject {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * the remote remote object of the internal remote remote object.
      * Remote method calls are received by this remote remote object,

@@ -53,6 +53,8 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
  */
 public class PANameControllerImpl extends AbstractPAController implements NameController,
         ControllerStateDuplication {
+
+    private static final long serialVersionUID = 52;
     // FIXME coherency between this value and the one in component parameters controller
     String name;
 

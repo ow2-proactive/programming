@@ -46,6 +46,8 @@ import org.objectweb.proactive.examples.nbody.common.Cube;
  */
 public class Planet implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** Time step, the smaller the more precise the movement */
     private final double dt = 0.002;
 

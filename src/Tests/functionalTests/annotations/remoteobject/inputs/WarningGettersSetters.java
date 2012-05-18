@@ -46,6 +46,8 @@ import org.objectweb.proactive.extensions.annotation.RemoteObject;
 @RemoteObject
 public class WarningGettersSetters implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     // WARNING (no accessors)
     public int error;
 

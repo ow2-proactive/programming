@@ -69,6 +69,8 @@ import com.rabbitmq.client.ShutdownSignalException;
  */
 
 public class AMQPRemoteObject implements RemoteRemoteObject, Serializable {
+
+    private static final long serialVersionUID = 52;
     final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */

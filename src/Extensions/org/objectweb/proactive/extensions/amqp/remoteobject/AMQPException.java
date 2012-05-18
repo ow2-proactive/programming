@@ -43,4 +43,6 @@ package org.objectweb.proactive.extensions.amqp.remoteobject;
 
 public class AMQPException extends Exception {
 
+    private static final long serialVersionUID = 52;
+
 }

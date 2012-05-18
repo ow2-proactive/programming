@@ -70,6 +70,8 @@ public class TestTurnRemote extends GCMFunctionalTest {
     }
 
     public static class AO implements Serializable {
+
+    private static final long serialVersionUID = 52;
         public AO() {
         }
 

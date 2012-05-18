@@ -47,6 +47,8 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.View;
  * Represents a 3D scene, with objects, lights and a view
  */
 public class Scene implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     private Vector lights = new Vector();
     private Vector objects = new Vector();
     private View view = new View();

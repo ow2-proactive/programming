@@ -73,6 +73,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class FTManagerPMLRB extends FTManager {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

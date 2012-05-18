@@ -48,6 +48,8 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 @ActiveObject
 public class MigratableHello extends InitializedHelloWorld implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     @MigrationSignal
     public void packUpMyVariablesAndHitTheRoad(Node whereTo) {
         try {

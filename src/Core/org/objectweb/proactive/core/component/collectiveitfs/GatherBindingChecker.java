@@ -56,6 +56,8 @@ import org.objectweb.proactive.core.mop.Utils;
  */
 public class GatherBindingChecker implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      * client method <code>B foo (A) throws E;<code><br>
      * must be matched by <br>

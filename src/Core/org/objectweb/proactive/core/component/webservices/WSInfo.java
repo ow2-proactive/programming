@@ -57,6 +57,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class WSInfo implements Serializable {
+
+    private static final long serialVersionUID = 52;
     /**
      * Name of the interface which must be implemented by the class in charge of calling the web service.
      */

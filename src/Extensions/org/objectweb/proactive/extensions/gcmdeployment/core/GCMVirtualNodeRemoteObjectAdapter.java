@@ -56,6 +56,8 @@ import org.objectweb.proactive.gcmdeployment.Topology;
 public class GCMVirtualNodeRemoteObjectAdapter extends Adapter<GCMVirtualNode> implements GCMVirtualNode,
         Serializable {
 
+    private static final long serialVersionUID = 52;
+
     boolean isLocal = true;
     transient GCMVirtualNode vn;
 

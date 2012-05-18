@@ -55,6 +55,8 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
  */
 @ActiveObject
 public class SimpleAgent implements java.io.Serializable {
+
+    private static final long serialVersionUID = 52;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** ProActive compulsory empty no-args constructor */

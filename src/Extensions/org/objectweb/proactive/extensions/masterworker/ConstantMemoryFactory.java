@@ -50,6 +50,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
  */
 public class ConstantMemoryFactory implements MemoryFactory {
 
+    private static final long serialVersionUID = 52;
+
     private HashMap<String, Serializable> memory;
 
     public ConstantMemoryFactory() {

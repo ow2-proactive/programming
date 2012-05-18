@@ -49,6 +49,8 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
  * @author The ProActive Team
  */
 public class StatsGlobalImpl implements java.io.Serializable, StatsGlobal {
+
+    private static final long serialVersionUID = 52;
     private int processingQueueLength;
     private int waitingQueueLength;
     private int readyNewQueueLength;

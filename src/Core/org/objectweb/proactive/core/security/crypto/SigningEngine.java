@@ -44,6 +44,8 @@ import java.security.SignedObject;
 
 
 public class SigningEngine implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private transient Signature signingEngine;
 
     public SigningEngine() {

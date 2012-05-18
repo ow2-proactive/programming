@@ -58,6 +58,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class ConnectionListener implements NotificationListener, Serializable {
+
+    private static final long serialVersionUID = 52;
     private MBeanServerConnection connection;
 
     /**

@@ -48,6 +48,8 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class Domain implements Serializable {
+
+    private static final long serialVersionUID = 52;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** a unique number to differentiate this Domain from the others */

@@ -46,6 +46,8 @@ import java.io.Serializable;
  * <br>created    July 19, 2001
  */
 public class CertificateIdentity implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private String domainName;
 
     /**

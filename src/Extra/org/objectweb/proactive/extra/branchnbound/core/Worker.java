@@ -62,6 +62,8 @@ import org.objectweb.proactive.extra.branchnbound.core.queue.TaskQueue;
  */
 
 public class Worker implements Serializable {
+
+    private static final long serialVersionUID = 52;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
     private Worker selfWorkerGroup = null;
     private Result bestCurrentResult = null;

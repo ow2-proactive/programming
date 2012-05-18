@@ -77,6 +77,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class PAMonitorControllerImpl extends AbstractPAController implements MonitorController,
         NotificationListener {
+
+    private static final long serialVersionUID = 52;
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
 
     private transient JMXNotificationManager jmxNotificationManager;

@@ -65,6 +65,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
 
 public class WorkerMG extends Timed implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /*
      * TimIt related variables
      */

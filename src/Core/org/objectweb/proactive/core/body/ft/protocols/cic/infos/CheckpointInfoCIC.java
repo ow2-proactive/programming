@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.body.request.Request;
  */
 public class CheckpointInfoCIC implements org.objectweb.proactive.core.body.ft.checkpointing.CheckpointInfo {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

@@ -52,6 +52,8 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 @PublicAPI
 public class OrnsteinUhlenbeckProcess implements SimulationSet<double[]> {
 
+    private static final long serialVersionUID = 52;
+
     private int N;
     private double base;
     private double factor;

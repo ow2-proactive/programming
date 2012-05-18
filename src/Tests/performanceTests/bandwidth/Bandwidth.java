@@ -70,6 +70,8 @@ public abstract class Bandwidth extends GCMFunctionalTest {
     }
 
     static public class Server implements Serializable {
+
+    private static final long serialVersionUID = 52;
         boolean firstRequest = true;
         long count = 0;
         long startTime;
@@ -102,6 +104,8 @@ public abstract class Bandwidth extends GCMFunctionalTest {
     }
 
     static public class Client implements Serializable {
+
+    private static final long serialVersionUID = 52;
         private Server server;
 
         public Client() {

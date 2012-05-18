@@ -41,6 +41,8 @@ import java.io.Serializable;
 
 public class Cube implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** x-coordinate of the cube */
     public double x;
 

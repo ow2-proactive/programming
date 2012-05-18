@@ -45,6 +45,8 @@ import org.objectweb.proactive.core.node.NodeException;
 
 public class A implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /**
      *
      */

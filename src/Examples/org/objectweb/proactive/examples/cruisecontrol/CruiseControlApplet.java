@@ -49,6 +49,8 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
  *
  */
 public class CruiseControlApplet extends org.objectweb.proactive.examples.StandardFrame {
+
+    private static final long serialVersionUID = 52;
     // components
 
     /**

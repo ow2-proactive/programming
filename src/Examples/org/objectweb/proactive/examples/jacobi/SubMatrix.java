@@ -57,6 +57,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class SubMatrix implements Serializable {
 
+    private static final long serialVersionUID = 52;
+
     /** Default width value of a submatrix */
     private static final int DEFAULT_WIDTH = 100;
 

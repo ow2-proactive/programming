@@ -52,6 +52,8 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 @PublicAPI
 public class GeometricBrownianMotionStockDividend implements SimulationSet<double[]> {
 
+    private static final long serialVersionUID = 52;
+
     private double s0, Y, r, sigma, D;
     private int T, N;
     private NormalDist normal = null;

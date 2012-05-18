@@ -47,6 +47,8 @@ import java.io.Serializable;
  * @author The ProActive Team
  */
 public class OperationStatus implements Serializable {
+
+    private static final long serialVersionUID = 52;
     private IOException e = null;
 
     /**
