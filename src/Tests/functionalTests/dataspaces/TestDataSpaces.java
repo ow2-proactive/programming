@@ -360,7 +360,8 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
     @ActiveObject
     public static class TestActiveObject implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         /**
          * 
          */

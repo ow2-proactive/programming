@@ -47,6 +47,7 @@ import java.io.IOException;
 public class HTTPRemoteException extends IOException {
 
     private static final long serialVersionUID = 52;
+
     public HTTPRemoteException() {
         super();
     }

@@ -105,7 +105,7 @@ public class TeraSort {
      */
     public static class Master implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private List<Node> nodes;
         private Dispatcher[] dispatchers;
         private Sorter[] sorters;
@@ -179,7 +179,7 @@ public class TeraSort {
      */
     final static class Record implements Comparable<Record>, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private byte[] buf;
 
         public Record(byte[] line) {
@@ -226,7 +226,7 @@ public class TeraSort {
      */
     public static class Sorter implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private int id;
         private ArrayList<Record> lines;
 
@@ -270,7 +270,7 @@ public class TeraSort {
      */
     public static class Dispatcher implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private Sorter[] sorters;
 
         private LinkedList<Record>[] buf;

@@ -43,6 +43,7 @@ package org.objectweb.proactive.extensions.pnp.exception;
 public class PNPHeartbeatTimeoutException extends PNPIOException {
 
     private static final long serialVersionUID = 52;
+
     public PNPHeartbeatTimeoutException() {
         super();
     }

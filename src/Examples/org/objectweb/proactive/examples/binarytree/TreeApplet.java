@@ -345,7 +345,7 @@ public class TreeApplet extends org.objectweb.proactive.examples.StandardFrame {
 
     public class TreePanel extends javax.swing.JPanel {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private TreeDisplay display;
 
         public TreePanel(TreeDisplay display) {

@@ -59,7 +59,7 @@ public class Domain implements Serializable {
 
     private static class Carrier implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         Planet planet;
         int iter;
 

@@ -188,7 +188,7 @@ public class FileTransferDefinition implements Serializable {
 
     public class FileDescription implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         String srcName;
         String destName;
 
@@ -243,7 +243,7 @@ public class FileTransferDefinition implements Serializable {
 
     public class DirectoryDescription extends FileDescription {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         String includes;
         String excludes;
 

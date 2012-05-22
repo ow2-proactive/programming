@@ -320,7 +320,7 @@ public class MatrixChart implements Chart {
      */
     private class CustomRenderer extends StandardXYItemRenderer {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *
@@ -451,7 +451,7 @@ public class MatrixChart implements Chart {
 
     private static class CustomAxis extends NumberAxis {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *
@@ -504,7 +504,7 @@ public class MatrixChart implements Chart {
 
     private class CustomTickUnit extends NumberTickUnit {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *

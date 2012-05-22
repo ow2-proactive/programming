@@ -309,7 +309,7 @@ public class GCMVirtualMachineManager implements Serializable {
 
     class VirtualMachineManagerHolder implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private final VMMBean vmmbean;
         private transient VirtualMachineManager vmm;
         private transient Hashtable<String, VirtualMachine> vms;

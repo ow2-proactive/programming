@@ -39,6 +39,7 @@ package org.objectweb.proactive.core.mop;
 public abstract class BehavioralException extends MOPException {
 
     private static final long serialVersionUID = 52;
+
     public BehavioralException() {
     }
 

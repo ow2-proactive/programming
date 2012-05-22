@@ -740,7 +740,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     //
     public class FixWrapper implements java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         public boolean isPrimitive;
         public Class<?> encapsulated;
 

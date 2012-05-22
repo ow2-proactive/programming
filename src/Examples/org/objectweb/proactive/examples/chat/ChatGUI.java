@@ -162,7 +162,8 @@ public class ChatGUI extends JFrame {
      */
     private class QuitAction extends AbstractAction {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public QuitAction() {
             putValue(Action.NAME, "Quit");
             putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_Q));
@@ -189,7 +190,8 @@ public class ChatGUI extends JFrame {
      */
     private class SendAction extends AbstractAction {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public SendAction() {
             putValue(Action.NAME, "Send");
             putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_S));
@@ -213,7 +215,8 @@ public class ChatGUI extends JFrame {
      */
     private class MigrateAction extends AbstractAction {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public MigrateAction() {
             putValue(Action.NAME, "Migrate !");
             putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_M));

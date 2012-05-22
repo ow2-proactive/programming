@@ -104,7 +104,7 @@ public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory 
     //
     protected class RequestWithLocationServerFactory implements RequestFactory, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         transient private LocationServer server = LocationServerFactory.getLocationServer();
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
@@ -116,7 +116,8 @@ public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory 
     protected static class MigrationManagerFactoryImpl implements MigrationManagerFactory,
             java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public MigrationManager newMigrationManager() {
             return new MigrationManagerWithLocationServer(LocationServerFactory.getLocationServer());
         }

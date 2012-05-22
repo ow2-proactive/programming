@@ -289,7 +289,7 @@ public class OARGRIDSubProcess extends AbstractExternalProcessDecorator {
 
     public class OarSite implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private String clusterName;
         private String clusterFrontEndName;
         private int nodes;

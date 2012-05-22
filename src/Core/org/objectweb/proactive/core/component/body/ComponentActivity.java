@@ -228,7 +228,8 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
 
     private class ComponentFIFORunActive implements RunActive, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public void runActivity(Body body) {
             new Service(body).fifoServing();
         }
@@ -236,7 +237,8 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
 
     private class DefaultInitActive implements InitActive, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public void initActivity(Body body) {
             if (logger.isDebugEnabled()) {
                 logger.debug("initializing default functional activity of the component");
@@ -246,7 +248,8 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
 
     private class DefaultEndActive implements EndActive, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public void endActivity(Body body) {
             if (logger.isDebugEnabled()) {
                 logger.debug("ending default functional activity of this component");
@@ -256,7 +259,7 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
 
     private class ComponentInitActiveWrapper implements InitActive, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private ComponentInitActive wrappedComponentInitActive;
 
         public ComponentInitActiveWrapper(ComponentInitActive componentInitActive) {
@@ -270,7 +273,7 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
 
     private class ComponentRunActiveWrapper implements RunActive, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private ComponentRunActive wrappedComponentRunActive;
 
         public ComponentRunActiveWrapper(ComponentRunActive componentRunActive) {
@@ -284,7 +287,7 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
 
     private class ComponentEndActiveWrapper implements EndActive, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private ComponentEndActive wrappedComponentEndActive;
 
         public ComponentEndActiveWrapper(ComponentEndActive componentEndActive) {

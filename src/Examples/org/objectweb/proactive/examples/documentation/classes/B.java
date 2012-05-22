@@ -44,6 +44,7 @@ package org.objectweb.proactive.examples.documentation.classes;
 public class B extends A {
 
     private static final long serialVersionUID = 52;
+
     /**
      * Empty no-arg constructor
      */

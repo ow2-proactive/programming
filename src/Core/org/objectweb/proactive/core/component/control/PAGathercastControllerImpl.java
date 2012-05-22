@@ -258,7 +258,7 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
 
     class GatherCastItfState implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private HashMap<String, List<Object>> bindingsOnServerItfs;
         private HashMap<String, PAInterface> gatherItfs;
         private GatherRequestsQueues gatherRequestsHandler;

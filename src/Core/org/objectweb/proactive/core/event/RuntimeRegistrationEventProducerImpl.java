@@ -43,6 +43,7 @@ public class RuntimeRegistrationEventProducerImpl extends AbstractEventProducer 
         RuntimeRegistrationEventProducer {
 
     private static final long serialVersionUID = 52;
+
     //
     //-------------------implements RuntimeRegistrationEventProducer------------------
     //

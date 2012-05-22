@@ -63,7 +63,8 @@ public class A implements Serializable {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_00") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 return this;
             }
@@ -76,7 +77,8 @@ public class A implements Serializable {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_01") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 return null;
             }
@@ -88,7 +90,8 @@ public class A implements Serializable {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_02") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 Integer i = (Integer) getLocalMemory().get("MT_00");
                 if (i != null) {
@@ -110,7 +113,8 @@ public class A implements Serializable {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_02") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 return this;
             }
@@ -122,7 +126,8 @@ public class A implements Serializable {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_02") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 return this;
             }
@@ -134,7 +139,8 @@ public class A implements Serializable {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_03-A") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 return this;
             }
@@ -153,7 +159,8 @@ public class A implements Serializable {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_04") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 return this;
             }

@@ -442,7 +442,7 @@ public class TaskPool implements Serializable {
 
     class ReadyQueue implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         //Root tasks that are in this queue for the first time
         PriorityQueue<Task<?>> newRoots;
         //Root tasks that have already been in this queue before

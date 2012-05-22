@@ -402,7 +402,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
     private class RouterHandshakeException extends Exception {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         public RouterHandshakeException() {
             super();

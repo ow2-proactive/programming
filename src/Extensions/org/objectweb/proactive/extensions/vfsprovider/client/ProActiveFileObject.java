@@ -74,7 +74,7 @@ public class ProActiveFileObject extends AbstractFileObject {
 
     private static final FileInfo IMAGINARY_FILE_INFO = new FileInfo() {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         public long getLastModifiedTime() {
             return 0;

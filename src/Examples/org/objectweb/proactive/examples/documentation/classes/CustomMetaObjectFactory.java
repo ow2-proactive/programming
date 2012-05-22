@@ -75,7 +75,7 @@ public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
 
     protected class CustomRequestFactory extends RequestFactoryImpl implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                 long sequenceID) {
@@ -85,7 +85,8 @@ public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
 
         protected class CustomRequest extends RequestImpl {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public CustomRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                     long sequenceID) {
                 super(methodCall, sourceBody, isOneWay, sequenceID);

@@ -271,7 +271,7 @@ public class PenguinApplet extends StandardFrame implements PenguinMessageReceiv
 
     private static class PenguinListModel extends javax.swing.AbstractListModel {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private CircularArrayList<PenguinWrapper> penguinList;
 
         //
@@ -316,7 +316,7 @@ public class PenguinApplet extends StandardFrame implements PenguinMessageReceiv
 
     private static class PenguinWrapper implements java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         Penguin penguin;
         String name;
 

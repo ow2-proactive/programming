@@ -55,6 +55,7 @@ import java.awt.event.ActionListener;
 public class DialogBox extends Dialog implements ActionListener, java.io.Serializable {
 
     private static final long serialVersionUID = 52;
+
     public DialogBox(Frame parent, String frametitle, String line1, String line2) {
         super(parent, frametitle, true);
 

@@ -623,7 +623,7 @@ public class FuturePool extends Object implements java.io.Serializable {
      */
     private class ACService implements java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         // bodies that have to be updated
         private ArrayList<UniversalBody> dests;
 

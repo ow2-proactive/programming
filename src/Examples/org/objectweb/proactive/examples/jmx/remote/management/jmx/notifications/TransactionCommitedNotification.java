@@ -42,6 +42,7 @@ import java.util.Date;
 public class TransactionCommitedNotification extends TransactionNotification {
 
     private static final long serialVersionUID = 52;
+
     public TransactionCommitedNotification(String type, Object source, long sequenceNumber, String message,
             long id, Date date) {
         super(type, source, sequenceNumber, message, id, date);

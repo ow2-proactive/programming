@@ -160,7 +160,8 @@ public class Election implements RunActive, Serializable {
      * To make a democracy, ie winner has most votes, you need to change winner and add methods. */
     private class Ballots extends Vector implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public Vec winner() {
             if (size() == 1) {
                 return (Vec) get(0);

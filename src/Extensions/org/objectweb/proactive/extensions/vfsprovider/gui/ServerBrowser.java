@@ -189,7 +189,7 @@ public class ServerBrowser implements ActionListener, WindowListener, KeyEventDi
 
         table = new JTable(model) {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
             private StatusCellRenderer statusRenderer = new StatusCellRenderer();
 
             /*
@@ -197,7 +197,7 @@ public class ServerBrowser implements ActionListener, WindowListener, KeyEventDi
              */
             final class StatusCellRenderer extends DefaultTableCellRenderer {
 
-    private static final long serialVersionUID = 52;
+                private static final long serialVersionUID = 52;
 
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,

@@ -43,6 +43,7 @@ package org.objectweb.proactive.core.remoteobject;
 public class ProtocolActivationException extends Exception {
 
     private static final long serialVersionUID = 52;
+
     public ProtocolActivationException() {
     }
 }

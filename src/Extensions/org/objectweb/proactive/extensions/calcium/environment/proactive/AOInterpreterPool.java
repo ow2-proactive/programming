@@ -133,7 +133,7 @@ public class AOInterpreterPool implements RunActive, InitActive {
 
     protected class RequestFilterOnAllowedMethods implements RequestFilter, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private String allowedMethodNames;
 
         public RequestFilterOnAllowedMethods(String allowedMethodNames) {

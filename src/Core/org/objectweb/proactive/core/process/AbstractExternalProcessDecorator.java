@@ -178,7 +178,7 @@ public abstract class AbstractExternalProcessDecorator extends AbstractExternalP
      */
     public static class CompositeMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private RemoteProcessMessageLogger messageLogger1;
         private RemoteProcessMessageLogger messageLogger2;
 

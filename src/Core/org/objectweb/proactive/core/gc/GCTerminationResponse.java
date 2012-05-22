@@ -43,6 +43,7 @@ package org.objectweb.proactive.core.gc;
 public class GCTerminationResponse extends GCSimpleResponse {
 
     private static final long serialVersionUID = 52;
+
     GCTerminationResponse(Activity lastActivity) {
         super(lastActivity, true);
     }

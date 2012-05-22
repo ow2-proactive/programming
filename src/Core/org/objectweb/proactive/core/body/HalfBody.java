@@ -215,7 +215,7 @@ public class HalfBody extends AbstractBody {
     //
     private class HalfLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *

@@ -212,7 +212,7 @@ public class NBody2DFrame extends JFrame implements Serializable, ActionListener
 
     private class PlanetDisplayPanel extends JPanel {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private final Image bkground;
         private int iter = 0;
         private BufferedImage[] stars;

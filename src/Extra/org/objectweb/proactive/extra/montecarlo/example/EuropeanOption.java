@@ -118,7 +118,8 @@ public class EuropeanOption implements EngineTask<double[]> {
             sets.add(new AbstractSimulationSetPostProcess<double[], double[]>(new GeometricBrownianMotion(
                 spot, interest, volatility, maturity, N)) {
 
-    private static final long serialVersionUID = 52;
+                private static final long serialVersionUID = 52;
+
                 // Compute the payoff of both call [index 1] and put [index 0]
                 // options
                 public double[] postprocess(double[] experiencesResults) {

@@ -233,7 +233,7 @@ public class LogFinderExample extends AbstractExample {
      */
     public static class GrepCountTask implements Task<ArrayList<Integer>> {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         private File srcFile;
         private File tmpFile;
@@ -302,7 +302,7 @@ public class LogFinderExample extends AbstractExample {
      */
     public static class ListLogFiles implements Task<ArrayList<File>> {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         private File directory;
         private String pattern;

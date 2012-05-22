@@ -308,7 +308,8 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
     //
     private class FIFORunActive implements RunActive, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public void runActivity(Body body) {
             new Service(body).fifoServing();
         }

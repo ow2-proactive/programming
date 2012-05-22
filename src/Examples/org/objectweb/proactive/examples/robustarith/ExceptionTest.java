@@ -46,6 +46,7 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 class DangerousException extends Exception {
 
     private static final long serialVersionUID = 52;
+
     DangerousException(String str) {
         super(str);
     }

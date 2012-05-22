@@ -93,7 +93,8 @@ public class B implements Serializable, InitActive {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_03-B") {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
+
             public Tag apply() {
                 return this;
             }

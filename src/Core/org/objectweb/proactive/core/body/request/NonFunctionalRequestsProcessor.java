@@ -186,7 +186,7 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
      */
     protected class ImmediateNFRequestFilter implements RequestFilter, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *
@@ -207,7 +207,7 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
      */
     protected class PriorityNFRequestFilter implements RequestFilter, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *
@@ -228,7 +228,7 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
      */
     protected class NoPriorityNFRequestFilter implements RequestFilter, Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *

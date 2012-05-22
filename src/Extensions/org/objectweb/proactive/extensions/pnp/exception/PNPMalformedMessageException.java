@@ -43,6 +43,7 @@ package org.objectweb.proactive.extensions.pnp.exception;
 public class PNPMalformedMessageException extends PNPException {
 
     private static final long serialVersionUID = 52;
+
     public PNPMalformedMessageException() {
         super();
     }

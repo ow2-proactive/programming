@@ -64,6 +64,7 @@ public class PANFComponentRepresentativeImpl extends PAComponentRepresentativeIm
         PANFComponentRepresentative {
 
     private static final long serialVersionUID = 52;
+
     public PANFComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
         super(componentType, hierarchicalType, controllersConfigFileLocation);

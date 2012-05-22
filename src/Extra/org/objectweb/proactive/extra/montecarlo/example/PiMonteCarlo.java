@@ -89,7 +89,7 @@ public class PiMonteCarlo implements EngineTask<Double> {
      */
     public class MCPi implements SimulationSet<double[]> {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         int N;
 
         MCPi(final int n) {
@@ -224,7 +224,8 @@ public class PiMonteCarlo implements EngineTask<Double> {
         for (int i = 0; i < t; i++) {
             sets.add(new AbstractSimulationSetPostProcess<double[], Long>(new MCPi(ni)) {
 
-    private static final long serialVersionUID = 52;
+                private static final long serialVersionUID = 52;
+
                 public Long postprocess(double[] experiencesResults) {
                     long counter = 0;
                     double[] simulatedCounts = experiencesResults;

@@ -398,7 +398,7 @@ public class LSFBSubProcess extends AbstractExternalProcessDecorator {
      */
     public class ParserMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private boolean foundJobID;
         private boolean foundHostname;
 

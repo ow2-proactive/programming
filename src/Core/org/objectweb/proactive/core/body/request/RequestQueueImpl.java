@@ -420,7 +420,7 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
     //
     protected class RequestFilterOnMethodName implements RequestFilter, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private String methodName;
 
         public RequestFilterOnMethodName() {

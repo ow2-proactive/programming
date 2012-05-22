@@ -101,7 +101,8 @@ public class TestInternalClassAO extends FunctionalTest {
     // Note that empty constructor is not mandatory
     public class MemberClass implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public int incrementEnclosingPrivateValue() {
             return TestInternalClassAO.this.enclosingPrivate++;
         }

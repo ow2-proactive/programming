@@ -58,7 +58,7 @@ public class Main {
     public static void main(String[] args) {
         Formula f = new Formula() {
 
-    private static final long serialVersionUID = 52;
+            private static final long serialVersionUID = 52;
             private final Ratio ONE_64 = new Ratio(BigInteger.ONE, new BigInteger("64"));
 
             private BigInteger i2b(int i) {

@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 class ThisIsNotAnException extends Exception {
 
     private static final long serialVersionUID = 52;
+
     public ThisIsNotAnException() {
         super("This is the call in the proxy");
     }

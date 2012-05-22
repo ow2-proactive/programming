@@ -51,6 +51,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class ProActiveException extends Exception {
 
     private static final long serialVersionUID = 52;
+
     public ProActiveException() {
         super();
     }

@@ -50,9 +50,10 @@ import java.awt.event.WindowEvent;
 public class Legend extends Dialog {
 
     private static final long serialVersionUID = 52;
+
     public class LegendPanel extends Panel {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         DisplayPanel display;
 
         public LegendPanel(DisplayPanel _display) {

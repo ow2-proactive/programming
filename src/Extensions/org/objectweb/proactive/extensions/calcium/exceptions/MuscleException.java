@@ -49,6 +49,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class MuscleException extends Exception {
 
     private static final long serialVersionUID = 52;
+
     public MuscleException(String msg) {
         super(msg);
     }

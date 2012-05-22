@@ -94,7 +94,8 @@ public class TestDeploymentDescriptorParser {
 
     protected static class UserGroup extends AbstractGroup {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         @Override
         public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
             return new ArrayList<String>();
@@ -103,7 +104,8 @@ public class TestDeploymentDescriptorParser {
 
     protected static class UserBridge extends AbstractBridge {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         @Override
         public String internalBuildCommand(CommandBuilder commandBuilder) {
             return "";

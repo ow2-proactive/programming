@@ -43,6 +43,7 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
 public class ConquerBoard implements Conquer<Result, Result> {
 
     private static final long serialVersionUID = 52;
+
     public Result conquer(Result[] result, SkeletonSystem system) {
         Result r = new Result(result[0].n);
 

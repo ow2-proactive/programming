@@ -284,7 +284,8 @@ public class RemoteObjectSet implements Serializable, Observer {
      */
     public class RemoteRemoteObjectException extends Exception {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         RemoteRemoteObjectException(Exception e) {
             super(e);
         }
@@ -303,7 +304,8 @@ public class RemoteObjectSet implements Serializable, Observer {
      */
     public class NotYetExposedException extends Exception {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public NotYetExposedException(Exception e) {
             super(e);
         }

@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 public class InactiveBodyException extends ProActiveRuntimeException {
 
     private static final long serialVersionUID = 52;
+
     public InactiveBodyException(UniversalBody body) {
         super("Cannot perform this call because body " + body.getID() + "is inactive");
     }

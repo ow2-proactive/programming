@@ -543,7 +543,8 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
      */
     private class LoadLevelerParserMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
+
         public LoadLevelerParserMessageLogger() {
         }
 

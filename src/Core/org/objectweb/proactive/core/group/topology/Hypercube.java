@@ -46,6 +46,7 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
 public class Hypercube<E> extends TopologyGroup<E> {
 
     private static final long serialVersionUID = 52;
+
     public Hypercube(Group<E> g, int size) throws ConstructionOfReifiedObjectFailedException {
         super(g, size);
         for (int i = 0; i < size; i++) {

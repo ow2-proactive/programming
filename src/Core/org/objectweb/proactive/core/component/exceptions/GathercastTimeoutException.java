@@ -56,6 +56,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 public class GathercastTimeoutException extends ProActiveRuntimeException {
 
     private static final long serialVersionUID = 52;
+
     public GathercastTimeoutException() {
         super();
     }

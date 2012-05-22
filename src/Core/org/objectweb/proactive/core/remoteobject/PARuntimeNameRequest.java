@@ -46,6 +46,7 @@ import org.objectweb.proactive.core.util.URIBuilder;
 public class PARuntimeNameRequest extends RemoteObjectRequest {
 
     private static final long serialVersionUID = 52;
+
     public PARuntimeNameRequest() {
     };
 

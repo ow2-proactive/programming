@@ -56,6 +56,7 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
         ControllerStateDuplication {
 
     private static final long serialVersionUID = 52;
+
     public PASuperControllerImpl(Component owner) {
         super(owner);
     }
@@ -124,7 +125,7 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
 
     class SuperControllerState implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private Component[] parents;
 
         public SuperControllerState(Component[] parents) {

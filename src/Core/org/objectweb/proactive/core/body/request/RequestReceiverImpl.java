@@ -78,7 +78,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
 
     private static class AnyParametersClass implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
     }
 
     /**
@@ -87,7 +87,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
      */
     private static final class ClassArrayWrapper implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private final Class<?>[] wrappedClassArray;
         // cached hashcode since CAW is final
         private final int myHashcode;

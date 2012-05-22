@@ -153,7 +153,7 @@ public class UserBag implements Serializable {
     // A container for (int -> C3DUser -> String)
     private class Troika implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         int key;
         User user;
         String name;

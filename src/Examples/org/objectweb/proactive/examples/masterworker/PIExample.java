@@ -106,7 +106,7 @@ public class PIExample {
      */
     public static class ComputePIMonteCarlo implements Task<Long> {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /**
          *

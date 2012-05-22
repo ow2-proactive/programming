@@ -505,7 +505,7 @@ public class FileTransferWorkShop implements Serializable {
 
     public class StructureInformation implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         /* FileTransferQueue specific information */
         String prefix;

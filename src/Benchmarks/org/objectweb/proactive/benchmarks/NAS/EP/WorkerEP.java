@@ -456,7 +456,7 @@ public class WorkerEP extends Timed {
 
     public static class ReduceSumOp extends ReduceAll {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
 
         public ReduceSumOp() {
         }

@@ -1423,7 +1423,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     //
     protected static class VMInformationImpl implements VMInformation, java.io.Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private final java.net.InetAddress hostInetAddress;
 
         // the Unique ID of the JVM

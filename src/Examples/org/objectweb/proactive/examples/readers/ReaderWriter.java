@@ -182,7 +182,7 @@ public class ReaderWriter implements org.objectweb.proactive.RunActive {
      */
     private class MyRequestFilter implements org.objectweb.proactive.core.body.request.RequestFilter {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private String methodNameA;
         private String methodNameB;
         private boolean foundMethodB;

@@ -538,7 +538,7 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
 
     class MulticastItfState implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private HashMap clientSideProxies;
         private HashMap<String, PAInterface> multicastItfs;
         private HashMap<String, Map<String, Map<SerializableMethod, SerializableMethod>>> matchingMethods;

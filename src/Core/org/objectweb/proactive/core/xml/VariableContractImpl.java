@@ -72,7 +72,7 @@ public class VariableContractImpl implements VariableContract, Serializable, Clo
 
     private class PropertiesDatas implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         public String value;
         public VariableContractType type;
         public String setFrom; //Descriptor, Program

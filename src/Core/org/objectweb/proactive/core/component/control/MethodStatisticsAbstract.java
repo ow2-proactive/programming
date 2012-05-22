@@ -247,7 +247,7 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
 
     class RequestStatistics implements Serializable {
 
-    private static final long serialVersionUID = 52;
+        private static final long serialVersionUID = 52;
         private long arrivalTime;
 
         private long departureTime;
