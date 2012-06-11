@@ -43,14 +43,10 @@ import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
-import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.adl.FactoryFactory;
 import org.objectweb.proactive.core.component.control.PAMembraneController;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
-import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.nonfunctional.adl.factory.nf.NFService;
@@ -107,7 +103,6 @@ public class TestADLNFFactory extends ComponentTest {
 
         // Finish
         System.out.println("... and done!");
-        System.in.read();
         System.out.println("------------------------------------");
         System.out.println("Stopping components ...");
         GCM.getGCMLifeCycleController(comp).stopFc();
