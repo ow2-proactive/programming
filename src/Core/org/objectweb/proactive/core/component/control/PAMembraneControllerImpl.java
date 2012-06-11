@@ -278,6 +278,16 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 logger.warn("Could not add a binding : the component does not not have a Name Controller");
             }
 
+            // If the owner is a primitive component, the implementation of the component must be
+            // notified of the binding: ie. call its bind method if any
+            if (hostComponentisPrimitive()) {
+                try {
+                    GCM.getBindingController(owner).bindFc(clItf, srItf);
+                } catch (NoSuchInterfaceException nsie) {
+                    // Not have a BindingController, ignore the exception
+                }
+            }
+
             if (Utils.isGCMGathercastItf(srItf)) {
                 GCM.getGathercastController(srItf.getFcItfOwner()).notifyAddedGCMBinding(
                         srItf.getFcItfName(), owner.getRepresentativeOnThis(), clItf);
@@ -703,6 +713,16 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         if (theItf.getComponent() == null) {// Unbind a client interface exposed by the membrane, update the structure
             it.setFcItfImpl(null);
             nfBindings.removeNormalBinding("membrane", it.getFcItfName());//Here, we deal only with singleton bindings
+
+            // If the owner is a primitive component, the implementation of the component must be
+            // notified of the removing of the binding: ie. call its unbind method
+            if (hostComponentisPrimitive()) {
+                try {
+                    GCM.getBindingController(owner).unbindFc(clientItf);
+                } catch (NoSuchInterfaceException nsie) {
+                    // Not have a BindingController, ignore the exception
+                }
+            }
         } else {//Unbind the non-functional component's interface
             Component theComp = theItf.getComponent();
             checkMembraneIsStarted(theComp);

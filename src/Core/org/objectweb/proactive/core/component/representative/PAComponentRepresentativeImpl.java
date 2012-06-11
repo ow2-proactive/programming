@@ -333,10 +333,11 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
             return true;
         }
 
-        // BINDING controller is not created for primitives without client interfaces
+        // BINDING controller is not created for primitives without client interfaces except if it has an internal server interface
         if (Constants.BINDING_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() &&
             !itfType.isInternal() && isPrimitive) {
-            if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
+            if ((Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) &&
+                !hasNfInternalServerInterfaces()) {
                 //logger.warn("Ignored NF Interface '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
                 return true;
             }
@@ -373,10 +374,11 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
             return true;
         }
 
-        // BINDING controller is not created for primitives without client interfaces
+        // BINDING controller is not created for primitives without client interfaces except if it has an internal server interface
         if (Constants.BINDING_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() &&
             !itfType.isInternal() && isPrimitive) {
-            if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
+            if ((Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) &&
+                !hasNfInternalServerInterfaces()) {
                 //logger.warn("Ignored controller '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
                 return true;
             }
@@ -430,9 +432,8 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
             }
 
             if (BindingController.class.isAssignableFrom(controllerClass)) {
-                if ((this.componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE) && (Utils
-                        .getClientItfTypes(this.componentParameters.getComponentType()).length == 0))) {
-                    //bindingController = null;
+                if ((this.componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE) &&
+                    (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) && !hasNfInternalServerInterfaces())) {
                     if (logger.isDebugEnabled()) {
                         logger
                                 .debug("user component class of this component does not have any client interface. It will have no BindingController");
@@ -512,8 +513,9 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                 // ASSERTIONS: controller implements PAContentController, and controllerName is "content-controller"
             }
 
-            //BINDING Controller if composite, or primitive with F client interfaces
-            if (!existsNfInterface(Constants.BINDING_CONTROLLER) && !(isPrimitive && !hasFClientInterfaces)) {
+            //BINDING Controller if composite, or primitive with F client interfaces or NF internal server interfaces
+            if (!existsNfInterface(Constants.BINDING_CONTROLLER) &&
+                !(isPrimitive && !hasFClientInterfaces && !hasNfInternalServerInterfaces())) {
                 // default implementation of PABindingController
                 controllerClass = PABindingControllerImpl.class;
                 itfRef = createControllerRepresentative(controllerClass);
@@ -542,6 +544,19 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                 controllerClass.getName() + "' while instantiating component'" +
                 this.componentParameters.getName() + "': " + e.getMessage(), e);
         }
+    }
+
+    private boolean hasNfInternalServerInterfaces() {
+        InterfaceType[] nfItfTypes = ((PAComponentType) this.componentParameters.getComponentType())
+                .getNfFcInterfaceTypes();
+
+        for (InterfaceType nfItfType : nfItfTypes) {
+            if (!nfItfType.isFcClientItf() && ((PAGCMInterfaceType) nfItfType).isInternal()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

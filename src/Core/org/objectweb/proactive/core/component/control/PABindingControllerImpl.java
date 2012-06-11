@@ -72,6 +72,7 @@ import org.objectweb.proactive.core.component.gen.WSProxyClassGenerator;
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.representative.ItfID;
+import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceTypeImpl;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
@@ -122,8 +123,8 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         //        if (((InterfaceType) serverItf.getFcItfType()).isFcClientItf())
         //            throw new IllegalBindingException("The provided server interface is a client interface");
 
-        PAGCMInterfaceType clientItfType = (PAGCMInterfaceType) ((ComponentType) owner.getFcType())
-                .getFcInterfaceType(clientItfName);
+        PAGCMInterfaceType clientItfType = (PAGCMInterfaceType) ((PAComponentType) owner.getFcType())
+                .getAllFcInterfaceType(clientItfName);
 
         // TODO handle internal interfaces
         // if (server_itf_type.isFcClientItf()) {
@@ -166,7 +167,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
             InterfaceType sType = (InterfaceType) serverItf.getFcItfType();
 
             //InterfaceType cType = (InterfaceType)((PAInterface)owner.getFcInterface(clientItfName)).getFcItfType();
-            InterfaceType cType = ((ComponentType) owner.getFcType()).getFcInterfaceType(clientItfName);
+            InterfaceType cType = ((PAComponentType) owner.getFcType()).getAllFcInterfaceType(clientItfName);
 
             try {
                 Class<?> s = Class.forName(sType.getFcItfSignature());
@@ -607,7 +608,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
 
     protected boolean existsBinding(String clientItfName) throws NoSuchInterfaceException {
         if (isPrimitive() &&
-            !(((GCMInterfaceType) ((ComponentType) owner.getFcType()).getFcInterfaceType(clientItfName))
+            !(((GCMInterfaceType) ((PAComponentType) owner.getFcType()).getAllFcInterfaceType(clientItfName))
                     .isGCMMulticastItf())) {
             return (((BindingController) ((PAComponent) getFcItfOwner()).getReferenceOnBaseObject())
                     .lookupFc(clientItfName) != null);
@@ -640,7 +641,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
      * @throws NoSuchInterfaceException
      */
     private void checkClientInterfaceExist(String clientItfName) throws NoSuchInterfaceException {
-        InterfaceType[] itfTypes = ((ComponentType) getFcItfOwner().getFcType()).getFcInterfaceTypes();
+        InterfaceType[] itfTypes = ((PAComponentType) getFcItfOwner().getFcType()).getAllFcInterfaceTypes();
         for (InterfaceType interfaceType : itfTypes) {
             if (clientItfName.startsWith(interfaceType.getFcItfName())) {
                 return;
