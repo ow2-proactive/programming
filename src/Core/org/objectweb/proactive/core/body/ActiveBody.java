@@ -213,9 +213,7 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
             }
         } catch (Exception e) {
             logger.error("Exception occured in runActivity method of body " + toString() +
-                ". Now terminating the body");
-
-            e.printStackTrace();
+                ". Now terminating the body", e);
             terminate();
         } finally {
             // execute the end of activity if not after migration
