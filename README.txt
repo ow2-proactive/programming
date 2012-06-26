@@ -1,6 +1,6 @@
 Thanks for your interest in ProActive.
 
-ProActive x.x.x 
+ProActive $Id$
 
 You can find the documentation of ProActive in the docs directory:
 

@@ -348,7 +348,7 @@
 	<target name="deploy.core" depends="compile.all, -deploy.mkdir, compile.all" description="Populate dist/ with all the files needed">
 		<!-- Update Implementation-Version -->
 		<if name="isRelease" exists="true">
-			<replaceregexp file="${compile.dir}/Manifest-base.mf" match="\$ID.*\$" replace="${version}" byline="true" />
+			<replaceregexp file="${compile.dir}/Manifest-base.mf" match="\$Id.*\$" replace="${version}" byline="true" />
 		</if>
 		<concat destfile="${compile.dir}/Manifest.mf">
 			<fileset dir="${compile.dir}" includes="Manifest-base.mf" />
