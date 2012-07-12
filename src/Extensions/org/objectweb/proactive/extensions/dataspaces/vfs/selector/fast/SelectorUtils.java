@@ -51,7 +51,7 @@ import java.util.Vector;
  *
  * @since ProActive 4.3.0
  */
-final class SelectorUtils {
+public final class SelectorUtils {
 
     private static SelectorUtils instance = new SelectorUtils();
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
