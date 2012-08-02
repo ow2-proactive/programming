@@ -39,8 +39,10 @@ package org.objectweb.proactive.extensions.dataspaces.vfs;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.FileSystemOptions;
+import org.apache.commons.vfs.auth.StaticUserAuthenticator;
 import org.apache.commons.vfs.cache.NullFilesCache;
 import org.apache.commons.vfs.impl.DefaultFileReplicator;
+import org.apache.commons.vfs.impl.DefaultFileSystemConfigBuilder;
 import org.apache.commons.vfs.impl.DefaultFileSystemManager;
 import org.apache.commons.vfs.impl.PrivilegedFileReplicator;
 import org.apache.commons.vfs.provider.ftp.FtpFileProvider;
@@ -57,6 +59,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
+
+import com.intridea.io.vfs.provider.s3.S3FileProvider;
+import com.intridea.io.vfs.provider.s3.acl.AclOperationsProvider;
 
 
 /**
@@ -122,8 +127,9 @@ public class VFSFactory {
     public static DefaultFileSystemManager createDefaultFileSystemManager(boolean enableFilesCache)
             throws FileSystemException {
         logger.debug("Creating new VFS manager");
-        final DefaultFileSystemManager manager = new DefaultOptionsFileSystemManager(
-            createDefaultFileSystemOptions());
+
+        FileSystemOptions opts = createDefaultFileSystemOptions();
+        final DefaultFileSystemManager manager = new DefaultOptionsFileSystemManager(opts);
         manager.setLogger(logger);
 
         final DefaultFileReplicator replicator = new DefaultFileReplicator();
@@ -143,6 +149,10 @@ public class VFSFactory {
         for (final String scheme : ProActiveFileName.getAllVFSSchemes()) {
             manager.addProvider(scheme, proactiveProvider);
         }
+
+        manager.addProvider("s3", new S3FileProvider());
+        manager.addOperationProvider("s3", new AclOperationsProvider());
+
         manager.setDefaultProvider(new UrlFileProvider());
 
         manager.init();
