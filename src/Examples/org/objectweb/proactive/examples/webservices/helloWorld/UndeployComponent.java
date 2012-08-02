@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -36,14 +36,18 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
 
 
 /**
- * A simple example to expose an active object as a web service.
+ * A simple example to unexpose a web service of a component.
  *
  * @author The ProActive Team
  */
@@ -51,29 +55,43 @@ public class UndeployComponent {
 
     public static void main(String[] args) {
         String url = "";
-        String componentName = "";
-        String[] interfaceName = null;
         String wsFrameWork = "";
-        if (args.length >= 4) {
+        String componentName = "";
+        String[] interfaceNames = null;
+        if (args.length == 2) {
+            url = "http://localhost:8080/";
+            wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+            componentName = args[0];
+            interfaceNames = args[1].split(",");
+        } else if (args.length == 3) {
+            try {
+                new URL(args[0]);
+                url = args[0];
+                wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
+            } catch (MalformedURLException me) {
+                // Given argument is not the URL to use to expose the web service, it should be the web service framework to use
+                url = "http://localhost:8080/";
+                wsFrameWork = args[0];
+            }
+            componentName = args[1];
+            interfaceNames = args[2].split(",");
+        } else if (args.length == 4) {
             url = args[0];
             wsFrameWork = args[1];
             componentName = args[2];
-            interfaceName = new String[args.length - 3];
-            for (int i = 0; i < interfaceName.length; i++) {
-                interfaceName[i] = args[3 + i];
-            }
+            interfaceNames = args[3].split(",");
         } else {
             System.out.println("Wrong number of arguments:");
             System.out
-                    .println("Usage: java UndeployComponent url wsFrameWork componentName interfaceNames+ ");
-            System.out.println("where wsFramWork should be either \"axis2\" or \"cxf\"");
+                    .println("Usage: java UndeployComponent [url] [wsFrameWork] componentName interfaceName1,interfaceName2,... ");
+            System.out.println("where wsFrameWork should be 'cxf'");
             return;
         }
 
         try {
             WebServicesFactory wsf = AbstractWebServicesFactory.getWebServicesFactory(wsFrameWork);
             WebServices ws = wsf.getWebServices(url);
-            ws.unExposeComponentAsWebService(componentName, interfaceName);
+            ws.unExposeComponentAsWebService(componentName, interfaceNames);
         } catch (ProActiveException e) {
             e.printStackTrace();
         }

@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -47,9 +47,25 @@ import org.objectweb.fractal.adl.error.ErrorTemplate;
  * @author The ProActive Team
  */
 public enum PABindingErrors implements ErrorTemplate {
+
     /** */
-    INVALID_MULTICAST_SIGNATURE(
-            "Invalid binding: incompatible binding between multicast client interface defined at \"%s\" and server interface defined at \"%s\": there is not the same number of methods.",
+    INVALID_SIGNATURE(
+            "Invalid binding: client interface signature is not compatible with server interface signature, and none of them is collective.\nClient interface defined at \"%s\".\nServer interface defined at \"%s\".",
+            "fromlocation", "tolocation"),
+
+    /** */
+    INVALID_FROM_INTERNAL(
+            "Invalid binding: client interface \"%s\" of enclosing component is not a server interface, nor it is internal-client. Interface defined at %s.",
+            "itfName", "location"),
+
+    /** */
+    INVALID_TO_INTERNAL(
+            "Invalid binding: server interface \"%s\" of enclosing component is not a client interface, nor it is internal-server. Interface defined at %s.",
+            "itfName", "location"),
+
+    /** */
+    INVALID_COLLECTIVE_SIGNATURE(
+            "Invalid binding: incompatible binding involving a multicast or gathercast interface. Client interface defined at \"%s\" and server interface defined at \"%s\" do not have the same number of methods.",
             "fromlocation", "tolocation");
 
     /** The groupId of ErrorTemplates defined in this enumeration. */

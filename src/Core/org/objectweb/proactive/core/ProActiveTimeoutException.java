@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -48,7 +48,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * 
  * @since 4.0
  */
-public class ProActiveTimeoutException extends Exception {
+public class ProActiveTimeoutException extends ProActiveRuntimeException {
 
     public ProActiveTimeoutException() {
         super();

@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -38,21 +38,55 @@ package org.objectweb.proactive.core.component.adl.types;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.adl.ADLException;
+import org.objectweb.fractal.adl.Definition;
+import org.objectweb.fractal.adl.components.Component;
+import org.objectweb.fractal.adl.components.ComponentContainer;
+import org.objectweb.fractal.adl.implementations.Controller;
+import org.objectweb.fractal.adl.implementations.ControllerContainer;
 import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeErrors;
 import org.objectweb.fractal.adl.types.TypeInterface;
 import org.objectweb.fractal.adl.types.TypeLoader;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
  * A {@link org.objectweb.fractal.adl.Loader} to check {@link GCMTypeInterface}
  * nodes in definitions. This loader checks that the Java interfaces specified
- * in these nodes exist.
+ * in these nodes exist.<br/><br/>
+ * 
+ * The {@link PATypeLoader} checks all the &lt;interface&gt; nodes and check
+ * that the Java interfaces specified exist, including interfaces defined inside
+ * &lt;controller&gt; nodes. 
+ * 
+ * @author The ProActive Team
+ * 
  */
 public class PATypeLoader extends TypeLoader {
+
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+
+    /** 
+     * Overriden to use our own version of 'checkNode', which is private in {@link TypeLoader}.
+     */
+    @Override
+    public Definition load(final String name, final Map<Object, Object> context) throws ADLException {
+        final Definition d = clientLoader.load(name, context);
+        checkNode(d, context);
+        return d;
+    }
+
+    /**
+     * Checks a node that contains &lt;interface&gt; nodes.<br/>
+     * Uses the interfaceCodeLoader interface to verify the existence of the class specified by the 'signature' attribute.
+     * Then, checks the values of the 'role', 'contingency' and 'cardinality' attributes according to the possible values
+     * specified by GCM.  
+     */
     @Override
     protected void checkInterfaceContainer(final InterfaceContainer container,
             final Map<Object, Object> context) throws ADLException {
@@ -60,6 +94,8 @@ public class PATypeLoader extends TypeLoader {
         for (int i = 0; i < itfs.length; i++) {
             Interface itf = itfs[i];
             if (itf instanceof TypeInterface) {
+                logger.debug("[PATypeLoader] Checking interface:" + itf.toString() + " (" +
+                    (itf.astGetDecoration("NF") != null ? "NF" : "F") + ")");
                 String signature = ((TypeInterface) itf).getSignature();
                 if (signature == null) {
                     throw new ADLException(TypeErrors.SIGNATURE_MISSING, itf);
@@ -74,13 +110,16 @@ public class PATypeLoader extends TypeLoader {
                 if (role == null) {
                     throw new ADLException(TypeErrors.ROLE_MISSING, itf);
                 } else {
-                    if (!role.equals("client") && !role.equals("server")) {
-                        throw new ADLException(TypeErrors.INVALID_ROLE, itf, role);
+                    if (!role.equals(TypeInterface.CLIENT_ROLE) && !role.equals(TypeInterface.SERVER_ROLE) &&
+                        !role.equals(PATypeInterface.INTERNAL_CLIENT_ROLE) &&
+                        !role.equals(PATypeInterface.INTERNAL_SERVER_ROLE)) {
+                        throw new ADLException(PATypeErrors.INVALID_ROLE, itf, role);
                     }
                 }
                 String contingency = ((TypeInterface) itf).getContingency();
                 if (contingency != null) {
-                    if (!contingency.equals("mandatory") && !contingency.equals("optional")) {
+                    if (!contingency.equals(TypeInterface.MANDATORY_CONTINGENCY) &&
+                        !contingency.equals(TypeInterface.OPTIONAL_CONTINGENCY)) {
                         throw new ADLException(TypeErrors.INVALID_CONTINGENCY, itf, contingency);
                     }
                 }
@@ -97,4 +136,34 @@ public class PATypeLoader extends TypeLoader {
             }
         }
     }
+
+    /**
+     * Looks for containers of &lt;interface&gt; nodes.
+     * 
+     * @param node
+     * @param context
+     * @throws ADLException
+     */
+    private void checkNode(final Object node, final Map<Object, Object> context) throws ADLException {
+
+        // The node contains <interface> nodes. Check it.
+        if (node instanceof InterfaceContainer) {
+            checkInterfaceContainer((InterfaceContainer) node, context);
+        }
+        // The node contains <component> nodes. Check each <component>
+        if (node instanceof ComponentContainer) {
+            for (final Component comp : ((ComponentContainer) node).getComponents()) {
+                checkNode(comp, context);
+            }
+        }
+        // The node contains <controller> nodes. The <controller> may contain NF <interface> nodes.
+        if (node instanceof ControllerContainer) {
+            Controller ctrl = ((ControllerContainer) node).getController();
+            if (ctrl != null) {
+                checkNode(ctrl, context);
+            }
+
+        }
+    }
+
 }

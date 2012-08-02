@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -39,6 +39,7 @@ package functionalTests.component.wsbindings;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
@@ -48,6 +49,7 @@ import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
@@ -69,6 +71,11 @@ public abstract class CommonSetup extends ComponentTest {
     protected ComponentType componentType;
     protected WebServicesFactory wsf;
     protected WebServices ws;
+
+    @BeforeClass
+    final static public void setJettyPort() {
+        CentralPAPropertyRepository.PA_XMLHTTP_PORT.setValue(8888);
+    }
 
     public void setUpAndDeploy() throws Exception {
         boot = Utils.getBootstrapComponent();

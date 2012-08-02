@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -44,8 +44,6 @@ import org.apache.log4j.Logger;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
-import org.objectweb.fractal.adl.attributes.Attributes;
-import org.objectweb.fractal.adl.attributes.AttributesContainer;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.implementations.ControllerContainer;
@@ -53,8 +51,6 @@ import org.objectweb.fractal.adl.implementations.Implementation;
 import org.objectweb.fractal.adl.implementations.ImplementationCompiler;
 import org.objectweb.fractal.adl.implementations.ImplementationContainer;
 import org.objectweb.fractal.adl.nodes.VirtualNodeContainer;
-import org.objectweb.fractal.api.type.ComponentType;
-import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.task.core.TaskMap;
 import org.objectweb.fractal.task.core.TaskMap.TaskHole;
 import org.objectweb.fractal.task.deployment.lib.AbstractInstanceProviderTask;
@@ -62,6 +58,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.adl.implementations.PAImplementationBuilder;
 import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 import org.objectweb.proactive.core.component.type.Composite;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -69,19 +66,53 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
+ * The {@link PAImplementationCompiler} compiles the &lt;component&gt; nodes and
+ * creates the creation tasks {@link CreateTask} for each component.<br/>
+ * 
+ * For each component, the {@link PAImplementationCompiler} collects the info required 
+ * to create it:
+ * <ul>
+ *   <li>name</li>
+ *   <li>implementing class</li>
+ *   <li>controller descriptions</li>
+ *   <li>virtual nodes</li>
+ *   <li>hierarchy</li>
+ *   <li>functional/non-functional quality</li>,
+ * </ul>
+ * and creates the {@link CreateTask} that handles the component creation.
+ * 
  * @author The ProActive Team
  */
 public class PAImplementationCompiler extends ImplementationCompiler {
-    protected static int counter = 0;
+
+    // Is this counter is used???
+    //protected static int counter = 0;
+
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     @Override
     public void compile(List<ComponentContainer> path, ComponentContainer container, TaskMap tasks,
             Map<Object, Object> context) throws ADLException {
+
+        //DEBUG
+        String name = null;
+        boolean f = true;
+        if (container instanceof Definition) {
+            name = ((Definition) container).getName();
+        } else if (container instanceof Component) {
+            name = ((Component) container).getName();
+        }
+        f = (container.astGetDecoration("NF") == null);
+        logger.debug("[PAImplementationCompiler] Compiling " + (f ? "F" : "NF") + " component: " + name);
+        //--DEBUG
+
+        // collect info required for creating the component
         ObjectsContainer obj = init(path, container, tasks, context);
+        // determines content description and controller description info
         controllers(obj.getImplementation(), obj.getController(), obj.getName(), obj);
+        // create the task that will be in charge of creating the component
         end(tasks, container, context, obj.getName(), obj.getDefinition(), obj.getControllerDesc(), obj
-                .getContentDesc(), obj.getVn(), true);
+                .getContentDesc(), obj.getVn(), obj.isFunctional());
     }
 
     protected static String getControllerPath(String controller, String name) {
@@ -94,32 +125,40 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         }
     }
 
+    /**
+     * Collects info for the creation of the component: implementation class, controller descriptor name, component name,
+     * definition, virtual node, the number of subcomponents (if any), and determines if it is a functional or non-functional
+     * component.
+     * 
+     * @param path
+     * @param container
+     * @param tasks
+     * @param context
+     * @return An ObjectsContainer object including all the collected info.
+     */
     protected ObjectsContainer init(final List<ComponentContainer> path, final ComponentContainer container,
             final TaskMap tasks, final Map<Object, Object> context) {
-        counter++;
-        String implementation = null;
 
+        //counter++; // it seems that this counter is not used ...
+
+        String implementation = null;
         if (container instanceof ImplementationContainer) {
             ImplementationContainer ic = (ImplementationContainer) container;
             Implementation i = ic.getImplementation();
-
             if (i != null) {
                 implementation = i.getClassName();
             }
         }
 
         String controller = null;
-
         if (container instanceof ControllerContainer) {
             ControllerContainer cc = (ControllerContainer) container;
-
             if (cc.getController() != null) {
                 controller = cc.getController().getDescriptor();
             }
         }
 
         String name = null;
-
         if (container instanceof Definition) {
             name = ((Definition) container).getName();
         } else if (container instanceof Component) {
@@ -127,16 +166,13 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         }
 
         String definition = null;
-
         if (container instanceof Definition) {
             definition = name;
         } else {
             definition = (String) ((Node) container).astGetDecoration("definition");
         }
 
-        //        Component[] comps = ((ComponentContainer) container).getComponents();
         VirtualNode n = null;
-
         if (container instanceof VirtualNodeContainer) {
             try {
                 n = (VirtualNode) ((VirtualNodeContainer) container).getVirtualNode();
@@ -170,23 +206,26 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         // check if this Component has subcomponents
         int k = container.getComponents().length;
 
-        return new ObjectsContainer(implementation, controller, name, definition, n, k > 0);
+        // determine if the component is functional
+        boolean isFunctional = (container.astGetDecoration("NF") == null);
+
+        // return the object with all the info collected
+        return new ObjectsContainer(implementation, controller, name, definition, n, k > 0, isFunctional);
     }
 
-    protected void end(final TaskMap tasks, final ComponentContainer container,
-            final Map<Object, Object> context, String name, String definition,
-            ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode n,
-            boolean isFunctional) {
-        AbstractInstanceProviderTask createTask = null;
-
-        createTask = new CreateTask((PAImplementationBuilder) builder, container, name, definition,
-            controllerDesc, contentDesc, n, context);
-
-        TaskHole typeTask = tasks.getTaskHole("type", container);
-        createTask.setFactoryProviderTask(typeTask);
-        tasks.addTask("create", container, createTask);
-    }
-
+    /** 
+     * Completes the collected ObjectsContainer with the ContentDescription and the ControllerDescription objects.<br/><br/>
+     * 
+     * Determines the hierarchical type (composite/primitive) by checking if the component has 
+     * subcomponents or not. In fact, a composite may have an implementation class, in case that
+     * the composite must provide an AttributeController interface (so, checking that implementation==null
+     * is not enough).
+     * 
+     * @param implementation
+     * @param controller
+     * @param name
+     * @param obj
+     */
     private void controllers(String implementation, String controller, String name, ObjectsContainer obj) {
         ContentDescription contentDesc = null;
         ControllerDescription controllerDesc = null;
@@ -207,7 +246,7 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             //    the Attributes signature
             contentDesc = new ContentDescription(implementation);
 
-            // treat it has a composite
+            // treat it as a composite
             if ("composite".equals(controller) || (controller == null)) {
                 controllerDesc = new ControllerDescription(name, Constants.COMPOSITE);
             } else {
@@ -227,9 +266,47 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             }
         }
 
+        // update the ObjectsContainer object
         obj.setContentDesc(contentDesc);
         obj.setControllerDesc(controllerDesc);
     }
+
+    /**
+     * Creates the {@link CreateTask} that will take charge of creating the component,
+     * and sets its dependency (the corresponding task of type "type").
+     * 
+     * @param tasks
+     * @param container
+     * @param context
+     * @param name
+     * @param definition
+     * @param controllerDesc
+     * @param contentDesc
+     * @param n
+     * @param isFunctional
+     */
+    protected void end(final TaskMap tasks, final ComponentContainer container,
+            final Map<Object, Object> context, String name, String definition,
+            ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode n,
+            boolean isFunctional) {
+        AbstractInstanceProviderTask createTask = null;
+
+        // the CreateTask delegates the effective creation to a PAImplementationBuilder
+        createTask = new CreateTask((PAImplementationBuilder) builder, container, name, definition,
+            controllerDesc, contentDesc, n, context, isFunctional);
+
+        // obtains the TaskHole of type "type" associated to this container (which may be null if it has not yet been created)
+        // and sets it as the 'FactoryProvider' Task for this task. This implies that the factory provider task will be executed
+        // before the current task.
+        // Finally, it adds the current task, as a task of type "create", associate to this container.
+        TaskHole typeTask = tasks.getTaskHole("type", container);
+        createTask.setFactoryProviderTask(typeTask);
+        tasks.addTask("create", container, createTask);
+    }
+
+    // --------------------------------------------------------------------------
+    // Inner classes
+    // --------------------------------------------------------------------------
 
     // TODO change visibility of this inner class in ImplementationCompiler
     static class CreateTask extends AbstractInstanceProviderTask {
@@ -241,10 +318,12 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         VirtualNode vn;
         Map<Object, Object> context;
         ComponentContainer container;
+        boolean functional = true;
 
         public CreateTask(final PAImplementationBuilder builder, final ComponentContainer container,
                 final String name, final String definition, final ControllerDescription controllerDesc,
-                final ContentDescription contentDesc, final VirtualNode vn, final Map<Object, Object> context) {
+                final ContentDescription contentDesc, final VirtualNode vn,
+                final Map<Object, Object> context, final boolean isFunctional) {
             this.builder = builder;
             this.container = container;
             this.name = name;
@@ -253,16 +332,18 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             this.contentDesc = contentDesc;
             this.vn = vn;
             this.context = context;
+            this.functional = isFunctional;
         }
 
         public void execute(Map<Object, Object> context) throws Exception {
             if (getInstance() != null) {
                 return;
             }
-
+            logger.debug("[PAImplementationCompiler] Executing creation of " + (functional ? "F" : "NF") +
+                " component" + name);
             Object type = getFactoryProviderTask().getFactory();
             Object result = builder.createComponent(type, name, definition, controllerDesc, contentDesc, vn,
-                    context);
+                    functional, context);
             setInstance(result);
         }
 
@@ -282,15 +363,17 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         ContentDescription contentDesc = null;
         ControllerDescription controllerDesc = null;
         private boolean subcomponents = false;
+        private boolean functional = true;
 
         public ObjectsContainer(String implementation, String controller, String name, String definition,
-                VirtualNode n, boolean subcomponents) {
+                VirtualNode n, boolean subcomponents, boolean isFunctional) {
             this.implementation = implementation;
             this.controller = controller;
             this.name = name;
             this.definition = definition;
             this.n = n;
             this.subcomponents = subcomponents;
+            this.functional = isFunctional;
         }
 
         public String getController() {
@@ -331,6 +414,10 @@ public class PAImplementationCompiler extends ImplementationCompiler {
 
         public boolean hasSubcomponents() {
             return subcomponents;
+        }
+
+        public boolean isFunctional() {
+            return functional;
         }
 
     }

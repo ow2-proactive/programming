@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -45,7 +45,6 @@ import javax.imageio.spi.ServiceRegistry;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.webservices.axis2.Axis2WebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.cxf.CXFWebServicesFactory;
 
 
@@ -61,7 +60,6 @@ public class WebServicesFrameWorkFactoryRegistry {
     static {
         // set the default supported framework
         webServicesFactories = new Hashtable<String, Class<? extends WebServicesFactory>>();
-        webServicesFactories.put("axis2", Axis2WebServicesFactory.class);
         webServicesFactories.put("cxf", CXFWebServicesFactory.class);
 
         // add the WebServicesFactory at runtime using the WebServicesFactorySPI class

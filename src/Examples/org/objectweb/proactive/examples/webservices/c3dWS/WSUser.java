@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -40,7 +40,6 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.axis2.AxisFault;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
@@ -117,7 +116,7 @@ public class WSUser implements InitActive, java.io.Serializable, User, UserLogic
         this.userName = name;
         this.wsFrameWork = wsFrameWork;
 
-        ClientFactory cf = AbstractClientFactory.getClientFactory(wsFrameWork);
+        ClientFactory cf = AbstractClientFactory.getClientFactory(this.wsFrameWork);
         this.client = cf.getClient(this.dispatcherUrl, "C3DDispatcher", C3DDispatcher.class);
     }
 
@@ -165,7 +164,6 @@ public class WSUser implements InitActive, java.io.Serializable, User, UserLogic
      * Tells what are the operations to perform before starting the activity of the AO. Here, we
      * state that if migration asked, procedure is : saveData, migrate, rebuild. We also set some
      * other variables.
-     * @throws AxisFault
      */
     public void initActivity(Body body) {
         if (body != null) { // FIXME: this is a component bug: sometimes body is null!
@@ -330,7 +328,7 @@ public class WSUser implements InitActive, java.io.Serializable, User, UserLogic
     /** Send a message to a given other user, or to all
      * @throws WebServicesException */
     public void sendMessage(String message, String recipientName) throws WebServicesException {
-        Integer talkId = (Integer) h_users.get(recipientName);
+        Integer talkId = h_users.get(recipientName);
 
         if (talkId == null) {
             // BroadCast

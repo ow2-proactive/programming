@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -36,13 +36,9 @@
  */
 package org.objectweb.proactive.extensions.webservices.cxf.initialization;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.frontend.ServerFactoryBean;
-import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -93,24 +89,20 @@ public class CXFInitializer {
         if (logger.getLevel() != null && logger.getLevel() == Level.DEBUG) {
 
             /*
-             * Attaches a list of in-interceptors
+             * Attaches in-interceptors
              * In our case, only a logger is attached in order to be able
              * to see input soap messages
              */
-            List<Interceptor> inInterceptors = new ArrayList<Interceptor>();
             LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor();
-            inInterceptors.add(loggingInInterceptor);
-            svrFactory.setInInterceptors(inInterceptors);
+            svrFactory.getInInterceptors().add(loggingInInterceptor);
 
             /*
-             * Attaches a list of out-interceptors
+             * Attaches out-interceptors
              * In our case, only a logger is attached in order to be able
              * to see output soap messages
              */
-            List<Interceptor> outInterceptors = new ArrayList<Interceptor>();
             LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor();
-            outInterceptors.add(loggingOutInterceptor);
-            svrFactory.setOutInterceptors(outInterceptors);
+            svrFactory.getOutInterceptors().add(loggingOutInterceptor);
         }
 
         // Creates the service

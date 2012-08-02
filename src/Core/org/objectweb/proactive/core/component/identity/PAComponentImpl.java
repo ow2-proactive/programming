@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -397,7 +397,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
                 itfRef = createObjectController(controllerClass);
                 this.nfServerItfs.put(itfRef.getFcItfName(), itfRef);
                 // don't re-add the type to the vector if it already existed
-                if (!nfType.contains((InterfaceType) itfRef.getFcItfType())) {
+                if (!nfType.contains(itfRef.getFcItfType())) {
                     nfType.add((InterfaceType) itfRef.getFcItfType());
                 }
                 // ASSERTIONS: controller implements PAGCMLifeCycleController, and controllerName is "lifecycle-controller"
@@ -411,7 +411,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
                 itfRef = createObjectController(controllerClass);
                 this.nfServerItfs.put(itfRef.getFcItfName(), itfRef);
                 // don't re-add the type to the vector if it already existed
-                if (!nfType.contains((InterfaceType) itfRef.getFcItfType())) {
+                if (!nfType.contains(itfRef.getFcItfType())) {
                     nfType.add((InterfaceType) itfRef.getFcItfType());
                 }
                 // ASSERTIONS: controller implements NameController, and controllerName is "name-controller"
@@ -424,20 +424,21 @@ public class PAComponentImpl implements PAComponent, Serializable {
                 itfRef = createObjectController(controllerClass);
                 this.nfServerItfs.put(itfRef.getFcItfName(), itfRef);
                 // don't re-add the type to the vector if it already existed
-                if (!nfType.contains((InterfaceType) itfRef.getFcItfType())) {
+                if (!nfType.contains(itfRef.getFcItfType())) {
                     nfType.add((InterfaceType) itfRef.getFcItfType());
                 }
                 // ASSERTIONS: controller implements PAContentController, and controllerName is "content-controller"
             }
 
-            //BINDING Controller if composite, or primitive with F client interfaces
-            if (!hasNfImplementation(Constants.BINDING_CONTROLLER) && !(isPrimitive && !hasFClientInterfaces)) {
+            //BINDING Controller if composite, or primitive with F client interfaces or NF internal server interfaces
+            if (!hasNfImplementation(Constants.BINDING_CONTROLLER) &&
+                !(isPrimitive && !hasFClientInterfaces && !hasNfInternalServerInterfaces())) {
                 // default implementation of PABindingController
                 controllerClass = PABindingControllerImpl.class;
                 itfRef = createObjectController(controllerClass);
                 this.nfServerItfs.put(itfRef.getFcItfName(), itfRef);
                 // don't re-add the type to the vector if it already existed
-                if (!nfType.contains((InterfaceType) itfRef.getFcItfType())) {
+                if (!nfType.contains(itfRef.getFcItfType())) {
                     nfType.add((InterfaceType) itfRef.getFcItfType());
                 }
                 // ASSERTIONS: controller implements PABindingController, and controllerName is "binding-controller"
@@ -532,10 +533,11 @@ public class PAComponentImpl implements PAComponent, Serializable {
             return true;
         }
 
-        // BINDING controller is not created for primitives without client interfaces
+        // BINDING controller is not created for primitives without client interfaces except if it has an internal server interface
         if (Constants.BINDING_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() &&
             !itfType.isInternal() && isPrimitive) {
-            if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
+            if ((Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) &&
+                !hasNfInternalServerInterfaces()) {
                 logger.debug("[PAComponentImpl] Ignored controller '" + Constants.BINDING_CONTROLLER +
                     "' declared for component '" + this.componentParameters.getName() + "' in file: " +
                     controllersConfigFileLocation);
@@ -583,12 +585,26 @@ public class PAComponentImpl implements PAComponent, Serializable {
             return true;
         }
 
-        // BINDING controller is not created for primitives without client interfaces
+        // BINDING controller is not created for primitives without client interfaces except if it has an internal server interface
         if (Constants.BINDING_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() &&
             !itfType.isInternal() && isPrimitive) {
-            if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
+            if ((Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) &&
+                !hasNfInternalServerInterfaces()) {
                 logger.debug("[PAComponentImpl] Ignored NF Interface '" + Constants.BINDING_CONTROLLER +
                     "' declared for component '" + this.componentParameters.getName() + "'");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasNfInternalServerInterfaces() {
+        InterfaceType[] nfItfTypes = ((PAComponentType) this.componentParameters.getComponentType())
+                .getNfFcInterfaceTypes();
+
+        for (InterfaceType nfItfType : nfItfTypes) {
+            if (!nfItfType.isFcClientItf() && ((PAGCMInterfaceType) nfItfType).isInternal()) {
                 return true;
             }
         }

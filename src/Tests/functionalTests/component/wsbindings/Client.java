@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -113,7 +113,7 @@ public class Client implements Serializable, BindingController, Runner {
                 Assert.assertTrue("Integer not (correctly) modified: expected " +
                     (1 + Services.INCREMENT_VALUE) + ", actual " + i, (i == (1 + Services.INCREMENT_VALUE)));
 
-                Double[] array = new Double[5];
+                double[] array = new double[5];
                 for (int j = 0; j < array.length; j++) {
                     array[j] = j + (0.1 * j);
                 }

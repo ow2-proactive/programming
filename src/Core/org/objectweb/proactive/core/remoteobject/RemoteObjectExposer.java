@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -189,8 +189,8 @@ public class RemoteObjectExposer<T> {
             // select the factory matching the required protocol
             // here is an implicit check for protocol validity
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
-            URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, rof
-                    .getProtocolId(), rof.getPort());
+            URI uri = URIBuilder.buildURI(rof.getBaseURI().getHost(), name, rof.getProtocolId(), rof
+                    .getPort());
             InternalRemoteRemoteObject irro = activeRemoteRemoteObjects.get(uri);
             if (irro == null) {
                 irro = rof.createRemoteObject(this.remoteObject, name, rebind);

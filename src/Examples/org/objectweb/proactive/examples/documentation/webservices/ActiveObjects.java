@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -73,22 +73,17 @@ public class ActiveObjects {
             HelloWorld hw = (HelloWorld) PAActiveObject
                     .newActive(HelloWorld.class.getName(), new Object[] {});
 
-            // If you want the default WebServicesFactory, you can use
-            // AbstractWebServicesFactory.getDefaultWebServicesFactory()
+            // As only one framework is supported for the moment,
+            // you can use either one of the two following methods
             //@snippet-start webservices_AO_4
             //@snippet-start webservices_AO_5
-            //@snippet-start webservices_AO_6
             WebServicesFactory wsf;
             //@snippet-break webservices_AO_5
-            //@snippet-break webservices_AO_6
-            wsf = AbstractWebServicesFactory.getWebServicesFactory("axis2");
+            wsf = AbstractWebServicesFactory.getDefaultWebServicesFactory();
             //@snippet-end webservices_AO_4
             //@snippet-resume webservices_AO_5
-            wsf = AbstractWebServicesFactory.getDefaultWebServicesFactory();
-            //@snippet-end webservices_AO_5
-            //@snippet-resume webservices_AO_6
             wsf = AbstractWebServicesFactory.getWebServicesFactory("cxf");
-            //@snippet-end webservices_AO_6
+            //@snippet-end webservices_AO_5
 
             // If you want to use the local Jetty server, you can use
             // AbstractWebServicesFactory.getLocalUrl() to get its url with
@@ -120,13 +115,9 @@ public class ActiveObjects {
             //@snippet-end webservices_AO_8
 
             //@snippet-start webservices_AO_3
-            // Instead of using "cxf", you can also use wsf.getFrameWorkId()
-            // in order to be sure to get the same framework as the service
-            // has used to be exposed. However, you can call a cxf service
-            // using an axis2 client but there exists some incompatibility
-            // between these two frameworks.
-            // If you want the default ClientFactory, you can use
-            // ClientFactory.getDefaultClientFactory()
+            // Instead of using "cxf", you can also use webServicesFactory.getFrameWorkId().
+            // As only one framework is supported for the moment, use the following method
+            // is equivalent to ClientFactory.getDefaultClientFactory()
             ClientFactory clientFactory = AbstractClientFactory.getClientFactory("cxf");
 
             // Instead of using "http://localhost:8080/", you can use ws.getUrl() to

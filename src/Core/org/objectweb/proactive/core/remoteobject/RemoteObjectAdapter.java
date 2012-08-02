@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -176,9 +176,6 @@ public class RemoteObjectAdapter implements RemoteObject {
         try {
             // for each RRO ordered from faster to slower
             return remoteObjectSet.receiveMessage(message);
-        } catch (EOFException e) {
-            LOGGER_RO.debug("EOFException while calling method " + message.getMethodName());
-            return new SynchronousReplyImpl();
         } catch (ProActiveException e) {
             throw new IOException6(e);
         } catch (IOException e) {
@@ -450,7 +447,7 @@ public class RemoteObjectAdapter implements RemoteObject {
         return null;
     }
 
-    private RemoteObjectSet getRemoteObjectSet(RemoteRemoteObject rro) {
+    private RemoteObjectSet getRemoteObjectSet(RemoteRemoteObject rro) throws ProActiveException {
         try {
             MethodCall mc = MethodCall.getMethodCall(internalRROMethods[3], new Object[0],
                     new HashMap<TypeVariable<?>, Class<?>>());
@@ -463,12 +460,15 @@ public class RemoteObjectAdapter implements RemoteObject {
             return ros;
         } catch (ProActiveException pae) {
             LOGGER_RO.info("exception in remote object adapter while forwarding the method call", pae);
+            throw pae;
         } catch (IOException ioe) {
-            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", ioe);
+            throw new ProActiveException(
+                "exception in remote object adapter while forwarding the method call", ioe);
         } catch (RenegotiateSessionException rse) {
-            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", rse);
+            throw new ProActiveException(
+                "exception in remote object adapter while forwarding the method call", rse);
         }
-        return null;
+
     }
 
     @Override

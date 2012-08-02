@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -90,6 +90,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.objectweb.proactive.extensions.dataspaces.exceptions.DataSpacesException;
 import org.objectweb.proactive.extensions.vfsprovider.gui.DataServer.Server;
+import org.objectweb.proactive.utils.JVMPropertiesPreloader;
 
 
 /**
@@ -122,6 +123,8 @@ public class ServerBrowser implements ActionListener, WindowListener, KeyEventDi
      * @param no argument
      */
     public static void main(String[] args) {
+        args = JVMPropertiesPreloader.overrideJVMProperties(args);
+
         setLF();
 
         SwingUtilities.invokeLater(new Runnable() {

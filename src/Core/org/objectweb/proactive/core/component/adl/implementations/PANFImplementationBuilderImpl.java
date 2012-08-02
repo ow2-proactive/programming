@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -41,6 +41,7 @@ import java.util.Map;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.fractal.julia.control.content.SuperContentMixin;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
@@ -50,32 +51,23 @@ import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 
 
 /**
+ * This class is used by the NFCompiler factory component that is instantiated by the NFFactory.
+ * 
+ * When the NFCompiler is used, it replaces the {@link PAImplementationBuilder} by this class,
+ * whose only difference is to force the 'isFunctional' parameters in the super class, consequently
+ * creating a NF component. 
+ * 
  * @author The ProActive Team
  */
 public class PANFImplementationBuilderImpl extends PAImplementationBuilderImpl {
     @Override
     public Object createComponent(Object type, String name, String definition,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
-            Map<Object, Object> context) throws Exception {
-        ObjectsContainer obj = commonCreation(type, name, definition, contentDesc, adlVN, context);
-        return createNFComponent(type, obj.getNodesContainer(), controllerDesc, contentDesc, adlVN, obj
-                .getBootstrapComponent());
-    }
+            boolean isFunctional, Map<Object, Object> context) throws Exception {
 
-    private Component createNFComponent(Object type, Object nodesContainer,
-            ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
-            Component bootstrap) throws Exception {
-        Component result = newNfFcInstance(bootstrap, (ComponentType) type, controllerDesc, contentDesc,
-                nodesContainer);
-        //        registry.addComponent(result); // the registry can handle groups
-        return result;
-    }
+        // forces the component to be NF
+        return super.createComponent(type, name, definition, controllerDesc, contentDesc, adlVN, false,
+                context);
 
-    private Component newNfFcInstance(Component bootstrap, Type type, ControllerDescription controllerDesc,
-            ContentDescription contentDesc, Object nodesContainer) throws Exception {
-        PAGenericFactory genericFactory = Utils.getPAGenericFactory(bootstrap);
-        return genericFactory.newNfFcInstance(type, controllerDesc, contentDesc, ADLNodeProvider
-                .getNode(nodesContainer));
     }
-
 }

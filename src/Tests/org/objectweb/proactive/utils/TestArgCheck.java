@@ -1,7 +1,7 @@
 /*
  * ################################################################
  *
- * Copyright (C) 1997-2011 ActiveEon SAS. All rights reserved.
+ * Copyright (C) 1997-2012 ActiveEon SAS. All rights reserved.
  * Redistribution, reproduction, or copying to any other server or location of this code
  * is expressly prohibited by law.
  * It may only be obtained and installed by ActiveEon or its commercial partners.

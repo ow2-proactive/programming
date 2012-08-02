@@ -296,8 +296,7 @@
             </listitem>
 
             <listitem>
-               <para> <literal>commons-discovery.jar, saaj-api.jar, commons-logging-1.0.4.jar, jaxrpc.jar, activation.jar, wsdl4j-1.5.1.jar, mail.jar,
-               xml-apis.jar, axis.jar, soap.jar</literal> - used by the Web Services features </para>
+               <para> <literal>Proactive/lib/cxf/*.jar</literal> - used by the Web Services features </para>
             </listitem>
 
             <listitem>

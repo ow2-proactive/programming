@@ -28,7 +28,7 @@
  <!-- Add copyright information to all the page footers. -->
 <!-- <xsl:template name="user.footer.content">-->
 <!--  <P class="copyright" align="right">-->
-<!--   © 1997-2009-->
+<!--   © 1997-2012-->
 <!--   <A href="http://www-sop.inria.fr/">-->
 <!--    INRIA Sophia Antipolis-->
 <!--   </A>-->

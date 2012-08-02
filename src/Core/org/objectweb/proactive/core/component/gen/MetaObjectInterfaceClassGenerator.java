@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -61,6 +61,7 @@ import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFail
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
+import org.objectweb.proactive.core.mop.MOPClassLoader;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.util.ClassDataCache;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -112,19 +113,24 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
 
             Class<?> generated_class;
 
-            // check whether class has already been generated
-            try {
-                generated_class = loadClass(generatedClassFullName);
-            } catch (ClassNotFoundException cnfe) {
+            // Synchronize this part on MOPClassLoader.getMOPClassLoader() to prevent concurrent access
+            // between MOPClassLoader and Javassist class pool.
+            // See PROACTIVE-1027 and PROACTIVE-1203
+            synchronized (MOPClassLoader.getMOPClassLoader()) {
+                // check whether class has already been generated
                 try {
-                    CtClass generatedCtClass = pool.get(generatedClassFullName);
-                    byte[] bytecode = generatedCtClass.toBytecode();
-                    generated_class = Utils.defineClass(generatedClassFullName, bytecode);
-                } catch (NotFoundException nfe) {
-                    byte[] bytecode = generateInterfaceByteCode(generatedClassFullName, interfaceType);
+                    generated_class = loadClass(generatedClassFullName);
+                } catch (ClassNotFoundException cnfe) {
+                    try {
+                        CtClass generatedCtClass = pool.get(generatedClassFullName);
+                        byte[] bytecode = generatedCtClass.toBytecode();
+                        generated_class = Utils.defineClass(generatedClassFullName, bytecode);
+                    } catch (NotFoundException nfe) {
+                        byte[] bytecode = generateInterfaceByteCode(generatedClassFullName, interfaceType);
 
-                    // convert the bytes into a Class<?>
-                    generated_class = Utils.defineClass(generatedClassFullName, bytecode);
+                        // convert the bytes into a Class<?>
+                        generated_class = Utils.defineClass(generatedClassFullName, bytecode);
+                    }
                 }
             }
 

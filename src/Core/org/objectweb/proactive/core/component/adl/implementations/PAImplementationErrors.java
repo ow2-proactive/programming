@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -53,7 +53,11 @@ public enum PAImplementationErrors implements ErrorTemplate {
     /** */
     INCOMPATIBLE_VIRTUAL_NODE_CARDINALITY(
             "Cannot deploy on a single virtual node when the cardinality of this virtual node named \"%s\" in the ADL is set to multiple.",
-            "vnName");
+            "vnName"),
+
+    /** */
+    EMPTY_CONTROLLER_NODE(
+            "The <controller> node is empty. It should contain at least one component or interface; otherwise it must contain a controller descriptor file.");
 
     /** The groupId of ErrorTemplates defined in this enumeration. */
     public static final String GROUP_ID = "PAIMP";

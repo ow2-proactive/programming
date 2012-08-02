@@ -348,7 +348,7 @@
 	<target name="deploy.core" depends="compile.all, -deploy.mkdir, compile.all" description="Populate dist/ with all the files needed">
 		<!-- Update Implementation-Version -->
 		<if name="isRelease" exists="true">
-			<replaceregexp file="${compile.dir}/Manifest-base.mf" match="\$ID.*\$" replace="${version}" byline="true" />
+			<replaceregexp file="${compile.dir}/Manifest-base.mf" match="\$Id.*\$" replace="${version}" byline="true" />
 		</if>
 		<concat destfile="${compile.dir}/Manifest.mf">
 			<fileset dir="${compile.dir}" includes="Manifest-base.mf" />
@@ -382,21 +382,17 @@
 			</fileset>
 			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
 			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
-			<fileset dir="${cxf.dir}/etc">
-				<include name="META-INF/cxf/**" />
-			</fileset>
 			<indexjars>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${ws.common.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
 				<fileset dir="${cxf.lib.dir}">
 					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${axis2.lib.dir}">
-					<include name="*.jar" />
+					<!-- It is mandatory to exclude the cxf jar of the jar index
+					and to explicity include it in the classpath. CXF is not able to
+					find its configuration files if they are not directly accessible
+					through the classpath. -->
+					<exclude name="cxf-2.5.2.jar" />
 				</fileset>
 			</indexjars>
 		</jar>
@@ -409,12 +405,6 @@
 				<include name="**/*.dll" />
 			</fileset>
 			<fileset dir="${cxf.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${axis2.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ws.common.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
@@ -599,7 +589,7 @@
 
 				<classpath>
 					<additionalClasspath>
-						<!--  it  is mandatory to explicity include the ibis jar in the
+						<!-- It is mandatory to explicity include the ibis jar in the
 						classpath. Ibis is not able to find the classes if they are
 						not directly accessible through the classpath.
 						i.e. we cannot use the jar index tip -->
@@ -654,6 +644,10 @@
 
 	<target name="junit.rmissl" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="rmissl" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+	</target>
+
+	<target name="junit.amqp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+		<junitMacro communication.protocol="amqp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
 	</target>
 
 
@@ -896,7 +890,6 @@
 		<delete dir="${junit.dir}" />
 		<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices/" />
 		<delete dir="${webservices.dir}/servicedeployer/build" />
-		<delete file="${axis2.dir}/repository/services/ServiceDeployer.aar" />
 		<delete dir="${tutorials.dir}" />
 		<subant target="doc.clean" inheritall="true">
 			<fileset dir="../doc/toolchain" includes="doc.xml" />
@@ -1064,47 +1057,12 @@
 	<!-- ================================================================================ -->
 	<!--    Create the proactive Web Archive to be used with the web service framework    -->
 	<!-- ================================================================================ -->
-	<target name="proActiveWarAxis2" depends="deploy.all" description="build the proactive.war archive with Axis2 embedded">
-
-		<war destfile="${deploy.dir}/proactive.war" webxml="${axis2.dir}/webapp/WEB-INF/web.xml">
-			<lib dir="${axis2.lib.dir}">
-				<include name="**" />
-				<exclude name="**servlet**" />
-				<exclude name="ant*.jar" />
-				<exclude name="axis2-adb-codegen*.jar" />
-				<exclude name="axis2-codegen*.jar" />
-				<exclude name="jibx-bind*.jar" />
-			</lib>
-			<lib dir="${ws.common.lib.dir}">
-				<include name="**" />
-			</lib>
-			<lib dir="${deploy.dir}/lib">
-				<include name="*.jar" />
-			</lib>
-			<webinf dir="${temp.class.dir}/WEB-INF" />
-			<fileset dir="${temp.class.dir}">
-				<include name="**/axis2-web/**" />
-			</fileset>
-		</war>
-		<delete dir="${temp.class.dir}" />
-	</target>
-
-	<target name="proActiveWarCXF" depends="deploy.all" description="build the proactive.war archive with CXF embedded">
+	<target name="proActiveWar"  depends="deploy.all" description="Build the proactive.war archive with CXF embedded">
 		<war destfile="${deploy.dir}/proactive.war" webxml="${cxf.dir}/etc/web.xml">
 			<webinf dir="${cxf.dir}/wsdl">
 				<include name="cxf-servlet.xml" />
 			</webinf>
 			<lib dir="${deploy.dir}/lib">
-				<include name="*.jar" />
-			</lib>
-			<lib dir="${cxf.lib.dir}">
-				<include name="*.jar" />
-				<exclude name="servlet-api-*.jar" />
-				<exclude name="geronimo-servlet_*.jar" />
-				<exclude name="jetty-*.jar" />
-				<exclude name="WHICH_JARS" />
-			</lib>
-			<lib dir="${ws.common.lib.dir}">
 				<include name="*.jar" />
 			</lib>
 			<fileset dir="${cxf.dir}/etc">
@@ -1113,9 +1071,11 @@
 		</war>
 	</target>
 
+	<target name="proActiveWarCXF" depends="proActiveWar" description="Deprecated, see proActiveWar"/>
+
 
 	<!-- MUST BE CALLED FROM AN INRIA MACHINE ON PRODUCTION NETWORK -->
-	<target name="uploadSchemas" description="upload schemas on web site">
+	<target name="uploadSchemas" description="Upload schemas on web site">
 		<property name="schemas.website.dir" value="/net/servers/www-sop/teams/oasis/proactive/schemas/gcm/1.0/" />
 		<mkdir dir="${schemas.website.dir}" />
 		<copy todir="${schemas.website.dir}" includeEmptyDirs="no" overwrite="true">

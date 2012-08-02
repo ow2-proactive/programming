@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -50,7 +50,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * <br>
  * The class in charge to call the web service must implement the {@link PAWSCaller} interface.
  * <br>
- * By default, the class {@link Axis2WSCaller}, using the <a href="http://ws.apache.org/axis2/">Axis2</a> API,
+ * By default, the class {@link CXFWSCaller}, using the <a href="http://cxf.apache.org/">CXF</a> API,
  * is used.
  *
  * @author The ProActive Team
@@ -61,16 +61,6 @@ public class WSInfo implements Serializable {
      * Name of the interface which must be implemented by the class in charge of calling the web service.
      */
     public static final String PAWSCALLER_ITF_NAME = PAWSCaller.class.getName();
-
-    /**
-     * Shortcut ID to specify that Axis2 must be used to call the web service.
-     */
-    public static final String AXIS2WSCALLER_ID = "Axis2";
-
-    /**
-     * Full name of the class calling web services using Axis2.
-     */
-    public static final String AXIS2WSCALLER_CLASSNAME = Axis2WSCaller.class.getName();
 
     /**
      * Shortcut ID to specify that CXF must be used to call the web service.
@@ -136,22 +126,22 @@ public class WSInfo implements Serializable {
      * Main constructor.
      * <br>
      * The String passed as argument is the URL of the web service (not the WSDL address).
-     * By default the Axis2 API is used to call the web service, but it is also possible to
+     * By default the CXF API is used to call the web service, but it is also possible to
      * specify another library. If so, the URL must be followed, in parenthesis, by the ID
      * or the full name of the class to use to call the web service. The ID (not case
-     * sensitive) may be Axis2 or CXF to use one of these library to call the web service.
-     * Otherwise, the full class name given must be the one of a class implementing the
-     * {@link PAWSCaller} interface.
+     * sensitive) may be CXF, JaxWsCXF, CXFAegis, DynamicCXF or CXFRESTful to use one of
+     * these client configuration to call the web service. Otherwise, the full class name
+     * given must be the one of a class implementing the {@link PAWSCaller} interface.
      * <br>
      * For instance:
      * <br>
-     * "http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.Axis2WSCaller)"
+     * "http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.CXFWSCaller)"
      * <br>
      * which is equivalent to:
      * <br>
-     * "http://localhost:8080/proactive/services/Server_HelloWorld(Axis2)"
+     * "http://localhost:8080/proactive/services/Server_HelloWorld(CXF)"
      * <br>
-     * and which, as Axis2 is used by default, is also equivalent to:
+     * and which, as CXF is used by default, is also equivalent to:
      * <br>
      * "http://localhost:8080/proactive/services/Server_HelloWorld"
      *
@@ -217,9 +207,7 @@ public class WSInfo implements Serializable {
      */
     private String selectWSCallerClassName(String[] wsInfo) throws IllegalBindingException {
         if (wsInfo.length == 2) {
-            if (wsInfo[1].equalsIgnoreCase(AXIS2WSCALLER_ID)) {
-                return AXIS2WSCALLER_CLASSNAME;
-            } else if (wsInfo[1].equalsIgnoreCase(CXFWSCALLER_ID)) {
+            if (wsInfo[1].equalsIgnoreCase(CXFWSCALLER_ID)) {
                 return CXFWSCALLER_CLASSNAME;
             } else if (wsInfo[1].equalsIgnoreCase(JAXWSCXFWSCALLER_ID)) {
                 return JAXWSCXFWSCALLER_CLASSNAME;
@@ -233,7 +221,7 @@ public class WSInfo implements Serializable {
                 return checkClassName(wsInfo[1]);
             }
         } else {
-            return AXIS2WSCALLER_CLASSNAME;
+            return CXFWSCALLER_CLASSNAME;
         }
     }
 

@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -123,7 +123,7 @@ public class ComponentMembraneActivityPriority extends ComponentActivityPriority
                     // 3.1. init object Activity
                     // life cycle started : starting activity of the object
                     if (functionalInitActive != null) {
-                        functionalInitActive.initActivity(activeBody);
+                        functionalInitActive.initActivity(body);
                         //functionalInitActive = null; // we won't do it again
                     }
 

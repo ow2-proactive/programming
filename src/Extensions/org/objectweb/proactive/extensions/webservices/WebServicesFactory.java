@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -40,7 +40,7 @@ import org.objectweb.proactive.extensions.webservices.exceptions.WebServicesExce
 
 
 /**
- * This factory is used to get a WebServices instance corresponding to its framework (axis2 or cxf)
+ * This factory is used to get a WebServices instance corresponding to its framework (cxf)
  * and a given URL.
  *
  * @author The ProActive Team

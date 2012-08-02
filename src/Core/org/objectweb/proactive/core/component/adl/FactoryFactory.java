@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -52,12 +52,13 @@ public class FactoryFactory {
     public final static String PROACTIVE_BACKEND = "org.objectweb.proactive.core.component.adl.PACompiler";
     public final static String PROACTIVE_NFFACTORY = "org.objectweb.proactive.core.component.adl.PANFFactory";
     public final static String PROACTIVE_NFBACKEND = "org.objectweb.proactive.core.component.adl.PANFCompiler";
+    public final static String PROACTIVE_DEBUG_FACTORY = "org.objectweb.proactive.core.component.adl.PADebugFactory";
 
     private FactoryFactory() {
     }
 
     /**
-     * Returns a factory for the ProActive ADL.
+     * Returns a factory for the GCM ADL
      *
      * @see org.objectweb.fractal.adl.FactoryFactory#getFactory(java.lang.String,
      *      java.lang.String, java.util.Map)
@@ -69,7 +70,7 @@ public class FactoryFactory {
     }
 
     /**
-     * Returns a factory for the ProActive ADL.
+     * Returns a factory that creates NF components
      *
      * @see org.objectweb.fractal.adl.FactoryFactory#getFactory(java.lang.String,
      *      java.lang.String, java.util.Map)
@@ -79,4 +80,17 @@ public class FactoryFactory {
         return org.objectweb.fractal.adl.FactoryFactory.getFactory(PROACTIVE_NFFACTORY, PROACTIVE_NFBACKEND,
                 new HashMap());
     }
+
+    /**
+     * Returns a factory for the GCM ADL that prints debugging information
+     *
+     * @see org.objectweb.fractal.adl.FactoryFactory#getFactory(java.lang.String,
+     *      java.lang.String, java.util.Map)
+     */
+    @SuppressWarnings("unchecked")
+    public static Factory getDebugFactory() throws ADLException {
+        return org.objectweb.fractal.adl.FactoryFactory.getFactory(PROACTIVE_DEBUG_FACTORY,
+                PROACTIVE_BACKEND, new HashMap());
+    }
+
 }

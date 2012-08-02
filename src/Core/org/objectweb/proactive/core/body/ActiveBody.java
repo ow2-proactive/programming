@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2011 INRIA/University of
+ * Copyright (C) 1997-2012 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -117,22 +117,18 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
                 GCM.getPriorityController(getPAComponentImpl());
                 Utils.getPAMembraneController(getPAComponentImpl());
                 activity = new ComponentMembraneActivityPriority(activity, reifiedObject);
-
-            } catch (NoSuchInterfaceException e) {
+            } catch (NoSuchInterfaceException nsie1) {
                 try {
                     GCM.getPriorityController(getPAComponentImpl());
                     activity = new ComponentActivityPriority(activity, reifiedObject);
-                } catch (NoSuchInterfaceException priorityExc) {
-                    activity = new ComponentActivity(activity, reifiedObject);
+                } catch (NoSuchInterfaceException nsie2) {
+                    try {
+                        Utils.getPAMembraneController(getPAComponentImpl());
+                        activity = new ComponentMembraneActivity(activity, reifiedObject);
+                    } catch (NoSuchInterfaceException nsie3) {
+                        activity = new ComponentActivity(activity, reifiedObject);
+                    }
                 }
-
-                try {
-                    Utils.getPAMembraneController(getPAComponentImpl());
-                    activity = new ComponentMembraneActivity(activity, reifiedObject);
-                } catch (NoSuchInterfaceException priorityExc) {
-                    activity = new ComponentActivity(activity, reifiedObject);
-                }
-
             }
         }
 
@@ -217,9 +213,7 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
             }
         } catch (Exception e) {
             logger.error("Exception occured in runActivity method of body " + toString() +
-                ". Now terminating the body");
-
-            e.printStackTrace();
+                ". Now terminating the body", e);
             terminate();
         } finally {
             // execute the end of activity if not after migration
