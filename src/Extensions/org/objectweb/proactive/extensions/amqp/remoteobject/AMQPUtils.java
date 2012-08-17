@@ -42,8 +42,6 @@ import java.net.URI;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
 
-import com.rabbitmq.client.Channel;
-
 
 /**
  * Utility class
@@ -69,30 +67,37 @@ public class AMQPUtils {
         return AMQPConfig.PA_AMQP_QUEUE_PREFIX.getValue() + name;
     }
 
-    public static String generateNewExchange(String name) {
-        return AMQPConfig.PA_AMQP_QUEUE_PREFIX.getValue() + name + "." +
-            java.util.UUID.randomUUID().toString();
+    public static ReusableChannel getChannel(URI uri) throws IOException {
+        return ConnectionAndChannelFactory.getInstance().getChannel(getBrokerHost(uri), getBrokerPort(uri));
     }
 
-    public static Channel getChannelToBroker(URI uri) throws IOException {
+    public static RpcReusableChannel getRpcChannel(URI uri) throws IOException {
+        return ConnectionAndChannelFactory.getInstance()
+                .getRpcChannel(getBrokerHost(uri), getBrokerPort(uri));
+    }
 
+    public static void returnChannel(ReusableChannel channel) {
+        ConnectionAndChannelFactory.getInstance().returnChannel(channel);
+    }
+
+    private static String getBrokerHost(URI uri) {
         String host = URIBuilder.getHostNameFromUrl(uri);
         if ((host == null) || (host.isEmpty())) {
             if (AMQPConfig.PA_AMQP_BROKER_ADDRESS.isSet()) {
                 host = AMQPConfig.PA_AMQP_BROKER_ADDRESS.getValue();
             }
         }
+        return host;
+    }
 
+    private static int getBrokerPort(URI uri) {
         int port = URIBuilder.getPortNumber(uri);
         if (port == 0) {
             if (AMQPConfig.PA_AMQP_BROKER_PORT.isSet()) {
                 port = AMQPConfig.PA_AMQP_BROKER_PORT.getValue();
             }
         }
-
-        Channel channel = ConnectionAndChannelFactory.getInstance().getChannel(host, port, false);
-
-        return channel;
+        return port;
     }
 
 }

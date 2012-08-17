@@ -37,7 +37,6 @@
 package org.objectweb.proactive.extensions.amqp;
 
 import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
-import org.objectweb.proactive.core.config.PAPropertyBoolean;
 import org.objectweb.proactive.core.config.PAPropertyInteger;
 import org.objectweb.proactive.core.config.PAPropertyString;
 
@@ -59,18 +58,11 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
 
     /**
      * The port of the broker to use.
-     * 5672 bu default
+     * 5672 by default
      *
      */
     static public PAPropertyInteger PA_AMQP_BROKER_PORT = new PAPropertyInteger(
         "proactive.communication.amqp.broker.port", false, 5672);
-
-    /**
-     * The persistant of the queue. Meaning if they supports
-     *
-     */
-    static public PAPropertyBoolean PA_AMQP_PERSISTANT_QUEUE = new PAPropertyBoolean(
-        "proactive.communication.amqp.persistant_queue", false, false);
 
     static public PAPropertyString PA_AMQP_QUEUE_PREFIX = new PAPropertyString(
         "proactive.communication.amqp.queue_prefix", false, "proactive.remoteobject.");
@@ -78,9 +70,12 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_AMQP_DISCOVERY_QUEUES_MESSAGE_TYPE = new PAPropertyString(
         "proactive.communication.amqp.discover_queues_message_type", false, "proactive.discover_queues");
 
-    static final public PAPropertyString PA_AMQP_FACTORY_EXCHANGE_NAME = new PAPropertyString(
-        "proactive.communication.amqp.factory_exchange_name", false,
-        "proactive.remoteobject.amqp_factory_exchange");
+    static final public PAPropertyString PA_AMQP_DISCOVER_EXCHANGE_NAME = new PAPropertyString(
+        "proactive.communication.amqp.discover_exchange_name", false,
+        "proactive.remoteobject.amqp_discover_exchange");
+
+    static final public PAPropertyString PA_AMQP_RPC_EXCHANGE_NAME = new PAPropertyString(
+        "proactive.communication.amqp.rpc_exchange_name", false, "proactive.remoteobject.amqp_rpc_exchange");
 
     public interface Loggers {
 

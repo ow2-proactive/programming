@@ -36,6 +36,10 @@
  */
 package org.objectweb.proactive.extensions.amqp.remoteobject;
 
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.amqp.AMQPConfig;
+
 import com.rabbitmq.client.ShutdownListener;
 import com.rabbitmq.client.ShutdownSignalException;
 
@@ -46,20 +50,17 @@ import com.rabbitmq.client.ShutdownSignalException;
  */
 public class AMQPShutDownListener implements ShutdownListener {
 
-    protected String name;
+    final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_CHANNEL_FACTORY);
 
-    public AMQPShutDownListener() {
-    }
+    private final String name;
 
     public AMQPShutDownListener(String name) {
         this.name = name;
     }
 
     @Override
-    public void shutdownCompleted(ShutdownSignalException arg0) {
-        System.out.println(String.format("%s is shutted down, reason follows ", name));
-        arg0.printStackTrace();
-
+    public void shutdownCompleted(ShutdownSignalException e) {
+        logger.warn(String.format("connection %s is shutted down, reason follows ", name), e);
     }
 
 }

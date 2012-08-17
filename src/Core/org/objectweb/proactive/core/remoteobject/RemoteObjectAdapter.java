@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
@@ -180,7 +179,8 @@ public class RemoteObjectAdapter implements RemoteObject {
             throw new IOException6(e);
         } catch (IOException e) {
             // Log for keeping a trace
-            LOGGER_RO.warn("unable to contact remote object when calling method " + message.getMethodName());
+            LOGGER_RO.warn("unable to contact remote object when calling method " + message.getMethodName(),
+                    e);
             return new SynchronousReplyImpl(new MethodCallResult(null, e));
         }
     }

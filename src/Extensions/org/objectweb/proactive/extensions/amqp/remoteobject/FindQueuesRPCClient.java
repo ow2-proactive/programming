@@ -45,7 +45,6 @@ import org.objectweb.proactive.utils.TimeoutAccounter;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 
 
@@ -58,62 +57,48 @@ import com.rabbitmq.client.QueueingConsumer;
  * @since 5.2.0
  *
  */
-public class FindQueuesRPCClient {
-    private Connection connection;
-    private Channel channel;
-    private String requestQueueName = AMQPConfig.PA_AMQP_QUEUE_PREFIX.getValue() + "*";
-    private String replyQueueName;
-    private QueueingConsumer consumer;
+class FindQueuesRPCClient {
 
-    /**
-     *
-     * @param uri contains the address of the broker
-     * @throws Exception
-     */
-    public FindQueuesRPCClient(URI uri) throws Exception {
-
-        channel = AMQPUtils.getChannelToBroker(uri);
-        replyQueueName = channel.queueDeclare().getQueue();
-        consumer = new QueueingConsumer(channel);
-        channel.basicConsume(replyQueueName, true, consumer);
+    FindQueuesRPCClient() {
     }
 
-    public List<URI> discover(String exchangeName, long timeout) throws Exception {
-        List<URI> response = new ArrayList<URI>();
-        String corrId = java.util.UUID.randomUUID().toString();
+    public List<URI> discover(URI uri, String exchangeName, long timeout) throws Exception {
+        ReusableChannel reusableChannel = AMQPUtils.getChannel(uri);
+        try {
+            Channel channel = reusableChannel.getChannel();
 
-        BasicProperties props = new BasicProperties.Builder().correlationId(corrId).replyTo(replyQueueName)
-                .type(AMQPConfig.PA_AMQP_DISCOVERY_QUEUES_MESSAGE_TYPE.getValue()).build();
+            String replyQueueName = channel.queueDeclare().getQueue();
 
-        channel.basicPublish(exchangeName, "", props, "".getBytes());
+            QueueingConsumer consumer = new QueueingConsumer(channel);
+            String consumerTag = channel.basicConsume(replyQueueName, true, consumer);
 
-        TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
+            List<URI> response = new ArrayList<URI>();
+            String corrId = java.util.UUID.randomUUID().toString();
 
-        while (!time.isTimeoutElapsed()) {
-            QueueingConsumer.Delivery delivery = consumer.nextDelivery(200);
-            if ((delivery != null) && (delivery.getProperties().getCorrelationId().equals(corrId))) {
-                URI u = URI.create(new String(delivery.getBody()));
-                response.add(u);
+            BasicProperties props = new BasicProperties.Builder().correlationId(corrId).replyTo(
+                    replyQueueName).type(AMQPConfig.PA_AMQP_DISCOVERY_QUEUES_MESSAGE_TYPE.getValue()).build();
+
+            channel.basicPublish(exchangeName, "", props, null);
+
+            TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
+
+            while (!time.isTimeoutElapsed()) {
+                QueueingConsumer.Delivery delivery = consumer.nextDelivery(200);
+                if ((delivery != null) && (delivery.getProperties().getCorrelationId().equals(corrId))) {
+                    URI u = URI.create(new String(delivery.getBody()));
+                    response.add(u);
+                }
             }
+
+            // stop consuming, this also should delete temporary queue
+            channel.basicCancel(consumerTag);
+
+            AMQPUtils.returnChannel(reusableChannel);
+
+            return response;
+        } catch (Exception e) {
+            reusableChannel.close();
+            throw e;
         }
-
-        return response;
     }
-
-    //    public void close() throws Exception {
-    //	try {
-    //
-    //	    if (channel != null) {
-    //		if ( channel.getConnection().isOpen()) {
-    //		    channel.getConnection().close() ;
-    //		}
-    //		if ( channel.isOpen() ) {
-    //		    channel.close();
-    //		}
-    //	    }
-    //	} catch (Throwable e) {
-    //	    e.printStackTrace();
-    //	}
-    //
-    //    }
 }

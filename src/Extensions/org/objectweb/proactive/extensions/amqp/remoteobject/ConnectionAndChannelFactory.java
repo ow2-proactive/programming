@@ -37,24 +37,23 @@
 package org.objectweb.proactive.extensions.amqp.remoteobject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
 
-import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
 
 /**
  * Connection and Factory to enable connection and channel caching and reuse
- * A connection creates almost 8 threads and a channel 4 threads so reusing them is a good idea.
- * Tests have shown that reusing a connection is easy while reusing a channel is a bad idea as 
- * channels are closed each time an exception occurs.
- * In the current implementation, we only reuse connections, channels are not reused.
+ * 
  * @since 5.2.0
  *
  */
@@ -62,87 +61,104 @@ public class ConnectionAndChannelFactory {
 
     final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_CHANNEL_FACTORY);
 
-    static private ConnectionAndChannelFactory instance;
+    private static final ConnectionAndChannelFactory instance = new ConnectionAndChannelFactory();
 
-    Map<String, Connection> cachedConnections = new WeakHashMap<String, Connection>();
-    Map<String, Channel> cachedChannels = new WeakHashMap<String, Channel>();
+    private final Map<String, CachedConnection> cachedConnections = new HashMap<String, CachedConnection>();
 
-    public synchronized static ConnectionAndChannelFactory getInstance() {
-        if (instance == null) {
-            instance = new ConnectionAndChannelFactory();
+    static class CachedConnection {
+
+        private final Connection connection;
+
+        private final List<ReusableChannel> cachedChannels = new ArrayList<ReusableChannel>();
+
+        private final List<RpcReusableChannel> cachedRpcChannels = new ArrayList<RpcReusableChannel>();
+
+        CachedConnection(Connection connection) {
+            this.connection = connection;
         }
-        return instance;
 
-    }
-
-    /**
-     * provides connection caching and reuse.
-     * @param hostname the hostname to the broker
-     * @param port the port to the broker
-     * @return a Connection to the requested broker
-     * @throws IOException is the broker cannot be contacted
-     */
-    public synchronized Connection getConnection(String hostname, int port) throws IOException {
-
-        String key = generateKey(hostname, port);
-        Connection c = cachedConnections.get(key);
-
-        if ((c != null) && (c.isOpen())) {
-            return c;
-        }
-        logger.debug(String.format("requested connection to %s is close, creating a new one", key));
-
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(hostname);
-        factory.setPort(port);
-
-        c = factory.newConnection();
-
-        c.addShutdownListener(new AMQPShutDownListener(c.toString()));
-
-        logger.debug(String.format("checking new connection to %s, isOpen() %s", c.toString(), c.isOpen()));
-        cachedConnections.put(key, c);
-        return c;
-    }
-
-    /**
-     * provide a channel, try to reuse a connection if already exists
-     * @param hostname the broker to contact
-     * @param port the port of the broker
-     * @param reuse if we want to reuse an already opened channel (bad idea so far)
-     * @return a channel  
-     * @throws IOException if something went wrong
-     */
-    public synchronized Channel getChannel(String hostname, int port, boolean reuse) throws IOException {
-        Channel chan;
-        String key = null;
-        if (reuse) {
-            key = generateKey(hostname, port);
-
-            chan = cachedChannels.get(key);
-
-            if ((chan != null) && (chan.isOpen())) {
-                return chan;
+        ReusableChannel getChannel() throws IOException {
+            ReusableChannel channel = getChannel(cachedChannels);
+            if (channel == null) {
+                channel = new ReusableChannel(this, connection.createChannel());
             }
-
-            logger.debug(String.format("requested channel to %s is close, creating a new one", key));
+            return channel;
         }
 
-        Connection c = getConnection(hostname, port);
-        chan = c.createChannel();
-
-        //	chan.addShutdownListener(new AMQPShutDownListener(chan.toString()));
-
-        logger.debug(String
-                .format("checking new channel to %s, isOpen() %s ", chan.toString(), chan.isOpen()));
-
-        if (reuse) {
-            cachedChannels.put(key, chan);
+        RpcReusableChannel getRpcChannel() throws IOException {
+            RpcReusableChannel channel = (RpcReusableChannel) getChannel(cachedRpcChannels);
+            if (channel == null) {
+                channel = new RpcReusableChannel(this, connection.createChannel());
+            }
+            return channel;
         }
-        return chan;
+
+        private ReusableChannel getChannel(List<? extends ReusableChannel> channels) throws IOException {
+            synchronized (channels) {
+                for (Iterator<? extends ReusableChannel> i = channels.iterator(); i.hasNext();) {
+                    ReusableChannel channel = i.next();
+                    i.remove();
+                    if (channel.getChannel().isOpen()) {
+                        return channel;
+                    }
+                }
+                return null;
+            }
+        }
+
+        void returnChannel(ReusableChannel channel) {
+            if (channel instanceof RpcReusableChannel) {
+                synchronized (cachedRpcChannels) {
+                    cachedRpcChannels.add((RpcReusableChannel) channel);
+                }
+            } else {
+                synchronized (cachedChannels) {
+                    cachedChannels.add(channel);
+                }
+            }
+        }
+
     }
 
-    private String generateKey(String hostname, int port) {
+    public static ConnectionAndChannelFactory getInstance() {
+        return instance;
+    }
+
+    public void returnChannel(ReusableChannel channel) {
+        channel.returnChannel();
+    }
+
+    public ReusableChannel getChannel(String hostname, int port) throws IOException {
+        CachedConnection connection = getConnection(hostname, port);
+        return connection.getChannel();
+    }
+
+    public RpcReusableChannel getRpcChannel(String hostname, int port) throws IOException {
+        CachedConnection connection = getConnection(hostname, port);
+        return connection.getRpcChannel();
+    }
+
+    private synchronized CachedConnection getConnection(String hostname, int port) throws IOException {
+        String key = generateKey(hostname, port);
+        CachedConnection connection = cachedConnections.get(key);
+        if (connection == null) {
+            logger.debug(String.format("creating a new connection %s", key));
+
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.setHost(hostname);
+            factory.setPort(port);
+
+            Connection c = factory.newConnection();
+            c.addShutdownListener(new AMQPShutDownListener(c.toString()));
+
+            connection = new CachedConnection(c);
+            cachedConnections.put(key, connection);
+        }
+
+        return connection;
+    }
+
+    private static String generateKey(String hostname, int port) {
         return hostname + port;
     }
 
