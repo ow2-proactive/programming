@@ -22,11 +22,15 @@
 	<classpathentry kind="lib" path="lib/bundlerepository-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/cimom.jar"/>
 	<classpathentry kind="lib" path="lib/cimrepository.jar"/>
+	<classpathentry kind="lib" path="lib/cockpit-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
 	<classpathentry kind="lib" path="lib/colobus-0.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-discovery-0.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199-tests.jar"/>
@@ -37,11 +41,14 @@
 	<classpathentry kind="lib" path="lib/cryptix32.jar"/>
 	<classpathentry kind="lib" path="lib/dtdparser-1.21.jar"/>
 	<classpathentry kind="lib" path="lib/felix.jar"/>
+	<classpathentry kind="lib" path="lib/fluent-hc-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/fractal-adl-2.7-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fractal-api-2.0.3-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fractal-gcm-api-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/glite-wms-jdlj.jar"/>
 	<classpathentry kind="lib" path="lib/http-2.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/ibis-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/ibis-connect-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/ibis-util-1.0.jar"/>
@@ -50,11 +57,14 @@
 	<classpathentry kind="lib" path="lib/jackrabbit-jcr-commons-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jackrabbit-webdav-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/java-xmlbuilder-0.4.jar"/>
 	<classpathentry kind="lib" path="lib/javassist.jar"/>
 	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/jcifs-1.2.19.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/jets3t-0.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/jets3t-gui-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-6.1.18.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-util-6.1.18.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.2.jar"/>
@@ -71,6 +81,7 @@
 	<classpathentry kind="lib" path="lib/netty-3.2.0.ALPHA2.jar"/>
 	<classpathentry kind="lib" path="lib/osgi.jar"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
+	<classpathentry kind="lib" path="lib/rabbitmq-client.jar"/>
 	<classpathentry kind="lib" path="lib/saaj-impl.jar"/>
 	<classpathentry kind="lib" path="lib/servicebinder-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.11.jar"/>
@@ -85,10 +96,13 @@
 	<classpathentry kind="lib" path="lib/soap.jar"/>
 	<classpathentry kind="lib" path="lib/ssj.jar"/>
 	<classpathentry kind="lib" path="lib/sunxacml.jar"/>
+	<classpathentry kind="lib" path="lib/synchronize-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/tablelayout.jar"/>
 	<classpathentry kind="lib" path="lib/task-deployment-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/task-framework-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/trilead-ssh2.jar"/>
+	<classpathentry kind="lib" path="lib/uploader-0.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/vfs_s3.jar"/>
 	<classpathentry kind="lib" path="lib/vi-java.jar"/>
 	<classpathentry kind="lib" path="lib/vim.jar"/>
 	<classpathentry kind="lib" path="lib/vim25.jar"/>
@@ -125,7 +139,5 @@
 	<classpathentry kind="lib" path="lib/cxf/spring-web-3.0.6.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/xmlschema-core-2.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/rabbitmq-client.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.2.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
