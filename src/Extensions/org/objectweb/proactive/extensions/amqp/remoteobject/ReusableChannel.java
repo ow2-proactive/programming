@@ -33,6 +33,10 @@ class ReusableChannel {
         return channel;
     }
 
+    boolean isOpened() {
+        return channel != null;
+    }
+
     void close() {
         try {
             if (channel.isOpen()) {
@@ -46,7 +50,9 @@ class ReusableChannel {
     }
 
     void returnChannel() {
-        connection.returnChannel(this);
+        if (isOpened()) {
+            connection.returnChannel(this);
+        }
     }
 
     public String toString() {

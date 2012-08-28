@@ -79,7 +79,7 @@ public class AMQPRemoteObjectServer {
     private final InternalRemoteRemoteObject rro;
     private final String queueName;
 
-    static final ThreadPoolExecutor tpe = ThreadPools.newCachedThreadPool(60, TimeUnit.SECONDS,
+    static final ThreadPoolExecutor tpe = ThreadPools.newCachedThreadPool(5, TimeUnit.MINUTES,
             new NamedThreadFactory("AMQP Consumer Thread ", true));
 
     public AMQPRemoteObjectServer(InternalRemoteRemoteObject rro) throws ProActiveException, IOException {

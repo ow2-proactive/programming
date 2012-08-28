@@ -133,7 +133,7 @@ public class ObjectToByteConverter {
     }
 
     private static byte[] standardConvert(Object o, ConversionMode conversionMode) throws IOException {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
         ObjectOutputStream objectOutputStream = null;
 
         try {

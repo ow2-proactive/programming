@@ -38,6 +38,7 @@ package org.objectweb.proactive.extensions.amqp;
 
 import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 import org.objectweb.proactive.core.config.PAPropertyInteger;
+import org.objectweb.proactive.core.config.PAPropertyLong;
 import org.objectweb.proactive.core.config.PAPropertyString;
 
 
@@ -76,6 +77,9 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
 
     static final public PAPropertyString PA_AMQP_RPC_EXCHANGE_NAME = new PAPropertyString(
         "proactive.communication.amqp.rpc_exchange_name", false, "proactive.remoteobject.amqp_rpc_exchange");
+
+    static final public PAPropertyLong PA_AMQP_RPC_TIMEOUT = new PAPropertyLong(
+        "proactive.communication.amqp.rpc_timeout", false, 10000);
 
     public interface Loggers {
 

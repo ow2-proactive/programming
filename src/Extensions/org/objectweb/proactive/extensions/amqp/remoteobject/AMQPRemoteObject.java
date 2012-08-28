@@ -65,9 +65,9 @@ import com.rabbitmq.client.QueueingConsumer.Delivery;
 public class AMQPRemoteObject implements RemoteRemoteObject, Serializable {
     final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT);
 
-    private static final String exchangeName = AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue();
+    private static final String RPC_EXCHANGE_NAME = AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue();
 
-    private static final long RPC_REPLY_TIMEOUT = 10000;
+    private static final long RPC_REPLY_TIMEOUT = AMQPConfig.PA_AMQP_RPC_TIMEOUT.getValue();
 
     private final URI remoteObjectURL;
 
@@ -83,12 +83,12 @@ public class AMQPRemoteObject implements RemoteRemoteObject, Serializable {
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("AMQP RO sending %s to %s, on exchange %s, queue %s", message
-                        .getMethodName(), remoteObjectURL, exchangeName, queueName));
+                        .getMethodName(), remoteObjectURL, RPC_EXCHANGE_NAME, queueName));
             }
 
             String replyQueue = channel.getReplyQueue();
             byte[] messageBody = ObjectToByteConverter.ProActiveObjectStream.convert(message);
-            channel.getChannel().basicPublish(AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue(), queueName,
+            channel.getChannel().basicPublish(RPC_EXCHANGE_NAME, queueName,
                     new BasicProperties.Builder().replyTo(replyQueue).build(), messageBody);
 
             while (true) {
@@ -99,7 +99,7 @@ public class AMQPRemoteObject implements RemoteRemoteObject, Serializable {
                     if (logger.isDebugEnabled()) {
                         logger.debug(String.format(
                                 "AMQP RO received response of message %s to %s, on exchange %s, queue %s",
-                                message.getMethodName(), remoteObjectURL, exchangeName, queueName));
+                                message.getMethodName(), remoteObjectURL, RPC_EXCHANGE_NAME, queueName));
                     }
                     AMQPUtils.returnChannel(channel);
                     return reply;
@@ -119,7 +119,7 @@ public class AMQPRemoteObject implements RemoteRemoteObject, Serializable {
             channel.close();
 
             throw new IOException(String.format("AMQP cannot send %s to %s, on exchange %s, queue %s",
-                    message.getMethodName(), remoteObjectURL, exchangeName, queueName), e);
+                    message.getMethodName(), remoteObjectURL, RPC_EXCHANGE_NAME, queueName), e);
         }
     }
 
