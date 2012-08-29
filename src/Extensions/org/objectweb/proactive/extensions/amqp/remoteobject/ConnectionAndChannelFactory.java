@@ -128,26 +128,29 @@ public class ConnectionAndChannelFactory {
         channel.returnChannel();
     }
 
-    public ReusableChannel getChannel(String hostname, int port) throws IOException {
-        CachedConnection connection = getConnection(hostname, port);
+    public ReusableChannel getChannel(AMQPConnectionParameters connectionParameters) throws IOException {
+        CachedConnection connection = getConnection(connectionParameters);
         return connection.getChannel();
     }
 
-    public RpcReusableChannel getRpcChannel(String hostname, int port) throws IOException {
-        CachedConnection connection = getConnection(hostname, port);
+    public RpcReusableChannel getRpcChannel(AMQPConnectionParameters connectionParameters) throws IOException {
+        CachedConnection connection = getConnection(connectionParameters);
         return connection.getRpcChannel();
     }
 
-    private synchronized CachedConnection getConnection(String hostname, int port) throws IOException {
-        String key = generateKey(hostname, port);
+    private synchronized CachedConnection getConnection(AMQPConnectionParameters connectionParameters)
+            throws IOException {
+        String key = connectionParameters.getKey();
         CachedConnection connection = cachedConnections.get(key);
         if (connection == null) {
             logger.debug(String.format("creating a new connection %s", key));
 
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost(hostname);
-            factory.setPort(port);
-
+            factory.setHost(connectionParameters.getHost());
+            factory.setPort(connectionParameters.getPort());
+            factory.setUsername(connectionParameters.getUsername());
+            factory.setPassword(connectionParameters.getPassword());
+            factory.setVirtualHost(connectionParameters.getVhost());
             Connection c = factory.newConnection();
             c.addShutdownListener(new AMQPShutDownListener(c.toString()));
 
@@ -156,10 +159,6 @@ public class ConnectionAndChannelFactory {
         }
 
         return connection;
-    }
-
-    private static String generateKey(String hostname, int port) {
-        return hostname + port;
     }
 
 }

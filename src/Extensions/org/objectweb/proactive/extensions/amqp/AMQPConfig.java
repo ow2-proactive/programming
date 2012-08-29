@@ -65,6 +65,15 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
     static public PAPropertyInteger PA_AMQP_BROKER_PORT = new PAPropertyInteger(
         "proactive.communication.amqp.broker.port", false, 5672);
 
+    static public PAPropertyString PA_AMQP_BROKER_USER = new PAPropertyString(
+        "proactive.communication.amqp.broker.user", false, "guest");
+
+    static public PAPropertyString PA_AMQP_BROKER_PASSWORD = new PAPropertyString(
+        "proactive.communication.amqp.broker.password", false, "guest");
+
+    static public PAPropertyString PA_AMQP_BROKER_VHOST = new PAPropertyString(
+        "proactive.communication.amqp.broker.vhost", false, "/");
+
     static public PAPropertyString PA_AMQP_QUEUE_PREFIX = new PAPropertyString(
         "proactive.communication.amqp.queue_prefix", false, "proactive.remoteobject.");
 

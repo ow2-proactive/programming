@@ -68,16 +68,24 @@ public class AMQPUtils {
     }
 
     public static ReusableChannel getChannel(URI uri) throws IOException {
-        return ConnectionAndChannelFactory.getInstance().getChannel(getBrokerHost(uri), getBrokerPort(uri));
+        return ConnectionAndChannelFactory.getInstance().getChannel(getConnectionParameters(uri));
     }
 
     public static RpcReusableChannel getRpcChannel(URI uri) throws IOException {
-        return ConnectionAndChannelFactory.getInstance()
-                .getRpcChannel(getBrokerHost(uri), getBrokerPort(uri));
+        return ConnectionAndChannelFactory.getInstance().getRpcChannel(getConnectionParameters(uri));
     }
 
     public static void returnChannel(ReusableChannel channel) {
         ConnectionAndChannelFactory.getInstance().returnChannel(channel);
+    }
+
+    private static AMQPConnectionParameters getConnectionParameters(URI uri) {
+        String host = getBrokerHost(uri);
+        int port = getBrokerPort(uri);
+        String username = AMQPConfig.PA_AMQP_BROKER_USER.getValue();
+        String password = AMQPConfig.PA_AMQP_BROKER_PASSWORD.getValue();
+        String vhost = AMQPConfig.PA_AMQP_BROKER_VHOST.getValue();
+        return new AMQPConnectionParameters(host, port, username, password, vhost);
     }
 
     private static String getBrokerHost(URI uri) {
