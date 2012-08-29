@@ -120,11 +120,7 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
      */
     @Override
     public String toString() {
-        if (logger.isDebugEnabled()) {
-            return shortString();
-        } else {
-            return getCanonString();
-        }
+        return getCanonString();
     }
 
     public String shortString() {
