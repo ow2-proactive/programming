@@ -38,156 +38,56 @@ package org.objectweb.proactive.extensions.amqp.remoteobject;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.body.future.MethodCallResult;
-import org.objectweb.proactive.core.body.reply.Reply;
-import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
-import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
-import org.objectweb.proactive.core.util.URIBuilder;
-import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
-import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
-import org.objectweb.proactive.utils.NamedThreadFactory;
-import org.objectweb.proactive.utils.ThreadPools;
 
-import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.AMQP.Queue;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
 
 
 /**
- * Server-side implementation of the remote object
+ * Remote object server part for 'amqp' protocol. It inherits general server
+ * logic from the AbstractAMQPRemoteObjectServer and implements specific for
+ * 'amqp' protocol:
+ * <ul>
+ * <li>remote object's queue is bound to the exchanges specified in the AMQPConfig
+ * <li>default "" reply exchange is used to send reply messages
+ * </ul>
  *  
- * @since 5.2.0
  */
-public class AMQPRemoteObjectServer {
-
-    final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT);
-
-    final static private String QUEUES_MESSAGE_TYPE = AMQPConfig.PA_AMQP_DISCOVERY_QUEUES_MESSAGE_TYPE
-            .getValue();
-
-    private final InternalRemoteRemoteObject rro;
-    private final String queueName;
-
-    static final ThreadPoolExecutor tpe = ThreadPools.newCachedThreadPool(5, TimeUnit.MINUTES,
-            new NamedThreadFactory("AMQP Consumer Thread ", true));
+public class AMQPRemoteObjectServer extends AbstractAMQPRemoteObjectServer {
 
     public AMQPRemoteObjectServer(InternalRemoteRemoteObject rro) throws ProActiveException, IOException {
-        this.rro = rro;
-        this.queueName = AMQPUtils.computeQueueNameFromName(URIBuilder.getNameFromURI(rro.getURI()));
+        super(rro);
     }
 
-    public void connect(boolean passive) throws IOException, ProActiveException {
-        final ReusableChannel reusableChannel = AMQPUtils.getChannel(rro.getURI());
+    @Override
+    protected ReusableChannel getReusableChannel() throws IOException, ProActiveException {
+        return AMQPUtils.getChannel(rro.getURI());
+    }
 
+    @Override
+    protected void createObjectQueue(Channel channel, String queueName) throws IOException {
         boolean autoDelete = true;
         boolean durable = false;
         boolean exclusive = false;
         Map<String, Object> arguments = null;
 
-        boolean queueDeclared = false;
-
-        try {
-            Channel channel = reusableChannel.getChannel();
-
-            Queue.DeclareOk declareOk = channel.queueDeclare(queueName, durable, exclusive, autoDelete,
-                    arguments);
-
-            queueDeclared = true;
-
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("declared queue %s,response %s", queueName, declareOk.toString()));
-            }
-
-            channel.queueBind(queueName, AMQPConfig.PA_AMQP_DISCOVER_EXCHANGE_NAME.getValue(), "");
-            channel.queueBind(queueName, AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue(), queueName);
-
-            boolean autoAck = true;
-
-            channel.basicConsume(queueName, autoAck, new DefaultConsumer(channel) {
-
-                @Override
-                public void handleCancel(String consumerTag) throws IOException {
-                    // 'handleCancel' called after object's queue is deleted
-                    AMQPUtils.returnChannel(reusableChannel);
-                }
-
-                @Override
-                public void handleDelivery(String consumerTag, Envelope envelope,
-                        final AMQP.BasicProperties props, final byte[] body) throws IOException {
-                    tpe.execute(new Runnable() {
-                        public void run() {
-                            byte[] replyBody = null;
-
-                            BasicProperties replyProps = null;
-
-                            try {
-
-                                if (QUEUES_MESSAGE_TYPE.equals(props.getType())) {
-                                    // service message
-                                    replyProps = new BasicProperties.Builder().correlationId(
-                                            props.getCorrelationId()).build();
-                                    replyBody = rro.getURI().toString().getBytes();
-                                } else {
-                                    Request req = (Request) ByteToObjectConverter.ProActiveObjectStream
-                                            .convert(body);
-
-                                    if (logger.isDebugEnabled()) {
-                                        logger.debug(String.format("message %s consumed on queue %s", req
-                                                .getMethodName(), queueName));
-                                    }
-
-                                    Reply reply = rro.receiveMessage(req);
-                                    replyBody = ObjectToByteConverter.ProActiveObjectStream.convert(reply);
-                                }
-
-                            } catch (Exception e) {
-                                logger.error("Error during reply processing", e);
-
-                                Reply reply = new SynchronousReplyImpl(new MethodCallResult(null, e));
-                                try {
-                                    replyBody = ObjectToByteConverter.ProActiveObjectStream.convert(reply);
-                                } catch (IOException convertException) {
-                                    logger.error("Failed to convert reply", convertException);
-                                }
-                            } finally {
-                                try {
-                                    getChannel().basicPublish("", props.getReplyTo(), replyProps, replyBody);
-                                } catch (IOException e) {
-                                    logger.error("Failed to send message", e);
-                                }
-                            }
-
-                        }
-                    });
-
-                }
-            });
-
-        } catch (IOException e) {
-            if (queueDeclared) {
-                try {
-                    reusableChannel.getChannel().queueDelete(queueName);
-                } catch (Exception queueDeleteException) {
-                    logger.warn("Failed to delete queue", queueDeleteException);
-                }
-            }
-
-            reusableChannel.close();
-
-            throw e;
-        }
-
+        channel.queueDeclare(queueName, durable, exclusive, autoDelete, arguments);
+        channel.queueBind(queueName, AMQPConfig.PA_AMQP_DISCOVER_EXCHANGE_NAME.getValue(), "");
+        channel.queueBind(queueName, AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue(), queueName);
     }
 
+    @Override
+    protected byte[] handleMessage(Channel channel, BasicProperties props, byte[] body) {
+        // doesn't handle additional messages
+        return null;
+    }
+
+    @Override
+    protected String getReplyExchange() {
+        return "";
+    }
 }

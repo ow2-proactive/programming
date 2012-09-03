@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.amqp.remoteobject;
+package org.objectweb.proactive.extensions.amqp.federation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +45,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
@@ -62,22 +61,25 @@ import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalInputS
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalOutputStream;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
+import org.objectweb.proactive.extensions.amqp.remoteobject.AMQPUtils;
+import org.objectweb.proactive.extensions.amqp.remoteobject.ReusableChannel;
+
+import com.rabbitmq.client.AMQP.BasicProperties;
 
 
 /**
- * AMQP Remote Object Factory adds support for AMQP as communication protocol.
+ * Remote Object Factory adds support for 'amqp-federation' protocol.
  *   
  * @since ProActive 5.2.0
  */
-public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory implements RemoteObjectFactory {
+public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFactory implements
+        RemoteObjectFactory {
+
     static final Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT_FACTORY);
 
-    /** The protocol id of the factory */
-    static final public String PROTOCOL_ID = "amqp";
+    static final public String PROTOCOL_ID = "amqp-federation";
 
-    private boolean exchangeInitialized;
-
-    public AMQPRemoteObjectFactory() {
+    public AMQPFederationRemoteObjectFactory() {
     }
 
     /*
@@ -89,8 +91,7 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      */
     public RemoteRemoteObject newRemoteObject(InternalRemoteRemoteObject target) throws ProActiveException {
         try {
-            ensureExchangesExist(target.getURI());
-            return new AMQPRemoteObject(target.getURI());
+            return new AMQPFederationRemoteObject(target.getURI());
         } catch (IOException e) {
             throw new ProActiveException(String.format("AMQP unable to create the RemoteRemoteObject for %s",
                     target.toString()), e);
@@ -107,12 +108,10 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      */
     public RemoteRemoteObject register(InternalRemoteRemoteObject ro, URI uri, boolean replacePrevious)
             throws ProActiveException {
-
         try {
-            ensureExchangesExist(uri);
-            AMQPRemoteObjectServer amqpROS = new AMQPRemoteObjectServer(ro);
+            AMQPFederationRemoteObjectServer amqpROS = new AMQPFederationRemoteObjectServer(ro);
             amqpROS.connect(replacePrevious);
-            return new AMQPRemoteObject(uri);
+            return new AMQPFederationRemoteObject(uri);
         } catch (IOException e) {
             throw new ProActiveException(String.format("AMQP unable to register the object at %s", uri
                     .toString()), e);
@@ -126,15 +125,22 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      *            the urn under which the active object has been registered
      */
     public void unregister(URI uri) throws ProActiveException {
+        String queueName = AMQPUtils.computeQueueNameFromURI(uri);
+
         ReusableChannel channel = null;
         try {
-            channel = AMQPUtils.getChannel(uri);
-            String queueName = AMQPUtils.computeQueueNameFromURI(uri);
-            channel.getChannel().queueDelete(queueName);
+            channel = AMQPFederationUtils.getChannel();
+            channel.getChannel().basicPublish(
+                    AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_EXCHANGE_NAME.getValue(),
+                    queueName,
+                    new BasicProperties.Builder().type(
+                            AMQPFederationRemoteObjectServer.DELETE_QUEUE_MESSAGE_TYPE).build(), null);
             channel.returnChannel();
         } catch (IOException e) {
-            channel.close();
-            throw new ProActiveException(e);
+            if (channel != null) {
+                channel.close();
+            }
+            throw new ProActiveException("Failed to delete object's queue", e);
         }
     }
 
@@ -149,18 +155,11 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     @SuppressWarnings("unchecked")
     public <T> RemoteObject<T> lookup(URI uri) throws ProActiveException {
         try {
-            ensureExchangesExist(uri);
-
-            ReusableChannel queueCheckChannel = AMQPUtils.getChannel(uri);
             String queueName = AMQPUtils.computeQueueNameFromURI(uri);
-            try {
-                queueCheckChannel.getChannel().queueDeclarePassive(queueName);
-                queueCheckChannel.returnChannel();
-            } catch (IOException e) {
-                throw new ProActiveException("Lookup failed to get response while sending request to the " +
-                    queueName, e);
+            if (!AMQPFederationUtils.pingRemoteObject(queueName)) {
+                throw new ProActiveException("Failed to find queue for the object with URI " + uri);
             }
-            return new RemoteObjectAdapter(new AMQPRemoteObject(uri));
+            return new RemoteObjectAdapter(new AMQPFederationRemoteObject(uri));
         } catch (IOException e) {
             throw new ProActiveException(String.format("unable to lookup object at %s", uri.toString()), e);
         }
@@ -191,12 +190,12 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         // a specific exchange and each RemoteObject listen for a particular message
         // in order to return its url.
         try {
-            ensureExchangesExist(uri);
-            FindQueuesRPCClient finder = new FindQueuesRPCClient();
+            FederationFindQueuesRPCClient finder = new FederationFindQueuesRPCClient();
 
             List<URI> response;
 
-            response = finder.discover(uri, AMQPConfig.PA_AMQP_DISCOVER_EXCHANGE_NAME.getValue(), 5000);
+            response = finder.discover(uri, AMQPFederationConfig.PA_AMQP_FEDERATION_DISCOVER_EXCHANGE_NAME
+                    .getValue(), 5000);
 
             URI[] result = response.toArray(new URI[response.size()]);
             if (logger.isDebugEnabled()) {
@@ -216,24 +215,24 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
     public void unexport(RemoteRemoteObject rro) throws ProActiveException {
         // TODO 
-        logger.debug("unexport is not supported for AMQP");
+        logger.debug("unexport is not supported for amqp-federation");
     }
 
     public int getPort() {
-        return AMQPConfig.PA_AMQP_BROKER_PORT.getValue();
+        return AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_PORT.getValue();
     }
 
     public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
             boolean rebind) throws ProActiveException {
-
         try {
             // Must be a fixed path
             if (!name.startsWith("/")) {
                 name = "/" + name;
             }
 
-            URI uri = new URI(this.getProtocolId(), null, AMQPConfig.PA_AMQP_BROKER_ADDRESS.getValue(), this
-                    .getPort(), name, null, null);
+            URI uri = new URI(this.getProtocolId(), null,
+                AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_ADDRESS.getValue(), this.getPort(), name,
+                null, null);
 
             // register the object on the register
             InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
@@ -247,8 +246,8 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     }
 
     public URI getBaseURI() {
-        return URIBuilder.buildURI(AMQPConfig.PA_AMQP_BROKER_ADDRESS.getValue(), "", this.getProtocolId(),
-                AMQPConfig.PA_AMQP_BROKER_PORT.getValue());
+        return URIBuilder.buildURI(AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_ADDRESS.getValue(), "",
+                this.getProtocolId(), AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_PORT.getValue());
     }
 
     public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
@@ -257,29 +256,5 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
     public ObjectOutputStream getProtocolObjectOutputStream(OutputStream out) throws IOException {
         return new ProActiveMarshalOutputStream(out, ProActiveRuntimeImpl.getProActiveRuntime().getURL());
-    }
-
-    private void ensureExchangesExist(URI uri) throws IOException {
-        if (!exchangeInitialized) {
-            ReusableChannel channel = AMQPUtils.getChannel(uri);
-            try {
-                boolean durable = false;
-                boolean autoDelete = false;
-                boolean internal = false;
-                Map<String, Object> arguments = null;
-
-                channel.getChannel().exchangeDeclare(AMQPConfig.PA_AMQP_DISCOVER_EXCHANGE_NAME.getValue(),
-                        "fanout", durable, autoDelete, internal, arguments);
-                channel.getChannel().exchangeDeclare(AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue(),
-                        "direct", durable, autoDelete, internal, arguments);
-
-                exchangeInitialized = true;
-
-                channel.returnChannel();
-            } catch (IOException e) {
-                channel.close();
-                throw e;
-            }
-        }
     }
 }

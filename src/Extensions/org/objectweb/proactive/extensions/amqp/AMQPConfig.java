@@ -74,12 +74,6 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_AMQP_BROKER_VHOST = new PAPropertyString(
         "proactive.communication.amqp.broker.vhost", false, "/");
 
-    static public PAPropertyString PA_AMQP_QUEUE_PREFIX = new PAPropertyString(
-        "proactive.communication.amqp.queue_prefix", false, "proactive.remoteobject.");
-
-    static public PAPropertyString PA_AMQP_DISCOVERY_QUEUES_MESSAGE_TYPE = new PAPropertyString(
-        "proactive.communication.amqp.discover_queues_message_type", false, "proactive.discover_queues");
-
     static final public PAPropertyString PA_AMQP_DISCOVER_EXCHANGE_NAME = new PAPropertyString(
         "proactive.communication.amqp.discover_exchange_name", false,
         "proactive.remoteobject.amqp_discover_exchange");

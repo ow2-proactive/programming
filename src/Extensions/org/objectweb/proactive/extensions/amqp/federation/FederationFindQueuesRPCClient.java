@@ -34,38 +34,48 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.amqp.remoteobject;
+package org.objectweb.proactive.extensions.amqp.federation;
 
 import java.io.IOException;
 import java.net.URI;
+
+import org.objectweb.proactive.extensions.amqp.remoteobject.AbstractFindQueuesRPCClient;
+import org.objectweb.proactive.extensions.amqp.remoteobject.ReusableChannel;
 
 import com.rabbitmq.client.Channel;
 
 
 /**
- * Class used to discover remote objects with 'amqp' protocol.
+ * Class used to discover remote objects with 'amqp-federation' protocol.
  * It inherits discover logic from the AbstractFindQueuesRPCClient
- * and implements logic specific for 'amqp' protocol:
+ * and implements logic specific for 'amqp-federation' protocol:
  * <ul>
- * <li>ReusableChannel is received using AMQPUtils.getChannel
- * (to connect to the broker AMQPUtils extracts broker's host/port from the remote object's URL)
- * <li>temporary reply queue with unique name is created using
- * standard AMQP method 'queueDeclare' 
+ * <li>ReusableChannel is received using AMQPFederationUtils.getChannel
+ * (AMQPFederationUtils doesn't extracts broker's host/port from the remote object's URL,
+ * it always uses host/port from the AMQPFederationConfig)
+ * <li>for temporary reply queue unique name is generated using utility
+ * method AMQPFederationUtils.uniqueQueueName since queue name should be unique
+ * among multiple brokers, also reply queue should be bound to the 
+ * special federated exchange  
  * </ul>
  * 
  * @since 5.2.0
  *
  */
-class FindQueuesRPCClient extends AbstractFindQueuesRPCClient {
+class FederationFindQueuesRPCClient extends AbstractFindQueuesRPCClient {
 
     @Override
     protected ReusableChannel getReusableChannel(URI uri) throws IOException {
-        return AMQPUtils.getChannel(uri);
+        return AMQPFederationUtils.getChannel();
     }
 
     @Override
     protected String createReplyQueue(Channel channel) throws IOException {
-        return channel.queueDeclare().getQueue();
+        String replyQueueName = AMQPFederationUtils.uniqueQueueName("reply_discover");
+        channel.queueDeclare(replyQueueName, false, true, true, null);
+        channel.queueBind(replyQueueName, AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_REPLY_EXCHANGE_NAME
+                .getValue(), replyQueueName);
+        return replyQueueName;
     }
 
 }

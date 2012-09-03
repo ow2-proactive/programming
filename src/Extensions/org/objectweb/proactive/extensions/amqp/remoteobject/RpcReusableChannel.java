@@ -18,7 +18,7 @@ import com.rabbitmq.client.QueueingConsumer;
  * @author ProActive team
  *
  */
-class RpcReusableChannel extends ReusableChannel {
+public class RpcReusableChannel extends ReusableChannel {
 
     private String replyQueue;
 
@@ -28,9 +28,17 @@ class RpcReusableChannel extends ReusableChannel {
         super(connection, channel);
     }
 
-    String getReplyQueue() throws IOException {
+    /*
+     * queue creation is moved to the separate method, so that it can be overridden 
+     * for 'amqp-federation' protocol  
+     */
+    protected String createReplyQueue() throws IOException {
+        return channel.queueDeclare().getQueue();
+    }
+
+    public final String getReplyQueue() throws IOException {
         if (replyQueue == null) {
-            replyQueue = channel.queueDeclare().getQueue();
+            replyQueue = createReplyQueue();
             queueConsumer = new QueueingConsumer(channel);
             boolean autoAck = true;
             channel.basicConsume(replyQueue, autoAck, queueConsumer);
@@ -38,7 +46,7 @@ class RpcReusableChannel extends ReusableChannel {
         return replyQueue;
     }
 
-    QueueingConsumer getReplyQueueConsumer() {
+    public final QueueingConsumer getReplyQueueConsumer() {
         if (queueConsumer == null) {
             throw new IllegalStateException("Queue isn't created");
         }

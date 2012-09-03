@@ -47,6 +47,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
 
+import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
@@ -61,11 +62,11 @@ public class ConnectionAndChannelFactory {
 
     final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_CHANNEL_FACTORY);
 
-    private static final ConnectionAndChannelFactory instance = new ConnectionAndChannelFactory();
-
     private final Map<String, CachedConnection> cachedConnections = new HashMap<String, CachedConnection>();
 
-    static class CachedConnection {
+    public static class CachedConnection {
+
+        private final ConnectionAndChannelFactory factory;
 
         private final Connection connection;
 
@@ -73,7 +74,8 @@ public class ConnectionAndChannelFactory {
 
         private final List<RpcReusableChannel> cachedRpcChannels = new ArrayList<RpcReusableChannel>();
 
-        CachedConnection(Connection connection) {
+        CachedConnection(ConnectionAndChannelFactory factory, Connection connection) {
+            this.factory = factory;
             this.connection = connection;
         }
 
@@ -88,7 +90,7 @@ public class ConnectionAndChannelFactory {
         RpcReusableChannel getRpcChannel() throws IOException {
             RpcReusableChannel channel = (RpcReusableChannel) getChannel(cachedRpcChannels);
             if (channel == null) {
-                channel = new RpcReusableChannel(this, connection.createChannel());
+                channel = factory.createRpcReusableChannel(this, connection.createChannel());
             }
             return channel;
         }
@@ -118,10 +120,6 @@ public class ConnectionAndChannelFactory {
             }
         }
 
-    }
-
-    public static ConnectionAndChannelFactory getInstance() {
-        return instance;
     }
 
     public void returnChannel(ReusableChannel channel) {
@@ -154,11 +152,14 @@ public class ConnectionAndChannelFactory {
             Connection c = factory.newConnection();
             c.addShutdownListener(new AMQPShutDownListener(c.toString()));
 
-            connection = new CachedConnection(c);
+            connection = new CachedConnection(this, c);
             cachedConnections.put(key, connection);
         }
 
         return connection;
     }
 
+    protected RpcReusableChannel createRpcReusableChannel(CachedConnection connection, Channel channel) {
+        return new RpcReusableChannel(connection, channel);
+    }
 }

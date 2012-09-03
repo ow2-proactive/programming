@@ -15,7 +15,7 @@ import com.rabbitmq.client.Channel;
  * @author ProActive team
  *
  */
-class ReusableChannel {
+public class ReusableChannel {
 
     final static private Logger channelLogger = ProActiveLogger
             .getLogger(AMQPConfig.Loggers.AMQP_CHANNEL_FACTORY);
@@ -29,15 +29,15 @@ class ReusableChannel {
         this.channel = channel;
     }
 
-    Channel getChannel() {
+    public Channel getChannel() {
         return channel;
     }
 
-    boolean isOpened() {
+    public boolean isOpened() {
         return channel != null;
     }
 
-    void close() {
+    public void close() {
         try {
             if (channel.isOpen()) {
                 channel.close();
@@ -49,14 +49,14 @@ class ReusableChannel {
         }
     }
 
-    void returnChannel() {
+    public void returnChannel() {
         if (isOpened()) {
             connection.returnChannel(this);
         }
     }
 
     public String toString() {
-        return "ReusableChannel-" + channel.getChannelNumber();
+        return getClass().getSimpleName() + "-" + channel.getChannelNumber();
     }
 
 }

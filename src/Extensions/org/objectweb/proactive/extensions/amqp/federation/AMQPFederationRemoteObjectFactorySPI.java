@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2012 INRIA/University of
+ * Copyright (C) 1997-2011 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -34,38 +34,20 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.amqp.remoteobject;
+package org.objectweb.proactive.extensions.amqp.federation;
 
-import java.io.IOException;
-import java.net.URI;
-
-import com.rabbitmq.client.Channel;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
 
 
-/**
- * Class used to discover remote objects with 'amqp' protocol.
- * It inherits discover logic from the AbstractFindQueuesRPCClient
- * and implements logic specific for 'amqp' protocol:
- * <ul>
- * <li>ReusableChannel is received using AMQPUtils.getChannel
- * (to connect to the broker AMQPUtils extracts broker's host/port from the remote object's URL)
- * <li>temporary reply queue with unique name is created using
- * standard AMQP method 'queueDeclare' 
- * </ul>
- * 
- * @since 5.2.0
- *
- */
-class FindQueuesRPCClient extends AbstractFindQueuesRPCClient {
+public class AMQPFederationRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
 
-    @Override
-    protected ReusableChannel getReusableChannel(URI uri) throws IOException {
-        return AMQPUtils.getChannel(uri);
+    public Class<? extends RemoteObjectFactory> getFactoryClass() {
+        return AMQPFederationRemoteObjectFactory.class;
     }
 
-    @Override
-    protected String createReplyQueue(Channel channel) throws IOException {
-        return channel.queueDeclare().getQueue();
+    public String getProtocolId() {
+        return AMQPFederationRemoteObjectFactory.PROTOCOL_ID;
     }
 
 }
