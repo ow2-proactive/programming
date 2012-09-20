@@ -40,24 +40,25 @@ import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 import org.objectweb.proactive.core.config.PAPropertyInteger;
 import org.objectweb.proactive.core.config.PAPropertyLong;
 import org.objectweb.proactive.core.config.PAPropertyString;
+import org.objectweb.proactive.extensions.amqp.remoteobject.AMQPConstants;
 
 
 public class AMQPFederationConfig implements PAPropertiesLoaderSPI {
 
     static public PAPropertyString PA_AMQP_FEDERATION_BROKER_ADDRESS = new PAPropertyString(
-        "proactive.communication.amqp_federation.broker.address", false, "localhost");
+        "proactive.communication.amqp_federation.broker.address", false, AMQPConstants.DEFAULT_BROKER_HOST);
 
     static public PAPropertyInteger PA_AMQP_FEDERATION_BROKER_PORT = new PAPropertyInteger(
-        "proactive.communication.amqp_federation.broker.port", false, 5672);
+        "proactive.communication.amqp_federation.broker.port", false, AMQPConstants.DEFAULT_BROKER_PORT);
 
     static public PAPropertyString PA_AMQP_FEDERATION_BROKER_USER = new PAPropertyString(
-        "proactive.communication.amqp_federation.broker.user", false, "guest");
+        "proactive.communication.amqp_federation.broker.user", false, AMQPConstants.DEFAULT_USER);
 
     static public PAPropertyString PA_AMQP_FEDERATION_BROKER_PASSWORD = new PAPropertyString(
-        "proactive.communication.amqp_federation.broker.password", false, "guest");
+        "proactive.communication.amqp_federation.broker.password", false, AMQPConstants.DEFAULT_PASSWORD);
 
     static public PAPropertyString PA_AMQP_FEDERATION_BROKER_VHOST = new PAPropertyString(
-        "proactive.communication.amqp_federation.broker.vhost", false, "/");
+        "proactive.communication.amqp_federation.broker.vhost", false, AMQPConstants.DEFAULT_VHOST);
 
     static final public PAPropertyString PA_AMQP_FEDERATION_DISCOVER_EXCHANGE_NAME = new PAPropertyString(
         "proactive.communication.amqp_federation.discover_exchange_name", false,
@@ -76,5 +77,8 @@ public class AMQPFederationConfig implements PAPropertiesLoaderSPI {
 
     static final public PAPropertyLong PA_AMQP_FEDERATION_PING_TIMEOUT = new PAPropertyLong(
         "proactive.communication.amqp_federation.ping_timeout", false, 5000);
+
+    static public PAPropertyString PA_AMQP_FEDERATION_BROKER_MAPPING_FILE = new PAPropertyString(
+        "proactive.communication.amqp_federation.broker.mapping_file", false);
 
 }

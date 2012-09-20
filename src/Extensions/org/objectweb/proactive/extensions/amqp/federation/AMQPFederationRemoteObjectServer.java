@@ -82,7 +82,7 @@ public class AMQPFederationRemoteObjectServer extends AbstractAMQPRemoteObjectSe
 
     @Override
     protected ReusableChannel getReusableChannel() throws ProActiveException, IOException {
-        return AMQPFederationUtils.getChannel();
+        return AMQPFederationUtils.getChannel(rro.getURI());
     }
 
     @Override

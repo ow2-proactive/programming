@@ -37,6 +37,8 @@
 package org.objectweb.proactive.extensions.amqp.federation;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.UniqueID;
@@ -69,11 +71,11 @@ class AMQPFederationUtils {
     private static final Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT);
 
     /*
-     * For 'amqp-federation' protocol broker's address isn't extracted from the remote
-     * object's URL, it is assumed that it is possible to connect only to one broker specified in the 
-     * AMQPFederationConfig.  
+     * For 'amqp-federation' protocol broker's address isn't extracted from the remote object's URL
+     * since there is no guarantee that node has direct access to the object's broker. Instead
+     * connection parameters for target broker should be specified in the configuration.
      */
-    private static final AMQPConnectionParameters connectionParameters;
+    private static final BrokerAddressMap brokerAddressMap;
 
     static {
         String host = AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_ADDRESS.getValue();
@@ -81,11 +83,20 @@ class AMQPFederationUtils {
         String username = AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_USER.getValue();
         String password = AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_PASSWORD.getValue();
         String vhost = AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_VHOST.getValue();
-        connectionParameters = new AMQPConnectionParameters(host, port, username, password, vhost);
+        AMQPConnectionParameters defaultConnectionParameters = new AMQPConnectionParameters(host, port,
+            username, password, vhost);
+
+        if (AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_MAPPING_FILE.isSet()) {
+            brokerAddressMap = BrokerAddressMap.createFromMappingFile(defaultConnectionParameters,
+                    AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_MAPPING_FILE.getValue());
+        } else {
+            brokerAddressMap = new BrokerAddressMap(defaultConnectionParameters,
+                new HashMap<String, AMQPConnectionParameters>());
+        }
     }
 
-    static boolean pingRemoteObject(String queueName) throws IOException {
-        RpcReusableChannel reusableChannel = AMQPFederationUtils.getRpcChannel();
+    static boolean pingRemoteObject(String queueName, URI uri) throws IOException {
+        RpcReusableChannel reusableChannel = AMQPFederationUtils.getRpcChannel(uri);
         Channel channel = reusableChannel.getChannel();
         try {
             BasicProperties props = new BasicProperties.Builder().replyTo(reusableChannel.getReplyQueue())
@@ -117,20 +128,19 @@ class AMQPFederationUtils {
     }
 
     /*
-     * Generate unique queue name. Can't use broker-generated unique queue names 
-     * for 'amqp-federation' protocol since queue name should be unique among 
-     * multiple brokers
+     * Generate unique queue name. Can't use broker-generated unique queue names for
+     * 'amqp-federation' protocol since queue name should be unique among multiple brokers
      */
     static String uniqueQueueName(String prefix) {
         return prefix + "_" + new UniqueID().getCanonString();
     }
 
-    static ReusableChannel getChannel() throws IOException {
-        return connectionFactory.getChannel(connectionParameters);
+    static ReusableChannel getChannel(URI uri) throws IOException {
+        return connectionFactory.getChannel(brokerAddressMap.getBrokerForObject(uri));
     }
 
-    static RpcReusableChannel getRpcChannel() throws IOException {
-        return connectionFactory.getRpcChannel(connectionParameters);
+    static RpcReusableChannel getRpcChannel(URI uri) throws IOException {
+        return connectionFactory.getRpcChannel(brokerAddressMap.getBrokerForObject(uri));
     }
 
 }

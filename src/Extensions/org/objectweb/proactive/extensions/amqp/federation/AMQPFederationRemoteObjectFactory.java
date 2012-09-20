@@ -129,7 +129,7 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
 
         ReusableChannel channel = null;
         try {
-            channel = AMQPFederationUtils.getChannel();
+            channel = AMQPFederationUtils.getChannel(uri);
             channel.getChannel().basicPublish(
                     AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_EXCHANGE_NAME.getValue(),
                     queueName,
@@ -156,7 +156,7 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
     public <T> RemoteObject<T> lookup(URI uri) throws ProActiveException {
         try {
             String queueName = AMQPUtils.computeQueueNameFromURI(uri);
-            if (!AMQPFederationUtils.pingRemoteObject(queueName)) {
+            if (!AMQPFederationUtils.pingRemoteObject(queueName, uri)) {
                 throw new ProActiveException("Failed to find queue for the object with URI " + uri);
             }
             return new RemoteObjectAdapter(new AMQPFederationRemoteObject(uri));

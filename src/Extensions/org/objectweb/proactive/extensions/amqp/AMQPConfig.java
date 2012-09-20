@@ -40,6 +40,7 @@ import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 import org.objectweb.proactive.core.config.PAPropertyInteger;
 import org.objectweb.proactive.core.config.PAPropertyLong;
 import org.objectweb.proactive.core.config.PAPropertyString;
+import org.objectweb.proactive.extensions.amqp.remoteobject.AMQPConstants;
 
 
 /**
@@ -55,7 +56,7 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
      * Can be FQDN or an IP address
      */
     static public PAPropertyString PA_AMQP_BROKER_ADDRESS = new PAPropertyString(
-        "proactive.communication.amqp.broker.address", false, "localhost");
+        "proactive.communication.amqp.broker.address", false, AMQPConstants.DEFAULT_BROKER_HOST);
 
     /**
      * The port of the broker to use.
@@ -63,16 +64,16 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
      *
      */
     static public PAPropertyInteger PA_AMQP_BROKER_PORT = new PAPropertyInteger(
-        "proactive.communication.amqp.broker.port", false, 5672);
+        "proactive.communication.amqp.broker.port", false, AMQPConstants.DEFAULT_BROKER_PORT);
 
     static public PAPropertyString PA_AMQP_BROKER_USER = new PAPropertyString(
-        "proactive.communication.amqp.broker.user", false, "guest");
+        "proactive.communication.amqp.broker.user", false, AMQPConstants.DEFAULT_USER);
 
     static public PAPropertyString PA_AMQP_BROKER_PASSWORD = new PAPropertyString(
-        "proactive.communication.amqp.broker.password", false, "guest");
+        "proactive.communication.amqp.broker.password", false, AMQPConstants.DEFAULT_PASSWORD);
 
     static public PAPropertyString PA_AMQP_BROKER_VHOST = new PAPropertyString(
-        "proactive.communication.amqp.broker.vhost", false, "/");
+        "proactive.communication.amqp.broker.vhost", false, AMQPConstants.DEFAULT_VHOST);
 
     static final public PAPropertyString PA_AMQP_DISCOVER_EXCHANGE_NAME = new PAPropertyString(
         "proactive.communication.amqp.discover_exchange_name", false,

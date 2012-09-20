@@ -50,8 +50,8 @@ import org.objectweb.proactive.extensions.amqp.remoteobject.RpcReusableChannel;
  * parts specific for 'amqp-federation' protocol:
  * <ul>
  * <li>RpcReusableChannel is received using AMQPFederationUtils.getRpcChannel
- * (AMQPFederationUtils doesn't extracts broker's host/port from the remote object's URL,
- * it always uses host/port from the AMQPFederationConfig)
+ * (AMQPFederationUtils doesn't directly extracts broker's host/port from the remote 
+ * object's URL, it uses brokers address mapping from the configuration)
  * <li>to check that target remote object's queue exists it executes it can't
  * use AMQP call 'queueDeclarePassive' since this queue can be created in
  * another broker, instead it sends special 'ping' message to the server object
@@ -74,12 +74,12 @@ public class AMQPFederationRemoteObject extends AbstractAMQPRemoteObject {
 
     @Override
     protected RpcReusableChannel getRpcReusableChannel() throws IOException {
-        return AMQPFederationUtils.getRpcChannel();
+        return AMQPFederationUtils.getRpcChannel(remoteObjectURL);
     }
 
     @Override
     protected void checkTargetObjectExists() throws IOException {
-        if (!AMQPFederationUtils.pingRemoteObject(queueName)) {
+        if (!AMQPFederationUtils.pingRemoteObject(queueName, remoteObjectURL)) {
             throw new IOException("Failed to ping queue " + queueName);
         }
     }

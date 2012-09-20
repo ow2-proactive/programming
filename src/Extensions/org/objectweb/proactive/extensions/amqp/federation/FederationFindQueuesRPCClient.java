@@ -51,8 +51,8 @@ import com.rabbitmq.client.Channel;
  * and implements logic specific for 'amqp-federation' protocol:
  * <ul>
  * <li>ReusableChannel is received using AMQPFederationUtils.getChannel
- * (AMQPFederationUtils doesn't extracts broker's host/port from the remote object's URL,
- * it always uses host/port from the AMQPFederationConfig)
+ * (AMQPFederationUtils doesn't directly extracts broker's host/port from 
+ * the remote object's URL, it uses brokers address mapping from the configuration)
  * <li>for temporary reply queue unique name is generated using utility
  * method AMQPFederationUtils.uniqueQueueName since queue name should be unique
  * among multiple brokers, also reply queue should be bound to the 
@@ -66,7 +66,7 @@ class FederationFindQueuesRPCClient extends AbstractFindQueuesRPCClient {
 
     @Override
     protected ReusableChannel getReusableChannel(URI uri) throws IOException {
-        return AMQPFederationUtils.getChannel();
+        return AMQPFederationUtils.getChannel(uri);
     }
 
     @Override
