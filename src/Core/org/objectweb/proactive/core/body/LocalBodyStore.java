@@ -36,12 +36,18 @@
  */
 package org.objectweb.proactive.core.body;
 
+import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PALifeCycle;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
@@ -90,6 +96,8 @@ public class LocalBodyStore {
      * it belongs to this JVM
      */
     private BodyMap localHalfBodyMap = new BodyMap();
+
+    private Map<Thread, HalfBody> halfbodiesThreadMap = new HashMap<Thread, HalfBody>();
 
     /**
      * This table maps all known Forwarder's in this JVM with their UniqueID
@@ -207,15 +215,49 @@ public class LocalBodyStore {
             // If we cannot find a context for the current thread we assume that the current thread
             // is not the one from an active object. Therefore in this case we create an HalfBody
             // that handle the futures, and push a new context for this HalfBody.
-            AbstractBody body = HalfBody.getHalfBody(this.getHalfBodyMetaObjectFactory());
+            HalfBody body = HalfBody.getHalfBody(this.getHalfBodyMetaObjectFactory());
             s = ((s == null) ? new Stack<Context>() : s);
             Context c = new Context(body, null);
             s.push(c);
             this.contexts.set(s);
             registerHalfBody(body);
+
+            updateHalfbodiesThreadMap(body);
+
             return c;
         } else {
             return s.peek();
+        }
+    }
+
+    private void updateHalfbodiesThreadMap(HalfBody body) {
+        List<HalfBody> toRemove = null;
+
+        synchronized (halfbodiesThreadMap) {
+            for (Iterator<Map.Entry<Thread, HalfBody>> i = halfbodiesThreadMap.entrySet().iterator(); i
+                    .hasNext();) {
+                Map.Entry<Thread, HalfBody> entry = i.next();
+                if (!entry.getKey().isAlive()) {
+                    i.remove();
+                    if (toRemove == null) {
+                        toRemove = new ArrayList<HalfBody>();
+                    }
+                    toRemove.add(entry.getValue());
+                }
+            }
+
+            halfbodiesThreadMap.put(Thread.currentThread(), body);
+        }
+
+        if (toRemove != null) {
+            for (HalfBody halfBody : toRemove) {
+                LocalBodyStore.getInstance().unregisterHalfBody(halfBody);
+                try {
+                    halfBody.getRemoteObjectExposer().unregisterAll();
+                } catch (ProActiveException e) {
+                    logger.error("Failed to unregister halfBody remote object", e);
+                }
+            }
         }
     }
 
