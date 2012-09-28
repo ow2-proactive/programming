@@ -12,8 +12,8 @@ public class AMQPConstants {
 
     public static final String DEFAULT_VHOST = "/";
 
-    public static final String EXCHNAGE_TYPE_DIRECT = "direct";
+    public static final String EXCHANGE_TYPE_DIRECT = "direct";
 
-    public static final String EXCHNAGE_TYPE_FANOUT = "fanout";
+    public static final String EXCHANGE_TYPE_FANOUT = "fanout";
 
 }

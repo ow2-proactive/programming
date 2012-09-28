@@ -269,9 +269,9 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
                 Map<String, Object> arguments = null;
 
                 channel.getChannel().exchangeDeclare(AMQPConfig.PA_AMQP_DISCOVER_EXCHANGE_NAME.getValue(),
-                        AMQPConstants.EXCHNAGE_TYPE_FANOUT, durable, autoDelete, internal, arguments);
+                        AMQPConstants.EXCHANGE_TYPE_FANOUT, durable, autoDelete, internal, arguments);
                 channel.getChannel().exchangeDeclare(AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue(),
-                        AMQPConstants.EXCHNAGE_TYPE_DIRECT, durable, autoDelete, internal, arguments);
+                        AMQPConstants.EXCHANGE_TYPE_DIRECT, durable, autoDelete, internal, arguments);
 
                 exchangeInitialized = true;
 
