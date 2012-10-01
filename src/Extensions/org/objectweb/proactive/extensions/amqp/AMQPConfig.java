@@ -101,8 +101,8 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_AMQP_SSH_REMOTE_USERNAME = new PAPropertyString(
         "proactive.amqp.ssh.username", false);
 
-    static public PAPropertyInteger PA_AMQP_SSH_REMOTE_PORT = new PAPropertyInteger("proactive.amqp.ssh.port",
-        false);
+    static public PAPropertyInteger PA_AMQP_SSH_REMOTE_PORT = new PAPropertyInteger(
+        "proactive.amqp.ssh.port", false);
 
     public interface Loggers {
 

@@ -125,11 +125,11 @@ public class ConnectionAndChannelFactory {
     }
 
     private final SocketFactory socketFactory;
-    
+
     public ConnectionAndChannelFactory(SocketFactory socketFactory) {
         this.socketFactory = socketFactory;
     }
-    
+
     public void returnChannel(ReusableChannel channel) {
         channel.returnChannel();
     }

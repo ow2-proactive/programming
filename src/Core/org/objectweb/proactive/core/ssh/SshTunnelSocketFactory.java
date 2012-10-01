@@ -57,7 +57,7 @@ import org.objectweb.proactive.core.ssh.SshConfigFileParser.SshToken;
 public class SshTunnelSocketFactory extends SocketFactory {
 
     private final SshConfig config;
-    
+
     private final SshTunnelPool tp;
 
     public SshTunnelSocketFactory(PAPropertyString keyDir, PAPropertyString knownHosts,
@@ -92,7 +92,7 @@ public class SshTunnelSocketFactory extends SocketFactory {
         Socket socket = new Socket() {
 
             private Socket realSocket;
-            
+
             @Override
             public void connect(SocketAddress endpoint) throws IOException {
                 createRealSocket(endpoint);
@@ -128,7 +128,7 @@ public class SshTunnelSocketFactory extends SocketFactory {
                 realSocket.setTcpNoDelay(getTcpNoDelay());
                 realSocket.setTrafficClass(getTrafficClass());
             }
-            
+
             @Override
             public InetAddress getInetAddress() {
                 if (realSocket != null) {
@@ -495,5 +495,5 @@ public class SshTunnelSocketFactory extends SocketFactory {
     public Socket createSocket(String host, int port) throws IOException {
         return tp.getSocket(host, port);
     }
-    
+
 }
