@@ -39,6 +39,9 @@ package org.objectweb.proactive.extensions.amqp.remoteobject;
 import java.io.IOException;
 import java.net.URI;
 
+import javax.net.SocketFactory;
+
+import org.objectweb.proactive.core.ssh.SshTunnelSocketFactory;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
 
@@ -50,7 +53,20 @@ import org.objectweb.proactive.extensions.amqp.AMQPConfig;
  */
 public class AMQPUtils {
 
-    private static final ConnectionAndChannelFactory connectionFactory = new ConnectionAndChannelFactory();
+    private static final ConnectionAndChannelFactory connectionFactory;
+
+    static {
+        SocketFactory socketFactory;
+        if (AMQPConfig.PA_AMQP_SOCKET_FACTORY.isSet() &&
+            "ssh".equals(AMQPConfig.PA_AMQP_SOCKET_FACTORY.getValue())) {
+            socketFactory = new SshTunnelSocketFactory(AMQPConfig.PA_AMQP_SSH_KEY_DIR,
+                AMQPConfig.PA_AMQP_SSH_KNOWN_HOSTS, AMQPConfig.PA_AMQP_SSH_REMOTE_PORT,
+                AMQPConfig.PA_AMQP_SSH_REMOTE_USERNAME);
+        } else {
+            socketFactory = null;
+        }
+        connectionFactory = new ConnectionAndChannelFactory(socketFactory);
+    }
 
     private static final String QUEUE_PREFIX = "proactive.remoteobject.";
 

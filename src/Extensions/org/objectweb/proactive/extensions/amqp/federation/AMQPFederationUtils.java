@@ -40,8 +40,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 
+import javax.net.SocketFactory;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.UniqueID;
+import org.objectweb.proactive.core.ssh.SshTunnelSocketFactory;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
 import org.objectweb.proactive.extensions.amqp.remoteobject.AMQPConnectionParameters;
@@ -61,12 +64,26 @@ import com.rabbitmq.client.QueueingConsumer;
  */
 class AMQPFederationUtils {
 
-    private static final ConnectionAndChannelFactory connectionFactory = new ConnectionAndChannelFactory() {
-        @Override
-        protected RpcReusableChannel createRpcReusableChannel(CachedConnection connection, Channel channel) {
-            return new FederationRpcReusableChannel(connection, channel);
+    private static final ConnectionAndChannelFactory connectionFactory;
+
+    static {
+        SocketFactory socketFactory;
+        if (AMQPFederationConfig.PA_AMQP_FEDERATION_SOCKET_FACTORY.isSet() &&
+            "ssh".equals(AMQPFederationConfig.PA_AMQP_FEDERATION_SOCKET_FACTORY.getValue())) {
+            socketFactory = new SshTunnelSocketFactory(AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_KEY_DIR,
+                AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_KNOWN_HOSTS,
+                AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_REMOTE_PORT,
+                AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_REMOTE_USERNAME);
+        } else {
+            socketFactory = null;
         }
-    };
+        connectionFactory = new ConnectionAndChannelFactory(socketFactory) {
+            @Override
+            protected RpcReusableChannel createRpcReusableChannel(CachedConnection connection, Channel channel) {
+                return new FederationRpcReusableChannel(connection, channel);
+            }
+        };
+    }
 
     private static final Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT);
 

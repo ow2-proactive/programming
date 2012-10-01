@@ -43,6 +43,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.SocketFactory;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
@@ -122,6 +124,12 @@ public class ConnectionAndChannelFactory {
 
     }
 
+    private final SocketFactory socketFactory;
+    
+    public ConnectionAndChannelFactory(SocketFactory socketFactory) {
+        this.socketFactory = socketFactory;
+    }
+    
     public void returnChannel(ReusableChannel channel) {
         channel.returnChannel();
     }
@@ -144,6 +152,9 @@ public class ConnectionAndChannelFactory {
             logger.debug(String.format("creating a new connection %s", key));
 
             ConnectionFactory factory = new ConnectionFactory();
+            if (socketFactory != null) {
+                factory.setSocketFactory(socketFactory);
+            }
             factory.setHost(connectionParameters.getHost());
             factory.setPort(connectionParameters.getPort());
             factory.setUsername(connectionParameters.getUsername());

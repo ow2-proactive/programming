@@ -85,6 +85,25 @@ public class AMQPConfig implements PAPropertiesLoaderSPI {
     static final public PAPropertyLong PA_AMQP_RPC_TIMEOUT = new PAPropertyLong(
         "proactive.communication.amqp.rpc_timeout", false, 10000);
 
+    static public PAPropertyString PA_AMQP_SOCKET_FACTORY = new PAPropertyString(
+        "proactive.communication.amqp.socketfactory", false, "plain");
+
+    /*
+     * SSH tunnel parameters
+     */
+
+    static public PAPropertyString PA_AMQP_SSH_KEY_DIR = new PAPropertyString(
+        "proactive.amqp.ssh.key_directory", false);
+
+    static public PAPropertyString PA_AMQP_SSH_KNOWN_HOSTS = new PAPropertyString(
+        "proactive.amqp.ssh.known_hosts", false);
+
+    static public PAPropertyString PA_AMQP_SSH_REMOTE_USERNAME = new PAPropertyString(
+        "proactive.amqp.ssh.username", false);
+
+    static public PAPropertyInteger PA_AMQP_SSH_REMOTE_PORT = new PAPropertyInteger("proactive.amqp.ssh.port",
+        false);
+
     public interface Loggers {
 
         // root logger for amqp

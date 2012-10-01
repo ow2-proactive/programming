@@ -81,4 +81,23 @@ public class AMQPFederationConfig implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_AMQP_FEDERATION_BROKER_MAPPING_FILE = new PAPropertyString(
         "proactive.communication.amqp_federation.broker.mapping_file", false);
 
+    static public PAPropertyString PA_AMQP_FEDERATION_SOCKET_FACTORY = new PAPropertyString(
+        "proactive.communication.amqp_federation.socketfactory", false, "plain");
+
+    /*
+     * SSH tunnel parameters
+     */
+
+    static public PAPropertyString PA_AMQP_FEDERATION_SSH_KEY_DIR = new PAPropertyString(
+        "proactive.amqp_federation.ssh.key_directory", false);
+
+    static public PAPropertyString PA_AMQP_FEDERATION_SSH_KNOWN_HOSTS = new PAPropertyString(
+        "proactive.amqp_federation.ssh.known_hosts", false);
+
+    static public PAPropertyString PA_AMQP_FEDERATION_SSH_REMOTE_USERNAME = new PAPropertyString(
+        "proactive.amqp_federation.ssh.username", false);
+
+    static public PAPropertyInteger PA_AMQP_FEDERATION_SSH_REMOTE_PORT = new PAPropertyInteger(
+        "proactive.amqp_federation.ssh.port", false);
+
 }
