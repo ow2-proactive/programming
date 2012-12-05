@@ -46,7 +46,7 @@ import java.io.UnsupportedEncodingException;
  * It is used instead of InputStreamReader+{@link BufferedReader} because this way we
  * can be sure that no output remains in the buffer when we exit the method using the 
  * reader.
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 public class LineReader {

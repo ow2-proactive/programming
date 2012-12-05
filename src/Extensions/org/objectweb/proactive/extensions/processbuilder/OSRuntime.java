@@ -51,7 +51,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * Class that mimics {@link Runtime} but uses {@link OSProcessBuilder} for
  * launching
  * 
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 @PublicAPI

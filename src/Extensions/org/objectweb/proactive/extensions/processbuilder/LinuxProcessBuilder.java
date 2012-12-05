@@ -63,7 +63,7 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
  * Class that extends the {@link OSProcessBuilder} for machines running Linux.<br>
  * It relies on scritps for custom launching of the user command.
  * 
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 public class LinuxProcessBuilder implements OSProcessBuilder {
@@ -395,7 +395,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      * {@link #waitForUserCommandStart(Process)} method's
      * javadoc.
      * 
-     * @author Zsolt Istvan
+     * @author The ProActive Team
      * 
      */
     private class ProcessOutputInterpreter {

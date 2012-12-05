@@ -70,7 +70,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * @see OSProcessBuilderFactory
  * @see ProcessBuilder
  * 
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 @PublicAPI

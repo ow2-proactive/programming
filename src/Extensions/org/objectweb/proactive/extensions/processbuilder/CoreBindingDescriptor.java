@@ -46,7 +46,7 @@ import java.util.List;
  * Default state for binding descriptors is to enable binding to all cores.
  * </p>
  * 
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 public interface CoreBindingDescriptor {
