@@ -43,7 +43,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Factory class for {@link OSProcessBuilder} which will produce a process
  * builder that is compatible with the underlying operating system.
  * 
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 @PublicAPI

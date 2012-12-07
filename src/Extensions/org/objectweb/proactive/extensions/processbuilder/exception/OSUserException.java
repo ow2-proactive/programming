@@ -50,7 +50,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  *  <li>The OSProcessBuilder's internal launching mechanism fails
  *  under the specific user ID - access rights to scripts folder</li>
  * </ul>
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 @PublicAPI

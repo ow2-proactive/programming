@@ -44,7 +44,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 /**
  * This exception is thrown if the process builder's scripts were not able to bind the 
  * to-be-launched process to the given subset of the cores.
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * 
  * @since ProActive 5.0.0
  */

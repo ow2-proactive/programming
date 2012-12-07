@@ -48,7 +48,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  *  <li>username and private key</li>
  * </ol>
  * 
- * @author zistan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 @PublicAPI

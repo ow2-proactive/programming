@@ -58,7 +58,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  *  <li>Inability to launch - Other reasons</li>
  * </ul>
  * </p>
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * 
  * @since ProActive 5.0.0
  */

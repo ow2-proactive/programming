@@ -50,7 +50,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * Class that wraps around {@link java.lang.ProcessBuilder}.<br>
  * It has no additional capabilities.
  * 
- * @author Zsolt Istvan
+ * @author The ProActive Team
  * @since ProActive 5.0.0
  */
 public class BasicProcessBuilder implements OSProcessBuilder {
