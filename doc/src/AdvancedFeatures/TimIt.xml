@@ -86,7 +86,7 @@
         <section xml:id="QuickStartIntroduction"><info><title>Introduction</title></info>
 			<para>
 				In order to use TimIt, you first have to create a configuration file as explained in <xref linkend="DefineyourTimItconfigurationfile" />.
-				This configuration file is used to describe the application to be launched as well as ouputs you wants (reports and charts).
+				This configuration file is used to describe the application to be launched as well as outputs you wants (reports and charts).
 				This file will then be used as an argument of the TimIt main method:
 			</para>
 			<screen>java org.objectweb.proactive.extensions.timitspmd.TimIt -c configuration_file.xml</screen>
@@ -231,7 +231,7 @@
                         <para>
                             <emphasis>errorFile</emphasis> (Optional):
                             if an error occurs (recoverable), logs will
-                            be outputed into this file
+                            be outputted into this file
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -245,7 +245,7 @@
                 </para>
                 <para>Attribute description:</para>
                 <para>
-                    Some attributes are independant on the chart type:
+                    Some attributes are independent on the chart type:
                 </para>
                 <itemizedlist>
                     <listitem>
@@ -358,7 +358,7 @@
 					<emphasis role="bold">benchmark</emphasis> tags inside a <emphasis role="bold">benchmarks</emphasis> one.
                     Each test will generate a result file and an entry in chart.
                 </para>
-                <para>Attribute descritpion:</para>
+                <para>Attribute description:</para>
                 <itemizedlist>
                     <listitem>
                         <para>
@@ -411,7 +411,7 @@
                             <emphasis>note</emphasis> (Optional):
                             the text entered here will be copied into
                             the result file. Useful for specifying launch
-                            environnement.
+                            environment.
                         </para>
                     </listitem>
                     <listitem>
@@ -622,7 +622,7 @@ TimIt.notifyObservers( new CommEvent(E_COMM, destID, 1) );</programlisting>
                         old value will be performed. Then the collapsing
                         operation between the timed objects will be a
                         sum. In this case, you will obtain a matrix
-                        showing the toplogy of your application.
+                        showing the topology of your application.
                     </para>
                     <para>
                         Lines represent the senders and columns
@@ -710,7 +710,7 @@ if (name.equals("myOption")) {
                     </para>
                     <para>
                         This class will contain values of all timer
-                        counters. Here is all the "intelligency" of the
+                        counters. Here is all the "intelligence" of the
                         timer. For example, if you want to use
                         nanoseconds instead of milliseconds, you should
                         extend this class and overwrite
@@ -726,7 +726,7 @@ if (name.equals("myOption")) {
                 The subpackage
                 <emphasis>org.objectweb.proactive.extensions.timitspmd.util.observing</emphasis>
                 contains all classes related to the event observers
-                management. Existant event observers are default and
+                management. Existent event observers are default and
                 communication specific. Default (<emphasis>DefaultEventObserver</emphasis>) 
 				is base on a single value, while the communication specific (<emphasis>CommEventObserver</emphasis>) 
 				is based on 2D square matrix.

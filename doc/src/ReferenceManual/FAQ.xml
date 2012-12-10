@@ -343,7 +343,7 @@
 				<programlisting language="java">int getNumber();</programlisting>
 
 				<para>
-					Calling this method with ProActive is sychronous since the 'int'
+					Calling this method with ProActive is synchronous since the 'int'
 					type is not reifiable. To keep asynchronism, it is advised to
 					use the classes given in the
 					<literal>org.objectweb.proactive.core.util.wrapper</literal>

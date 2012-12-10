@@ -15,7 +15,7 @@
 		must be designed to coordinate the <emphasis role="italics">PAActiveObject.terminateActiveObject()</emphasis>
 		method calls.</para>
 
-		<para>The simplest alternative is to enable the <emphasis role="bold">Distibuted Garbage Collector (DGC)</emphasis> by setting the
+		<para>The simplest alternative is to enable the <emphasis role="bold">Distributed Garbage Collector (DGC)</emphasis> by setting the
 		<emphasis>proactive.dgc</emphasis> property to <emphasis>true</emphasis>
 		and let it destroy unreferenced active objects and cycles of idle active
 		objects.
@@ -91,7 +91,7 @@ pad.activateMappings();
 pad.killall(false);</programlisting>
 
 			<para>If <emphasis role="bold">softly</emphasis> is set to false, then all JVMs
-			created when activating the descriptor are killed abruptely. If true, then the JVM
+			created when activating the descriptor are killed abruptly. If true, then the JVM
 			that has originated the creation of a rmi registry waits until registry is
 			empty before dying. To be more precise a thread is created to ask
 			periodically the registry if objects are still registered.</para>

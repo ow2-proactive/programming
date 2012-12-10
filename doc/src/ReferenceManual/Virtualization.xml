@@ -12,7 +12,7 @@
 			Whether you want to save money by saving power, footprint or cooling system, or improve reactivity, fault
 			tolerance and availability of your services, you will probably use hardware virtualization capabilities.
 			You can also improve desktop management and delivery by using hardware virtualization for your workstations.
-			That's because we can see the hardware virtualization as a fast growing and widespread techonology that
+			That's because we can see the hardware virtualization as a fast growing and widespread technology that
 			ProActive must leverage such infrastructures.
 		</phrase>
 	</emphasis>
@@ -24,7 +24,7 @@
 		</info>
 		<para>
 			This section gives a brief introduction about how hardware virtualization works with the different
-			kind of virtualization softwares we can meet and how to provide seamless ProActive deployment on a
+			kind of virtualization software we can meet and how to provide seamless ProActive deployment on a
 			virtual enabled infrastructure.
 		</para>
 		<section>
@@ -54,10 +54,10 @@
 						system that stands for your workspace, to manage your virtual infrastructure. The
 						virtual machine monitor (VMM) itself is a small footprint software (about 50Mo) which
 						will only check and schedule underlying hardware access. To set up your virtual environment
-						you need an extra software ( xm for XenOss, xe for XenServer, vmx for ESX ... ) which is useable
+						you need an extra software ( xm for XenOss, xe for XenServer, vmx for ESX ... ) which is usable
 						directly from your DOM 0. This type of hypervisor is, in general, more efficient and faster than
 						others hypervisors as it implements its own hardware access policy at the lowest possible level.
-						Thus, you completly avoid overhead induced by an underlying operating system.
+						Thus, you completely avoid overhead induced by an underlying operating system.
 						Here are some well-known hypervisors:
 						<link xlink:href="http://community.citrix.com/cdn/xs">XenServer</link>,
 						<link xlink:href="http://www.microsoft.com/hyper-v-server/en/us/default.aspx">Hyper-V</link>,
@@ -91,7 +91,7 @@
 				<itemizedlist>
 					<listitem>
 						<para>
-							<emphasis>Bridge Networking.</emphasis> Here, the network routing is made at the 3rd level of the OSI/ISO stack. Your computer's NIC binded to your
+							<emphasis>Bridge Networking.</emphasis> Here, the network routing is made at the 3rd level of the OSI/ISO stack. Your computer's NIC bound to your
 							company/internet network is setup in <quote>PROMISCUOUS MODE</quote> to intercept not only packet intended for the host/dom0 IP but also
 							for newly created Virtual interfaces designed to provide network to virtual machines. Depending on what kind of virtualization product you use, you
 							may have to create the virtual interfaces by yourself ( brctl/openvpn on linux systems &amp; Network Manager on Windows ). With this solution, your
@@ -104,7 +104,7 @@
 							<emphasis>Nat/Route.</emphasis> The network routing is also made at the 3rd level of the OSI/ISO stack. This time, a newly created virtual interface will
 							ensure POST/PRE-ROUTING &amp; MASQUERADE for your virtual machine to have network access. It is really easy to find such configuration example on the internet
 							( <link xlink:href="http://www.revsys.com/writings/quicktips/nat.html">Here for linux for instance</link> ). The introduction of the Network address translation
-							( NAT ) adds a difficulty for ProActive deployment and makes the virtual machines belonging to the subnet hiden for the outer network. Nevertheless you can
+							( NAT ) adds a difficulty for ProActive deployment and makes the virtual machines belonging to the subnet hidden for the outer network. Nevertheless you can
 							deploy from your host within the virtual machines binding ProActive on the NATing interface.
 						</para>
 					</listitem>
@@ -124,7 +124,7 @@
 				<title>How does it work with ProActive.</title>
 			</info>
 			<para>
-				For conventional ProActive deployment, the <quote>deployer</quote> builds the needed commands to contact machines specified in the xml GCMDeployment Descriptor and launchs
+				For conventional ProActive deployment, the <quote>deployer</quote> builds the needed commands to contact machines specified in the xml GCMDeployment Descriptor and launches
 				a ProActive Runtime. This one next registers to its parent to be able to create Nodes for your application. Because when using the virtualization layer one adds an intermediate
 				( the VMM ) and maybe binds virtual machines to NATed network, the boot process can't be the same. This diagram shows the differences:
 				<mediaobject xml:id="proactive_virtalization_deployment">
@@ -156,7 +156,7 @@
 							descriptor, contacted by the deployer to start the chosen virtual machines. The vmm
 							identifies/build the virtual environment to deploy and start the corresponding virtual machines.
 							Every virtual machine needs some information to be able to bootstrap ProActive environment, to be
-							able to provide such information, a dedicated servlet handles virtual machines' requests. When hiting
+							able to provide such information, a dedicated servlet handles virtual machines' requests. When hitting
 							the good html page, the virtual machine gets the compulsory pieces of information. To get that done,
 							the vmm update the virtual machine environment with the servlet's url ( this part of the job is done
 							thanks to the underlying virtualization software layer ).
@@ -184,7 +184,7 @@
 				<title>Software compatibility.</title>
 			</info>
 			<para>
-				The table below lists the different supported virtualization softwares, the virtualization type and the
+				The table below lists the different supported virtualization software, the virtualization type and the
 				associated section to use in GCMDeployment descriptor to use if you want to deploy such infrastructures.
 				To get more information on a particular VMM you can refer to the wanted subsection.
 			</para>
@@ -276,7 +276,7 @@
 				<title>Overall prerequisites.</title>
 			</info>
 			<para>
-				You must setup the virtulization software. This begins by choosing the kind of vmm you want to use depending
+				You must setup the virtualization software. This begins by choosing the kind of vmm you want to use depending
 				on your needs. You have essentially have to focus on the kind of operating system you want to virtualize,
 				the kind of hardware you have, the type of network to provide for your virtual machines to access
 				network, and if performances are a critical requirement for your application.
@@ -285,7 +285,7 @@
 				The more often and at the time this documentation was written ( 07/02/2009 ), the bare metal hypervisors
 				don't allow advanced settings for network. The main solution is to deploy a dedicated virtual machine
 				that will handle network traffic for NAT-ing or Bride-ing ( that can represents a major flaw ). Bare
-				metal VMMs don't support many hardwares, you have to ensure your configuration is compatible ( depending on
+				metal VMMs don't support many hardware, you have to ensure your configuration is compatible ( depending on
 				what kind of guest os you want to run, you also may need specific hardware. For instance, using XenServer
 				for Windows virtualization, it is compulsory to own an intel vt, vtx or vtx2 chip. Besides, notice that
 				for compliant kernel in case of	<link xlink:href="http://en.wikipedia.org/wiki/Paravirtualization">paravirtualization</link>
@@ -293,7 +293,7 @@
 				the main products are designed for datacenter virtualization or advanced desktop delivery, they may
 				lack some important features like hierarchical snapshots, removable devices handling, sounds...
 				The main advantage to run type one hypervisors is that they expose better performances and benefit
-				fast pace evolution due to hard pressure from industry client users. Hosted virtualization softwares
+				fast pace evolution due to hard pressure from industry client users. Hosted virtualization software
 				are more desktop user friendly and often used for desktop/client virtualization, critical software development...
 				They always expose at least NAT/Bridge networking capabilities and do not require to run modified guest operating
 				system. The main flaw is that they run pretty much slower than type one hypervisor due to host operating system
@@ -457,7 +457,7 @@
 					<title>VMware</title>
 				</info>
 				<para>
-					<emphasis><phrase>These softwares allow ProActive deployment from GCM.</phrase></emphasis>
+					<emphasis><phrase>These software products allow ProActive deployment from GCM.</phrase></emphasis>
 				</para>
 				<para>
 					For all handled VMware products you have to install VMware guest tools. This step is really straight forward.
@@ -505,7 +505,7 @@
 							<para>
 								<emphasis><phrase>VMware Server &lt; 2. </phrase></emphasis>
 								The VMware Server releases prior to 2 are shipped with a rich client ( VMware Server Console ) to be
-								able to connect to every compatible server.This means that you need two different softwares to
+								able to connect to every compatible server.This means that you need two different software solution to
 								manage your virtual environment. If you want to use that product: First, create a new user belonging to
 								the vmware group, this user will be the administrator for your system. Download the software from
 								<link xlink:href="http://www.vmware.com/support/server/doc/releasenotes_server.html">VMware web site</link>
@@ -574,7 +574,7 @@
 				</para>
 				<para>
 					The way we provide ProActive deployment for XenServer virtualization platform is different than
-					for other virtualization softwares. The implementation of the virtualization layer embeds a small
+					for other virtualization software. The implementation of the virtualization layer embeds a small
 					database to handle infrastructure information. We use that database to store and retrieve the
 					bootstrap servlet's url to be able to get needed information to boot ProActive Runtime.
 					To store the information, we tag a VM's datastore space with its NIC MAC address ( this information
@@ -668,7 +668,7 @@
 					<programlisting>
 					make
 					make modules
-					make modules_intall
+					make modules_install
 					make install
 					</programlisting>
 					Just repeat the whole procedure unchecking
@@ -695,7 +695,7 @@
 			<para>
 				<emphasis>
 					<phrase>This hypervisors are not supported for ProActive Deployment.</phrase>
-						<phrase>You need to use libvirt in addition to make these softwares work with deployment.</phrase>
+						<phrase>You need to use libvirt in addition to make these software products work with deployment.</phrase>
 				</emphasis>
 			</para>
 			<para>
@@ -886,7 +886,7 @@
 					<itemizedlist>
 						<listitem>
 							<para><emphasis><phrase>id</phrase></emphasis></para>
-							<para>A unique id for the entire GCM descritpor file. Used to be referenced from the resources section.</para>
+							<para>A unique id for the entire GCM descriptor file. Used to be referenced from the resources section.</para>
 						</listitem>
 						<listitem>
 							<para><emphasis><phrase>service</phrase></emphasis></para>
@@ -1122,7 +1122,7 @@
 				<title>KVM, Qemu, Qemu-KVM, LXC, UML, Xen OSS</title>
 				<para>
 					<emphasis>
-						<phrase>This section concerns every Libvirt compliant softwares. </phrase>
+						<phrase>This section concerns every Libvirt compliant software. </phrase>
 						<phrase>This module doesn't allow ProActive deployment. </phrase>
 						<phrase>You need to reference every Virtualizing/src/libvirt/lib/ jars in the classpath. </phrase>
 						<phrase>This section uses <link xlink:href="https://jna.dev.java.net/">JNA</link> to bring the API to JAVA framework. </phrase>
@@ -1285,7 +1285,7 @@
 						Use a JRE/JDK that handles the native 32/64bits libraries.
 					</para>
 					<para>
-						When using vmware-vix to connect to VI compliant softwares, if you want to
+						When using vmware-vix to connect to VI compliant software, if you want to
 						get a virtual machine you have to supply the vmx file path from
 						a datastore root, for instance <quote>[standard] myUbuntu/myUbuntu.vmx</quote>,
 						where [standard] is the datacenter's name.

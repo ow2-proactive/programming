@@ -59,7 +59,7 @@
 			clearly advertise this information.
 		</para>
 		<para>
-			However, it important to kepp in mind that the abstract description of an
+			However, it important to keep in mind that the abstract description of an
 			application and the way to deploy it are not independent
 			pieces of information. If for example, we have
 			a simulation engine, it might register in a specific

@@ -64,7 +64,7 @@
 					<emphasis>proactive.communication.protocols.order</emphasis>
 					<newline />
 					A fixed order could be specified if protocol's performance is known
-					in advance and won't change. This property explain a prefered order
+					in advance and won't change. This property explain a preferred order
 					for a subset of protocols declared in the property
 					proactive.communication.additional_protocols.
 					If one of the specified protocol isn't exposed, it is ignored. If
@@ -219,7 +219,7 @@
 
 		<section xml:id="CustomBenchmarkImpl_MP">
 			<info>
-				<title>Existings benchmarks</title>
+				<title>Existing benchmarks</title>
 			</info>
 
 			<itemizedlist>
@@ -307,7 +307,7 @@
 						PARemoteObject.addProtocol(RemoteObjectExposer roe, String protocol)
 						</emphasis>
 					<newline />
-					This API call permit to deploy an object to an additionnal protocol
+					This API call permit to deploy an object to an additional protocol
 					not
 					specified in the property.
 					Please note that this API call could only be made on server side, i.e.

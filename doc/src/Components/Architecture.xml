@@ -199,7 +199,7 @@
 			overridden when the component is in the functional activity
 			and corresponds then to the state of the lifecycle. During
 			the component activity, the <literal>isActive()</literal>
-			condition reacts as for any active objet.
+			condition reacts as for any active object.
 		</para>
 
 		<para>

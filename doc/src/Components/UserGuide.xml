@@ -274,7 +274,7 @@
 
 			<para>
 				As a result, the client and server component will be
-				colocated / deployed on the same virtual node. This can
+				collocated / deployed on the same virtual node. This can
 				be profitable if there is a lot of communications
 				between these two components.
 			</para>
@@ -501,7 +501,7 @@
 				(<literal>
 					org.objectweb.proactive.core.component.ContentDescription
 				</literal>)
-				is to define some informations about a component:
+				is to define some information about a component:
 				<itemizedlist>
 					<listitem>
 						<para>
@@ -520,7 +520,7 @@
 							the activity as defined in the ProActive
 							model (optional). See
 							<link xlink:href="../../ReferenceManual/multiple_html/ActiveObjectCreation.html#ActiveObjectCreation">Chapter 2. Active Objects: Creation And Advanced Concepts</link>
-							for more informations about activity in
+							for more information about activity in
 							ProActive.
 						</para>
 					</listitem>
@@ -1078,7 +1078,7 @@
 							The
 							<literal>org.objectweb.proactive.core.group.DispatchMode.DYNAMIC</literal>
 							mode is applicable when there are more parameter
-							partitions than binded server interfaces. A
+							partitions than bound server interfaces. A
 							partitions is a set of arguments (list elements)
 							that will be sent to server interfaces. For
 							instance, instead of giving arguments one-by-one,
@@ -1698,7 +1698,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				using the ProActive deployment framework. This
 				deployment framework uses the concept of virtual
 				nodes too but it just needs a single configuration file.
-				Thus it may be used in a similar way. More informations
+				Thus it may be used in a similar way. More information
 				are available at
 				<link xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/XML_Descriptors.html">Chapter 15. XML Deployment Descriptors</link>.
 			</para>
@@ -2257,7 +2257,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					As said in the previous section, it is possible to expose web
-					services in two differents manners. This section explains how
+					services in two different manners. This section explains how
 					to proceed with the dedicated web services controller.
 				</para>
 
@@ -2832,7 +2832,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					fails. For example, it can contact the sender (using the
 					non-functional client interface – 3) and ask it to send
 					the message again. Another security policy would be to
-					contacta “trust and reputation” authority to signal a
+					contact a “trust and reputation” authority to signal a
 					suspicious behaviour of the sender. The Alert component is
 					implemented by a developer who knows the security policy of
 					the system. In this example, we have three well-identified
@@ -3051,7 +3051,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							</listitem>
 							<listitem>
 								<para>
-									<literal>setControllerObject(string itf, any controllerclass)</literal>:
+									<literal>setControllerObject(string itf, any controller class)</literal>:
 									sets or replaces an existing controller object inside the
 									membrane. Itf specifies the name of the control interface
 									which has to be implemented by the controller class, given

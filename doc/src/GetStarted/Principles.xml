@@ -332,7 +332,7 @@
 		<para> The library may be represented in four layers: IDE, programming model,
 		deployment facilities, and non-functional features. </para>
 		<para>
-		ProActive offers IC2D, an interactive graphical enviroment for remote monitoring and control of
+		ProActive offers IC2D, an interactive graphical environment for remote monitoring and control of
 		distributed applications. Due to the fact that it uses the standard (starting with the J2SE platform 5.0)
 		Java Management Extensions (JMX) technology in order to monitor distribution, IC2D can be deployed without
 		requiring changes to the JVM or Java.

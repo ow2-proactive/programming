@@ -17,7 +17,7 @@
         <para><emphasis role="bold">Pull</emphasis> - Transfer from a remote node to the local node.</para>
       </listitem>
       <listitem>
-        <para><emphasis role="bold">Third part tranfer</emphasis> - Transfer from a remote node to another remote node.</para>
+        <para><emphasis role="bold">Third part transfer</emphasis> - Transfer from a remote node to another remote node.</para>
       </listitem>
     </itemizedlist>
 
@@ -43,7 +43,7 @@
 	<warning>
 		<para>
 			If you use the GCM Deployment, the transfer can only be made by the user at the third moment.
-			Contrary to the XML Deployment which provides tags for transfering file at deployment and retrieval times,
+			Contrary to the XML Deployment which provides tags for transferring file at deployment and retrieval times,
 			GCM Deployment is not able to do that. If you want to know how to transfer files at deployment and retrieval times,
 			please refer to <xref linkend="DescriptorFileTransfer_67" />.
 		</para>
@@ -97,7 +97,7 @@ public static RemoteFile mkdirs(Node node, File path) throws IOException;</progr
     <section xml:id="HowtousetheAPIExample_67"><info><title>How to use the API Example</title></info>
 
 	  <para>
-		The following class shows how to use the ProActive File transfer wheither it be with the GCM or the XML deployments.
+		The following class shows how to use the ProActive File transfer whether it be with the GCM or the XML deployments.
 		Actually, once the nodes concerned by the transfer have been retrieved, there is no difference between these two deployment.
 		The only difference is how to get a node.
 	  </para>
@@ -133,7 +133,7 @@ Node node = PAActiveObject.getActiveObjectNode(o);
       and future file asynchronism model. When pulling or pushing a file from
       a Node, two service Active Objects (AO) are created. One is placed on
       the local machine and the other one on the remote site. The file is then
-      split into blocks, and transfered over the network using remote
+      split into blocks, and transferred over the network using remote
       invocations between these two AOs.</para>
 
 
@@ -147,7 +147,7 @@ Node node = PAActiveObject.getActiveObjectNode(o);
 	  </figure>
 
 	  <para>Each ProActive runtime has a unique <literal>FileTransferEngine</literal> which manages several <literal>FileTransferService</literal>.
-	  These services are active object and are in charge of transfering files. When a transfer is launch, the unique <literal>FileTransferEngine</literal> asks one of its
+	  These services are active object and are in charge of transferring files. When a transfer is launch, the unique <literal>FileTransferEngine</literal> asks one of its
 	  <literal>FileTransferService</literal> to send the file to another <literal>FileTransferService</literal> which is a <literal>FileTransferService</literal> of the destination node.
 	  The source <literal>FileTransferService</literal> then splits the file into blocks and calls the <literal>saveFileBlock</literal> method on the destination <literal>FileTransferService</literal>
 	  to write each block in the destination node.

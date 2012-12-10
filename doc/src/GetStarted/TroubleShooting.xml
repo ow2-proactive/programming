@@ -122,7 +122,7 @@
 
       <itemizedlist>
          <listitem>
-            <para><literal>ProActlive/lib/trilead-ssh2.jar</literal>
+            <para><literal>ProActive/lib/trilead-ssh2.jar</literal>
             must be included in the <literal>CLASSPATH</literal> of the
             concerned machines.</para>
          </listitem>

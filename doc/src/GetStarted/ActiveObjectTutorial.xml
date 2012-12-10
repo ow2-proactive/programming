@@ -1150,7 +1150,7 @@
 						<literal>
 							org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment
 						</literal>
-						- used for the deployement
+						- used for the deployment
 					</para>
 				</listitem>
 				<listitem>
@@ -1222,7 +1222,7 @@
 
 			<para>
 				Each worker serves requests in a FIFO order, meanwhile the order
-				of result reception by the manager is indeterministic, it depends on
+				of result reception by the manager is nondeterministic, it depends on
 				various factors like workers load, network latency, etc.
 			</para>
 			<para>

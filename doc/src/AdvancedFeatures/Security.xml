@@ -44,7 +44,7 @@
       (see <xref linkend="Settingupvirtualdistributedsandboxsatruntime_63" />).
 	  This absence of sharing is important with respect to security.</para>
 
-      <para><figure xml:id="Settingupvirtualdistributedsandboxsatruntime_63"><info><title>Setting up virtual distributed sandboxs at runtime</title></info>
+      <para><figure xml:id="Settingupvirtualdistributedsandboxsatruntime_63"><info><title>Setting up virtual distributed sandboxes at runtime</title></info>
           <mediaobject>
             <imageobject>
               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/secureDeployment.png" format="PNG"/>
@@ -225,7 +225,7 @@
       allocators, or even Web Services in an OGSA infrastructure (see
       <citation><xref endterm="foster98security.abbrev" linkend="foster98security"/></citation>). Catch-all rules might be
       important in that case to cover all cases, and to provide a conservative
-      security strategy for unforseen deployments.</para>
+      security strategy for unforeseen deployments.</para>
 
       <para>Finally, as active objects are active and mobile entities, there
       is a need to specify security at the level of such entities.</para>
@@ -241,7 +241,7 @@
       <para>In open applications, e.g. several principals interacting in a
       collaborative Grid application, a JVM (a process) launched by a given
       principal can actually host an activity executing under another
-      principal. The secutiry of this latter principal has to be
+      principal. The security of this latter principal has to be
       retained in such a case. Moreover, it can also serve as a basis to
       offer, in a secure manner, hosting environments for mobile
       agents.</para>
@@ -541,7 +541,7 @@ Domain[CardPlus] -&gt; Domain[CardPlus]: Q,P: [+A,?I,?C]</screen>
         </mediaobject>
       </figure></para>
 
-	  <para>Once you have generated all the certificates you need, you can drag'n drop the ones you want to activate from the second column to the last one.
+	  <para>Once you have generated all the certificates you need, you can drag and drop the ones you want to activate from the second column to the last one.
 		Activating certificates allows you to use them afterwards for rule creation. It also allows you to save them into a file.
 	  </para>
 
@@ -571,7 +571,7 @@ Domain[CardPlus] -&gt; Domain[CardPlus]: Q,P: [+A,?I,?C]</screen>
 	These rules can be saved into a policy file using the <emphasis role="italics">Save rules</emphasis> button.
 	To get familiar with the generated policy file, please refer to <xref linkend="TheXMLSecurityDescriptorindetails_63" />.
 	To create a new rule, you just have to click on the <emphasis role="italics">New</emphasis> button and then fill the right panel.
-	The <emphasis role="italics">From</emphasis> and <emphasis role="italics">To</emphasis> part can be filled by drag'n drop from the
+	The <emphasis role="italics">From</emphasis> and <emphasis role="italics">To</emphasis> part can be filled by drag and drop from the
 	<emphasis role="italics">ActiveKeystore</emphasis> column.
 	</para>
 	<para><figure xml:id="SecurityRuleEditor"><info><title>Rule Editor</title></info>

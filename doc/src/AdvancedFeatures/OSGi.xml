@@ -167,7 +167,7 @@
       </listitem>
 
       <listitem>
-        <para>We can also specify others informations like author, version, description, ...</para>
+        <para>We can also specify other information like author, version, description, ...</para>
       </listitem>
     </itemizedlist>
 
@@ -184,7 +184,7 @@
       <listitem>
         <para><emphasis>Generation of the ProActive Bundle as well as other required bundles</emphasis></para>
 
-        <para>The proActiveBundle is the jar archive created when deploying ProActive. Yet, this bundle requires the  <literal>librariesBundle</literal> which emcompasses packages needed by ProActive.
+        <para>The proActiveBundle is the jar archive created when deploying ProActive. Yet, this bundle requires the  <literal>librariesBundle</literal> which encompasses packages needed by ProActive.
 		To generate these bundles, you have to go to your <literal>$PROACTIVE_HOME/compile</literal> and type:
         </para>
 

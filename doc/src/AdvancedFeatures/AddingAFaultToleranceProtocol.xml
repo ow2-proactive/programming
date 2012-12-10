@@ -55,12 +55,12 @@
 			<literal>
 				org.objectweb.proactive.core.body.ft.checkpointing.CheckpointInfo
 			</literal>.
-			This object contains all the informations linked to
+			This object contains all the information linked to
 			the checkpoint used for recovering the active object,
 			and is used to restore its state. The programmer might
 			define his own class implementing
 			<literal>CheckpointInfo</literal>,
-			to add needed informations, depending on the protocol.
+			to add needed information, depending on the protocol.
 		</para>
 	</section>
 	<section xml:id="Serverside_32"><info><title>Server side</title></info>

@@ -180,7 +180,7 @@
 
         <para><itemizedlist>
             <listitem>
-              <para>the mapping betweens VNs and JVMs</para>
+              <para>the mapping between VNs and JVMs</para>
             </listitem>
 
             <listitem>
@@ -224,8 +224,8 @@
         is defined in the infrastructure part. This part will be discussed
         later on. But you can already notice that there are two parts in a descriptor file: an
         abstract one containing VirtualNode definitions and deployment
-        informations and a more concrete one containing concrete
-        infrastructure informations where all processes are
+        information and a more concrete one containing concrete
+        infrastructure information where all processes are
         defined.</para>
       </listitem>
     </itemizedlist>
@@ -270,7 +270,7 @@
 
 			<para>Another possibility for the one to one
             mapping is to map 1 VN to the jvm running the program. In that
-            case the lookup protocol can be specified but is optionnal (default
+            case the lookup protocol can be specified but is optional (default
             value is the property <emphasis role="bold">proactive.communication.protocol</emphasis>) as it is
             shown in the following:</para>
 
@@ -288,7 +288,7 @@
 	&lt;/mapping&gt;
 &lt;/deployment&gt;</programlisting>
 
-            <para>Since it is the current JVM, it does not have to be redifined
+            <para>Since it is the current JVM, it does not have to be redefined
             later on in the descriptor. This will be shown in a complete
             example.</para>
           </listitem>
@@ -360,12 +360,12 @@
             has two different meanings.
 			If the <emphasis role="bold">waitForTimeout</emphasis> attribute, which is a boolean, is
             set to <emphasis role="bold">true</emphasis>, then you will have to
-            wait exaclty <emphasis role="bold">timeout</emphasis> milliseconds before accessing Nodes.
+            wait exactly <emphasis role="bold">timeout</emphasis> milliseconds before accessing Nodes.
 			If <emphasis role="bold">waitForTimeout</emphasis> is set to
             <emphasis role="bold">false</emphasis>, then <emphasis role="bold">timeout</emphasis> represents the
             maximum amount of time to wait, i.e. no more nodes will be created
             once this timeout over.
-            Defaut value for <emphasis role="bold">waitForTimeout</emphasis>
+            Default value for <emphasis role="bold">waitForTimeout</emphasis>
             attribute is <emphasis role="bold">false</emphasis>.
 			<newline />
 			The <emphasis role="bold">minNodeNumber</emphasis> attribute defines the minimum
@@ -374,12 +374,12 @@
             or the number of nodes expected are effectively created. Setting
             this attribute allows to redefine the number of nodes expected, we
             define it as the number of nodes needed for the VirtualNode to be
-            suitable for the application. In the exammple above, once
+            suitable for the application. In the example above, once
             <emphasis role="bold">3</emphasis> nodes are created and mapped to
             the VirtualNode <emphasis role="bold">Renderer</emphasis>, this
             VirtualNode starts to give access to its nodes. Those options are
-            very usefull when there is no idea about how many nodes will be
-            mapped on the VirtualNode (which is often unususal). All those
+            very useful when there is no idea about how many nodes will be
+            mapped on the VirtualNode (which is often unusual). All those
             attributes are optional.</para>
           </listitem>
         </itemizedlist>
@@ -511,7 +511,7 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
 
       <para>To summarize, all VirtualNodes are activated when calling the activate
       method except if '*' is set for a VirtualNode to be acquired. In that
-      case, the lookup will be performed when giving host informations.</para>
+      case, the lookup will be performed when giving host information.</para>
 
       <para>Registration and lookup can be performed automatically when using
       tags in the descriptor as well as programmatically using static methods
@@ -742,7 +742,7 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
 	&lt;/infrastructure&gt;
 &lt;/ProActiveDescriptor&gt;</programlisting></para>
    </example>
-    <para>This file is read when addind a C3DUser. Two VirtualNodes are
+    <para>This file is read when adding a C3DUser. Two VirtualNodes are
     defined: <emphasis role="bold">User</emphasis> which is mapped to the jvm
     running the <literal>main()</literal> method, whose acquisition method is performed by looking up
     the RMIRegistry, and <emphasis role="bold">Dispatcher</emphasis> in the
@@ -883,7 +883,7 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
       there is at least one combination for each remote protocol. Indeed each
       remote protocol <emphasis role="bold">must</emphasis> have a pointer
       either on another remote protocol or on a <emphasis role="bold">jvmProcess</emphasis> to create a jvm (discussed
-      previoulsy).</para>
+      previously).</para>
 
       <para>You can find in the <literal>$PROACTIVE_HOME/descriptors/examples_legacy_descriptors/</literal> directory
       several examples of supported protocols and useful combinations.</para>
@@ -1086,9 +1086,9 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
 		  <itemizedlist>
 			  <listitem><para><emphasis role="bold">[m-n]</emphasis> means from m to n with a step 1,</para></listitem>
 			  <listitem><para><emphasis role="bold">[m-n;k]</emphasis> means from m to n with a step k (m, m+k, m+2k, ....),</para></listitem>
-			  <listitem><para><emphasis role="bold">[m-n]^[x,y]</emphasis> means from m to n exluding x and y,</para></listitem>
+			  <listitem><para><emphasis role="bold">[m-n]^[x,y]</emphasis> means from m to n excluding x and y,</para></listitem>
 			  <listitem><para><emphasis role="bold">[m-n]^[x,y-z]</emphasis> means from m to n
-				  exluding x and values from y to z,</para></listitem>
+				  excluding x and values from y to z,</para></listitem>
 			  <listitem><para><emphasis role="bold">[m-n;k]^[x,y]</emphasis> same as before except that the
 				  step is k.</para></listitem>
 		  </itemizedlist>
@@ -1202,7 +1202,7 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
 		  This <emphasis role="bold">bsub</emphasis> command will create Nodes on several
           cluster machines, since <emphasis role="bold">bsubInriaCluster</emphasis> references the <emphasis role="bold">jvmProcess</emphasis> defined process. All tags defined
           under <emphasis role="bold">&lt;bsubOption&gt;</emphasis> are not
-          mandatory, but they can be very usefull. The &lt;hostlist&gt; tag
+          mandatory, but they can be very useful. The &lt;hostlist&gt; tag
           defines possible candidates in the job attribution, if not set the
           job will be allocated among all cluster's machines. The
           <emphasis role="bold">&lt;processor&gt;</emphasis> tag defines the number of processor requested, if
@@ -1314,7 +1314,7 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
 &lt;/processes&gt;</programlisting>
 
           <para>Note that not all options are listed here, and some options
-          mentionned in the example are optionnal:</para>
+          mentionned in the example are optional:</para>
 		  <itemizedlist>
 			  <listitem>
 				  <para><emphasis role="bold">hostsNumber</emphasis> represents the number of host requested using pbs (default is 1)</para>
@@ -1533,7 +1533,7 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
 
           <para>In this example, <emphasis role="bold">Jvm2</emphasis> will be
           created using <emphasis role="bold">GRAM</emphasis>. An <emphasis role="bold">RSL</emphasis> request will be generated with
-          informations provided in the descriptor. For instance, the
+          information provided in the descriptor. For instance, the
           &lt;environment&gt; tag is not mandatory, but for the globus host to
           export the DISPLAY on your machine, you can define the value in the
           descriptor as well as other environment variable, except the
@@ -1754,7 +1754,7 @@ ssh.startProcess();</programlisting>
 	  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/FileTransfer_2.snip"/></textobject></programlisting>
 
       <para>All the low level information such as: hosts, username, protocols,
-      prefix, etc... is declared inside each process. Both <emphasis role="bold">fileTransferDeploy</emphasis> and <emphasis role="bold">fileTransferRetrieve</emphasis> are specified separetly
+      prefix, etc... is declared inside each process. Both <emphasis role="bold">fileTransferDeploy</emphasis> and <emphasis role="bold">fileTransferRetrieve</emphasis> are specified separately
       using a <emphasis role="bold">refid</emphasis> attribute. The <emphasis role="bold">refid</emphasis> can be a direct reference to a FileTransfer
       definition, or the keyword <emphasis role="bold">implicit</emphasis>. If <emphasis role="bold">implicit</emphasis> is used, then the reference will be
       inherited from the corresponding VirtualNode. In the following example
@@ -1778,7 +1778,7 @@ ssh.startProcess();</programlisting>
       and therefore the Secure Copy Protocol (scp) will be tried first. To
       complement the higher level File Transfer definition, other information
       can be specified as attributes in the <emphasis role="bold">sourceInfo</emphasis> and <emphasis role="bold">destinationInfo</emphasis> elements.
-	  In this example, we provide a <emphasis role="bold">prefix</emphasis> attribute that indicates from and to which directory the file should be transfered.
+	  In this example, we provide a <emphasis role="bold">prefix</emphasis> attribute that indicates from and to which directory the file should be transferred.
       Other attributes such as <emphasis>hostname</emphasis> and
       <emphasis>username</emphasis> can also be given.</para>
 
@@ -1826,7 +1826,7 @@ ssh.startProcess();</programlisting>
         possible to deploy on remote machines without having ProActive
         <emphasis>pre-installed</emphasis>. Even further, when the network
         allows, it is also possible to transfer other required libraries like
-        the JRE (Java Runtime Envirorment).</para>
+        the JRE (Java Runtime Environment).</para>
 
         <para>There is one protocol that behaves differently from the others:
         the ProActive FileTransfer Protocol (<emphasis role="bold">pftp</emphasis>). <emphasis role="bold">pftp</emphasis> uses the ProActive FileTranfer API
@@ -1846,8 +1846,8 @@ ssh.startProcess();</programlisting>
 
 
         <para>Since distributed application's termination is difficult to
-        detect. The responsability of triggering the deployment corresponds to
-        the user. To achieve this, we have provided a specific mehod that will
+        detect. The responsibility of triggering the deployment corresponds to
+        the user. To achieve this, we have provided a specific method that will
         trigger the retrieval of all files associated with a
         VirtualNode.</para>
 
@@ -1877,7 +1877,7 @@ ssh.startProcess();</programlisting>
 
 		  <itemizedlist>
 			<listitem>
-			  <para><emphasis role="bold">id</emphasis> attibute - A unique identification name.</para>
+			  <para><emphasis role="bold">id</emphasis> attribute - A unique identification name.</para>
 			</listitem>
 
 			<listitem>

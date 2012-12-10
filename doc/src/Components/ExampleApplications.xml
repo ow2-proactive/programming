@@ -144,7 +144,7 @@
                 This way, the
                 <literal>C3DUser</literal>
                 code can now use this variable as if it was addressing
-                the real active object. To be occurate, we have to
+                the real active object. To be accurate, we have to
                 point out that you are going through proxies before
                 reaching the component, then the active object. This is
                 hidden by the ProActive layer. All you should know is that

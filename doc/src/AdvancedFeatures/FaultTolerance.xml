@@ -18,7 +18,7 @@
 
     <para>Persistence of active objects is obtained through standard Java
     serialization: a checkpoint thus consists in an object containing a
-    serialized copy of an active object and few informations related to the
+    serialized copy of an active object and few information related to the
     protocol. <emphasis role="bold">As a consequence, a fault-tolerant active object has to be
     serializable.</emphasis></para>
 
@@ -226,7 +226,7 @@
 
       <para>Persistence of active objects is obtained through standard Java
       serialization: a checkpoint thus consists in an object containing a
-      serialized copy of an active object and a few informations related to
+      serialized copy of an active object and a few information related to
       the protocol. As a consequence, a fault-tolerant active object
       <emphasis>has to be serializable</emphasis>. If a non serializable object
       is activated on a fault-tolerant virtual node, fault-tolerance is

@@ -447,7 +447,7 @@
     is identified by its urn, an unique id of the service. It is also possible
     to choose the exported methods of the object.</para>
 
-    <para>The WSDL file matching the service will be accesible at
+    <para>The WSDL file matching the service will be accessible at
     <code> http://localhost:8080/servlet/wsdl? </code> for a service which name is 'a'
     and which id deployed on a web server which location is
     http://localhost:8080.</para>
@@ -546,13 +546,13 @@
       </listitem>
     </itemizedlist>
 
-    <para>Finally, start the compution:</para>
+    <para>Finally, start the computation:</para>
 
 	<programlisting language="java"><textobject><textdata fileref="code_snippets/referencecard/bnb_start.txt"/></textobject></programlisting>
 
     <para>Keep in mind that only 'initLower/UpperBound' and 'split' methods
     are called on the root task. The 'execute' method is called on the root
-    task's splitted task. The methods  execution  order is:</para>
+    task's split task. The methods execution order is:</para>
 
     <orderedlist>
       <listitem>
@@ -585,7 +585,7 @@
   <section xml:id="FileTransferDeployment_76"><info><title>File Transfer Deployment</title></info>
 
 
-    <para>File Transfer Deployment is a tool for transfering files at
+    <para>File Transfer Deployment is a tool for transferring files at
     deployment time. This files are specified using the ProActive XML
     Deployment Descriptor in the following way:</para>
 

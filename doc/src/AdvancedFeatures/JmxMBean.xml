@@ -98,7 +98,7 @@
 				</para>
 				</note>
 <!--				<para>Migration informations</para>-->
-				<table><title>Migration informations</title>
+				<table><title>Migration information</title>
 
 			    <tgroup cols="2">
 				     <tbody>
@@ -132,7 +132,7 @@
 
 
 <!--				<para>Request informations</para>-->
-				   <table><title>Request informations</title>
+				   <table><title>Request information</title>
 
 			    <tgroup cols="2">
 				     <tbody>
@@ -240,7 +240,7 @@
 				   </table>
 
 <!--				<para>Destruction informations</para>-->
-				   <table><title>Destruction informations</title>
+				   <table><title>Destruction information</title>
 
 			    <tgroup cols="2">
 				     <tbody>

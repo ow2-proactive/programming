@@ -11,11 +11,11 @@
 			in the ProActive manual, and it is left to the responsibility of the programmer to
 			obey these rules. If the rules are broken, the effects are usually seen at runtime,
 			translated into specific runtime exceptions, which are difficult to interpret
-			by the unexperienced ProActive programmers. The compile-time annotation system
+			by the inexperienced ProActive programmers. The compile-time annotation system
 			makes it possible to verify these rules at compile-time, in order to avoid long debugging
 			sessions made out of stack traces eyeballing. Ideally, the runtime errors that the programmer
 			will receive will be more related to the logic of the application, and less
-			to the misusage of the ProActive library.
+			to the misuse of the ProActive library.
 		</para>
 		<section xml:id="Generalusage">
 			<info><title>General usage</title></info>
@@ -131,7 +131,7 @@
 					cannot be configured to use APT proactive annotation processor without manual editing of project's build.xml file.
 					</para>
 					<para>
-					In order to setup annotation processing using javac (applicable for JDK 6) goto
+					In order to setup annotation processing using javac (applicable for JDK 6) go to
 					</para>
 					<para>
 					Project Properties -> Compiling -> Additional compiler options and add the following option

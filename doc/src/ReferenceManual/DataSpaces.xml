@@ -259,7 +259,7 @@ VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_RegisteringApp.snip"/></textobject></programlisting>
             </para>
             <para>
-                When application terminates, it should be deconfigured by  <emphasis>unregistering</emphasis> itself from Naming Service:
+                When application terminates, it should be deconfigured by <emphasis>unregistering</emphasis> itself from Naming Service:
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_UnregisteringApp.snip"/></textobject></programlisting>
             </para>
             <para>
@@ -410,15 +410,15 @@ VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?
             Finally, let's have a look at routines that are performed by Active Objects instantiated from the <literal>ExampleProcessing</literal> class (<xref linkend="ds_example_processing1" /> , refer to comments for the routines' explanation. There are two main processing methods <literal>computePartials</literal> and <literal>gatherPartials</literal> shown, along with the <literal>writeIntoScratchFile</literal> helper method.
             </para>
             <example xml:id="ds_example_processing1">
-                <info><title>ExampleProcessing.java: routines perfomed by Active Objects (1)</title></info>
+                <info><title>ExampleProcessing.java: routines performed by Active Objects (1)</title></info>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_processing1.snip"/></textobject></programlisting>
             </example>
             <example xml:id="ds_example_processing2">
-                <info><title>ExampleProcessing.java: routines perfomed by Active Objects (2)</title></info>
+                <info><title>ExampleProcessing.java: routines performed by Active Objects (2)</title></info>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_processing2.snip"/></textobject></programlisting>
             </example>
             <example xml:id="ds_example_processing3">
-                <info><title>ExampleProcessing.java: routines perfomed by Active Objects (3)</title></info>
+                <info><title>ExampleProcessing.java: routines performed by Active Objects (3)</title></info>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_processing3.snip"/></textobject></programlisting>
             </example>
         </section>

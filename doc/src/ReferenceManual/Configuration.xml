@@ -79,7 +79,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
     <screen>java ... <emphasis role="bold">-Dproactive.configuration=pathToTheConfigFile</emphasis></screen>
     <para>In that case, the given XML file is loaded. Some ProActive properties (defined
     below) are required for applications using ProActive to work, so even if
-    not defined in user config file, they will be loaded programatically with
+    not defined in user config file, they will be loaded programmatically with
     default values. So people can just ignore the config file if they are
     happy with the default configuration or create their own file if they want
     to change ProActive properties values or add their own properties.</para>
@@ -287,7 +287,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
 
             <listitem>
               <para><emphasis role="bold">proactive.useIPaddress</emphasis>: If
-              set to <emphasis role="bold">true</emphasis>, IP adresses will
+              set to <emphasis role="bold">true</emphasis>, IP addresses will
               be used instead of machines names. This property is particularly
               useful to deal with sites that do not host a DNS.</para>
             </listitem>
@@ -320,7 +320,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
           </itemizedlist>
 
             <note>
-              <para>Note that as mentionned above, user-defined properties can
+              <para>Note that as mentioned above, user-defined properties can
               be added.</para>
             </note>
         </section>

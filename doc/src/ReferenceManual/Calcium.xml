@@ -58,7 +58,7 @@
             </listitem>
          </orderedlist>
 
-         <para>Problems inputed into the framework are treated as tasks. The
+         <para>Problems inputted into the framework are treated as tasks. The
          tasks are interpreted by the remote skeleton interpreters as shown in
          the following figure:</para>
 

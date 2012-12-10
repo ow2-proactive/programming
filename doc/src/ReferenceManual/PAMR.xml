@@ -175,7 +175,7 @@
 							<emphasis>--timeout</emphasis>: PAMR uses an heartbeat mecanism to detect network failures. 
 							As soon as an agent detects that the tunnel is broken, it will try to reconnect to the router. 
 							If the router detects a broken tunnel it sends a notification to every clients to unlock blocked
-							thread waiting for a response from the disconnected client. This option sets the hearbeat timeout
+							thread waiting for a response from the disconnected client. This option sets the heartbeat timeout
 							in milliseconds. It means that if the router or a client does not receive an heartbeat before the 
 							timeout, then the tunnel is closed and the client is disconnected. An heartbeat is sent every at an 
 							timeout/3 frequency.

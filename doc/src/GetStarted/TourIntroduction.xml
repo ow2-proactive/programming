@@ -40,7 +40,7 @@
       <para>Example applications in <xref linkend="GuidedTour"/> can
       be run by going to <literal>ProActive/examples/</literal> directory
       and starting the corresponding script.
-      You do not need to set up any enviroment variables as these are set up automatically by the
+      You do not need to set up any environment variables as these are set up automatically by the
       scripts. The scripts are platform dependant: use the <literal>.sh</literal> files
       on Unix/Linux and the <literal>.bat</literal> files on
       Windows.</para>
@@ -93,10 +93,10 @@
 
       <para>You have to specify some Java settings in order to set the
       application classpath. Select the <emphasis role="bold">Libraries</emphasis> tab and click on the <emphasis role="bold">Add External Jar...</emphasis> button. Add the ProActive.jar
-      and the librairies contained in the ProActive/dist/lib/ directory of the ProActive
+      and the libraries contained in the ProActive/dist/lib/ directory of the ProActive
       distribution.</para>
 
-      <para>The <emphasis role="bold">Librairies</emphasis> tab should look like
+      <para>The <emphasis role="bold">Libraries</emphasis> tab should look like
       this:</para>
 
       <informalfigure>

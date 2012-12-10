@@ -142,7 +142,7 @@
    execute various forms of synchronisation. For instance:
    <literal>waitOne</literal>, <literal>waitN</literal>,
    <literal>waitAll</literal>, <literal>waitTheNth</literal>,
-   <literal>waitAndGetOne</literal>. Here is an exemple:</para>
+   <literal>waitAndGetOne</literal>. Here is an example:</para>
 
    <programlisting language="java"><textobject><textdata fileref="./automatic_snippets/group_A_5.snip"/></textobject></programlisting>
 
@@ -161,7 +161,7 @@
    <para>A common way to achieve the scattering of a global parameter is to
    use the rank of each member of the group, in order to select the
    appropriate part that it should get in order to execute the method. There
-   is a natural traduction of this idea inside our group communication
+   is a natural translation of this idea inside our group communication
    mechanism: <emphasis role="bold">the use of a group of objects in order to
    represent a parameter of a group method call that must be scattered to its
    members</emphasis>.</para>

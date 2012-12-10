@@ -9,7 +9,7 @@
     ProActive offers several communication protocols. It is up to the user to decide which
     protocol to use according to its needs. Each protocol provides
     different features: speed, security,
-    fast error detection, firewall or NAT friendness, etc. None of the protocols can offer all these features,
+    fast error detection, firewall or NAT friendliness, etc. None of the protocols can offer all these features,
     so they have
     to be chosen carefully. To take benefit from each communication protocol, a ProActive runtime
     can use several communication protocols concurrently.
@@ -94,9 +94,9 @@
                 <emphasis>proactive.pnp.idle_timeout</emphasis>
                 PNP channels are closed when unused to free system resources. Establishing a TCP
                 connection is costly (at least 3 RTT) so PNP connections are
-                not closed immediatly
+                not closed immediately
                 but after a grace time. By default the grace time is 60 000 ms. Setting this value to 0
-                disable the autoclosing mecanism,
+                disable the autoclosing mechanism,
                 connections are kept open forever.
               </para>
             </listitem>
@@ -245,7 +245,7 @@ $ $PA_HOME/bin/ssl-keystore.sh --create --keystore mykeystore.p12
 
       <section xml:id="netconfig-protocols-pnps-troubleshooting">
         <info>
-          <title>Troubleshouting</title>
+          <title>Troubleshooting</title>
         </info>
 
         <qandaset>
@@ -256,7 +256,7 @@ $ $PA_HOME/bin/ssl-keystore.sh --create --keystore mykeystore.p12
             <answer>
               <para>
                 Using SSL consume require some available entropy to initialize the SSL engine. When
-                the certificates are created at runtime (ciphering only mode without a keystore speicified)
+                the certificates are created at runtime (ciphering only mode without a keystore specified)
                 SSL consumes even more entropy bytes. Most likely the runtime is
                 waiting for more random
                 bytes being available in the system entropy pool (
@@ -294,7 +294,7 @@ $ $PA_HOME/bin/ssl-keystore.sh --create --keystore mykeystore.p12
         <para>
           The goal of PAMR is to allow the deployment of ProActive Programming when the configuration
           of the network is unfriendly. PAMR has the weakest
-          expections on how the network is configured.
+          expectations on how the network is configured.
           Unlike all the other communication protocols, PAMR does not expect bidirectional TCP connections.
           It has
           been designed to work when only outgoing TCP connections are available.
@@ -490,7 +490,7 @@ $ $PA_HOME/bin/ssl-keystore.sh --create --keystore mykeystore.p12
                   to the router.
                   If the router detects a broken tunnel it sends a notification to every clients to unlock blocked
                   thread waiting for a response
-                  from the disconnected client. This option sets the hearbeat timeout
+                  from the disconnected client. This option sets the heartbeat timeout
                   in milliseconds. It means that if the router or a client does not receive
                   an heartbeat before the
                   timeout, then the tunnel is closed and the client is disconnected. An heartbeat is sent every at an
@@ -629,7 +629,7 @@ Caused by: org.objectweb.proactive.core.ProActiveException: Failed to create the
       </para>
 
         <para>
-          RMI is the protocol to use if you deploy your application on an unfirewalled LAN, don't need
+          RMI is the protocol to use if you deploy your application on an non firewalled LAN, don't need
           high scalability, and want best point to point  performance (both bandwidth and throughput).
       </para>
       </section>
@@ -696,7 +696,7 @@ Caused by: org.objectweb.proactive.core.ProActiveException: Failed to create the
               <para>
                 <emphasis>proactive.http.port</emphasis>
                 : The TCP port to bind to. If not set HTTP uses a random free port. If the specified 
-                TCP port is already used HHTP will not start and an error message is displayed. 
+                TCP port is already used HTTP will not start and an error message is displayed.
               </para>
             </listitem>
             <listitem>

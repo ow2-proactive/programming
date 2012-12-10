@@ -39,7 +39,7 @@
 				</listitem>
 			</itemizedlist>
 			From this MessageTags object, you have access to the following API to
-			interract with tags:
+			interact with tags:
 			<itemizedlist>
 				<listitem>
 					<para>
@@ -71,7 +71,7 @@
 				<listitem>
 					<para>
 						<emphasis>getTag(String id)</emphasis>:
-						retireves the tag instance of the tag whose ID is
+						retrieves the tag instance of the tag whose ID is
 						<emphasis>id</emphasis>.
 					</para>
 				</listitem>
@@ -87,7 +87,7 @@
 		</para>
 
 		<para>
-			Once you have retrieved the tag instance, you have acces to the
+			Once you have retrieved the tag instance, you have access to the
 			following methods:
 			<itemizedlist>
 				<listitem>
@@ -175,7 +175,7 @@
 			</itemizedlist>
 		</para>
 
-		<para>Each time a value is accessed, the current lease value of the LocalMemory space is incremented by half of the initial value. A thread runs periodicaly
+		<para>Each time a value is accessed, the current lease value of the LocalMemory space is incremented by half of the initial value. A thread runs periodically
 		(<emphasis>proactive.tagmemory.lease.period</emphasis>) to check the lease value of each LocalMemory, and decrements their current lease.</para>
 
 	</section>
@@ -194,7 +194,7 @@
 
 		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/IncrementingTag.snip"/></textobject></programlisting>
 
-		<para>Each time this tag is propated, that is, each time the <literal>apply</literal> method is called, the <literal>depth</literal> field is incremented.</para>
+		<para>Each time this tag is propagated, that is, each time the <literal>apply</literal> method is called, the <literal>depth</literal> field is incremented.</para>
 
 		<para>
 			In order to test this tag, we have written a loop between three active objects:
@@ -211,7 +211,7 @@
 			</listitem>
 		</itemizedlist>
 		<para>
-			All this classes define a <literal>propagate</literal> method which hava the same principle:
+			All this classes define a <literal>propagate</literal> method which have the same principle:
 		</para>
 		<orderedlist>
 			<listitem>

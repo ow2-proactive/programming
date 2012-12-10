@@ -226,7 +226,7 @@ Type the domain number to see all registered MBeans in this domain :</screen>
 
 Type the mbean number to see its properties :</screen>
 
-			If you wish to get informations about Memory, choose 3,
+			If you wish to get information about Memory, choose 3,
 			and the console will show the whole information about
 			this MBean.
 	</para>

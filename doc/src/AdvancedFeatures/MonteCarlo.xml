@@ -116,7 +116,7 @@
             </section>
             <section xml:id="mc_api_simulation_set">
 				<info>
-					<title xml:id="SimuationSet_34">Simuation Set</title>
+					<title xml:id="SimuationSet_34">Simulation Set</title>
                 </info>
                 <para>
                     A Simulation Set is a specific task for running Monte-Carlo simulations. It is given a random number
@@ -140,7 +140,7 @@
                     Therefore, a post-treatment needs to be done on this big array.
                     Of course, this post-treatment could be done by an engine task that spawned the simulation set task,
                     but
-                    in that case, the big array would be transfered by the network from the Worker which handles the
+                    in that case, the big array would be transferred by the network from the Worker which handles the
                     simulation set to the Worker which handles the parent engine task.
                     The Simulation Set Post Process avoids this transfer, and allows to do some computations on the same
                     machine which generated the Monte-Carlo simulations.

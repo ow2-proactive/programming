@@ -57,7 +57,7 @@
             </listitem>
             <listitem>
                <para><emphasis>Multicast</emphasis> - this exercise make you modify the previous Master component so as to have its
-               client interface be a multicast interface binded to the server interface of two different Slave components.</para>
+               client interface be a multicast interface bound to the server interface of two different Slave components.</para>
             </listitem>
             <listitem>
                <para><emphasis>Deployment</emphasis> - this exercise make you deploy your component on different nodes located in

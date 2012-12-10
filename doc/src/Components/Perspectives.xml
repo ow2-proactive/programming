@@ -53,7 +53,7 @@
 			reconfigurations. Indeed, suppose for example that two
 			consecutive requests (on the same binding) should
 			necessarily be addressed to the same destination component
-			(for example, the one requests sends additional informations
+			(for example, the one requests sends additional information
 			necessary to fulfill the other one). Then, between those two
 			requests, no reconfiguration can occur if it involves the
 			binding used for the requests.
@@ -222,7 +222,7 @@
 		</info>
 			<para>
 				We are developing the VCE (Vercors Component
-				Environnement), that includes graphical editors for the
+				Environment), that includes graphical editors for the
 				architecture and the behavior of GCM components.
 			</para>
 			<para>
