@@ -118,7 +118,7 @@
   </authorgroup>
       <citetitle>Interactive and descriptor-based deployment of object-oriented grid applications</citetitle>
       <pagenums>93--102</pagenums>
-      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/hpdc2002vayssiere.pdf">http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/hpdc2002vayssiere.pdf</link></bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/personnel/Julien.Vayssiere/publications/hpdc2002_vayssiere.pdf">http://www-sop.inria.fr/oasis/personnel/Julien.Vayssiere/publications/hpdc2002_vayssiere.pdf</link></bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup>
@@ -139,7 +139,7 @@
    <author><personname><firstname>Matthieu</firstname><surname>Morel</surname></personname></author>
   </authorgroup>
       <citetitle>From distributed objects to hierarchical grid components</citetitle>
-      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/doc/HierarchicalGridComponents.pdf">http://www-sop.inria.fr/oasis/ProActive/doc/HierarchicalGridComponents.pdf</link></bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.activeeon.com//userfiles/file/papers/HierarchicalGridComponents.pdf">http://proactive.activeeon.com//userfiles/file/papers/HierarchicalGridComponents.pdf</link></bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup>
