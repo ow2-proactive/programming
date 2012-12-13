@@ -59,8 +59,12 @@
         <prop key="proactive.test.perf.duration" value="30000" />
 
         <prop key="proactive.log4j.appender.provider" value="org.objectweb.proactive.core.util.log.remote.ThrottlingProvider" />
-    </properties>
-    <javaProperties>
+
+	<!-- @snippet-resume PAConfig_example -->
+	</properties>
+	<!-- @snippet-break PAConfig_example -->
+
+	<javaProperties>
       <!-- <prop key="java.rmi.server.RMIClassLoaderSpi" value="org.objectweb.proactive.core.classloading.protocols.ProActiveRMIClassLoader"/> -->
         <prop key="java.protocol.handler.pkgs" value="org.objectweb.proactive.core.ssh|org.objectweb.proactive.core.classloading.protocols" />
         <prop key="ibis.name_server.host" value="localhost" />
