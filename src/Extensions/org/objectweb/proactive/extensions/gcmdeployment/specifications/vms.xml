@@ -461,7 +461,7 @@
 						<phrase>This module allows to manage VMware Server and Workstation. </phrase>
 						<phrase>This module may need an extra installation step. </phrase>
 						<phrase>You need to reference every Virtualizing/src/vmware-vix/lib/ jars in the classpath. </phrase>
-						<phrase>This module uses <ulink url="https://jna.dev.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
+						<phrase>This module uses <ulink url="http://jna.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
 						<phrase>Even if this module supports VMware server 2, we encourage you to use vmware-vi instead. </phrase>
 					</emphasis>
 				</para>
@@ -580,7 +580,7 @@
 						<phrase>This implementation doesn't support ProActive deployment. </phrase>
 						<phrase>This module needs an extra installation step to work. </phrase>
 						<phrase>You need to reference every Virtualizing/src/libvirt/lib/ jars in the classpath. </phrase>
-						<phrase>This module uses <ulink url="https://jna.dev.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
+						<phrase>This module uses <ulink url="http://jna.dev.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
 					</emphasis>
 				</para>
 				<para>

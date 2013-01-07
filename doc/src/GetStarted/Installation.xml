@@ -79,7 +79,7 @@
                file</link> using the option
                <literal> -Djava.security.policy=pathToFile</literal>. A basic policy file
                can be found at <literal>ProActive/examples/proactive.java.policy</literal>. You can also specify a
-               <link xlink:href="http://logging.apache.org/log4j/docs/manual.html">log4j configuration
+               <link xlink:href="http://logging.apache.org/log4j/1.2/manual.html">log4j configuration
                file</link> with the property <literal>-Dlog4j.configuration=file:pathToFile</literal>.
                If a configuration file is not specified a default logger that logs on the console will be created.</para>
             </listitem>
@@ -211,7 +211,7 @@
             </listitem>
 
             <listitem>
-               <para><literal>dist/lib/log4j.jar</literal> - <link xlink:href="http://logging.apache.org/log4j/docs/manual.html">logging</link>
+               <para><literal>dist/lib/log4j.jar</literal> - <link xlink:href="http://logging.apache.org/log4j/1.2/manual.html">logging</link>
                mechanism used by ProActive.</para>
             </listitem>
 
