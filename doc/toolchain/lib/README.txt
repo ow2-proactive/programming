@@ -139,7 +139,7 @@ Please make sure you've read the license of each package.
 
 - JAI Image I/O Tools
 
-    https://jai-imageio.dev.java.net/
+    http://java.net/projects/jai-imageio
     BSD license
     
     Note: This is not the same as JAI! Only the ImageIO-compatible codecs

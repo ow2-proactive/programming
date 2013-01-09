@@ -1125,7 +1125,7 @@
 						<phrase>This section concerns every Libvirt compliant software. </phrase>
 						<phrase>This module doesn't allow ProActive deployment. </phrase>
 						<phrase>You need to reference every Virtualizing/src/libvirt/lib/ jars in the classpath. </phrase>
-						<phrase>This section uses <link xlink:href="http://jna.dev.java.net/">JNA</link> to bring the API to JAVA framework. </phrase>
+						<phrase>This section uses <link xlink:href="http://jna.java.net/">JNA</link> to bring the API to JAVA framework. </phrase>
 					</emphasis>
 				</para>
 				<para>

@@ -580,7 +580,7 @@
 						<phrase>This implementation doesn't support ProActive deployment. </phrase>
 						<phrase>This module needs an extra installation step to work. </phrase>
 						<phrase>You need to reference every Virtualizing/src/libvirt/lib/ jars in the classpath. </phrase>
-						<phrase>This module uses <ulink url="http://jna.dev.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
+						<phrase>This module uses <ulink url="http://jna.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
 					</emphasis>
 				</para>
 				<para>

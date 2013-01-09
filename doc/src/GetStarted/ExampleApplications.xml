@@ -781,7 +781,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                     <para>
                         <emphasis role="bold">-3d</emphasis>
                         starting GUI in 3D, must have
-                        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://java3d.dev.java.net/">
+                        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.oracle.com/technetwork/java/javase/tech/index-jsp-138252.html">
                             Java3d
                         </link>
                         (≥ 1.4) installed and also must have ProActive
