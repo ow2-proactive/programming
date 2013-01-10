@@ -48,11 +48,13 @@ import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
+import org.objectweb.proactive.extensions.webservices.component.Utils;
+import org.objectweb.proactive.extensions.webservices.component.controller.AbstractPAWebServicesControllerImpl;
+import org.objectweb.proactive.extensions.webservices.component.controller.PAWebServicesController;
 
 import functionalTests.ComponentTest;
 
@@ -82,19 +84,23 @@ public abstract class CommonSetup extends ComponentTest {
         tf = GCM.getGCMTypeFactory(boot);
         gf = GCM.getGenericFactory(boot);
 
-        url = AbstractWebServicesFactory.getLocalUrl();
         ComponentType sType = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType(SERVER_SERVICES_NAME, Services.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
                 tf.createFcItfType(SERVER_SERVICEMULTICAST_NAME, Service.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE) });
+        String controllersConfigFileLocation = AbstractPAWebServicesControllerImpl
+                .getControllerFileUrl("cxf").getPath();
+        url = AbstractWebServicesFactory.getLocalUrl();
         servers = new Component[NUMBER_SERVERS];
         for (int i = 0; i < NUMBER_SERVERS; i++) {
             servers[i] = gf.newFcInstance(sType, new ControllerDescription(SERVER_DEFAULT_NAME + i,
-                Constants.PRIMITIVE), new ContentDescription(Server.class.getName()));
+                Constants.PRIMITIVE, controllersConfigFileLocation),
+                    new ContentDescription(Server.class.getName()));
             GCM.getGCMLifeCycleController(servers[i]).startFc();
-            ws = wsf.getWebServices(url);
-            ws.exposeComponentAsWebService(servers[i], SERVER_DEFAULT_NAME + i);
+            PAWebServicesController wsController = Utils.getPAWebServicesController(servers[i]);
+            wsController.setUrl(url);
+            wsController.exposeComponentAsWebService(SERVER_DEFAULT_NAME + i);
         }
 
         componentType = tf.createFcType(new InterfaceType[] {
@@ -111,7 +117,8 @@ public abstract class CommonSetup extends ComponentTest {
     @After
     public void undeploy() throws Exception {
         for (int i = 0; i < NUMBER_SERVERS; i++) {
-            ws.unExposeComponentAsWebService(servers[i], SERVER_DEFAULT_NAME + i);
+            Utils.getPAWebServicesController(servers[i]).unExposeComponentAsWebService(
+                    SERVER_DEFAULT_NAME + i);
         }
     }
 }
