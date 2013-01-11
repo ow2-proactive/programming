@@ -95,8 +95,8 @@ public abstract class CommonSetup extends ComponentTest {
         servers = new Component[NUMBER_SERVERS];
         for (int i = 0; i < NUMBER_SERVERS; i++) {
             servers[i] = gf.newFcInstance(sType, new ControllerDescription(SERVER_DEFAULT_NAME + i,
-                Constants.PRIMITIVE, controllersConfigFileLocation),
-                    new ContentDescription(Server.class.getName()));
+                Constants.PRIMITIVE, controllersConfigFileLocation), new ContentDescription(Server.class
+                    .getName()));
             GCM.getGCMLifeCycleController(servers[i]).startFc();
             PAWebServicesController wsController = Utils.getPAWebServicesController(servers[i]);
             wsController.setUrl(url);
