@@ -1700,7 +1700,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				nodes too but it just needs a single configuration file.
 				Thus it may be used in a similar way. More information
 				are available at
-				<link xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/XML_Descriptors.html">Chapter 15. XML Deployment Descriptors</link>.
+				<link xlink:href="../../ReferenceManual/multiple_html/XML_Descriptors.html">Chapter 15. XML Deployment Descriptors</link>.
 			</para>
 
 		</section>
