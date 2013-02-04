@@ -42,6 +42,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -130,7 +131,8 @@ public abstract class AbstractWebServicesFactory implements WebServicesFactory {
      * @return the local Jetty URL
      */
     public static String getLocalUrl() {
-        return "http://localhost:" + getLocalPort() + "/";
+        return "http://" + ProActiveInet.getInstance().getInetAddress().getHostAddress() + ":" +
+            getLocalPort() + "/";
     }
 
     /**
