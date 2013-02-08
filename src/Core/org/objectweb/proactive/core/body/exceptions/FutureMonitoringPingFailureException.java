@@ -36,13 +36,16 @@
  */
 package org.objectweb.proactive.core.body.exceptions;
 
+import org.objectweb.proactive.core.UniqueID;
+
+
 public class FutureMonitoringPingFailureException extends RuntimeException {
-    public FutureMonitoringPingFailureException(Throwable cause) {
-        super("Failure to ping creator body", cause);
+    public FutureMonitoringPingFailureException(UniqueID bodyId, String nodeUrl, Throwable cause) {
+        super("Failure to ping creator body " + bodyId + " on " + nodeUrl, cause);
     }
 
-    public FutureMonitoringPingFailureException(String message) {
-        super("Failure to ping creator body : " + message);
+    public FutureMonitoringPingFailureException(UniqueID bodyId, String nodeUrl, String message) {
+        super("Failure to ping creator body " + bodyId + " on " + nodeUrl + " : " + message);
     }
 
 }

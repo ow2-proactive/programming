@@ -49,9 +49,9 @@ import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
@@ -81,6 +81,8 @@ public class PARemoteObject {
     private final static AtomicLong counter = new AtomicLong();
 
     public static <T> RemoteObjectExposer<T> newRemoteObject(String className, T target) {
+        // The className is used for the public name of this remote object
+
         return new RemoteObjectExposer<T>(className, target);
     }
 
@@ -121,6 +123,7 @@ public class PARemoteObject {
      * @throws ProActiveException
      */
     public static Object lookup(URI url) throws ProActiveException {
+        logger.debug("Trying to lookup " + url);
         return RemoteObjectHelper.getFactoryFromURL(url).lookup(RemoteObjectHelper.expandURI(url))
                 .getObjectProxy();
     }

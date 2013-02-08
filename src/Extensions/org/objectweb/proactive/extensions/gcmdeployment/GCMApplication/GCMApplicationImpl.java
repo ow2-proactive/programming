@@ -314,7 +314,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     private GCMVirtualNode vnAsRemoteObject(GCMVirtualNode vn) {
         // Export this GCMApplication as a remote object
         String name = this.getDeploymentId() + "/VirtualNode/" + vn.getName();
-        RemoteObjectExposer<GCMVirtualNode> roe = new RemoteObjectExposer<GCMVirtualNode>(
+        RemoteObjectExposer<GCMVirtualNode> roe = new RemoteObjectExposer<GCMVirtualNode>(name,
             GCMVirtualNode.class.getName(), vn, GCMVirtualNodeRemoteObjectAdapter.class);
         try {
             roe.createRemoteObject(name, false);

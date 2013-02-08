@@ -36,12 +36,6 @@
  */
 package org.objectweb.proactive.core.body;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
@@ -51,6 +45,13 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -73,9 +74,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
 
-    /** Unique ID of the body. */
-    protected UniqueID bodyID;
-
     /** A table containing a mapping from a UniqueID toward a Body. The location table
        caches the location of all known bodies to whom this body communicated */
     protected BodyMap location;
@@ -89,6 +87,32 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     protected Map<ItfID, Shortcut> shortcuts = null; // key = functionalItfID, value=shortcut
 
     protected transient RemoteObjectExposer<UniversalBody> roe;
+
+    /** Unique ID of the body. */
+    protected UniqueID bodyID;
+
+    /**
+     * Name of this body, generally related to the reifiedObjectClassName
+     */
+    protected String name;
+
+    /**
+     * class name of the reified object associated with this body
+     */
+    protected String reifiedObjectClassName;
+
+    /**
+     * host who stores this universal body
+     */
+    protected static String HOSTNAME = "localhost";
+
+    static {
+        try {
+            HOSTNAME = java.net.InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
 
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
@@ -108,13 +132,21 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
      * Creates a new AbstractBody for an active object attached to a given node.
      * @param nodeURL the URL of the node that body is attached to
      */
-    public AbstractUniversalBody(String nodeURL) throws ActiveObjectCreationException {
+    public AbstractUniversalBody(Object reifiedObject, String nodeURL) throws ActiveObjectCreationException {
         this.nodeURL = nodeURL;
-        this.bodyID = new UniqueID();
+        if (reifiedObject instanceof StackTraceElement) {
+            StackTraceElement ste = (StackTraceElement) reifiedObject;
+            this.name = "HalfBody_" + ste.getClassName() + "#" + ste.getMethodName();
+
+        } else {
+            this.reifiedObjectClassName = reifiedObject.getClass().getName();
+            this.name = "ActiveObject_" + reifiedObjectClassName;
+        }
+        this.bodyID = new UniqueID(this.name + "_");
         this.location = new BodyMap();
 
-        this.roe = new RemoteObjectExposer<UniversalBody>(UniversalBody.class.getName(), this,
-            UniversalBodyRemoteObjectAdapter.class);
+        this.roe = new RemoteObjectExposer<UniversalBody>(this.bodyID.toString(), UniversalBody.class
+                .getName(), this, UniversalBodyRemoteObjectAdapter.class);
 
         try {
             RemoteRemoteObject rro = this.roe.createRemoteObject(this.bodyID.toString(), false);
@@ -130,6 +162,10 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     //
     // -- implements UniversalBody -----------------------------------------------
     //
+
+    public String getName() {
+        return name;
+    }
 
     public String getUrl() {
         return this.roe.getURL();
@@ -166,12 +202,17 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
         if (this.bodyID == null) {
             // it may happen that the bodyID is set to null before serialization if we want to
             // create a copy of the Body that is distinct from the original
-            this.bodyID = new UniqueID();
+            if (name == null) {
+                this.bodyID = new UniqueID();
+            } else {
+                this.bodyID = new UniqueID(name + "_");
+            }
+
         }
 
         // remoteBody is transient so we recreate it here
-        this.roe = new RemoteObjectExposer<UniversalBody>(UniversalBody.class.getName(), this,
-            UniversalBodyRemoteObjectAdapter.class);
+        this.roe = new RemoteObjectExposer<UniversalBody>(this.bodyID.toString(), UniversalBody.class
+                .getName(), this, UniversalBodyRemoteObjectAdapter.class);
 
         try {
             // rebind must be true: if an object migrates between two JVM on the same machine (same rmi registry)

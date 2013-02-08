@@ -36,12 +36,13 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.io.IOException;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+
+import java.io.IOException;
+import java.net.URI;
 
 
 /**
@@ -64,4 +65,12 @@ public interface RemoteRemoteObject {
      */
     public Reply receiveMessage(Request message) throws ProActiveException, IOException,
             RenegotiateSessionException;
+
+    /**
+     * Return the protocol dependant URI of the remote remote object
+     * @return uri of the protocol dependant RO
+     * @throws ProActiveException
+     * @throws IOException
+     */
+    public URI getURI() throws ProActiveException, IOException;
 }

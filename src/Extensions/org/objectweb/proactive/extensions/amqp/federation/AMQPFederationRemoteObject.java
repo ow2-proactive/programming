@@ -36,12 +36,12 @@
  */
 package org.objectweb.proactive.extensions.amqp.federation;
 
-import java.io.IOException;
-import java.net.URI;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.amqp.remoteobject.AbstractAMQPRemoteObject;
 import org.objectweb.proactive.extensions.amqp.remoteobject.RpcReusableChannel;
+
+import java.io.IOException;
+import java.net.URI;
 
 
 /**

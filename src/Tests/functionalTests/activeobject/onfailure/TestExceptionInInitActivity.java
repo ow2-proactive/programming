@@ -36,6 +36,7 @@
  */
 package functionalTests.activeobject.onfailure;
 
+import org.apache.log4j.Level;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -44,6 +45,8 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
 
 import functionalTests.FunctionalTest;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class TestExceptionInInitActivity extends FunctionalTest {
@@ -51,6 +54,7 @@ public class TestExceptionInInitActivity extends FunctionalTest {
     static {
         // Disable future monitoring
         CentralPAPropertyRepository.PA_FUTUREMONITORING_TTM.setValue(0);
+        ProActiveLogger.getLogger(Loggers.BODY).setLevel(Level.DEBUG);
     }
 
     @Test(expected = BodyTerminatedException.class)

@@ -36,14 +36,15 @@
  */
 package org.objectweb.proactive.core.remoteobject.ibis;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+
+import java.io.IOException;
+import java.net.URI;
+import java.rmi.RemoteException;
 
 
 /**
@@ -64,6 +65,11 @@ public class IbisRemoteObjectImpl extends ibis.rmi.server.UnicastRemoteObject im
     public Reply receiveMessage(Request message) throws RemoteException, RenegotiateSessionException,
             ProActiveException, IOException {
         return this.remoteObject.receiveMessage(message);
+    }
+
+    @Override
+    public URI getURI() throws ProActiveException, IOException {
+        return remoteObject.getURI();
     }
 
 }

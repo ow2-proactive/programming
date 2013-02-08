@@ -41,6 +41,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.Semaphore;
 
+import functionalTests.GCMFunctionalTest;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
@@ -49,8 +50,6 @@ import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-
-import functionalTests.GCMFunctionalTest;
 
 
 public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctionalTest {

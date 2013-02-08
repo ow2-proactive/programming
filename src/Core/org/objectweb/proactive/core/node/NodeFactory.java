@@ -36,9 +36,6 @@
  */
 package org.objectweb.proactive.core.node;
 
-import java.net.URISyntaxException;
-import java.rmi.AlreadyBoundException;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
@@ -52,6 +49,9 @@ import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import java.net.URISyntaxException;
+import java.rmi.AlreadyBoundException;
 
 
 /**
@@ -90,7 +90,7 @@ public class NodeFactory {
     private static final String DEFAULT_NODE_NAME = "Node";
     private static Node defaultNode = null;
 
-    private static final String HALFBODIES_NODE_NAME = "__PA__HalfbodiesNode";
+    private static final String HALFBODIES_NODE_NAME = "HalfbodiesNode_";
     private static Node halfBodiesNode = null;
 
     static {

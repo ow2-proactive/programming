@@ -70,6 +70,7 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
     protected UniversalBody wrappedBody;
     protected long time;
     protected UniqueID id;
+    protected String name;
     protected boolean stop;
     protected long creationTime;
 
@@ -86,6 +87,7 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
         this.creationTime = System.currentTimeMillis();
         //     t =new Thread(this);
         this.id = this.wrappedBody.getID();
+        this.name = this.wrappedBody.getName();
 
         //   t.start();
     }
@@ -125,6 +127,11 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
 
     public UniqueID getID() {
         return this.id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     public void updateLocation(UniqueID id, UniversalBody body) throws IOException {

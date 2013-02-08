@@ -36,10 +36,6 @@
  */
 package org.objectweb.proactive.core.body.future;
 
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
@@ -51,8 +47,13 @@ import org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalServi
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.LocalNode;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.Pair;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class FutureMonitoring implements Runnable {
@@ -65,6 +66,7 @@ public class FutureMonitoring implements Runnable {
      * so we should detect a broken automatic continuations chain.
      */
     private static final ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>> futuresToMonitor = new ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>>();
+    private static final ConcurrentHashMap<UniqueID, String> nodeUrls = new ConcurrentHashMap<UniqueID, String>();
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
     static {
@@ -111,6 +113,7 @@ public class FutureMonitoring implements Runnable {
         boolean pinged = false;
         FutureMonitoringPingFailureException bodyException = null;
         Collection<FutureProxy> futures = futuresToMonitor.get(bodyId);
+        String nodeUrl = nodeUrls.get(bodyId);
         if (futures == null) {
 
             /*
@@ -138,13 +141,14 @@ public class FutureMonitoring implements Runnable {
                         Integer state = (Integer) body.receiveFTMessage(HEARTBEAT_MSG);
                         /* If the object is dead, ping failed ... */
                         if (state.equals(FaultDetector.IS_DEAD)) {
-                            throw new ProActiveRuntimeException("Awaited body has been terminated.");
+                            throw new ProActiveRuntimeException("Awaited body " + bodyId + " on " + nodeUrl +
+                                " has been terminated.");
                         }
                         /* Successful ping, nothing more to do */
                         return true;
                     } catch (Exception e) {
                         /* Ping failure, update all awaited futures on this node with the exception */
-                        bodyException = new FutureMonitoringPingFailureException(e);
+                        bodyException = new FutureMonitoringPingFailureException(bodyId, nodeUrl, e);
                     }
                 }
             }
@@ -193,6 +197,25 @@ public class FutureMonitoring implements Runnable {
         return body.getID();
     }
 
+    private static Pair<UniqueID, String> getUpdaterBodyIdAndNodeUrl(FutureProxy fp) {
+        if (isFTEnabled()) {
+            return null;
+        }
+        UniversalBody body = fp.getUpdater();
+        if (body == null) {
+            new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
+            return null;
+        }
+        UniqueID id = body.getID();
+        String nodeUrl = "[unknown]";
+        try {
+            nodeUrl = body.getNodeURL();
+        } catch (Throwable e) {
+
+        }
+        return new Pair<UniqueID, String>(id, nodeUrl);
+    }
+
     public static void removeFuture(FutureProxy fp) {
         UniqueID updaterId = getUpdaterBodyId(fp);
         if (updaterId == null) {
@@ -207,6 +230,7 @@ public class FutureMonitoring implements Runnable {
                 futures.remove(fp);
                 if (futures.isEmpty()) {
                     futuresToMonitor.remove(updaterId);
+                    nodeUrls.remove(updaterId);
                 }
             }
         }
@@ -216,10 +240,12 @@ public class FutureMonitoring implements Runnable {
         if (fp.isAvailable()) {
             return;
         }
-        UniqueID updaterId = getUpdaterBodyId(fp);
+        Pair<UniqueID, String> pair = getUpdaterBodyIdAndNodeUrl(fp);
+        UniqueID updaterId = pair.getFirst();
         if (updaterId == null) {
             return;
         }
+        String nodeUrl = pair.getSecond();
         synchronized (futuresToMonitor) {
             /*
              * Avoid a race with the suppression in the ConcurrentHashMap when the
@@ -229,6 +255,7 @@ public class FutureMonitoring implements Runnable {
             if (futures == null) {
                 futures = new ConcurrentLinkedQueue<FutureProxy>();
                 futuresToMonitor.put(updaterId, futures);
+                nodeUrls.put(updaterId, nodeUrl);
             }
             if (!futures.contains(fp)) {
                 futures.add(fp);

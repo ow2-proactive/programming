@@ -37,8 +37,10 @@
 package org.objectweb.proactive.core.body;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
+import org.objectweb.proactive.api.PAVersion;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.exceptions.HalfBodyException;
 import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService;
@@ -72,7 +74,6 @@ public class HalfBody extends AbstractBody {
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
-    private static final String NAME = "Other thread";
 
     /** The component in charge of receiving reply */
     private ReplyReceiver replyReceiver;
@@ -92,7 +93,8 @@ public class HalfBody extends AbstractBody {
     // -- CONSTRUCTORS -----------------------------------------------
     //
     private HalfBody(MetaObjectFactory factory) throws ActiveObjectCreationException, NodeException {
-        super(null, NodeFactory.getHalfBodiesNode().getNodeInformation().getURL(), factory);
+        super(initializeHalfBodyName(), NodeFactory.getHalfBodiesNode().getNodeInformation().getURL(),
+                factory);
 
         //SECURITY
         if (this.securityManager == null) {
@@ -138,6 +140,24 @@ public class HalfBody extends AbstractBody {
             this.ftmanager = null;
         }
         this.gc = HalfBodies.getInstance();
+    }
+
+    /**
+     * This method infers the name of the class and method responsible for the half body creation
+     * @return a dummy object containing
+     */
+    private static Object initializeHalfBodyName() {
+        StackTraceElement[] elems = new Throwable().getStackTrace();
+        for (StackTraceElement elem : elems) {
+            String className = elem.getClassName();
+            if (!(className.startsWith(UniqueID.class.getPackage().getName()) ||
+                className.startsWith(PAVersion.class.getPackage().getName()) || className
+                    .startsWith(Throwable.class.getPackage().getName()))) {
+                return elem;
+            }
+        }
+        // if we didn't find anything we send the last element
+        return elems[elems.length - 1];
     }
 
     //
@@ -252,10 +272,6 @@ public class HalfBody extends AbstractBody {
             throw new HalfBodyException();
         }
 
-        public String getName() {
-            return NAME;
-        }
-
         public void serve(Request request) {
             throw new HalfBodyException();
         }
@@ -307,7 +323,7 @@ public class HalfBody extends AbstractBody {
          * @return a unique identifier that can be used to tag a future, a request.
          */
         public synchronized long getNextSequenceID() {
-            return HalfBody.this.bodyID.toString().hashCode() + ++this.absoluteSequenceID;
+            return HalfBody.this.bodyID.hashCode() + ++this.absoluteSequenceID;
         }
     }
 

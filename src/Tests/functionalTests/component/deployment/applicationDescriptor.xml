@@ -24,7 +24,7 @@
 					<pathElement base="proactive" relpath="classes/Tests"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
 					<pathElement base="proactive" relpath="dist/lib/cxf-2.5.2.jar"/>
-					<pathElement base="proactive" relpath="compile/lib/junit-4.8.2.jar"/>
+					<pathElement base="proactive" relpath="compile/lib/junit-4.11-SNAPSHOT-20120416-1530.jar"/>
 				</proactiveClasspath>		
 				
 			</configuration>

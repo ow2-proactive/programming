@@ -82,7 +82,7 @@ public class FactoryName {
     public static ObjectName createActiveObjectName(UniqueID id) {
         ObjectName oname = null;
         try {
-            oname = new ObjectName(FactoryName.AO + "," + AO_ID_PROPERTY + "=" + id.toString());
+            oname = new ObjectName(FactoryName.AO + "," + AO_ID_PROPERTY + "=" + id.getCanonString());
         } catch (MalformedObjectNameException e) {
             logger.error("Can't create the objectName of the active object", e);
         } catch (NullPointerException e) {

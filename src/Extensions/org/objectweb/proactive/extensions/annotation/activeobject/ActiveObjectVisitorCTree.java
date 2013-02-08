@@ -213,7 +213,7 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
 
             MethodTree method = (MethodTree) trees.getTree(trees.getElement(curMethod));
             if (!method.getModifiers().getFlags().contains(Modifier.PRIVATE)) {
-                reportError(ErrorMessages.NO_NULL_RETURN_ERROR_MSG, trees.getElement(curMethod));
+                reportWarning(ErrorMessages.NO_NULL_RETURN_ERROR_MSG, trees.getElement(curMethod));
                 // mark that we've reported the error for this method
                 methodReturnsNull = true;
             }

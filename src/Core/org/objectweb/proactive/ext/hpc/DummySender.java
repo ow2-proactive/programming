@@ -36,10 +36,6 @@
  */
 package org.objectweb.proactive.ext.hpc;
 
-import java.io.IOException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
@@ -59,6 +55,10 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
+
+import java.io.IOException;
+import java.security.AccessControlException;
+import java.security.PublicKey;
 
 
 public class DummySender implements UniversalBody {
@@ -98,6 +98,11 @@ public class DummySender implements UniversalBody {
 
     public UniqueID getID() {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getName() {
         return null;
     }
 

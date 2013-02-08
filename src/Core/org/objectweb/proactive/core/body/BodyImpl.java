@@ -36,23 +36,6 @@
  */
 package org.objectweb.proactive.core.body;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.lang.management.ManagementFactory;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectName;
-
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.ProActiveInternalObject;
 import org.objectweb.proactive.annotation.ImmediateService;
@@ -70,12 +53,7 @@ import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.body.reply.ReplyReceiver;
-import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
-import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.body.request.RequestFactory;
-import org.objectweb.proactive.core.body.request.RequestQueue;
-import org.objectweb.proactive.core.body.request.RequestReceiver;
-import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
+import org.objectweb.proactive.core.body.request.*;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.Tag;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
@@ -89,11 +67,7 @@ import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.jmx.notification.RequestNotificationData;
 import org.objectweb.proactive.core.jmx.server.ServerConnector;
-import org.objectweb.proactive.core.mop.MOP;
-import org.objectweb.proactive.core.mop.MOPException;
-import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.mop.ObjectReferenceReplacer;
-import org.objectweb.proactive.core.mop.ObjectReplacer;
+import org.objectweb.proactive.core.mop.*;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
@@ -101,6 +75,14 @@ import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenEx
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
+
+import javax.management.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 
 /**
@@ -556,10 +538,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             return this.reifiedObject;
         }
 
-        public String getName() {
-            return this.reifiedObject.getClass().getName();
-        }
-
         /**
          * Serves the request. The request should be removed from the request queue before serving,
          * which is correctly done by all methods of the Service class. However, this condition is
@@ -716,7 +694,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                     } catch (Throwable retryException1) {
                         // log the issue on the AO side for debugging purpose
                         // the initial exception must be the one to appear in the log.
-                        sendReplyExceptionsLogger.error("Failed to send reply to " + request, e1);
+                        sendReplyExceptionsLogger.error(shortString() + " : Failed to send reply to method:" +
+                            request.getMethodName() + " sequence: " + request.getSequenceNumber() + " by " +
+                            request.getSenderNodeURL() + "/" + request.getSender(), e1);
                     }
                 }
             }
@@ -816,7 +796,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
          * @return a unique identifier that can be used to tag a future, a request.
          */
         public synchronized long getNextSequenceID() {
-            return BodyImpl.this.bodyID.toString().hashCode() + ++this.absoluteSequenceID;
+            return BodyImpl.this.bodyID.hashCode() + ++this.absoluteSequenceID;
         }
 
         //
@@ -880,6 +860,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // -- CONSTRUCTORS -----------------------------------------------
         //
         public InactiveLocalBodyStrategy() {
+
         }
 
         public InactiveLocalBodyStrategy(FuturePool remainingsACs) {
@@ -907,10 +888,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
         public Object getReifiedObject() {
             throw new InactiveBodyException(BodyImpl.this);
-        }
-
-        public String getName() {
-            return "inactive body";
         }
 
         public void serve(Request request) {

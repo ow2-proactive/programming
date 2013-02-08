@@ -36,21 +36,6 @@
  */
 package org.objectweb.proactive.core.body;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.lang.management.ManagementFactory;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
@@ -84,14 +69,7 @@ import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.security.DefaultProActiveSecurityManager;
-import org.objectweb.proactive.core.security.InternalBodySecurity;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurity;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.Secure;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.TypedCertificate;
+import org.objectweb.proactive.core.security.*;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
 import org.objectweb.proactive.core.security.crypto.SessionException;
@@ -106,6 +84,20 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerProvidable;
+
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.management.ManagementFactory;
+import java.security.AccessControlException;
+import java.security.PublicKey;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -145,6 +137,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
+
     protected ThreadStore threadStore;
 
     // the current implementation of the local view of this body
@@ -201,8 +194,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
     // the StepByStep mode
     protected Debugger debugger;
 
-    private String reifiedObjectClassName;
-
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
@@ -226,15 +217,12 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      */
     public AbstractBody(Object reifiedObject, String nodeURL, MetaObjectFactory factory)
             throws ActiveObjectCreationException {
-        super(nodeURL);
+        super(reifiedObject, nodeURL);
 
         this.threadStore = factory.newThreadStoreFactory().newThreadStore();
 
         // GROUP
         this.spmdManager = factory.newProActiveSPMDGroupManagerFactory().newProActiveSPMDGroupManager();
-
-        if (reifiedObject != null)
-            this.reifiedObjectClassName = reifiedObject.getClass().getName();
 
         ProActiveSecurity.loadProvider();
 
@@ -309,11 +297,19 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         String inc = (this.ftmanager != null) ? ("" + this.ftmanager) : ("");
 
         if (this.localBodyStrategy != null) {
-            return "Body for " + this.localBodyStrategy.getName() + " node=" + this.nodeURL + " id=" +
-                this.bodyID + inc;
+            return "Body for " + this.getName() + " node=" + this.nodeURL + " id=" + this.bodyID + inc;
         }
 
         return "Method call called during Body construction -- the body is not yet initialized ";
+    }
+
+    /**
+     * Returns a short string representation of this object.
+     *
+     * @return a string representation of this object
+     */
+    public String shortString() {
+        return "" + this.nodeURL + "/" + this.bodyID;
     }
 
     //
@@ -325,7 +321,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         int ftres = FTManager.NON_FT;
         if (this.ftmanager != null) {
             if (this.isDead) {
-                throw new BodyTerminatedRequestException(reifiedObjectClassName, request != null ? request
+                throw new BodyTerminatedRequestException(shortString(), request != null ? request
                         .getMethodName() : null);
             } else {
                 ftres = this.ftmanager.onReceiveRequest(request);
@@ -337,7 +333,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         try {
             this.enterInThreadStore();
             if (this.isDead) {
-                throw new BodyTerminatedRequestException(reifiedObjectClassName, request != null ? request
+                throw new BodyTerminatedRequestException(shortString(), request != null ? request
                         .getMethodName() : null);
             }
             if (this.isSecurityOn) {
@@ -917,10 +913,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
     public Object getReifiedObject() {
         return this.localBodyStrategy.getReifiedObject();
-    }
-
-    public String getName() {
-        return this.localBodyStrategy.getName();
     }
 
     /**

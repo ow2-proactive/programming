@@ -59,6 +59,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
     private java.rmi.server.UID id;
     private java.rmi.dgc.VMID vmID;
+    private String identifier;
 
     //the Unique ID of the JVM
     private static java.rmi.dgc.VMID uniqueVMID = new java.rmi.dgc.VMID();
@@ -71,6 +72,11 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
+
+    public UniqueID(String identifier) {
+        this();
+        this.identifier = identifier;
+    }
 
     /**
      * Creates a new UniqueID
@@ -127,7 +133,7 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
         // Date-race initialization. Initialization in the ctor is to heavy
         String s = this.cachedShortString;
         if (s == null) {
-            s = "" + Math.abs(this.getCanonString().hashCode() % 100000);
+            s = (identifier != null ? identifier : "") + Math.abs(this.getCanonString().hashCode() % 100000);
             this.cachedShortString = s;
         }
 
@@ -138,7 +144,7 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
         // Date-race initialization. Initialization in the ctor is to heavy
         String s = this.cachedCanonString;
         if (s == null) {
-            s = ("" + this.id + "--" + this.vmID).replace(':', '-');
+            s = ((identifier != null ? identifier : "") + this.id + "--" + this.vmID).replace(':', '-');
             this.cachedCanonString = s;
         }
 

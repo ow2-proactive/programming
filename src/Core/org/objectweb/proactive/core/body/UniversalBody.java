@@ -103,6 +103,12 @@ public interface UniversalBody extends Serializable, SecurityEntity {
     public UniqueID getID();
 
     /**
+     * Return the name of this body, which generally contains the class name of the reified object
+     * @return the body name
+     */
+    public String getName();
+
+    /**
      * Signals to this body that the body identified by id is now to a new
      * remote location. The body given in parameter is a new stub pointing
      * to this new location. This call is a way for a body to signal to his

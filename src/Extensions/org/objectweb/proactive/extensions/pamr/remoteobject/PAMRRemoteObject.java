@@ -36,10 +36,6 @@
  */
 package org.objectweb.proactive.extensions.pamr.remoteobject;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
@@ -52,6 +48,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
 import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRemoteObjectRequest;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
 
 
 /**

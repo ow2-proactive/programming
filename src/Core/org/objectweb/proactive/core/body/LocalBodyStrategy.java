@@ -36,8 +36,6 @@
  */
 package org.objectweb.proactive.core.body;
 
-import java.io.IOException;
-
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
@@ -45,6 +43,8 @@ import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+
+import java.io.IOException;
 
 
 /**
@@ -77,12 +77,6 @@ public interface LocalBodyStrategy {
      * @return the reified object that body is for
      */
     public Object getReifiedObject();
-
-    /**
-     * Returns the name of this body that can be used for displaying information
-     * @return the name of this body
-     */
-    public String getName();
 
     /**
      * Sends the request <code>request</code> with the future <code>future</code> to the local body

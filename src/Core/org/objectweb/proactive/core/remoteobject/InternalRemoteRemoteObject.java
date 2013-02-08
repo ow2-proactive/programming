@@ -36,11 +36,11 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.io.IOException;
-import java.net.URI;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.security.SecurityEntity;
+
+import java.io.IOException;
+import java.net.URI;
 
 
 /**
@@ -56,7 +56,8 @@ import org.objectweb.proactive.core.security.SecurityEntity;
 public interface InternalRemoteRemoteObject extends RemoteRemoteObject, SecurityEntity {
 
     /**
-     * @return returns the URI where its protocol dependant remote object is bound
+     * We redefine the super method
+     * @return uri of the protocol dependant RO
      * @throws ProActiveException
      * @throws IOException
      */
@@ -107,4 +108,5 @@ public interface InternalRemoteRemoteObject extends RemoteRemoteObject, Security
      *          A collection of all RemoteRemoteObject
      */
     public RemoteObjectSet getRemoteObjectSet() throws IOException;
+
 }

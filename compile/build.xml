@@ -626,28 +626,44 @@
 		</sequential>
 	</macrodef>
 
+    <target name="junit.summary">
+        <junitreport todir="${junit.dir}">
+            <fileset dir="${junit.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.dir}/html"/>
+        </junitreport>
+        <echo message="JUnit report: ${junit.dir}/html/index.html" />
+    </target>
+
 	<target name="junit" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.http" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="http" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.rmissh" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="rmissh" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.rmi" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="rmi" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.rmissl" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="rmissl" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.amqp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="amqp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
 	</target>
 
 
@@ -657,6 +673,7 @@
 				<jvmarg value="-Djava.security.egd=file:/dev/urandom" />
 			</jvmargs>
 		</junitMacro>
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.ibis" depends="deploy.all">
@@ -666,6 +683,7 @@
 				<jvmarg value="-Dibis.serialization=ibis" />
 			</jvmargs>
 		</junitMacro>
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.pamr" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
@@ -675,10 +693,12 @@
 				<jvmarg value="-Dproactive.net.router.port=0" />
 			</jvmargs>
 		</junitMacro>
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.pnp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="pnp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
 	</target>
 
 	<target name="with.clover">

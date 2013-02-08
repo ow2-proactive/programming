@@ -36,12 +36,6 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.reply.Reply;
@@ -57,6 +51,12 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.security.AccessControlException;
+import java.security.PublicKey;
 
 
 /**
@@ -117,7 +117,7 @@ public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObjec
     /* (non-Javadoc)
      * @see org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject#getURI()
      */
-    public URI getURI() throws ProActiveException, IOException {
+    public URI getURI() {
         return this.uri;
     }
 

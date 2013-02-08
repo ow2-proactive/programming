@@ -36,17 +36,18 @@
  */
 package org.objectweb.proactive.core.remoteobject.rmi;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
-import java.rmi.server.RMIClientSocketFactory;
-import java.rmi.server.RMIServerSocketFactory;
-import java.rmi.server.UnicastRemoteObject;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+
+import java.io.IOException;
+import java.net.URI;
+import java.rmi.RemoteException;
+import java.rmi.server.RMIClientSocketFactory;
+import java.rmi.server.RMIServerSocketFactory;
+import java.rmi.server.UnicastRemoteObject;
 
 
 /**
@@ -74,5 +75,10 @@ public class RmiRemoteObjectImpl extends UnicastRemoteObject implements RmiRemot
     public Reply receiveMessage(Request message) throws RemoteException, RenegotiateSessionException,
             ProActiveException, IOException {
         return this.internalrrObject.receiveMessage(message);
+    }
+
+    @Override
+    public URI getURI() throws ProActiveException, IOException {
+        return internalrrObject.getURI();
     }
 }

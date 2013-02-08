@@ -36,14 +36,14 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.io.IOException;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.security.SecurityEntity;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+
+import java.io.IOException;
 
 
 /**
@@ -84,6 +84,11 @@ public interface RemoteObject<T> extends SecurityEntity {
      * @return return the classname of the reified object
      */
     public String getClassName();
+
+    /**
+     * @return return the universal name of this remote object
+     */
+    public String getName();
 
     /**
      * @return return the class of the reified object

@@ -36,15 +36,14 @@
  */
 package functionalTests.activeobject.futuremonitoring;
 
-import static junit.framework.Assert.assertTrue;
-
+import functionalTests.GCMFunctionalTest;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTest;
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -75,6 +74,7 @@ public class TestFutureMonitoring extends GCMFunctionalTest {
             //System.out.println(ac);
             ac.toString();
         } catch (FutureMonitoringPingFailureException fmpfe) {
+            fmpfe.printStackTrace();
             exception = true;
         }
         assertTrue(exception);
@@ -90,6 +90,7 @@ public class TestFutureMonitoring extends GCMFunctionalTest {
             //System.out.println(ac);
             acT.toString();
         } catch (FutureMonitoringPingFailureException fmpfe) {
+            fmpfe.printStackTrace();
             exceptionT = true;
         }
         assertTrue(exceptionT);
@@ -102,6 +103,7 @@ public class TestFutureMonitoring extends GCMFunctionalTest {
             //System.out.println(future);
             future.toString();
         } catch (FutureMonitoringPingFailureException fmpfe) {
+            fmpfe.printStackTrace();
             exception = true;
         }
         assertTrue(exception);

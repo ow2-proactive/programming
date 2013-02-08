@@ -48,10 +48,10 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -75,7 +75,12 @@ public class RemoteObjectExposer<T> {
     }
 
     public RemoteObjectExposer(String className, T target) {
-        this(className, target, null);
+        this(new UniqueID(className + "_").shortString(), className, target, null);
+    }
+
+    public RemoteObjectExposer(String className, Object target,
+            Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
+        this(new UniqueID(className + "_").shortString(), className, target, targetRemoteObjectAdapter);
     }
 
     /**
@@ -88,11 +93,11 @@ public class RemoteObjectExposer<T> {
      *            the adapter object that allows to implement specific behaviour
      *            like cache mechanism
      */
-    public RemoteObjectExposer(String className, Object target,
+    public RemoteObjectExposer(String name, String className, Object target,
             Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         this.className = className;
         try {
-            this.remoteObject = new RemoteObjectImpl(className, target, targetRemoteObjectAdapter);
+            this.remoteObject = new RemoteObjectImpl(name, className, target, targetRemoteObjectAdapter);
             this.remoteObject.setRemoteObjectExposer(this);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block

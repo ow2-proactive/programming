@@ -36,10 +36,8 @@
  */
 package org.objectweb.proactive.extensions.amqp.remoteobject;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-
+import com.rabbitmq.client.AMQP.BasicProperties;
+import com.rabbitmq.client.QueueingConsumer.Delivery;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
@@ -50,8 +48,9 @@ import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
 
-import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.QueueingConsumer.Delivery;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
 
 
 /**
@@ -96,6 +95,11 @@ public abstract class AbstractAMQPRemoteObject implements RemoteRemoteObject, Se
         this.queueName = AMQPUtils.computeQueueNameFromURI(remoteObjectURL);
         this.rpcExchangeName = rpcExchangeName;
         this.replyTimeout = replyTimeout;
+    }
+
+    @Override
+    public URI getURI() {
+        return remoteObjectURL;
     }
 
     /*

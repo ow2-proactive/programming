@@ -36,9 +36,6 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment;
 
-import java.io.File;
-import java.net.URL;
-
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
@@ -49,6 +46,9 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationRemoteObjectAdapter;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
+
+import java.io.File;
+import java.net.URL;
 
 
 /**
@@ -131,7 +131,7 @@ public class PAGCMDeployment {
     private static GCMApplication getRemoteObjectAdapter(GCMApplication gcma) throws ProActiveException {
         // Export this GCMApplication as a remote object
         String name = gcma.getDeploymentId() + "/GCMApplication";
-        RemoteObjectExposer<GCMApplication> roe = new RemoteObjectExposer<GCMApplication>(
+        RemoteObjectExposer<GCMApplication> roe = new RemoteObjectExposer<GCMApplication>(name,
             GCMApplication.class.getName(), gcma, GCMApplicationRemoteObjectAdapter.class);
         RemoteRemoteObject rro = roe.createRemoteObject(name, false);
         return (GCMApplication) RemoteObjectHelper.generatedObjectStub(new RemoteObjectAdapter(rro));

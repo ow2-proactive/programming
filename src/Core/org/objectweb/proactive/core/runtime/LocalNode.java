@@ -36,20 +36,6 @@
  */
 package org.objectweb.proactive.core.runtime;
 
-import java.lang.management.ManagementFactory;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.NotCompliantMBeanException;
-import javax.management.ObjectName;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
@@ -64,11 +50,7 @@ import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.SecurityEntity;
-import org.objectweb.proactive.core.security.TypedCertificate;
+import org.objectweb.proactive.core.security.*;
 import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
 import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
@@ -77,6 +59,14 @@ import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import javax.management.*;
+import java.lang.management.ManagementFactory;
+import java.security.AccessControlException;
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 
 /**
@@ -123,8 +113,9 @@ public class LocalNode implements SecurityEntity {
                     "registering node certificate for VN " + this.virtualNodeName);
         }
 
-        this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>(ProActiveRuntime.class.getName(),
-            ProActiveRuntimeImpl.getProActiveRuntime(), ProActiveRuntimeRemoteObjectAdapter.class);
+        this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>("LocalNode_" + name,
+            ProActiveRuntime.class.getName(), ProActiveRuntimeImpl.getProActiveRuntime(),
+            ProActiveRuntimeRemoteObjectAdapter.class);
         this.runtimeRoe.createRemoteObject(name, replacePreviousBinding);
 
         // JMX registration

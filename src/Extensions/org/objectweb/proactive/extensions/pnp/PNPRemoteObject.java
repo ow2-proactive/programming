@@ -36,12 +36,7 @@
  */
 package org.objectweb.proactive.extensions.pnp;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
@@ -50,6 +45,10 @@ import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
 
 
 /**

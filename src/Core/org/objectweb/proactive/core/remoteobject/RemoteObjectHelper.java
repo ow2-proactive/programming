@@ -36,9 +36,6 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.lang.reflect.Constructor;
-import java.net.URI;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -49,6 +46,9 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import java.lang.reflect.Constructor;
+import java.net.URI;
 
 
 public class RemoteObjectHelper {

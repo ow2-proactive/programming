@@ -9,7 +9,7 @@
 	<classpathentry excluding="functionalTests/annotations/**/*|functionalTests/annotations/callbacks/inputs/|functionalTests/annotations/migrationsignal/inputs/|functionalTests/annotations/migrationstrategy/inputs/|functionalTests/annotations/remoteobject/inputs/" kind="src" output="classes/Tests" path="src/Tests"/>
 	<classpathentry excluding="doc/PublishedAPIDoclet.java" kind="src" output="classes/Utils" path="src/Utils"/>
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
-	<classpathentry kind="lib" path="compile/lib/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="compile/lib/junit-4.11-SNAPSHOT-20120416-1530.jar"/>
 	<classpathentry kind="lib" path="lib/asm-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/ast-core-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>

@@ -36,11 +36,11 @@
  */
 package org.objectweb.proactive.extensions.amqp.remoteobject;
 
-import java.io.IOException;
-import java.net.URI;
-
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
+
+import java.io.IOException;
+import java.net.URI;
 
 
 /**

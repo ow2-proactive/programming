@@ -70,6 +70,8 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
      */
     protected UniqueID bodyID;
 
+    protected String name;
+
     protected int hashcode;
 
     public UniversalBodyRemoteObjectAdapter() {
@@ -86,6 +88,7 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
     @Override
     protected void construct() {
         this.bodyID = target.getID();
+        this.name = target.getName();
         this.hashcode = target.hashCode();
     }
 
@@ -104,6 +107,11 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
      */
     public UniqueID getID() {
         return bodyID;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     /**

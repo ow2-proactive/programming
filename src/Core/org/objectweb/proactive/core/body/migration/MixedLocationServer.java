@@ -36,10 +36,6 @@
  */
 package org.objectweb.proactive.core.body.migration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Hashtable;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.UniqueID;
@@ -50,6 +46,10 @@ import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.ext.locationserver.LocationServer;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Hashtable;
 
 
 public class MixedLocationServer implements org.objectweb.proactive.RunActive, LocationServer {
@@ -112,7 +112,7 @@ public class MixedLocationServer implements org.objectweb.proactive.RunActive, L
                         // the
                         // same sender for the same ID
                         UniqueID id = (UniqueID) oldest.getParameter(0);
-                        String requestID = oldest.getSender().getID().toString() + id.toString();
+                        String requestID = oldest.getSender().getID().getCanonString() + id.getCanonString();
 
                         LocationRequestInfo oldRequest = (LocationRequestInfo) requestTable.get(requestID);
 
