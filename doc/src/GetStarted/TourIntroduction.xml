@@ -126,6 +126,6 @@
 
       <para>We have developed an Eclipse application that will help
       developers to easily monitor ProActive applications. To learn how to monitor ProActive applications read the
-      <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk/IC2D/multiple_html/index.html">ProActive IC2D documentation</link>.</para>
+      ProActive IC2D documentation.</para>
    </section>
 </chapter>
