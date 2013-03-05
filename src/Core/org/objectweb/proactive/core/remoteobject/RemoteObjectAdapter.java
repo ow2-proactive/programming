@@ -36,6 +36,15 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
+import java.lang.reflect.TypeVariable;
+import java.net.URI;
+import java.security.AccessControlException;
+import java.security.PublicKey;
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -48,7 +57,11 @@ import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.security.*;
+import org.objectweb.proactive.core.security.PolicyServer;
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.security.SecurityContext;
+import org.objectweb.proactive.core.security.SecurityEntity;
+import org.objectweb.proactive.core.security.TypedCertificate;
 import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
 import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
@@ -57,15 +70,6 @@ import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
-import java.net.URI;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-import java.util.HashMap;
 
 
 /**
@@ -162,12 +166,6 @@ public class RemoteObjectAdapter implements RemoteObject {
     }
 
     public RemoteObjectAdapter(RemoteRemoteObject ro) throws ProActiveException {
-        // Retrieve from the RemoteRemoteObject (client-side) gave as parameter, all the exposed protocols on server-side
-        this.remoteObjectSet = this.getRemoteObjectSet(ro);
-
-        if (this.displayCaller.equals("[unknown]")) {
-            this.displayCaller = Thread.currentThread().getName();
-        }
 
         URI rouri = null;
         try {
@@ -178,6 +176,13 @@ public class RemoteObjectAdapter implements RemoteObject {
         } catch (IOException e) {
             LOGGER_RO.warn(displayCaller + " : unable to initialize remote object", e);
         }
+
+        if (this.displayCaller.equals("[unknown]")) {
+            this.displayCaller = Thread.currentThread().getName();
+        }
+
+        // Retrieve from the RemoteRemoteObject (client-side) gave as parameter, all the exposed protocols on server-side
+        this.remoteObjectSet = this.getRemoteObjectSet(ro);
 
     }
 
@@ -619,16 +624,16 @@ public class RemoteObjectAdapter implements RemoteObject {
             return ros;
         } catch (ProActiveException pae) {
             LOGGER_RO.info(displayCaller +
-                " : exception in remote object adapter while forwarding the method call to" + displayROURI,
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
                     pae);
             throw pae;
         } catch (IOException ioe) {
             throw new ProActiveException(displayCaller +
-                " : exception in remote object adapter while forwarding the method call to" + displayROURI,
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
                 ioe);
         } catch (RenegotiateSessionException rse) {
             throw new ProActiveException(displayCaller +
-                " : exception in remote object adapter while forwarding the method call to" + displayROURI,
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
                 rse);
         }
 
