@@ -36,17 +36,19 @@
  */
 package functionalTests.activeobject.onfailure;
 
+import functionalTests.FunctionalTest;
 import org.apache.log4j.Level;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedException;
+import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
-
-import functionalTests.FunctionalTest;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import static junit.framework.Assert.assertTrue;
 
 
 public class TestExceptionInInitActivity extends FunctionalTest {
@@ -55,13 +57,41 @@ public class TestExceptionInInitActivity extends FunctionalTest {
         // Disable future monitoring
         CentralPAPropertyRepository.PA_FUTUREMONITORING_TTM.setValue(0);
         ProActiveLogger.getLogger(Loggers.BODY).setLevel(Level.DEBUG);
+        ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
+        ProActiveLogger.getLogger(Loggers.REQUESTS).setLevel(Level.DEBUG);
+        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
+        //  ProActiveLogger.getLogger(Loggers.CORE).setLevel(Level.DEBUG);
     }
 
-    @Test(expected = BodyTerminatedException.class)
+    @Test
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {
         ExceptionInInitActivityAO ao = PAActiveObject.newActive(ExceptionInInitActivityAO.class,
                 new Object[] {});
+        Thread.sleep(2000);
+        boolean exception = false;
         // Should not be executed (or at least a Runtime Exception must been thrown by ao.getTrue())
-        ao.getTrue();
+        try {
+            ao.getTrue();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            assertTrue(e instanceof BodyTerminatedException);
+            exception = true;
+        }
+        assertTrue(exception);
+        exception = false;
+
+        CentralPAPropertyRepository.PA_FUTUREMONITORING_TTM.setValue(21000);
+        ao = PAActiveObject.newActive(ExceptionInInitActivityAO.class, new Object[] {});
+
+        // Should not be executed (or at least a Runtime Exception must been thrown by ao.getTrue())
+        try {
+            ao.getTrue();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            assertTrue(e instanceof FutureMonitoringPingFailureException);
+            exception = true;
+        }
+        assertTrue(exception);
+
     }
 }
