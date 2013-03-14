@@ -276,6 +276,11 @@ public class HalfBody extends AbstractBody {
             throw new HalfBodyException();
         }
 
+        @Override
+        public void serveWithException(Request request, Throwable exception) {
+            throw new HalfBodyException();
+        }
+
         public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
                 throws java.io.IOException, RenegotiateSessionException, CommunicationForbiddenException {
             long sequenceID = getNextSequenceID();

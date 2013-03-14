@@ -217,6 +217,7 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
             node = migrationManager.checkNode(node);
         } catch (MigrationException me) {
             // JMX Notification
+
             if (mbean != null) {
                 mbean.sendNotification(NotificationType.migrationExceptionThrown, me);
             }

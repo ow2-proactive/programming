@@ -36,6 +36,10 @@
  */
 package unitTests.dataspaces.mock;
 
+import java.io.IOException;
+import java.security.AccessControlException;
+import java.security.PublicKey;
+
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
@@ -63,10 +67,6 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
-
-import java.io.IOException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
 
 
 public class MOCKBody implements Body {
@@ -209,6 +209,10 @@ public class MOCKBody implements Body {
     }
 
     public void serve(Request request) {
+
+    }
+
+    public void serveWithException(Request request, Throwable exception) {
 
     }
 

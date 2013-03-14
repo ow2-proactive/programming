@@ -171,6 +171,11 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
         return RequestProcessor.KEEP;
     }
 
+    @Override
+    public Throwable getExceptionToThrow() {
+        return null; // TODO implement serving non functonal requests with an exception
+    }
+
     // --------------- FILTERS -----------------//
 
     /**

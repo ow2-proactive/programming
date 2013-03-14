@@ -36,6 +36,21 @@
  */
 package org.objectweb.proactive.core.body;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.management.ManagementFactory;
+import java.security.AccessControlException;
+import java.security.PublicKey;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
@@ -69,8 +84,15 @@ import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.security.*;
+import org.objectweb.proactive.core.security.DefaultProActiveSecurityManager;
+import org.objectweb.proactive.core.security.InternalBodySecurity;
+import org.objectweb.proactive.core.security.PolicyServer;
+import org.objectweb.proactive.core.security.ProActiveSecurity;
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.security.Secure;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
+import org.objectweb.proactive.core.security.SecurityContext;
+import org.objectweb.proactive.core.security.TypedCertificate;
 import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
 import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
@@ -84,20 +106,6 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerProvidable;
-
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanRegistrationException;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-import java.io.IOException;
-import java.io.Serializable;
-import java.lang.management.ManagementFactory;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -934,6 +942,34 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             this.ftmanager.onServeRequestAfter(request);
         } else {
             this.localBodyStrategy.serve(request);
+        }
+
+        // Sterility control
+        // Once the service of a sterile methodCall is done, the body can be turned back to standard
+        // mode
+        this.setSterility(false, null);
+    }
+
+    /**
+     * Serves the request with the given exception as result instead of the normal execution.
+     * The request should be removed from the request queue before serving,
+     * which is correctly done by all methods of the Service class. However, this condition is
+     * not ensured for custom calls on serve.
+     */
+    public void serveWithException(Request request, Throwable exception) {
+        // Sterility control
+        // If the methodCall is sterile, the body must be sterile during its service
+        if (request != null && request.getMethodCall() != null && request.getMethodCall().isSterile()) {
+            setSterility(true, request.getSender().getID());
+        }
+
+        // Serve
+        if (this.ftmanager != null) {
+            this.ftmanager.onServeRequestBefore(request);
+            this.localBodyStrategy.serveWithException(request, exception);
+            this.ftmanager.onServeRequestAfter(request);
+        } else {
+            this.localBodyStrategy.serveWithException(request, exception);
         }
 
         // Sterility control

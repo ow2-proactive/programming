@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.core.body;
 
+import java.io.IOException;
+
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
@@ -43,8 +45,6 @@ import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-
-import java.io.IOException;
 
 
 /**
@@ -97,6 +97,14 @@ public interface LocalBodyStrategy {
      * @param request the request to serve
      */
     public void serve(Request request);
+
+    /**
+     * Instead of serving the request <code>request</code>, returns the exception given in parameter to the caller
+     *
+     * @param request the request to serve
+     * @param request the exception to return
+     */
+    public void serveWithException(Request request, Throwable exception);
 
     /**
      * Returns a unique identifier that can be used to tag a future, a request

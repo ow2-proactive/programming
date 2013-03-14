@@ -122,6 +122,16 @@ public class Service {
     }
 
     /**
+     * Instead of serving the request given in parameter,
+     * the given exception will be sent to the caller
+     * @param request the request to be served
+     * @param exception the exception that will be thrown to the caller
+     */
+    public void serveWithException(Request request, Exception exception) {
+        body.serveWithException(request, exception);
+    }
+
+    /**
      * Invoke the default FIFO policy to pick up the requests from the request queue.
      * This does not return until the body terminate, as the active thread enters in
      * an infinite loop for processing the request in the FIFO order.
@@ -204,6 +214,109 @@ public class Service {
      */
     public void blockingServeOldest(RequestFilter requestFilter) {
         blockingServeOldest(requestFilter, 0);
+    }
+
+    /**
+     * Serves the oldest request in the request queue.
+     * The method blocks if there is no request until one request is
+     * received or until the body terminates.
+     */
+    public void blockingServeOldestWithException(Throwable ex) {
+        blockingServeOldestWithException(null, 0, ex);
+    }
+
+    /**
+     * Serves the oldest request in request queue.
+     * The method blocks if there is no request until one request is
+     * received or until the body terminates. The method does not block
+     * more than the given timeout.
+     * @param timeout how long the thread can be blocked for.
+     */
+    public void blockingServeOldestWithException(long timeout, Throwable ex) {
+        blockingServeOldestWithException(null, timeout, ex);
+    }
+
+    /**
+     * Serves the oldest request matching the criteria given be the filter with an Exception.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * The method blocks if there is no matching request until one
+     * matching request is received or until the body terminates. The method does not block
+     * more than the given timeout.
+     * @param requestFilter The request filter accepting the request
+     * @param timeout the timeout in ms
+     * @param ex The exception to send to the caller
+     */
+    public void blockingServeOldestWithException(RequestFilter requestFilter, long timeout, Throwable ex) {
+        Request r = requestQueue.blockingRemoveOldest(requestFilter, timeout);
+        if (r != null) {
+            body.serveWithException(r, ex);
+        }
+    }
+
+    /**
+     * Serves the oldest request for a method of name <code>methodName</code> with an Exception.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * The method blocks if there is no matching request until one
+     * matching request is received or until the body terminates.
+     * @param methodName The name of the request to serve
+     * @param ex The exception to send to the caller     *
+     * @throws NoSuchMethodError if methodName is not a public method of the reified object.
+     */
+    public void blockingServeOldestWithException(String methodName, Throwable ex) {
+        if (!this.body.checkMethod(methodName)) {
+            throw new NoSuchMethodError(methodName + " is not defined in " +
+                this.body.getReifiedObject().getClass().getName());
+        }
+        blockingServeOldestWithException(new RequestFilterOnMethodName(methodName), ex);
+    }
+
+    /**
+     * Serves the oldest request matching the criteria given be the filter with an Exception.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * The method blocks if there is no matching request until one
+     * matching request is received or until the body terminates.
+     * @param requestFilter The request filter accepting the request
+     * @param ex The exception to send to the caller
+     */
+    public void blockingServeOldestWithException(RequestFilter requestFilter, Throwable ex) {
+        blockingServeOldestWithException(requestFilter, 0, ex);
+    }
+
+    /**
+     * Serves the oldest request in the request queue with an Exception. If there is no
+     * request, the method returns with no effect.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param ex The exception to send to the caller
+     */
+    public void serveOldestWithException(Throwable ex) {
+        body.serveWithException(requestQueue.removeOldest(), ex);
+    }
+
+    /**
+     * Serves the oldest request for a method of name methodName with an Exception.
+     * If no matching request is found, the method returns with no effect.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param methodName The name of the request to serve
+     * @param ex The exception to send to the caller
+     * @throws NoSuchMethodError if methodName is not a public method of the reified object.
+     */
+    public void serveOldestWithException(String methodName, Throwable ex) {
+        if (!this.body.checkMethod(methodName)) {
+            throw new NoSuchMethodError(methodName + " is not defined in " +
+                this.body.getReifiedObject().getClass().getName());
+        }
+        body.serveWithException(requestQueue.removeOldest(methodName), ex);
+    }
+
+    /**
+     * Serves the oldest request matching the criteria given be the filter with an Exception.
+     * If no matching request is found, the method returns with no effect.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param requestFilter The request filter accepting the request
+     * @param ex The exception to send to the caller
+     */
+    public void serveOldestWithException(RequestFilter requestFilter, Throwable ex) {
+        body.serveWithException(requestQueue.removeOldest(requestFilter), ex);
     }
 
     /**
@@ -297,6 +410,73 @@ public class Service {
     }
 
     /**
+     * Serves the youngest request in the request queue with an Exception.
+     * The method blocks if there is no request until one request is
+     * received or until the body terminates.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param ex The exception to send to the caller
+     */
+    public void blockingServeYoungestWithException(Throwable ex) {
+        blockingServeYoungestWithException(null, 0, ex);
+    }
+
+    /**
+     * Serves the youngest request in request queue with an Exception.
+     * The method blocks if there is no request until one request is
+     * received or until the body terminates. The method does not block
+     * more than the given timeout.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param timeout : for how long the thread can be blocked.
+     * @param ex The exception to send to the caller
+     */
+    public void blockingServeYoungestWithException(long timeout, Throwable ex) {
+        blockingServeYoungestWithException(null, timeout, ex);
+    }
+
+    /**
+     * Serves the youngest request for a method of name <code>methodName</code> with an Exception.
+     * The method blocks if there is no matching request until one
+     * matching request is received or until the body terminates.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param methodName The name of the request to serve
+     * @param ex The exception to send to the caller
+     * @throws NoSuchMethodError if methodName is not a public method of the reified object.
+     */
+    public void blockingServeYoungestWithException(String methodName, Throwable ex) {
+        if (!this.body.checkMethod(methodName)) {
+            throw new NoSuchMethodError(methodName + " is not defined in " +
+                this.body.getReifiedObject().getClass().getName());
+        }
+        blockingServeYoungestWithException(new RequestFilterOnMethodName(methodName), ex);
+    }
+
+    /**
+     * Serves the youngest request matching the criteria given be the filter with an Exception.
+     * The method blocks if there is no matching request until one
+     * matching request is received or until the body terminates.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param requestFilter The request filter accepting the request
+     * @param ex The exception to send to the caller
+     */
+    public void blockingServeYoungestWithException(RequestFilter requestFilter, Throwable ex) {
+        blockingServeYoungestWithException(requestFilter, 0, ex);
+    }
+
+    /**
+     * Serves the youngest request matching the criteria given be the filter with an Exception.
+     * The method blocks if there is no matching request until one
+     * matching request is received or until the body terminates. The method does not block
+     * more than the given timeout.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param requestFilter The request filter accepting the request
+     * @param timeout : for how long the thread can be blocked.
+     * @param ex The exception to send to the caller
+     */
+    public void blockingServeYoungestWithException(RequestFilter requestFilter, long timeout, Throwable ex) {
+        body.serveWithException(requestQueue.blockingRemoveYoungest(requestFilter, timeout), ex);
+    }
+
+    /**
      * Serves the youngest request in the request queue. If there is no
      * request, the method returns with no effect.
      */
@@ -327,7 +507,54 @@ public class Service {
         body.serve(requestQueue.removeYoungest(requestFilter));
     }
 
+    /**
+     * Serves the youngest request in the request queue with an Exception. If there is no
+     * request, the method returns with no effect.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param ex The exception to send to the caller
+     */
+    public void serveYoungestWithException(Throwable ex) {
+        body.serveWithException(requestQueue.removeYoungest(), ex);
+    }
+
+    /**
+     * Serves the youngest request for a method of name methodName with an Exception.
+     * If no matching request is found, the method returns with no effect.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param methodName The name of the request to serve
+     * @param ex The exception to send to the caller
+     * @throws NoSuchMethodError if methodName is not a public method of the reified object.
+     */
+    public void serveYoungestWithException(String methodName, Throwable ex) {
+        if (!this.body.checkMethod(methodName)) {
+            throw new NoSuchMethodError(methodName + " is not defined in " +
+                this.body.getReifiedObject().getClass().getName());
+        }
+        body.serveWithException(requestQueue.removeYoungest(methodName), ex);
+    }
+
+    /**
+     * Serves the youngest request matching the criteria given be the filter with an Exception.
+     * If no matching request is found, the method returns with no effect.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param requestFilter The request filter accepting the request
+     * @param ex The exception to send to the caller
+     */
+    public void serveYoungestWithException(RequestFilter requestFilter, Throwable ex) {
+        body.serveWithException(requestQueue.removeYoungest(requestFilter), ex);
+    }
+
     // -- Serve All ---------------------------------------------------
+
+    /**
+     * Serves all requests in the queue.
+     * If there is no request matching the method name,
+     * no request is served.
+     * All served requests are removed from the RequestQueue.
+     */
+    public void serveAll() {
+        requestQueue.processRequests(new ServingRequestProcessor(new AcceptAllRequestFilter()), body);
+    }
 
     /**
      * Serves all requests for the method named <code>methodName</code>.
@@ -352,6 +579,47 @@ public class Service {
      */
     public void serveAll(RequestFilter requestFilter) {
         requestQueue.processRequests(new ServingRequestProcessor(requestFilter), body);
+    }
+
+    /**
+     * Serves all requests with an Exception.
+     * If there is no request in the request queue,
+     * no request is served.
+     * The requests will not actually be served, the exception will be sent to the caller instead
+     * All served requests are removed from the RequestQueue.
+     * @param ex The exception to send to the caller
+     */
+    public void serveAllWithException(Throwable ex) {
+        requestQueue.processRequests(new ServingRequestProcessor(new AcceptAllRequestFilter(), ex), body);
+    }
+
+    /**
+     * Serves all requests for the method named <code>methodName</code> with an Exception.
+     * If there is no request matching the method name,
+     * no request is served.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * All served requests are removed from the RequestQueue.
+     * @param methodName The name of the request to serve
+     * @param ex The exception to send to the caller
+     * @throws NoSuchMethodError if methodName is not a public method of the reified object.
+     */
+    public void serveAllWithException(String methodName, Throwable ex) {
+        if (!this.body.checkMethod(methodName)) {
+            throw new NoSuchMethodError(methodName + " is not defined in " +
+                this.body.getReifiedObject().getClass().getName());
+        }
+        serveAllWithException(new RequestFilterOnMethodName(methodName), ex);
+    }
+
+    /**
+     * Serves all requests accepted by the given filter with an Exception.
+     * All served requests are removed from the RequestQueue.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param requestFilter The request filter accepting the request
+     * @param ex The exception to send to the caller
+     */
+    public void serveAllWithException(RequestFilter requestFilter, Throwable ex) {
+        requestQueue.processRequests(new ServingRequestProcessor(requestFilter, ex), body);
     }
 
     // -- Serve And Flush Youngest ---------------------------------------------------
@@ -387,7 +655,7 @@ public class Service {
 
     /**
      * Serves the most recent request (youngest) accepted by the given filter
-     * and discards all the other requests also accepted by this sasme filter.
+     * and discards all the other requests also accepted by this same filter.
      * The most recent request is the one served.
      * If there is no match, no request is served or removed.
      * All requests accepted by the filter are removed from the request queue.
@@ -395,6 +663,53 @@ public class Service {
      */
     public void flushingServeYoungest(RequestFilter requestFilter) {
         requestQueue.processRequests(new FlushingServeYoungestRequestProcessor(requestFilter), body);
+    }
+
+    /**
+     * Serves the youngest request with an Exception and discard all other requests
+     * After the call the youngest request is served and the request
+     * queue is empty.
+     * If the request queue is already empty before the call the method
+     * has no effect
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param ex The exception to send to the caller
+     */
+    public void flushingServeYoungestWithException(Throwable ex) {
+        flushingServeYoungestWithException(new AcceptAllRequestFilter(), ex);
+    }
+
+    /**
+     * Serves the most recent request (youngest) for the method named <code>methodName</code> with an Exception
+     * and discards all the other requests of the same name. The most recent
+     * request is the one served.
+     * If there is no match, no request is served or removed.
+     * All requests of method name <code>methodName</code> are removed from the
+     * request queue.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param methodName The name of the request to serve and flush
+     * @param ex The exception to send to the caller
+     * @throws NoSuchMethodError if methodName is not a public method of the reified object.
+     */
+    public void flushingServeYoungestWithException(String methodName, Throwable ex) {
+        if (!this.body.checkMethod(methodName)) {
+            throw new NoSuchMethodError(methodName + " is not defined in " +
+                this.body.getReifiedObject().getClass().getName());
+        }
+        flushingServeYoungestWithException(new RequestFilterOnMethodName(methodName), ex);
+    }
+
+    /**
+     * Serves the most recent request (youngest) accepted by the given filter with an Exception
+     * and discards all the other requests also accepted by this sasme filter.
+     * The most recent request is the one served.
+     * If there is no match, no request is served or removed.
+     * All requests accepted by the filter are removed from the request queue.
+     * The request will not actually be served, the exception will be sent to the caller instead
+     * @param requestFilter The request filter accepting requests
+     * @param ex The exception to send to the caller
+     */
+    public void flushingServeYoungestWithException(RequestFilter requestFilter, Throwable ex) {
+        requestQueue.processRequests(new FlushingServeYoungestRequestProcessor(requestFilter, ex), body);
     }
 
     // -- Serve And Flush Oldest ---------------------------------------------------
@@ -438,6 +753,53 @@ public class Service {
      */
     public void flushingServeOldest(RequestFilter requestFilter) {
         requestQueue.processRequests(new FlushingServeOldestRequestProcessor(requestFilter), body);
+    }
+
+    /**
+     * Serves the oldest request with an Exception and discard all other requests.
+     * After the call the oldest request is served and the request
+     * queue is empty.
+     * The request will not actually be "served", the exception given as parameter will be sent to the caller instead
+     * If the request queue is already empty before the call the method
+     * has no effect
+     * @param ex The exception to send to the caller
+     */
+    public void flushingServeOldestWithException(Throwable ex) {
+        flushingServeOldestWithException(new AcceptAllRequestFilter(), ex);
+    }
+
+    /**
+     * Serves the oldest request for the method named <code>methodName</code> with an Exception
+     * and discards all the other requests of the same name. The oldest
+     * request is the one served.
+     * If there is no match, no request is served or removed.
+     * All requests of method name <code>methodName</code> are removed from the
+     * request queue.
+     * The request will not actually be "served", the exception given as parameter will be sent to the caller instead
+     * @param methodName The name of the request to serve and flush
+     * @param ex The exception to send to the caller
+     * @throws NoSuchMethodError if methodName is not a public method of the reified object.
+     */
+    public void flushingServeOldestWithException(String methodName, Throwable ex) {
+        if (!this.body.checkMethod(methodName)) {
+            throw new NoSuchMethodError(methodName + " is not defined in " +
+                this.body.getReifiedObject().getClass().getName());
+        }
+        flushingServeOldestWithException(new RequestFilterOnMethodName(methodName), ex);
+    }
+
+    /**
+     * Serves the oldest request accepted by the given filter with an Exception
+     * and discards all the other requests also accepted by this sasme filter.
+     * The oldest request is the one served.
+     * If there is no match, no request is served or removed.
+     * All requests accepted by the filter are removed from the request queue.
+     * The request will not actually be "served", the exception given as parameter will be sent to the caller instead
+     * @param requestFilter The request filter accepting requests
+     * @param ex The exception to send to the caller
+     */
+    public void flushingServeOldestWithException(RequestFilter requestFilter, Throwable ex) {
+        requestQueue.processRequests(new FlushingServeOldestRequestProcessor(requestFilter, ex), body);
     }
 
     // -- Other helpers methods ---------------------------------------------------
@@ -753,9 +1115,15 @@ public class Service {
 
         /** the filter*/
         private RequestFilter selectorRequestFilter;
+        private Throwable exception;
 
         public ServingRequestProcessor(RequestFilter selectorRequestFilter) {
             this.selectorRequestFilter = selectorRequestFilter;
+        }
+
+        public ServingRequestProcessor(RequestFilter selectorRequestFilter, Throwable ex) {
+            this.selectorRequestFilter = selectorRequestFilter;
+            this.exception = ex;
         }
 
         /**
@@ -771,6 +1139,11 @@ public class Service {
             } else {
                 return KEEP;
             }
+        }
+
+        @Override
+        public Throwable getExceptionToThrow() {
+            return exception;
         }
     } // end inner class ServingRequestProcessor
 
@@ -790,9 +1163,15 @@ public class Service {
         private Request requestToServe;
         private int counter;
         private int numberOfRequests;
+        private Throwable exception;
 
         public FlushingServeYoungestRequestProcessor(RequestFilter selectorRequestFilter) {
             this.selectorRequestFilter = selectorRequestFilter;
+        }
+
+        public FlushingServeYoungestRequestProcessor(RequestFilter selectorRequestFilter, Throwable ex) {
+            this.selectorRequestFilter = selectorRequestFilter;
+            this.exception = ex;
         }
 
         /**
@@ -817,12 +1196,17 @@ public class Service {
             }
             if ((counter == numberOfRequests) && (requestToServe != null)) {
                 if (request == requestToServe) {
-                    return REMOVE_AND_SERVE; // serve current request
+                    return REMOVE_AND_SERVE;
                 } else {
                     body.serve(requestToServe); // serve an already removed request
                 }
             }
             return shouldRemove;
+        }
+
+        @Override
+        public Throwable getExceptionToThrow() {
+            return exception; // not applicable;
         }
     } // end inner class FlushingServeYoungestRequestProcessor
 
@@ -840,9 +1224,15 @@ public class Service {
     protected class FlushingServeOldestRequestProcessor implements RequestProcessor {
         private RequestFilter selectorRequestFilter;
         private boolean hasServed;
+        private Throwable exception;
 
         public FlushingServeOldestRequestProcessor(RequestFilter selectorRequestFilter) {
             this.selectorRequestFilter = selectorRequestFilter;
+        }
+
+        public FlushingServeOldestRequestProcessor(RequestFilter selectorRequestFilter, Throwable ex) {
+            this.selectorRequestFilter = selectorRequestFilter;
+            this.exception = ex;
         }
 
         /**
@@ -862,6 +1252,11 @@ public class Service {
             } else {
                 return KEEP;
             }
+        }
+
+        @Override
+        public Throwable getExceptionToThrow() {
+            return exception;
         }
     } // end inner class FlushingServeYoungestRequestProcessor
 

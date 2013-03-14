@@ -246,6 +246,7 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
 
     public void processRequests(RequestProcessor processor, Body body) {
         List<Request> reqToServe = new ArrayList<Request>();
+        Throwable exceptionToTrow = processor.getExceptionToThrow();
         synchronized (this) {
 
             for (int i = 0; i < requestQueue.size(); i++) {
@@ -293,7 +294,11 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
         }
         // If there is a request to serve, we serve it (but outside the synchronized block)
         for (Request req : reqToServe) {
-            body.serve(req);
+            if (exceptionToTrow != null) {
+                body.serveWithException(req, exceptionToTrow);
+            } else {
+                body.serve(req);
+            }
         }
     }
 
@@ -337,7 +342,7 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
      * Return the oldest fullfilling the criteria defined by the
      * given filter or null if no match
      * The request is removed only if shouldRemove is set to true
-     * @param methodName the name of the method to look for
+     * @param requestFilter the name of the method to look for
      * @param shouldRemove whether to remove the request found or not
      * @return the oldest matching request or null
      */
@@ -379,7 +384,7 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
      * Return the youngest request fullfilling the criteria defined by the
      * given filter or null if no match
      * The request is removed only if shouldRemove is set to true
-     * @param methodName the name of the method to look for
+     * @param requestFilter the name of the method to look for
      * @param shouldRemove whether to remove the request found or not
      * @return the youngest matching request or null
      */

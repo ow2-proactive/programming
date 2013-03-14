@@ -179,6 +179,8 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
             this.notify();
         }
 
+        boolean callTerminate = false;
+
         // run the activity of the body
         try {
 
@@ -214,14 +216,16 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
         } catch (Exception e) {
             logger.error("Exception occured in runActivity method of body " + toString() +
                 ". Now terminating the body", e);
-            terminate();
+            callTerminate = true;
+
         } finally {
             // execute the end of activity if not after migration
             if ((!this.hasJustMigrated) && (this.endActive != null)) {
                 this.endActive.endActivity(this);
             }
-
-            if (isActive()) {
+            if (callTerminate) {
+                terminate();
+            } else if (isActive()) {
                 activityStopped(!this.getFuturePool().remainingAC());
             }
         }

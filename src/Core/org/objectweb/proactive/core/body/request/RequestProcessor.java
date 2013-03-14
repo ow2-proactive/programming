@@ -74,4 +74,10 @@ public interface RequestProcessor {
      * @return one of the three constants above
      */
     public int processRequest(Request request);
+
+    /**
+     * An exception to throw instead of serving the method
+     * @return
+     */
+    public Throwable getExceptionToThrow();
 }
