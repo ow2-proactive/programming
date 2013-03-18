@@ -137,6 +137,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
     private final File configFile;
 
     private final int heartbeatTimeout;
+    private final long clientEvictionTimeout;
 
     /** Create a new router
      * 
@@ -157,6 +158,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
     RouterImpl(RouterConfig config) throws Exception {
         this.configFile = config.getReservedAgentConfigFile();
         this.heartbeatTimeout = config.getHeartbeatTimeout();
+        this.clientEvictionTimeout = config.getClientEvictionTimeout();
 
         init(config);
         ThreadFactory tf = new NamedThreadFactory("Proactive PAMR router worker");
@@ -189,6 +191,11 @@ public class RouterImpl extends RouterInternal implements Runnable {
         this.port = serverSocket.getLocalPort();
         logger.info("Message router listening on " + serverSocket.toString() + ". Heartbeat timeout is " +
             this.heartbeatTimeout + " ms");
+        if (this.clientEvictionTimeout == -1) {
+            logger.info("Client eviction is disabled");
+        } else {
+            logger.info("Client eviction timeout is " + this.clientEvictionTimeout + " ms");
+        }
 
         // register the listener with the selector
         ssc.register(selector, SelectionKey.OP_ACCEPT);
@@ -340,6 +347,37 @@ public class RouterImpl extends RouterInternal implements Runnable {
         }
     }
 
+    private class EvictClientsTimerTask extends SafeTimerTask {
+
+        @Override
+        public void safeRun() {
+            evictStaleClients();
+        }
+
+        private void evictStaleClients() {
+            long currentTime = System.currentTimeMillis();
+            for (Map.Entry<AgentID, Client> entry : clientMap.entrySet()) {
+                AgentID agentID = entry.getKey();
+                Client client = entry.getValue();
+                if (!agentID.isReserved() && !client.isConnected()) {
+                    long timeSinceLastSeen = currentTime - client.getLastSeen();
+                    if (timeSinceLastSeen >= clientEvictionTimeout) {
+                        logger.info("Evicting client " + client + ": last seen " + timeSinceLastSeen +
+                            " ms ago");
+                        clientMap.remove(agentID);
+                    }
+                }
+            }
+        }
+    }
+
+    private void createAndScheduleEvictClientsTimerTask() {
+        Timer timer = new Timer("Client eviction timer", true);
+        long delay = this.clientEvictionTimeout / 3;
+        EvictClientsTimerTask task = new EvictClientsTimerTask();
+        timer.scheduleAtFixedRate(task, new Date(), delay);
+    }
+
     public void run() {
         boolean r = this.selectThread.compareAndSet(null, Thread.currentThread());
         if (r == false) {
@@ -352,6 +390,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
         long delay = this.heartbeatTimeout / 3;
         HeartbeatTimerTask hbtt = new HeartbeatTimerTask(delay);
         timer.scheduleAtFixedRate(hbtt, new Date(), delay);
+
+        if (clientEvictionTimeout >= 0) {
+            createAndScheduleEvictClientsTimerTask();
+        }
 
         Set<SelectionKey> selectedKeys = null;
         Iterator<SelectionKey> it;
