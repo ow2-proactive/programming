@@ -67,12 +67,15 @@ public class RouterConfig {
 
     private int heartbeatTimeout;
 
+    private long clientEvictionTimeout;
+
     public RouterConfig() {
         this.port = 0;
         this.isDaemon = false;
         this.nbWorkerThreads = 4;
         this.inetAddress = null;
         this.heartbeatTimeout = 9000;
+        this.clientEvictionTimeout = -1;
     }
 
     public void setReadOnly() {
@@ -154,6 +157,14 @@ public class RouterConfig {
 
     public void setHeartbeatTimeout(int heartbeatTimeout) {
         this.heartbeatTimeout = heartbeatTimeout;
+    }
+
+    public long getClientEvictionTimeout() {
+        return clientEvictionTimeout;
+    }
+
+    public void setClientEvictionTimeout(long timeout) {
+        this.clientEvictionTimeout = timeout;
     }
 
 }

@@ -83,6 +83,8 @@ class Main {
         this.options.addOption("4", "ipv4", false, "Force the router to use IPv4 addresses only");
         this.options.addOption("6", "ipv6", false, "Force the router to use IPv6 addresses only");
         this.options.addOption("t", "timeout", true, "The heartbeat timeout value");
+        this.options.addOption("e", "evictTimeout", true,
+                "Timeout for the eviction of disconnected clients (default: -1, means no eviction)");
         this.options.addOption("w", "nbWorkers", true, "Size of the worker thread pool");
         this.options.addOption("f", "configFile", true, "configuration file");
         this.options.addOption("h", "help", false, "Print help message");
@@ -117,8 +119,9 @@ class Main {
                 error |= line.hasOption("w");
                 error |= line.hasOption("f");
                 error |= line.hasOption("t");
+                error |= line.hasOption("e");
                 if (error) {
-                    printHelpAndExit("Options -4 -6 -w -f -t are not compatible with -r");
+                    printHelpAndExit("Options -4 -6 -w -f -t -e are not compatible with -r");
                 }
 
                 int port = -1;
@@ -278,6 +281,19 @@ class Main {
                         config.setHeartbeatTimeout(i);
                     } catch (NumberFormatException e) {
                         printHelpAndExit("Invalid timeout value");
+                    }
+                }
+
+                arg = line.getOptionValue("e");
+                if (arg != null) {
+                    try {
+                        long i = Long.parseLong(arg);
+                        if (i == 0 || i < -1) {
+                            printHelpAndExit("Invalid client eviction timeout value. Must be either -1 or positive");
+                        }
+                        config.setClientEvictionTimeout(i);
+                    } catch (NumberFormatException e) {
+                        printHelpAndExit("Invalid client eviction timeout value");
                     }
                 }
 
