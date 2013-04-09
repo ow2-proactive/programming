@@ -125,8 +125,10 @@ public class PARTPinger extends Thread {
             logger.warn("You are running the latest version of ProActive");
         } else {
             logger.warn("You don't seem to be running the latest released version of ProActive");
-            logger.warn(String.format("Version you are using: %s, latest version: %s", version, latestVersion));
-            logger.warn("To download the latest release, please visit http://www.activeeon.com/community-downloads");
+            logger.warn(String
+                    .format("Version you are using: %s, latest version: %s", version, latestVersion));
+            logger
+                    .warn("To download the latest release, please visit http://www.activeeon.com/community-downloads");
         }
         logger.warn(String.format("To disable this check, set the %s property to false",
                 CentralPAPropertyRepository.PA_RUNTIME_PING.getName()));
