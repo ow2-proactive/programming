@@ -52,6 +52,8 @@ import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
 import org.objectweb.proactive.extensions.dataspaces.core.naming.SpacesDirectory;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceAlreadyRegisteredException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.WrongApplicationIdException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSNodeScratchSpaceImpl;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerImpl;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
@@ -344,9 +346,14 @@ public class NodeConfigurator {
                     cachingDir.register(scratchInfo);
                     registered = true;
                     logger.debug("Scratch space for application registered");
+                } catch (SpaceAlreadyRegisteredException e) {
+                    logger.error("Could not register application scratch space to Naming Service", e);
+                    throw e;
+                } catch (WrongApplicationIdException e) {
+                    logger.error("Could not register application scratch space to Naming Service", e);
+                    throw e;
                 } finally {
                     if (!registered) {
-                        logger.error("Could not register application scratch space to Naming Service");
                         nodeScratchSpace.close();
                     }
                 }
