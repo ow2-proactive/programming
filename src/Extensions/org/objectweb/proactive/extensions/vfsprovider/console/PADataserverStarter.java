@@ -37,7 +37,6 @@
 package org.objectweb.proactive.extensions.vfsprovider.console;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -56,11 +55,6 @@ public class PADataserverStarter {
 
     private static FileSystemServerDeployer deployer;
 
-    /**
-     * @param args
-     * @throws IOException
-     * @throws URISyntaxException
-     */
     public static void main(String[] args) throws IOException {
         final String name = PADataserverStarter.class.getName();
 
@@ -71,6 +65,8 @@ public class PADataserverStarter {
             System.out.println("       java " + name + " --help");
             System.out
                     .println("Starts the ProActive dataserver for <root directory> with default or specified name.");
+            System.out.println("ProActive system properties can be set using command line too.");
+            System.out.println("\tSyntax is: -Dproperty=value");
             System.out.println("\t--help\tprints this screen");
             return;
         }

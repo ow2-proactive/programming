@@ -227,6 +227,11 @@ VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?
                     </listitem>
                 </itemizedlist>
             </para>
+			<para>
+				ProActive system properties (see <xref linkend="ProActiveproperties_69" /> for details) can also be set using command line
+				(-Dproperty=value). For instance, the port can be configured using
+				-Dproactive.rmi.port=1099 given that RMI is used.
+			</para>
         </section>
     </section>
 
