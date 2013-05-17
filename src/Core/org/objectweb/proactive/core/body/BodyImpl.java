@@ -57,7 +57,6 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.ProActiveInternalObject;
 import org.objectweb.proactive.annotation.ImmediateService;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.benchmarks.timit.util.CoreTimersContainer;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
@@ -99,8 +98,6 @@ import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.util.profiling.Profiling;
-import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 
 
 /**
@@ -178,17 +175,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         super(reifiedObject, nodeURL, factory);
 
         super.isProActiveInternalObject = reifiedObject instanceof ProActiveInternalObject;
-
-        // TIMING
-        if (!super.isProActiveInternalObject) {
-            super.timersContainer = CoreTimersContainer.create(super.bodyID, reifiedObject, factory, nodeURL);
-
-            if (super.timersContainer != null) {
-                TimerWarehouse.enableTimers();
-                // START TOTAL TIMER
-                TimerWarehouse.startTimer(super.bodyID, TimerWarehouse.TOTAL);
-            }
-        }
 
         this.checkedMethodNames = new HashMap<String, HashSet<List<Class<?>>>>();
 
@@ -564,10 +550,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
          * not ensured for custom calls on serve.
          */
         public void serve(Request request) {
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.startServeTimer(bodyID, request.getMethodCall().getReifiedMethod());
-            }
-
             // push the new context
             LocalBodyStore.getInstance().pushContext(new Context(BodyImpl.this, request));
 
@@ -575,10 +557,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 serveInternal(request, null);
             } finally {
                 LocalBodyStore.getInstance().popContext();
-            }
-
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.stopServeTimer(BodyImpl.this.bodyID);
             }
         }
 
@@ -589,10 +567,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
          * not ensured for custom calls on serve.
          */
         public void serveWithException(Request request, Throwable exception) {
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.startServeTimer(bodyID, request.getMethodCall().getReifiedMethod());
-            }
-
             // push the new context
             LocalBodyStore.getInstance().pushContext(new Context(BodyImpl.this, request));
 
@@ -600,10 +574,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 serveInternal(request, exception);
             } finally {
                 LocalBodyStore.getInstance().popContext();
-            }
-
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.stopServeTimer(BodyImpl.this.bodyID);
             }
         }
 
@@ -694,10 +664,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 return;
             }
 
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.startTimer(BodyImpl.this.bodyID, TimerWarehouse.SEND_REPLY);
-            }
-
             // JMX Notification
             if (!isProActiveInternalObject && (mbean != null) && reply.getResult().getException() == null) {
                 String tagNotification = createTagNotification(request.getTags());
@@ -767,10 +733,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                             request.getSenderNodeURL() + "/" + request.getSender(), e1);
                     }
                 }
-            }
-
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.stopTimer(BodyImpl.this.bodyID, TimerWarehouse.SEND_REPLY);
             }
 
             this.getFuturePool().removeDestinations();

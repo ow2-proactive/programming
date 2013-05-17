@@ -66,8 +66,6 @@ import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableExce
 import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.core.util.profiling.Profiling;
-import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 
 
 public class RequestImpl extends MessageImpl implements Request, java.io.Serializable {
@@ -408,21 +406,11 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
     }
 
     protected void writeTheObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-        if ((Profiling.TIMERS_COMPILED) && (this.sourceID != null)) {
-            TimerWarehouse.stopTimer(this.sourceID, TimerWarehouse.BEFORE_SERIALIZATION);
-            TimerWarehouse.startTimer(this.sourceID, TimerWarehouse.SERIALIZATION);
-        }
-
         out.defaultWriteObject();
         if (this.sender != null) {
             out.writeObject(this.sender.getRemoteAdapter());
         } else {
             out.writeObject(this.sender);
-        }
-
-        if ((Profiling.TIMERS_COMPILED) && (this.sourceID != null)) {
-            TimerWarehouse.stopTimer(this.sourceID, TimerWarehouse.SERIALIZATION);
-            TimerWarehouse.startTimer(this.sourceID, TimerWarehouse.AFTER_SERIALIZATION);
         }
     }
 

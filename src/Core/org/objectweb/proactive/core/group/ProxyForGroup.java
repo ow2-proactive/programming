@@ -39,7 +39,6 @@ package org.objectweb.proactive.core.group;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -55,8 +54,6 @@ import org.objectweb.proactive.core.mop.*;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.core.util.profiling.Profiling;
-import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -242,13 +239,6 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
     public synchronized Object reify(MethodCall mc) throws InvocationTargetException {
         // System.out.println("A method is called : \"" + mc.getName() + "\" on
         // " + this.memberList.size() + " membres.");
-        if (Profiling.TIMERS_COMPILED) {
-            TimerWarehouse
-                    .startXAndDisable(
-                            PAActiveObject.getBodyOnThis().getID(),
-                            ((mc.isOneWayCall() || (mc.getReifiedMethod().getReturnType() == Void.TYPE)) ? TimerWarehouse.GROUP_ONE_WAY_CALL
-                                    : TimerWarehouse.GROUP_ASYNC_CALL));
-        }
 
         ExceptionListException exceptionList = null;
 
@@ -341,12 +331,6 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         // throw new InvocationTargetException(e, "Group invocation failed due
         // to a synchronization issue");
         // }
-        if (Profiling.TIMERS_COMPILED) {
-            TimerWarehouse.enableAndStopX(PAActiveObject.getBodyOnThis().getID(), ((mc.isOneWayCall() || (mc
-                    .getReifiedMethod().getReturnType() == Void.TYPE)) ? TimerWarehouse.GROUP_ONE_WAY_CALL
-                    : TimerWarehouse.GROUP_ASYNC_CALL));
-        }
-
         /*
          * Early returned exceptions are assumed to be caused by a rendez-vous failure There is a
          * race condition, if an application exception comes back too early it can be taken for a

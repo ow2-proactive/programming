@@ -104,8 +104,6 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 import org.objectweb.proactive.core.util.ThreadStore;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.core.util.profiling.Profiling;
-import org.objectweb.proactive.core.util.profiling.TimerProvidable;
 
 
 /**
@@ -168,10 +166,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
     protected boolean isSterileBody;
     protected UniqueID parentUID;
     protected transient SendingQueue sendingQueue; // should not be migrated
-
-    // TIMING
-    /** A container for timers not migratable for the moment */
-    protected transient TimerProvidable timersContainer;
 
     // JMX
     /** The MBean representing this body */
@@ -731,17 +725,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         if (this.isDead && (this.getFuturePool() == null)) {
             return;
         }
-        if (Profiling.TIMERS_COMPILED) {
-            // THE VARIABLE TIMERS_COMPILED SHOULD BE EVALUATED ALONE
-            if (this.timersContainer != null) {
-                // Stops wfr, serve and total
-                this.timersContainer.stopAll();
-                // We need to finalize statistics of the timers container
-                // for this body
-                this.timersContainer.sendResults(this.getName(), this.bodyID.shortString());
-                this.timersContainer = null;
-            }
-        }
+
         this.isDead = true;
         // the ACthread is not killed if completeACs is true AND there is
         // some ACs remaining...

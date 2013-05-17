@@ -391,15 +391,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
      * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#getTimersSnapshotFromBody()
      */
     public Object[] getTimersSnapshotFromBody() throws Exception {
-        final org.objectweb.proactive.core.util.profiling.TimerProvidable container = org.objectweb.proactive.core.util.profiling.TimerWarehouse
-                .getTimerProvidable(this.id);
-        if (container == null) {
-            throw new NullPointerException("The timers container is null, the body is not timed.");
-        }
-        return new Object[] { container.getSnapshot(), // The array of timers
-                System.nanoTime() // The nano timestamp on this machine used
-        // to stop all timers at the caller side
-        };
+        throw new UnsupportedOperationException("Times are not supported anymore");
     }
 
     /**

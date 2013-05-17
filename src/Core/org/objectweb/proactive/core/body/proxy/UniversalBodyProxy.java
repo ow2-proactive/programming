@@ -82,8 +82,6 @@ import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenEx
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.core.util.profiling.Profiling;
-import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 
 
 public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Serializable {
@@ -446,10 +444,6 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     @Override
     protected void sendRequest(MethodCall methodCall, Future future, Body sourceBody)
             throws java.io.IOException, RenegotiateSessionException, CommunicationForbiddenException {
-        if (Profiling.TIMERS_COMPILED) {
-            TimerWarehouse.startTimer(sourceBody.getID(), TimerWarehouse.SEND_REQUEST);
-        }
-
         // TODO if component request and shortcut : update body ref
         // Now we check whether the reference to the remoteBody has changed i.e the body has
         // migrated
@@ -491,39 +485,19 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         }
 
         if (this.isLocal) {
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.startTimer(sourceBody.getID(), TimerWarehouse.LOCAL_COPY);
-            }
             // Replaces the effective arguments with a deep copy
             // Only do this if the body is local
             // For remote bodies, this is automatically handled by the RMI stub
             methodCall.makeDeepCopyOfArguments();
-
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.stopTimer(sourceBody.getID(), TimerWarehouse.LOCAL_COPY);
-            }
-            sendRequestInternal(methodCall, future, sourceBody);
-        } else {
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.startTimer(sourceBody.getID(), TimerWarehouse.BEFORE_SERIALIZATION);
-            }
-
-            sendRequestInternal(methodCall, future, sourceBody);
-
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.stopTimer(sourceBody.getID(), TimerWarehouse.AFTER_SERIALIZATION);
-            }
         }
+
+        sendRequestInternal(methodCall, future, sourceBody);
 
         FuturePool fp = sourceBody.getFuturePool();
 
         // A synchronous termination request may have destroyed the future pool
         if (fp != null) {
             fp.removeDestinations();
-        }
-
-        if (Profiling.TIMERS_COMPILED) {
-            TimerWarehouse.stopTimer(sourceBody.getID(), TimerWarehouse.SEND_REQUEST);
         }
 
         // Restore Result Object

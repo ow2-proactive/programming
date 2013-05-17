@@ -51,8 +51,6 @@ import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.util.profiling.Profiling;
-import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 import org.objectweb.proactive.utils.TimeoutAccounter;
 
 
@@ -193,10 +191,6 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      * Does not check for pending requests before waiting
      */
     private synchronized void internalWait(long timeout) {
-        if (Profiling.TIMERS_COMPILED) {
-            TimerWarehouse.startTimer(this.ownerID, TimerWarehouse.WAIT_FOR_REQUEST);
-        }
-
         // JMX Notification
         Body body = LocalBodyStore.getInstance().getLocalBody(ownerID);
         if (body != null) {
@@ -211,11 +205,6 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
             this.wait(timeout);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            // THIS CODE IS NEVER EXECUTED IF THE ACTIVE OBJECT IS TERMINATED
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse.stopTimer(this.ownerID, TimerWarehouse.WAIT_FOR_REQUEST);
-            }
         }
     }
 
