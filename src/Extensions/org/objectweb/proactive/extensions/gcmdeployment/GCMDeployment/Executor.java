@@ -36,8 +36,6 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +49,8 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.OperatingSystem;
+
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class Executor {
@@ -83,7 +83,7 @@ public class Executor {
                         command);
                     break;
                 case windows:
-                    // if command is passed to the ProcessBuilder as single string it can be corrupted on windows 
+                    // if command is passed to the ProcessBuilder as single string it can be corrupted on windows
                     // (see PROACTIVE-1176)
                     String[] tokenizedCommand = tokenizeCommand(command);
                     pb = new ProcessBuilder(tokenizedCommand);
@@ -92,7 +92,8 @@ public class Executor {
 
             pb.redirectErrorStream(true);
             Process p = pb.start();
-            InputStreamMonitor streamMonitor = new InputStreamMonitor(p.getInputStream(), command, logger);
+            InputStreamMonitor<String> streamMonitor = new InputStreamMonitor<String>(p.getInputStream(),
+                command, "" + command.subSequence(0, 100), logger);
             streamMonitor.start();
             threads.add(streamMonitor);
         } catch (IOException e) {
@@ -109,18 +110,52 @@ public class Executor {
         return cmdarray;
     }
 
-    static private class InputStreamMonitor extends Thread {
+    public void submit(List<List<String>> commandList) {
+        Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT + ".job." + jobId);
+        jobId++;
+        for (int i = 0; i < commandList.size(); i++) {
+            List<String> command = commandList.get(i);
+            logger.debug("Command submitted: " + command);
+            try {
+                logger.info("executing command=" + command);
+
+                ProcessBuilder pb = null;
+                switch (OperatingSystem.getOperatingSystem()) {
+                    case unix:
+                        pb = new ProcessBuilder(command);
+                        break;
+                    case windows:
+                        // if command is passed to the ProcessBuilder as single string it can be corrupted on windows 
+                        // (see PROACTIVE-1176)
+                        // String[] tokenizedCommand = tokenizeCommand(command);
+                        pb = new ProcessBuilder(command);
+                        break;
+                }
+
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+                InputStreamMonitor<List<String>> streamMonitor = new InputStreamMonitor<List<String>>(p
+                        .getInputStream(), command, "Process" + i, logger);
+                streamMonitor.start();
+                threads.add(streamMonitor);
+            } catch (IOException e) {
+                logger.warn("Cannot execute: " + command, e);
+            }
+        }
+    }
+
+    static private class InputStreamMonitor<T> extends Thread {
         InputStream stream;
-        String cmd;
+        T cmd;
         Logger logger;
 
-        public InputStreamMonitor(InputStream stream, String cmd, Logger logger) {
+        public InputStreamMonitor(InputStream stream, T cmd, String name, Logger logger) {
             this.logger = logger;
             logger.trace("Monitor started: " + cmd);
             this.stream = stream;
             this.cmd = cmd;
             setDaemon(true);
-            setName("GCM Deployment Monitor for " + cmd.subSequence(0, 100));
+            setName("GCM Deployment Monitor for " + name);
         }
 
         @Override

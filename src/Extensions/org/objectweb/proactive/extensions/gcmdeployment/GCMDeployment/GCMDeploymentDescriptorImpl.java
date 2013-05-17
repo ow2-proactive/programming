@@ -36,8 +36,6 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
-
 import java.net.URL;
 import java.util.List;
 
@@ -47,6 +45,9 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Group;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
+
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class GCMDeploymentDescriptorImpl implements GCMDeploymentDescriptor {
@@ -74,7 +75,7 @@ public class GCMDeploymentDescriptorImpl implements GCMDeploymentDescriptor {
         HostInfo hostInfo = resources.getHostInfo();
         if (hostInfo != null) {
             // Something needs to be started on this host
-            String command = commandBuilder.buildCommand(hostInfo, gcma);
+            List<List<String>> command = commandBuilder.buildCommandLocal(hostInfo, gcma);
 
             GCMD_LOGGER.info("Starting a process on localhost");
             GCMD_LOGGER.debug("command= " + command);

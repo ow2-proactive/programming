@@ -44,6 +44,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplic
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeProvider;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
+
 
 public class CommandBuilderExecutable implements CommandBuilder {
 
@@ -78,11 +80,47 @@ public class CommandBuilderExecutable implements CommandBuilder {
     }
 
     public void addArg(String arg) {
-        args.add(arg);
+        if (arg != null) {
+            GCMD_LOGGER.trace(" Added " + arg + " to args");
+            args.addAll(CommandBuilderHelper.parseArg(arg));
+        }
     }
 
     public void addNodeProvider(NodeProvider nodeProvider) {
         providers.add(nodeProvider);
+    }
+
+    @Override
+    public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma) {
+        ArrayList<String> cmd = new ArrayList<String>();
+        if (path != null) {
+            cmd.add(PathElement.appendPath(path.getFullPath(hostInfo, this), command, hostInfo));
+        } else {
+            cmd.add(command);
+        }
+        for (String arg : args) {
+            cmd.add(arg);
+        }
+        int nbCmd = 0;
+        switch (instances) {
+            case onePerCapacity:
+                nbCmd = hostInfo.getHostCapacity() * hostInfo.getVmCapacity();
+                break;
+            case onePerVM:
+                nbCmd = hostInfo.getHostCapacity();
+                break;
+            case onePerHost:
+                nbCmd = 1;
+                break;
+        }
+
+        ArrayList<List<String>> commandList = new ArrayList<List<String>>();
+        for (int i = 0; i < nbCmd; i++) {
+            commandList.add(cmd);
+        }
+
+        GCMD_LOGGER.trace(commandList);
+        return commandList;
     }
 
     public String buildCommand(HostInfo hostInfo, GCMApplicationInternal gcma) {

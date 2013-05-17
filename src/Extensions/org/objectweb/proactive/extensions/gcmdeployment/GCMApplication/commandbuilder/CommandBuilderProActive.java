@@ -36,28 +36,30 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.StartPARuntime;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
-import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tools;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement.PathBase;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
+
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class CommandBuilderProActive implements CommandBuilder {
@@ -76,7 +78,7 @@ public class CommandBuilderProActive implements CommandBuilder {
     private PathElement javaPath = null;
 
     /** Arguments to be passed to java */
-    private List<String> jvmArgs;
+    private Set<String> jvmArgs;
 
     /**
      * ProActive classpath
@@ -105,7 +107,7 @@ public class CommandBuilderProActive implements CommandBuilder {
     private PathElement runtimePolicy;
 
     /** JVM debug mode configuration */
-    private String debugCommandLine;
+    private List<String> debugCommandLine;
 
     /** indicates if the debug tag has been found in the GCMA */
     private boolean isDebugEnabled = false;
@@ -113,7 +115,7 @@ public class CommandBuilderProActive implements CommandBuilder {
     public CommandBuilderProActive() {
         GCMD_LOGGER.trace(this.getClass().getSimpleName() + " created");
         vns = new HashMap<String, GCMVirtualNodeInternal>();
-        jvmArgs = new ArrayList<String>();
+        jvmArgs = new HashSet<String>();
     }
 
     public void addVirtualNode(GCMVirtualNodeInternal vn) {
@@ -168,8 +170,10 @@ public class CommandBuilderProActive implements CommandBuilder {
 
     public void addJVMArg(String arg) {
         if (arg != null) {
-            GCMD_LOGGER.trace(" Added " + arg + " to JavaArgs");
-            jvmArgs.add(arg);
+            if (arg != null) {
+                GCMD_LOGGER.trace(" Added " + arg + " to JVMargs");
+                jvmArgs.addAll(CommandBuilderHelper.parseArg(arg));
+            }
         }
     }
 
@@ -243,7 +247,7 @@ public class CommandBuilderProActive implements CommandBuilder {
                 javaCommand = javaTool.getPath();
             }
         }
-        return "\"" + javaCommand + "\"";
+        return javaCommand;
     }
 
     /**
@@ -334,8 +338,8 @@ public class CommandBuilderProActive implements CommandBuilder {
     }
 
     /**
-     * Build a command defining a ProActive runtime launching on a target host. 
-     * @param hostInfo HostInfo defining target's host properties.  
+     * Build a command defining a ProActive runtime launching on a target host.
+     * @param hostInfo HostInfo defining target's host properties.
      * @param gcma GCMA containing ProActive application attributes to launch.
      * @param withClasspath if true, specify directly the classpath in the command with
      * -cp argument after 'java' command (Classpath surrounded by "), otherwise classpath is not defined.
@@ -375,7 +379,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         }
 
         if (withClasspath) {
-            //add classpath string surrounded by ", 
+            //add classpath string surrounded by ",
             //to deal with OS that accept paths without escaped spaces chars
             StringBuilder sb = new StringBuilder();
             command.append("-cp \"");
@@ -520,6 +524,143 @@ public class CommandBuilderProActive implements CommandBuilder {
         return ret.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder#buildCommand(org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo, org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal)
+     */
+    public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma) {
+        return buildCommandLocal(hostInfo, gcma, true);
+    }
+
+    /**
+     * Build a command defining a ProActive runtime launching on a target host.
+     * This command builder uses a List to build the command instead of a String builder, this is less error-prone and works much better on Windows
+     * @param hostInfo HostInfo defining target's host properties.  
+     * @param gcma GCMA containing ProActive application attributes to launch.
+     * @param withClasspath if true, specify directly the classpath in the command with
+     * -cp argument after 'java' command (Classpath surrounded by "), otherwise classpath is not defined.
+     * @return
+     */
+    public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma,
+            boolean withClasspath) {
+        if ((proActivePath == null) && (hostInfo.getTool(Tools.PROACTIVE.id) == null)) {
+            throw new IllegalStateException(
+                "ProActive installation path must be specified with the relpath attribute inside the proactive element (GCMA), or as tool in all hostInfo elements (GCMD). HostInfo=" +
+                    hostInfo.getId());
+        }
+
+        if (!hostInfo.isCapacitiyValid()) {
+            throw new IllegalStateException(
+                "To enable capacity autodetection nor VM Capacity nor Host Capacity must be specified. HostInfo=" +
+                    hostInfo.getId());
+        }
+
+        ArrayList<String> command = new ArrayList<String>();
+        // Java
+        command.add(getJava(hostInfo));
+
+        Tool jp = hostInfo.getTool(Tools.JAVA_PARAMETERS.id);
+        if (jp != null) {
+            command.add(jp.getPath()); // Not really a path, but it's ok
+        }
+
+        for (String arg : jvmArgs) {
+            command.add(arg);
+        }
+
+        if (CentralPAPropertyRepository.PA_TEST.isTrue()) {
+            command.add(CentralPAPropertyRepository.PA_TEST.getCmdLine() + "true");
+        }
+
+        if (withClasspath) {
+            //add classpath string surrounded by ", 
+            //to deal with OS that accept paths without escaped spaces chars
+            StringBuilder sb = new StringBuilder();
+            command.add("-cp");
+            command.add(getClasspath(hostInfo));
+        }
+        // Log4j
+        if (log4jProperties != null) {
+            command.add(CentralPAPropertyRepository.LOG4J.getCmdLine() + "file:" +
+                log4jProperties.getFullPath(hostInfo, this));
+        } else {
+            command.add(CentralPAPropertyRepository.PA_LOG4J_COLLECTOR.getCmdLine() +
+                gcma.getLogCollectorUrl());
+        }
+
+        // Java Security Policy
+        if (javaSecurityPolicy != null) {
+            command.add(CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getCmdLine() +
+                javaSecurityPolicy.getFullPath(hostInfo, this));
+        } else {
+            command.add(CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getCmdLine() +
+                CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getValue());
+        }
+
+        if (hostInfo.getNetworkInterface() != null) {
+            command.add(CentralPAPropertyRepository.PA_NET_INTERFACE.getCmdLine() +
+                hostInfo.getNetworkInterface());
+        }
+
+        if (runtimePolicy != null) {
+            command.add(CentralPAPropertyRepository.PA_RUNTIME_SECURITY.getCmdLine() +
+                runtimePolicy.getFullPath(hostInfo, this));
+        }
+
+        if (hostInfo.getDataSpacesScratchURL() != null) {
+            command.add(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URL.getCmdLine() +
+                hostInfo.getDataSpacesScratchURL());
+        }
+
+        if (hostInfo.getDataSpacesScratchPath() != null) {
+            command.add(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_PATH.getCmdLine() +
+                hostInfo.getDataSpacesScratchPath().getFullPath(hostInfo, this));
+        }
+
+        if (isDebugEnabled) {
+            command.addAll(getDebugCommand(hostInfo, gcma.getDeploymentId()));
+        }
+
+        // Class to be started and its arguments
+        command.add(StartPARuntime.class.getName());
+
+        String parentURL;
+        try {
+            parentURL = RuntimeFactory.getDefaultRuntime().getURL();
+        } catch (ProActiveException e) {
+            GCMD_LOGGER.error(
+                    "Cannot determine the URL of this runtime. Children will not be able to register", e);
+            parentURL = "unkownParentURL";
+        }
+        command.add("-" + StartPARuntime.Params.parent.shortOpt());
+        command.add(parentURL);
+
+        if (hostInfo.getVmCapacity() != 0) {
+            command.add("-" + StartPARuntime.Params.capacity.shortOpt());
+            command.add("" + hostInfo.getVmCapacity());
+        }
+
+        command.add("-" + StartPARuntime.Params.topologyId.shortOpt());
+        command.add("" + hostInfo.getToplogyId());
+
+        command.add("-" + StartPARuntime.Params.deploymentId.shortOpt());
+        command.add("" + gcma.getDeploymentId());
+
+        // TODO cdelbe Check FT properties here
+        // was this.ftService.buildParamsLine();
+
+        ArrayList<List<String>> commandList = new ArrayList<List<String>>();
+        for (int i = 0; i < hostInfo.getHostCapacity(); i++) {
+            ArrayList<String> commandi = new ArrayList<String>(command);
+            for (int j = 0; j < commandi.size(); j++) {
+                commandi.set(j, commandi.get(j).replaceAll(TOKEN, "" + i));
+            }
+            commandList.add(commandi);
+        }
+
+        GCMD_LOGGER.trace(commandList);
+        return commandList;
+    }
+
     public void setProActivePath(String proActivePath) {
         setProActivePath(proActivePath, PathBase.HOME.name());
     }
@@ -569,19 +710,25 @@ public class CommandBuilderProActive implements CommandBuilder {
     }
 
     public void setDebugCommand(String debugCommand) {
-        debugCommandLine = debugCommand;
+        debugCommandLine = new ArrayList<String>();
+        if (debugCommand != null) {
+            GCMD_LOGGER.trace(" Set " + debugCommand + " to debugCommand");
+            debugCommandLine.addAll(CommandBuilderHelper.parseArg(debugCommand));
+        }
     }
 
-    protected String getDebugCommand(HostInfo hostInfo, long deploymentId) {
-        Tool javaTool = hostInfo.getTool(Tools.JAVA.id);
-        String java = "java";
-        if (javaTool != null) {
-            java = javaTool.getPath();
-        }
+    protected List<String> getDebugCommand(HostInfo hostInfo, long deploymentId) {
+        //        Tool javaTool = hostInfo.getTool(Tools.JAVA.id);
+        //        String java = "java";
+        //        if (javaTool != null) {
+        //            java = javaTool.getPath();
+        //        }
         if (debugCommandLine == null) {
+            debugCommandLine = new ArrayList<String>();
             String token = "padebug_" + deploymentId + "_" + TOKEN;
-            debugCommandLine = "-DdebugID=" + token +
-                " -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0";
+            debugCommandLine.add("-DdebugID=" + token);
+            debugCommandLine.add("-Xdebug");
+            debugCommandLine.add("-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0");
         }
         return debugCommandLine;
     }

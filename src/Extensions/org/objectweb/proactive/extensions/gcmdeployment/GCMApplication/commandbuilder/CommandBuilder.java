@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
+import java.util.List;
+
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 
@@ -43,8 +45,22 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.H
 public interface CommandBuilder {
 
     /**
-     * Build the command to start the application
+     * Build the command to start the application, this applies only to local executions where using List<String> is preferred
+     * over simple String
      * 
+     *
+     * @param hostInfo
+     *            Host information to customize the command according to this host type
+     * @param gcma
+     *            configuration of the GCMApplication
+     * @return A list of command to be used to start several nodes. Each command is expressed via a list of Strings
+     */
+    public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma);
+
+    /**
+     * Build the command to start the application
+     *
+     *
      * @param hostInfo
      *            Host information to customize the command according to this host type
      * @return The command to be used to start the application
