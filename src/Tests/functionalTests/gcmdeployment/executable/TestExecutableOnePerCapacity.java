@@ -36,24 +36,15 @@
  */
 package functionalTests.gcmdeployment.executable;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderExecutable.Instances;
-import org.objectweb.proactive.utils.OperatingSystem;
-
-import functionalTests.TestDisabler;
 
 
 public class TestExecutableOnePerCapacity extends AbstractTExecutable {
 
     public TestExecutableOnePerCapacity() throws ProActiveException {
         super(Instances.onePerCapacity);
-    }
-
-    @Before
-    final public void disable() {
-        TestDisabler.unsupportedOs(OperatingSystem.windows);
     }
 
     @Test(timeout = 20000)

@@ -36,13 +36,16 @@
  */
 package unitTests.gcmdeployment.commandEscape;
 
-import static unitTests.UnitTests.logger;
-
 import java.io.IOException;
 
+import functionalTests.TestDisabler;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
+import org.objectweb.proactive.utils.OperatingSystem;
+
+import static unitTests.UnitTests.logger;
 
 
 public class TestCommandEscape {
@@ -51,6 +54,11 @@ public class TestCommandEscape {
     final static int vTrue = 0;
     final static String cFalse = "/bin/false \"plop\"";
     final static int vFalse = 1;
+
+    @Before
+    final public void disable() {
+        TestDisabler.unsupportedOs(OperatingSystem.windows);
+    }
 
     @Test
     public void testCommandEscape() throws IOException, InterruptedException {

@@ -71,7 +71,7 @@ public class TestSnapshot extends GCMFunctionalTest {
         super.startDeployment();
     }
 
-    @Test
+    @Test(timeout = 20000)
     public void test() throws ProActiveException, InterruptedException {
         Root r = PAActiveObject.newActive(Root.class, new Object[] {}, super.getANode());
 

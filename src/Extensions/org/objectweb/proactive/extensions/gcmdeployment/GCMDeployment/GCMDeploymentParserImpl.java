@@ -36,8 +36,6 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
-import static org.objectweb.proactive.core.mop.Utils.makeDeepCopy;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -59,8 +57,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.BroadcastEntry;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
@@ -99,6 +95,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMPars
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVMwareVIParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVMwareVixParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVirtualboxParser;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.objectweb.proactive.extensions.gcmdeployment.environment.Environment;
 import org.objectweb.proactive.utils.OperatingSystem;
 import org.ow2.proactive.virtualizing.core.error.VirtualServiceException;
@@ -108,6 +106,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import static org.objectweb.proactive.core.mop.Utils.makeDeepCopy;
 
 
 /**
@@ -301,8 +301,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         // Must use URLs here so schemas can be fetched from jars
-        URL extensionSchemaURL = GCMDeploymentParserImpl.class.getClass().getResource(
-                EXTENSION_SCHEMAS_LOCATION);
+        URL extensionSchemaURL = GCMDeploymentParserImpl.class.getResource(EXTENSION_SCHEMAS_LOCATION);
 
         schemas.add(0, extensionSchemaURL.toString());
 

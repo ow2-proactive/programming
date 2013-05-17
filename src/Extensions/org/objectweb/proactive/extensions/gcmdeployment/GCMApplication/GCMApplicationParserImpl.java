@@ -259,12 +259,16 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
                     if (schemeFound) {
                         // if it's an url starting with file: we remove the protocol
                         URL urlWithFile = new URL(path);
-                        if (urlWithFile.getHost().length() != 0) {
+                        if (urlWithFile.getHost().length() > 1) {
+                            // the host can include the Windows drive letter (in that case it is of size 1)
                             throw new IOException(
                                 urlWithFile +
                                     " is using the form <host>/<path> which is not supported. Other possibility is that the url is of the form file:/<path> and it should be file://<path>");
+                        } else if (urlWithFile.getHost().length() == 1) {
+                            path = urlWithFile.getHost() + ":" + "/" + urlWithFile.getPath();
+                        } else {
+                            path = urlWithFile.getPath();
                         }
-                        path = urlWithFile.getPath();
                     }
                     File file = new File(path);
 
@@ -276,7 +280,7 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
                         // we need to handle ourselves how we resolve the relative path against the jar
                         JarURLConnection jconn = (JarURLConnection) descriptor.openConnection();
                         URI base = new URI(jconn.getEntryName());
-                        URI resolved = base.resolve(new URI(file.getPath()));
+                        URI resolved = base.resolve(new URI(file.getPath().replace("\\", "/")));
                         fullURL = new URL("jar:" + jconn.getJarFileURL().toExternalForm() + "!/" + resolved);
                     } else if (descriptor.toURI().isOpaque()) {
                         // This is very unlikely, but : ff this path is relative and the base url is not hierarchical (and differs from jar)

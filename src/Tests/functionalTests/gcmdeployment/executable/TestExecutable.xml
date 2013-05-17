@@ -17,10 +17,10 @@
 	
 	<application>
 		<executable instances="${instances}">
-			<command name="&quot;${java.home}/bin/java&quot;">
+			<command name="${java.home}/bin/java">
 				<arg>-cp "${proactive.home}/classes/Tests"</arg>
 				<arg>functionalTests.gcmdeployment.executable.Executable</arg>
-				<arg>"${tmpDir}"</arg>
+				<arg>${tmpDir}</arg>
 			</command>
 			<nodeProvider refid="remote"/>
 		</executable>

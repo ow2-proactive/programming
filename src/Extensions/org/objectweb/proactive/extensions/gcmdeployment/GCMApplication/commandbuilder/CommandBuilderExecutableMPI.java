@@ -44,6 +44,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplic
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeProvider;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
+
 
 public class CommandBuilderExecutableMPI implements CommandBuilder {
 
@@ -71,11 +73,31 @@ public class CommandBuilderExecutableMPI implements CommandBuilder {
     }
 
     public void addArg(String arg) {
-        args.add(arg);
+        if (arg != null) {
+            GCMD_LOGGER.trace(" Added " + arg + " to args");
+            args.addAll(CommandBuilderHelper.parseArg(arg));
+        }
     }
 
     public void addDescriptor(NodeProvider nodeProvider) {
         providers.add(nodeProvider);
+    }
+
+    @Override
+    public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma) {
+        ArrayList<String> cmd = new ArrayList<String>();
+        if (path != null) {
+            cmd.add(PathElement.appendPath(path.getFullPath(hostInfo, this), command, hostInfo));
+        } else {
+            cmd.add(command);
+        }
+        for (String arg : args) {
+            cmd.add(arg);
+        }
+        ArrayList<List<String>> commandList = new ArrayList<List<String>>();
+        commandList.add(cmd);
+        GCMD_LOGGER.trace(commandList);
+        return commandList;
     }
 
     public String buildCommand(HostInfo hostInfo, GCMApplicationInternal gcma) {
