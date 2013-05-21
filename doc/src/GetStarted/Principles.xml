@@ -90,12 +90,6 @@
 			</listitem>
 			<listitem>
 				<para>
-					<emphasis role="bold">Monte Carlo</emphasis> - The goal of the ProActive Monte-Carlo API is to provide an easy to use API for running Monte-Carlo simulations in a distributed environment.
-					You can find its documentation in <link xlink:href="../../AdvancedFeatures/multiple_html/MonteCarlo.html">"Chapter 14. Monte-Carlo API"</link> of the Advanced Features manual.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
 					<emphasis role="bold">Legacy Wrapping</emphasis> - The Message Passing Interface (MPI) is a widely adopted communication library for parallel and distributed computing. This API helps you to deploy, wrap and couple MPI applications for distributed environments.
 					You can find its documentation in <link xlink:href="../../ReferenceManual/multiple_html/WrappingMpiAndLegacyCode.html">"Chapter 9. Wrapping Native MPI Application"</link> of the Reference Manual.
 
