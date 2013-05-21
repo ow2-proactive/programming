@@ -107,12 +107,6 @@ public interface BodyWrapperMBean extends Serializable {
     public ObjectName getObjectName();
 
     /**
-     * Returns an array of timers.
-     * @return an array of timers
-     */
-    public Object[] getTimersSnapshotFromBody() throws Exception;
-
-    /**
      * Returns <code>True</code> if the reified object of the body implements
      * {@link java.io.Serializable} <code>False</code> otherwise.
      *
@@ -144,13 +138,6 @@ public interface BodyWrapperMBean extends Serializable {
      * @throws MigrationException
      */
     public void migrateTo(String nodeUrl) throws MigrationException;
-
-    /**
-     * returns a list of outgoing active object references.
-     */
-    public Collection<UniqueID> getReferenceList();
-
-    public String getDgcState();
 
     //
     // -- STEPBYSTEP METHODS -----------------------------------------------

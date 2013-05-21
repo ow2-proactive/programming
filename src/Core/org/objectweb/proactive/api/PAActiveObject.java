@@ -1077,7 +1077,6 @@ public class PAActiveObject {
             UniversalBody body = getRemoteBody(obj);
 
             String url = body.registerByName(name, rebind);
-            body.setRegistered(true);
             if (PAActiveObject.logger.isInfoEnabled()) {
                 PAActiveObject.logger.info("Success at binding url " + url);
             }
@@ -1098,7 +1097,6 @@ public class PAActiveObject {
             UniversalBody body = getRemoteBody(obj);
 
             String url = body.registerByName(name, rebind, protocol);
-            body.setRegistered(true);
             if (PAActiveObject.logger.isInfoEnabled()) {
                 PAActiveObject.logger.info("Success at binding url " + url);
             }
@@ -1378,20 +1376,22 @@ public class PAActiveObject {
      *                if the remote object cannot be removed from the registry
      */
     public static void unregister(String url) throws java.io.IOException {
-
         RemoteObject<?> rmo;
         try {
             rmo = RemoteObjectHelper.lookup(URI.create(url));
-            Object o = RemoteObjectHelper.generatedObjectStub(rmo);
 
-            if (o instanceof UniversalBody) {
-                UniversalBody ub = (UniversalBody) o;
-                ub.setRegistered(false);
+            try {
+                rmo.getRemoteObjectExposer().unexportAll();
+            } catch (ProActiveException e) {
+                PAActiveObject.logger.error("Failed to unexport " + url, e);
             }
 
-            if (PAActiveObject.logger.isDebugEnabled()) {
-                PAActiveObject.logger.debug("Success at unbinding url " + url);
+            try {
+                rmo.getRemoteObjectExposer().unregisterAll();
+            } catch (ProActiveException e) {
+                logger.error("Failed to unregister " + url, e);
             }
+
         } catch (ProActiveException e) {
             throw new IOException(e.getMessage());
         }

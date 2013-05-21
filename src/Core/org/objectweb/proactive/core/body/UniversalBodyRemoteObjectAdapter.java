@@ -47,8 +47,6 @@ import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.gc.GCMessage;
-import org.objectweb.proactive.core.gc.GCResponse;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -157,10 +155,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
         return target.receiveFTMessage(ev);
     }
 
-    public GCResponse receiveGCMessage(GCMessage toSend) throws IOException {
-        return target.receiveGCMessage(toSend);
-    }
-
     public int receiveReply(Reply r) throws IOException {
         return target.receiveReply(r);
     }
@@ -176,10 +170,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
     public String registerByName(String name, boolean rebind, String protocol) throws IOException,
             ProActiveException {
         return target.registerByName(name, rebind, protocol);
-    }
-
-    public void setRegistered(boolean registered) throws IOException {
-        target.setRegistered(registered);
     }
 
     public void updateLocation(UniqueID id, UniversalBody body) throws IOException {

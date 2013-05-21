@@ -38,7 +38,6 @@ package org.objectweb.proactive.api;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.exceptions.ProActiveBadConfigurationException;
-import org.objectweb.proactive.core.gc.HalfBodies;
 import org.objectweb.proactive.core.util.ProActiveInet;
 
 
@@ -50,15 +49,6 @@ import org.objectweb.proactive.core.util.ProActiveInet;
  */
 @PublicAPI
 public class PALifeCycle {
-
-    /**
-     * Inform the ProActive DGC that all non active threads will not use
-     * anymore their references to active objects. This is needed when the
-     * local GC does not reclaim stubs quickly enough.
-     */
-    public static void userThreadTerminated() {
-        HalfBodies.end();
-    }
 
     /**
      * Call this method at the end of the application if it completed

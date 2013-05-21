@@ -56,7 +56,6 @@ import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.gc.HalfBodies;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -139,7 +138,6 @@ public class HalfBody extends AbstractBody {
             bodyLogger.error("**ERROR** Unable read node configuration. Fault-tolerance is disabled " + e);
             this.ftmanager = null;
         }
-        this.gc = HalfBodies.getInstance();
     }
 
     /**

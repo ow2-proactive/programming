@@ -63,8 +63,6 @@ import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.debug.debugger.DebugInfo;
 import org.objectweb.proactive.core.debug.debugger.RequestQueueInfo;
-import org.objectweb.proactive.core.gc.GarbageCollector;
-import org.objectweb.proactive.core.gc.ObjectGraph;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.node.Node;
@@ -374,24 +372,6 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
         } catch (SecurityNotAvailableException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * returns a list of outgoing active object references.
-     */
-    public Collection<UniqueID> getReferenceList() {
-        return ObjectGraph.getReferenceList(this.id);
-    }
-
-    public String getDgcState() {
-        return GarbageCollector.getDgcState(this.id);
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#getTimersSnapshotFromBody()
-     */
-    public Object[] getTimersSnapshotFromBody() throws Exception {
-        throw new UnsupportedOperationException("Times are not supported anymore");
     }
 
     /**

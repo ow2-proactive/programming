@@ -79,7 +79,6 @@ import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.body.migration.MigrationException;
-import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
 import org.objectweb.proactive.core.descriptor.data.VirtualNodeInternal;
@@ -88,7 +87,6 @@ import org.objectweb.proactive.core.descriptor.util.RefactorPAD;
 import org.objectweb.proactive.core.event.RuntimeRegistrationEvent;
 import org.objectweb.proactive.core.event.RuntimeRegistrationEventProducerImpl;
 import org.objectweb.proactive.core.filetransfer.FileTransferEngine;
-import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.jmx.mbean.JMXClassLoader;
@@ -932,10 +930,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
         ProActiveLogger.getLogger(Loggers.RUNTIME).debug("nodeName " + nodeName);
         registerBody(nodeName, localBody);
-
-        if (GarbageCollector.dgcIsEnabled()) {
-            ((AbstractBody) localBody).updateReferences(UniversalBodyProxy.getIncomingReferences());
-        }
 
         if (isLocal) {
             // if the body and proxy are on the same vm, returns the local view

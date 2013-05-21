@@ -82,7 +82,6 @@ import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.debug.debugger.BreakpointType;
-import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapper;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
@@ -226,8 +225,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             bodyLogger.error("**ERROR** Unable to read node configuration. Fault-tolerance is disabled");
             this.ftmanager = null;
         }
-
-        this.gc = new GarbageCollector(this);
 
         // JMX registration
         if (!super.isProActiveInternalObject) {

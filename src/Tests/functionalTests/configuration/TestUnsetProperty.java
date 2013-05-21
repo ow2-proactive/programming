@@ -41,7 +41,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.PAPropertyBoolean;
-import org.objectweb.proactive.core.config.PAPropertyInteger;
 import org.objectweb.proactive.core.config.PAPropertyString;
 
 
@@ -55,12 +54,6 @@ public class TestUnsetProperty {
         s.unset();
         Assert.assertFalse(s.isSet());
         Assert.assertNull(s.getValue());
-
-        PAPropertyInteger i = CentralPAPropertyRepository.PA_DGC_TTA;
-        i.setValue(12);
-        i.unset();
-        Assert.assertFalse(i.isSet());
-        Assert.assertNull(i.getValueAsString());
 
         PAPropertyBoolean b = CentralPAPropertyRepository.PA_DEBUG;
         b.setValue(true);

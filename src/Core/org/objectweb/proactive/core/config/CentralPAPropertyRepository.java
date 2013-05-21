@@ -518,27 +518,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         "proactive.masterworker.compresstasks", false);
 
     /* ------------------------------------
-     *  DISTRIBUTED GARBAGE COLLECTOR
-     */
-
-    /** Enable the distributed garbage collector */
-    static public PAPropertyBoolean PA_DGC = new PAPropertyBoolean("proactive.dgc", false);
-
-    /**
-     * TimeToAlone
-     * After this delay, we suppose we got a message from all our referencers.
-     */
-    static public PAPropertyInteger PA_DGC_TTA = new PAPropertyInteger("proactive.dgc.tta", false);
-
-    /**
-     * TimeToBroadcast
-     * Time is always in milliseconds. It is fundamental for this value
-     * to be the same in all JVM of the distributed system, so think twice
-     * before changing it.
-     */
-    static public PAPropertyInteger PA_DGC_TTB = new PAPropertyInteger("proactive.dgc.ttb", false);
-
-    /* ------------------------------------
      *  DISTRIBUTED DEBUGGER
      */
 

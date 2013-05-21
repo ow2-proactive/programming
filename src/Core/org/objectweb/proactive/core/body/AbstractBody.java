@@ -41,7 +41,6 @@ import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.security.AccessControlException;
 import java.security.PublicKey;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -66,7 +65,6 @@ import org.objectweb.proactive.core.body.ft.servers.faultdetection.FaultDetector
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
-import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
@@ -77,9 +75,6 @@ import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.debug.debugger.BreakpointType;
 import org.objectweb.proactive.core.debug.debugger.Debugger;
-import org.objectweb.proactive.core.gc.GCMessage;
-import org.objectweb.proactive.core.gc.GCResponse;
-import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
@@ -189,10 +184,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      */
     private transient boolean isDead;
 
-    // GC
-    // Initialized in the subclasses after the local body strategy
-    protected transient GarbageCollector gc;
-
     // the StepByStep mode
     protected Debugger debugger;
 
@@ -254,30 +245,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
     }
 
-    public void updateReference(UniversalBodyProxy ref) {
-        this.gc.addProxy(this, ref);
-    }
-
-    public void updateReferences(Collection<UniversalBodyProxy> newReferences) {
-        for (UniversalBodyProxy ubp : newReferences) {
-            this.gc.addProxy(this, ubp);
-        }
-    }
-
     public BodyWrapperMBean getMBean() {
         return this.mbean;
-    }
-
-    public Collection<UniqueID> getReferences() {
-        return this.gc.getReferencesID();
-    }
-
-    public GarbageCollector getGarbageCollector() {
-        return this.gc;
-    }
-
-    public void setRegistered(boolean registered) {
-        this.gc.setRegistered(registered);
     }
 
     public String getReifiedClassName() {
@@ -357,9 +326,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             }
             this.registerIncomingFutures();
             ftres = this.internalReceiveRequest(request);
-            if (GarbageCollector.dgcIsEnabled()) {
-                updateReferences(UniversalBodyProxy.getIncomingReferences());
-            }
         } finally {
             this.exitFromThreadStore();
         }
@@ -403,9 +369,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             }
             this.registerIncomingFutures();
             ftres = internalReceiveReply(reply);
-            if (GarbageCollector.dgcIsEnabled()) {
-                updateReferences(UniversalBodyProxy.getIncomingReferences());
-            }
         } finally {
             exitFromThreadStore();
         }
@@ -1177,10 +1140,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         this.ftmanager = ftm;
     }
 
-    public GCResponse receiveGCMessage(GCMessage msg) {
-        return this.gc.receiveGCMessage(msg);
-    }
-
     // MESSAGE TAGS MEMORY
     /**
      * Create a local memory for the specified tag for a lease period inferior to 
@@ -1236,7 +1195,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
     }
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
-        this.gc = new GarbageCollector(this);
         in.defaultReadObject();
         // FAULT TOLERANCE
         if (this.ftmanager != null) {

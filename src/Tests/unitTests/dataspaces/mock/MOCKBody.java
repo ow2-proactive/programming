@@ -52,8 +52,6 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.gc.GCMessage;
-import org.objectweb.proactive.core.gc.GCResponse;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -253,11 +251,6 @@ public class MOCKBody implements Body {
     }
 
     public Object receiveFTMessage(FTMessage ev) throws IOException {
-
-        return null;
-    }
-
-    public GCResponse receiveGCMessage(GCMessage toSend) throws IOException {
 
         return null;
     }

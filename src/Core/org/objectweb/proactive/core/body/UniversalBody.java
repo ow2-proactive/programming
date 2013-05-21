@@ -46,8 +46,6 @@ import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.gc.GCMessage;
-import org.objectweb.proactive.core.gc.GCResponse;
 import org.objectweb.proactive.core.security.SecurityEntity;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -160,25 +158,6 @@ public interface UniversalBody extends Serializable, SecurityEntity {
      * @exception java.io.IOException if a problem occurs during this method call
      */
     public Object receiveFTMessage(FTMessage ev) throws IOException;
-
-    /**
-     * The DGC broadcasting method, called every GarbageCollector.TTB between
-     * referenced active objects. The GC{Message,Response} may actually be
-     * composed of many GCSimple{Message,Response}.
-     *
-     * @param toSend the message
-     * @return its associated response
-     * @throws IOException if a pb occurs during this method call
-     */
-    public GCResponse receiveGCMessage(GCMessage toSend) throws IOException;
-
-    /**
-     * Inform the DGC that an active object is pinned somewhere so cannot
-     * be garbage collected until being unregistered.
-     * @param registered true for a registration, false for an unregistration
-     * @throws IOException if a pb occurs during this method call
-     */
-    public void setRegistered(boolean registered) throws IOException;
 
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException;
 

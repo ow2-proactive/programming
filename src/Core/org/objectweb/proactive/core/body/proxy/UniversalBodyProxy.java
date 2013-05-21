@@ -63,8 +63,6 @@ import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.exceptions.ExceptionHandler;
-import org.objectweb.proactive.core.gc.GCTag;
-import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.mop.ConstructorCallImpl;
@@ -95,7 +93,6 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     // the serialization by ourselves
     protected transient UniversalBody universalBody;
     protected transient boolean isLocal;
-    private transient GCTag tag;
     private UniqueID cachedBodyId;
     private static ThreadLocal<Collection<UniversalBodyProxy>> incomingReferences = new ThreadLocal<Collection<UniversalBodyProxy>>() {
         @Override
@@ -181,11 +178,6 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
 
             // cache the body ID
             cachedBodyId = this.universalBody.getID();
-
-            if (GarbageCollector.dgcIsEnabled()) {
-                ((AbstractBody) PAActiveObject.getBodyOnThis()).updateReference(this);
-            }
-
         }
     }
 
@@ -581,15 +573,6 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         if (logger.isDebugEnabled()) {
             logger.debug("universalBody is " + this.universalBody);
         }
-
-        if (GarbageCollector.dgcIsEnabled()) {
-            incomingReferences.get().add(this);
-        }
-    }
-
-    public void setGCTag(GCTag tag) {
-        assert this.tag == null;
-        this.tag = tag;
     }
 
     public UniqueID getBodyID() {

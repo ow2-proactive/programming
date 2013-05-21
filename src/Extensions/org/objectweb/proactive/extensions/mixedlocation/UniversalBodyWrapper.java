@@ -48,8 +48,6 @@ import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.gc.GCMessage;
-import org.objectweb.proactive.core.gc.GCResponse;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityContext;
@@ -254,14 +252,6 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
      */
     public Object receiveFTMessage(FTMessage ev) throws IOException {
         return this.wrappedBody.receiveFTMessage(ev);
-    }
-
-    public GCResponse receiveGCMessage(GCMessage msg) throws IOException {
-        return this.wrappedBody.receiveGCMessage(msg);
-    }
-
-    public void setRegistered(boolean registered) throws IOException {
-        this.wrappedBody.setRegistered(registered);
     }
 
     public void createShortcut(Shortcut shortcut) throws IOException {

@@ -42,8 +42,6 @@ import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.gc.GCMessage;
-import org.objectweb.proactive.core.gc.GCResponse;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -117,11 +115,6 @@ public class DummySender implements UniversalBody {
     }
 
     public Object receiveFTMessage(FTMessage ev) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public GCResponse receiveGCMessage(GCMessage toSend) throws IOException {
         // TODO Auto-generated method stub
         return null;
     }
