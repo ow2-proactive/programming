@@ -25,8 +25,7 @@
 	<!ENTITY WriteDocumentation SYSTEM "WriteProActiveDocumentation.xml">
 	<!ENTITY DevFileTransfer SYSTEM "AddingAFileTransferProtocol.xml">
 	<!ENTITY DevFaultTolerance SYSTEM "AddingAFaultToleranceProtocol.xml">
-	<!ENTITY MOP SYSTEM "MOP.xml">
-	<!ENTITY BnB SYSTEM "BranchAndBound.xml">	
+	<!ENTITY MOP SYSTEM "MOP.xml">	
 	<!ENTITY ProxyCommand SYSTEM "ProxyCommand.xml">
 	<!ENTITY MultiProtocol SYSTEM "MultiProtocol.xml">
 	<!ENTITY Biblio SYSTEM "Biblio.xml">

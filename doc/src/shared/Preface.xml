@@ -20,7 +20,7 @@
 		<listitem>
 			<para>
 				<emphasis role="bold">ProActive Advanced Features Manual</emphasis> - This manual describes some advanced features like Fault-Tolerance, ProActive Compile-Time Annotations or Web Services Exportation.
-				In Addition, it gives information on some other high-level APIs such as Monte-Carlo or Branch and Bound APIs. Finally, it helps advanced user to extend ProActive.
+				Finally, it helps advanced user to extend ProActive.
 			</para>
 		</listitem>
 		<listitem>

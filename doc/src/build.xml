@@ -188,8 +188,7 @@
 				<package name="org.objectweb.proactive.annotation*"/>
 			</group>
 			<group title="ProActive Extensions: TimIt SPMD" packages="org.objectweb.proactive.extensions.timitspmd*" />
-			<group title="ProActive Extensions: Other packages" packages="org.objectweb.proactive.ext*" />
-			<group title="ProActive Extras: Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />
+			<group title="ProActive Extensions: Other packages" packages="org.objectweb.proactive.ext*" />			
 			<group title="ProActive Extras: Message Routing" packages="org.objectweb.proactive.extra.messagerouting*" />
 			<group title="ProActive Extras: Other packages" packages="org.objectweb.proactive.extra*" />
 			<group title="ProActive Benchmarks API" packages="org.objectweb.proactive.benchmarks*" />
@@ -289,8 +288,7 @@
 				<package name="org.objectweb.proactive.annotation*"/>
 			</group>
 			<group title="ProActive Extensions: TimIt SPMD" packages="org.objectweb.proactive.extensions.timitspmd*" />
-			<group title="ProActive Extensions: Other packages" packages="org.objectweb.proactive.ext*" />
-			<group title="ProActive Extras: Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />
+			<group title="ProActive Extensions: Other packages" packages="org.objectweb.proactive.ext*" />			
 			<group title="ProActive Extras: Message Routing" packages="org.objectweb.proactive.extra.messagerouting*" />
 			<group title="ProActive Extras: Other packages" packages="org.objectweb.proactive.extra*" />
 			<group title="ProActive Benchmarks API" packages="org.objectweb.proactive.benchmarks*" />

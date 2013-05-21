@@ -88,8 +88,6 @@ public interface Loggers {
     public static final String HTTP_SERVER = CORE + ".http.server";
     public static final String HTTP_CLIENT = CORE + ".http.client";
 
-    public static final String BNB = CORE + "bnb";
-
     public static final String DSI = CORE + ".dsi";
 
     // Security loggers
