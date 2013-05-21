@@ -46,13 +46,13 @@ import java.util.zip.CheckedInputStream;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAFileTransfer;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.filetransfer.RemoteFile;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
 
 import functionalTests.GCMFunctionalTest;
 
@@ -257,8 +257,6 @@ public class TestAPI extends GCMFunctionalTest {
      * 
      */
     private void cleanIfNecessary() throws IOException {
-        if (dirTest.exists() && !SkeletonSystemImpl.deleteDirectory(dirTest)) {
-            throw new IOException("Cannot delete directory test:" + dirTest);
-        }
+        FileUtils.deleteDirectory(this.dirTest);
     }
 }

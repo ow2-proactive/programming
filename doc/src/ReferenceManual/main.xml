@@ -19,7 +19,6 @@
 	<!ENTITY Migration SYSTEM "Migration.xml">
 	<!ENTITY Exceptions SYSTEM "Exceptions.xml">
 	<!ENTITY MasterWorker SYSTEM "MasterWorkerAPI.xml">
-	<!ENTITY Calcium SYSTEM "Calcium.xml">
 	<!ENTITY OOSPMD SYSTEM "OOSPMD.xml">
 	<!ENTITY MPI SYSTEM "MPI.xml">
 	<!ENTITY DataSpaces SYSTEM "DataSpaces.xml">
@@ -57,7 +56,6 @@
 	<part xml:id="HighLevelAPI"><info><title xml:id="ProgrammingWithHighLevelAPIs_2">Programming With High Level APIs</title></info>
 
 		&MasterWorker;
-		&Calcium;
 		&OOSPMD;
 		&MPI;
 		&DataSpaces;

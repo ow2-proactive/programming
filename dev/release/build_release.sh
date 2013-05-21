@@ -104,7 +104,6 @@ cp -r ${MASTER_DIR} ${SRC_DIR} || die "Failed to create SRC_DIR"
 	cd ${SRC_DIR} || die
 	rm -Rf ./classes
 	rm -Rf ./dist
-	rm -Rf ./examples/calcium # save 12MB
 )
 
 # Publish artifacts
@@ -130,7 +129,6 @@ cp -r ${MASTER_DIR} ${BIN_DIR} || die "Failed to create BIN_DIR"
 	rm -Rf ./compile
 	rm -Rf ./dev
 	rm -Rf ./doc/toolchain ./doc/src
-	rm -Rf ./examples/calcium # save 12MB
 	rm -Rf ./lib
 	rm -Rf ./scripts
 	rm -Rf ./src

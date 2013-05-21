@@ -173,7 +173,6 @@
 			<group title="ProActive Core: Security" packages="org.objectweb.proactive.core.security*" />
 			<group title="ProActive Core: XML Descriptor (Deprecated Soon)" packages="org.objectweb.proactive.core.descriptor*" />
 			<group title="ProActive Core: Other packages" packages="org.objectweb.proactive.core*" />
-			<group title="ProActive Extensions: Calcium API" packages="org.objectweb.proactive.extensions.calcium*" />
 			<group title="ProActive Extensions: Dataspaces" packages="org.objectweb.proactive.extensions.dataspaces*" />
 			<group title="ProActive Extensions: GCM Deployment">
 				 <package name="org.objectweb.proactive.extensions.gcmdeployment*" />
@@ -276,7 +275,6 @@
 			<group title="ProActive Core: Security" packages="org.objectweb.proactive.core.security*" />
 			<group title="ProActive Core: XML Descriptor (Deprecated Soon)" packages="org.objectweb.proactive.core.descriptor*" />
 			<group title="ProActive Core: Other packages" packages="org.objectweb.proactive.core*" />
-			<group title="ProActive Extensions: Calcium API" packages="org.objectweb.proactive.extensions.calcium*" />
 			<group title="ProActive Extensions: Dataspaces" packages="org.objectweb.proactive.extensions.dataspaces*" />
 			<group title="ProActive Extensions: GCM Deployment">
 				 <package name="org.objectweb.proactive.extensions.gcmdeployment*" />
