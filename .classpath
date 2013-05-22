@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" output="classes/Benchmarks" path="src/Benchmarks"/>
 	<classpathentry kind="src" output="classes/Core" path="src/Core"/>
 	<classpathentry excluding="org/objectweb/proactive/examples/nbody/common/NBody3DFrame.java" kind="src" output="classes/Examples" path="src/Examples"/>
 	<classpathentry excluding="org/objectweb/proactive/extensions/annotation/*/*/**" kind="src" output="classes/Extensions" path="src/Extensions"/>

@@ -138,7 +138,7 @@
 		Compilation
 	-->
 
-	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.examples, compile.tests, compile.benchmarks" description="Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)" />
+	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.examples, compile.tests" description="Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)" />
 
 
 	<target name="compile.core" depends="-configurationCopy, compile.util" description="Compile ProActive core classes">
@@ -231,14 +231,6 @@
 			</fileset>
 		</copy>
 	</target>
-
-
-	<target name="compile.benchmarks" depends="compile.core, compile.extra" description="Compile the benchmarks">
-		<javac srcdir="${src.benchmarks.dir}" destdir="${cl.benchmarks.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}">
-			<classpath refid="project.classpath" />
-		</javac>
-	</target>
-
 
 	<target name="compile.examples" depends="compile.core, compile.extensions, compile.extra, compile.util" description="Compile all examples classes">
 
@@ -437,7 +429,6 @@
 	<target name="deploy.examples" depends="examples, deploy.core" description="Add ProActive_examples.jar to the dist/ directory">
 		<jar destfile="${deploy.lib.dir}/ProActive_examples.jar">
 			<fileset dir="${cl.examples.dir}" includes="**" />
-			<fileset dir="${cl.benchmarks.dir}" includes="**" />
 		</jar>
 	</target>
 
@@ -558,13 +549,9 @@
 		</check_annotations>
 	</target>
 
-	<target name="check.annotations.benchmarks" depends="deploy,-declare" description="Annotation processing for Benchmarks">
-		<check_annotations module="benchmarks" />
-	</target>
-
 	<target name="check.annotations" depends="check.annotations.all" description="Perform annotation processing on ProActive code" />
 
-	<target name="check.annotations.all" depends="check.annotations.core, check.annotations.extensions, check.annotations.extra, check.annotations.examples, check.annotations.benchmarks" description="Do annotation processing for the following ProActive modules : Core + Extensions + Extra + Examples + Benchmarks" />
+	<target name="check.annotations.all" depends="check.annotations.core, check.annotations.extensions, check.annotations.extra, check.annotations.examples" description="Do annotation processing for the following ProActive modules : Core + Extensions + Extra + Examples + Benchmarks" />
 
 
 	<!-- ************
@@ -926,7 +913,6 @@
 		<mkdir dir="${cl.proactive.dir}" />
 		<mkdir dir="${cl.test.dir}" />
 		<mkdir dir="${cl.utils.dir}" />
-		<mkdir dir="${cl.benchmarks.dir}" />
 
 		<echo message="--- Debugging is ${debug} ---" />
 	</target>
