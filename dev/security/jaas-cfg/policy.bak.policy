@@ -88,7 +88,6 @@ grant codebase "file:classes/-" {
 	permission java.util.PropertyPermission "proactive.http.servlet", "read, write";
 	permission java.util.PropertyPermission "proactive.locationserver", "read, write";
 	permission java.util.PropertyPermission "proactive.locationserver.rmi", "read, write";
-	permission java.util.PropertyPermission "proactive.masterslave.pingperiod", "read, write";
 	permission java.util.PropertyPermission "proactive.mixedlocation.maxMigrationNb", "read, write";
 	permission java.util.PropertyPermission "proactive.mixedlocation.maxTimeOnSite", "read, write";
 	permission java.util.PropertyPermission "proactive.mixedlocation.ttl", "read, write";

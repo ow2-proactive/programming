@@ -46,12 +46,6 @@
 		<!-- <prop key="proactive.ssh.username" value="mlacage"/> -->
         <prop key="components.creation.timeout" value="10000" /> <!-- timeout in seconds for parallel creation of components -->		
 		<!-- ***************************************************** -->
-		<!-- MASTER/WORKER PROPERTIES VALUE -->
-		<!-- Period of the slave pinging (in ms) -->
-        <prop key="proactive.masterworker.pingperiod" value="10000" />
-        <!-- Compressing tasks in the repository -->
-        <prop key="proactive.masterworker.compresstasks" value="false" />
-        
 		<!-- Message Tagging -->
 		<prop key="proactive.tagmemory.lease.max" value="60" />
 		<prop key="proactive.tagmemory.lease.period" value="21" />

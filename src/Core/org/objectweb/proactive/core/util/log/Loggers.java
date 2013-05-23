@@ -118,13 +118,6 @@ public interface Loggers {
     static final public String SKELETONS_DIAGNOSIS = SKELETONS + ".diagnosis";
     static final public String SKELETONS_SYSTEM = SKELETONS + ".system";
 
-    //  Master Worker loggers
-    static final public String MASTERWORKER = CORE + ".masterworker";
-    static final public String MASTERWORKER_WORKERMANAGER = MASTERWORKER + ".workermanager";
-    static final public String MASTERWORKER_PINGER = MASTERWORKER + ".pinger";
-    static final public String MASTERWORKER_REPOSITORY = MASTERWORKER + ".repository";
-    static final public String MASTERWORKER_WORKERS = MASTERWORKER + ".workers";
-
     // remote Objects
     static final public String REMOTEOBJECT = CORE + ".remoteobject";
     public static final String CLASS_SERVER = CORE + ".class_server";

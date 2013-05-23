@@ -588,7 +588,6 @@ log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20
 log4j.rootLogger=INFO,REMOTE
 log4j.logger.org.mortbay = WARN
 
-log4j.logger.proactive.masterworker=DEBUG,REMOTE
 log4j.logger.myapplication=DEBUG,REMOTE
 
 log4j.appender.REMOTE=org.objectweb.proactive.core.util.log.remote.ProActiveAppender

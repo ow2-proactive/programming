@@ -497,27 +497,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         false);
 
     /* ------------------------------------
-     *  MASTER/WORKER
-     */
-
-    /**
-     * Master/Worker ping period in milliseconds
-     *
-     * The ping period is the default interval at which workers receive a ping message
-     * (to check if they're alive). Default to ten seconds
-     */
-    static public PAPropertyInteger PA_MASTERWORKER_PINGPERIOD = new PAPropertyInteger(
-        "proactive.masterworker.pingperiod", false);
-    /**
-     * Master/Worker compress tasks
-     *
-     * Parameter which decides wether tasks should be compressed when they are saved inside the task repository
-     * compressing increases CPU usage on the master side, but decrease memory usage, default to false
-     */
-    static public PAPropertyBoolean PA_MASTERWORKER_COMPRESSTASKS = new PAPropertyBoolean(
-        "proactive.masterworker.compresstasks", false);
-
-    /* ------------------------------------
      *  DISTRIBUTED DEBUGGER
      */
 

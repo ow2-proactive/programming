@@ -178,7 +178,6 @@
 				 <package name="org.objectweb.proactive.extensions.gcmdeployment*" />
 				 <package name="org.objectweb.proactive.gcmdeployment*" />
 			</group>
-			<group title="ProActive Extensions: Master-Worker API" packages="org.objectweb.proactive.extensions.masterworker*" />
 			<group title="ProActive Extensions: VFS Provider" packages="org.objectweb.proactive.extensions.vfsprovider*" />
 			<group title="ProActive Extensions: Web Services" packages="org.objectweb.proactive.extensions.webservices*" />
 			<group title="ProActive Extensions: Native Interface API" packages="org.objectweb.proactive.extensions.nativeinterface*" />
@@ -278,7 +277,6 @@
 				 <package name="org.objectweb.proactive.extensions.gcmdeployment*" />
 				 <package name="org.objectweb.proactive.gcmdeployment*" />
 			</group>
-			<group title="ProActive Extensions: Master-Worker API" packages="org.objectweb.proactive.extensions.masterworker*" />
 			<group title="ProActive Extensions: VFS Provider" packages="org.objectweb.proactive.extensions.vfsprovider*" />
 			<group title="ProActive Extensions: Web Services" packages="org.objectweb.proactive.extensions.webservices*" />
 			<group title="ProActive Extensions: Native Interface API" packages="org.objectweb.proactive.extensions.nativeinterface*" />
