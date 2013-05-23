@@ -151,7 +151,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     protected FTManagerFactory ftmanagerFactoryInstance;
     protected DebuggerFactory debuggerFactoryInstance;
     protected MessageTagsFactory requestTagsFactoryInstance;
-    protected Object timItReductor;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
@@ -523,14 +522,5 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
             throw (CloneNotSupportedException) new CloneNotSupportedException(e.getMessage()).initCause(e);
         }
     }
-
-    public void setTimItReductor(Object timItReductor) {
-        this.timItReductor = timItReductor;
-    }
-
-    public Object getTimItReductor() {
-        return this.timItReductor;
-    }
-
 }
 //@snippet-end proactivemetaobjectfactory

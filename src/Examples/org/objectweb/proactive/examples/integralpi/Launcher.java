@@ -71,7 +71,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 public class Launcher {
     private static GCMApplication pad;
 
-    /** The main method, not used by TimIt */
+    /** The main method */
     public static void main(String[] args) {
         try {
             // The number of workers

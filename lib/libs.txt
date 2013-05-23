@@ -47,16 +47,6 @@
 ./ibis/ibis-connect-1.0.jar
 ./ibis/ibis-1.4.jar
 ./ibis/bcel-5.1-fixes-1.0.jar
-./timit
-./timit/jdom.jar
-./timit/commons-cli-1.0.jar
-./timit/batik-awt-util.jar
-./timit/batik-svggen.jar
-./timit/batik-util.jar
-./timit/jcommon-1.0.6.jar
-./timit/batik-xml.jar
-./timit/jfreechart-1.0.2.jar
-./timit/batik-dom.jar
 ./javassist.jar
 ./glite
 ./glite/classad.jar

@@ -21,7 +21,6 @@
 	<!ENTITY OSGi SYSTEM "OSGi.xml">
 	<!ENTITY JMX SYSTEM "Jmx.xml">
 	<!ENTITY JMXMBean SYSTEM "JmxMBean.xml">
-	<!ENTITY TimIt SYSTEM "TimIt.xml">
 	<!ENTITY WriteDocumentation SYSTEM "WriteProActiveDocumentation.xml">
 	<!ENTITY DevFileTransfer SYSTEM "AddingAFileTransferProtocol.xml">
 	<!ENTITY DevFaultTolerance SYSTEM "AddingAFaultToleranceProtocol.xml">
@@ -47,7 +46,6 @@
 		&OSGi;
 		&JMX;
 		&JMXMBean;
-		&TimIt;
 		&ProxyCommand;
 		&MultiProtocol;
 	</part>

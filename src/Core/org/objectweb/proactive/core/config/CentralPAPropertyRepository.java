@@ -489,14 +489,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         "proactive.runtime.domain.url", false);
 
     /* ------------------------------------
-     *  TIMIT
-     */
-
-    /** this property indicates the list (comma separated) of the TimIt counters to activate */
-    static public PAPropertyString PA_TIMIT_ACTIVATION = new PAPropertyString("proactive.timit.activation",
-        false);
-
-    /* ------------------------------------
      *  DISTRIBUTED DEBUGGER
      */
 

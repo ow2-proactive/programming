@@ -282,7 +282,6 @@ $ROOT/workProActive/ProActive/dev/lib/getopt-1.0.9.jar:\
 $ROOT/workProActive/ProActive/dev/lib/jaxp-1.2.jar:\
 $ROOT/workProActive/ProActive/dev/lib/jcommon-0.8.7.jar:\
 $ROOT/workProActive/ProActive/dev/lib/jdom-1.0b8.jar:\
-$ROOT/workProActive/ProActive/dev/lib/jfreechart-0.9.12.jar:\
 $ROOT/workProActive/ProActive/dev/lib/oro-2.0.6.jar:\
 $ROOT/workProActive/ProActive/dev/lib/oro.jar:\
 $ROOT/workProActive/ProActive/dev/lib/sax-2.0.1.jar:\
