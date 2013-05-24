@@ -407,7 +407,6 @@
 				<include name="unix/cluster/**" />
 				<include name="windows/cluster/**" />
 				<include name="gcmdeployment/**" />
-				<include name="virtualization/**" />
 			</fileset>
 		</copy>
 

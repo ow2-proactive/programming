@@ -82,8 +82,6 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploym
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Group;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.GCMVirtualMachineManager;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMBean;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeRemoteObjectAdapter;
@@ -333,13 +331,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         return this.ROvirtualNodes;
     }
 
-    /**
-     * Kills every registered PART &
-     * every launched virtual machines. It also asks every registered hypervisors
-     * to destroy cloned virtual machines to let environment as clean as it was
-     * when we launched the deployment
-     * ( see {@link AbstractVMM#stop()} ).
-     */
     public void kill() {
         isKilled = true;
         for (ProActiveRuntime part : deployedRuntimes) {
@@ -348,21 +339,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             } catch (Exception e) {
                 // Connection between the two runtimes will be interrupted 
                 // Eat the exception: Miam Miam Miam
-            }
-        }
-
-        Set<String> keys = nodeProviders.keySet();
-        for (String key : keys) {
-            NodeProvider np = nodeProviders.get(key);
-            for (GCMDeploymentDescriptor dd : np.getDescriptors()) {
-                try {
-                    GCMDeploymentResources resources = dd.getResources();
-                    for (GCMVirtualMachineManager vmm : resources.getVMM()) {
-                        vmm.stop();
-                    }
-                } catch (Exception e) {
-                    GCMA_LOGGER.warn("GCM Deployment failed to clean the virtual machine environment.", e);
-                }
             }
         }
 
@@ -490,11 +466,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
                 for (Bridge bridge : resources.getBridges()) {
                     buildBridgeTree(rootNode, rootNode, bridge, nodeProvider, gdd);
                 }
-
-                TopologyImpl node = new TopologyImpl();//a unique topologyID for all vms...
-                for (GCMVirtualMachineManager vmm : resources.getVMM()) {
-                    buildVMMTree(rootNode, rootNode, vmm, nodeProvider, gdd, node);
-                }
             }
         }
 
@@ -561,30 +532,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         }
 
         popDeploymentPath();
-    }
-
-    /**
-     * To build vmm tag associated deploymentTree.
-     * @param rootNode
-     * @param rootNode2
-     * @param vmm
-     * @param nodeProvider
-     * @param gcmd
-     */
-    private void buildVMMTree(TopologyRootImpl rootNode, TopologyRootImpl parentNode,
-            GCMVirtualMachineManager vmm, NodeProvider nodeProvider, GCMDeploymentDescriptor gcmd,
-            TopologyImpl node) {
-        pushDeploymentPath(vmm.getId());
-        for (VMBean vm : vmm.getVms()) {
-            node.setDeploymentDescriptorPath(gcmd.getDescriptorURL().toExternalForm());
-            node.setApplicationDescriptorPath(rootNode.getApplicationDescriptorPath());
-            node.setDeploymentPath(getCurrentDeploymentPath());
-            node.setNodeProvider(nodeProvider.getId());
-            topologyIdToNodeProviderMapping.put(node.getId(), nodeProvider);
-            vm.setNode(node);
-        }
-        rootNode.addNode(node, parentNode);
-        popDeploymentPath(); // ???
     }
 
     private boolean pushDeploymentPath(String pathElement) {

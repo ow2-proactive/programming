@@ -53,6 +53,4 @@ public interface GCMDeploymentDescriptor {
     public void start(CommandBuilder commandBuilder, GCMApplicationInternal gcma);
 
     public URL getDescriptorURL();
-
-    public GCMDeploymentResources getResources();
 }

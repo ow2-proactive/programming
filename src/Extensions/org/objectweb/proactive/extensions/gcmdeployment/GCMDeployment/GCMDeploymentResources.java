@@ -43,14 +43,11 @@ import java.util.List;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Group;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.GCMVirtualMachineManager;
 
 
 public class GCMDeploymentResources {
     private List<Group> groups = Collections.synchronizedList(new ArrayList<Group>());
     private List<Bridge> bridges = Collections.synchronizedList(new ArrayList<Bridge>());
-    private List<GCMVirtualMachineManager> vmms = Collections
-            .synchronizedList(new ArrayList<GCMVirtualMachineManager>());
     private HostInfo hostInfo;
 
     public List<Group> getGroups() {
@@ -61,20 +58,12 @@ public class GCMDeploymentResources {
         return bridges;
     }
 
-    public List<GCMVirtualMachineManager> getVMM() {
-        return vmms;
-    }
-
     public void addGroup(Group group) {
         groups.add(group);
     }
 
     public void addBridge(Bridge bridge) {
         bridges.add(bridge);
-    }
-
-    public void addVMM(GCMVirtualMachineManager vmm) {
-        vmms.add(vmm);
     }
 
     public HostInfo getHostInfo() {

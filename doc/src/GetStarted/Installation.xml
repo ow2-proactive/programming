@@ -61,9 +61,8 @@
                <literal>ProActive/dist/lib/asm-2.2.3.jar</literal>,
                <literal>ProActive/dist/lib/ibis-1.4.jar</literal>,
                <literal>ProActive/dist/lib/bouncycastle.jar</literal>,
-			   <literal>ProActive/dist/lib/servlet-api.jar</literal>,
-			   <literal>ProActive/dist/lib/jetty-*.jar</literal> and
-			   <literal>ProActive/dist/lib/virtualization-core.jar</literal>.
+			   <literal>ProActive/dist/lib/servlet-api.jar</literal> and
+			   <literal>ProActive/dist/lib/jetty-*.jar</literal>
                Thus, theses files have to be placed into the same directory as ProActive.jar.
                It is a piece of information to keep in mind in particular if you want to move ProActive.jar toward your own lib
                directory. In this case, you have also to move the 7 others JAR files.</para>
@@ -242,11 +241,6 @@
 			<listitem>
 				<para>
 					<literal>dist/lib/servlet-api.jar</literal> and <literal>dist/lib/jetty-*.jar</literal> - used for dynamic class loading through the embedded Jetty server.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<literal>dist/lib/virtualization-core.jar</literal> - used by ProActive deployments on virtual infrastructures.
 				</para>
 			</listitem>
          </itemizedlist>

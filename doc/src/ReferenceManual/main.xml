@@ -30,7 +30,6 @@
 	<!ENTITY FileTransfer SYSTEM "FileTransfer.xml">
 	<!ENTITY Termination SYSTEM "Termination.xml">
 	<!ENTITY VariableContract SYSTEM "VariableContract.xml">
-	<!ENTITY Virtualization SYSTEM "Virtualization.xml">
 	<!ENTITY TechnicalService SYSTEM "TechnicalService.xml">
 	<!ENTITY FAQ SYSTEM "FAQ.xml">
 	<!ENTITY ReferenceCard SYSTEM "ReferenceCard.xml">
@@ -65,13 +64,12 @@
         &SSHTunneling;
 	</part>
 
-	<part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
+	<part xml:id="ProActiveDeployment"><info><title xml:id="Deployment_2">Deployment</title></info>
 		&GCMDeployment;
 		&XMLDescriptor;
 		&FileTransfer;
 		&Termination;
-		&VariableContract;
-		&Virtualization;
+		&VariableContract;		
 		&TechnicalService;
 	</part>
 

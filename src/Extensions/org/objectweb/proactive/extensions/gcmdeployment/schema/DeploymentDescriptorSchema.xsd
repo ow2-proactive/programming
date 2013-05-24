@@ -256,8 +256,6 @@
 			</xsd:element>
 			<xsd:element ref="abstractResourceElement" minOccurs="0" maxOccurs="unbounded">
 			</xsd:element>
-			<xsd:element name="hypervisor" type="hypervisorRefType" minOccurs="0" maxOccurs="unbounded">
-			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -395,10 +393,6 @@
 		</xsd:attribute>
 	</xsd:complexType>
 
-	<xsd:complexType name="hypervisorRefType">
-		<xsd:attribute name="refid" type="idType" use="required" />
-	</xsd:complexType>
-
 	<xsd:complexType name="hostsType">
 	    <xsd:annotation>
             <xsd:documentation>
@@ -447,18 +441,6 @@
 		</xsd:sequence>
 	</xsd:complexType>
 
-	<xsd:complexType name="abstractVMElementType">
-		<xsd:attribute name="id" type="idType" use="required" />
-	</xsd:complexType>
-
-	<xsd:element name="abstractVMElement" type="abstractVMElementType"></xsd:element>
-
-	<xsd:complexType name="vmsType">
-		<xsd:sequence>
-			<xsd:element ref="abstractVMElement" maxOccurs="unbounded"></xsd:element>
-		</xsd:sequence>
-	</xsd:complexType>
-
 	<xsd:complexType name="infrastructureType">
 		<xsd:all>
 			<xsd:element name="hosts" type="hostsType" minOccurs="0">
@@ -481,13 +463,6 @@
                         <p>Describes the bridges referenced into the &lt;resources&gt; element</p>
                     </xsd:documentation>
                 </xsd:annotation>
-			</xsd:element>
-			<xsd:element name="vms" type="vmsType" minOccurs="0">
-			<xsd:annotation>
-                    <xsd:documentation>
-                        <p>Describes the virtual machines managers referenced into the &lt;resources&gt; element</p>
-                    </xsd:documentation>
-			</xsd:annotation>
 			</xsd:element>
 		</xsd:all>
 	</xsd:complexType>
@@ -582,17 +557,6 @@
 		</xsd:keyref>
 		<xsd:keyref name="refIdKeyGroupHost" refer="idKeyHosts">
 			<xsd:selector xpath="ns:resources/ns:group/ns:host"></xsd:selector>
-			<xsd:field xpath="@refid"></xsd:field>
-		</xsd:keyref>
-
-		<!-- Hypervisor refid/id key correctness -->
-		<!--  -->
-		<xsd:key name="idKeyHypervisors">
-			<xsd:selector xpath="ns:infrastructure/ns:vms/*" />
-			<xsd:field xpath="@id" />
-		</xsd:key>
-		<xsd:keyref name="refIdKeyHypervisor" refer="idKeyHypervisors">
-			<xsd:selector xpath="ns:resources/ns:hypervisor"></xsd:selector>
 			<xsd:field xpath="@refid"></xsd:field>
 		</xsd:keyref>
 
