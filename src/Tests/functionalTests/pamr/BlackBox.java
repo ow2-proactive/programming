@@ -51,10 +51,11 @@ import functionalTests.FunctionalTest;
 public class BlackBox extends FunctionalTest {
     protected Router router;
     protected Tunnel tunnel;
+    protected RouterConfig config;
 
     @Before
     public void beforeBlackbox() throws Exception {
-        RouterConfig config = new RouterConfig();
+        config = new RouterConfig();
         this.router = Router.createAndStart(config);
 
         Socket s = new Socket(InetAddress.getLocalHost(), this.router.getPort());

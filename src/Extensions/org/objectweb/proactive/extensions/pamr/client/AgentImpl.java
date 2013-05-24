@@ -48,6 +48,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -129,9 +133,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
     /** The socket factory to use to create the Tunnel */
     final private PAMRSocketFactorySPI socketFactory;
 
-    final private Timer timer;
-
-    private HeartbeatTask heartbeatTask;
+    private ExecutorService heartbeatExecutor = Executors.newSingleThreadExecutor();
 
     /**
      * Create a routing agent
@@ -190,7 +192,6 @@ public class AgentImpl implements Agent, AgentImplMBean {
         this.failedTunnels = new LinkedList<Tunnel>();
 
         this.socketFactory = socketFactory;
-        this.timer = new Timer("PAMR: Heartbeat timer");
         this.agentID = agentId; // Check the agentId number
         this.magicCookie = magicCookie;
         this.routerID = RouterImpl.DEFAULT_ROUTER_ID;
@@ -383,16 +384,6 @@ public class AgentImpl implements Agent, AgentImplMBean {
             int hb = rrm.getHeartbeatPeriod();
             if (hb > 0) {
                 tunnel.setSoTimeout(hb);
-
-                // Cancel the task in case of heartbeat period change
-                if (this.heartbeatTask != null) {
-                    this.heartbeatTask.cancel();
-                    this.heartbeatTask = null;
-                }
-
-                // Reschedule the task
-                this.heartbeatTask = new HeartbeatTask();
-                this.timer.schedule(this.heartbeatTask, hb / 3, hb / 3);
             }
         } catch (MalformedMessageException e) {
             throw new RouterHandshakeException("Invalid router response: corrupted " +
@@ -758,16 +749,14 @@ public class AgentImpl implements Agent, AgentImplMBean {
         }
     }
 
-    class HeartbeatTask extends SafeTimerTask {
+    class Heartbeat implements Runnable {
         long heartbeatId;
-        volatile boolean stop;
 
-        public HeartbeatTask() {
-            this.stop = false;
-            this.heartbeatId = 0;
+        public Heartbeat(long heartbeatId) {
+            this.heartbeatId = heartbeatId;
         }
 
-        public void safeRun() {
+        public void run() {
             try {
                 Tunnel t = getTunnel();
                 if (t != null) {
@@ -854,15 +843,20 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     handleError(error);
                     break;
                 case HEARTBEAT_ROUTER:
-                    // Nothing to do. Heartbeat are only used to be able to set a soTimeout on the tunnel
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Heartbeat #" + ((HeartbeatMessage) msg).getHeartbeatId() + " received");
-                    }
+                    HeartbeatMessage heartbeat = (HeartbeatMessage) msg;
+                    handleHeartbeat(heartbeat);
                     break;
                 default:
                     // Bad message type. Log it.
                     logger.error("Invalid Message received, wrong type: " + msg);
             }
+        }
+
+        private void handleHeartbeat(HeartbeatMessage heartbeat) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Heartbeat #" + heartbeat.getHeartbeatId() + " received");
+            }
+            heartbeatExecutor.submit(new Heartbeat(heartbeat.getHeartbeatId()));
         }
 
         private void handleError(ErrorMessage error) {

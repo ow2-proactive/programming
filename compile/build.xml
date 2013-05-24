@@ -95,6 +95,7 @@
 				<exclude name="functionalTests/component/collectiveitf/multicast/TesterImpl.class" />
 				<exclude name="functionalTests/component/collectiveitf/multicast/classbased/TesterImpl.class" />
 				<exclude name="${annotations_tests_exec_exclude}" />
+				<exclude name="functionalTests/pamr/TestHeartbeat.class" />
 			</fileset>
 		</else>
 	</if>
@@ -116,6 +117,9 @@
 		</else>
 	</if>
 
+	<fileset dir="${cl.test.dir}" id="pamr.testheartbeat">
+		<include name="functionalTests/pamr/TestHeartbeat.class" />
+	</fileset>
 
 	<!-- ************
 		Backward Compatibility
@@ -638,7 +642,8 @@
 
 	<target name="junit" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
-        <antcall target="junit.summary" />
+		<antcall target="junit.pamr.testheartbeat" />
+		<antcall target="junit.summary" />
 	</target>
 
 	<target name="junit.http" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
@@ -698,6 +703,16 @@
 
 	<target name="junit.pnp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="pnp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
+        <antcall target="junit.summary" />
+	</target>
+
+	<target name="junit.pamr.testheartbeat" depends="compile.tests, deploy.all" description="Run pamr heartbeat test. Separate because uses jdi.">
+		<junitMacro communication.protocol="pamr" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="pamr.testheartbeat">
+			<jvmargs>
+				<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5550" />
+				<jvmarg value="-Djdwp.port=5550" />
+			</jvmargs>
+		</junitMacro>
         <antcall target="junit.summary" />
 	</target>
 
