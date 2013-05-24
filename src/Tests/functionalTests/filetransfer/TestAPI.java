@@ -95,9 +95,9 @@ public class TestAPI extends GCMFunctionalTest {
 
     public void testPushPullFile() throws Exception {
         File fileTest = new File(dirTest, "ProActiveTestFile.dat");
-        File filePushed = new File(dirTest, "b/ProActiveTestPushed.dat");
-        File filePulled = new File(dirTest, "c/ProActiveTestPulled.dat");
-        File fileFuturePushed = new File(dirTest, "d/ProActiveTestFuturePushed.dat");
+        File filePushed = new File(new File(dirTest, "b"), "ProActiveTestPushed.dat");
+        File filePulled = new File(new File(dirTest, "c"), "ProActiveTestPulled.dat");
+        File fileFuturePushed = new File(new File(dirTest, "d"), "ProActiveTestFuturePushed.dat");
 
         if (logger.isDebugEnabled()) {
             logger.debug("Creating " + FILE_SIZE + "MB random test file: " + fileTest);
@@ -232,7 +232,7 @@ public class TestAPI extends GCMFunctionalTest {
     /**
      * Creates a File with random content of specified MB size.
      * 
-     * @param path
+     * @param file
      *            The path of the File.
      * @param size
      *            The desired size of the file in MB.

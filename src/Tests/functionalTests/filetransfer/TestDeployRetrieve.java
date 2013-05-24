@@ -39,11 +39,14 @@ package functionalTests.filetransfer;
 import static junit.framework.Assert.assertTrue;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.List;
 
+import functionalTests.TestDisabler;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -57,6 +60,7 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 
 import functionalTests.FunctionalTest;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**
@@ -64,14 +68,21 @@ import functionalTests.FunctionalTest;
  */
 public class TestDeployRetrieve extends FunctionalTest {
     private static Logger logger = ProActiveLogger.getLogger("functionalTests");
-    private static String XML_LOCATION = TestAPI.class.getResource(
-            "/functionalTests/filetransfer/TestDeployRetrieve.xml").getPath();
+    private static File XML_LOCATION = null;
+    static {
+        try {
+            XML_LOCATION = new File(TestAPI.class.getResource(
+                    "/functionalTests/filetransfer/TestDeployRetrieve.xml").toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
     ProActiveDescriptor pad;
-    File fileTest = new File("/tmp/ProActiveTestFile.dat");
-    File fileRetrieved = new File("/tmp/ProActiveTestFileRetrieved.dat");
-    File fileDeployed = new File("/tmp/ProActiveTestFileDeployed.dat");
-    File fileRetrieved2 = new File("/tmp/ProActiveTestFileRetrieved2.dat");
-    File fileDeployed2 = new File("/tmp/ProActiveTestFileDeployed2.dat");
+    File fileTest;
+    File fileRetrieved;
+    File fileDeployed;
+    File fileRetrieved2;
+    File fileDeployed2;
     static int testblocksize = org.objectweb.proactive.core.filetransfer.FileBlock.DEFAULT_BLOCK_SIZE;
     static int testflyingblocks = org.objectweb.proactive.core.filetransfer.FileTransferService.DEFAULT_MAX_SIMULTANEOUS_BLOCKS;
     static int filesize = 2;
@@ -80,11 +91,23 @@ public class TestDeployRetrieve extends FunctionalTest {
     String jvmProcess = "localJVM";
     String hostName = "localhost";
 
+    @BeforeClass
+    public static void beforeClass() {
+        // This test hangs on Windows because SSH processes are not killed
+        TestDisabler.unsupportedOs(OperatingSystem.windows);
+    }
+
     @Before
     public void initTest() throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("Creating " + filesize + "Mb random test file in /tmp");
         }
+
+        fileTest = File.createTempFile("ProActiveTestFile", ".dat");
+        fileRetrieved = File.createTempFile("ProActiveTestFileRetrieved", ".dat");
+        fileDeployed = File.createTempFile("ProActiveTestFileDeployed", ".dat");
+        fileRetrieved2 = File.createTempFile("ProActiveTestFileRetrieved2", ".dat");
+        fileDeployed2 = File.createTempFile("ProActiveTestFileDeployed2", ".dat");
 
         //creates a new 2MB test file
         TestAPI.createRandomContentFile(fileTest, filesize);
@@ -124,7 +147,7 @@ public class TestDeployRetrieve extends FunctionalTest {
         VariableContractImpl vc = new VariableContractImpl();
         vc.setVariableFromProgram("HOST_NAME", hostName, VariableContractType.DescriptorDefaultVariable);
 
-        pad = PADeployment.getProactiveDescriptor(XML_LOCATION, vc);
+        pad = PADeployment.getProactiveDescriptor(XML_LOCATION.getCanonicalPath(), vc);
 
         // we restore the old state of the schema validation
         CentralPAPropertyRepository.SCHEMA_VALIDATION.setValue(validatingProperyOld);
@@ -208,7 +231,7 @@ public class TestDeployRetrieve extends FunctionalTest {
             filesize = Integer.parseInt(args[0]);
             testblocksize = Integer.parseInt(args[1]);
             testflyingblocks = Integer.parseInt(args[2]);
-            XML_LOCATION = args[3];
+            XML_LOCATION = new File(args[3]);
         } else if (args.length != 0) {
             System.out
                     .println("Use with arguments: filesize[mb] fileblocksize[bytes] maxflyingblocks xmldescriptorpath");
