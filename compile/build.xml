@@ -122,8 +122,7 @@
 	-->
 
 	<target name="compile" depends="compile.all" description="Deprecated, see compile.all" />
-	<target name="core" depends="compile.core" description="Deprecated, see compile.core" />
-	<target name="examples" depends="compile.examples" description="Deprecated, see compile.examples" />
+	<target name="core" depends="compile.core" description="Deprecated, see compile.core" />	
 	<target name="extensions" depends="compile.extensions" description="Deprecated, see compile.extensions" />
 	<target name="extra" depends="compile.extra" description="Deprecated, see compile.extra" />
 	<target name="microTimer" depends="compile.microTimer" description="Deprecated, see compile.microTimer" />
@@ -138,7 +137,7 @@
 		Compilation
 	-->
 
-	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.examples, compile.tests" description="Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)" />
+	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.tests" description="Build class files (ProActive + Extensions + Extra + Utils + Tests)" />
 
 
 	<target name="compile.core" depends="-configurationCopy, compile.util" description="Compile ProActive core classes">
@@ -230,70 +229,6 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-	</target>
-
-	<target name="compile.examples" depends="compile.core, compile.extensions, compile.extra, compile.util" description="Compile all examples classes">
-
-		<!-- XXX, MicroTimer should be in core or not used by examples-->
-		<javac srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
-			<classpath>
-				<path refid="project.with.ws.classpath" />
-			</classpath>
-		</javac>
-
-		<copy todir="${cl.examples.dir}/" includeEmptyDirs="no">
-			<fileset dir="${src.examples.dir}/">
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-
-		<if>
-			<bool>
-				<and>
-					<os family="Unix" />
-					<available file="mpic++" filepath="/bin:/usr/bin:/usr/local/bin" />
-				</and>
-			</bool>
-			<echo>Compiling native examples</echo>
-			<property name="src.mpi.dir" value="${src.extensions.dir}/${extensions.path}/nativeinterfacempi/control/config/src" />
-			<property name="src.nativeinterface.dir" value="${src.extensions.dir}/${extensions.path}/nativeinterface" />
-
-			<exec dir="${src.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="mpic++" os="Linux">
-				<arg line="-O3 -lrt
-					-I${src.mpi.dir}
-					-I${src.nativeinterface.dir}
-					-L${deploy.lib.native.dir}
-					-lProActiveNativeInterfaceIPC 
-					-lProActiveNativeComm
-					-lProActiveMPIComm
-					-fPIC -g
-					hello_pampi.c -o hello_pampi " />
-			</exec>
-
-			<exec dir="${src.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="cp" os="Linux">
-				<arg line="hello_pampi ${cl.examples.dir}/${examples.path}/mpi/proactive_mpi/" />
-			</exec>
-
-			<exec dir="${cl.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="chmod" os="Linux">
-				<arg line="+x hello_pampi" />
-			</exec>
-
-			<else>
-				<echo>Native examples are only available for Unix and mpic++ must be installed</echo>
-			</else>
-		</if>
-
-
-		<available classname="com.sun.j3d.utils.behaviors.mouse.MouseWheelZoom" property="java3d_present" />
-		<if name="java3d_present">
-			<echo message="Info: Java3D installed." />
-			<javac srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}">
-				<classpath refid="project.with.ws.classpath" />
-			</javac>
-			<else>
-				<echo level="warning" message="Info: Java 3D dependencies were not resolved." />
-			</else>
-		</if>
 	</target>
 
 
@@ -424,13 +359,6 @@
 
 	</target>
 
-
-	<target name="deploy.examples" depends="examples, deploy.core" description="Add ProActive_examples.jar to the dist/ directory">
-		<jar destfile="${deploy.lib.dir}/ProActive_examples.jar">
-			<fileset dir="${cl.examples.dir}" includes="**" />
-		</jar>
-	</target>
-
 	<target name="deploy.tests" depends="deploy.core" description="Add ProActive_tests.jar to the dist/ directory">
 		<jar destfile="${deploy.lib.dir}/ProActive_tests.jar">
 			<fileset dir="${cl.test.dir}" />
@@ -483,9 +411,9 @@
 
 	<target name="deploy.annotations.all" depends="deploy.annotations.java5, deploy.annotations.java6" />
 
-	<target name="deploy.all" depends="deploy.core, deploy.examples, deploy.tests, deploy.utils, deploy.annotations.java6" description="Populate dist/ with all ProActive Programming dependencies and JARs" />
+	<target name="deploy.all" depends="deploy.core, deploy.tests, deploy.utils, deploy.annotations.java6" description="Populate dist/ with all ProActive Programming dependencies and JARs" />
 
-	<target name="deploy" depends="deploy.all" description="Populate dist/ (with ProActive_examples.jar)" />
+	<target name="deploy" depends="deploy.all" description="Populate dist" />
 
 
 	<!-- ************
@@ -540,17 +468,9 @@
 		<check_annotations module="extra" />
 	</target>
 
-	<target name="check.annotations.examples" depends="deploy,-declare" description="Annotation processing for Examples">
-		<check_annotations module="examples">
-			<extra.exclusion.pattern>
-				<exclude name="${proactive.path}/examples/nbody/common/NBody3DFrame.java" />
-			</extra.exclusion.pattern>
-		</check_annotations>
-	</target>
-
 	<target name="check.annotations" depends="check.annotations.all" description="Perform annotation processing on ProActive code" />
 
-	<target name="check.annotations.all" depends="check.annotations.core, check.annotations.extensions, check.annotations.extra, check.annotations.examples" description="Do annotation processing for the following ProActive modules : Core + Extensions + Extra + Examples + Benchmarks" />
+	<target name="check.annotations.all" depends="check.annotations.core, check.annotations.extensions, check.annotations.extra" description="Do annotation processing for the following ProActive modules : Core + Extensions + Extra" />
 
 
 	<!-- ************
@@ -905,8 +825,7 @@
 
 	<target name="-init">
 		<!-- Create the build directory structure used by compile -->
-		<mkdir dir="${classes.dir}" />
-		<mkdir dir="${cl.examples.dir}" />
+		<mkdir dir="${classes.dir}" />		
 		<mkdir dir="${cl.extra.dir}" />
 		<mkdir dir="${cl.extensions.dir}" />
 		<mkdir dir="${cl.proactive.dir}" />
@@ -1123,32 +1042,16 @@
 				<fileset dir="${base.dir}/doc/toolchain/lib">
 					<include name="**/*.jar" />
 				</fileset>
-			</classpath>
-			<arg value="${src.examples.dir}" />
+			</classpath>			
 			<arg value="${tutorials.src}" />
 		</java>
 		<mkdir dir="${tutorials.dist}" />
 		<copy toDir="${tutorials.dist}">
 			<fileset dir="${deploy.dir}">
-				<include name="**/*" />
-				<exclude name="lib/ProActive_examples.jar" />
+				<include name="**/*" />				
 				<exclude name="lib/ProActive_utils.jar" />
 				<exclude name="lib/ProActive_tests.jar" />
 			</fileset>
 		</copy>
-		<mkdir dir="${tutorials.dir}/scripts" />
-		<copy toDir="${tutorials.dir}/scripts">
-			<fileset dir="${src.examples.dir}/${examples.path}/userguide/scripts">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-		<chmod dir="${tutorials.dir}/scripts" perm="755" includes="**/*.sh" />
-		<mkdir dir="${tutorials.dir}/compile" />
-		<copy toDir="${tutorials.dir}/compile">
-			<fileset dir="${src.examples.dir}/${examples.path}/userguide/compile">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-		<chmod file="${tutorials.dir}/compile/build" perm="755" />
 	</target>
 </project>

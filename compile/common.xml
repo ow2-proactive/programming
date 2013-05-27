@@ -27,23 +27,20 @@
 	
 	<property name="src.proactive.dir"  value="${src.dir}/Core" />
 	<property name="src.extensions.dir" value="${src.dir}/Extensions" />
-	<property name="src.extra.dir"      value="${src.dir}/Extra" />
-	<property name="src.examples.dir"   value="${src.dir}/Examples" />
+	<property name="src.extra.dir"      value="${src.dir}/Extra" />	
 	<property name="src.test.dir"       value="${src.dir}/Tests" />
 	<property name="src.utils.dir"      value="${src.dir}/Utils" />
 
 	<property name="cl.proactive.dir"   value="${classes.dir}/Core" />
 	<property name="cl.extensions.dir"  value="${classes.dir}/Extensions" />
-	<property name="cl.extra.dir"       value="${classes.dir}/Extra" />
-	<property name="cl.examples.dir"    value="${classes.dir}/Examples" />
+	<property name="cl.extra.dir"       value="${classes.dir}/Extra" />	
 	<property name="cl.test.dir"        value="${classes.dir}/Tests" />
 	<property name="cl.utils.dir"       value="${classes.dir}/Utils" />
 	
 	<property name="proactive.path"      value="org/objectweb/proactive" />
 	<property name="proactive.core.path" value="${proactive.path}/core" />
 	<property name="proactive.ext.path"  value="${proactive.path}/ext" />
-	<property name="extensions.path"     value="${proactive.path}/extensions"/>
-	<property name="examples.path"       value="${proactive.path}/examples"/>
+	<property name="extensions.path"     value="${proactive.path}/extensions"/>	
 	<property name="extra.path"          value="${proactive.path}/extra"/>
 
 	<!-- Javac properties -->

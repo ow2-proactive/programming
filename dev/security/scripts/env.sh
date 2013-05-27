@@ -37,10 +37,6 @@ if [ -f $PROACTIVE/ProActive.jar ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/ProActive.jar
 fi
-if [ -f $PROACTIVE/ProActive_examples.jar ]
-then
-    CLASSPATH=$CLASSPATH:$PROACTIVE/ProActive_examples.jar
-fi
 if [ -f $PROACTIVE/lib/log4j.jar ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/lib/log4j.jar

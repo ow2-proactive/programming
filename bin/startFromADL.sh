@@ -15,5 +15,5 @@ workingDir=`dirname $0`
 JAVACMD=$JAVACMD" -Dgcm.provider=org.objectweb.proactive.core.component.Fractive"
 
 echo --- Fractal ADL Launcher --------------------------------
-$JAVACMD org.objectweb.proactive.examples.components.StartFromADL "$@"
+$JAVACMD org.objectweb.proactive.core.component.StartFromADL "$@"
 echo ---------------------------------------------------------

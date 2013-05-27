@@ -44,10 +44,6 @@ if [ -f $PROACTIVE/lib/asm.jar ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/lib/asm.jar
 fi
-if [ -f $PROACTIVE/ProActive_examples.jar ]
-then
-    CLASSPATH=$CLASSPATH:$PROACTIVE/ProActive_examples.jar
-fi
 if [ -f $PROACTIVE/ic2d.jar ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/ic2d.jar

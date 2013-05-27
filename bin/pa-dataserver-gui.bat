@@ -14,7 +14,7 @@ IF DEFINED CLASSPATHEXT (
 	SET CLASSPATH=.
 )
 
-SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar;%PROACTIVE%\dist\lib\ProActive_examples.jar;%PROACTIVE%\dist\lib\ProActive_utils.jar
+SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar;%PROACTIVE%\dist\lib\ProActive_utils.jar
 set JAVA_CMD="%JAVA_HOME%\bin\java.exe" -Dproactive.home="%PROACTIVE%"  -Djava.security.manager -Djava.security.policy="%PROACTIVE%\examples\proactive.java.policy"
 %JAVA_CMD% org.objectweb.proactive.extensions.vfsprovider.gui.ServerBrowser %*
 

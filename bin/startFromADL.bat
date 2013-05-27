@@ -13,7 +13,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..
 call ".\init.bat"
 set JAVA_CMD=%JAVA_CMD% -Dgcm.provider=org.objectweb.proactive.core.component.Fractive
-%JAVA_CMD% org.objectweb.proactive.examples.components.StartFromADL %*
+%JAVA_CMD% org.objectweb.proactive.core.component.StartFromADL %*
 ENDLOCAL
 
 :end

@@ -41,7 +41,6 @@ import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 
 
-// this is inspired from src/Examples/org/objectweb/proactive/examples/chat/ChatGUI.java
 public class AcceptInnerInterClassCall {
 
     private Migration ao = new Migration();

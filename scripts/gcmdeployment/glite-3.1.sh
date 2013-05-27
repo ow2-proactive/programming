@@ -20,8 +20,7 @@ if [ -d $PROACTIVE/classes ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Core
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extensions
-    CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extra
-    CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Examples
+    CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extra    
     for i in $PROACTIVE/lib/*.jar ; do
       CLASSPATH=$CLASSPATH:$i
     done

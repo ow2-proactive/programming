@@ -79,7 +79,7 @@ public class Test extends FunctionalTest {
         checkValidationRecursive(descriptorsfolder);
 
         // locates the examples directory
-        URI examplesuri = baseuri.resolve("../../../src/Examples/org/objectweb/proactive/examples");
+        URI examplesuri = baseuri.resolve("../../../descriptors/examples");
         File examplesfolder = new File(examplesuri);
         assertTrue("\"" + examplesuri + "\" directory could not be found", examplesfolder.exists());
         assertTrue("\"" + examplesuri + "\" is not a directory", examplesfolder.isDirectory());

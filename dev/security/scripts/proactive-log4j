@@ -35,7 +35,6 @@ log4j.logger.org.mortbay = WARN
 #log4j.logger.proactive.communication.transport.http = DEBUG
 #log4j.logger.proactive.migration = DEBUG
 #log4j.logger.proactive.communication.requests = DEBUG
-#log4j.logger.proactive.examples = DEBUG
 
 #log4j.logger.proactive.components = DEBUG
 #log4j.logger.proactive.components.requests = DEBUG
