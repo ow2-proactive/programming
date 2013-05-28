@@ -52,9 +52,7 @@ public class TestBasicDescriptorParsing {
     //    @Test
     public void oldDeploymentDescriptorParse() throws Exception {
         String descriptorLocation = getClass().getResource("javaproperty_ERROR.xml").getPath();
-
-        Object proActiveDescriptor = PADeployment.getProactiveDescriptor("file:" + descriptorLocation);
-
+        PADeployment.getProactiveDescriptor("file:" + descriptorLocation);
     }
 
     @Test
@@ -64,7 +62,7 @@ public class TestBasicDescriptorParsing {
         boolean gotException = false;
 
         try {
-            GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(descriptorLocation, null);
+            new GCMDeploymentParserImpl(descriptorLocation, null);
         } catch (SAXException e) {
             gotException = e.getException().getMessage().contains("old format");
         }

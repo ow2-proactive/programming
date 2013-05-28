@@ -60,7 +60,7 @@ import functionalTests.TestDisabler;
  */
 public class Test extends FunctionalTest {
     /*
-     * Only work for RMI. There is no easy way to write this test for HTTP/IBIS/PAMR
+     * Only work for RMI. There is no easy way to write this test for HTTP/PAMR
      */
 
     private static String ONEVM_XML_LOCATION_UNIX = Test.class.getResource(

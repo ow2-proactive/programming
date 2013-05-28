@@ -4,7 +4,6 @@
 
 log4j.rootLogger=INFO,REMOTE
 log4j.logger.org.mortbay = WARN
-log4j.logger.ibis = WARN
 
 log4j.appender.REMOTE=org.objectweb.proactive.core.util.log.remote.ProActiveAppender
 log4j.appender.REMOTE.layout=org.apache.log4j.PatternLayout

@@ -141,10 +141,6 @@ A    | &lt;----                    ----&gt;  |    B
       </listitem>
 
       <listitem>
-        <para>ibis</para>
-      </listitem>
-
-      <listitem>
         <para>pamr (plain TCP connection or tunneled over SSH)</para>
       </listitem>
     </itemizedlist>

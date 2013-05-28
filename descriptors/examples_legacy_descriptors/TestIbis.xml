@@ -6,8 +6,6 @@
 	<variables>
         <descriptorVariable name="PROACTIVE_HOME"
             value="/home/user/ProActive" /><!--CHANGE ME!!!! -->
-        <descriptorVariable name="IBIS_HOME"
-            value="/path/to/Ibis" /><!--CHANGE ME!!!! -->
         <descriptorVariable name="JAVA_HOME"
             value="/path/to/jdk1.5.0" /><!-- Path of the remote JVM , CHANGE ME!!!! -->
         <descriptorVariable name="PRESERIALIZED_HOME"
@@ -53,8 +51,6 @@
 					class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<bootclasspath>
 						<absolutePath
-							value="${IBIS_HOME}/" />
-						<absolutePath
 							value="${PRESERIALIZED_HOME}/jdk" /> <!--  preserialized jars from JDK -->
 					</bootclasspath>
 					<classpath>
@@ -69,8 +65,7 @@
 
 					</classpath>
 					<!--<classpath>
-						<absolutePath type="absolute" value="/home1/fabrice/workProActive/ProActive/classes"/>
-						<absolutePath type="absolute" value="/home1/fabrice/workIbis/Ibis/classes"/>
+						<absolutePath type="absolute" value="/home1/fabrice/workProActive/ProActive/classes"/>						
 						<absolutePath type="absolute" value="/home1/fabrice/workProActive/ProActive/lib/bcel.jar"/>
 						<absolutePath type="absolute" value="/home1/fabrice/workProActive/ProActive/lib/asm.jar"/>
 						<absolutePath type="absolute" value="/home1/fabrice/workProActive/ProActive/lib/jini-core.jar"/>

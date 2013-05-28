@@ -25,8 +25,7 @@
                 <jvmarg value="-Djava.security.egd=file:/dev/urandom"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="classes/Tests"/>
-					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
-					<pathElement base="proactive" relpath="dist/lib/ibis-1.4.jar"/>
+					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>					
 				</proactiveClasspath>	
 <!--				<log4jProperties base="proactive" relpath="compile/proactive-log4j"/> -->
 		      <!--   <proactiveSecurity>

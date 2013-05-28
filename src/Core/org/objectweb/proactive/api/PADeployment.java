@@ -280,7 +280,7 @@ public class PADeployment {
     }
 
     /**
-     * Looks-up a VirtualNode previously registered in a registry(RMI or HTTP or IBIS)
+     * Looks-up a VirtualNode previously registered in a registry(RMI or HTTP)
      * The registry where to look for is fully determined with the protocol included in the url
      * @param url The url where to perform the lookup. The url takes the following form:
      * protocol://machine_name:port/name. Protocol and port can be ommited if respectively RMI and 1099:
@@ -299,7 +299,7 @@ public class PADeployment {
      * The VirtualNode to register must exist on the local runtime. This is done when using XML Deployment Descriptors
      * @param virtualNode the VirtualNode to register.
      * @param registrationProtocol The protocol used for registration or null in order to use the protocol used to start the jvm.
-     * At this time RMI, HTTP, IBIS are supported. If set to null, the registration protocol will be set to the system property:
+     * At this time RMI, HTTP are supported. If set to null, the registration protocol will be set to the system property:
      * proactive.communication.protocol
      * @param replacePreviousBinding
      * @throws ProActiveException If the VirtualNode with the given name has not been yet activated or does not exist on the local runtime

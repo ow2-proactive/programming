@@ -108,7 +108,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
               Represents the communication protocol, i.e. the protocol used to export objects
               on remote JVMs. At this stage, several
               protocols are supported: <emphasis role="bold">RMI(rmi),
-              HTTP(http), IBIS/RMI(ibis), SSH tunneling for RMI/HTTP(rmissh),
+              HTTP(http), SSH tunneling for RMI/HTTP(rmissh),
               ProActive Message Routing(pamr)</emphasis>. It means that once the JVM starts, nodes and
               active objects that will be created on this JVM will export
               themselves using the protocol specified in <emphasis role="bold">proactive.communication.protocol</emphasis>

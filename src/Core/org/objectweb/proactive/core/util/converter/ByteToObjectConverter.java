@@ -40,13 +40,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
-import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.PAObjectInputStream;
 import org.objectweb.proactive.core.mop.SunMarshalInputStream;
 
@@ -57,12 +51,6 @@ import org.objectweb.proactive.core.mop.SunMarshalInputStream;
  *
  */
 public class ByteToObjectConverter {
-    // IBIS Classes and methods names we need to perform reflection
-    private static final String CLOSE = "close";
-    private static final String READ_OBJECT = "readObject";
-    private static final String IBIS_SERIALIZATION_INPUT_STREAM = "ibis.io.IbisSerializationInputStream";
-    private static final String BUFFERED_ARRAY_INPUT_STREAM = "ibis.io.BufferedArrayInputStream";
-    private static final String BYTE_ARRAY_INPUT_STREAM = "java.io.ByteArrayInputStream";
 
     public static class MarshallStream {
 
@@ -180,14 +168,7 @@ public class ByteToObjectConverter {
 
     private static Object convert(InputStream is, MakeDeepCopy.ConversionMode conversionMode, ClassLoader cl)
             throws IOException, ClassNotFoundException {
-        final String mode = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
-
-        //here we check wether or not we are running in ibis
-        if (Constants.IBIS_PROTOCOL_IDENTIFIER.equals(mode)) {
-            return ibisConvert(is);
-        } else {
-            return standardConvert(is, conversionMode, cl);
-        }
+        return standardConvert(is, conversionMode, cl);
     }
 
     private static Object readFromStream(ObjectInputStream objectInputStream) throws IOException,
@@ -221,61 +202,6 @@ public class ByteToObjectConverter {
                 objectInputStream.close();
             }
             is.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Object ibisConvert(InputStream bais) throws IOException, ClassNotFoundException {
-        try {
-            final Class cl_bais = Class.forName(BYTE_ARRAY_INPUT_STREAM);
-            final Class cl_buais = Class.forName(BUFFERED_ARRAY_INPUT_STREAM);
-            final Class cl_isis = Class.forName(IBIS_SERIALIZATION_INPUT_STREAM);
-            final Constructor c_bais = cl_bais.getConstructor(Array.newInstance(byte.class, 0).getClass());
-
-            final Constructor c_buais = cl_buais.getConstructor(new Class[] { java.io.InputStream.class });
-            final Constructor c_isis = cl_isis.getConstructor(new Class[] { Class
-                    .forName("ibis.io.DataInputStream") });
-
-            //      final ByteArrayInputStream bi = new ByteArrayInputStream(b);
-            //            final ByteArrayInputStream i_bais = (ByteArrayInputStream) c_bais.newInstance(b);
-
-            //      final BufferedArrayInputStream ai = new BufferedArrayInputStream(bi);
-            final Object i_buais = c_buais.newInstance(new Object[] { bais });
-
-            //      final IbisSerializationInputStream si = new IbisSerializationInputStream(ai);
-            final Object i_isis = c_isis.newInstance(new Object[] { i_buais });
-
-            final Method readObjectMth = cl_isis.getMethod(READ_OBJECT);
-            final Method closeMth = cl_isis.getMethod(CLOSE);
-
-            //      final Object unserialized = si.readObject();
-            final Object unserialized = readObjectMth.invoke(i_isis, new Object[] {});
-
-            closeMth.invoke(i_isis, new Object[] {});
-
-            return unserialized;
-        } catch (ClassNotFoundException e) {
-            //TODO replace by IOException(Throwable e) java 1.6
-            MakeDeepCopy.logger.warn("Check your classpath for ibis jars ");
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
-        } catch (SecurityException e) {
-            MakeDeepCopy.logger.warn("Check your classpath for ibis jars ");
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
-        } catch (NoSuchMethodException e) {
-            MakeDeepCopy.logger.warn("Check your classpath for ibis jars ");
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
-        } catch (IllegalArgumentException e) {
-            MakeDeepCopy.logger.warn("Check your classpath for ibis jars ");
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
-        } catch (InstantiationException e) {
-            MakeDeepCopy.logger.warn("Check your classpath for ibis jars ");
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
-        } catch (IllegalAccessException e) {
-            MakeDeepCopy.logger.warn("Check your classpath for ibis jars ");
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
-        } catch (InvocationTargetException e) {
-            MakeDeepCopy.logger.warn("Check your classpath for ibis jars ");
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
         }
     }
 

@@ -118,49 +118,4 @@ public class MixedLocationMetaObjectFactory extends ProActiveMetaObjectFactory {
             return new MigrationManagerWithMixedLocation(LocationServerFactory.getLocationServer());
         }
     }
-
-    //    @Override
-    //    protected RemoteBodyFactory newRemoteBodyFactorySingleton() {
-    //        if (Constants.IBIS_PROTOCOL_IDENTIFIER.equals(
-    //                    ProActiveConfiguration.getInstance()
-    //                                              .getProperty(Constants.PROPERTY_PA_COMMUNICATION_PROTOCOL))) {
-    //            if (logger.isDebugEnabled()) {
-    //                logger.debug("Factory is ibis");
-    //            }
-    //            return new RemoteIbisBodyFactoryImpl();
-    //        } else {
-    //            if (logger.isDebugEnabled()) {
-    //                logger.debug("Factory is rmi");
-    //            }
-    //            return new RemoteRmiBodyFactoryImpl();
-    //        }
-    //    }
-
-    //    protected static class RemoteIbisBodyFactoryImpl
-    //        implements RemoteBodyFactory, java.io.Serializable {
-    //        public UniversalBody newRemoteBody(UniversalBody body) {
-    //            try {
-    //                // 	System.out.println("Creating ibis remote body adapter");
-    //                return new IbisBodyAdapter(body);
-    //            } catch (ProActiveException e) {
-    //                throw new ProActiveRuntimeException("Cannot create Ibis Remote body adapter ",
-    //                    e);
-    //            }
-    //        }
-    //    }
-    //
-    //    // end
-    //    protected static class RemoteRmiBodyFactoryImpl implements RemoteBodyFactory,
-    //        java.io.Serializable {
-    //        public UniversalBody newRemoteBody(UniversalBody body) {
-    //            try {
-    //                return new org.objectweb.proactive.core.body.rmi.RmiBodyAdapter(body);
-    //            } catch (ProActiveException e) {
-    //                throw new ProActiveRuntimeException("Cannot create Remote body adapter ",
-    //                    e);
-    //            }
-    //        }
-    //    }
-    //
-    //    // end inner class RemoteBodyFactoryImpl
 }

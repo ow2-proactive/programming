@@ -1108,7 +1108,7 @@ public class PAActiveObject {
     }
 
     /**
-     * Looks-up all Active Objects registered on a host, using a registry(RMI or HTTP or IBIS) The
+     * Looks-up all Active Objects registered on a host, using a registry(RMI or HTTP) The
      * registry where to look for is fully determined with the protocol included in the url.
      * 
      * @param url
@@ -1440,7 +1440,7 @@ public class PAActiveObject {
     }
 
     /**
-     * Looks-up an active object previously registered in a registry(RMI, IBIS, HTTP). In fact it is
+     * Looks-up an active object previously registered in a registry(RMI, HTTP). In fact it is
      * the remote version of the body of an active object that can be registered into the Registry
      * under a given URL. If the lookup is successful, the method reconstructs a Stub-Proxy couple
      * and point it to the remote nody found. The registry where to look for is fully determined
@@ -1465,7 +1465,7 @@ public class PAActiveObject {
     }
 
     /**
-     * Looks-up an active object previously registered in a registry(RMI, IBIS, HTTP). In fact it is
+     * Looks-up an active object previously registered in a registry(RMI, HTTP). In fact it is
      * the remote version of the body of an active object that can be registered into the Registry
      * under a given URL. If the lookup is successful, the method reconstructs a Stub-Proxy couple
      * and point it to the remote body found. The registry where to look for is fully determined

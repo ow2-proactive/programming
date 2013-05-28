@@ -103,15 +103,13 @@
 	<if name="test">
 		<fileset dir="${cl.test.dir}" id="performancesuite">
 			<include name="${test}" />
-			<exclude name="**/*$*.class" />
-			<exclude name="**/*Ibis*.class" />
+			<exclude name="**/*$*.class" />			
 		</fileset>
 		<else>
 			<fileset dir="${cl.test.dir}" id="performancesuite">
 				<include name="performanceTests/bandwidth/Test*.class" />
 				<include name="performanceTests/throughput/Test*.class" />
-				<exclude name="**/*$*.class" />
-				<exclude name="**/*Ibis*.class" />
+				<exclude name="**/*$*.class" />				
 			</fileset>
 		</else>
 	</if>
@@ -183,9 +181,7 @@
 			<class name="org.objectweb.proactive.core.jmx.server.ProActiveServerImpl" />
 			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketServer" />
 			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketClient" />
-		</stubGenerator>
-
-		<antcall target="ibis" />
+		</stubGenerator>	
 	</target>
 
 
@@ -494,13 +490,6 @@
 				<jvmarg value="-Dproactive.home=${base.dir}" />
 
 				<classpath>
-					<additionalClasspath>
-						<!-- It is mandatory to explicity include the ibis jar in the
-						classpath. Ibis is not able to find the classes if they are
-						not directly accessible through the classpath.
-						i.e. we cannot use the jar index tip -->
-						<pathelement location="${lib.dir}/ibis-1.4.jar" />
-					</additionalClasspath>
 					<path refid="test.classpath" />
 				</classpath>
 
@@ -577,16 +566,6 @@
 		<junitMacro communication.protocol="pnps" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite">
 			<jvmargs>
 				<jvmarg value="-Djava.security.egd=file:/dev/urandom" />
-			</jvmargs>
-		</junitMacro>
-        <antcall target="junit.summary" />
-	</target>
-
-	<target name="junit.ibis" depends="deploy.all">
-		<junitMacro communication.protocol="ibis" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocalIbis.xml" testsuite="testsuite">
-			<jvmargs>
-				<jvmarg value="-Dproactive.communication.protocol=ibis" />
-				<jvmarg value="-Dibis.serialization=ibis" />
 			</jvmargs>
 		</junitMacro>
         <antcall target="junit.summary" />
@@ -857,25 +836,6 @@
 			</fileset>
 		</copy>
 	</target>
-
-
-	<!-- ================================================================ -->
-	<!--               Ibisc to generate stubs/skels                      -->
-	<!-- ================================================================ -->
-	<target name="ibis" description="Everything related to ProActive IBIS">
-		<delete>
-			<fileset dir="${classes.dir}" includes="**/rmi*.java" />
-		</delete>
-		<java classname="ibis.frontend.rmi.Rmic" fork="true" dir="${cl.proactive.dir}/org/objectweb/proactive/core/remoteobject/ibis/">
-			<classpath refid="project.classpath" />
-			<arg value="org.objectweb.proactive.core.remoteobject.ibis.IbisRemoteObjectImpl" />
-		</java>
-		<javac srcdir="${cl.proactive.dir}" destdir="${cl.proactive.dir}" deprecation="on" source="${source}" debug="${debug}">
-			<include name="**/*.java" />
-			<classpath refid="project.classpath" />
-		</javac>
-	</target>
-
 
 	<target name="jdepend" depends="compile" description="JDepend report">
 		<macrodef name="jdependMacro">

@@ -13,7 +13,7 @@
 		</info>
 
 		<para>
-			ProActive Programming supports several communication protocols like RMI, HTTP, Ibis or RMI over SSH.
+			ProActive Programming supports several communication protocols like RMI, HTTP or RMI over SSH.
 			Each protocol has its own advantages and drawbacks. For example RMI is reasonably fast
 			but is not firewall friendly. HTTP is slower but only requires one open TCP port.
 		</para>

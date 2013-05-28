@@ -45,7 +45,6 @@ import javax.imageio.spi.ServiceRegistry;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.remoteobject.http.HTTPRemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.ibis.IbisRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmissh.RmiSshRemoteObjectFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -62,7 +61,6 @@ public class RemoteObjectProtocolFactoryRegistry {
         remoteObjectFactories.put(Constants.RMI_PROTOCOL_IDENTIFIER, RmiRemoteObjectFactory.class);
         remoteObjectFactories.put(Constants.XMLHTTP_PROTOCOL_IDENTIFIER, HTTPRemoteObjectFactory.class);
         remoteObjectFactories.put(Constants.RMISSH_PROTOCOL_IDENTIFIER, RmiSshRemoteObjectFactory.class);
-        remoteObjectFactories.put(Constants.IBIS_PROTOCOL_IDENTIFIER, IbisRemoteObjectFactory.class);
 
         Iterator<RemoteObjectFactorySPI> iter = ServiceRegistry.lookupProviders(RemoteObjectFactorySPI.class);
         while (iter.hasNext()) {

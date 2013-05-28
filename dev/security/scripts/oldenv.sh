@@ -76,10 +76,6 @@ if [ -f $PROACTIVE/lib/log4j.jar ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/lib/log4j.jar
 fi
-if [ -f $PROACTIVE/lib/ibis.jar ]
-then
-    CLASSPATH=$CLASSPATH:$PROACTIVE/lib/ibis.jar
-fi
 if [ -f $PROACTIVE/lib/xercesImpl.jar ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/lib/xercesImpl.jar

@@ -39,7 +39,6 @@ package functionalTests.descriptor.coallocation;
 import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PADeployment;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualMachine;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
@@ -53,17 +52,8 @@ import functionalTests.FunctionalTest;
  */
 public class Test extends FunctionalTest {
     ProActiveDescriptor proActiveDescriptor;
-    private static String AGENT_XML_LOCATION_UNIX = null;
-
-    static {
-        if ("ibis".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
-            AGENT_XML_LOCATION_UNIX = Test.class.getResource(
-                    "/functionalTests/descriptor/coallocation/coallocationIbis.xml").getPath();
-        } else {
-            AGENT_XML_LOCATION_UNIX = Test.class.getResource(
-                    "/functionalTests/descriptor/coallocation/coallocation.xml").getPath();
-        }
-    }
+    private static String AGENT_XML_LOCATION_UNIX = Test.class.getResource(
+            "/functionalTests/descriptor/coallocation/coallocation.xml").getPath();
 
     Node node1;
     Node node2;

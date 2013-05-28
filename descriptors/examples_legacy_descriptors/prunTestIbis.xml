@@ -6,8 +6,6 @@
 	<variables>
 		<descriptorVariable name="PROACTIVE_HOME"
 			value="/home/user/ProActive" /><!--CHANGE ME!!!! -->
-		<descriptorVariable name="IBIS_HOME"
-			value="/path/to/Ibis" /><!--CHANGE ME!!!! -->
 		<descriptorVariable name="PRESERIALIZED_HOME"
 			value="/path/to/classlibs" /><!--CHANGE ME!!!! -->
 		<descriptorVariable name="JAVA_HOME"
@@ -40,8 +38,6 @@
 				<jvmProcess
 					class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<bootclasspath>
-						<absolutePath
-							value="${IBIS_HOME}/" />
 						<absolutePath
 							value="${PRESERIALIZED_HOME}/jdk" /> <!--  preserialized jars from JDK -->
 					</bootclasspath>

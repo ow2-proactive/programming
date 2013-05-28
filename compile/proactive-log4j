@@ -8,7 +8,6 @@ log4j.rootLogger=INFO,CONSOLE
  
 # If INFO is enabled Jetty is too verbose at startup
 log4j.logger.org.mortbay = WARN
-log4j.logger.ibis= WARN
 
 log4j.logger.proactive.pnp = INFO
 

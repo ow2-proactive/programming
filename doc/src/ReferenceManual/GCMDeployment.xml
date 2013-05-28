@@ -1604,7 +1604,7 @@
 					have a single occurrence or be omitted. The &lt;lookup&gt; element has the following three attributes:
 					<orderedlist>
 						<listitem>
-							<para>type: one of "RMI", "HTTP", "IBIS";</para>
+							<para>type: one of "RMI", "HTTP";</para>
 						</listitem>
 						<listitem>
 							<para>hostlist: a HostList as defined in 5.1.1;</para>

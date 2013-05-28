@@ -58,8 +58,7 @@
                <literal>ProActive/dist/lib/log4j.jar</literal>,
                <literal>ProActive/dist/lib/xercesImpl.jar</literal>,
                <literal>ProActive/dist/lib/fractal.jar</literal>,
-               <literal>ProActive/dist/lib/asm-2.2.3.jar</literal>,
-               <literal>ProActive/dist/lib/ibis-1.4.jar</literal>,
+               <literal>ProActive/dist/lib/asm-2.2.3.jar</literal>,               
                <literal>ProActive/dist/lib/bouncycastle.jar</literal>,
 			   <literal>ProActive/dist/lib/servlet-api.jar</literal> and
 			   <literal>ProActive/dist/lib/jetty-*.jar</literal>
@@ -232,10 +231,6 @@
             </listitem>
 
             <listitem>
-               <para><literal>dist/lib/ibis-1.4.jar</literal> - communication library used by the ProActive components.</para>
-            </listitem>
-
-            <listitem>
                <para><literal>dist/lib/asm-2.2.3.jar</literal> - used by the ProActive components for bytecode manipulations.</para>
             </listitem>
 			<listitem>
@@ -291,12 +286,6 @@
 
             <listitem>
                <para> <literal>Proactive/lib/cxf/*.jar</literal> - used by the Web Services features </para>
-            </listitem>
-
-            <listitem>
-               <para><literal>bcel-5.1.jar, ibis-util-1.0.jar, colobus-0.1.jar,
-               ibis-connect-1.0.jar, ibis-1.4.jar, bcel-5.1-fixes-1.0.jar</literal> - used by Ibis if
-               configured as communication protocol</para>
             </listitem>
 
             <listitem>

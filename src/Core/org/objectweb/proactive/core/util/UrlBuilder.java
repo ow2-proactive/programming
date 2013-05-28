@@ -187,8 +187,7 @@ public class UrlBuilder {
     public static String buildUrlFromProperties(String host, String name) {
         String port = null;
         String protocol = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
-        if (protocol.equals(Constants.RMI_PROTOCOL_IDENTIFIER) ||
-            protocol.equals(Constants.IBIS_PROTOCOL_IDENTIFIER)) {
+        if (protocol.equals(Constants.RMI_PROTOCOL_IDENTIFIER)) {
             port = CentralPAPropertyRepository.PA_RMI_PORT.getValueAsString();
         }
         if (protocol.equals(Constants.XMLHTTP_PROTOCOL_IDENTIFIER)) {

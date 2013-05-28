@@ -41,7 +41,6 @@ import static junit.framework.Assert.assertTrue;
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.util.ProActiveInet;
@@ -57,17 +56,8 @@ import functionalTests.TestDisabler;
  */
 public class Test extends FunctionalTest {
     // private static String FS = File.separator;
-    private static String AGENT_XML_LOCATION_UNIX;
-
-    static {
-        if ("ibis".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
-            AGENT_XML_LOCATION_UNIX = Test.class.getResource(
-                    "/functionalTests/descriptor/lookupregister/AgentIbis.xml").getPath();
-        } else {
-            AGENT_XML_LOCATION_UNIX = Test.class.getResource(
-                    "/functionalTests/descriptor/lookupregister/Agent.xml").getPath();
-        }
-    }
+    private static String AGENT_XML_LOCATION_UNIX = Test.class.getResource(
+            "/functionalTests/descriptor/lookupregister/Agent.xml").getPath();
 
     ProActiveDescriptor proActiveDescriptorAgent;
     A a;

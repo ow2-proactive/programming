@@ -32,7 +32,7 @@
             <para><emphasis role="bold">Java complains about not being able to
             find the ProActive classes</emphasis> - Your <literal>CLASSPATH</literal>
             environment variable does not contain the entry for classes belonging to ProActive,
-            ASM, Log4, Xerces, Fractal, Ibis or BouncyCastle. Normally, only
+            ASM, Log4, Xerces, Fractal or BouncyCastle. Normally, only
             <literal>ProActive.jar</literal> must be in
             your <literal>CLASSPATH</literal> since the other libraries are indexed into the ProActive.jar file.
             However, if these others libraries are not in the same directory than ProActive.jar, then you have to

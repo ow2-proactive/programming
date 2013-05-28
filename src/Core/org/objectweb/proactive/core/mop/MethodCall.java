@@ -541,10 +541,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
                         e +
                         ". This may be caused by having different versions of the same class on different VMs. Check your CLASSPATH settings.");
             }
-        } else { //added to avoid an ibis bug
-            in.readObject();
-            in.readObject();
-            in.readObject();
         }
 
         if ((this.serializedEffectiveArguments != null) && (this.effectiveArguments == null)) {

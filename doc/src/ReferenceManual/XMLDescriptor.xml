@@ -73,10 +73,6 @@
             </listitem>
 
             <listitem>
-              <para>ibis</para>
-            </listitem>
-
-            <listitem>
               <para>soap</para>
             </listitem>
           </itemizedlist></para>
@@ -421,7 +417,7 @@
             <para>VirtualNode registration</para>
 
             <para>Descriptors provide the ability to register a VirtualNode in
-            a registry such as RMIRegistry, HTTP registry, IBIS/RMI
+            a registry such as RMIRegistry, HTTP registry, RMI
             Registry Service. Hence this VirtualNode will be accessible from
             another application as it is described in <xref linkend="VirtualNodesAcquisition_1"/>. The
             protocol (registry) to use can be specified in the descriptor. If
@@ -858,8 +854,7 @@ vnDispatcher.setRuntimeInformations('LOOKUP_HOST','machine_name);
       <para>Even if not shown in this example, a specific tag is provided for
       <literal>XbootClasspathi</literal> option under the form.</para>
 
-      <programlisting language="xml">&lt;bootclasspath&gt;
-	&lt;relativePath origin='user.home' value='/IOFAb/Ibis/'/&gt;
+      <programlisting language="xml">&lt;bootclasspath&gt;	
 	&lt;relativePath origin='user.home' value='/IOFAb/classlibs/jdk'/&gt;
 &lt;/bootclasspath&gt;
 </programlisting>

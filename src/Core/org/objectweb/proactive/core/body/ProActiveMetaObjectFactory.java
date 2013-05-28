@@ -386,15 +386,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     //        java.io.Serializable {
     //        public UniversalBody newRemoteBody(UniversalBody body) {
     //            try {
-    //                if (Constants.IBIS_PROTOCOL_IDENTIFIER.equals(
-    //                            ProActiveConfiguration.getInstance()
-    //                                                      .getProperty(Constants.PROPERTY_PA_COMMUNICATION_PROTOCOL))) {
-    //                    if (logger.isDebugEnabled()) {
-    //                        logger.debug(
-    //                            "Using ibis factory for creating remote body");
-    //                    }
-    //                    return new org.objectweb.proactive.core.body.ibis.IbisBodyAdapter(body);
-    //                } else if (Constants.XMLHTTP_PROTOCOL_IDENTIFIER.equals(
+    //                if (Constants.XMLHTTP_PROTOCOL_IDENTIFIER.equals(
     //                            ProActiveConfiguration.getInstance()
     //                                                      .getProperty(Constants.PROPERTY_PA_COMMUNICATION_PROTOCOL))) {
     //                    if (logger.isDebugEnabled()) {

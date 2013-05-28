@@ -66,12 +66,6 @@ grant codebase "file:classes/-" {
 	permission java.util.PropertyPermission "components.creation.timeout", "read, write";
 	permission java.util.PropertyPermission "gcm.provider", "read, write";
 	permission java.util.PropertyPermission "fractal.provider", "read, write";
-	permission java.util.PropertyPermission "ibis.name", "read, write";
-	permission java.util.PropertyPermission "ibis.name_server.host", "read, write";
-	permission java.util.PropertyPermission "ibis.name_server.key", "read, write";
-	permission java.util.PropertyPermission "ibis.name_server.pool", "read, write";
-	permission java.util.PropertyPermission "ibis.pool_host_number", "read, write";
-	permission java.util.PropertyPermission "ibis.serialization", "read, write";
 	permission java.util.PropertyPermission "java.protocol.handler.pkgs", "read, write";
 	permission java.util.PropertyPermission "name_server", "read, write";
 	permission java.util.PropertyPermission "name_server_pool", "read, write";

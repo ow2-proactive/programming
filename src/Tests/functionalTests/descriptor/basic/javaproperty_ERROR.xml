@@ -76,8 +76,6 @@
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/components/julia-asm.jar" />
 						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/ibis/ibis.jar" />
-						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/jini/jini-core.jar" />
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/jini/jini-ext.jar" />

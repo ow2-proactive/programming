@@ -53,7 +53,7 @@ import java.net.URI;
 /**
  * <p>
  * The <code>RuntimeFactory</code> provides a generic way to create and lookup <code>ProActiveRuntime</code>
- * without protocol specific code (such as RMI, HTTP, IBIS, RMI/SSH).
+ * without protocol specific code (such as RMI, HTTP, RMI/SSH).
  * </p><p>
  * <code>RuntimeFactory</code> provides a set of static methods to create and lookup <code>ProActiveRuntime</code>
  * and to associate protocol specific factory to concrete protocols. To create a proActiveRuntime it is only

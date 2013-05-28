@@ -91,8 +91,6 @@
 						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/fractal.jar" />
 						<absolutePath
-							value="/user/acontes/home/dev/ProActive/lib/ibis.jar" />
-						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/javaxCrypto.jar" />
 						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/jce-jdk13-117.jar" />
@@ -147,8 +145,6 @@
 						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/fractal.jar" />
 						<absolutePath
-							value="/user/acontes/home/dev/ProActive/lib/ibis.jar" />
-						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/javaxCrypto.jar" />
 						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/jce-jdk13-117.jar" />
@@ -200,8 +196,6 @@
 							value="/user/acontes/home/dev/ProActive/lib/cryptix.jar" />
 						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/fractal.jar" />
-						<absolutePath
-							value="/user/acontes/home/dev/ProActive/lib/ibis.jar" />
 						<absolutePath
 							value="/user/acontes/home/dev/ProActive/lib/javaxCrypto.jar" />
 						<absolutePath

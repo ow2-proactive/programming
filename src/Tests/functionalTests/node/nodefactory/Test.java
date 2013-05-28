@@ -45,7 +45,7 @@ import functionalTests.FunctionalTest;
 
 
 /**
- * Test the creation of rmi, ibis node whith the factory
+ * Test the creation of rmi node with the factory
  */
 public class Test extends FunctionalTest {
     final private static String NODE_NAME = "RMINode";

@@ -535,7 +535,7 @@
              width="294.64218"
              id="rect15818"
              style="fill:#000000;fill-opacity:1" /></flowRegion><flowPara
-           id="flowPara15820">Connection through rsh, ssh, ibis </flowPara><flowPara
+           id="flowPara15820">Connection through rsh, ssh</flowPara><flowPara
            id="flowPara15822">starts a remote JVM </flowPara></flowRoot>      <flowRoot
          transform="translate(909.91067,-191.85022)"
          id="flowRoot15824"
@@ -1380,7 +1380,7 @@
              height="38.353882"
              width="294.64218"
              id="rect4705" /></flowRegion><flowPara
-           id="flowPara4709">Connection through rsh, ssh, ibis </flowPara><flowPara
+           id="flowPara4709">Connection through rsh, ssh</flowPara><flowPara
            id="flowPara4741">starts a remote JVM </flowPara></flowRoot>      <flowRoot
          transform="translate(-256.99693,214.94332)"
          id="flowRoot4989"

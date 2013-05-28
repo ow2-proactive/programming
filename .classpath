@@ -10,13 +10,11 @@
 	<classpathentry kind="lib" path="compile/lib/junit-4.11-SNAPSHOT-20120416-1530.jar"/>
 	<classpathentry kind="lib" path="lib/asm-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/ast-core-2.4-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/bcel-5.2.jar"/>
 	<classpathentry kind="lib" path="lib/bouncycastle.jar"/>
 	<classpathentry kind="lib" path="lib/bundlerepository-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/cockpit-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
-	<classpathentry kind="lib" path="lib/colobus-0.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-discovery-0.4.jar"/>
@@ -40,9 +38,6 @@
 	<classpathentry kind="lib" path="lib/http-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/ibis-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/ibis-connect-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/ibis-util-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jackrabbit-jcr-commons-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jackrabbit-webdav-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>

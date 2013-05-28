@@ -43,7 +43,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.net.URI;
 import java.net.URL;
 
 import org.junit.After;
@@ -51,7 +50,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 
@@ -88,13 +86,8 @@ public class Test extends FunctionalTest {
 
     @Before
     public void initTest() throws Exception {
-        String fileName = null;
+        String fileName = "JVMExtension";
 
-        if ("ibis".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
-            fileName = "JVMExtensionIbis";
-        } else {
-            fileName = "JVMExtension";
-        }
         URL url = getClass().getResource("/functionalTests/descriptor/extendedjvm/" + fileName + ".xml");
         String oldFilePath = new File(url.toURI()).getAbsolutePath();
         String newFilePath = oldFilePath.replaceFirst(fileName + ".xml", fileName + "-tmp.xml");

@@ -112,13 +112,6 @@ then
 fi
 
 #--------------------------------------------------
-# jar to set when using Ibis
-if [ -f $PROACTIVE/lib/ibis/ibis.jar ]
-then
-    CLASSPATH=$CLASSPATH:$PROACTIVE/lib/ibis/ibis.jar
-fi
-
-#--------------------------------------------------
 # jars to set when using Fractal GUI
 if [ -f $PROACTIVE/lib/components/asm-2.2.1.jar ]
 then

@@ -40,13 +40,6 @@
 ./components/julia-asm.jar
 ./components/SVGGraphics.jar
 ./components/fractal-adl.jar
-./ibis
-./ibis/bcel-5.1.jar
-./ibis/ibis-util-1.0.jar
-./ibis/colobus-0.1.jar
-./ibis/ibis-connect-1.0.jar
-./ibis/ibis-1.4.jar
-./ibis/bcel-5.1-fixes-1.0.jar
 ./javassist.jar
 ./glite
 ./glite/classad.jar

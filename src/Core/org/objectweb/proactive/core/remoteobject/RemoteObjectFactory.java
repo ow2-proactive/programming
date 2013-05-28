@@ -114,7 +114,7 @@ public interface RemoteObjectFactory {
 
     /**
      *  the id string of the protocol
-     * @return returns the id string of the protocol (i.e. rmi, ibis, ...)
+     * @return returns the id string of the protocol (i.e. rmi ...)
      */
     public String getProtocolId();
 

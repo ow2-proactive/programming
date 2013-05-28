@@ -48,7 +48,6 @@ Main targets:
  extensions                          Deprecated, see compile.extensions
  extra                               Deprecated, see compile.extra
  format                              hibernate's eclipse-based formatter
- ibis                                Everything related to ProActive IBIS
  jdepend                             JDepend report
  junit                               Run all non regression tests on the current host only
  junit.clover                        Same as junit but with code coverage enabled

@@ -100,8 +100,7 @@
 	<xsd:simpleType name="lookupProtocolType">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="RMI"></xsd:enumeration>
-			<xsd:enumeration value="HTTP"></xsd:enumeration>
-			<xsd:enumeration value="IBIS"></xsd:enumeration>
+			<xsd:enumeration value="HTTP"></xsd:enumeration>			
 		</xsd:restriction>
 	</xsd:simpleType>
 
