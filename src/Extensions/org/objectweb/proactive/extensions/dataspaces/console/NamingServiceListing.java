@@ -179,7 +179,7 @@ public class NamingServiceListing {
 
             sb.append(sii.getMountingPoint());
             sb.append("\t-> ");
-            sb.append(sii.getUrl());
+            sb.append(sii.getUrls());
             sorted.add(sb.toString());
 
             if (recursively)

@@ -37,6 +37,7 @@
 package org.objectweb.proactive.extensions.dataspaces.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
@@ -162,8 +163,14 @@ public class BaseScratchSpaceConfiguration implements Serializable {
      */
     public ScratchSpaceConfiguration createScratchSpaceConfiguration(final String... subDirs)
             throws ConfigurationException {
+        ArrayList<String> urls = new ArrayList<String>();
         final String newUrl = Utils.appendSubDirs(getUrl(), subDirs);
         final String newPath = Utils.appendSubDirs(getPath(), subDirs);
-        return new ScratchSpaceConfiguration(newUrl, newPath, Utils.getHostname());
+        String localPathUrl = "file://" + (newPath.startsWith("/") ? "" : "/") + newPath.replace("\\", "/");
+        if (!newUrl.equals(localPathUrl)) {
+            urls.add(localPathUrl);
+        }
+        urls.add(newUrl);
+        return new ScratchSpaceConfiguration(urls, newPath, Utils.getHostname());
     }
 }

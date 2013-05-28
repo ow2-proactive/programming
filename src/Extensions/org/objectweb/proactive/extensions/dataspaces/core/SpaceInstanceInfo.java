@@ -37,6 +37,8 @@
 package org.objectweb.proactive.extensions.dataspaces.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
@@ -56,7 +58,7 @@ public final class SpaceInstanceInfo implements Serializable {
      *
      */
 
-    protected final String url;
+    protected final List<String> urls = new ArrayList<String>();
 
     protected final String path;
 
@@ -113,7 +115,7 @@ public final class SpaceInstanceInfo implements Serializable {
         }
 
         this.mountingPoint = mountingPoint;
-        this.url = config.getUrl();
+        this.urls.addAll(config.getUrls());
         this.hostname = config.getHostname();
         this.path = config.getPath();
     }
@@ -123,8 +125,8 @@ public final class SpaceInstanceInfo implements Serializable {
      *
      * @return remote access URL to this data space
      */
-    public String getUrl() {
-        return url;
+    public List<String> getUrls() {
+        return urls;
     }
 
     /**
@@ -189,7 +191,7 @@ public final class SpaceInstanceInfo implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + mountingPoint.hashCode();
-        result = prime * result + url.hashCode();
+        result = prime * result + urls.hashCode();
         result = prime * result + ((hostname == null) ? 0 : hostname.hashCode());
         result = prime * result + ((path == null) ? 0 : path.hashCode());
         return result;
@@ -209,10 +211,10 @@ public final class SpaceInstanceInfo implements Serializable {
         } else if (!mountingPoint.equals(other.mountingPoint))
             return false;
 
-        if (url == null) {
-            if (other.url != null)
+        if (urls == null) {
+            if (other.urls != null)
                 return false;
-        } else if (!url.equals(other.url))
+        } else if (!urls.equals(other.urls))
             return false;
 
         if (hostname == null) {
@@ -246,8 +248,8 @@ public final class SpaceInstanceInfo implements Serializable {
         }
         sb.append("; ");
 
-        sb.append("remote access URL: ");
-        sb.append(url);
+        sb.append("remote access URLs: ");
+        sb.append(urls.toString());
         sb.append(']');
 
         return sb.toString();

@@ -40,6 +40,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 import org.objectweb.proactive.extensions.dataspaces.core.ScratchSpaceConfiguration;
 import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
@@ -48,6 +51,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
 
 public class ScratchSpaceConfigurationTest {
     private static final String URL = "http://host/";
+    private static final String[] URLs = { "/file.txt", "http://host/" };
     private static final String PATH = "/file.txt";
     private static final String HOSTNAME = "host";
 
@@ -60,6 +64,12 @@ public class ScratchSpaceConfigurationTest {
     }
 
     @Test
+    public void testCreateWithURLsPathHostname() throws ConfigurationException {
+        config = new ScratchSpaceConfiguration(Arrays.asList(URLs), PATH, HOSTNAME);
+        assertProperlyConfigured(Arrays.asList(URLs), PATH, HOSTNAME, true);
+    }
+
+    @Test
     public void testCreateWithURL() throws ConfigurationException {
         config = new ScratchSpaceConfiguration(URL, null, null);
         assertProperlyConfigured(URL, null, null, true);
@@ -67,12 +77,24 @@ public class ScratchSpaceConfigurationTest {
 
     @Test
     public void testCreateWithPathHostname() throws ConfigurationException {
-        config = new ScratchSpaceConfiguration(null, PATH, HOSTNAME);
-        assertProperlyConfigured(null, PATH, HOSTNAME, false);
+        config = new ScratchSpaceConfiguration((String) null, PATH, HOSTNAME);
+        assertProperlyConfigured((String) null, PATH, HOSTNAME, false);
     }
 
     private void assertProperlyConfigured(String url, String path, String hostname, boolean complete) {
-        assertEquals(url, config.getUrl());
+        if (url != null) {
+            assertEquals(url, config.getUrls().get(0));
+        } else {
+            assertEquals(url, config.getUrls());
+        }
+        assertEquals(path, config.getPath());
+        assertEquals(hostname, config.getHostname());
+        assertEquals(SpaceType.SCRATCH, config.getType());
+        assertEquals(complete, config.isComplete());
+    }
+
+    private void assertProperlyConfigured(List<String> urls, String path, String hostname, boolean complete) {
+        assertEquals(urls, config.getUrls());
         assertEquals(path, config.getPath());
         assertEquals(hostname, config.getHostname());
         assertEquals(SpaceType.SCRATCH, config.getType());
@@ -82,7 +104,7 @@ public class ScratchSpaceConfigurationTest {
     @Test
     public void testTryCreateWithNothing() throws ConfigurationException {
         try {
-            config = new ScratchSpaceConfiguration(null, null, null);
+            config = new ScratchSpaceConfiguration((String) null, null, null);
             fail("exception expected");
         } catch (ConfigurationException x) {
         }
@@ -91,7 +113,7 @@ public class ScratchSpaceConfigurationTest {
     @Test
     public void testTryCreateWithPathNoHostname() throws ConfigurationException {
         try {
-            config = new ScratchSpaceConfiguration(null, PATH, null);
+            config = new ScratchSpaceConfiguration((String) null, PATH, null);
             fail("exception expected");
         } catch (ConfigurationException x) {
         }
@@ -99,9 +121,9 @@ public class ScratchSpaceConfigurationTest {
 
     @Test
     public void testEquals() throws ConfigurationException {
-        config = new ScratchSpaceConfiguration(null, PATH, HOSTNAME);
-        ScratchSpaceConfiguration config2 = new ScratchSpaceConfiguration(null, PATH, HOSTNAME);
-        ScratchSpaceConfiguration config3 = new ScratchSpaceConfiguration(null, PATH, HOSTNAME + "x");
+        config = new ScratchSpaceConfiguration((String) null, PATH, HOSTNAME);
+        ScratchSpaceConfiguration config2 = new ScratchSpaceConfiguration((String) null, PATH, HOSTNAME);
+        ScratchSpaceConfiguration config3 = new ScratchSpaceConfiguration((String) null, PATH, HOSTNAME + "x");
 
         assertEquals(config, config2);
         assertFalse(config.equals(config3));

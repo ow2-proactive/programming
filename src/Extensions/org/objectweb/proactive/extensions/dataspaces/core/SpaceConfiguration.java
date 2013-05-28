@@ -36,6 +36,14 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.core;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 
 
@@ -51,13 +59,16 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
  * methods.
  */
 public abstract class SpaceConfiguration {
+
+    protected final static Logger logger = ProActiveLogger.getLogger(Loggers.DATASPACES);
+
     protected final String path;
 
     protected final SpaceType spaceType;
 
     protected final String hostname;
 
-    protected final String url;
+    protected List<String> urls;
 
     /**
      * Creates data space configuration instance. This configuration may be incomplete (see
@@ -84,7 +95,46 @@ public abstract class SpaceConfiguration {
      */
     protected SpaceConfiguration(final String url, final String path, final String hostname,
             final SpaceType spaceType) throws ConfigurationException {
-        this.url = url;
+        this(url != null ? Collections.singletonList(url) : null, path, hostname, spaceType);
+    }
+
+    /**
+     * Creates data space configuration instance. This configuration may be incomplete (see
+     * {@link #isComplete()}), but at least one access method has to be specified - local or remote.
+     *
+     * @param urls
+     *            List of Access URL to this space, used for accessing data from remote nodes. each member URL of this list
+     *            defines a protocol that can be used to access the data from remote node, and some additional
+     *            information for protocol like path, sometimes user name and password. May be
+     *            <code>null</code> when remote access is not specified yet.
+     *            The order of the list defines the priority of protocols to use
+     * @param path
+     *            Local path to access data. This path is local to host with hostname specified in
+     *            <code>hostname</code> argument. May be <code>null</code> if there is no local
+     *            access.
+     * @param hostname
+     *            Name of host where data are stored. It is always used in conjunction with a path
+     *            attribute. Input (output) data can be accessed locally on host with that name. May
+     *            be <code>null</code> only if path is <code>null</code>.
+     * @param spaceType
+     *            Data space type.
+     * @throws ConfigurationException
+     *             when provided arguments doesn't form correct configuration (no access, no
+     *             hostname for path)
+     */
+    protected SpaceConfiguration(final List<String> urls, final String path, final String hostname,
+            final SpaceType spaceType) throws ConfigurationException {
+
+        if (urls != null) {
+            for (String url : urls) {
+                try {
+                    URI uriTest = new URI(url);
+                } catch (URISyntaxException e) {
+                    logger.warn("Malformed URI : " + url, e);
+                }
+            }
+        }
+        this.urls = urls;
         this.path = path;
         this.hostname = hostname;
         this.spaceType = spaceType;
@@ -97,15 +147,15 @@ public abstract class SpaceConfiguration {
         } else {
             localDefined = false;
         }
-        if (!localDefined && url == null)
+        if (!localDefined && (urls == null || urls.size() == 0))
             throw new ConfigurationException("No access specified (neither local, nor remote)");
     }
 
     /**
      * @return remote access URL; may be <code>null</code>
      */
-    public final String getUrl() {
-        return url;
+    public final List<String> getUrls() {
+        return urls;
     }
 
     /**
@@ -140,53 +190,36 @@ public abstract class SpaceConfiguration {
      */
     public final boolean isComplete() {
         // remaining contract is guaranteed by the constructor
-        return url != null;
+        return urls != null && urls.size() > 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        SpaceConfiguration that = (SpaceConfiguration) o;
+
+        if (hostname != null ? !hostname.equals(that.hostname) : that.hostname != null)
+            return false;
+        if (path != null ? !path.equals(that.path) : that.path != null)
+            return false;
+        if (spaceType != that.spaceType)
+            return false;
+        if (urls != null ? !urls.equals(that.urls) : that.urls != null)
+            return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + spaceType.hashCode();
-        result = prime * result + ((url == null) ? 0 : url.hashCode());
-        result = prime * result + ((hostname == null) ? 0 : hostname.hashCode());
-        result = prime * result + ((path == null) ? 0 : path.hashCode());
+        int result = path != null ? path.hashCode() : 0;
+        result = 31 * result + (spaceType != null ? spaceType.hashCode() : 0);
+        result = 31 * result + (hostname != null ? hostname.hashCode() : 0);
+        result = 31 * result + (urls != null ? urls.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof SpaceConfiguration))
-            return false;
-
-        SpaceConfiguration other = (SpaceConfiguration) obj;
-        if (!spaceType.equals(other.spaceType)) {
-            return false;
-        }
-
-        if (url == null) {
-            if (other.url != null) {
-                return false;
-            }
-        } else if (!url.equals(other.url)) {
-            return false;
-        }
-
-        if (hostname == null) {
-            if (other.hostname != null) {
-                return false;
-            }
-        } else if (!hostname.equals(other.hostname)) {
-            return false;
-        }
-
-        if (path == null) {
-            if (other.path != null) {
-                return false;
-            }
-        } else if (!path.equals(other.path)) {
-            return false;
-        }
-        return true;
     }
 }

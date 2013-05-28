@@ -24,13 +24,16 @@
     </para>
     <para>
         <figure xml:id="ds_tree">
-            <info><title>Abstract VFS layer used in Data Spaces (simplified). Each space is described by URI path that resolves to underneath physical protocol.</title></info>
+            <info><title>Abstract VFS layer used in Data Spaces (simplified). Each space is described by URI path that resolves to underneath physical protocols.</title></info>
            <mediaobject><imageobject><imagedata scalefit="1" width="50%" contentdepth="50%" fileref="images/png/dataspaces-layer.png" format="PNG"/></imageobject></mediaobject>
         </figure>
     </para>
+    <para>
+        Every file in Data Spaces API is identified by an unique virtual URI. A given file can be accessed via several protocols at once if the data space was created using several physical protocols.
+    </para>
 
     <para>
-        Every file in Data Spaces API is identified by an unique URI. It can be shared between Active Objects even if they reside on different nodes. Files are organized in data stores called data spaces, grouped by their purpose and access. To access a file one can use designated data space to resolve file's name or directly resolve URI received from another Active Object.
+        The URI can be shared between Active Objects even if they reside on different nodes. Files are organized in data stores called data spaces, grouped by their purpose and access. To access a file one can use designated data space to resolve file's name or directly resolve URI received from another Active Object.
     </para>
     <para>
         There are distinguished three different space types: input space with files used as the application's input data, output space for storing the application's result files and scratch space for temporary files with the intermediate results of the computations. Spaces types differ in the access rights, and therefore input is only meant for read operations, output for read and write as well, whereas scratch's access mode depends on the caller. If a calling thread is an owner of a particular scratch, then it can perform both read and write operations. On the other hand, if a calling thread is not an owner (eg. has received URI from another Active Object), its access is limited to read only operations.
