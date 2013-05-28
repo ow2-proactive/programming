@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 
@@ -76,9 +77,10 @@ public class ManualConfigurationExample {
         // need to guarantee uniqueness of application id somehow
         final long applicationId = 1234431;
         // @snippet-bDataSpacesManualConfig_RegisteringApp
-        // create set of predefined inputs and outputs - here: default input accessed only through HTTP
+        // create set of predefined inputs and outputs - here: default input accessed via FILE and HTTP
         final InputOutputSpaceConfiguration inSpaceConf = InputOutputSpaceConfiguration
-                .createInputSpaceConfiguration("http://www.faqs.org/ftp/rfc/rfc2616.txt", null, null,
+                .createInputSpaceConfiguration(Arrays.asList("file:///user/share/ftp/rfc/rfc2616.txt",
+                        "http://www.faqs.org/ftp/rfc/rfc2616.txt"), null, null,
                         PADataSpaces.DEFAULT_IN_OUT_NAME);
         final SpaceInstanceInfo inSpaceInfo = new SpaceInstanceInfo(applicationId, inSpaceConf);
         final Set<SpaceInstanceInfo> predefinedSpaces = Collections.singleton(inSpaceInfo);

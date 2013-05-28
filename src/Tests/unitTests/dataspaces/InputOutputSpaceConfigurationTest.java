@@ -41,6 +41,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
 import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
@@ -49,6 +52,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
 
 public class InputOutputSpaceConfigurationTest {
     private static final String URL = "http://host/";
+    private static final String[] URLS = { "/file.txt", "http://host/" };
     private static final String PATH = "/file.txt";
     private static final String HOSTNAME = "host";
     private static final String NAME = "name";
@@ -63,9 +67,23 @@ public class InputOutputSpaceConfigurationTest {
     }
 
     @Test
+    public void testCreateInputWithURLsName() throws ConfigurationException {
+        config = InputOutputSpaceConfiguration.createInputSpaceConfiguration(Arrays.asList(URLS), null, null,
+                NAME);
+        assertProperlyConfigured(Arrays.asList(URLS), null, null, NAME, SpaceType.INPUT, true);
+    }
+
+    @Test
     public void testCreateOutputWithURLName() throws ConfigurationException {
         config = InputOutputSpaceConfiguration.createOutputSpaceConfiguration(URL, null, null, NAME);
         assertProperlyConfigured(URL, null, null, NAME, SpaceType.OUTPUT, true);
+    }
+
+    @Test
+    public void testCreateOutputWithURLsName() throws ConfigurationException {
+        config = InputOutputSpaceConfiguration.createOutputSpaceConfiguration(Arrays.asList(URLS), null,
+                null, NAME);
+        assertProperlyConfigured(Arrays.asList(URLS), null, null, NAME, SpaceType.OUTPUT, true);
     }
 
     @Test
@@ -75,9 +93,23 @@ public class InputOutputSpaceConfigurationTest {
     }
 
     @Test
+    public void testCreateWithURLsPathHostnameNameType() throws ConfigurationException {
+        config = InputOutputSpaceConfiguration.createConfiguration(Arrays.asList(URLS), PATH, HOSTNAME, NAME,
+                TYPE);
+        assertProperlyConfigured(Arrays.asList(URLS), PATH, HOSTNAME, NAME, TYPE, true);
+    }
+
+    @Test
     public void testCreateWithURLNameType() throws ConfigurationException {
         config = InputOutputSpaceConfiguration.createConfiguration(URL, null, null, NAME, TYPE);
         assertProperlyConfigured(URL, null, null, NAME, TYPE, true);
+    }
+
+    @Test
+    public void testCreateWithURLsNameType() throws ConfigurationException {
+        config = InputOutputSpaceConfiguration.createConfiguration(Arrays.asList(URLS), null, null, NAME,
+                TYPE);
+        assertProperlyConfigured(Arrays.asList(URLS), null, null, NAME, TYPE, true);
     }
 
     @Test
@@ -88,13 +120,27 @@ public class InputOutputSpaceConfigurationTest {
 
     @Test
     public void testCreateWithPathHostname() throws ConfigurationException {
-        config = InputOutputSpaceConfiguration.createConfiguration(null, PATH, HOSTNAME, NAME, TYPE);
-        assertProperlyConfigured(null, PATH, HOSTNAME, NAME, TYPE, false);
+        config = InputOutputSpaceConfiguration.createConfiguration((String) null, PATH, HOSTNAME, NAME, TYPE);
+        assertProperlyConfigured((String) null, PATH, HOSTNAME, NAME, TYPE, false);
     }
 
     private void assertProperlyConfigured(String url, String path, String hostname, String name,
             SpaceType type, boolean complete) {
-        assertEquals(url, config.getUrl());
+        if (url != null) {
+            assertEquals(url, config.getUrls().get(0));
+        } else {
+            assertEquals(url, config.getUrls());
+        }
+        assertEquals(path, config.getPath());
+        assertEquals(hostname, config.getHostname());
+        assertEquals(name, config.getName());
+        assertSame(type, config.getType());
+        assertEquals(complete, config.isComplete());
+    }
+
+    private void assertProperlyConfigured(List<String> urls, String path, String hostname, String name,
+            SpaceType type, boolean complete) {
+        assertEquals(urls, config.getUrls());
         assertEquals(path, config.getPath());
         assertEquals(hostname, config.getHostname());
         assertEquals(name, config.getName());

@@ -41,6 +41,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.vfs.FileName;
@@ -57,6 +59,8 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
 import org.objectweb.proactive.extensions.dataspaces.exceptions.MalformedURIException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
+import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import unitTests.vfsprovider.AbstractIOOperationsBase;
 
@@ -74,12 +78,20 @@ public class VFSFileObjectAdapterTest {
     private static final DataSpacesURI fileURI = spaceURI.withActiveObjectId(activeObjectId).withUserPath(
             path);
 
+    private String vfsServerUrl;
+
     private static DefaultFileSystemManager fileSystemManager;
     private DataSpacesFileObject dsFileObject;
+
+    private static FileSystemServerDeployer server;
     private FileObject adaptee;
     private File testDir;
     private String differentDirPath;
     private String rootDirPath;
+
+    private ArrayList<String> rootUris;
+
+    private String rootFileUri;
 
     @BeforeClass
     static public void init() throws org.apache.commons.vfs.FileSystemException {
@@ -108,10 +120,20 @@ public class VFSFileObjectAdapterTest {
         differentDirPath = differentDir.getCanonicalPath();
 
         final FileObject rootFileObject = fileSystemManager.resolveFile("file://" + rootDirPath);
+        if (server == null) {
+            server = new FileSystemServerDeployer(rootDirPath, false);
+        }
+        vfsServerUrl = server.getVFSRootURL();
+
         final FileName mountintPointFileName = rootFileObject.getName();
         adaptee = rootFileObject.resolveFile(fileURI.getRelativeToSpace());
 
-        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName);
+        rootFileUri = "file://" + rootDirPath;
+        rootUris = new ArrayList<String>();
+        rootUris.add(rootFileUri);
+        rootUris.add(vfsServerUrl);
+
+        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName, rootUris);
     }
 
     @After
@@ -128,10 +150,11 @@ public class VFSFileObjectAdapterTest {
     @Test
     public void testGetURI1() throws org.apache.commons.vfs.FileSystemException, MalformedURIException,
             FileSystemException {
-        final FileObject rootFileObject = fileSystemManager.resolveFile("file://" + rootDirPath);
+        final FileObject rootFileObject = fileSystemManager.resolveFile(rootFileUri);
         final FileName mountintPointFileName = rootFileObject.getName();
         final FileObject rootAdaptee = rootFileObject;
-        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI, mountintPointFileName);
+        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI,
+            mountintPointFileName, rootUris);
 
         assertEquals(spaceURI.toString(), fo.getVirtualURI());
     }
@@ -139,6 +162,12 @@ public class VFSFileObjectAdapterTest {
     @Test
     public void testGetURI2() throws FileSystemException {
         assertEquals(fileURI.toString(), dsFileObject.getVirtualURI());
+    }
+
+    @Test
+    public void testGetURI3() throws Exception {
+        assertEquals(adaptee.getURL().toString(), dsFileObject.getRealURI());
+        assertEquals(rootUris, dsFileObject.getAllSpaceRootURIs());
     }
 
     @Test
@@ -166,11 +195,19 @@ public class VFSFileObjectAdapterTest {
 
     @Test(expected = FileSystemException.class)
     public void testGetParentOnFilesystemRoot() throws org.apache.commons.vfs.FileSystemException,
-            FileSystemException {
-        final FileObject rootFileObject = fileSystemManager.resolveFile("file:///");
+            FileSystemException, MalformedURLException {
+        FileObject rootFileObject;
+        if (OperatingSystem.getOperatingSystem() == OperatingSystem.windows) {
+            rootFileObject = fileSystemManager.resolveFile(new File("c:\\").toURI().toURL().toString());
+        } else {
+            rootFileObject = fileSystemManager.resolveFile(new File("/").toURI().toURL().toString());
+        }
         final FileName mountintPointFileName = rootFileObject.getName();
         final FileObject rootAdaptee = rootFileObject;
-        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI, mountintPointFileName);
+        ArrayList<String> fos = new ArrayList<String>();
+        fos.add("file:///");
+        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI,
+            mountintPointFileName, fos);
         fo.getParent();
     }
 
@@ -183,7 +220,8 @@ public class VFSFileObjectAdapterTest {
     public void testMismatchedRoot() throws FileSystemException, org.apache.commons.vfs.FileSystemException {
         final FileName diffName;
         diffName = fileSystemManager.resolveFile(differentDirPath).getName();
-        new VFSFileObjectAdapter(adaptee, spaceURI, diffName);
+
+        new VFSFileObjectAdapter(adaptee, spaceURI, diffName, rootUris);
     }
 
     private void assertIsSomeDir(DataSpacesFileObject parent) throws FileSystemException {

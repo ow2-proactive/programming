@@ -79,7 +79,7 @@ public class VFSApplicationScratchSpaceImplTest {
 
     private static final String NODE_ID = "node_id";
     private static final String RUNTIME_ID = "rt_id";
-    private static final String ACCESS_URL = "/";
+    private static String ACCESS_URL = "file:///";
     private static final long APP_ID_LONG = 0;
     private static final String APP_ID = new Long(APP_ID_LONG).toString();
 
@@ -118,6 +118,7 @@ public class VFSApplicationScratchSpaceImplTest {
 
         node = new MOCKNode(RUNTIME_ID, NODE_ID);
         body = new MOCKBody();
+        ACCESS_URL = (new File(testDirPath).toURI().toURL().toString()).replace("file:/", "file:///");
         localAccessConfig = new BaseScratchSpaceConfiguration(ACCESS_URL, testDirPath);
         nodeScratchSpace = new VFSNodeScratchSpaceImpl();
 
@@ -231,7 +232,7 @@ public class VFSApplicationScratchSpaceImplTest {
         assertEquals(SpaceType.SCRATCH, sii.getType());
         assertEquals(hostname, sii.getHostname());
         assertEquals(scratchDataSpacePath, sii.getPath());
-        assertEquals(spaceAccessURL, sii.getUrl());
+        assertEquals(spaceAccessURL, sii.getUrls().get(0));
         assertNull(sii.getName());
     }
 

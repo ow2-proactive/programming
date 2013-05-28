@@ -38,6 +38,7 @@ package org.objectweb.proactive.extensions.dataspaces.vfs.adapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.vfs.FileName;
@@ -55,6 +56,8 @@ import org.objectweb.proactive.extensions.dataspaces.api.FileSelector;
 import org.objectweb.proactive.extensions.dataspaces.api.FileType;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
+import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerImpl;
 
 
 /**
@@ -66,11 +69,28 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
 public class VFSFileObjectAdapter implements DataSpacesFileObject {
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.DATASPACES);
 
-    private final FileObject adaptee;
+    private FileObject currentAdaptee;
 
     private final DataSpacesURI dataSpaceURI;
 
+    private final LinkedHashSet<String> spaceRootsFO;
+
     private FileName dataSpaceVFSFileName;
+
+    private final VFSSpacesMountManagerImpl manager;
+
+    private final String ownerActiveObjectId;
+
+    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI,
+            FileName dataSpaceVFSFileName, ArrayList<String> spaceRoots) throws FileSystemException {
+        this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, null, null);
+    }
+
+    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI,
+            FileName dataSpaceVFSFileName, ArrayList<String> spaceRoots, VFSSpacesMountManagerImpl manager)
+            throws FileSystemException {
+        this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, manager, null);
+    }
 
     /**
      * @param adaptee
@@ -84,37 +104,29 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
      * @throws FileSystemException
      *             when data space file name does not match adaptee's name
      */
-    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI, FileName dataSpaceVFSFileName)
-            throws FileSystemException {
+    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI,
+            FileName dataSpaceVFSFileName, ArrayList<String> spaceRoots, VFSSpacesMountManagerImpl manager,
+            String ownerActiveObjectId) throws FileSystemException {
         this.dataSpaceURI = dataSpaceURI;
         this.dataSpaceVFSFileName = dataSpaceVFSFileName;
-        this.adaptee = adaptee;
+        this.currentAdaptee = adaptee;
+        this.spaceRootsFO = new LinkedHashSet<String>(spaceRoots);
+        this.manager = manager;
+        this.ownerActiveObjectId = ownerActiveObjectId;
         checkFileNamesConsistencyOrWound();
     }
 
     private VFSFileObjectAdapter(FileObject adaptee, VFSFileObjectAdapter fileObjectAdapter)
             throws FileSystemException {
-        this(adaptee, fileObjectAdapter.dataSpaceURI, fileObjectAdapter.dataSpaceVFSFileName);
-    }
-
-    public String getVirtualURI() {
-        String relativePath;
-        try {
-            relativePath = dataSpaceVFSFileName.getRelativeName(adaptee.getName());
-        } catch (org.apache.commons.vfs.FileSystemException e) {
-            ProActiveLogger.logImpossibleException(logger, e);
-            throw new ProActiveRuntimeException(e);
-        }
-        if (".".equals(relativePath))
-            relativePath = null;
-
-        return dataSpaceURI.withRelativeToSpace(relativePath).toString();
+        this(adaptee, fileObjectAdapter.dataSpaceURI, fileObjectAdapter.dataSpaceVFSFileName,
+                new ArrayList<String>(fileObjectAdapter.spaceRootsFO), fileObjectAdapter.manager,
+                fileObjectAdapter.ownerActiveObjectId);
     }
 
     public void close() throws FileSystemException {
         try {
-            adaptee.close();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            currentAdaptee.close();
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
@@ -124,32 +136,32 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         final org.apache.commons.vfs.FileSelector vfsSelector = buildFVSSelector(selector);
 
         try {
-            adaptee.copyFrom(srcAdaptee, vfsSelector);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            currentAdaptee.copyFrom(srcAdaptee, vfsSelector);
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
 
     public void createFile() throws FileSystemException {
         try {
-            adaptee.createFile();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            currentAdaptee.createFile();
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
 
     public void createFolder() throws FileSystemException {
         try {
-            adaptee.createFolder();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            currentAdaptee.createFolder();
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
 
     public boolean delete() throws FileSystemException {
         try {
-            return adaptee.delete();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            return currentAdaptee.delete();
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
@@ -158,16 +170,16 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         final org.apache.commons.vfs.FileSelector vfsSelector = buildFVSSelector(selector);
 
         try {
-            return adaptee.delete(vfsSelector);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            return currentAdaptee.delete(vfsSelector);
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
 
     public boolean exists() throws FileSystemException {
         try {
-            return adaptee.exists();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            return currentAdaptee.exists();
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
@@ -177,10 +189,10 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         final List<DataSpacesFileObject> result = new ArrayList<DataSpacesFileObject>();
 
         try {
-            final FileObject[] vfsResult = adaptee.findFiles(vfsSelector);
+            final FileObject[] vfsResult = currentAdaptee.findFiles(vfsSelector);
 
             adaptVFSResult(vfsResult, result);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
         return result;
@@ -193,18 +205,18 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
         try {
             final List<FileObject> vfsResult = new ArrayList<FileObject>();
-            adaptee.findFiles(vfsSelector, depthwise, vfsResult);
+            currentAdaptee.findFiles(vfsSelector, depthwise, vfsResult);
 
             adaptVFSResult(vfsResult, selected);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
 
     public DataSpacesFileObject getChild(String name) throws FileSystemException {
         try {
-            return adaptVFSResult(adaptee.getChild(name));
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            return adaptVFSResult(currentAdaptee.getChild(name));
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
@@ -213,8 +225,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         List<DataSpacesFileObject> adapted = new ArrayList<DataSpacesFileObject>();
 
         try {
-            adaptVFSResult(adaptee.getChildren(), adapted);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            adaptVFSResult(currentAdaptee.getChildren(), adapted);
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
         return adapted;
@@ -223,8 +235,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public FileContent getContent() throws FileSystemException {
 
         try {
-            return new VFSContentAdapter(adaptee.getContent(), this);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            return new VFSContentAdapter(currentAdaptee.getContent(), this);
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
@@ -232,8 +244,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public DataSpacesFileObject getParent() throws FileSystemException {
         final FileObject vfsParent;
         try {
-            vfsParent = adaptee.getParent();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            vfsParent = currentAdaptee.getParent();
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
 
@@ -244,19 +256,23 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     public FileType getType() throws FileSystemException {
         try {
-            return adaptVFSResult(adaptee.getType());
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+            return adaptVFSResult(currentAdaptee.getType());
+        } catch (Exception e) {
             throw new FileSystemException(e);
         }
     }
 
+    public FileObject getFileObject() {
+        return currentAdaptee;
+    }
+
     public boolean isContentOpen() {
-        return adaptee.isContentOpen();
+        return currentAdaptee.isContentOpen();
     }
 
     public boolean isHidden() throws FileSystemException {
         try {
-            return adaptee.isHidden();
+            return currentAdaptee.isHidden();
         } catch (org.apache.commons.vfs.FileSystemException e) {
             throw new FileSystemException(e);
         }
@@ -264,7 +280,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     public boolean isReadable() throws FileSystemException {
         try {
-            return adaptee.isReadable();
+            return currentAdaptee.isReadable();
         } catch (org.apache.commons.vfs.FileSystemException e) {
             throw new FileSystemException(e);
         }
@@ -272,7 +288,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     public boolean isWritable() throws FileSystemException {
         try {
-            return adaptee.isWriteable();
+            return currentAdaptee.isWriteable();
         } catch (org.apache.commons.vfs.FileSystemException e) {
             throw new FileSystemException(e);
         }
@@ -282,7 +298,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         final FileObject destAdaptee = getVFSAdapteeOrWound(destFile);
 
         try {
-            adaptee.moveTo(destAdaptee);
+            currentAdaptee.moveTo(destAdaptee);
         } catch (org.apache.commons.vfs.FileSystemException e) {
             throw new FileSystemException(e);
         }
@@ -290,7 +306,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     public void refresh() throws FileSystemException {
         try {
-            adaptee.refresh();
+            currentAdaptee.refresh();
         } catch (org.apache.commons.vfs.FileSystemException e) {
             throw new FileSystemException(e);
         }
@@ -300,19 +316,19 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         if (path.startsWith("/"))
             throw new FileSystemException("Cannot resolve an absolute path");
         try {
-            return adaptVFSResult(adaptee.resolveFile(path));
+            return adaptVFSResult(currentAdaptee.resolveFile(path));
         } catch (org.apache.commons.vfs.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
 
     public FileObject getAdaptee() {
-        return adaptee;
+        return currentAdaptee;
     }
 
     public boolean hasSpaceCapability(Capability capability) {
         final org.apache.commons.vfs.Capability vfsCapability = buildVFSCapability(capability);
-        final org.apache.commons.vfs.FileSystem vfsFileSystem = adaptee.getFileSystem();
+        final org.apache.commons.vfs.FileSystem vfsFileSystem = currentAdaptee.getFileSystem();
 
         return vfsFileSystem.hasCapability(vfsCapability);
     }
@@ -452,7 +468,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     private void checkFileNamesConsistencyOrWound() throws FileSystemException {
-        final FileName adapteeName = adaptee.getName();
+        final FileName adapteeName = currentAdaptee.getName();
 
         if (!dataSpaceVFSFileName.isDescendent(adapteeName, NameScope.DESCENDENT_OR_SELF))
             throw new FileSystemException("Specified data space file name does not match adaptee's name");
@@ -466,13 +482,65 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         throw new FileSystemException("Operation unsupported: destination file system unknown");
     }
 
+    private String computeRelativePath() {
+        String relativePath = null;
+        try {
+            relativePath = dataSpaceVFSFileName.getRelativeName(currentAdaptee.getName());
+        } catch (org.apache.commons.vfs.FileSystemException e) {
+            ProActiveLogger.logImpossibleException(logger, e);
+            throw new ProActiveRuntimeException(e);
+        }
+        if (".".equals(relativePath)) {
+            relativePath = null;
+        }
+        return relativePath;
+    }
+
+    public String getVirtualURI() {
+        String relativePath = computeRelativePath();
+
+        return dataSpaceURI.withRelativeToSpace(relativePath).toString();
+    }
+
     public String getRealURI() {
         try {
-            return adaptee.getURL().toExternalForm();
+            return currentAdaptee.getURL().toExternalForm();
         } catch (org.apache.commons.vfs.FileSystemException e) {
             //null of unknown
             return null;
         }
+    }
+
+    public List<String> getAllRealURIs() {
+        String relativePath = computeRelativePath();
+        ArrayList<String> answer = new ArrayList<String>();
+        for (String root : spaceRootsFO) {
+            if ((relativePath != null) && !(relativePath.equals("."))) {
+                answer.add(root + relativePath);
+            } else {
+                answer.add(root);
+            }
+        }
+        return answer;
+    }
+
+    public List<String> getAllSpaceRootURIs() {
+        return new ArrayList<String>(spaceRootsFO);
+    }
+
+    public DataSpacesFileObject switchToSpaceRoot(String spaceRootUri) throws FileSystemException,
+            SpaceNotFoundException {
+        if (!spaceRootsFO.contains(spaceRootUri)) {
+            throw new IllegalArgumentException(spaceRootUri + " is not accessible by DFO " + getVirtualURI());
+        }
+        if (manager == null) {
+            throw new UnsupportedOperationException("Mount Manager is not initialized.");
+        }
+        String relativePath = computeRelativePath();
+        DataSpacesFileObject newDsfo = manager.resolveFile(dataSpaceURI.withRelativeToSpace(relativePath),
+                ownerActiveObjectId, spaceRootUri);
+        logger.debug("switched to " + newDsfo.getRealURI());
+        return newDsfo;
     }
 
     @Override

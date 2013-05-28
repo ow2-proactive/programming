@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.core;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.objectweb.proactive.extensions.dataspaces.api.PADataSpaces;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 
@@ -47,6 +50,9 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
  * @see SpaceConfiguration
  */
 public class InputOutputSpaceConfiguration extends SpaceConfiguration {
+
+    private final String name;
+
     /**
      * This factory method is shorthand for
      * {@link #createConfiguration(String, String, String, String, SpaceType)} with input space as a
@@ -77,6 +83,12 @@ public class InputOutputSpaceConfiguration extends SpaceConfiguration {
             String hostname, String name) throws ConfigurationException {
 
         return new InputOutputSpaceConfiguration(url, path, hostname, SpaceType.INPUT, name);
+    }
+
+    public static InputOutputSpaceConfiguration createInputSpaceConfiguration(List<String> urls, String path,
+            String hostname, String name) throws ConfigurationException {
+
+        return new InputOutputSpaceConfiguration(urls, path, hostname, SpaceType.INPUT, name);
     }
 
     /**
@@ -111,6 +123,12 @@ public class InputOutputSpaceConfiguration extends SpaceConfiguration {
         return new InputOutputSpaceConfiguration(url, path, hostname, SpaceType.OUTPUT, name);
     }
 
+    public static InputOutputSpaceConfiguration createOutputSpaceConfiguration(List<String> urls,
+            String path, String hostname, String name) throws ConfigurationException {
+
+        return new InputOutputSpaceConfiguration(urls, path, hostname, SpaceType.OUTPUT, name);
+    }
+
     /**
      * Creates input or output data space configuration. This configuration may be incomplete (see
      * {@link #isComplete()}), but at least one access method has to be specified - local or remote.
@@ -143,11 +161,19 @@ public class InputOutputSpaceConfiguration extends SpaceConfiguration {
         return new InputOutputSpaceConfiguration(url, path, hostname, spaceType, name);
     }
 
-    private final String name;
+    public static InputOutputSpaceConfiguration createConfiguration(List<String> urls, String path,
+            String hostname, String name, SpaceType spaceType) throws ConfigurationException {
+        return new InputOutputSpaceConfiguration(urls, path, hostname, spaceType, name);
+    }
 
     private InputOutputSpaceConfiguration(final String url, final String path, final String hostname,
             final SpaceType spaceType, final String name) throws ConfigurationException {
-        super(url, path, hostname, spaceType);
+        this(url != null ? Collections.singletonList(url) : null, path, hostname, spaceType, name);
+    }
+
+    private InputOutputSpaceConfiguration(final List<String> urls, final String path, final String hostname,
+            final SpaceType spaceType, final String name) throws ConfigurationException {
+        super(urls, path, hostname, spaceType);
         this.name = name;
 
         if (spaceType != SpaceType.INPUT && spaceType != SpaceType.OUTPUT)
@@ -185,8 +211,8 @@ public class InputOutputSpaceConfiguration extends SpaceConfiguration {
         }
         sb.append("; ");
 
-        sb.append("remote access URL: ");
-        sb.append(url);
+        sb.append("remote access URLs: ");
+        sb.append(urls);
         sb.append(']');
 
         return sb.toString();

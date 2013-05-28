@@ -77,7 +77,8 @@ public class BaseScratchSpaceConfigurationTest {
     public void testDeriveScratchSpaceConfiguration() throws ConfigurationException {
         config = new BaseScratchSpaceConfiguration("http://#{hostname}/", "/abc");
         final ScratchSpaceConfiguration derivedConfig = config.createScratchSpaceConfiguration("subdir");
-        assertEquals("http://" + Utils.getHostname() + "/subdir", derivedConfig.getUrl());
+        assertEquals("http://" + Utils.getHostname() + "/subdir", derivedConfig.getUrls().get(
+                derivedConfig.getUrls().size() - 1));
         assertEquals("/abc/subdir", derivedConfig.getPath());
         assertEquals(Utils.getHostname(), derivedConfig.getHostname());
         assertEquals(SpaceType.SCRATCH, derivedConfig.getType());

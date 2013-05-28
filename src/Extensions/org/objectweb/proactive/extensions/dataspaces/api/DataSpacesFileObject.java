@@ -44,11 +44,20 @@ package org.objectweb.proactive.extensions.dataspaces.api;
 import java.util.List;
 
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
 
 
 /**
  * Instances of this interface represent files within the Data Spaces framework and allows to
  * perform context specific file system operations and file access.
+ *
+ * A DataSpaceFileObject's File System is backed up by one or more Apache Virtual File Systems.
+ * Each Apache VirtualFileSystem points to the same physical file system which can be accessed via
+ * several protocols. Some protocols provide stronger performances, other protocols provide encryption,
+ * etc.
+ * Only one Apache Virtual File System is active at a time, the user can switch to other VFS by using the method
+ * switchTo
+ * The user can know the list of all available uris by using the method getAllUris
  * <p>
  * Instances of this interface are to be returned by resolve* methods from {@link PADataSpaces}
  * class, and therefore refer to its documentation.
@@ -67,7 +76,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
 public interface DataSpacesFileObject {
 
     /**
-     * Returns the file's URI in the Data Spaces virtual file system. It remains valid when passed
+     * Returns the file's URI in the ProActive Data Spaces virtual file system. It remains valid when passed
      * to active ActiveObject, and hence can be resolved there trough
      * {@link PADataSpaces#resolveFile(String)} method call.
      *
@@ -76,13 +85,42 @@ public interface DataSpacesFileObject {
     public abstract String getVirtualURI();
 
     /**
-     * Returns the real file's URI in its current file system.
-     * This URI may not be understood by third application depending on the provider of the real path.<br />
+     * Returns the real file's URI in its current Apache VFS file system.
+     * This URI may not be understood by third-party application depending on the provider of the real path.<br />
      * This method returns null if this URI is unknown.
      *
      * @return URI of a represented file without the trailing slash
      */
     public abstract String getRealURI();
+
+    /**
+     * In case the dataspace is backed up by several Apache VFS. Returns all URIs referring to this FileObject. If there
+     * is only one VFS, then a list containing a single element will be returned.
+     * Any of these URI can be used externally or for example via the Apache VFS FileObject API
+     *
+     * @return List of URI of a represented file
+     */
+    public abstract List<String> getAllRealURIs();
+
+    /**
+     * In case the dataspace is backed up by several Apache VFS. Returns all space Root URIs to which this FileObject has access.
+     * Any of these URI can be used as parameter to the method switchToSpaceRoot
+     *
+     * @return List of space root URI accessible to the file
+     */
+    public abstract List<String> getAllSpaceRootURIs();
+
+    /**
+     * Switches the DataspaceFileObject to the given Root FileSystem. All subsequent calls on this DFO
+     * will be done via the new FileSystem. The uri must be a valid uri returned by getAllSpaceRootURIs
+     * Example a file://path/to/fs can be switched to ftp://server/path Those two virtual file systems should represent
+     * the same real file system, but accessed via different protocols
+     *
+     * @param uri the new Apache VFS space root
+     * @throws IllegalArgumentException if the given uri don't represent a valid uri for this DFO
+     */
+    public abstract DataSpacesFileObject switchToSpaceRoot(String uri) throws FileSystemException,
+            SpaceNotFoundException;
 
     /**
      * Determines if this file exists.
