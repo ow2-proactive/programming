@@ -401,7 +401,6 @@
 		<!-- Make deploy directories -->
 		<mkdir dir="${deploy.dir}" />
 		<mkdir dir="${deploy.lib.dir}" />
-		<mkdir dir="${deploy.lib.native.dir}" />
 		<mkdir dir="${deploy.scripts.dir}" />
 	</target>
 
