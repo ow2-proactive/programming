@@ -44,17 +44,6 @@
 					<classpath>
 						<absolutePath
 							value="${PROACTIVE_HOME}/classes/" />
-
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/osgi/servicebinder.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/osgi/oscar.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/osgi/moduleloader.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/osgi/http.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/osgi/osgi.jar" />
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/components/julia-runtime.jar" />
 						<absolutePath

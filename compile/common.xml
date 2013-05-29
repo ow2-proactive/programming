@@ -51,13 +51,6 @@
 	<property name="clover.historyreport.dir" value="${base.dir}/clover_history" />
 	<property name="clover.historypoint.dir"  value="${base.dir}/clover_db" />
 
-
-	<!-- Osgi properties -->
-	<property name="osgi.manifest.dir" value="${src.extensions.dir}/${extensions.path}/osgi/Manifest/" />
-	<property name="bundle.dir" value="${base.dir}/dist/bundle" />
-	<property name="osgi.res.dir" value="${src.extensions.dir}/${extensions.path}/osgi/res/"/>
-	<property name="manifest.connector.dir" value="${src.extensions.dir}/${extensions.path}/osgi/connector/Manifest/"/>
-
 	<property name="stubgenerator.class" value="org.objectweb.proactive.ext.util.StubGenerator" />
 
 	<!-- junit properties -->

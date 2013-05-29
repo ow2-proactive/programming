@@ -86,15 +86,7 @@ public class ProActiveConfigurationParser {
 
         InputSource source = null;
         try {
-            //System.out.println("FILENAME = " + filename);
-            if (filename.startsWith("bundle://")) {
-                /* osgi mode, get the ProActiveConfiguration in the jar root */
-                filename = "/ProActiveConfiguration.xml";
-                //filename = "/org/objectweb/proactive/core/config/ProActiveConfiguration.xml";
-                source = new InputSource(ProActiveConfigurationParser.class.getResourceAsStream(filename));
-            } else {
-                source = new org.xml.sax.InputSource(filename);
-            }
+            source = new org.xml.sax.InputSource(filename);
 
             DocumentBuilderFactory domFactory;
             DocumentBuilder builder;

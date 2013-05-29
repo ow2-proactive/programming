@@ -198,11 +198,6 @@ org.eclipse.ltk.core.refactoring_3.5.100.v20100526-0800.jar
 org.eclipse.ltk.ui.refactoring_3.5.0.v20100526-0800.jar
 org.eclipse.ocl_3.0.1.R30x_v201008251030.jar
 org.eclipse.ocl.ecore_3.0.1.R30x_v201008251030.jar
-org.eclipse.osgi_3.6.1.R36x_v20100806.jar
-org.eclipse.osgi_3.7.0.v20110613.jar
-org.eclipse.osgi.services_3.2.100.v20100503.jar
-org.eclipse.osgi.services_3.3.0.v20110513.jar
-org.eclipse.osgi.util_3.2.100.v20100503.jar
 org.eclipse.persistence.jpa.equinox.weaving_2.1.1.v20100817-r8050.jar
 org.eclipse.search_3.6.0.v20100520-0800.jar
 org.eclipse.swt_3.6.1.v3655c.jar

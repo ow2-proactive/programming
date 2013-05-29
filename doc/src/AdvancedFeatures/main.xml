@@ -18,7 +18,6 @@
 	<!ENTITY MessageTagging SYSTEM "MessageTagging.xml">
 	<!ENTITY WebServices SYSTEM "WebServices.xml">
 	<!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
-	<!ENTITY OSGi SYSTEM "OSGi.xml">
 	<!ENTITY JMX SYSTEM "Jmx.xml">
 	<!ENTITY JMXMBean SYSTEM "JmxMBean.xml">
 	<!ENTITY WriteDocumentation SYSTEM "WriteProActiveDocumentation.xml">
@@ -43,7 +42,6 @@
 		&MessageTagging;
 		&WebServices;
 		&AnnotationProcessing;
-		&OSGi;
 		&JMX;
 		&JMXMBean;
 		&ProxyCommand;

@@ -103,13 +103,13 @@
 	<if name="test">
 		<fileset dir="${cl.test.dir}" id="performancesuite">
 			<include name="${test}" />
-			<exclude name="**/*$*.class" />			
+			<exclude name="**/*$*.class" />
 		</fileset>
 		<else>
 			<fileset dir="${cl.test.dir}" id="performancesuite">
 				<include name="performanceTests/bandwidth/Test*.class" />
 				<include name="performanceTests/throughput/Test*.class" />
-				<exclude name="**/*$*.class" />				
+				<exclude name="**/*$*.class" />
 			</fileset>
 		</else>
 	</if>
@@ -275,7 +275,6 @@
 		</if>
 		<concat destfile="${compile.dir}/Manifest.mf">
 			<fileset dir="${compile.dir}" includes="Manifest-base.mf" />
-			<fileset dir="${osgi.manifest.dir}" includes="Manifest.mf" />
 		</concat>
 
 
@@ -304,7 +303,6 @@
 				<exclude name="META-INF/**" />
 			</fileset>
 			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
-			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
 			<indexjars>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
@@ -859,53 +857,6 @@
 		<jdependMacro outputfile="jdepend_core" classesdir="${cl.proactive.dir}" />
 		<jdependMacro outputfile="jdepend_all" classesdir="${classes.dir}" />
 	</target>
-
-
-	<!-- ================================================================ -->
-	<!--                    Create OSGi Library Bundle                    -->
-	<!--  =============================================================== -->
-	<target name="librariesBundle">
-		<mkdir dir="${bundle.dir}" />
-		<jar manifest="${osgi.manifest.dir}/ManifestLibraries.mf" jarfile="${bundle.dir}/librariesBundle.jar">
-			<fileset dir="${lib.dir}/">
-				<include name="javassist.jar" />
-				<include name="log4j.jar" />
-				<include name="xercesImpl-2.8.1.jar" />
-				<include name="bouncycastle.jar" />
-				<include name="fractal-api-2.0.3-SNAPSHOT.jar" />
-				<include name="fractal-gcm-api-1.1.1.jar" />
-			</fileset>
-		</jar>
-	</target>
-
-	<!-- ================================================================ -->
-	<!--                     Build the JMX Connector Bundle               -->
-	<!--  =============================================================== -->
-	<target name="proActiveConnectorBundle">
-		<mkdir dir="${bundle.dir}" />
-		<jar manifest="${manifest.connector.dir}/Manifest.mf" jarfile="${bundle.dir}/proactiveConnectorBundle.jar">
-			<fileset dir="${cl.extensions.dir}">
-				<include name="${extensions.path}/osgi/connector/Activator.class" />
-			</fileset>
-		</jar>
-	</target>
-
-	<!-- ================================================================ -->
-	<!--                      Build all OSGi Bundles                      -->
-	<!--  =============================================================== -->
-
-	<target name="OSGiBundles" depends="deploy, librariesBundle, proActiveConnectorBundle">
-		<subant inheritall="yes" failonerror="true">
-			<target name="helloBundle" />
-			<target name="helloClientBundle" />
-			<fileset dir="${src.examples.dir}/${examples.path}/osgi" includes="**/build.xml" />
-		</subant>
-		<subant inheritall="yes" failonerror="true">
-			<target name="OSGiManagement" />
-			<fileset dir="${src.examples.dir}/${examples.path}/jmx/remote/management" includes="**/build.xml" />
-		</subant>
-	</target>
-
 
 	<!-- ================================================================ -->
 	<!--                          Performance test                        -->

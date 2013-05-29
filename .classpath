@@ -11,7 +11,6 @@
 	<classpathentry kind="lib" path="lib/asm-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/ast-core-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/bouncycastle.jar"/>
-	<classpathentry kind="lib" path="lib/bundlerepository-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/cockpit-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
@@ -24,18 +23,15 @@
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199-tests.jar"/>
 	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199.jar"/>
-	<classpathentry kind="lib" path="lib/configadmin-1.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix-asn1.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix32.jar"/>
 	<classpathentry kind="lib" path="lib/dtdparser-1.21.jar"/>
-	<classpathentry kind="lib" path="lib/felix.jar"/>
 	<classpathentry kind="lib" path="lib/fluent-hc-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/fractal-adl-2.7-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fractal-api-2.0.3-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fractal-gcm-api-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/glite-wms-jdlj.jar"/>
-	<classpathentry kind="lib" path="lib/http-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/jackrabbit-jcr-commons-1.5.2.jar"/>
@@ -56,26 +52,16 @@
 	<classpathentry kind="lib" path="lib/julia-runtime-2.5.3-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
-	<classpathentry kind="lib" path="lib/moduleloader.jar"/>
 	<classpathentry kind="lib" path="lib/netty-3.2.0.ALPHA2.jar"/>
-	<classpathentry kind="lib" path="lib/osgi.jar"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
 	<classpathentry kind="lib" path="lib/rabbitmq-client.jar"/>
-	<classpathentry kind="lib" path="lib/servicebinder-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.11.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="lib/servlet.jar"/>
-	<classpathentry kind="lib" path="lib/shell-1.4.2.jar"/>
-	<classpathentry kind="lib" path="lib/shellgui.jar"/>
-	<classpathentry kind="lib" path="lib/shellplugin.jar"/>
-	<classpathentry kind="lib" path="lib/shelltui-1.4.2.jar"/>
-	<classpathentry kind="lib" path="lib/simple.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/soap.jar"/>
 	<classpathentry kind="lib" path="lib/ssj.jar"/>
 	<classpathentry kind="lib" path="lib/sunxacml.jar"/>
 	<classpathentry kind="lib" path="lib/synchronize-0.9.0.jar"/>
-	<classpathentry kind="lib" path="lib/tablelayout.jar"/>
 	<classpathentry kind="lib" path="lib/task-deployment-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/task-framework-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/trilead-ssh2.jar"/>
