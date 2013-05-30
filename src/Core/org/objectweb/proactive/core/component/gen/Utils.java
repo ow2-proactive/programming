@@ -92,7 +92,6 @@ public class Utils {
     public static final String GATHERCAST_ITF_PROXY_DEFAULT_SUFFIX = GEN_ESCAPE_CHAR + "gathercastItfProxy";
     public static final String COMPOSITE_REPRESENTATIVE_SUFFIX = GEN_ESCAPE_CHAR + "composite";
     public static final String OUTPUT_INTERCEPTOR_SUFFIX = GEN_ESCAPE_CHAR + "outputInterceptor";
-    public static final String WEBSERVICE_PROXY_SUFFIX = GEN_ESCAPE_CHAR + "webServiceProxy";
 
     // packages
     public static final String STUB_DEFAULT_PACKAGE = null;
@@ -111,16 +110,12 @@ public class Utils {
 
     public static boolean isMetaObjectClassName(String classname) {
         return classname.startsWith(GENERATED_DEFAULT_PREFIX) && !isRepresentativeClassName(classname) &&
-            !isGathercastProxyClassName(classname) && !isWebServiceProxyClassName(classname);
+            !isGathercastProxyClassName(classname);
     }
 
     public static boolean isGathercastProxyClassName(String classname) {
         return (classname.startsWith(GENERATED_DEFAULT_PREFIX) && classname
                 .endsWith(GATHERCAST_ITF_PROXY_DEFAULT_SUFFIX));
-    }
-
-    public static boolean isWebServiceProxyClassName(String classname) {
-        return (classname.startsWith(GENERATED_DEFAULT_PREFIX) && classname.endsWith(WEBSERVICE_PROXY_SUFFIX));
     }
 
     /**
@@ -224,12 +219,6 @@ public class Utils {
             String javaInterfaceName) {
         // just a way to have an identifier (possibly not unique ... but readable)
         return (getMetaObjectClassName(functionalInterfaceName, javaInterfaceName) + OUTPUT_INTERCEPTOR_SUFFIX);
-    }
-
-    public static String getWSProxyClassName(String functionalInterfaceName, String javaInterfaceName,
-            String wsCallerClassName) {
-        return (getMetaObjectClassName(functionalInterfaceName, javaInterfaceName) + GEN_MIDDLE_SEPARATOR +
-            escapeString(wsCallerClassName.substring(wsCallerClassName.lastIndexOf('.'))) + WEBSERVICE_PROXY_SUFFIX);
     }
 
     public static Class<?> defineClass(final String className, final byte[] bytes)

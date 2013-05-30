@@ -65,21 +65,6 @@
 	<property name="tutorials.src"		value="${tutorials.dir}/src" />
 	<property name="tutorials.dist"       value="${tutorials.dir}/dist" />
 
-
-	<!-- Common web service properties -->
-	<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices" />
-	<property name="webservices.class.dir" value="${cl.extensions.dir}/${extensions.path}/webservices" />
-
-	<!-- CXF properties -->
-	<property name="cxf.dir" value="${webservices.dir}/cxf" />
-	<property name="cxf.lib.dir" value="${lib.dir}/cxf" />
-	<path id="cxf.libs">
-		<fileset dir="${cxf.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-
-
 	<!-- ================================================================ -->
 	<!--                   define the different classpaths                -->
 	<!--  =============================================================== -->
@@ -115,11 +100,6 @@
 		<pathelement location="${cl.utils.dir}" />
 		<pathelement location="${cl.test.dir}"/>
 		<path refid="compile.libs" />
-	</path>
-
-	<path id="project.with.ws.classpath">
-		<path refid="project.classpath" />
-		<path refid="cxf.libs" />
 	</path>
 
 	<macrodef name="compile_extra">

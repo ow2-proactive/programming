@@ -145,7 +145,7 @@
 
 
 		<javac srcdir="${src.proactive.dir}" destdir="${cl.proactive.dir}" deprecation="on" source="${source}" debug="${debug}">
-			<classpath refid="project.with.ws.classpath" />
+			<classpath refid="project.classpath" />
 			<include name="**/*.java" />
 
 			<!-- XXX, MicroTimer should be in core or not used by the core-->
@@ -212,13 +212,13 @@
 		</if>
 
 		<javac srcdir="${src.test.dir}" destdir="${cl.test.dir}" includes="unitTests/**" deprecation="on" source="${source}" debug="${debug}">
-			<classpath refid="project.with.ws.classpath" />
+			<classpath refid="project.classpath" />
 		</javac>
 		<javac srcdir="${src.test.dir}" destdir="${cl.test.dir}" includes="functionalTests/**" excludes="functionalTests/annotations/*/inputs/**,${annotations_tests_exec_exclude}" deprecation="on" source="${source}" debug="${debug}">
-			<classpath refid="project.with.ws.classpath" />
+			<classpath refid="project.classpath" />
 		</javac>
 		<javac srcdir="${src.test.dir}" destdir="${cl.test.dir}" includes="performanceTests/**" deprecation="on" source="${source}" debug="${debug}">
-			<classpath refid="project.with.ws.classpath" />
+			<classpath refid="project.classpath" />
 		</javac>
 		<copy toDir="${cl.test.dir}">
 			<fileset dir="${src.test.dir}">
@@ -307,14 +307,6 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<fileset dir="${cxf.lib.dir}">
-					<include name="*.jar" />
-					<!-- It is mandatory to exclude the cxf jar of the jar index
-					and to explicity include it in the classpath. CXF is not able to
-					find its configuration files if they are not directly accessible
-					through the classpath. -->
-					<exclude name="cxf-2.5.2.jar" />
-				</fileset>
 			</indexjars>
 		</jar>
 
@@ -324,9 +316,6 @@
 				<include name="*.jar" />
 				<include name="**/*.so" />
 				<include name="**/*.dll" />
-			</fileset>
-			<fileset dir="${cxf.lib.dir}">
-				<include name="*.jar" />
 			</fileset>
 		</copy>
 
@@ -886,27 +875,6 @@
 			<arg value="${x}" />
 		</java>
 	</target>
-
-
-	<!-- ================================================================================ -->
-	<!--    Create the proactive Web Archive to be used with the web service framework    -->
-	<!-- ================================================================================ -->
-	<target name="proActiveWar"  depends="deploy.all" description="Build the proactive.war archive with CXF embedded">
-		<war destfile="${deploy.dir}/proactive.war" webxml="${cxf.dir}/etc/web.xml">
-			<webinf dir="${cxf.dir}/wsdl">
-				<include name="cxf-servlet.xml" />
-			</webinf>
-			<lib dir="${deploy.dir}/lib">
-				<include name="*.jar" />
-			</lib>
-			<fileset dir="${cxf.dir}/etc">
-				<include name="META-INF/**" />
-			</fileset>
-		</war>
-	</target>
-
-	<target name="proActiveWarCXF" depends="proActiveWar" description="Deprecated, see proActiveWar"/>
-
 
 	<!-- MUST BE CALLED FROM AN INRIA MACHINE ON PRODUCTION NETWORK -->
 	<target name="uploadSchemas" description="Upload schemas on web site">

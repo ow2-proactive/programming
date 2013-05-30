@@ -43,7 +43,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.etsi.uri.gcm.api.type.GCMInterfaceType;
-import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
@@ -68,7 +67,6 @@ import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
 import org.objectweb.proactive.core.component.gen.GatherItfAdapterProxy;
 import org.objectweb.proactive.core.component.gen.OutputInterceptorClassGenerator;
-import org.objectweb.proactive.core.component.gen.WSProxyClassGenerator;
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.representative.ItfID;
@@ -76,8 +74,6 @@ import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceTypeImpl;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
-import org.objectweb.proactive.core.component.type.WSComponent;
-import org.objectweb.proactive.core.component.webservices.WSInfo;
 
 
 /**
@@ -277,64 +273,25 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         // get value of (eventual) future before casting
         serverItf = PAFuture.getFutureValue(serverItf);
 
-        PAInterface sItf = null;
-        if (serverItf instanceof PAInterface) {
-            sItf = (PAInterface) serverItf;
+        PAInterface sItf = (PAInterface) serverItf;
 
-            //        if (controllerLogger.isDebugEnabled()) {
-            //            String serverComponentName;
-            //
-            //            if (PAGroup.isGroup(serverItf)) {
-            //                serverComponentName = "a group of components ";
-            //            } else {
-            //                serverComponentName = GCM.getNameController((sItf).getFcItfOwner()).getFcName();
-            //            }
-            //
-            //            controllerLogger.debug("binding " + GCM.getNameController(getFcItfOwner()).getFcName() + "." +
-            //                clientItfName + " to " + serverComponentName + "." + (sItf).getFcItfName());
-            //        }
+        //        if (controllerLogger.isDebugEnabled()) {
+        //            String serverComponentName;
+        //
+        //            if (PAGroup.isGroup(serverItf)) {
+        //                serverComponentName = "a group of components ";
+        //            } else {
+        //                serverComponentName = GCM.getNameController((sItf).getFcItfOwner()).getFcName();
+        //            }
+        //
+        //            controllerLogger.debug("binding " + GCM.getNameController(getFcItfOwner()).getFcName() + "." +
+        //                clientItfName + " to " + serverComponentName + "." + (sItf).getFcItfName());
+        //        }
 
-            checkBindability(clientItfName, (Interface) serverItf);
+        checkBindability(clientItfName, (Interface) serverItf);
 
-            ((ItfStubObject) serverItf).setSenderItfID(new ItfID(clientItfName,
-                ((PAComponent) getFcItfOwner()).getID()));
-        }
-        // binding on a web service
-        else if (serverItf instanceof WSInfo) {
-            PAGCMInterfaceType serverItfType = null;
-            try {
-                serverItfType = new PAGCMInterfaceTypeImpl(clientItfName, ((ComponentType) owner.getFcType())
-                        .getFcInterfaceType(clientItfName).getFcItfSignature(), TypeFactory.SERVER,
-                    TypeFactory.MANDATORY, GCMTypeFactory.SINGLETON_CARDINALITY);
-            } catch (InstantiationException e) {
-                // should never append
-                controllerLogger.error("could not generate ProActive interface type for " + clientItfName +
-                    ": " + e.getMessage());
-                IllegalBindingException ibe = new IllegalBindingException(
-                    "could not generate ProActive interface type for " + clientItfName + ": " +
-                        e.getMessage());
-                ibe.initCause(e);
-                throw ibe;
-            }
-            try {
-                // generate a proxy implementing the Java client interface and calling the web service
-                sItf = WSProxyClassGenerator.instance().generateFunctionalInterface(
-                        serverItfType.getFcItfName(), new WSComponent((WSInfo) serverItf), serverItfType);
-            } catch (InterfaceGenerationFailedException e) {
-                controllerLogger.error("could not generate web service proxy for client interface " +
-                    clientItfName + ": " + e.getMessage());
-                IllegalBindingException ibe = new IllegalBindingException(
-                    "could not generate web service proxy for client interface " + clientItfName + ": " +
-                        e.getMessage());
-                ibe.initCause(e);
-                throw ibe;
-            }
-        }
-        // binding on a web service
-        else if (serverItf instanceof String) {
-            bindFc(clientItfName, new WSInfo((String) serverItf));
-            return;
-        }
+        ((ItfStubObject) serverItf).setSenderItfID(new ItfID(clientItfName, ((PAComponent) getFcItfOwner())
+                .getID()));
 
         // checks binding from internal client interface of composite component to server interface of subcomponent
         if (isComposite() && !Utils.isGCMClientItf(clientItfName, getFcItfOwner())) {

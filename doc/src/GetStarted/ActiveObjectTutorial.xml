@@ -945,15 +945,6 @@
 
 		</para>
 		<section xml:id="ClassesUsed_7"><info><title>Classes Used</title></info>
-
-			<itemizedlist><info><title xml:id="NewClasses_2">New Classes</title></info>
-
-				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory</literal> - used to get a WebServicesFactory depending on the CXF framework</para></listitem>
-				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.WebServicesFactory</literal> - used to get a WebServices corresponding to a specified url</para></listitem>
-				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.WebServices</literal> - used to transform the active object into a web service</para></listitem>
-				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.exceptions.WebServicesException</literal> - used to report web service exceptions</para></listitem>
-			</itemizedlist>
-
 			<itemizedlist><info><title xml:id="Previouslyusedclasses_6">Previously used classes</title></info>
 
 

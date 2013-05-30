@@ -179,7 +179,6 @@
 				 <package name="org.objectweb.proactive.gcmdeployment*" />
 			</group>
 			<group title="ProActive Extensions: VFS Provider" packages="org.objectweb.proactive.extensions.vfsprovider*" />
-			<group title="ProActive Extensions: Web Services" packages="org.objectweb.proactive.extensions.webservices*" />
 			<group title="ProActive Extensions: Native Interface API" packages="org.objectweb.proactive.extensions.nativeinterface*" />			
 			<group title="ProActive Extensions: Annotations">
 				<package name="org.objectweb.proactive.extensions.annotation*"/>
@@ -276,8 +275,7 @@
 				 <package name="org.objectweb.proactive.extensions.gcmdeployment*" />
 				 <package name="org.objectweb.proactive.gcmdeployment*" />
 			</group>
-			<group title="ProActive Extensions: VFS Provider" packages="org.objectweb.proactive.extensions.vfsprovider*" />
-			<group title="ProActive Extensions: Web Services" packages="org.objectweb.proactive.extensions.webservices*" />
+			<group title="ProActive Extensions: VFS Provider" packages="org.objectweb.proactive.extensions.vfsprovider*" />			
 			<group title="ProActive Extensions: Native Interface API" packages="org.objectweb.proactive.extensions.nativeinterface*" />			
 			<group title="ProActive Extensions: Annotations">
 				<package name="org.objectweb.proactive.extensions.annotation*"/>

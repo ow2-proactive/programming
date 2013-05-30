@@ -615,24 +615,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         false);
 
     /**
-     * Web services framework
-     *
-     * Suppported value is cxf
-     */
-    static public PAPropertyString PA_WEBSERVICES_FRAMEWORK = new PAPropertyString(
-        "proactive.webservices.framework", false);
-
-    /**
-     * Web services: WSDL elementFormDefault attribute
-     *
-     * When creating a web service, the generated WSDL contains an XSD schema which represents
-     * the SOAP message format. This property allows to set the elementFormDefault of this schema
-     * to "qualified" or "unqualified". It is set to false ("unqualified") by default.
-     */
-    static public PAPropertyBoolean PA_WEBSERVICES_ELEMENTFORMDEFAULT = new PAPropertyBoolean(
-        "proactive.webservices.elementformdefault", false);
-
-    /**
      * if true, write the bytecode of the generated stub on the disk
      *
      */

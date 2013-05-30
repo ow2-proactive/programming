@@ -39,17 +39,6 @@
 ./unicore/scriptPlugin.jar
 ./unicore/jh.jar
 ./xercesImpl.jar
-./ws
-./ws/commons-discovery.jar
-./ws/saaj-api.jar
-./ws/commons-logging.jar
-./ws/jaxrpc.jar
-./ws/activation.jar
-./ws/wsdl4j.jar
-./ws/mail.jar
-./ws/servlet-api.jar
-./ws/xml-apis.jar
-./ws/soap.jar
 ./log4j.jar
 ./scilab
 ./scilab/javasci.jar

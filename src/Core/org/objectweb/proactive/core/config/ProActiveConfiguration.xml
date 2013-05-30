@@ -66,11 +66,7 @@
 
         <prop key="proactive.gcmd.unix.shell" value="/bin/sh"/>
 
-        <prop key="proactive.mop.writestubondisk" value="false"/>                                        
-
-        <prop key="proactive.webservices.framework" value="cxf" />
-        <prop key="proactive.webservices.elementformdefault" value="false" />
-        
+        <prop key="proactive.mop.writestubondisk" value="false"/>
     </properties>
     <javaProperties>
         <!-- <prop key="java.rmi.server.RMIClassLoaderSpi" value="org.objectweb.proactive.core.classloading.protocols.ProActiveRMIClassLoader"/> -->
