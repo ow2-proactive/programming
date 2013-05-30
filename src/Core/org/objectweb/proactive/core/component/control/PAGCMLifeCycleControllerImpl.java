@@ -348,9 +348,25 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
         }
     }
 
+    public void terminateGCMComponent(boolean immediate) throws IllegalLifeCycleException {
+        if (fcState.equals(LifeCycleController.STOPPED)) {
+            String hierarchical_type = owner.getComponentParameters().getHierarchicalType();
+            if (hierarchical_type.equals(Constants.PRIMITIVE)) {
+                // primitive component: check if the implementation class implements PAGCMLifeCycleController
+                if (owner.getReferenceOnBaseObject() instanceof PAGCMLifeCycleController) {
+                    ((PAGCMLifeCycleController) owner.getReferenceOnBaseObject())
+                            .terminateGCMComponent(immediate);
+                }
+            }
+            PAActiveObject.terminateActiveObject(immediate);
+        } else {
+            throw new IllegalLifeCycleException(
+                "Cannot terminate component because the component is not stopped");
+        }
+    }
+
     /*
-     * @see
-     * org.objectweb.proactive.core.component.control.PAGCMLifeCycleController#getFcState
+     * @see org.objectweb.proactive.core.component.control.PAGCMLifeCycleController#getFcState
      * (short)
      */
     public String getFcState(short priority) {
@@ -365,8 +381,7 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
     }
 
     /*
-     * @see
-     * org.objectweb.proactive.core.component.control.PAGCMLifeCycleController#stopFc(short)
+     * @see org.objectweb.proactive.core.component.control.PAGCMLifeCycleController#stopFc(short)
      */
     public void stopFc(short priority) {
         stopFc();

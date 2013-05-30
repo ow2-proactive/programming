@@ -1142,7 +1142,7 @@ public class PAActiveObject {
      *            the active object to kill
      * @param immediate
      *            if this boolean is true, this method is served as an immediate service. The
-     *            termination is then synchronous. The active object dies immediatly. Else, the kill
+     *            termination is then synchronous. The active object dies immediately. Else, the kill
      *            request is served as a normal request, it is put on the request queue. The
      *            termination is asynchronous.
      */
@@ -1176,7 +1176,7 @@ public class PAActiveObject {
      * 
      * @param immediate
      *            if this boolean is true, this method is served as an immediate service. The
-     *            termination is then synchronous. The active object dies immediatly. Else, the kill
+     *            termination is then synchronous. The active object dies immediately. Else, the kill
      *            request is served as a normal request, it is put on the request queue. The
      *            termination is asynchronous.
      */
