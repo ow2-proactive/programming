@@ -489,13 +489,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         "proactive.runtime.domain.url", false);
 
     /* ------------------------------------
-     *  DISTRIBUTED DEBUGGER
-     */
-
-    /** Enable the distributed debugger */
-    static public PAPropertyBoolean PA_DEBUG = new PAPropertyBoolean("proactive.debug", false);
-
-    /* ------------------------------------
      *  MESSAGE TAGGING
      */
     /** Set the max period for LocalMemoryTag lease time */

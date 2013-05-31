@@ -56,7 +56,6 @@ public interface Loggers {
     public static final String SYNC_CALL = CORE + ".sync_call";
     static final public String GROUPS = CORE + ".groups";
     public static final String GC = CORE + ".gc";
-    public static final String DEBUGGER = CORE + ".debugger";
     public static final String HTTP_TRANSPORT = CORE + ".communication.transport.http";
     public static final String MIGRATION = CORE + ".migration";
     public static final String REQUESTS = CORE + ".communication.requests";

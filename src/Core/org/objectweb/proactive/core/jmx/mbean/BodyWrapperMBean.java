@@ -37,16 +37,11 @@
 package org.objectweb.proactive.core.jmx.mbean;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
 
 import javax.management.ObjectName;
 
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.migration.MigrationException;
-import org.objectweb.proactive.core.debug.debugger.DebugInfo;
-import org.objectweb.proactive.core.debug.debugger.RequestQueueInfo;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -138,94 +133,4 @@ public interface BodyWrapperMBean extends Serializable {
      * @throws MigrationException
      */
     public void migrateTo(String nodeUrl) throws MigrationException;
-
-    //
-    // -- STEPBYSTEP METHODS -----------------------------------------------
-    //
-    /**
-     * Enable the debugger
-     */
-    public void enableStepByStep();
-
-    /**
-     * Disable the debugger
-     */
-    public void disableStepByStep();
-
-    /**
-     * Resume all the threads blocked in current breakpoint.
-     * The next active breakpoints will block them if the step by step mode is enable.
-     */
-    public void nextStep();
-
-    /**
-     * Resume one thread blocked in current breakpoint.
-     * The next active breakpoints will block them if the step by step mode is enable.
-     * @param id the id of the thread.
-     */
-    public void nextStep(long id);
-
-    /**
-     * Resume some threads blocked in current breakpoint.
-     * The next active breakpoints will block them if the step by step mode is enable.
-     * @param ids the collection of the threads.
-     */
-    public void nextStep(Collection<Long> ids);
-
-    /**
-     * return the state of the ActivableObject
-     */
-    public DebugInfo getDebugInfo() throws ProActiveException;
-
-    /**
-     * set the time between every breakpoint
-     * @param waitTime the time in millisecond
-     */
-    public void slowMotion(long slowMotionDelay);
-
-    /**
-     * enable all breakpointTypes used by stepByStep
-     */
-    public void initBreakpointTypes();
-
-    /**
-     * enable some breakpointTypes used by stepByStep
-     * @param types, a table of BreakpointType
-     */
-    public void updateBreakpointTypes(Map<String, Boolean> values);
-
-    //
-    // -- EXTENDED DEBUGGER ------------------------------------------------
-    //
-    /**
-     * enable the stepByStep mode on the sendRequest breakpoint for all
-     * the ActiveObjects in the runtime
-     */
-    public void enableExtendedDebugger();
-
-    /**
-     * disable the stepByStep mode on the sendRequest breakpoint for all
-     * the ActiveObjects in the runtime
-     */
-    public void disableExtendedDebugger();
-
-    /**
-     * unblock for the debugger connection
-     */
-    public void unblockConnection();
-
-    /**
-     * @return the request queue of the body
-     */
-    public RequestQueueInfo getRequestQueueInfo();
-
-    /**
-     * @param sequenceNumber
-     */
-    public void moveUpRequest(final long sequenceNumber);
-
-    /**
-     * @param sequenceNumber
-     */
-    public void moveDownRequest(final long sequenceNumber);
 }

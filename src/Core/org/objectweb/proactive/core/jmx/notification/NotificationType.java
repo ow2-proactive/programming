@@ -94,29 +94,10 @@ public class NotificationType {
     // --- GCM Deployment
     public final static String GCMRuntimeRegistered = "GCMRuntimeRegistered";
 
-    // --- Step by Step
-    public final static String stepByStepEnabled = "stepByStepEnabled";
-    public final static String stepByStepDisabled = "stepByStepDisabled";
-    public final static String stepByStepBlocked = "stepByStepBlocked";
-    public final static String stepByStepResumed = "stepByStepResumed";
-    public final static String stepByStepSlowMotionEnabled = "stepByStepSlowMotionEnabled";
-    public final static String stepByStepSlowMotionDisabled = "stepByStepSlowMotionDisabled";
-    public final static String stepByStepISEnabled = "stepByStepISEnabled";
-    public final static String stepByStepISDisabled = "stepByStepISDisabled";
-
-    // ExtendedDebugger
-    public final static String connectDebugger = "connectDebugger";
-    public final static String disconnectDebugger = "disconnectDebugger";
-    public final static String requestQueueModified = "requestQueueModified";
-
     /* TODO Send this notification */
     // public final static String forwarderRuntimeRegistered = "forwarderRuntimeRegistered";
     public final static String runtimeDestroyed = "runtimeDestroyed";
 
     // --- Used in the message of the JMX notifications -------------
     public final static String migrationMessage = "Migration Finished";
-
-    public final static String debuggerConnectionActivated = "debuggerConnectionActivated";
-    public final static String debuggerConnectionTerminated = "debuggerConnectionTerminated";
-
 }

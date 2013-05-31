@@ -50,11 +50,7 @@ import javax.management.ObjectName;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.LocalBodyStore;
-import org.objectweb.proactive.core.debug.dconnection.DebuggerConnection;
-import org.objectweb.proactive.core.debug.dconnection.DebuggerException;
-import org.objectweb.proactive.core.debug.dconnection.DebuggerInformation;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
-import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -86,8 +82,6 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
 
     /** Used by the JMX notifications */
     private long counter = 0;
-
-    private boolean eclipseDebugger = false;
 
     public ProActiveRuntimeWrapper() {
 
@@ -230,71 +224,5 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    //
-    // -- DEBUGGERCONNECTION METHODS -----------------------------------------------
-    //
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getDebugInformation()
-     */
-    public DebuggerInformation getDebugInformation() throws DebuggerException {
-        try {
-            return DebuggerConnection.getDebuggerConnection().getDebugInformation();
-        } catch (DebuggerException e) {
-            ProActiveLogger.logEatedException(ProActiveLogger.getLogger(Loggers.DEBUGGER), e);
-            throw e;
-        }
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#updateDebugInfo()
-     */
-    public void updateDebugInfo() {
-        DebuggerConnection.getDebuggerConnection().update();
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#removeDebugger()
-     */
-    public void removeDebugger() {
-        DebuggerConnection.getDebuggerConnection().removeDebugger();
-    }
-
-    public void removeEclipseDebugger() {
-        eclipseDebugger = false;
-        sendNotification(NotificationType.disconnectDebugger);
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#hasDebuggerConnected()
-     */
-    public boolean hasDebuggerConnected() {
-        return DebuggerConnection.getDebuggerConnection().hasDebuggerConnected();
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#canBeDebugged()
-     */
-    public boolean canBeDebugged() {
-        return System.getProperty("debugID") != null;
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getDebugID()
-     */
-    public String getDebugID() {
-        return System.getProperty("debugID");
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#isExtendedDebugger()
-     */
-    public boolean isExtendedDebugger() {
-        return eclipseDebugger;
-    }
-
-    public void setExtendedDebugger(boolean extendedDebugger) {
-        this.eclipseDebugger = extendedDebugger;
     }
 }

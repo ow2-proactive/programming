@@ -54,12 +54,6 @@ public class TestUnsetProperty {
         s.unset();
         Assert.assertFalse(s.isSet());
         Assert.assertNull(s.getValue());
-
-        PAPropertyBoolean b = CentralPAPropertyRepository.PA_DEBUG;
-        b.setValue(true);
-        b.unset();
-        Assert.assertFalse(b.isSet());
-        Assert.assertNull(b.getValueAsString());
     }
 
 }

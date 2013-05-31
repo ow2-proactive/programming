@@ -42,8 +42,6 @@ import java.util.List;
 import javax.management.ObjectName;
 
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.debug.dconnection.DebuggerException;
-import org.objectweb.proactive.core.debug.dconnection.DebuggerInformation;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -169,52 +167,4 @@ public interface ProActiveRuntimeWrapperMBean extends Serializable {
      * @param policyServer
      */
     public void setSecurityManager(Entity user, PolicyServer policyServer);
-
-    //
-    // -- DEBUGGERCONNECTION METHODS -----------------------------------------------
-    //
-    /**
-     * Get the information for connect a debugger.
-     * Create the debug node if it does not exist.
-     *
-     * @return the object containing the data for the debugger
-     * @throws DebuggerException  if debug mode cannot be activated, the message contains the
-     * explanation
-     */
-    public DebuggerInformation getDebugInformation() throws DebuggerException;
-
-    /**
-     * Force to parse a new port number if exist.
-     */
-    public void updateDebugInfo();
-
-    /**
-     * Kill the debug node if the number of active objects <= 0
-     */
-    public void removeDebugger();
-
-    public void removeEclipseDebugger();
-
-    /**
-     * @return true if there is a debugger connected, false otherwise
-     */
-    public boolean hasDebuggerConnected();
-
-    /**
-     * @return true if the jvm is in ProActive debug mode
-     */
-    public boolean canBeDebugged();
-
-    /**
-     * @return the DebugID of this runtime
-     */
-    public String getDebugID();
-
-    /**
-     * 
-     * @return true if the eclipse debugger is connected to this runtime. false otherwise
-     */
-    public boolean isExtendedDebugger();
-
-    public void setExtendedDebugger(boolean extendedDebugger);
 }

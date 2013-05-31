@@ -81,7 +81,6 @@ import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.debug.debugger.BreakpointType;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapper;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
@@ -579,14 +578,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 return;
             }
 
-            if (!isProActiveInternalObject) {
-                if (((RequestReceiverImpl) requestReceiver).immediateExecution(request)) {
-                    debugger.breakpoint(BreakpointType.NewImmediateService, request);
-                } else {
-                    debugger.breakpoint(BreakpointType.NewService, request);
-                }
-            }
-
             // JMX Notification
             if (!isProActiveInternalObject && (mbean != null)) {
                 String tagNotification = createTagNotification(request.getTags());
@@ -626,18 +617,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
                 } else {
                     reply = request.serve(BodyImpl.this);
-                }
-            }
-
-            if (!isProActiveInternalObject) {
-                try {
-                    if (isInImmediateService())
-                        debugger.breakpoint(BreakpointType.EndImmediateService, request);
-                    else
-                        debugger.breakpoint(BreakpointType.EndService, request);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 }
             }
 

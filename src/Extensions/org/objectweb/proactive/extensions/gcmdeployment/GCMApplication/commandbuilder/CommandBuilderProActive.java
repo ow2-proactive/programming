@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,17 +51,14 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.StartPARuntime;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement.PathBase;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tools;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
-import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
-import org.objectweb.proactive.extensions.gcmdeployment.PathElement.PathBase;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
-
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class CommandBuilderProActive implements CommandBuilder {
@@ -105,12 +104,6 @@ public class CommandBuilderProActive implements CommandBuilder {
 
     /** runtime security policy file */
     private PathElement runtimePolicy;
-
-    /** JVM debug mode configuration */
-    private List<String> debugCommandLine;
-
-    /** indicates if the debug tag has been found in the GCMA */
-    private boolean isDebugEnabled = false;
 
     public CommandBuilderProActive() {
         GCMD_LOGGER.trace(this.getClass().getSimpleName() + " created");
@@ -273,43 +266,6 @@ public class CommandBuilderProActive implements CommandBuilder {
             sb.append(fs);
             sb.append(PROACTIVE_JAR);
             sb.append(hostInfo.getOS().pathSeparator());
-
-            if (isDebugEnabled) {
-                String javaCommand = null;
-
-                if (javaPath != null) {
-                    javaCommand = javaPath.getFullPath(hostInfo, this);
-                } else {
-                    Tool javaTool = hostInfo.getTool(Tools.JAVA.id);
-                    if (javaTool != null) {
-                        javaCommand = javaTool.getPath();
-                    }
-                }
-
-                if (javaCommand == null) {
-                    // Java location must be set when the debug mode is enabled
-                    // TODO throw an exception
-                    GCMA_LOGGER
-                            .warn("GCMApplication/application/proactive/configuration/java is NOT set. Remote debbuging will fail");
-                } else {
-                    // Check if we are able to guess tool.jar location
-                    File f = new File(javaCommand.trim());
-                    if (!f.exists() || javaCommand.lastIndexOf(fs) < 0) {
-                        GCMA_LOGGER
-                                .warn("Unable to find tool.jar, please specify a full or relative path for java (" +
-                                    javaCommand + ")");
-                    } else {
-                        sb.append(javaCommand.substring(0, javaCommand.lastIndexOf(fs)));
-                        sb.append(fs);
-                        sb.append("..");
-                        sb.append(fs);
-                        sb.append("lib");
-                        sb.append(fs);
-                        sb.append("tools.jar");
-                        sb.append(hostInfo.getOS().pathSeparator());
-                    }
-                }
-            }
         }
 
         if (proactiveClasspath != null) {
@@ -380,8 +336,7 @@ public class CommandBuilderProActive implements CommandBuilder {
 
         if (withClasspath) {
             //add classpath string surrounded by ",
-            //to deal with OS that accept paths without escaped spaces chars
-            StringBuilder sb = new StringBuilder();
+            //to deal with OS that accept paths without escaped spaces chars            
             command.append("-cp \"");
             command.append(getClasspath(hostInfo));
             command.append("\" ");
@@ -445,10 +400,6 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(hostInfo.getDataSpacesScratchPath().getFullPath(hostInfo, this));
             command.append("\"");
             command.append(" ");
-        }
-
-        if (isDebugEnabled) {
-            command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
         }
 
         // Class to be started and its arguments
@@ -573,8 +524,7 @@ public class CommandBuilderProActive implements CommandBuilder {
 
         if (withClasspath) {
             //add classpath string surrounded by ", 
-            //to deal with OS that accept paths without escaped spaces chars
-            StringBuilder sb = new StringBuilder();
+            //to deal with OS that accept paths without escaped spaces chars            
             command.add("-cp");
             command.add(getClasspath(hostInfo));
         }
@@ -614,10 +564,6 @@ public class CommandBuilderProActive implements CommandBuilder {
         if (hostInfo.getDataSpacesScratchPath() != null) {
             command.add(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_PATH.getCmdLine() +
                 hostInfo.getDataSpacesScratchPath().getFullPath(hostInfo, this));
-        }
-
-        if (isDebugEnabled) {
-            command.addAll(getDebugCommand(hostInfo, gcma.getDeploymentId()));
         }
 
         // Class to be started and its arguments
@@ -707,33 +653,5 @@ public class CommandBuilderProActive implements CommandBuilder {
 
     public void setOverwriteClasspath(boolean overwriteClasspath) {
         this.overwriteClasspath = overwriteClasspath;
-    }
-
-    public void setDebugCommand(String debugCommand) {
-        debugCommandLine = new ArrayList<String>();
-        if (debugCommand != null) {
-            GCMD_LOGGER.trace(" Set " + debugCommand + " to debugCommand");
-            debugCommandLine.addAll(CommandBuilderHelper.parseArg(debugCommand));
-        }
-    }
-
-    protected List<String> getDebugCommand(HostInfo hostInfo, long deploymentId) {
-        //        Tool javaTool = hostInfo.getTool(Tools.JAVA.id);
-        //        String java = "java";
-        //        if (javaTool != null) {
-        //            java = javaTool.getPath();
-        //        }
-        if (debugCommandLine == null) {
-            debugCommandLine = new ArrayList<String>();
-            String token = "padebug_" + deploymentId + "_" + TOKEN;
-            debugCommandLine.add("-DdebugID=" + token);
-            debugCommandLine.add("-Xdebug");
-            debugCommandLine.add("-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0");
-        }
-        return debugCommandLine;
-    }
-
-    public void enableDebug(boolean b) {
-        isDebugEnabled = b;
     }
 }

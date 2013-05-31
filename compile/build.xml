@@ -179,9 +179,7 @@
 			<class name="org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector" />
 			<class name="org.objectweb.proactive.core.jmx.ProActiveConnection" />
 			<class name="org.objectweb.proactive.core.jmx.server.ProActiveServerImpl" />
-			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketServer" />
-			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketClient" />
-		</stubGenerator>	
+		</stubGenerator>
 	</target>
 
 

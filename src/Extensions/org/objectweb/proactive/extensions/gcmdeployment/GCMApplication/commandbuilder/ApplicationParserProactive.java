@@ -73,7 +73,6 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
     private static final String XPATH_RUNTIME_POLICY = "app:runtimePolicy";
     private static final String XPATH_LOG4J_PROPERTIES = "app:log4jProperties";
     private static final String XPATH_USER_PROPERTIES = "app:userProperties";
-    private static final String XPATH_DEBUG_PROPERTIES = "app:debug";
     private static final String XPATH_DATA = "app:data";
     private static final String XPATH_NAMING_SERVICE = "app:namingService";
     private static final String XPATH_INPUT_DEFAULT = "app:inputDefault";
@@ -250,15 +249,6 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
             String jvmarg = GCMParserHelper.getAttributeValue(jvmargNodes.item(i), "value");
             commandBuilderProActive.addJVMArg(jvmarg);
         }
-
-        // Optional: debug mode
-        Node debugNode = (Node) xpath.evaluate(XPATH_DEBUG_PROPERTIES, configNode, XPathConstants.NODE);
-        if (debugNode != null) {
-            String attr = GCMParserHelper.getAttributeValue(debugNode, "command");
-            commandBuilderProActive.setDebugCommand(attr);
-            commandBuilderProActive.enableDebug(true);
-        }
-
     }
 
     protected void parseDataSpaces(XPath xpath, Node dataNode) throws XPathExpressionException {

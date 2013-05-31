@@ -73,8 +73,6 @@ import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.debug.debugger.BreakpointType;
-import org.objectweb.proactive.core.debug.debugger.Debugger;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
@@ -184,9 +182,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      */
     private transient boolean isDead;
 
-    // the StepByStep mode
-    protected Debugger debugger;
-
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
@@ -218,9 +213,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         this.spmdManager = factory.newProActiveSPMDGroupManagerFactory().newProActiveSPMDGroupManager();
 
         ProActiveSecurity.loadProvider();
-
-        this.debugger = factory.newDebuggerFactory().newDebugger();
-        this.debugger.setTarget(this);
 
         // MESSAGE TAGS
         this.messageTagsFactory = factory.newRequestTagsFactory();
@@ -959,11 +951,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
                 }
             }
 
-            // add StepByStep and ExtrendedDebugger breakpoint
-            if (!isProActiveInternalObject) {
-                debugger.breakpoint(BreakpointType.SendRequest, destinationBody);
-            }
-
             this.localBodyStrategy.sendRequest(methodCall, future, destinationBody);
 
         } catch (RenegotiateSessionException e) {
@@ -1231,9 +1218,4 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         }
         this.securityManager.setProActiveSecurityManager(user, policyServer);
     }
-
-    public Debugger getDebugger() {
-        return debugger;
-    }
-
 }
