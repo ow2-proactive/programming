@@ -74,8 +74,6 @@ grant codebase "file:classes/-" {
 	permission java.util.PropertyPermission "proactive.communication.protocol", "read, write";
 	permission java.util.PropertyPermission "proactive.dgc", "read, write";
 	permission java.util.PropertyPermission "proactive.exit_on_empty", "read, write";
-	permission java.util.PropertyPermission "proactive.ft", "read, write";
-	permission java.util.PropertyPermission "proactive.ft.ttc", "read, write";
 	permission java.util.PropertyPermission "proactive.future.ac", "read, write";
 	permission java.util.PropertyPermission "proactive.future.maxdelay", "read, write";
 	permission java.util.PropertyPermission "proactive.http.port", "read, write";

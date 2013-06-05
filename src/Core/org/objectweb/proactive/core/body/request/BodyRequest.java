@@ -127,17 +127,15 @@ public class BodyRequest extends MessageImpl implements Request, java.io.Seriali
     //
     // -- Implements Request -----------------------------------------------
     //
-    public int send(UniversalBody destinationBody) throws java.io.IOException {
-        int ftres;
+    public void send(UniversalBody destinationBody) throws java.io.IOException {
         if (!(destinationBody instanceof Body)) {
             throw new java.io.IOException("The destination body is not a local body");
         }
         if (!isPriority) {
-            ftres = ((Body) destinationBody).getRequestQueue().add(this);
+            ((Body) destinationBody).getRequestQueue().add(this);
         } else {
-            ftres = ((Body) destinationBody).getRequestQueue().addToFront(this);
+            ((Body) destinationBody).getRequestQueue().addToFront(this);
         }
-        return ftres;
     }
 
     public Reply serve(Body targetBody) {

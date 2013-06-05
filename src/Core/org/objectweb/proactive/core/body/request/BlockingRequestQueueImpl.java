@@ -89,17 +89,10 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
     }
 
     @Override
-    public synchronized int add(Request r) {
-        int ftres = super.add(r);
+    public synchronized void add(Request r) {
+        super.add(r);
         if (logger.isDebugEnabled()) {
             logger.debug("Adding request " + r.getMethodName());
-        }
-
-        // FAULT-TOLERANCE
-        // STILL NOT OOSPMD COMPLIANT !
-        if (r instanceof AwaitedRequest) {
-            this.notifyAll();
-            return ftres;
         }
 
         // if there is a "method based barrier"
@@ -130,14 +123,12 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
             this.suspend();
         }
         this.notifyAll();
-        return ftres;
     }
 
     @Override
-    public synchronized int addToFront(Request r) {
-        int ftres = super.addToFront(r);
+    public synchronized void addToFront(Request r) {
+        super.addToFront(r);
         this.notifyAll();
-        return ftres;
     }
 
     public synchronized Request blockingRemoveOldest(RequestFilter requestFilter) {

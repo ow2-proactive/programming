@@ -134,58 +134,6 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
         programmatically with the default value.</para></note>
 
       </section>
-      <section xml:id="Faulttoleranceproperties_69"><info><title>Fault-tolerance properties</title></info>
-
-
-        <para>Note that those properties should not be altered if the
-        programmer uses deployment descriptor files. See
-		<link xlink:href="../../AdvancedFeatures/multiple_html/faultTolerance.html">Chapter 32. Fault-Tolerance</link>.
-        and more specifically
-		<link xlink:href="../../AdvancedFeatures/multiple_html/faultTolerance.html#faultTolerance_html_configuration">Chapter 32. Fault-Tolerance</link>.
-        for more details.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><emphasis role="bold">proactive.ft</emphasis>:
-            Boolean indicating whether to enable
-            the fault-tolerance and if so, a set of servers has to be
-            defined with the following properties. Default value is <emphasis role="bold">false</emphasis>.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis role="bold">proactive.ft.server.checkpoint</emphasis>: URL
-             of the checkpoint server.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis role="bold">proactive.ft.server.location</emphasis>: URL of
-             the location server.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis role="bold">proactive.ft.server.recovery</emphasis>: URL of
-             the recovery process.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis role="bold">proactive.ft.server.resource</emphasis>: URL of
-             the resource server.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis role="bold">proactive.ft.server.global</emphasis>:
-             URL of the global server.
-             If this property is set, all others <emphasis role="bold">proactive.fr.server.*</emphasis> are ignored.</para>
-          </listitem>
-
-          <listitem>
-            <para><emphasis role="bold">proactive.ft.ttc</emphasis>:
-             Value of the Time To Checkpoint counter (in seconds).
-             The default value is <emphasis role="bold">30 sec</emphasis>.</para>
-          </listitem>
-        </itemizedlist>
-       </section>
-
       <section xml:id="rmisshproperties_69"><info><title>rmi ssh properties</title></info>
 
     <para>The following properties are specific to the rmissh protocol

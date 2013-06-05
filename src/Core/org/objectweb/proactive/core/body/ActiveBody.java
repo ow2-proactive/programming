@@ -242,9 +242,7 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
             logger.debug("Starting Body");
         }
 
-        // get the incarnation number if ft is enable
-        String inc = (this.ftmanager != null) ? ("" + this.ftmanager) : ("");
-        Thread t = new Thread(this, shortClassName(getName()) + " on " + getNodeURL() + inc);
+        Thread t = new Thread(this, shortClassName(getName()) + " on " + getNodeURL());
 
         // Wait for the registration of this Body inside the LocalBodyStore
         // to avoid a race condition (t not yet scheduled and getActiveObjects() called)
@@ -292,15 +290,7 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
             logger.debug("in = " + in);
         }
         in.defaultReadObject();
-        // FAULT-TOLERANCE: if this is a recovering checkpoint,
-        // activity will be started in ProActiveRuntimeImpl.receiveCheckpoint()
-        if (this.ftmanager != null) {
-            if (!this.ftmanager.isACheckpoint()) {
-                startBody();
-            }
-        } else {
-            startBody();
-        }
+        startBody();
     }
 
     //

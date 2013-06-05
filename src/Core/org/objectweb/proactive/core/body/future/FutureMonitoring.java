@@ -36,24 +36,19 @@
  */
 package org.objectweb.proactive.core.body.future;
 
+import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
-import org.objectweb.proactive.core.body.ft.internalmsg.Heartbeat;
-import org.objectweb.proactive.core.body.ft.servers.faultdetection.FaultDetector;
-import org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.runtime.LocalNode;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.Pair;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class FutureMonitoring implements Runnable {
@@ -102,11 +97,6 @@ public class FutureMonitoring implements Runnable {
     }
 
     /**
-     * The FT Message used to test the communication
-     */
-    private static Heartbeat HEARTBEAT_MSG = new Heartbeat();
-
-    /**
      * @return true iff a body has been pinged
      */
     private static boolean pingBody(UniqueID bodyId) {
@@ -138,9 +128,10 @@ public class FutureMonitoring implements Runnable {
                     /* OK, Found somebody to ping */
                     pinged = true;
                     try {
-                        Integer state = (Integer) body.receiveFTMessage(HEARTBEAT_MSG);
+                        Integer state = (Integer) body
+                                .receiveHeartbeat(org.objectweb.proactive.core.util.Heartbeat.HB);
                         /* If the object is dead, ping failed ... */
-                        if (state.equals(FaultDetector.IS_DEAD)) {
+                        if (state.equals(org.objectweb.proactive.core.util.Heartbeat.IS_DEAD)) {
                             throw new ProActiveRuntimeException("Awaited body " + bodyId + " on " + nodeUrl +
                                 " has been terminated.");
                         }
@@ -186,9 +177,6 @@ public class FutureMonitoring implements Runnable {
     }
 
     private static UniqueID getUpdaterBodyId(FutureProxy fp) {
-        if (isFTEnabled()) {
-            return null;
-        }
         UniversalBody body = fp.getUpdater();
         if (body == null) {
             new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
@@ -198,9 +186,6 @@ public class FutureMonitoring implements Runnable {
     }
 
     private static Pair<UniqueID, String> getUpdaterBodyIdAndNodeUrl(FutureProxy fp) {
-        if (isFTEnabled()) {
-            return null;
-        }
         UniversalBody body = fp.getUpdater();
         if (body == null) {
             new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
@@ -261,28 +246,5 @@ public class FutureMonitoring implements Runnable {
                 futures.add(fp);
             }
         }
-    }
-
-    /**
-     * Heuristic to detect if the Fault Tolerance is enabled, in order to
-     * disable the monitoring if FT is enabled.
-     */
-    private static int lastNumberOfNodes = 0;
-    private static boolean FTEnabled = false;
-
-    private static boolean isFTEnabled() {
-        if (!FTEnabled) {
-            Collection<LocalNode> nodes = ProActiveRuntimeImpl.getProActiveRuntime().getLocalNodes();
-            if (nodes.size() != lastNumberOfNodes) {
-                lastNumberOfNodes = nodes.size();
-                for (LocalNode node : nodes) {
-                    if ("true".equals(node.getProperty(FaultToleranceTechnicalService.FT_ENABLED))) {
-                        FTEnabled = true;
-                        break;
-                    }
-                }
-            }
-        }
-        return FTEnabled;
     }
 }

@@ -54,7 +54,7 @@ public interface Reply extends Message {
      * @return value used by fault-tolerance mechanism.
      * @exception java.io.IOException if the reply fails to be sent
      */
-    public int send(UniversalBody destinationBody) throws IOException;
+    public void send(UniversalBody destinationBody) throws IOException;
 
     // SECURITY
     public boolean isCiphered();

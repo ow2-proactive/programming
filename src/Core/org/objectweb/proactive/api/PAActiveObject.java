@@ -62,7 +62,6 @@ import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.UniversalBodyRemoteObjectAdapter;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedException;
-import org.objectweb.proactive.core.body.ft.internalmsg.Heartbeat;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -83,6 +82,7 @@ import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
+import org.objectweb.proactive.core.util.Heartbeat;
 import org.objectweb.proactive.core.util.NonFunctionalServices;
 import org.objectweb.proactive.core.util.ProcessForAoCreation;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -104,7 +104,6 @@ import org.objectweb.proactive.utils.NamedThreadFactory;
 @PublicAPI
 public class PAActiveObject {
     protected final static Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
-    private final static Heartbeat hb = new Heartbeat();
 
     static {
         ProActiveConfiguration.load();
@@ -1201,7 +1200,7 @@ public class PAActiveObject {
         try {
             // reified object is checked in getRemoteBody
             targetedBody = getRemoteBody(target);
-            targetedBody.receiveFTMessage(PAActiveObject.hb);
+            targetedBody.receiveHeartbeat(Heartbeat.HB);
             return true;
         } catch (IOException e) {
             if (PAActiveObject.logger.isDebugEnabled()) {

@@ -292,13 +292,6 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
             if (isSecurityOn) {
                 this.internalBodySecurity.setDistantBody(migratedBody);
             }
-
-            // ****************************************************************
-            // Javier dixit: This is the moment to update the location on the FT Manager
-            // ****************************************************************
-            if (this.ftmanager != null) {
-                this.ftmanager.updateLocationAtServer(savedID, migratedBody);
-            }
         } catch (MigrationException e) {
             openedSessions = null;
             nodeURL = saveNodeURL;

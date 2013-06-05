@@ -38,12 +38,9 @@ package org.objectweb.proactive.core.body;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAVersion;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.exceptions.HalfBodyException;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
-import org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.reply.Reply;
@@ -57,7 +54,6 @@ import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.security.InternalBodySecurity;
@@ -113,31 +109,6 @@ public class HalfBody extends AbstractBody {
         this.replyReceiver = factory.newReplyReceiverFactory().newReplyReceiver();
         setLocalBodyImpl(new HalfLocalBodyStrategy(factory.newRequestFactory()));
         this.localBodyStrategy.getFuturePool().setOwnerBody(this);
-
-        // FAULT TOLERANCE
-        try {
-            Node node = NodeFactory.getNode(this.getNodeURL());
-            if ("true".equals(node.getProperty(FaultToleranceTechnicalService.FT_ENABLED))) {
-                try {
-                    // create the fault-tolerance manager
-                    int protocolSelector = FTManager.getProtoSelector(node
-                            .getProperty(FaultToleranceTechnicalService.PROTOCOL));
-                    this.ftmanager = factory.newFTManagerFactory().newHalfFTManager(protocolSelector);
-                    this.ftmanager.init(this);
-                    if (bodyLogger.isDebugEnabled()) {
-                        bodyLogger.debug("Init FTManager on " + this.getNodeURL());
-                    }
-                } catch (ProActiveException e) {
-                    bodyLogger.error("**ERROR** Unable to init FTManager. Fault-tolerance is disabled " + e);
-                    this.ftmanager = null;
-                }
-            } else {
-                this.ftmanager = null;
-            }
-        } catch (ProActiveException e) {
-            bodyLogger.error("**ERROR** Unable read node configuration. Fault-tolerance is disabled " + e);
-            this.ftmanager = null;
-        }
     }
 
     /**
@@ -173,7 +144,7 @@ public class HalfBody extends AbstractBody {
      * @exception java.io.IOException if the request cannot be accepted
      */
     @Override
-    protected int internalReceiveRequest(Request request) throws java.io.IOException {
+    protected void internalReceiveRequest(Request request) throws java.io.IOException {
         throw new ProActiveRuntimeException(
             "The method 'receiveRequest' is not implemented in class HalfBody.");
     }
@@ -184,7 +155,7 @@ public class HalfBody extends AbstractBody {
      * @exception java.io.IOException if the reply cannot be accepted
      */
     @Override
-    protected int internalReceiveReply(Reply reply) throws java.io.IOException {
+    protected void internalReceiveReply(Reply reply) throws java.io.IOException {
         try {
             if (reply.isCiphered()) {
                 reply.decrypt(this.securityManager);
@@ -193,7 +164,7 @@ public class HalfBody extends AbstractBody {
             e.printStackTrace();
         }
 
-        return this.replyReceiver.receiveReply(reply, this, getFuturePool());
+        this.replyReceiver.receiveReply(reply, this, getFuturePool());
     }
 
     @Deprecated
@@ -230,10 +201,6 @@ public class HalfBody extends AbstractBody {
     // -- inner classes -----------------------------------------------
     //
     private class HalfLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
-
-        /**
-         *
-         */
 
         /** A pool future that contains the pending future objects */
         protected FuturePool futures;
@@ -302,19 +269,7 @@ public class HalfBody extends AbstractBody {
                 this.futures.receiveFuture(future);
             }
 
-            // FAULT TOLERANCE
-            // System.out.println("a half body send a request: " + request.getMethodName());
-            //            try {
-            if (HalfBody.this.ftmanager != null) {
-                HalfBody.this.ftmanager.sendRequest(request, destinationBody);
-            } else {
-                request.send(destinationBody);
-            }
-
-            //            } catch (CommunicationForbiddenException cfe) {
-            //            	System.out.println("wtf is happening ?");
-            //            	cfe.printStackTrace();
-            //            }
+            request.send(destinationBody);
         }
 
         //

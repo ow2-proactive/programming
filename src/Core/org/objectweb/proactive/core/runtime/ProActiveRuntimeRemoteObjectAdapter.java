@@ -46,7 +46,6 @@ import java.util.List;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
 import org.objectweb.proactive.core.descriptor.data.VirtualNodeInternal;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
@@ -214,11 +213,6 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
 
     public UniversalBody receiveBody(String nodeName, Body body) throws ProActiveException {
         return target.receiveBody(nodeName, body);
-    }
-
-    public UniversalBody receiveCheckpoint(String nodeName, Checkpoint ckpt, int inc)
-            throws ProActiveException {
-        return target.receiveCheckpoint(nodeName, ckpt, inc);
     }
 
     public void register(ProActiveRuntime proActiveRuntimeDist, String proActiveRuntimeUrl, String creatorID,

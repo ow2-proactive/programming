@@ -44,7 +44,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
@@ -90,7 +89,7 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
         //   t.start();
     }
 
-    public int receiveRequest(Request request) throws IOException, RenegotiateSessionException {
+    public void receiveRequest(Request request) throws IOException, RenegotiateSessionException {
         //       System.out.println("UniversalBodyWrapper.receiveRequest");
         if (this.wrappedBody == null) {
             throw new IOException();
@@ -105,7 +104,7 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
             throw new IOException();
         } else {
             try {
-                return this.wrappedBody.receiveRequest(request);
+                this.wrappedBody.receiveRequest(request);
             } catch (IOException e) {
                 e.printStackTrace();
                 throw e;
@@ -115,8 +114,8 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
         //      this.stop();
     }
 
-    public int receiveReply(Reply r) throws IOException {
-        return this.wrappedBody.receiveReply(r);
+    public void receiveReply(Reply r) throws IOException {
+        this.wrappedBody.receiveReply(r);
     }
 
     public String getNodeURL() {
@@ -248,10 +247,10 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
     }
 
     /**
-     * @see org.objectweb.proactive.core.body.UniversalBody#receiveFTMessage(org.objectweb.proactive.core.body.ft.internalmsg.FTMessage)
+     * @see org.objectweb.proactive.core.body.UniversalBody#receiveHeartbeat(org.objectweb.proactive.core.body.ft.internalmsg.FTMessage)
      */
-    public Object receiveFTMessage(FTMessage ev) throws IOException {
-        return this.wrappedBody.receiveFTMessage(ev);
+    public Object receiveHeartbeat(org.objectweb.proactive.core.util.Heartbeat hb) throws IOException {
+        return this.wrappedBody.receiveHeartbeat(hb);
     }
 
     public void createShortcut(Shortcut shortcut) throws IOException {

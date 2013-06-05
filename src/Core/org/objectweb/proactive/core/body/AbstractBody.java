@@ -58,10 +58,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedReplyException;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedRequestException;
-import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
-import org.objectweb.proactive.core.body.ft.internalmsg.Heartbeat;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
-import org.objectweb.proactive.core.body.ft.servers.faultdetection.FaultDetector;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
@@ -76,7 +72,6 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.security.DefaultProActiveSecurityManager;
 import org.objectweb.proactive.core.security.InternalBodySecurity;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -94,6 +89,7 @@ import org.objectweb.proactive.core.security.exceptions.RuntimeSecurityException
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
+import org.objectweb.proactive.core.util.Heartbeat;
 import org.objectweb.proactive.core.util.ThreadStore;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -151,9 +147,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
     // SPMD GROUP
     protected ProActiveSPMDGroupManager spmdManager;
-
-    // FAULT TOLERANCE
-    protected FTManager ftmanager;
 
     // FORGET ON SEND
     protected boolean isSterileBody;
@@ -256,11 +249,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      */
     @Override
     public String toString() {
-        // get the incarnation number if ft is enable
-        String inc = (this.ftmanager != null) ? ("" + this.ftmanager) : ("");
-
         if (this.localBodyStrategy != null) {
-            return "Body for " + this.getName() + " node=" + this.nodeURL + " id=" + this.bodyID + inc;
+            return "Body for " + this.getName() + " node=" + this.nodeURL + " id=" + this.bodyID;
         }
 
         return "Method call called during Body construction -- the body is not yet initialized ";
@@ -278,21 +268,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
     //
     // -- implements UniversalBody -----------------------------------------------
     //
-    public int receiveRequest(Request request) throws java.io.IOException, RenegotiateSessionException {
-        // System.out.println("" + this + " --> receiveRequest m="+request.getMethodName());
-        // NON_FT is returned if this object is not fault tolerant
-        int ftres = FTManager.NON_FT;
-        if (this.ftmanager != null) {
-            if (this.isDead) {
-                throw new BodyTerminatedRequestException(shortString(), request != null ? request
-                        .getMethodName() : null);
-            } else {
-                ftres = this.ftmanager.onReceiveRequest(request);
-                if (request.ignoreIt()) {
-                    return ftres;
-                }
-            }
-        }
+    public void receiveRequest(Request request) throws java.io.IOException, RenegotiateSessionException {
+        // System.out.println("" + this + " --> receiveRequest m="+request.getMethodName());        
         try {
             this.enterInThreadStore();
             if (this.isDead) {
@@ -317,31 +294,14 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
                 }
             }
             this.registerIncomingFutures();
-            ftres = this.internalReceiveRequest(request);
+            this.internalReceiveRequest(request);
         } finally {
             this.exitFromThreadStore();
         }
-        return ftres;
     }
 
-    public int receiveReply(Reply reply) throws java.io.IOException {
+    public void receiveReply(Reply reply) throws java.io.IOException {
         // System.out.println(" --> receiveReply m="+reply.getMethodName());
-        // NON_FT is returned if this object is not fault tolerant
-        int ftres = FTManager.NON_FT;
-        if (this.ftmanager != null) {
-            // if the futurepool is not null while body is dead,
-            // this AO still has ACs to do.
-            if (this.isDead && (this.getFuturePool() == null)) {
-                throw new BodyTerminatedReplyException(reifiedObjectClassName, reply != null ? reply
-                        .getMethodName() : null);
-            } else {
-                ftres = this.ftmanager.onReceiveReply(reply);
-                if (reply.ignoreIt()) {
-                    return ftres;
-                }
-            }
-        }
-
         try {
             enterInThreadStore();
             if (this.isDead && (this.getFuturePool() == null)) {
@@ -360,11 +320,10 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
                 }
             }
             this.registerIncomingFutures();
-            ftres = internalReceiveReply(reply);
+            internalReceiveReply(reply);
         } finally {
             exitFromThreadStore();
         }
-        return ftres;
     }
 
     /**
@@ -874,14 +833,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             setSterility(true, request.getSender().getID());
         }
 
-        // Serve
-        if (this.ftmanager != null) {
-            this.ftmanager.onServeRequestBefore(request);
-            this.localBodyStrategy.serve(request);
-            this.ftmanager.onServeRequestAfter(request);
-        } else {
-            this.localBodyStrategy.serve(request);
-        }
+        // Serve        
+        this.localBodyStrategy.serve(request);
 
         // Sterility control
         // Once the service of a sterile methodCall is done, the body can be turned back to standard
@@ -903,13 +856,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         }
 
         // Serve
-        if (this.ftmanager != null) {
-            this.ftmanager.onServeRequestBefore(request);
-            this.localBodyStrategy.serveWithException(request, exception);
-            this.ftmanager.onServeRequestAfter(request);
-        } else {
-            this.localBodyStrategy.serveWithException(request, exception);
-        }
+        this.localBodyStrategy.serveWithException(request, exception);
 
         // Sterility control
         // Once the service of a sterile methodCall is done, the body can be turned back to standard
@@ -974,21 +921,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         }
     }
 
-    public Object receiveFTMessage(FTMessage fte) {
-        // delegate to the FTManger
-        Object res = null;
-        if (this.ftmanager != null) {
-            res = this.ftmanager.handleFTMessage(fte);
-            // todo cdelbe : should not use FaultDetector here !
-            // https://galpage-exp.inria.fr:8181/jira/browse/PROACTIVE-268
-        } else if (fte instanceof Heartbeat) {
-            if (!this.isAlive()) {
-                res = FaultDetector.IS_DEAD;
-            } else {
-                res = FaultDetector.OK;
-            }
-        }
-        return res;
+    public Object receiveHeartbeat(Heartbeat hb) {
+        return this.isAlive() ? Heartbeat.OK : Heartbeat.IS_DEAD;
     }
 
     //
@@ -1004,7 +938,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      * @exception java.io.IOException
      *                if the request cannot be accepted
      */
-    protected abstract int internalReceiveRequest(Request request) throws java.io.IOException,
+    protected abstract void internalReceiveRequest(Request request) throws java.io.IOException,
             RenegotiateSessionException;
 
     /**
@@ -1015,7 +949,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      * @exception java.io.IOException
      *                if the reply cannot be accepted
      */
-    protected abstract int internalReceiveReply(Reply reply) throws java.io.IOException;
+    protected abstract void internalReceiveReply(Reply reply) throws java.io.IOException;
 
     protected void setLocalBodyImpl(LocalBodyStrategy localBody) {
         this.localBodyStrategy = localBody;
@@ -1108,25 +1042,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         return PAGroup.size(this.getSPMDGroup());
     }
 
-    /**
-     * To get the FTManager of this body
-     * 
-     * @return Returns the ftm.
-     */
-    public FTManager getFTManager() {
-        return this.ftmanager;
-    }
-
-    /**
-     * To set the FTManager of this body
-     * 
-     * @param ftm
-     *            The ftm to set.
-     */
-    public void setFTManager(FTManager ftm) {
-        this.ftmanager = ftm;
-    }
-
     // MESSAGE TAGS MEMORY
     /**
      * Create a local memory for the specified tag for a lease period inferior to 
@@ -1183,24 +1098,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
-        // FAULT TOLERANCE
-        if (this.ftmanager != null) {
-            if (this.ftmanager.isACheckpoint()) {
-                // re-use remote view of the old body if any
-                Body toKill = LocalBodyStore.getInstance().getLocalBody(this.bodyID);
-                if (toKill != null) {
-                    // this body is still alive
-                    toKill.blockCommunication();
-                    RemoteObjectExposer<UniversalBody> toKillRoe = ((AbstractBody) toKill)
-                            .getRemoteObjectExposer();
-                    toKillRoe.getRemoteObject().setTarget(this);
-
-                    this.roe = toKillRoe;
-                    toKill.terminate(false);
-                    toKill.acceptCommunication();
-                }
-            }
-        }
     }
 
     public ProActiveSecurityManager getProActiveSecurityManager(Entity user)

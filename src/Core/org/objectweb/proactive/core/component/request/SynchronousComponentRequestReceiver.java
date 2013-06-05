@@ -67,7 +67,7 @@ public class SynchronousComponentRequestReceiver extends RequestReceiverImpl {
     }
 
     @Override
-    public int receiveRequest(Request r, Body bodyReceiver) {
+    public void receiveRequest(Request r, Body bodyReceiver) {
         if (r instanceof ComponentRequest) {
             if (!((ComponentRequest) r).isControllerRequest()) {
                 if (CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue()) {
@@ -80,7 +80,7 @@ public class SynchronousComponentRequestReceiver extends RequestReceiverImpl {
                         }
 
                         // no shortcut if there is an interception
-                        return super.receiveRequest(r, bodyReceiver);
+                        super.receiveRequest(r, bodyReceiver);
                     }
 
                     ((ComponentRequest) r).shortcutNotification(r.getSender(), bodyReceiver
@@ -98,12 +98,10 @@ public class SynchronousComponentRequestReceiver extends RequestReceiverImpl {
                     }
                 }
                 bodyReceiver.serve(r);
-                // TODO check with FT
-                return SynchronousComponentRequestReceiver.SHORTCUT;
             }
         }
 
         // normal object invocations and controller requests are not subject to shortcuts
-        return super.receiveRequest(r, bodyReceiver);
+        super.receiveRequest(r, bodyReceiver);
     }
 }

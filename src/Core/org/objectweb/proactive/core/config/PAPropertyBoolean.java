@@ -36,10 +36,7 @@
  */
 package org.objectweb.proactive.core.config;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**

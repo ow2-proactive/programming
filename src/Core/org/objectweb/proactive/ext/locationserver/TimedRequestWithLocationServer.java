@@ -41,7 +41,6 @@ import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.RequestImpl;
@@ -75,12 +74,11 @@ public class TimedRequestWithLocationServer extends RequestImpl implements java.
     }
 
     @Override
-    protected int sendRequest(UniversalBody destinationBody) throws java.io.IOException {
+    protected void sendRequest(UniversalBody destinationBody) throws java.io.IOException {
         System.out.println("TimedRequestWithLocationServer: sending to remote " + methodName);
-        int ftres = FTManager.NON_FT;
         try {
             startTime = System.currentTimeMillis();
-            ftres = destinationBody.receiveRequest(this);
+            destinationBody.receiveRequest(this);
 
             long endTime = System.currentTimeMillis();
             System.out.println("TimedRequestWithLocationServer:  .............. 1/gamma = " +
@@ -96,7 +94,6 @@ public class TimedRequestWithLocationServer extends RequestImpl implements java.
             System.out.println(">>>>>>>>>>>> Exception " + e);
             this.backupSolution(destinationBody);
         }
-        return ftres;
     }
 
     /**

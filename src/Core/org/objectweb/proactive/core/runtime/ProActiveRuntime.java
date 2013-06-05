@@ -45,7 +45,6 @@ import org.globus.ogce.broker.util.jobset.Job;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
 import org.objectweb.proactive.core.descriptor.data.VirtualNodeInternal;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
@@ -284,17 +283,6 @@ public interface ProActiveRuntime extends SecurityEntity {
      * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
      */
     public UniversalBody receiveBody(String nodeName, Body body) throws ProActiveException;
-
-    /**
-     * The runtime recovers the body contained in the checkpoint ckpt.
-     * @param nodeName node on which the body is restarted
-     * @param ckpt checkpoint to use for recovery
-     * @param inc incarnation number of this recovery
-     * @return *not used*
-     * @throws ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
-     */
-    public UniversalBody receiveCheckpoint(String nodeName, Checkpoint ckpt, int inc)
-            throws ProActiveException;
 
     // SECURITY
     public String getVNName(String Nodename) throws ProActiveException;

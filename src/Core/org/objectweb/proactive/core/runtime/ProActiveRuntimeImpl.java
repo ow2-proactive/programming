@@ -73,11 +73,8 @@ import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.AbstractBody;
-import org.objectweb.proactive.core.body.ActiveBody;
-import org.objectweb.proactive.core.body.Context;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
@@ -969,55 +966,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         ((AbstractBody) body).registerIncomingFutures();
 
         return body.getRemoteAdapter();
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#receiveCheckpoint(String,
-     *      Checkpoint, int)
-     */
-    public UniversalBody receiveCheckpoint(String nodeURL, Checkpoint ckpt, int inc)
-            throws ProActiveException {
-        runtimeLogger.debug("Receive a checkpoint for recovery");
-
-        if (NodeFactory.isHalfBodiesNode(nodeURL)) {
-            throw new ProActiveException("Cannot recover an active object on the reserved halfbodies node.");
-        }
-
-        // the recovered body
-        Body ret = ckpt.recover();
-
-        // update node url
-        ret.updateNodeURL(nodeURL);
-
-        String nodeName = URIBuilder.getNameFromURI(nodeURL);
-
-        // push the initial context for the current thread.
-        // need to register as thread of the corresponding active object: this
-        // thread
-        // may send looged requests or logged replies
-        LocalBodyStore.getInstance().pushContext(new Context(ret, null));
-        try {
-            ((AbstractBody) ret).getFTManager().beforeRestartAfterRecovery(ckpt.getCheckpointInfo(), inc);
-        } finally {
-            // remove contexts for the current thread
-            LocalBodyStore.getInstance().clearAllContexts();
-        }
-
-        // register the body
-        this.registerBody(nodeName, ret);
-
-        // register futures that have been deserialized in the body
-        ((AbstractBody) ret).registerIncomingFutures();
-
-        // restart actvity
-        if (runtimeLogger.isDebugEnabled()) {
-            runtimeLogger.debug(ret.getID() + " is restarting activity...");
-        }
-
-        ((ActiveBody) ret).startBody();
-
-        // no more need to return the recovered body
-        return null;
     }
 
     /**

@@ -51,9 +51,9 @@ public class RequestReceiverForwarder implements RequestReceiver {
         this.remoteBody = b;
     }
 
-    public int receiveRequest(Request request, Body bodyReceiver) throws java.io.IOException,
+    public void receiveRequest(Request request, Body bodyReceiver) throws java.io.IOException,
             RenegotiateSessionException, CommunicationForbiddenException {
-        return request.send(remoteBody);
+        request.send(remoteBody);
     }
 
     public boolean isInImmediateService() throws IOException {

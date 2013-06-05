@@ -42,12 +42,12 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.security.SecurityEntity;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+import org.objectweb.proactive.core.util.Heartbeat;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -73,18 +73,16 @@ public interface UniversalBody extends Serializable, SecurityEntity {
      * Receives a request for later processing. The call to this method is non blocking
      * unless the body cannot temporary receive the request.
      * @param request the request to process
-     * @exception java.io.IOException if the request cannot be accepted
-     * @return value for fault-tolerance protocol
+     * @exception java.io.IOException if the request cannot be accepted     * 
      */
-    public int receiveRequest(Request request) throws java.io.IOException, RenegotiateSessionException;
+    public void receiveRequest(Request request) throws java.io.IOException, RenegotiateSessionException;
 
     /**
      * Receives a reply in response to a former request.
      * @param r the reply received
      * @exception java.io.IOException if the reply cannot be accepted
-     * @return value for fault-tolerance procotol
      */
-    public int receiveReply(Reply r) throws java.io.IOException;
+    public void receiveReply(Reply r) throws java.io.IOException;
 
     /**
      * Returns the url of the node this body is associated to
@@ -149,15 +147,13 @@ public interface UniversalBody extends Serializable, SecurityEntity {
      */
     public void disableAC() throws java.io.IOException;
 
-    // FAULT TOLERANCE
-
     /**
-     * For sending a non functional message to the FTManager linked to this object.
-     * @param ev the message to send
+     * For sending a non functional heartbeat message.
+     * @param hb the message to send
      * @return depends on the message meaning
      * @exception java.io.IOException if a problem occurs during this method call
      */
-    public Object receiveFTMessage(FTMessage ev) throws IOException;
+    public Object receiveHeartbeat(Heartbeat hb) throws IOException;
 
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException;
 

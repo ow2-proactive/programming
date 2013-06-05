@@ -55,7 +55,6 @@ import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.api.PAFileTransfer;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.descriptor.services.FaultToleranceService;
 import org.objectweb.proactive.core.descriptor.services.ServiceThread;
 import org.objectweb.proactive.core.descriptor.services.ServiceUser;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
@@ -79,8 +78,8 @@ import org.objectweb.proactive.core.process.ExternalProcessDecorator;
 import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition;
-import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition.FileDescription;
+import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
 import org.objectweb.proactive.core.process.mpi.MPIProcess;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
@@ -194,9 +193,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     // Security
     private ProActiveSecurityManager proactiveSecurityManager;
-
-    // FAULT TOLERANCE
-    private FaultToleranceService ftService;
 
     // PAD infos
     private boolean mainVirtualNode;
@@ -558,16 +554,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
             if (this.registration) {
                 register();
-            }
-
-            // FAULT TOLERANCE
-            try {
-                if (this.ftService != null) {
-                    // register nodes only if ressource is not null
-                    this.ftService.registerRessources(this.getNodes());
-                }
-            } catch (NodeException e) {
-                logger.error(e.getMessage());
             }
         } else {
             logger.debug("VirtualNode " + this.name + " already activated");
@@ -1066,11 +1052,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
      * @see org.objectweb.proactive.core.descriptor.services.ServiceUser#setService(org.objectweb.proactive.core.descriptor.services.UniversalService)
      */
     public void setService(UniversalService service) throws ProActiveException {
-        if (FaultToleranceService.FT_SERVICE_NAME.equals(service.getServiceName())) {
-            this.ftService = (FaultToleranceService) service;
-        } else {
-            throw new ProActiveException(" Unable to bind the given service to a virtual node");
-        }
+        throw new ProActiveException(" Unable to bind the given service to a virtual node");
     }
 
     /**
@@ -1354,11 +1336,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             }
 
             jvmProcess.setParameters(vnName + " " + localruntimeURL + " " + vm.getName());
-
-            // FAULT TOLERANCE settings
-            if (this.ftService != null) {
-                jvmProcess.setJvmOptions(this.ftService.buildParamsLine());
-            }
         }
 
         /* Setting the file transfer definitions associated with the current process,

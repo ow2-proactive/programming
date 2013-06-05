@@ -154,17 +154,15 @@ public interface RequestQueue {
     /**
      * Adds the given request to the end of the queue
      * @param request the request to add
-     * @return value for fault tolerance protocol
      */
-    public int add(Request request);
+    public void add(Request request);
 
     /**
      * Adds the given request to the front of the queue before all
      * other request already in the queue
      * @param request the request to add
-     * @return value for fault tolerance protocol
      */
-    public int addToFront(Request request);
+    public void addToFront(Request request);
 
     /**
      * Processes all requests in the queue using  the given RequestProcessor.

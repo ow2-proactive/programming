@@ -43,9 +43,6 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.exception.ProtocolErrorException;
-import org.objectweb.proactive.core.body.ft.message.MessageInfo;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.MethodCall;
@@ -169,15 +166,15 @@ public class AwaitedRequest implements Request, java.io.Serializable {
     }
 
     public void resetSendCounter() {
-        throw new ProtocolErrorException("An active object is trying to send an awaited request");
+        throw new IllegalStateException("An active object is trying to send an awaited request");
     }
 
     public void notifyReception(UniversalBody bodyReceiver) throws IOException {
         wrappedRequest.notifyReception(bodyReceiver);
     }
 
-    public int send(UniversalBody destinationBody) throws IOException, RenegotiateSessionException {
-        throw new ProtocolErrorException("An active object is trying to send an awaited request");
+    public void send(UniversalBody destinationBody) throws IOException, RenegotiateSessionException {
+        throw new IllegalStateException("An active object is trying to send an awaited request");
     }
 
     public String getMethodName() {
@@ -206,33 +203,6 @@ public class AwaitedRequest implements Request, java.io.Serializable {
         } else {
             return wrappedRequest.getSequenceNumber();
         }
-    }
-
-    public void setMessageInfo(MessageInfo mi) {
-        wrappedRequest.setMessageInfo(mi);
-    }
-
-    public MessageInfo getMessageInfo() {
-        if (!this.isArrived) {
-            return null;
-        } else {
-            return wrappedRequest.getMessageInfo();
-        }
-    }
-
-    public void setIgnoreIt(boolean ignore) {
-        wrappedRequest.setIgnoreIt(ignore);
-    }
-
-    public boolean ignoreIt() {
-        return wrappedRequest.ignoreIt();
-    }
-
-    public void setFTManager(FTManager ft) {
-    }
-
-    public FTManager getFTManager() {
-        return null;
     }
 
     public boolean isCiphered() {

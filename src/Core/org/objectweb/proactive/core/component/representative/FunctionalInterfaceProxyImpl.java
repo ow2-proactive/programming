@@ -85,7 +85,7 @@ public class FunctionalInterfaceProxyImpl implements FunctionalInterfaceProxy, S
         try {
             universalBodyField = UniversalBodyProxy.class.getDeclaredField("universalBody");
             universalBodyField.setAccessible(true);
-            bodyIDField = UniversalBodyProxy.class.getSuperclass().getDeclaredField("bodyID");
+            bodyIDField = UniversalBodyProxy.class.getDeclaredField("cachedBodyId");
             bodyIDField.setAccessible(true);
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage());

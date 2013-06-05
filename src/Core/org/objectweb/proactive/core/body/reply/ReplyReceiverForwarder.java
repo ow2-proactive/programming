@@ -48,7 +48,8 @@ public class ReplyReceiverForwarder implements ReplyReceiver {
         this.remoteBody = b;
     }
 
-    public int receiveReply(Reply reply, Body receiverBody, FuturePool futurePool) throws java.io.IOException {
-        return reply.send(remoteBody);
+    public void receiveReply(Reply reply, Body receiverBody, FuturePool futurePool)
+            throws java.io.IOException {
+        reply.send(remoteBody);
     }
 }

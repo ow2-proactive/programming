@@ -175,11 +175,11 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
     //
     // -- Implements Request -----------------------------------------------
     //
-    public int send(UniversalBody destinationBody) throws java.io.IOException, RenegotiateSessionException,
+    public void send(UniversalBody destinationBody) throws java.io.IOException, RenegotiateSessionException,
             CommunicationForbiddenException {
         //System.out.println("RequestSender: sendRequest  " + methodName + " to destination");
         this.sendCounter++;
-        return sendRequest(destinationBody);
+        sendRequest(destinationBody);
     }
 
     public UniversalBody getSender() {
@@ -312,8 +312,8 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
         return true;
     }
 
-    protected int sendRequest(UniversalBody destinationBody) throws IOException, RenegotiateSessionException,
-            CommunicationForbiddenException {
+    protected void sendRequest(UniversalBody destinationBody) throws IOException,
+            RenegotiateSessionException, CommunicationForbiddenException {
         ProActiveSecurityManager psm = ((AbstractBody) PAActiveObject.getBodyOnThis())
                 .getProActiveSecurityManager();
         if (psm != null) {
@@ -332,7 +332,7 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
             this.crypt(psm, destinationBody);
         }
 
-        return destinationBody.receiveRequest(this);
+        destinationBody.receiveRequest(this);
     }
 
     // security issue

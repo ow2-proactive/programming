@@ -51,7 +51,6 @@ import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.Context;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -262,18 +261,12 @@ public class FuturePool extends Object implements java.io.Serializable {
      * @param creatorID ID of the body creator of the future to update
      * @param result value to update with the futures
      */
-    public synchronized int receiveFutureValue(long id, UniqueID creatorID, MethodCallResult result,
+    public synchronized void receiveFutureValue(long id, UniqueID creatorID, MethodCallResult result,
             Reply reply) throws java.io.IOException {
         // get all aiwated futures
         ArrayList<Future> futuresToUpdate = futures.getFuturesToUpdate(id, creatorID);
 
         if (futuresToUpdate != null) {
-            // FAULT-TOLERANCE
-            int ftres = FTManager.NON_FT;
-            if ((reply != null) && (reply.getFTManager() != null)) {
-                ftres = reply.getFTManager().onDeliverReply(reply);
-            }
-
             Future future = (futuresToUpdate.get(0));
             if (future != null) {
                 future.receiveReply(result);
@@ -333,12 +326,9 @@ public class FuturePool extends Object implements java.io.Serializable {
             }
             // 3) Remove futures from the futureMap
             futures.removeFutures(id, creatorID);
-            return ftres;
         } else {
             // we have to store the result received by AC until future arrive
             this.valuesForFutures.put("" + id + creatorID, result);
-            // OR this reply might be an orphan reply (return value is ignored if not)
-            return FTManager.ORPHAN_REPLY;
         }
     }
 
@@ -435,15 +425,8 @@ public class FuturePool extends Object implements java.io.Serializable {
                 out.writeBoolean(true);
                 // send the queue of AC requests
                 out.writeObject(queueAC.getQueue());
-                // stop the ActiveQueue thread if this is not a checkpointing serialization
-                FTManager ftm = ((AbstractBody) ownerBody).getFTManager();
-                if (ftm != null) {
-                    if (!ftm.isACheckpoint()) {
-                        queueAC.killMe(false);
-                    }
-                } else {
-                    queueAC.killMe(false);
-                }
+                // stop the ActiveQueue thread
+                queueAC.killMe(false);
             }
         }
     }
@@ -650,9 +633,6 @@ public class FuturePool extends Object implements java.io.Serializable {
                 for (int i = 0; i < dests.size(); i++) {
                     UniversalBody dest = (dests.get(i));
 
-                    // FAULT-TOLERANCE
-                    FTManager ftm = ((AbstractBody) FuturePool.this.getOwnerBody()).getFTManager();
-
                     if (remainingSends > 1) {
                         // create a new reply to keep the original copy unchanged for next sending ...
                         toSend = new ReplyImpl(reply.getSourceBodyID(), reply.getSequenceNumber(), null,
@@ -663,15 +643,12 @@ public class FuturePool extends Object implements java.io.Serializable {
                     }
 
                     // send the reply
-                    if (ftm != null) {
-                        ftm.sendReply(toSend, dest);
-                    } else {
-                        try {
-                            toSend.send(dest);
-                        } catch (IOException ioe) {
-                            UniversalBody.sendReplyExceptionsLogger.error(ioe, ioe);
-                        }
+                    try {
+                        toSend.send(dest);
+                    } catch (IOException ioe) {
+                        UniversalBody.sendReplyExceptionsLogger.error(ioe, ioe);
                     }
+
                     remainingSends--;
                 }
             }

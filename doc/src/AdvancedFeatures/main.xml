@@ -37,7 +37,6 @@
 
 	<part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
 
-		&FaultTolerance;
 		&Security;
 		&MessageTagging;
 		&WebServices;
@@ -52,7 +51,6 @@
 
 		&WriteDocumentation;
 		&DevFileTransfer;
-		&DevFaultTolerance;
 		&MOP;
 	</part>
 

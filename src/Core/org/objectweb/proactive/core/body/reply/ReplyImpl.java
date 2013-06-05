@@ -48,8 +48,8 @@ import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.crypto.Session;
-import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.crypto.Session.ActAs;
+import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
@@ -107,7 +107,7 @@ public class ReplyImpl extends MessageImpl implements Reply, Serializable {
         return result;
     }
 
-    public int send(UniversalBody destinationBody) throws IOException {
+    public void send(UniversalBody destinationBody) throws IOException {
         // if destination body is on the same VM that the sender, we must
         // perform
         // a deep copy of result in order to preserve ProActive model.
@@ -157,8 +157,8 @@ public class ReplyImpl extends MessageImpl implements Reply, Serializable {
         }
 
         // end security
-        // fault-tolerance returned value
-        return destinationBody.receiveReply(this);
+
+        destinationBody.receiveReply(this);
     }
 
     // security issue

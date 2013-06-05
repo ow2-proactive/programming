@@ -37,7 +37,6 @@
 package org.objectweb.proactive.core.descriptor.legacyparser;
 
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
-import org.objectweb.proactive.core.descriptor.services.FaultToleranceService;
 import org.objectweb.proactive.core.descriptor.services.RMIRegistryLookupService;
 import org.objectweb.proactive.core.descriptor.services.UniversalService;
 import org.objectweb.proactive.core.xml.handler.BasicUnmarshaller;
@@ -56,7 +55,6 @@ public class ServiceDefinitionHandler extends PassiveCompositeUnmarshaller imple
         super(false);
         this.pad = pad;
         this.addHandler(RMI_LOOKUP_TAG, new RMILookupHandler());
-        this.addHandler(FT_CONFIG_TAG, new FaultToleranceHandler());
     }
 
     /* (non-Javadoc)
@@ -87,52 +85,4 @@ public class ServiceDefinitionHandler extends PassiveCompositeUnmarshaller imple
             setResultObject(rmiService);
         }
     } // end of inner class RMILookupHandler
-
-    protected class FaultToleranceHandler extends PassiveCompositeUnmarshaller {
-        protected FaultToleranceService ftService;
-
-        public FaultToleranceHandler() {
-            FTConfigHandler ftch = new FTConfigHandler();
-            this.addHandler(FT_CKPTSERVER_TAG, ftch);
-            this.addHandler(FT_RECPROCESS_TAG, ftch);
-            this.addHandler(FT_LOCSERVER_TAG, ftch);
-            this.addHandler(FT_RESSERVER_TAG, ftch);
-            this.addHandler(FT_GLOBALSERVER_TAG, ftch);
-            this.addHandler(FT_TTCVALUE_TAG, ftch);
-            this.addHandler(FT_PROTO_TAG, ftch);
-        }
-
-        @Override
-        public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
-            this.ftService = new FaultToleranceService();
-        }
-
-        @Override
-        public Object getResultObject() throws org.xml.sax.SAXException {
-            return this.ftService;
-        }
-
-        protected class FTConfigHandler extends BasicUnmarshaller {
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-                if (FT_RECPROCESS_TAG.equals(name)) {
-                    FaultToleranceHandler.this.ftService.setRecoveryProcessURL(attributes.getValue("url"));
-                } else if (FT_LOCSERVER_TAG.equals(name)) {
-                    FaultToleranceHandler.this.ftService.setLocationServerURL(attributes.getValue("url"));
-                } else if (FT_CKPTSERVER_TAG.equals(name)) {
-                    FaultToleranceHandler.this.ftService.setCheckpointServerURL(attributes.getValue("url"));
-                } else if (FT_RESSERVER_TAG.equals(name)) {
-                    FaultToleranceHandler.this.ftService
-                            .setAttachedResourceServer(attributes.getValue("url"));
-                } else if (FT_TTCVALUE_TAG.equals(name)) {
-                    FaultToleranceHandler.this.ftService.setTtcValue(attributes.getValue("value"));
-                } else if (FT_GLOBALSERVER_TAG.equals(name)) {
-                    FaultToleranceHandler.this.ftService.setGlobalServerURL(attributes.getValue("url"));
-                } else if (FT_PROTO_TAG.equals(name)) {
-                    FaultToleranceHandler.this.ftService.setProtocolType(attributes.getValue("type"));
-                }
-            }
-        }
-    }
 }

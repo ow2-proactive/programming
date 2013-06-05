@@ -113,10 +113,9 @@ public interface Request extends Message, Securizable {
     /**
      * Sends this request to the body destination
      * @param destinationBody the body destination of this request
-     * @exception java.io.IOException if the request fails to be sent
-     * @return value for fault-tolerance protocol
+     * @exception java.io.IOException if the request fails to be sent 
      */
-    public int send(UniversalBody destinationBody) throws java.io.IOException, RenegotiateSessionException,
+    public void send(UniversalBody destinationBody) throws java.io.IOException, RenegotiateSessionException,
             CommunicationForbiddenException;
 
     /**

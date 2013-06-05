@@ -43,7 +43,6 @@ import java.security.PublicKey;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
@@ -59,6 +58,7 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
+import org.objectweb.proactive.core.util.Heartbeat;
 
 
 public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> implements UniversalBody {
@@ -151,16 +151,16 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
         return target.getNodeURL();
     }
 
-    public Object receiveFTMessage(FTMessage ev) throws IOException {
-        return target.receiveFTMessage(ev);
+    public Object receiveHeartbeat(Heartbeat ev) throws IOException {
+        return target.receiveHeartbeat(ev);
     }
 
-    public int receiveReply(Reply r) throws IOException {
-        return target.receiveReply(r);
+    public void receiveReply(Reply r) throws IOException {
+        target.receiveReply(r);
     }
 
-    public int receiveRequest(Request request) throws IOException, RenegotiateSessionException {
-        return target.receiveRequest(request);
+    public void receiveRequest(Request request) throws IOException, RenegotiateSessionException {
+        target.receiveRequest(request);
     }
 
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException {

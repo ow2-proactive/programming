@@ -178,14 +178,6 @@ public interface ProActiveDescriptorConstants {
     public static final String SECURITY_TAG = "security";
     public static final String SECURITY_FILE_TAG = "file";
     public static final String RMI_LOOKUP_TAG = "RMIRegistryLookup";
-    public static final String FT_CONFIG_TAG = "faultTolerance";
-    public static final String FT_CKPTSERVER_TAG = "checkpointServer";
-    public static final String FT_RECPROCESS_TAG = "recoveryProcess";
-    public static final String FT_LOCSERVER_TAG = "locationServer";
-    public static final String FT_RESSERVER_TAG = "resourceServer";
-    public static final String FT_GLOBALSERVER_TAG = "globalServer";
-    public static final String FT_TTCVALUE_TAG = "ttc";
-    public static final String FT_PROTO_TAG = "protocol";
     public static final String UNICORE_KEYFILE_PATH_TAG = "keyFilePath";
     public static final String UNICORE_USITE_TAG = "usite";
     public static final String UNICORE_VSITE_TAG = "vsite";

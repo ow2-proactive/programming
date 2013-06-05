@@ -48,7 +48,7 @@ public class BouncingRequestReceiver implements RequestReceiver {
     private static ObjectHasMigratedException REUSABLE_EXCEPTION = new ObjectHasMigratedException(
         "Object has migrated");
 
-    public int receiveRequest(Request r, Body bodyReceiver) throws java.io.IOException {
+    public void receiveRequest(Request r, Body bodyReceiver) throws java.io.IOException {
         //System.out.println("BouncingRequestReceiver: receiveRequest()");
         //        throw REUSABLE_EXCEPTION;
         throw new ObjectHasMigratedException("Object has migrated");

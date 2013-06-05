@@ -37,8 +37,6 @@
 package org.objectweb.proactive.core.body.message;
 
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.ft.message.MessageInfo;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 
 
@@ -88,43 +86,6 @@ public interface Message {
      * @return the time this message was created or deserialized
      */
     public long getTimeStamp();
-
-    /**
-     * Returns fault-tolerance infos piggybacked on this message
-     * @return a MessageInfo object that contains fault-tolerance infos OR null
-     * if the attached message has been sent by a non fault-tolerant object
-     */
-    public MessageInfo getMessageInfo();
-
-    /**
-     * Set fault-tolerance infos piggybacked on this message
-     * @param mi a MessageInfo object that contains fault-tolerance infos
-     */
-    public void setMessageInfo(MessageInfo mi);
-
-    /**
-     * Return true if this message must be ignored by the receiver
-     * @return true if this message must be ignored by the receiver
-     */
-    public boolean ignoreIt();
-
-    /**
-     * Set or unset the ignore tag.
-     * @param ignore true if this request must be ignored, false otherwise.
-     */
-    public void setIgnoreIt(boolean ignore);
-
-    /**
-     * Set the FTManager that have to treat this message
-     * @param ft the FTManager that have to treat this message
-     */
-    public void setFTManager(FTManager ft);
-
-    /**
-     * Return the FTManager that have to treat this message
-     * @return the FTManager that have to treat this message
-     */
-    public FTManager getFTManager();
 
     /**
      * Return the MessageTags attached to this message

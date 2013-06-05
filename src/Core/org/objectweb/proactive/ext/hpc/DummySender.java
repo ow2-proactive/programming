@@ -36,9 +36,12 @@
  */
 package org.objectweb.proactive.ext.hpc;
 
+import java.io.IOException;
+import java.security.AccessControlException;
+import java.security.PublicKey;
+
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
@@ -53,10 +56,7 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
-
-import java.io.IOException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
+import org.objectweb.proactive.core.util.Heartbeat;
 
 
 public class DummySender implements UniversalBody {
@@ -114,19 +114,14 @@ public class DummySender implements UniversalBody {
         return null;
     }
 
-    public Object receiveFTMessage(FTMessage ev) throws IOException {
-        // TODO Auto-generated method stub
+    public Object receiveHeartbeat(Heartbeat hb) throws IOException {
         return null;
     }
 
-    public int receiveReply(Reply r) throws IOException {
-        // TODO Auto-generated method stub
-        return 0;
+    public void receiveReply(Reply r) throws IOException {
     }
 
-    public int receiveRequest(Request request) throws IOException, RenegotiateSessionException {
-        // TODO Auto-generated method stub
-        return 0;
+    public void receiveRequest(Request request) throws IOException, RenegotiateSessionException {
     }
 
     @Deprecated

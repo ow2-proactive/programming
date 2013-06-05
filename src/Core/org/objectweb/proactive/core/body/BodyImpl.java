@@ -37,10 +37,8 @@
 package org.objectweb.proactive.core.body;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,12 +55,9 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.ProActiveInternalObject;
 import org.objectweb.proactive.annotation.ImmediateService;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
-import org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
@@ -91,8 +86,6 @@ import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.ObjectReferenceReplacer;
 import org.objectweb.proactive.core.mop.ObjectReplacer;
-import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
@@ -183,48 +176,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 .newRequestQueue(this.bodyID), factory.newRequestFactory()));
         this.localBodyStrategy.getFuturePool().setOwnerBody(this);
 
-        // FAULT TOLERANCE=
-        try {
-            Node node = NodeFactory.getNode(this.getNodeURL());
-            if ("true".equals(node.getProperty(FaultToleranceTechnicalService.FT_ENABLED))) {
-                // if the object is a ProActive internal object, FT is disabled
-                if (!super.isProActiveInternalObject) {
-                    // if the object is not serializable or instance of non static enclosing class (PROACTIVE-277), FT is disabled
-                    Class reifiedClass = this.localBodyStrategy.getReifiedObject().getClass();
-                    if ((this.localBodyStrategy.getReifiedObject() instanceof Serializable) ||
-                        (reifiedClass.isMemberClass() && !Modifier.isStatic(reifiedClass.getModifiers()))) {
-                        try {
-                            // create the fault tolerance manager
-                            int protocolSelector = FTManager.getProtoSelector(node
-                                    .getProperty(FaultToleranceTechnicalService.PROTOCOL));
-                            this.ftmanager = factory.newFTManagerFactory().newFTManager(protocolSelector);
-                            this.ftmanager.init(this);
-                            if (bodyLogger.isDebugEnabled()) {
-                                bodyLogger.debug("Init FTManager on " + this.getNodeURL());
-                            }
-                        } catch (ProActiveException e) {
-                            bodyLogger
-                                    .error("**ERROR** Unable to init FTManager. Fault-tolerance is disabled " +
-                                        e);
-                            this.ftmanager = null;
-                        }
-                    } else {
-                        // target body is not serilizable
-                        bodyLogger
-                                .error("**WARNING** Activated object is not serializable or instance of non static member class (" +
-                                    this.localBodyStrategy.getReifiedObject().getClass() +
-                                    "). Fault-tolerance is disabled for this active object");
-                        this.ftmanager = null;
-                    }
-                }
-            } else {
-                this.ftmanager = null;
-            }
-        } catch (ProActiveException e) {
-            bodyLogger.error("**ERROR** Unable to read node configuration. Fault-tolerance is disabled");
-            this.ftmanager = null;
-        }
-
         // JMX registration
         if (!super.isProActiveInternalObject) {
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
@@ -259,7 +210,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
      * @throws java.io.IOException if the request cannot be accepted
      */
     @Override
-    protected int internalReceiveRequest(Request request) throws java.io.IOException,
+    protected void internalReceiveRequest(Request request) throws java.io.IOException,
             RenegotiateSessionException {
         // JMX Notification
         if (!isProActiveInternalObject && (this.mbean != null)) {
@@ -276,12 +227,10 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // request queue length = number of requests in queue
         // + the one to add now
         try {
-            return this.requestReceiver.receiveRequest(request, this);
+            this.requestReceiver.receiveRequest(request, this);
         } catch (CommunicationForbiddenException e) {
             e.printStackTrace();
         }
-
-        return 0;
     }
 
     /**
@@ -291,7 +240,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
      * @throws java.io.IOException if the reply cannot be accepted
      */
     @Override
-    protected int internalReceiveReply(Reply reply) throws java.io.IOException {
+    protected void internalReceiveReply(Reply reply) throws java.io.IOException {
         // JMX Notification
         if (!isProActiveInternalObject && (this.mbean != null) && reply.getResult().getException() == null) {
             String tagNotification = createTagNotification(reply.getTags());
@@ -303,7 +252,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         }
 
         // END JMX Notification
-        return replyReceiver.receiveReply(reply, this, getFuturePool());
+        replyReceiver.receiveReply(reply, this, getFuturePool());
     }
 
     /**
@@ -389,13 +338,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                     throw new NoSuchMethodError(signature);
                 }
             }
-        }
-
-        // cannot use IS with unique thread with fault-tolerant active object
-        if (uniqueThread && this.ftmanager != null) {
-            throw new ProActiveRuntimeException("The method " + methodName +
-                " cannot be set as immediate service with unique thread since the active object " +
-                this.getID() + " has enabled fault-tolerance.");
         }
     }
 
@@ -678,36 +620,32 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 }
 
             }
-            // FAULT-TOLERANCE
-            if (BodyImpl.this.ftmanager != null) {
-                BodyImpl.this.ftmanager.sendReply(reply, request.getSender());
-            } else {
-                // if the reply cannot be sent, try to sent the thrown exception
-                // as result
-                // Useful if the exception is due to the content of the result
-                // (e.g. InvalidClassException)
+
+            // if the reply cannot be sent, try to sent the thrown exception
+            // as result
+            // Useful if the exception is due to the content of the result
+            // (e.g. InvalidClassException)
+            try {
+                reply.send(request.getSender());
+            } catch (Throwable e1) {
+                // see PROACTIVE-1172
+                // previously only IOException were caught but now that new communication protocols
+                // can be added dynamically (remote objects) we can no longer suppose that only IOException
+                // will be thrown i.e. a runtime exception sent by the protocol can go through the stack and
+                // kill the service thread if not caught here.
+                // We do not want the AO to be killed if he cannot send the result.
                 try {
-                    reply.send(request.getSender());
-                } catch (Throwable e1) {
-                    // see PROACTIVE-1172
-                    // previously only IOException were caught but now that new communication protocols
-                    // can be added dynamically (remote objects) we can no longer suppose that only IOException
-                    // will be thrown i.e. a runtime exception sent by the protocol can go through the stack and
-                    // kill the service thread if not caught here.
-                    // We do not want the AO to be killed if he cannot send the result.
-                    try {
-                        // trying to send the exception as result to fill the future.
-                        // we want to inform the caller that the result cannot be set in
-                        // the future for any reason. let's see if we can put the exception instead.
-                        // works only if the exception is not due to a communication issue.
-                        this.retrySendReplyWithException(reply, e1, request.getSender());
-                    } catch (Throwable retryException1) {
-                        // log the issue on the AO side for debugging purpose
-                        // the initial exception must be the one to appear in the log.
-                        sendReplyExceptionsLogger.error(shortString() + " : Failed to send reply to method:" +
-                            request.getMethodName() + " sequence: " + request.getSequenceNumber() + " by " +
-                            request.getSenderNodeURL() + "/" + request.getSender(), e1);
-                    }
+                    // trying to send the exception as result to fill the future.
+                    // we want to inform the caller that the result cannot be set in
+                    // the future for any reason. let's see if we can put the exception instead.
+                    // works only if the exception is not due to a communication issue.
+                    this.retrySendReplyWithException(reply, e1, request.getSender());
+                } catch (Throwable retryException1) {
+                    // log the issue on the AO side for debugging purpose
+                    // the initial exception must be the one to appear in the log.
+                    sendReplyExceptionsLogger.error(shortString() + " : Failed to send reply to method:" +
+                        request.getMethodName() + " sequence: " + request.getSequenceNumber() + " by " +
+                        request.getSenderNodeURL() + "/" + request.getSender(), e1);
                 }
             }
 
@@ -788,12 +726,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
             // END JMX Notification
 
-            // FAULT TOLERANCE
-            if (BodyImpl.this.ftmanager != null) {
-                BodyImpl.this.ftmanager.sendRequest(request, destinationBody);
-            } else {
-                request.send(destinationBody);
-            }
+            request.send(destinationBody);
         }
 
         /**

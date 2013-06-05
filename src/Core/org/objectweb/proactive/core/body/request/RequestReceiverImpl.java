@@ -55,9 +55,6 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
-import org.objectweb.proactive.core.body.ft.internalmsg.Heartbeat;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
-import org.objectweb.proactive.core.body.ft.servers.faultdetection.FaultDetector;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -146,7 +143,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         this.threadsForCallers = new Hashtable<UniqueID, ThreadForImmediateService>();
     }
 
-    public int receiveRequest(Request request, Body bodyReceiver) {
+    public void receiveRequest(Request request, Body bodyReceiver) {
         try {
             final ServiceMode mode = this.getServiceMode(request);
             if (!mode.equals(ServiceMode.NORMAL_SERVICE)) {
@@ -178,9 +175,6 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                 if (logger.isDebugEnabled()) {
                     logger.debug("end of service for " + request.getMethodName());
                 }
-
-                //Dummy value for immediate services...
-                return FTManager.IMMEDIATE_SERVICE;
             } else {
                 request.notifyReception(bodyReceiver);
                 RequestQueue queue = null;
@@ -190,12 +184,11 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                     throw new InactiveBodyException("Cannot add request \"" + request.getMethodName() +
                         "\" because this body is inactive", e);
                 }
-                return queue.add(request);
+                queue.add(request);
             }
         } catch (Exception e) {
             logger.info("Error while receiving request " +
                 (request == null ? "null" : request.getMethodName()), e);
-            return 0;
         }
     }
 
@@ -433,8 +426,9 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         private boolean pingAssociatedCaller() {
             try {
                 // PROACTIVE-267 : should not use explicitly FT package.
-                Object ping = this.associatedCaller.receiveFTMessage(new Heartbeat());
-                return FaultDetector.OK.equals(ping);
+                Object ping = this.associatedCaller
+                        .receiveHeartbeat(org.objectweb.proactive.core.util.Heartbeat.HB);
+                return org.objectweb.proactive.core.util.Heartbeat.OK.equals(ping);
             } catch (IOException e) {
                 return false;
             }

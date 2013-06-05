@@ -41,5 +41,5 @@ import org.objectweb.proactive.core.body.future.FuturePool;
 
 
 public interface ReplyReceiver {
-    public int receiveReply(Reply r, Body receiverBody, FuturePool futurePool) throws java.io.IOException;
+    public void receiveReply(Reply r, Body receiverBody, FuturePool futurePool) throws java.io.IOException;
 }

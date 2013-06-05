@@ -404,7 +404,7 @@
          <section xml:id="TheNBodySimulation_75"><info><title>The N-Body Simulation</title></info>
 
             <para>This example can be used later on as a deployment example for
-            several machines, and also for the fault-tolerance features.</para>
+            several machines.</para>
 
             <itemizedlist>
                <listitem>

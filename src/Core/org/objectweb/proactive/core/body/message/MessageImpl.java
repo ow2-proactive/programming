@@ -37,8 +37,6 @@
 package org.objectweb.proactive.core.body.message;
 
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.ft.message.MessageInfo;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 
 
@@ -68,17 +66,6 @@ public class MessageImpl implements Message, java.io.Serializable {
     /** the time the message has been issued or deserialized */
     protected transient long timeStamp;
     protected boolean isOneWay;
-
-    // FAULT TOLERANCE
-
-    /** all values piggybacked for fault tolerance stuff */
-    protected MessageInfo messageInfos;
-
-    /** true if this message can be ignored */
-    protected boolean ignoreIt;
-
-    /** ftmanager linked to this message */
-    protected transient FTManager ftm;
 
     // DSI
     protected MessageTags tags;
@@ -146,31 +133,6 @@ public class MessageImpl implements Message, java.io.Serializable {
     private void readObject(java.io.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
         this.timeStamp = System.currentTimeMillis();
-    }
-
-    // FAULT-TOLERANCE
-    public MessageInfo getMessageInfo() {
-        return this.messageInfos;
-    }
-
-    public void setMessageInfo(MessageInfo mi) {
-        this.messageInfos = mi;
-    }
-
-    public boolean ignoreIt() {
-        return this.ignoreIt;
-    }
-
-    public void setIgnoreIt(boolean ignore) {
-        this.ignoreIt = ignore;
-    }
-
-    public void setFTManager(FTManager ft) {
-        this.ftm = ft;
-    }
-
-    public FTManager getFTManager() {
-        return this.ftm;
     }
 
     public MessageTags getTags() {

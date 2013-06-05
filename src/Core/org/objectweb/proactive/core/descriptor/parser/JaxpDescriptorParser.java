@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.core.descriptor.parser;
 
-import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -68,7 +67,6 @@ import org.objectweb.proactive.core.descriptor.data.VirtualNodeImpl;
 import org.objectweb.proactive.core.descriptor.data.VirtualNodeInternal;
 import org.objectweb.proactive.core.descriptor.data.VirtualNodeLookup;
 import org.objectweb.proactive.core.descriptor.legacyparser.ProActiveDescriptorConstants;
-import org.objectweb.proactive.core.descriptor.services.FaultToleranceService;
 import org.objectweb.proactive.core.descriptor.services.RMIRegistryLookupService;
 import org.objectweb.proactive.core.descriptor.services.TechnicalServiceXmlType;
 import org.objectweb.proactive.core.descriptor.services.UniversalService;
@@ -158,7 +156,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
     static Logger logger = ProActiveLogger.getLogger(Loggers.XML);
 
     protected class MyDefaultHandler extends DefaultHandler {
-        private CharArrayWriter buff = new CharArrayWriter();
         private String errMessage = "";
 
         /*
@@ -728,39 +725,7 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
             if (serviceType.equals(RMI_LOOKUP_TAG)) {
                 String lookupURL = getNodeExpandedValue(node.getAttributes().getNamedItem("url"));
                 service = new RMIRegistryLookupService(lookupURL);
-            } else if (serviceType.equals(FT_CONFIG_TAG)) {
-                FaultToleranceService ftService = new FaultToleranceService();
-                service = ftService;
-
-                NodeList childNodes = node.getChildNodes();
-                for (int j = 0; j < childNodes.getLength(); ++j) {
-                    Node childNode = childNodes.item(j);
-                    if (childNode.getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-                    String url = getNodeExpandedValue(childNode.getAttributes().getNamedItem("url"));
-
-                    String nodeName = childNode.getNodeName();
-                    if (nodeName.equals(FT_RECPROCESS_TAG)) {
-                        ftService.setRecoveryProcessURL(url);
-                    } else if (nodeName.equals(FT_LOCSERVER_TAG)) {
-                        ftService.setLocationServerURL(url);
-                    } else if (nodeName.equals(FT_CKPTSERVER_TAG)) {
-                        ftService.setCheckpointServerURL(url);
-                    } else if (nodeName.equals(FT_RESSERVER_TAG)) {
-                        ftService.setAttachedResourceServer(url);
-                    } else if (nodeName.equals(FT_TTCVALUE_TAG)) {
-                        String value = getNodeExpandedValue(childNode.getAttributes().getNamedItem("value"));
-                        ftService.setTtcValue(value);
-                    } else if (nodeName.equals(FT_GLOBALSERVER_TAG)) {
-                        ftService.setGlobalServerURL(url);
-                    } else if (nodeName.equals(FT_PROTO_TAG)) {
-                        String type = getNodeExpandedValue(childNode.getAttributes().getNamedItem("type"));
-                        ftService.setProtocolType(type);
-                    }
-                }
             }
-
             proActiveDescriptor.addService(serviceID, service);
         }
     }

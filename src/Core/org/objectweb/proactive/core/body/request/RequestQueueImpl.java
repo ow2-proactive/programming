@@ -44,7 +44,6 @@ import java.util.ListIterator;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.LocalBodyStore;
-import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.event.AbstractEventProducer;
 import org.objectweb.proactive.core.event.ProActiveEvent;
 import org.objectweb.proactive.core.event.ProActiveListener;
@@ -194,18 +193,8 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
         return findYoungest(requestFilter, true);
     }
 
-    public synchronized int add(Request request) {
+    public synchronized void add(Request request) {
         //System.out.println("  --> RequestQueue.add m="+request.getMethodName());
-        // FAULT-TOLERANCE  
-        int ftres = FTManager.NON_FT;
-        FTManager ftm = request.getFTManager();
-        if (ftm != null) {
-            // null if FT is disable OR if request is an awaited request         
-            ftres = ftm.onDeliverRequest(request);
-            if (request.ignoreIt()) {
-                return ftres;
-            }
-        }
 
         //if the request is non functional and priority, a reference on it is added in a nonFunctionalRequestsQueue.
         int priority = request.getNFRequestPriority();
@@ -220,13 +209,10 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
             notifyAllListeners(new RequestQueueEvent(ownerID, RequestQueueEvent.ADD_REQUEST));
         }
 
-        // END ProActiveEvent
-        return ftres;
+        // END ProActiveEvent        
     }
 
-    public synchronized int addToFront(Request request) {
-        int ftres = 0;
-
+    public synchronized void addToFront(Request request) {
         //if the request is non functional and priority, a reference on it is added in a nonFunctionalRequestsQueue.
         int priority = request.getNFRequestPriority();
         if ((priority == Request.NFREQUEST_IMMEDIATE_PRIORITY) || (priority == Request.NFREQUEST_PRIORITY)) {
@@ -240,8 +226,7 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
             notifyAllListeners(new RequestQueueEvent(ownerID, RequestQueueEvent.ADD_REQUEST));
         }
 
-        // END ProActiveEvent
-        return ftres;
+        // END ProActiveEvent        
     }
 
     public void processRequests(RequestProcessor processor, Body body) {
