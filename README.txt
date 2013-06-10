@@ -16,7 +16,7 @@ Javadoc and updated documentation are available online:
 
 In order to start experimenting with ProActive:
 
-	* Set JAVA_HOME environment variable to the directory where 1.5 or greater JDK is installed
+	* Set JAVA_HOME environment variable to the directory where 1.6 or greater JDK is installed
 
 	Run the examples by going in the examples directory and launching the suitable scripts for your platform.
 	
