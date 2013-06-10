@@ -1671,6 +1671,10 @@ public class PAActiveObject {
     }
 
     private static UniversalBody getRemoteBody(Object obj) {
+        // Check if obj is a body and return the remote
+        if (obj instanceof UniversalBody) {
+            return ((UniversalBody) obj).getRemoteAdapter();
+        }
         // Check if obj is really a reified object
         if (!(MOP.isReifiedObject(obj))) {
             throw new ProActiveRuntimeException("The given object " + obj + " is not a reified object");
