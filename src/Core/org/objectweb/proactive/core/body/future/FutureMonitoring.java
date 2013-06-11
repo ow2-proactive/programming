@@ -46,6 +46,7 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.HeartbeatResponse;
 import org.objectweb.proactive.core.util.Pair;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -128,10 +129,9 @@ public class FutureMonitoring implements Runnable {
                     /* OK, Found somebody to ping */
                     pinged = true;
                     try {
-                        Integer state = (Integer) body
-                                .receiveHeartbeat(org.objectweb.proactive.core.util.Heartbeat.HB);
+                        Integer state = (Integer) body.receiveHeartbeat();
                         /* If the object is dead, ping failed ... */
-                        if (state.equals(org.objectweb.proactive.core.util.Heartbeat.IS_DEAD)) {
+                        if (state.equals(HeartbeatResponse.IS_DEAD)) {
                             throw new ProActiveRuntimeException("Awaited body " + bodyId + " on " + nodeUrl +
                                 " has been terminated.");
                         }

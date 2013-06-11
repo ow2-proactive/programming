@@ -55,6 +55,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
+import org.objectweb.proactive.core.util.HeartbeatResponse;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -426,9 +427,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         private boolean pingAssociatedCaller() {
             try {
                 // PROACTIVE-267 : should not use explicitly FT package.
-                Object ping = this.associatedCaller
-                        .receiveHeartbeat(org.objectweb.proactive.core.util.Heartbeat.HB);
-                return org.objectweb.proactive.core.util.Heartbeat.OK.equals(ping);
+                Object ping = this.associatedCaller.receiveHeartbeat();
+                return HeartbeatResponse.OK.equals(ping);
             } catch (IOException e) {
                 return false;
             }

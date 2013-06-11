@@ -249,8 +249,8 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
     /**
      * @see org.objectweb.proactive.core.body.UniversalBody#receiveHeartbeat(org.objectweb.proactive.core.body.ft.internalmsg.FTMessage)
      */
-    public Object receiveHeartbeat(org.objectweb.proactive.core.util.Heartbeat hb) throws IOException {
-        return this.wrappedBody.receiveHeartbeat(hb);
+    public Object receiveHeartbeat() throws IOException {
+        return this.wrappedBody.receiveHeartbeat();
     }
 
     public void createShortcut(Shortcut shortcut) throws IOException {

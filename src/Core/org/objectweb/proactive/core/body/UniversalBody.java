@@ -47,7 +47,6 @@ import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.security.SecurityEntity;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.util.Heartbeat;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -149,11 +148,10 @@ public interface UniversalBody extends Serializable, SecurityEntity {
 
     /**
      * For sending a non functional heartbeat message.
-     * @param hb the message to send
      * @return depends on the message meaning
      * @exception java.io.IOException if a problem occurs during this method call
      */
-    public Object receiveHeartbeat(Heartbeat hb) throws IOException;
+    public Object receiveHeartbeat() throws IOException;
 
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException;
 

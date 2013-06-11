@@ -82,7 +82,6 @@ import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
-import org.objectweb.proactive.core.util.Heartbeat;
 import org.objectweb.proactive.core.util.NonFunctionalServices;
 import org.objectweb.proactive.core.util.ProcessForAoCreation;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -1200,7 +1199,7 @@ public class PAActiveObject {
         try {
             // reified object is checked in getRemoteBody
             targetedBody = getRemoteBody(target);
-            targetedBody.receiveHeartbeat(Heartbeat.HB);
+            targetedBody.receiveHeartbeat();
             return true;
         } catch (IOException e) {
             if (PAActiveObject.logger.isDebugEnabled()) {

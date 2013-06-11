@@ -64,7 +64,6 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
-import org.objectweb.proactive.core.util.Heartbeat;
 
 
 public class MOCKBody implements Body {
@@ -250,7 +249,7 @@ public class MOCKBody implements Body {
         return null;
     }
 
-    public Object receiveHeartbeat(Heartbeat hb) throws IOException {
+    public Object receiveHeartbeat() throws IOException {
 
         return null;
     }

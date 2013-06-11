@@ -58,7 +58,7 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
-import org.objectweb.proactive.core.util.Heartbeat;
+import org.objectweb.proactive.core.util.HeartbeatResponse;
 
 
 public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> implements UniversalBody {
@@ -151,8 +151,8 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
         return target.getNodeURL();
     }
 
-    public Object receiveHeartbeat(Heartbeat ev) throws IOException {
-        return target.receiveHeartbeat(ev);
+    public Object receiveHeartbeat() throws IOException {
+        return target.receiveHeartbeat();
     }
 
     public void receiveReply(Reply r) throws IOException {

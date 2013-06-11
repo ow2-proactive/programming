@@ -89,7 +89,7 @@ import org.objectweb.proactive.core.security.exceptions.RuntimeSecurityException
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
-import org.objectweb.proactive.core.util.Heartbeat;
+import org.objectweb.proactive.core.util.HeartbeatResponse;
 import org.objectweb.proactive.core.util.ThreadStore;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -921,8 +921,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         }
     }
 
-    public Object receiveHeartbeat(Heartbeat hb) {
-        return this.isAlive() ? Heartbeat.OK : Heartbeat.IS_DEAD;
+    public Object receiveHeartbeat() {
+        return this.isAlive() ? HeartbeatResponse.OK : HeartbeatResponse.IS_DEAD;
     }
 
     //

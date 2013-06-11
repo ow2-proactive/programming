@@ -56,7 +56,7 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
-import org.objectweb.proactive.core.util.Heartbeat;
+import org.objectweb.proactive.core.util.HeartbeatResponse;
 
 
 public class DummySender implements UniversalBody {
@@ -114,7 +114,7 @@ public class DummySender implements UniversalBody {
         return null;
     }
 
-    public Object receiveHeartbeat(Heartbeat hb) throws IOException {
+    public Object receiveHeartbeat() throws IOException {
         return null;
     }
 
