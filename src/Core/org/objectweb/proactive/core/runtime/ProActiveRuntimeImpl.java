@@ -42,6 +42,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
@@ -1726,8 +1727,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             // Guess the location by using the classloader
             final URL url = this.getClass().getResource(this.getClass().getSimpleName() + ".class");
             final String path = url.getPath();
-
             if ("jar".equals(url.getProtocol())) {
+
                 int begin = path.indexOf("file:");
                 int end = path.indexOf(".jar!");
                 if (begin != 0 || end < 0) {
@@ -1739,12 +1740,22 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                     throw new ProActiveException("Unable to find ProActive home. Unexpected jar name: " + url);
                 }
 
-                return path.substring(5, end);
+                try {
+                    File padir = new File(new URI(path.substring(begin, end)));
+                    return padir.getAbsolutePath();
+                } catch (URISyntaxException e) {
+                    throw new ProActiveException(e);
+                }
             } else if ("file".equals(url.getProtocol())) {
                 int index = path.indexOf("classes/Core/" + this.getClass().getName().replace('.', '/') +
                     ".class");
                 if (index > 0) {
-                    return path.substring(0, index);
+
+                    try {
+                        return new File(new URI("file:" + path.substring(0, index))).getAbsolutePath();
+                    } catch (URISyntaxException e) {
+                        throw new ProActiveException(e);
+                    }
                 } else {
                     throw new ProActiveException(
                         "Unable to find ProActive home. Running from class files but non standard repository layout");
