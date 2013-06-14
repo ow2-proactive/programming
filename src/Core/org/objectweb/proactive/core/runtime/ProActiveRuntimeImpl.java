@@ -189,7 +189,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                 }
 
             } catch (Exception e) {
-                logger.fatal("Error while initializing ProActive Runtime",e);
+                logger.fatal("Error while initializing ProActive Runtime", e);
                 throw new RuntimeException(e);
             }
             return proActiveRuntime;
@@ -399,7 +399,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             runtimeLogger.error("Parent runtime already set!");
         }
     }
-
 
     public void registerDescriptor(String url, ProActiveDescriptorInternal pad) {
         this.descriptorMap.put(url, pad);
