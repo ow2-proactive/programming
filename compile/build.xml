@@ -642,7 +642,6 @@
 
 	<target name="junit" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
-		<antcall target="junit.pamr.testheartbeat" />
 		<antcall target="junit.summary" />
 	</target>
 
