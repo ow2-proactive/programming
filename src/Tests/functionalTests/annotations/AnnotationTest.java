@@ -101,11 +101,11 @@ public abstract class AnnotationTest extends FunctionalTest {
 
     private final String buildAnnotationProcessorPath(String proactive_home) {
 
-        String proactive_classes = proactive_home + "/classes/";
+        File proactive_classes = new File(proactive_home, "classes");
         StringBuilder buildProcPath = new StringBuilder();
         String[] pathDirs = new String[] { "Core", "Extra", "Utils", "Extensions" };
         for (String pathDir : pathDirs) {
-            buildProcPath.append(proactive_classes + pathDir + ":");
+            buildProcPath.append((new File(proactive_classes, pathDir)) + File.pathSeparator);
         }
 
         return buildProcPath.toString();

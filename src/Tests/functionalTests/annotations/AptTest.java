@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.objectweb.proactive.extensions.annotation.common.ProActiveAnnotationProcessorFactory;
 import org.objectweb.proactive.utils.OperatingSystem;
@@ -151,6 +152,7 @@ public abstract class AptTest extends AnnotationTest {
             }
 
             for (String line = stderr.readLine(); line != null; line = stderr.readLine()) {
+                System.err.println(line);
                 if (Pattern.matches("\\d* error(s?)", line)) {
                     ret.errors = extractNumber(line);
                 }

@@ -43,10 +43,20 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.objectweb.proactive.utils.OperatingSystem;
+
+import functionalTests.TestDisabler;
 
 
 public class TestHashSum {
+
+    @BeforeClass
+    public static void beforeClass() {
+        TestDisabler.unsupportedOs(OperatingSystem.windows);
+    }
+
     @Test
     public void TestSha1Sum() throws Exception {
         String shakespeare = "If music be the food of love, play on\n"
