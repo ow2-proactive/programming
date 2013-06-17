@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.core.process.ssh;
 
+import java.util.List;
+
 import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
 import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
@@ -213,16 +215,49 @@ public class SSHJVMProcess extends SSHProcess implements JVMProcess {
     /**
      * Returns parameters associated to the class that the target JVMProcess is going to start
      * @return String The value of the parameters of the class
+     * @deprecated use {@link SSHJVMProcess#getParametersAsList)} instead
      */
+    @Deprecated
+    @Override
     public String getParameters() {
         return jvmProcess.getParameters();
     }
 
     /**
+     * Returns parameters associated to the class that the target JVMProcess is going to start
+     * @return String The value of the parameters of the class
+     */
+    @Override
+    public List<String> getParametersAsList() {
+        return jvmProcess.getParametersAsList();
+    }
+
+    /**
+     * Adds an option to the jvm options
+     * @param option The option to add
+     */
+    @Override
+    public void addJvmOption(String option) {
+        this.jvmProcess.addJvmOption(option);
+    }
+
+    /**
      * Sets the parameters of the class to start with the given value for the target JVMProcess
      * @param parameters Parameters to be given in order to start the class
+     * @deprecated use {@link SSHJVMProcess#setParameters(List)} instead
      */
+    @Override
     public void setParameters(String parameters) {
+        checkStarted();
+        jvmProcess.setParameters(parameters);
+    }
+
+    /**
+     * Sets the parameters of the class to start with the given value for the target JVMProcess
+     * @param parameters Paramaters to be given in order to start the class
+     */
+    @Override
+    public void setParameters(List<String> parameters) {
         checkStarted();
         jvmProcess.setParameters(parameters);
     }
@@ -238,13 +273,31 @@ public class SSHJVMProcess extends SSHProcess implements JVMProcess {
     /**
      * Sets the parameters of the jvm to start with the given parameters for the target JVMProcess
      * @param parameters Parameters to be given in order to start the jvm
+     * @deprecated use {@link SSHJVMProcess#setJvmOptions(List)} instead
      */
+    @Deprecated
     public void setJvmOptions(String parameters) {
         jvmProcess.setJvmOptions(parameters);
     }
 
+    /**
+     * Sets the parameters of the jvm to start with the given parameters for the target JVMProcess
+     * @param parameters Parameters to be given in order to start the jvm
+     */
+    public void setJvmOptions(List<String> parameters) {
+        jvmProcess.setJvmOptions(parameters);
+    }
+
+    /**
+     * @deprecated use {@link SSHJVMProcess#getJvmOptionsAsList()} instead
+     */
+    @Deprecated
     public String getJvmOptions() {
         return jvmProcess.getJvmOptions();
+    }
+
+    public List<String> getJvmOptionsAsList() {
+        return jvmProcess.getJvmOptionsAsList();
     }
 
     public void setOverwrite(boolean overwrite) {

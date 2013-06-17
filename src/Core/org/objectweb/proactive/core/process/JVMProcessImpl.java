@@ -36,12 +36,22 @@
  */
 package org.objectweb.proactive.core.process;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.HostsInfos;
 import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -50,7 +60,7 @@ import org.objectweb.proactive.utils.OperatingSystem;
 
 /**
  * <p>
- * The JVMProcess class is able to start localy any class of the ProActive library by
+ * The JVMProcess class is able to start locally any class of the ProActive library by
  * creating a Java Virtual Machine.
  * </p><p>
  * For instance:
@@ -72,11 +82,11 @@ import org.objectweb.proactive.utils.OperatingSystem;
  * @since   ProActive 0.9.4
  */
 public class JVMProcessImpl extends AbstractExternalProcess implements JVMProcess, Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_PROCESS);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_PROCESS);
 
     //private final static String POLICY_FILE = "proactive.java.policy";
-    private final static String POLICY_OPTION = " -Djava.security.policy=";
-    private final static String LOG4J_OPTION = " -Dlog4j.configuration=file:";
+    private final static String POLICY_OPTION = "-Djava.security.policy=";
+    private final static String LOG4J_OPTION = "-Dlog4j.configuration=file:";
 
     //private final static String LOG4J_FILE = "proactive-log4j";
     public final static String DEFAULT_CLASSPATH = convertClasspathToAbsolutePath(System
@@ -98,6 +108,10 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     public final static String DEFAULT_CLASSNAME = org.objectweb.proactive.core.node.StartNode.class
             .getName();
     public final static String DEFAULT_JVMPARAMETERS = "";
+
+    // How many paths leading to a JVMProcessImpl have been encountered
+    private static int groupID = 0;
+
     protected String classpath = DEFAULT_CLASSPATH;
     protected String bootClasspath;
     protected String javaPath = DEFAULT_JAVAPATH;
@@ -105,37 +119,37 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     protected String log4jFile = DEFAULT_LOG4J_FILE;
     protected String classname = DEFAULT_CLASSNAME;
 
-    //    protected String parameters = DEFAULT_JVMPARAMETERS;
-    //    protected String jvmParameters;
-    protected StringBuffer parameters = new StringBuffer();
-    protected StringBuffer jvmParameters = new StringBuffer();
+    /** The jvm options to add to the command */
+    protected final HashSet<String> jvmOptions;
 
-    //this array will be used to know which options have been modified in case
-    //this process extends anothe jvmprocess in the descriptor
-    protected ArrayList<String> modifiedOptions;
+    /** 
+     * This array will be used to know which options have been modified in case 
+     * this process extends another jvmprocess in the descriptor
+     */
+    protected final ArrayList<String> modifiedOptions;
+
+    /** The main class parameters to add at the end of the command */
+    protected final ArrayList<String> parameters;
 
     /**
      * This attributes is used when this jvm extends another one.
      * If set to yes, the jvm options of the extended jvm will be ignored.
      * If false, jvm options of this jvm will be appended to extended jvm ones. Default is false.
      */
-    protected boolean overwrite = false;
-
-    // How many paths leading to a JVMProcessImpl have been encountered
-    static private int groupID = 0;
-    protected PriorityLevel priority = PriorityLevel.normal;
-    protected OperatingSystem os = OperatingSystem.getOperatingSystem();
+    protected boolean overwrite;
+    protected PriorityLevel priority;
+    protected OperatingSystem os;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
 
     /**
-     * Creates a new JVMProcess
-     * Used with XML Descriptor
+     * Creates a new JVMProcess with empty message loggers.
+     * Used with XML Descriptor.
      */
     public JVMProcessImpl() {
-        this.modifiedOptions = new ArrayList<String>();
+        this(null);
     }
 
     /**
@@ -143,8 +157,7 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
      * @param messageLogger The logger that handles input and error stream of this process
      */
     public JVMProcessImpl(RemoteProcessMessageLogger messageLogger) {
-        super(messageLogger);
-        this.modifiedOptions = new ArrayList<String>();
+        this(messageLogger, messageLogger);
     }
 
     /**
@@ -155,7 +168,11 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     public JVMProcessImpl(RemoteProcessMessageLogger inputMessageLogger,
             RemoteProcessMessageLogger errorMessageLogger) {
         super(inputMessageLogger, errorMessageLogger);
+        this.jvmOptions = new HashSet<String>();
         this.modifiedOptions = new ArrayList<String>();
+        this.parameters = new ArrayList<String>();
+        this.priority = PriorityLevel.normal;
+        this.os = OperatingSystem.getOperatingSystem();
     }
 
     //
@@ -165,7 +182,7 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
         try {
             JVMProcessImpl rsh = new JVMProcessImpl(new StandardOutputMessageLogger());
             rsh.setClassname(org.objectweb.proactive.core.node.StartNode.class.getName());
-            rsh.setParameters(args[0]);
+            rsh.setParameters(Arrays.asList(args));
             rsh.startProcess();
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,92 +192,207 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     //
     // -- implements JVMProcess -----------------------------------------------
     //
+    @Override
     public String getClasspath() {
         return classpath;
     }
 
+    @Override
     public void setClasspath(String classpath) {
         checkStarted();
         modifiedOptions.add("classpath");
         this.classpath = classpath;
     }
 
+    @Override
+    public String getJavaPath() {
+        return javaPath;
+    }
+
+    @Override
+    public void setJavaPath(String javaPath) {
+        checkStarted();
+        if (javaPath == null) {
+            throw new IllegalArgumentException("Java path canot be null");
+        }
+        modifiedOptions.add("javaPath");
+        this.javaPath = javaPath;
+    }
+
+    @Override
+    public String getBootClasspath() {
+        return bootClasspath;
+    }
+
+    @Override
     public void setBootClasspath(String bootClasspath) {
         checkStarted();
         modifiedOptions.add("bootClasspath");
         this.bootClasspath = bootClasspath;
     }
 
-    public String getBootClasspath() {
-        return bootClasspath;
-    }
-
-    public String getJavaPath() {
-        return javaPath;
-    }
-
-    public void setJavaPath(String javaPath) {
-        checkStarted();
-        if (javaPath == null) {
-            throw new NullPointerException();
-        }
-        modifiedOptions.add("javaPath");
-        this.javaPath = javaPath;
-    }
-
+    @Override
     public String getPolicyFile() {
         return policyFile;
     }
 
+    @Override
     public void setPolicyFile(String policyFile) {
         checkStarted();
         modifiedOptions.add("policyFile");
         this.policyFile = policyFile;
     }
 
+    @Override
     public String getLog4jFile() {
         return log4jFile;
     }
 
+    @Override
     public void setLog4jFile(String log4jFile) {
         modifiedOptions.add("log4jFile");
         this.log4jFile = log4jFile;
     }
 
+    @Override
     public String getClassname() {
         return classname;
     }
 
+    @Override
     public void setClassname(String classname) {
         checkStarted();
         this.classname = classname;
     }
 
-    public String getParameters() {
-        return parameters.toString();
-    }
-
+    @Override
     public void resetParameters() {
-        this.parameters = new StringBuffer();
+        this.parameters.clear();
     }
 
-    public void setParameters(String parameters) {
+    @Deprecated
+    @Override
+    public String getParameters() {
+        StringBuilder sb = new StringBuilder();
+        for (String param : this.parameters) {
+            sb.append(param).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
+    @Override
+    public List<String> getParametersAsList() {
+        return this.parameters;
+    }
+
+    @Deprecated
+    @Override
+    public void setParameters(String params) {
+        if (params == null) {
+            throw new IllegalArgumentException("Parameters cannot be null");
+        }
         checkStarted();
-        this.parameters.append(parameters + " ");
+        this.parameters.clear();
+        for (String opt : params.split(" ")) {
+            if (opt.length() != 0) {
+                this.parameters.add(opt);
+            }
+        }
     }
 
-    public void setJvmOptions(String string) {
+    @Override
+    public void setParameters(List<String> params) {
+        if (params == null) {
+            throw new IllegalArgumentException("Parameters cannot be null");
+        }
         checkStarted();
-        jvmParameters.append(string + " ");
+        this.parameters.clear();
+        this.parameters.addAll(params);
     }
 
+    @Override
+    public void addJvmOption(String option) {
+        if (option == null) {
+            throw new IllegalArgumentException("A jvm option cannot be null");
+        }
+        this.jvmOptions.add(option);
+    }
+
+    /**
+     * @deprecated use {@link JVMProcessImpl#getJvmOptionsAsList()} instead
+     */
+    @Deprecated
+    @Override
     public String getJvmOptions() {
-        return jvmParameters.toString();
+        StringBuilder sb = new StringBuilder();
+        for (String option : this.jvmOptions) {
+            sb.append(option).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
+    @Override
+    public List<String> getJvmOptionsAsList() {
+        return new ArrayList<String>(this.jvmOptions);
+    }
+
+    /**
+     * @deprecated use {@link JVMProcessImpl#setJvmOptions(List)} instead
+     */
+    @Deprecated
+    @Override
+    public void setJvmOptions(String opts) {
+        if (opts == null) {
+            throw new IllegalArgumentException("Jvm options cannot be null");
+        }
+        checkStarted();
+        this.jvmOptions.clear();
+        for (String opt : opts.split(" ")) {
+            if (opt.length() != 0) {
+                this.jvmOptions.add(opt);
+            }
+        }
+    }
+
+    @Override
+    public void setJvmOptions(List<String> opts) {
+        if (opts == null) {
+            throw new IllegalArgumentException("Jvm options cannot be null");
+        }
+        checkStarted();
+        this.jvmOptions.clear();
+        this.jvmOptions.addAll(opts);
+    }
+
+    @Override
+    public void setOverwrite(boolean overwrite) {
+        this.overwrite = overwrite;
+    }
+
+    @Override
+    public void setExtendedJVM(JVMProcessImpl jvmProcess) {
+        changeSettings(jvmProcess);
+    }
+
+    @Override
+    public void setPriority(PriorityLevel priority) {
+        this.priority = priority;
+    }
+
+    @Override
+    public void setOperatingSystem(OperatingSystem os) {
+        this.os = os;
+    }
+
+    @Override
+    public OperatingSystem getOperatingSystem() {
+        return this.os;
     }
 
     /**
      * @see org.objectweb.proactive.core.process.UniversalProcess#getProcessId()
      */
+    @Override
     public String getProcessId() {
         return "jvm";
     }
@@ -268,6 +400,7 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     /**
      * @see org.objectweb.proactive.core.process.UniversalProcess#getNodeNumber()
      */
+    @Override
     public int getNodeNumber() {
         return 1;
     }
@@ -275,16 +408,46 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     /**
      * @see org.objectweb.proactive.core.process.UniversalProcess#getFinalProcess()
      */
+    @Override
     public UniversalProcess getFinalProcess() {
         return this;
     }
 
-    public void setOverwrite(boolean overwrite) {
-        this.overwrite = overwrite;
+    /**
+     * @see org.objectweb.proactive.core.process.UniversalProcess#startProcess()
+     */
+    @Override
+    public void startProcess() throws IOException {
+        checkStarted();
+        super.isStarted = true;
+        if (super.username != null) {
+            HostsInfos.setUserName(super.hostname, super.username);
+        }
+
+        //before starting the process we execute the filetransfer
+        super.startFileTransfer();
+
+        List<String> commandAsList = buildJavaCommand();
+        String[] commandToExecute = commandAsList.toArray(new String[commandAsList.size()]);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Running command: " + this.buildCommand());
+        }
+        try {
+            super.shouldRun = true;
+            super.externalProcess = Runtime.getRuntime().exec(commandToExecute);
+            BufferedReader in = new BufferedReader(new InputStreamReader(externalProcess.getInputStream()));
+            BufferedReader err = new BufferedReader(new InputStreamReader(externalProcess.getErrorStream()));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(externalProcess.getOutputStream()));
+            handleProcess(in, out, err);
+        } catch (java.io.IOException e) {
+            isFinished = true;
+            throw e;
+        }
     }
 
-    public void setExtendedJVM(JVMProcessImpl jvmProcess) {
-        changeSettings(jvmProcess);
+    public int getNewGroupId() {
+        return JVMProcessImpl.groupID++;
     }
 
     //
@@ -292,87 +455,69 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     //
     @Override
     protected String buildCommand() {
-        return buildJavaCommand();
+        StringBuilder sb = new StringBuilder();
+        for (String s : this.buildJavaCommand()) {
+            sb.append(s).append(" ");
+        }
+        return sb.toString().trim();
     }
 
-    protected String buildJavaCommand() {
-        StringBuffer javaCommand = new StringBuffer();
+    protected ArrayList<String> buildJavaCommand() {
+        final ArrayList<String> javaCommand = new ArrayList<String>();
 
         if (!priority.equals(PriorityLevel.normal)) {
             switch (os) {
                 case unix:
-                    javaCommand.append(priority.unixCmd());
+                    javaCommand.add(priority.unixCmd());
                     break;
                 case windows:
-                    javaCommand.append(priority.windowsCmd());
+                    javaCommand.add(priority.windowsCmd());
                     break;
+                default:
+                    throw new IllegalStateException("Unknown Operating System");
             }
         }
 
         // append java command
-        if (javaPath == null) {
-            javaCommand.append("java");
+        if (this.javaPath == null) {
+            javaCommand.add("java");
         } else {
-            javaCommand.append(checkWhiteSpaces(javaPath));
+            javaCommand.add(javaPath);
         }
 
-        if (bootClasspath != null) {
-            javaCommand.append(" -Xbootclasspath:");
-            javaCommand.append(checkWhiteSpaces(bootClasspath));
-            javaCommand.append(" ");
-        }
-
-        // append jvmParameters
-        if (jvmParameters != null) {
-            javaCommand.append(" " + jvmParameters);
-        }
-
-        // append classpath
-        if ((classpath != null) && (classpath.length() > 0)) {
-            javaCommand.append(" -cp ");
-            javaCommand.append(checkWhiteSpaces(classpath));
+        if (this.bootClasspath != null) {
+            javaCommand.add("-Xbootclasspath:" + checkWhiteSpaces(this.bootClasspath));
         }
 
         // append policy option
         if (policyFile != null) {
-            javaCommand.append(POLICY_OPTION);
-            javaCommand.append(checkWhiteSpaces(policyFile));
+            javaCommand.add(POLICY_OPTION + checkWhiteSpaces(policyFile));
         }
 
         // append log4j option
         if (log4jFile != null) {
-            javaCommand.append(LOG4J_OPTION);
-            javaCommand.append(checkWhiteSpaces(log4jFile));
+            javaCommand.add(LOG4J_OPTION + checkWhiteSpaces(log4jFile));
         }
 
-        // append proactive policy File
-        // if (securityFile != null) {
-        //      javaCommand.append(PROACTIVE_POLICYFILE_OPTION);
-        //      javaCommand.append(securityFile);
-        //  }// else if (System.getProperty("proactive.runtime.security") != null) {
-        //    javaCommand.append(PROACTIVE_POLICYFILE_OPTION);
-        //      javaCommand.append(System.getProperty("proactive.runtime.security"));
-        //	 }
+        // append user specified jvm options
+        javaCommand.addAll(this.jvmOptions);
+
+        // append classpath
+        if ((classpath != null) && (classpath.length() > 0)) {
+            javaCommand.add("-cp");
+            javaCommand.add(checkWhiteSpaces(classpath));
+        }
+
         // append classname
-        javaCommand.append(" ");
-        javaCommand.append(classname);
+        javaCommand.add(this.classname);
+
+        // append user specified parameters
+        javaCommand.addAll(this.parameters);
+
         if (logger.isDebugEnabled()) {
-            logger.debug("JVMProcessImpl.buildJavaCommand()  Parameters " + parameters);
+            logger.debug("Java command: " + javaCommand.toString());
         }
-        if (parameters != null) {
-            javaCommand.append(" ");
-            javaCommand.append(parameters);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug(javaCommand.toString());
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug(javaCommand.toString() + "\n");
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("JVMProcessImpl.buildJavaCommand() " + javaCommand);
-        }
-        return javaCommand.toString();
+        return javaCommand;
     }
 
     protected void changeSettings(JVMProcess jvmProcess) {
@@ -392,7 +537,8 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
             this.log4jFile = jvmProcess.getLog4jFile();
         }
         if (!overwrite) {
-            setJvmOptions(jvmProcess.getJvmOptions());
+            this.jvmOptions.clear();
+            this.setJvmOptions(jvmProcess.getJvmOptionsAsList());
         }
     }
 
@@ -402,9 +548,9 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     private static String convertClasspathToAbsolutePath(String classpath) {
         StringBuffer absoluteClasspath = new StringBuffer();
         String pathSeparator = File.pathSeparator;
-        java.util.StringTokenizer st = new java.util.StringTokenizer(classpath, pathSeparator);
+        StringTokenizer st = new StringTokenizer(classpath, pathSeparator);
         while (st.hasMoreTokens()) {
-            absoluteClasspath.append(new java.io.File(st.nextToken()).getAbsolutePath());
+            absoluteClasspath.append(new File(st.nextToken()).getAbsolutePath());
             absoluteClasspath.append(pathSeparator);
         }
         return absoluteClasspath.substring(0, absoluteClasspath.length() - 1);
@@ -428,21 +574,5 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
             }
         }
         return path;
-    }
-
-    public int getNewGroupId() {
-        return groupID++;
-    }
-
-    public void setPriority(PriorityLevel priority) {
-        this.priority = priority;
-    }
-
-    public void setOperatingSystem(OperatingSystem os) {
-        this.os = os;
-    }
-
-    public OperatingSystem getOperatingSystem() {
-        return os;
     }
 }

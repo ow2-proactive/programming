@@ -40,9 +40,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
@@ -927,9 +929,9 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                     jvmProcess.setLog4jFile(path);
                 } else if (nodeName.equals(PROACTIVE_PROPS_FILE_TAG)) {
                     String path = getPath(child);
-                    jvmProcess.setJvmOptions("-Dproactive.configuration=" + path);
+                    jvmProcess.setJvmOptions(Arrays.asList("-Dproactive.configuration=" + path));
                 } else if (nodeName.equals(JVMPARAMETERS_TAG)) {
-                    String params = getParameters(child);
+                    List<String> params = getParameters(child);
                     jvmProcess.setJvmOptions(params);
                 } else if (nodeName.equals(EXTENDED_JVM_TAG)) {
                     Node overwriteParamsArg = child.getAttributes().getNamedItem("overwriteParameters");
@@ -1653,11 +1655,10 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
     /////////////////////////////////////////////////////////////////////////
     // utility methods
     // //////////////////////////////
-    private String getParameters(Node classpathNode) throws SAXException {
+    private List<String> getParameters(Node classpathNode) throws SAXException {
         NodeList childNodes = classpathNode.getChildNodes();
 
-        StringBuffer sb = new StringBuffer();
-        boolean firstParameter = true;
+        final ArrayList<String> res = new ArrayList<String>();
 
         for (int i = 0; i < childNodes.getLength(); ++i) {
             Node subNode = childNodes.item(i);
@@ -1667,16 +1668,11 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
             Node namedItem = subNode.getAttributes().getNamedItem("value");
             String parameter = getNodeExpandedValue(namedItem);
             if (parameter != null) {
-                if (!firstParameter) {
-                    sb.append(' ');
-                } else {
-                    firstParameter = false;
-                }
-                sb.append(parameter);
+                res.add(parameter);
             }
         }
 
-        return sb.toString().trim();
+        return res;
     }
 
     private String getPath(Node node) throws SAXException {
@@ -1714,7 +1710,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
     private static final String VALUE_ATTRIBUTE = "value";
     private static final String userDir = System.getProperty("user.dir");
     private static final String userHome = System.getProperty("user.home");
-    private static final String javaHome = System.getProperty("java.home");
     protected Document document;
     private DocumentBuilderFactory domFactory;
     protected SchemaFactory schemaFactory;
@@ -1827,15 +1822,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
         // This method isn't necessary for XPath processing either.
         public Iterator<?> getPrefixes(String uri) {
             throw new UnsupportedOperationException();
-        }
-    }
-
-    private void debugDump(Node topNode) {
-        NodeList childNodes = topNode.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); ++i) {
-            Node node = childNodes.item(i);
-            System.out.println(node.getNodeName());
-            debugDump(node);
         }
     }
 

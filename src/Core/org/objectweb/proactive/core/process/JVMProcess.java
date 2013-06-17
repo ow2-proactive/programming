@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.core.process;
 
+import java.util.List;
+
 import org.objectweb.proactive.utils.OperatingSystem;
 
 
@@ -134,10 +136,30 @@ public interface JVMProcess extends ExternalProcess {
     public String getParameters();
 
     /**
+     * Returns parameters associated to the class that this process is going to start
+     * @return String The value of the parameters of the class
+     */
+    public List<String> getParametersAsList();
+
+    /**
+     * Sets the parameters of the class to start with the given value
+     * @param parameters Paramaters to be given in order to start the class
+     * @deprecated use {@link JVMProcess#setParameters(List)} instead
+     */
+    @Deprecated
+    public void setParameters(String parameters);
+
+    /**
      * Sets the parameters of the class to start with the given value
      * @param parameters Paramaters to be given in order to start the class
      */
-    public void setParameters(String parameters);
+    public void setParameters(List<String> parameters);
+
+    /**
+     * Adds an option to the jvm options
+     * @param option The option to add
+     */
+    public void addJvmOption(String option);
 
     /**
      * Sets the options of the jvm to start
@@ -145,17 +167,39 @@ public interface JVMProcess extends ExternalProcess {
      * For instance:
      * </p>
      * <pre>
-     * jvmProcess.set JvmOptions("-verbose -Xms300M -Xmx300m");
+     * jvmProcess.setJvmOptions("-verbose -Xms300M -Xmx300m");
+     * </pre>
+     * @param options Options to be given in order to start the jvm
+     * @deprecated use {@link JVMProcess#setJvmOptions(List)} instead
+     */
+    @Deprecated
+    public void setJvmOptions(String options);
+
+    /**
+     * Sets the options of the jvm to start
+     * <p>
+     * For instance:
+     * </p>
+     * <pre>
+     * jvmProcess.setJvmOptions(Arrays.asList("-verbose", "-Xms300M","-Xmx300m"));
      * </pre>
      * @param options Options to be given in order to start the jvm
      */
-    public void setJvmOptions(String options);
+    public void setJvmOptions(List<String> options);
 
     /**
      * Returns this jvm options
      * @return this jvm options
+     * @deprecated use {@link JVMProcess#getJvmOptionsAsList()} instead
      */
+    @Deprecated
     public String getJvmOptions();
+
+    /**
+     * Returns this jvm options as a list of string
+     * @return this jvm options
+     */
+    public List<String> getJvmOptionsAsList();
 
     /**
      * Sets the overwrite attribute with the given value

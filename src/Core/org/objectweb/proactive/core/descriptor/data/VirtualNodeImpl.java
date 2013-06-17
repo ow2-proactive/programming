@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -364,16 +365,11 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
      * @return A VirtualMachine associated with the name parameter. If no VM is found then null is returned.
      */
     public VirtualMachine getVirtualMachine(String name) {
-        @SuppressWarnings("unchecked")
-        Iterator it = this.virtualMachines.iterator();
-
-        while (it.hasNext()) {
-            VirtualMachine vm = (VirtualMachine) it.next();
+        for (VirtualMachine vm : this.virtualMachines) {
             if (vm.getName().equals(name)) {
                 return vm;
             }
         }
-
         return null;
     }
 
@@ -1332,10 +1328,10 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
             // if it is a main node we set the property for retrieving the pad
             if (this.mainVirtualNode || process.isHierarchical()) {
-                jvmProcess.setJvmOptions(" -Dproactive.pad=" + this.padURL);
+                jvmProcess.setJvmOptions(Arrays.asList("-Dproactive.pad=" + this.padURL));
             }
 
-            jvmProcess.setParameters(vnName + " " + localruntimeURL + " " + vm.getName());
+            jvmProcess.setParameters(Arrays.asList(vnName, localruntimeURL, vm.getName()));
         }
 
         /* Setting the file transfer definitions associated with the current process,
