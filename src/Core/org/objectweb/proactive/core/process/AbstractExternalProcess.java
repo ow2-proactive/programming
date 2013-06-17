@@ -52,7 +52,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
     protected static final boolean IS_WINDOWS_SYSTEM = System.getProperty("os.name").toLowerCase()
             .startsWith("win");
     protected Process externalProcess;
-    private volatile boolean shouldRun = true;
+    protected volatile boolean shouldRun = true;
     public static final int NO_COMPOSITION = 0;
     protected boolean closeStream = false;
     protected RemoteProcessMessageLogger inputMessageLogger;

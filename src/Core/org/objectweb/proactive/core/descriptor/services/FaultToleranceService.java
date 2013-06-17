@@ -40,6 +40,8 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
@@ -102,33 +104,34 @@ public class FaultToleranceService implements UniversalService {
      * Build the java properties sequence corresponding to the set values.
      * @return the java properties sequence corresponding to the set values.
      */
-    public String buildParamsLine() {
-        StringBuffer line = new StringBuffer("-Dproactive.ft=true");
+    public List<String> buildParamsLine() {
+        final ArrayList<String> line = new ArrayList<String>();
+        line.add("-Dproactive.ft=true");
         if (this.getGlobalServerURL() != null) {
             if ((this.getCheckpointServerURL() != null) || (this.getLocationServerURL() != null) ||
                 (this.getRecoveryProcessURL() != null)) {
                 logger.warn("A global server is set : other servers are ignored !!");
             }
-            line.append(" -Dproactive.ft.server.global=" + this.getGlobalServerURL());
+            line.add("-Dproactive.ft.server.global=" + this.getGlobalServerURL());
         } else {
-            line.append(" -Dproactive.ft.server.checkpoint=" + this.getCheckpointServerURL());
-            line.append(" -Dproactive.ft.server.recovery=" + this.getRecoveryProcessURL());
-            line.append(" -Dproactive.ft.server.location=" + this.getLocationServerURL());
+            line.add("-Dproactive.ft.server.checkpoint=" + this.getCheckpointServerURL());
+            line.add("-Dproactive.ft.server.recovery=" + this.getRecoveryProcessURL());
+            line.add("-Dproactive.ft.server.location=" + this.getLocationServerURL());
         }
 
         if (this.getTtcValue() != null) {
-            line.append(" -Dproactive.ft.ttc=" + this.getTtcValue());
+            line.add("-Dproactive.ft.ttc=" + this.getTtcValue());
         }
         if (this.getAttachedResourceServer() != null) {
-            line.append(" -Dproactive.ft.server.resource=" + this.getAttachedResourceServer());
+            line.add("-Dproactive.ft.server.resource=" + this.getAttachedResourceServer());
         }
         if (this.getProtocolType() != null) {
-            line.append(" -Dproactive.ft.protocol=" + this.getProtocolType());
+            line.add("-Dproactive.ft.protocol=" + this.getProtocolType());
         }
         if (logger.isDebugEnabled()) {
             logger.debug("FT config is : " + line);
         }
-        return line.toString();
+        return line;
     }
 
     /**

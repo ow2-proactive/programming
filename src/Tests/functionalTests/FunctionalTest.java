@@ -36,6 +36,7 @@
  */
 package functionalTests;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
@@ -67,8 +68,8 @@ public class FunctionalTest {
         return paSetup.getVariableContract();
     }
 
-    protected String getJvmParameters() {
-        return paSetup.getJvmParameters();
+    protected List<String> getJvmParameters() {
+        return paSetup.getJvmParametersAsList();
     }
 
     @BeforeClass

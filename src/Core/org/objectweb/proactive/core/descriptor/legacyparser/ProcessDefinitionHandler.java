@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.descriptor.legacyparser;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
@@ -824,7 +825,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                 String[] paths = (String[]) activeHandler.getResultObject();
 
                 if (paths.length > 0) {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     char pathSeparator = jvmProcess.getOperatingSystem().pathSeparator();
                     sb.append(paths[0].trim());
 
@@ -841,7 +842,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                 String[] paths = (String[]) activeHandler.getResultObject();
 
                 if (paths.length > 0) {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     String pathSeparator = File.pathSeparator;
                     sb.append(paths[0].trim());
 
@@ -854,17 +855,8 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                 }
             } else if (name.equals(JVMPARAMETERS_TAG)) {
                 String[] paths = (String[]) activeHandler.getResultObject();
-
                 if (paths.length > 0) {
-                    StringBuffer sb = new StringBuffer();
-
-                    for (int i = 0; i < paths.length; i++) {
-                        //  sb.append(pathSeparator);
-                        sb.append(paths[i]);
-                        sb.append(" ");
-                    }
-
-                    jvmProcess.setJvmOptions(sb.toString());
+                    jvmProcess.setJvmOptions(Arrays.asList(paths));
                 }
             } else if (name.equals(JAVA_PATH_TAG)) {
                 String jp = (String) activeHandler.getResultObject();
@@ -874,12 +866,13 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             } else if (name.equals(LOG4J_FILE_TAG)) {
                 jvmProcess.setLog4jFile(((String) activeHandler.getResultObject()).trim());
             } else if (name.equals(PROACTIVE_PROPS_FILE_TAG)) {
-                jvmProcess.setJvmOptions("-Dproactive.configuration=" +
-                    (String) activeHandler.getResultObject());
+                jvmProcess.addJvmOption("-Dproactive.configuration=" +
+                    ((String) activeHandler.getResultObject()).trim());
             } else if (name.equals(CLASSNAME_TAG)) {
                 jvmProcess.setClassname((String) activeHandler.getResultObject());
             } else if (name.equals(PARAMETERS_TAG)) {
-                jvmProcess.setParameters((String) activeHandler.getResultObject());
+                String[] params = ((String) activeHandler.getResultObject()).split(" ");
+                jvmProcess.setParameters(Arrays.asList(params));
             } else if (name.equals(EXTENDED_JVM_TAG)) {
                 try {
                     proActiveDescriptor.mapToExtendedJVM((JVMProcess) targetProcess, (String) activeHandler

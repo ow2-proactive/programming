@@ -42,6 +42,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.Method;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,7 +78,6 @@ public class DebuggerConnection implements Serializable, NotificationListener {
     private int listeningPort = -1;
     private Node debugNode;
     private int debugDeployementId = 54136432;
-    private int timeout = 10;
 
     public static synchronized DebuggerConnection getDebuggerConnection() {
         if (debuggerConnection == null)
@@ -204,17 +204,15 @@ public class DebuggerConnection implements Serializable, NotificationListener {
             JVMProcessImpl vm = new JVMProcessImpl(new StandardOutputMessageLogger());
             vm.setClassname(StartPARuntime.class.getName());
             try {
-                vm.setParameters("-d " + debugDeployementId + " -p " +
-                    RuntimeFactory.getDefaultRuntime().getURL());
+                vm.setParameters(Arrays.asList("-d", "" + debugDeployementId, "-p", RuntimeFactory
+                        .getDefaultRuntime().getURL().toString()));
                 creating = true;
                 vm.startProcess();
                 ProActiveRuntimeImpl.getProActiveRuntime().getMBean().sendNotification(
                         NotificationType.debuggerConnectionActivated);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (ProActiveException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }

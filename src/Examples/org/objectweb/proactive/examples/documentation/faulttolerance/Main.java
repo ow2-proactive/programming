@@ -37,6 +37,7 @@
 package org.objectweb.proactive.examples.documentation.faulttolerance;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.objectweb.proactive.core.process.JVMProcessImpl;
 
@@ -50,7 +51,8 @@ public class Main {
                 .getName());
 
         // optional line: Default arguments
-        jvmProcessImpl.setParameters("-proto cic -name FTServer -port 1100 -fdperiod 30");
+        jvmProcessImpl.setParameters(Arrays.asList("-proto", "cic", "-name", "FTServer", "-port", "1100",
+                "-fdperiod", "30"));
 
         jvmProcessImpl.startProcess();
         //@snippet-end fault_tolerance_1

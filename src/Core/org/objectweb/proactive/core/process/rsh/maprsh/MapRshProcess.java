@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.process.rsh.maprsh;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.objectweb.proactive.core.process.AbstractExternalProcessDecorator;
 import org.objectweb.proactive.core.process.ExternalProcess;
@@ -206,7 +207,7 @@ public class MapRshProcess extends AbstractExternalProcessDecorator {
     public static void main(String[] args) {
         try {
             JVMProcess process = new JVMProcessImpl(new StandardOutputMessageLogger());
-            process.setParameters("///toto");
+            process.setParameters(Arrays.asList("///toto"));
 
             //ExternalProcess process = new SimpleExternalProcess("ls -la");
             MapRshProcess maprsh = new MapRshProcess(process);
