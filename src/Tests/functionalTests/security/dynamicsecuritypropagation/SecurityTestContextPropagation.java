@@ -41,6 +41,7 @@ import static junit.framework.Assert.assertTrue;
 import java.io.File;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
@@ -48,8 +49,10 @@ import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityDescriptorHandler;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
+import functionalTests.TestDisabler;
 import functionalTests.security.A;
 
 
@@ -65,6 +68,11 @@ public class SecurityTestContextPropagation extends FunctionalTest {
      *
      */
     private ProActiveSecurityManager psm = null;
+
+    @BeforeClass
+    public static void beforeClass() {
+        TestDisabler.unsupportedOs(OperatingSystem.windows);
+    }
 
     @Test
     public void action() throws Exception {

@@ -474,7 +474,14 @@ public class FileSystemServerImpl implements FileSystemServer {
     private File resolvePath(String absolute) throws IOException {
         final String path = absolute.replace(SEPARATOR_TO_REPLACE, File.separatorChar);
         checkConditionIsTrue(path.startsWith(File.separator), "Provided path is not absolute");
-        final File file = new File(rootFile, path);
+        File file = null;
+        // a strange behavior in the JVM, (new File(new File("path"),"\\")).getCanonicalPath() will return
+        // "path\" and we want "path"
+        if (!path.equals(File.separator)) {
+            file = (new File(rootFile, path)).getCanonicalFile();
+        } else {
+            file = rootFile;
+        }
         final String canonicalPath;
 
         try {
