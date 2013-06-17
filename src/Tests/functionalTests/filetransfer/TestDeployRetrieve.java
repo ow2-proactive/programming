@@ -42,7 +42,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import functionalTests.TestDisabler;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -58,9 +57,10 @@ import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
-import org.objectweb.proactive.utils.OperatingSystem;
+import functionalTests.TestDisabler;
 
 
 /**
@@ -93,6 +93,9 @@ public class TestDeployRetrieve extends FunctionalTest {
 
     @BeforeClass
     public static void beforeClass() {
+
+        // Disabled test deprecated API replaced by dataspaces
+        TestDisabler.unsupportedOs(OperatingSystem.unix);
         // This test hangs on Windows because SSH processes are not killed
         TestDisabler.unsupportedOs(OperatingSystem.windows);
     }
