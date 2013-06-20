@@ -1684,8 +1684,10 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
                 try {
                     File padir = new File(new URI(path.substring(begin, end)));
-                    return padir.getAbsolutePath();
+                    return padir.getCanonicalPath();
                 } catch (URISyntaxException e) {
+                    throw new ProActiveException(e);
+                } catch (IOException e) {
                     throw new ProActiveException(e);
                 }
             } else if ("file".equals(url.getProtocol())) {
@@ -1694,8 +1696,10 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                 if (index > 0) {
 
                     try {
-                        return new File(new URI("file:" + path.substring(0, index))).getAbsolutePath();
+                        return new File(new URI("file:" + path.substring(0, index))).getCanonicalPath();
                     } catch (URISyntaxException e) {
+                        throw new ProActiveException(e);
+                    } catch (IOException e) {
                         throw new ProActiveException(e);
                     }
                 } else {
