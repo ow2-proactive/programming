@@ -39,6 +39,7 @@ package functionalTests.activeobject.request.terminate;
 import static junit.framework.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
@@ -56,7 +57,7 @@ public class Test extends FunctionalTest {
     A a2;
     StringWrapper returnedValue;
 
-    @Before
+    @BeforeClass
     final public void disable() {
         TestDisabler.unstable();
     }
