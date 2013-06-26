@@ -45,7 +45,6 @@ import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.xml.VariableContract;
 
 
@@ -228,9 +227,4 @@ public interface GCMApplication {
      * @return descriptor url
      */
     public URL getDescriptorURL();
-
-    public ProActiveSecurityManager getProActiveApplicationSecurityManager();
-
-    public void setProActiveApplicationSecurityManager(
-            ProActiveSecurityManager proactiveApplicationSecurityManager);
 }

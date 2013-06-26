@@ -36,35 +36,29 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
+import java.io.IOException;
+
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
-import org.objectweb.proactive.core.security.SecurityEntity;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-
-import java.io.IOException;
 
 
 /**
  * A RemoteObject allows to turn a java object into a remotely accessible object.
  * According to the protocol selected, the remote object is going to register itself
  * on a registry.
- *
- *
  */
-public interface RemoteObject<T> extends SecurityEntity {
+public interface RemoteObject<T> {
 
     /**
      * Send a message containing a reified method call to a remote object
      * @param message the reified method call
      * @return a reply containing the result of the method call
      * @throws ProActiveException
-     * @throws RenegotiateSessionException if the security infrastructure needs to (re)initiate the session
      * @throws IOException if the message transfer has failed
      */
-    public Reply receiveMessage(Request message) throws ProActiveException, RenegotiateSessionException,
-            IOException;
+    public Reply receiveMessage(Request message) throws ProActiveException, IOException;
 
     /**
      * @return return a couple stub + proxy pointing on the current remote object

@@ -45,8 +45,6 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.security.SecurityEntity;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -64,7 +62,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @see org.objectweb.proactive.core.body.rmi.RmiBodyAdapter
  */
 //@snippet-start universalbody
-public interface UniversalBody extends Serializable, SecurityEntity {
+public interface UniversalBody extends Serializable {
     public static Logger bodyLogger = ProActiveLogger.getLogger(Loggers.BODY);
     public static Logger sendReplyExceptionsLogger = ProActiveLogger.getLogger(Loggers.EXCEPTIONS_SEND_REPLY);
 
@@ -72,9 +70,9 @@ public interface UniversalBody extends Serializable, SecurityEntity {
      * Receives a request for later processing. The call to this method is non blocking
      * unless the body cannot temporary receive the request.
      * @param request the request to process
-     * @exception java.io.IOException if the request cannot be accepted     * 
+     * @exception java.io.IOException if the request cannot be accepted 
      */
-    public void receiveRequest(Request request) throws java.io.IOException, RenegotiateSessionException;
+    public void receiveRequest(Request request) throws java.io.IOException;
 
     /**
      * Receives a reply in response to a former request.

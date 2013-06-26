@@ -3,8 +3,7 @@
     <properties>
         <prop key="proactive.locationserver"
             value="org.objectweb.proactive.ext.locationserver.LocationServer" />
-        <prop key="proactive.locationserver.rmi" value="//localhost/LocationServer" />
-        <prop key="proactive.securitymanager" value="true" />
+        <prop key="proactive.locationserver.rmi" value="//localhost/LocationServer" />        
         <prop key="proactive.mixedlocation.ttl" value="-1" />
         <prop key="proactive.mixedlocation.updatingForwarder"
             value="false" />
@@ -15,8 +14,7 @@
     	<prop key="proactive.net.disableIPv6" value="true" />
 	    
         <prop key="proactive.future.ac" value="true" />
-        <prop key="proactive.stack_trace" value="false" /> <!-- complete stack traces in requests -->
-        <prop key="proactive.dgc" value="false" />
+        <prop key="proactive.stack_trace" value="false" /> <!-- complete stack traces in requests -->        
         <prop key="proactive.exit_on_empty" value="false" /> <!-- destroy the JVM when there is no more active object -->
         <prop key="schema.validation" value="true" />
         <prop key="proactive.communication.protocol" value="rmi" />

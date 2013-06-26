@@ -42,8 +42,6 @@ import org.objectweb.proactive.core.descriptor.services.TechnicalService;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
 
 
@@ -78,15 +76,7 @@ public class FakeNode {
             //            String jobIb = new Long(gcma.getDeploymentId()).toString();
 
             try {
-
-                //create the node
-                ProActiveSecurityManager siblingPSM = null;
-                if (this.gcma.getProActiveApplicationSecurityManager() != null) {
-                    siblingPSM = this.gcma.getProActiveApplicationSecurityManager()
-                            .generateSiblingCertificate(EntityType.NODE, vn.getName());
-                }
-
-                node = part.createGCMNode(siblingPSM, vn.getName(), tsList);
+                node = part.createGCMNode(vn.getName(), tsList);
                 if (node == null) {
                     // Remote Object failed to contact the Runtime and returned null
                     // instead of throwing an exception

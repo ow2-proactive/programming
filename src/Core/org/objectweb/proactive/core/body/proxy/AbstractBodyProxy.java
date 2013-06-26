@@ -36,6 +36,12 @@
  */
 package org.objectweb.proactive.core.body.proxy;
 
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
@@ -47,17 +53,15 @@ import org.objectweb.proactive.core.body.exceptions.SendRequestCommunicationExce
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.mop.*;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+import org.objectweb.proactive.core.mop.MOP;
+import org.objectweb.proactive.core.mop.MOPException;
+import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
+import org.objectweb.proactive.core.mop.MethodCallInfo;
+import org.objectweb.proactive.core.mop.Proxy;
+import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 
 public abstract class AbstractBodyProxy extends AbstractProxy implements BodyProxy, java.io.Serializable {
@@ -121,8 +125,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
 
     private static Set<String> loggedSyncCalls = Collections.synchronizedSet(new HashSet<String>());
 
-    private Object invokeOnBody(MethodCall methodCall) throws Exception, RenegotiateSessionException,
-            Throwable {
+    private Object invokeOnBody(MethodCall methodCall) throws Exception, Throwable {
         // Now gives the MethodCall object to the body
 
         MethodCallInfo mci = methodCall.getMethodCallInfo();
@@ -159,8 +162,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
 
     // optimization may be a local execution or a caching mechanism
     // returns null if not applicable
-    private Object checkOptimizedMethod(MethodCall methodCall) throws Exception, RenegotiateSessionException,
-            Throwable {
+    private Object checkOptimizedMethod(MethodCall methodCall) throws Exception, Throwable {
         if (methodCall.getName().equals("equals") && (methodCall.getNumberOfParameter() == 1)) {
             Object arg = methodCall.getParameter(0);
             if (MOP.isReifiedObject(arg)) {
@@ -187,7 +189,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
     /**
      * 
      */
-    protected void reifyAsOneWay(MethodCall methodCall) throws Exception, RenegotiateSessionException {
+    protected void reifyAsOneWay(MethodCall methodCall) throws Exception {
         sendRequest(methodCall, null);
     }
 
@@ -200,7 +202,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         }
     }
 
-    protected Object reifyAsAsynchronous(MethodCall methodCall) throws Exception, RenegotiateSessionException {
+    protected Object reifyAsAsynchronous(MethodCall methodCall) throws Exception {
         StubObject futureobject = null;
 
         // Creates a stub + FutureProxy for representing the result
@@ -253,8 +255,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         return futureobject;
     }
 
-    protected Object reifyAsSynchronous(MethodCall methodCall) throws Throwable, Exception,
-            RenegotiateSessionException {
+    protected Object reifyAsSynchronous(MethodCall methodCall) throws Throwable, Exception {
         // Setting methodCall.res to null means that we do not use the future mechanism
         FutureProxy fp = FutureProxy.getFutureProxy();
         fp.setCreatorID(this.getBodyID());
@@ -289,9 +290,8 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         }
     }
 
-    protected abstract void sendRequest(MethodCall methodCall, Future future) throws java.io.IOException,
-            RenegotiateSessionException, CommunicationForbiddenException;
+    protected abstract void sendRequest(MethodCall methodCall, Future future) throws java.io.IOException;
 
     protected abstract void sendRequest(MethodCall methodCall, Future future, Body sourceBody)
-            throws java.io.IOException, RenegotiateSessionException, CommunicationForbiddenException;
+            throws java.io.IOException;
 }

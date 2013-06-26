@@ -44,8 +44,6 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.tags.MessageTags;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
 public class SynchronousReplyImpl implements Reply, Serializable {
@@ -56,10 +54,6 @@ public class SynchronousReplyImpl implements Reply, Serializable {
 
     public SynchronousReplyImpl(MethodCallResult reply) {
         this.reply = reply;
-    }
-
-    public boolean decrypt(ProActiveSecurityManager psm) throws RenegotiateSessionException {
-        return false;
     }
 
     public MethodCallResult getResult() {

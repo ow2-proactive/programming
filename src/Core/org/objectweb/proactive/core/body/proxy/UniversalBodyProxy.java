@@ -76,8 +76,6 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -342,8 +340,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     }
 
     @Override
-    protected void sendRequest(MethodCall methodCall, Future future) throws java.io.IOException,
-            RenegotiateSessionException, CommunicationForbiddenException {
+    protected void sendRequest(MethodCall methodCall, Future future) throws java.io.IOException {
         // Determines the body that is at the root of the subsystem from which the
         // call was sent.
         // It is always true that the body that issued the request (and not the body
@@ -435,7 +432,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
 
     @Override
     protected void sendRequest(MethodCall methodCall, Future future, Body sourceBody)
-            throws java.io.IOException, RenegotiateSessionException, CommunicationForbiddenException {
+            throws java.io.IOException {
         // TODO if component request and shortcut : update body ref
         // Now we check whether the reference to the remoteBody has changed i.e the body has
         // migrated
@@ -508,7 +505,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     }
 
     protected void sendRequestInternal(MethodCall methodCall, Future future, Body sourceBody)
-            throws java.io.IOException, RenegotiateSessionException, CommunicationForbiddenException {
+            throws java.io.IOException {
         sourceBody.sendRequest(methodCall, future, this.universalBody);
     }
 

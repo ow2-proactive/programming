@@ -46,9 +46,6 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityEntity;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -173,7 +170,7 @@ public class AwaitedRequest implements Request, java.io.Serializable {
         wrappedRequest.notifyReception(bodyReceiver);
     }
 
-    public void send(UniversalBody destinationBody) throws IOException, RenegotiateSessionException {
+    public void send(UniversalBody destinationBody) throws IOException {
         throw new IllegalStateException("An active object is trying to send an awaited request");
     }
 
@@ -203,23 +200,6 @@ public class AwaitedRequest implements Request, java.io.Serializable {
         } else {
             return wrappedRequest.getSequenceNumber();
         }
-    }
-
-    public boolean isCiphered() {
-        return this.wrappedRequest.isCiphered();
-    }
-
-    public long getSessionId() {
-        return this.wrappedRequest.getSessionId();
-    }
-
-    public boolean decrypt(ProActiveSecurityManager psm) throws RenegotiateSessionException {
-        return this.wrappedRequest.decrypt(psm);
-    }
-
-    public boolean crypt(ProActiveSecurityManager psm, SecurityEntity destinationBody)
-            throws RenegotiateSessionException {
-        return this.wrappedRequest.crypt(psm, destinationBody);
     }
 
     //

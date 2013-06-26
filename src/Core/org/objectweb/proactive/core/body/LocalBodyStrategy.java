@@ -43,8 +43,6 @@ import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
 /**
@@ -88,7 +86,7 @@ public interface LocalBodyStrategy {
      * @throws CommunicationForbiddenException
      */
     public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
-            throws IOException, RenegotiateSessionException, CommunicationForbiddenException;
+            throws IOException;
 
     /**
      * Serves the request <code>request</code> by the invoking the targeted method on the

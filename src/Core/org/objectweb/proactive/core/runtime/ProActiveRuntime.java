@@ -57,8 +57,6 @@ import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.process.UniversalProcess;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityEntity;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -87,7 +85,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 0.91
  *
  */
-public interface ProActiveRuntime extends SecurityEntity {
+public interface ProActiveRuntime {
     static Logger runtimeLogger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     /**
@@ -98,12 +96,11 @@ public interface ProActiveRuntime extends SecurityEntity {
      * @exception NodeException if the new node cannot be created
      * @see Job
      */
-    public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager nodeSecurityManager, String vnName) throws NodeException,
-            AlreadyBoundException;
+    public Node createLocalNode(String nodeName, boolean replacePreviousBinding, String vnName)
+            throws NodeException, AlreadyBoundException;
 
-    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName,
-            List<TechnicalService> tsList) throws NodeException, AlreadyBoundException;
+    public Node createGCMNode(String vnName, List<TechnicalService> tsList) throws NodeException,
+            AlreadyBoundException;
 
     /**
      * Kills all Nodes in this ProActiveRuntime

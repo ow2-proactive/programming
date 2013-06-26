@@ -38,11 +38,10 @@ package org.objectweb.proactive.core.remoteobject;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.net.URI;
-import java.security.AccessControlException;
-import java.security.PublicKey;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -57,17 +56,6 @@ import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.SecurityEntity;
-import org.objectweb.proactive.core.security.TypedCertificate;
-import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entities;
-import org.objectweb.proactive.core.security.securityentity.Entity;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -76,7 +64,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team The RemoteObjectAdapter is used to hide the fact
  *         that the remote object called is distant.
  */
-public class RemoteObjectAdapter implements RemoteObject {
+public class RemoteObjectAdapter implements RemoteObject, Serializable {
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
     protected RemoteObjectSet remoteObjectSet;
@@ -101,12 +89,6 @@ public class RemoteObjectAdapter implements RemoteObject {
     protected static Method[] methods;
 
     /**
-     * Array of methods belonging to the SecurityEntity class These methods are
-     * reified using the InternalRemoteRemoteObjectRequest class
-     */
-    protected static Method[] securityMethods;
-
-    /**
      * Array of methods belonging to the InternalRemoteRemoteObject class. These
      * methods are reified using the InternalRemoteRemoteObjectRequest class
      */
@@ -127,28 +109,6 @@ public class RemoteObjectAdapter implements RemoteObject {
             // new Class<?>[0]);
             methods[7] = RemoteObject.class.getDeclaredMethod("getAdapter", new Class<?>[0]);
             methods[8] = RemoteObject.class.getDeclaredMethod("getName", new Class<?>[0]);
-
-            securityMethods = new Method[20];
-            securityMethods[0] = SecurityEntity.class.getDeclaredMethod("getCertificate", new Class<?>[0]);
-            securityMethods[1] = SecurityEntity.class.getDeclaredMethod("startNewSession", new Class<?>[] {
-                    long.class, SecurityContext.class, TypedCertificate.class });
-            securityMethods[2] = SecurityEntity.class.getDeclaredMethod("getPublicKey", new Class<?>[0]);
-            securityMethods[3] = SecurityEntity.class.getDeclaredMethod("publicKeyExchange", new Class<?>[] {
-                    long.class, byte[].class });
-            securityMethods[4] = SecurityEntity.class.getDeclaredMethod("secretKeyExchange", new Class<?>[] {
-                    long.class, byte[].class, byte[].class, byte[].class, byte[].class, byte[].class });
-            securityMethods[5] = SecurityEntity.class.getDeclaredMethod("getPolicy", new Class<?>[] {
-                    Entities.class, Entities.class });
-            securityMethods[7] = SecurityEntity.class.getDeclaredMethod("getEntities", new Class<?>[0]);
-            securityMethods[8] = SecurityEntity.class.getDeclaredMethod("terminateSession",
-                    new Class<?>[] { long.class });
-            securityMethods[9] = SecurityEntity.class.getDeclaredMethod("randomValue", new Class<?>[] {
-                    long.class, byte[].class });
-
-            securityMethods[10] = SecurityEntity.class.getDeclaredMethod("getProActiveSecurityManager",
-                    new Class<?>[] { Entity.class });
-            securityMethods[11] = SecurityEntity.class.getDeclaredMethod("setProActiveSecurityManager",
-                    new Class<?>[] { Entity.class, PolicyServer.class });
 
             internalRROMethods = new Method[20];
             internalRROMethods[0] = InternalRemoteRemoteObject.class.getDeclaredMethod("getObjectProxy",
@@ -190,8 +150,7 @@ public class RemoteObjectAdapter implements RemoteObject {
         this.remoteObjectSet.forceProtocol(protocol);
     }
 
-    public Reply receiveMessage(Request message) throws ProActiveException, RenegotiateSessionException,
-            IOException {
+    public Reply receiveMessage(Request message) throws ProActiveException, IOException {
         try {
 
             // for each RRO ordered from faster to slower
@@ -203,288 +162,6 @@ public class RemoteObjectAdapter implements RemoteObject {
             LOGGER_RO.warn(displayCaller + " : unable to contact remote object " + displayROURI +
                 " when calling method " + message.getMethodName(), e);
             return new SynchronousReplyImpl(new MethodCallResult(null, e));
-        }
-    }
-
-    // Implements SecurityEntity
-    public TypedCertificate getCertificate() throws SecurityNotAvailableException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[0], new Object[0],
-                    new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (TypedCertificate) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            LOGGER_RO.info(displayCaller +
-                " : exception in remote object adapter while forwarding the method call to" + displayROURI,
-                    e1);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    // public byte[] getCertificateEncoded()
-    // throws SecurityNotAvailableException, IOException {
-    // return this.remoteObject.getCertificateEncoded();
-    // }
-    public Entities getEntities() throws SecurityNotAvailableException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[6], new Object[0],
-                    new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (Entities) reply.getResult().getResult();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    public SecurityContext getPolicy(Entities local, Entities distant) throws SecurityNotAvailableException,
-            IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[5], new Object[] { local, distant },
-                    new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (SecurityContext) reply.getResult().getResult();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    public PublicKey getPublicKey() throws SecurityNotAvailableException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[2], new Object[0],
-                    new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (PublicKey) reply.getResult().getResult();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    public byte[] publicKeyExchange(long sessionID, byte[] signature) throws SecurityNotAvailableException,
-            RenegotiateSessionException, KeyExchangeException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[3],
-                    new Object[] { sessionID, signature }, new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (byte[]) reply.getResult().getResult();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    public byte[] randomValue(long sessionID, byte[] clientRandomValue) throws SecurityNotAvailableException,
-            RenegotiateSessionException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[9], new Object[] { sessionID,
-                    clientRandomValue }, new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (byte[]) reply.getResult().getResult();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    public byte[][] secretKeyExchange(long sessionID, byte[] encodedAESKey, byte[] encodedIVParameters,
-            byte[] encodedClientMacKey, byte[] encodedLockData, byte[] parametersSignature)
-            throws SecurityNotAvailableException, RenegotiateSessionException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[4], new Object[] { sessionID,
-                    encodedAESKey, encodedIVParameters, encodedClientMacKey, encodedLockData,
-                    parametersSignature }, new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (byte[][]) reply.getResult().getResult();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    public long startNewSession(long distantSessionID, SecurityContext policy,
-            TypedCertificate distantCertificate) throws SecurityNotAvailableException, IOException,
-            SessionException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[1], new Object[] { distantSessionID,
-                    policy, distantCertificate }, new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return ((Long) reply.getResult().getResult()).longValue();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-
-        return 0;
-    }
-
-    public void terminateSession(long sessionID) throws SecurityNotAvailableException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[8], new Object[] { sessionID },
-                    new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
         }
     }
 
@@ -506,10 +183,6 @@ public class RemoteObjectAdapter implements RemoteObject {
                     " : exception in remote object adapter while forwarding the method call to" +
                     displayROURI, e);
             } catch (IOException e) {
-                LOGGER_RO.info(displayCaller +
-                    " : exception in remote object adapter while forwarding the method call to" +
-                    displayROURI, e);
-            } catch (RenegotiateSessionException e) {
                 LOGGER_RO.info(displayCaller +
                     " : exception in remote object adapter while forwarding the method call to" +
                     displayROURI, e);
@@ -542,8 +215,6 @@ public class RemoteObjectAdapter implements RemoteObject {
             LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
             LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
 
         return null;
@@ -573,11 +244,6 @@ public class RemoteObjectAdapter implements RemoteObject {
                     .info(displayCaller +
                         " : exception in remote object adapter while forwarding the method call to" +
                         displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
         }
 
         return null;
@@ -598,11 +264,6 @@ public class RemoteObjectAdapter implements RemoteObject {
                         " : exception in remote object adapter while forwarding the method call to" +
                         displayROURI, e);
         } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
             LOGGER_RO
                     .info(displayCaller +
                         " : exception in remote object adapter while forwarding the method call to" +
@@ -631,10 +292,6 @@ public class RemoteObjectAdapter implements RemoteObject {
             throw new ProActiveException(displayCaller +
                 " : exception in remote object adapter while forwarding the method call to " + displayROURI,
                 ioe);
-        } catch (RenegotiateSessionException rse) {
-            throw new ProActiveException(displayCaller +
-                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
-                rse);
         }
 
     }
@@ -683,11 +340,6 @@ public class RemoteObjectAdapter implements RemoteObject {
                     .info(displayCaller +
                         " : exception in remote object adapter while forwarding the method call to" +
                         displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
         }
         return null;
     }
@@ -710,62 +362,6 @@ public class RemoteObjectAdapter implements RemoteObject {
         return null;
     }
 
-    public ProActiveSecurityManager getProActiveSecurityManager(Entity user)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[10], new Object[] { user },
-                    new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-
-            return (ProActiveSecurityManager) reply.getResult().getResult();
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return null;
-    }
-
-    public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        try {
-            MethodCall mc = MethodCall.getMethodCall(securityMethods[11],
-                    new Object[] { user, policyServer }, new HashMap<TypeVariable<?>, Class<?>>());
-            Request r = new InternalRemoteRemoteObjectRequest(mc);
-
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-        } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        }
-        return;
-    }
-
     // TODO: write a public method which does't throw exception.
     public URI getURI() throws ProActiveException {
         try {
@@ -783,8 +379,6 @@ public class RemoteObjectAdapter implements RemoteObject {
             return uri;
         } catch (IOException e) {
             throw new ProActiveException(e);
-        } catch (RenegotiateSessionException e) {
-            throw new ProActiveException(e);
         } catch (SecurityException e) {
             throw new ProActiveException(e);
         }
@@ -801,8 +395,6 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             return (URI) reply.getResult().getResult();
         } catch (IOException e) {
-            throw new ProActiveException(e);
-        } catch (RenegotiateSessionException e) {
             throw new ProActiveException(e);
         } catch (SecurityException e) {
             throw new ProActiveException(e);
@@ -829,11 +421,6 @@ public class RemoteObjectAdapter implements RemoteObject {
                     .info(displayCaller +
                         " : exception in remote object adapter while forwarding the method call to" +
                         displayROURI, e);
-        } catch (RenegotiateSessionException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
         }
         return null;
     }
@@ -854,11 +441,6 @@ public class RemoteObjectAdapter implements RemoteObject {
                         " : exception in remote object adapter while forwarding the method call to" +
                         displayROURI, e);
         } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
-        } catch (RenegotiateSessionException e) {
             LOGGER_RO
                     .info(displayCaller +
                         " : exception in remote object adapter while forwarding the method call to" +

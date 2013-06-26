@@ -36,13 +36,12 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
+import java.io.IOException;
+import java.net.URI;
+
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-
-import java.io.IOException;
-import java.net.URI;
 
 
 /**
@@ -60,11 +59,9 @@ public interface RemoteRemoteObject {
      * @param message the reified method call
      * @return a reply containing the result of the method call
      * @throws ProActiveException
-     * @throws RenegotiateSessionException if the security infrastructure needs to (re)initiate the session
      * @throws IOException if the message transfer has failed
      */
-    public Reply receiveMessage(Request message) throws ProActiveException, IOException,
-            RenegotiateSessionException;
+    public Reply receiveMessage(Request message) throws ProActiveException, IOException;
 
     /**
      * Return the protocol dependant URI of the remote remote object

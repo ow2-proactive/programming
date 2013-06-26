@@ -36,18 +36,19 @@
  */
 package functionalTests.node.nodefactory;
 
-import functionalTests.FunctionalTest;
+import java.rmi.AlreadyBoundException;
+
 import org.junit.Test;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 
-import java.rmi.AlreadyBoundException;
+import functionalTests.FunctionalTest;
 
 
 public class TestErrorHandling extends FunctionalTest {
 
     @Test(expected = NodeException.class)
     public void testHalfBody() throws NodeException, AlreadyBoundException {
-        NodeFactory.createLocalNode("HalfbodiesNode_", false, null, null);
+        NodeFactory.createLocalNode("HalfbodiesNode_", false, null);
     }
 }

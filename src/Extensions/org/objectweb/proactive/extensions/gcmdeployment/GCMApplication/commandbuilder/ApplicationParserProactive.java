@@ -44,12 +44,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityDescriptorHandler;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
-import org.objectweb.proactive.core.security.exceptions.InvalidPolicyFile;
 import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
 import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
@@ -68,9 +62,6 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
     private static final String XPATH_PROACTIVE_CLASSPATH = "app:proactiveClasspath";
     private static final String XPATH_APPLICATION_CLASSPATH = "app:applicationClasspath";
     private static final String XPATH_SECURITY_POLICY = "app:securityPolicy";
-    private static final String XPATH_PROACTIVE_SECURITY = "app:proactiveSecurity";
-    private static final String XPATH_APPLICATION_POLICY = "app:applicationPolicy";
-    private static final String XPATH_RUNTIME_POLICY = "app:runtimePolicy";
     private static final String XPATH_LOG4J_PROPERTIES = "app:log4jProperties";
     private static final String XPATH_USER_PROPERTIES = "app:userProperties";
     private static final String XPATH_DATA = "app:data";
@@ -81,7 +72,6 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
     private static final String XPATH_OUTPUT = "app:output";
     protected static final String NODE_NAME = "proactive";
     protected TechnicalServicesProperties appTechnicalServicesProperties;
-    protected ProActiveSecurityManager proactiveApplicationSecurityManager;
     protected Set<InputOutputSpaceConfiguration> spacesConfigurations;
     protected String namingServiceURL;
 
@@ -122,7 +112,6 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
 
             if (configNode != null) {
                 parseProActiveConfiguration(xpath, commandBuilderProActive, configNode);
-                applicationParser.setProactiveApplicationSecurityManager(proactiveApplicationSecurityManager);
 
             }
 
@@ -181,50 +170,6 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
         if (securityPolicyNode != null) {
             PathElement pathElement = GCMParserHelper.parsePathElementNode(securityPolicyNode);
             commandBuilderProActive.setSecurityPolicy(pathElement);
-        }
-
-        Node applicationSecurityPolicyNode = (Node) xpath.evaluate(XPATH_PROACTIVE_SECURITY + "/" +
-            XPATH_APPLICATION_POLICY, configNode, XPathConstants.NODE);
-        if (applicationSecurityPolicyNode != null) {
-            PathElement pathElement = GCMParserHelper.parsePathElementNode(applicationSecurityPolicyNode);
-            commandBuilderProActive.setApplicationPolicy(pathElement);
-
-            /** security rules */
-
-            PolicyServer policyServer;
-
-            try {
-
-                System.out.println("CommandBuilderProActive.setApplicationPolicy()" +
-                    pathElement.getRelPath());
-
-                policyServer = ProActiveSecurityDescriptorHandler
-                        .createPolicyServer(pathElement.getRelPath());
-
-                proactiveApplicationSecurityManager = new ProActiveSecurityManager(EntityType.APPLICATION,
-                    policyServer);
-
-                System.out.println("ApplicationParserProactive.parseProActiveConfiguration()" +
-                    proactiveApplicationSecurityManager);
-
-                // set the security policyserver to the default proactive meta object
-                // by the way, the HalfBody will be associated to a security manager
-                // derivated from this one.
-                ProActiveSecurityManager psm = proactiveApplicationSecurityManager
-                        .generateSiblingCertificate(EntityType.OBJECT, "HalfBody");
-                ProActiveMetaObjectFactory.newInstance().setProActiveSecurityManager(psm);
-
-            } catch (InvalidPolicyFile e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        Node runtimeSecurityPolicyNode = (Node) xpath.evaluate(XPATH_PROACTIVE_SECURITY + "/" +
-            XPATH_RUNTIME_POLICY, configNode, XPathConstants.NODE);
-        if (runtimeSecurityPolicyNode != null) {
-            PathElement pathElement = GCMParserHelper.parsePathElementNode(runtimeSecurityPolicyNode);
-            commandBuilderProActive.setRuntimePolicy(pathElement);
         }
 
         // Optional: log4j properties

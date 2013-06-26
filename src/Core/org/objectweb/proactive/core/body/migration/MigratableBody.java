@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.core.body.migration;
 
-import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.apache.log4j.Logger;
@@ -50,12 +49,6 @@ import org.objectweb.proactive.core.body.request.RequestReceiver;
 import org.objectweb.proactive.core.event.MigrationEventListener;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.core.security.InternalBodySecurity;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.crypto.Session;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -230,38 +223,6 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
         String saveNodeURL = nodeURL;
         nodeURL = node.getNodeInformation().getURL();
 
-        // security checks
-        try {
-            ProActiveRuntime runtimeDestination = node.getProActiveRuntime();
-
-            if (this.securityManager != null) {
-                Session session = this.securityManager.initiateSession(runtimeDestination);
-
-                if (!session.getSecurityContext().isMigration()) {
-                    ProActiveLogger.getLogger(Loggers.SECURITY).info(
-                            "NOTE : Security manager forbids the migration");
-                    return this;
-                }
-            } else {
-                // no local security but need to check if distant runtime accepts migration
-                SecurityContext scDistant = runtimeDestination.getPolicy(this.getEntities(),
-                        runtimeDestination.getEntities());
-                if (!scDistant.isMigration()) {
-                    ProActiveLogger.getLogger(Loggers.SECURITY).info(
-                            "NOTE : Security manager forbids the migration");
-                    return this;
-                }
-            }
-        } catch (SecurityNotAvailableException e1) {
-            bodyLogger.debug("Security not available");
-        } catch (CommunicationForbiddenException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
         try {
             nodeURL = node.getNodeInformation().getURL();
 
@@ -276,30 +237,16 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
                 bodyID = null;
             }
 
-            // security
-            // save opened sessions
-            if (this.isSecurityOn) {
-                openedSessions = securityManager.getOpenedConnexion();
-            }
-
             // Set copyMode tag in all futures
             // those futures are going to be serialized for migration (i.e. no AC registration)
             this.getFuturePool().setCopyMode(true);
 
             // try to migrate
             migratedBody = migrationManager.migrateTo(node, this);
-
-            if (isSecurityOn) {
-                this.internalBodySecurity.setDistantBody(migratedBody);
-            }
         } catch (MigrationException e) {
-            openedSessions = null;
             nodeURL = saveNodeURL;
             bodyID = savedID;
             localBodyStrategy.getFuturePool().setCopyMode(false);
-            if (this.isSecurityOn) {
-                this.internalBodySecurity.setDistantBody(null);
-            }
             acceptCommunication();
             throw e;
         }
@@ -332,10 +279,6 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
         }
         in.defaultReadObject();
         hasJustMigrated = true;
-        if (this.isSecurityOn) {
-            internalBodySecurity = new InternalBodySecurity(null);
-            // securityManager.setBody(this);
-        }
     }
 
     /*

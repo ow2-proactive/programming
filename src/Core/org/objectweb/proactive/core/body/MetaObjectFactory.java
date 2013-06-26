@@ -46,7 +46,6 @@ import org.objectweb.proactive.core.body.request.RequestReceiverFactory;
 import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
 import org.objectweb.proactive.core.component.identity.PAComponentFactory;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManagerFactory;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ThreadStoreFactory;
 
 
@@ -135,17 +134,6 @@ public interface MetaObjectFactory {
 
     // COMPONENTS
     public Map<String, Object> getParameters();
-
-    //SECURITY
-
-    /**
-     * Creates the ProActiveSecurityManager
-     * @return a new ProActiveSecurityManager
-     * @see ProActiveSecurityManager
-     */
-    public ProActiveSecurityManager getProActiveSecurityManager();
-
-    public void setProActiveSecurityManager(ProActiveSecurityManager psm);
 
     public Object clone() throws CloneNotSupportedException;
 

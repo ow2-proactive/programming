@@ -37,8 +37,6 @@
 package unitTests.dataspaces.mock;
 
 import java.io.IOException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
@@ -53,17 +51,6 @@ import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.TypedCertificate;
-import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entities;
-import org.objectweb.proactive.core.security.securityentity.Entity;
 
 
 public class MOCKBody implements Body {
@@ -201,8 +188,7 @@ public class MOCKBody implements Body {
     }
 
     public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
-            throws IOException, RenegotiateSessionException, CommunicationForbiddenException {
-
+            throws IOException {
     }
 
     public void serve(Request request) {
@@ -257,7 +243,7 @@ public class MOCKBody implements Body {
     public void receiveReply(Reply r) throws IOException {
     }
 
-    public void receiveRequest(Request request) throws IOException, RenegotiateSessionException {
+    public void receiveRequest(Request request) throws IOException {
     }
 
     @Deprecated
@@ -288,79 +274,13 @@ public class MOCKBody implements Body {
         return null;
     }
 
-    public TypedCertificate getCertificate() throws SecurityNotAvailableException, IOException {
-
-        return null;
-    }
-
-    public Entities getEntities() throws SecurityNotAvailableException, IOException {
-
-        return null;
-    }
-
-    public SecurityContext getPolicy(Entities local, Entities distant) throws SecurityNotAvailableException,
-            IOException {
-
-        return null;
-    }
-
-    public ProActiveSecurityManager getProActiveSecurityManager(Entity user)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-
-        return null;
-    }
-
-    public PublicKey getPublicKey() throws SecurityNotAvailableException, IOException {
-
-        return null;
-    }
-
-    public byte[] publicKeyExchange(long sessionID, byte[] signature) throws SecurityNotAvailableException,
-            RenegotiateSessionException, KeyExchangeException, IOException {
-
-        return null;
-    }
-
-    public byte[] randomValue(long sessionID, byte[] clientRandomValue) throws SecurityNotAvailableException,
-            RenegotiateSessionException, IOException {
-
-        return null;
-    }
-
-    public byte[][] secretKeyExchange(long sessionID, byte[] encodedAESKey, byte[] encodedIVParameters,
-            byte[] encodedClientMacKey, byte[] encodedLockData, byte[] parametersSignature)
-            throws SecurityNotAvailableException, RenegotiateSessionException, IOException {
-
-        return null;
-    }
-
-    public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-
-    }
-
-    public long startNewSession(long distantSessionID, SecurityContext policy,
-            TypedCertificate distantCertificate) throws SessionException, SecurityNotAvailableException,
-            IOException {
-
-        return 0;
-    }
-
-    public void terminateSession(long sessionID) throws SecurityNotAvailableException, IOException {
-
-    }
-
     public String getUrl() {
         return null;
     }
 
     public void setImmediateService(String methodName, boolean uniqueThread) {
-        // TODO Auto-generated method stub
-
     }
 
     public void setImmediateService(String methodName, Class<?>[] parametersTypes, boolean uniqueThread) {
-        // TODO Auto-generated method stub
-
     }
 }

@@ -43,8 +43,6 @@ import org.objectweb.proactive.core.body.HalfBody;
 import org.objectweb.proactive.core.body.SendingThreadPool;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
 public class RequestToSend implements Runnable {
@@ -81,10 +79,6 @@ public class RequestToSend implements Runnable {
             // -------------------
 
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (RenegotiateSessionException e) {
-            e.printStackTrace();
-        } catch (CommunicationForbiddenException e) {
             e.printStackTrace();
         } finally {
             if (!isHalfBody) {

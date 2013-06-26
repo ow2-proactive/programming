@@ -10,7 +10,6 @@
 	<classpathentry kind="lib" path="compile/lib/junit-4.11-SNAPSHOT-20120416-1530.jar"/>
 	<classpathentry kind="lib" path="lib/asm-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/ast-core-2.4-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/bouncycastle.jar"/>
 	<classpathentry kind="lib" path="lib/cockpit-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
@@ -54,7 +53,6 @@
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.11.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/ssj.jar"/>
-	<classpathentry kind="lib" path="lib/sunxacml.jar"/>
 	<classpathentry kind="lib" path="lib/synchronize-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/task-deployment-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/task-framework-2.4-SNAPSHOT.jar"/>
@@ -64,5 +62,6 @@
 	<classpathentry kind="lib" path="lib/xercesImpl-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/winp-1.17-patched.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/bouncycastle.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

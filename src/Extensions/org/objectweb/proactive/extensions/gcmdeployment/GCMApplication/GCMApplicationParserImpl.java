@@ -61,7 +61,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
@@ -118,7 +117,6 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
     protected Map<String, GCMVirtualNodeInternal> virtualNodes;
     protected Map<String, ApplicationParser> applicationParsersMap;
     protected TechnicalServicesProperties appTechnicalServices;
-    protected ProActiveSecurityManager proactiveApplicationSecurityManager;
     protected boolean dataSpacesEnabled;
     protected Set<InputOutputSpaceConfiguration> inputOutputSpacesConfigurations;
     protected String dataSpacesNamingServiceURL;
@@ -461,15 +459,6 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
 
     public TechnicalServicesProperties getAppTechnicalServices() {
         return appTechnicalServices;
-    }
-
-    public ProActiveSecurityManager getProactiveApplicationSecurityManager() {
-        return proactiveApplicationSecurityManager;
-    }
-
-    public void setProactiveApplicationSecurityManager(
-            ProActiveSecurityManager proactiveApplicationSecurityManager) {
-        this.proactiveApplicationSecurityManager = proactiveApplicationSecurityManager;
     }
 
     public boolean isDataSpacesEnabled() {

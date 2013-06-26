@@ -85,8 +85,6 @@ import org.objectweb.proactive.core.process.mpi.MPIProcess;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.converter.MakeDeepCopy;
@@ -192,9 +190,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
     protected long globalTimeOut;
     private Object uniqueActiveObject = null;
 
-    // Security
-    private ProActiveSecurityManager proactiveSecurityManager;
-
     // PAD infos
     private boolean mainVirtualNode;
     private String padURL;
@@ -221,8 +216,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
     /**
      * Contructs a new intance of VirtualNode
      */
-    public VirtualNodeImpl(String name, ProActiveSecurityManager proactiveSecurityManager, String padURL,
-            boolean isMainVN, ProActiveDescriptorInternal descriptor) {
+    public VirtualNodeImpl(String name, String padURL, boolean isMainVN,
+            ProActiveDescriptorInternal descriptor) {
         // if we launch several times the same application
         // we have to change the name of the main VNs because of
         // the register, otherwise we will monitor each time all the last
@@ -250,9 +245,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             logger.debug("vn " + this.name + " registered on " +
                 this.proActiveRuntimeImpl.getVMInformation().getVMID().toString());
         }
-
-        // SECURITY
-        this.proactiveSecurityManager = proactiveSecurityManager;
 
         // added for main infos
         this.mainVirtualNode = isMainVN;
@@ -977,13 +969,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             int nodeNumber = (Integer.valueOf(_virtualMachine.getNbNodesOnCreatedVMs())).intValue();
 
             for (int i = 1; i <= nodeNumber; i++) {
-                ProActiveSecurityManager siblingPSM = null;
-
-                if (this.proactiveSecurityManager != null) {
-                    siblingPSM = this.proactiveSecurityManager.generateSiblingCertificate(EntityType.NODE,
-                            this.name);
-                }
-
                 int registerAttempts = this.REGISTRATION_ATTEMPTS;
 
                 while (registerAttempts > 0) { // If there is an
@@ -1000,8 +985,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                     // co-allocation
                     // in the jvm.
                     try {
-                        Node node = proActiveRuntimeRegistered.createLocalNode(nodeName, false, siblingPSM,
-                                this.getName());
+                        Node node = proActiveRuntimeRegistered.createLocalNode(nodeName, false, this
+                                .getName());
 
                         // JMX Notification
                         ProActiveRuntimeWrapperMBean mbean = ProActiveRuntimeImpl.getProActiveRuntime()
@@ -1105,14 +1090,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             // get the Runtime for the given protocol
             ProActiveRuntime defaultRuntime = RuntimeFactory.getProtocolSpecificRuntime(protocol);
 
-            //create the node
-            ProActiveSecurityManager siblingPSM = null;
-
-            if (this.proactiveSecurityManager != null) {
-                siblingPSM = this.proactiveSecurityManager.generateSiblingCertificate(EntityType.NODE,
-                        this.name);
-            }
-
             int registrationAttempts = this.REGISTRATION_ATTEMPTS;
 
             Node node = null;
@@ -1120,7 +1097,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 String nodeName = this.name + Integer.toString(ProActiveRandom.nextPosInt());
 
                 try {
-                    node = defaultRuntime.createLocalNode(nodeName, false, siblingPSM, this.getName());
+                    node = defaultRuntime.createLocalNode(nodeName, false, this.getName());
                     registrationAttempts = 0;
                 } catch (AlreadyBoundException e) {
                     registrationAttempts--;

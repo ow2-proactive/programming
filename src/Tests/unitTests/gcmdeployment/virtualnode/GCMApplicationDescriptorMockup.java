@@ -44,7 +44,6 @@ import java.util.Set;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
@@ -129,15 +128,6 @@ public class GCMApplicationDescriptorMockup implements GCMApplicationInternal {
     }
 
     public Set<String> getVirtualNodeNames() {
-        throw new RuntimeException("Not implemented");
-    }
-
-    public ProActiveSecurityManager getProActiveApplicationSecurityManager() {
-        return null;
-    }
-
-    public void setProActiveApplicationSecurityManager(
-            ProActiveSecurityManager proactiveApplicationSecurityManager) {
         throw new RuntimeException("Not implemented");
     }
 

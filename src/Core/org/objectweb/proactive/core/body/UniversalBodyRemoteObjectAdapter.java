@@ -37,8 +37,6 @@
 package org.objectweb.proactive.core.body;
 
 import java.io.IOException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -48,17 +46,6 @@ import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.TypedCertificate;
-import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entities;
-import org.objectweb.proactive.core.security.securityentity.Entity;
-import org.objectweb.proactive.core.util.HeartbeatResponse;
 
 
 public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> implements UniversalBody {
@@ -159,7 +146,7 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
         target.receiveReply(r);
     }
 
-    public void receiveRequest(Request request) throws IOException, RenegotiateSessionException {
+    public void receiveRequest(Request request) throws IOException {
         target.receiveRequest(request);
     }
 
@@ -174,60 +161,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
 
     public void updateLocation(UniqueID id, UniversalBody body) throws IOException {
         target.updateLocation(id, body);
-    }
-
-    public TypedCertificate getCertificate() throws SecurityNotAvailableException, IOException {
-        return target.getCertificate();
-    }
-
-    public Entities getEntities() throws SecurityNotAvailableException, IOException {
-        return target.getEntities();
-    }
-
-    public SecurityContext getPolicy(Entities local, Entities distant) throws SecurityNotAvailableException,
-            IOException {
-        return target.getPolicy(local, distant);
-    }
-
-    public PublicKey getPublicKey() throws SecurityNotAvailableException, IOException {
-        return target.getPublicKey();
-    }
-
-    public byte[] publicKeyExchange(long sessionID, byte[] signature) throws SecurityNotAvailableException,
-            RenegotiateSessionException, KeyExchangeException, IOException {
-        return target.publicKeyExchange(sessionID, signature);
-    }
-
-    public byte[] randomValue(long sessionID, byte[] clientRandomValue) throws SecurityNotAvailableException,
-            RenegotiateSessionException, IOException {
-        return target.randomValue(sessionID, clientRandomValue);
-    }
-
-    public byte[][] secretKeyExchange(long sessionID, byte[] encodedAESKey, byte[] encodedIVParameters,
-            byte[] encodedClientMacKey, byte[] encodedLockData, byte[] parametersSignature)
-            throws SecurityNotAvailableException, RenegotiateSessionException, IOException {
-        return target.secretKeyExchange(sessionID, encodedAESKey, encodedIVParameters, encodedClientMacKey,
-                encodedLockData, parametersSignature);
-    }
-
-    public long startNewSession(long distantSessionID, SecurityContext policy,
-            TypedCertificate distantCertificate) throws SecurityNotAvailableException, IOException,
-            SessionException {
-        return target.startNewSession(distantSessionID, policy, distantCertificate);
-    }
-
-    public void terminateSession(long sessionID) throws SecurityNotAvailableException, IOException {
-        target.terminateSession(sessionID);
-    }
-
-    public ProActiveSecurityManager getProActiveSecurityManager(Entity user)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        return this.target.getProActiveSecurityManager(user);
-    }
-
-    public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        this.target.setProActiveSecurityManager(user, policyServer);
     }
 
     public String getUrl() {

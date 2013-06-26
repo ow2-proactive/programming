@@ -54,7 +54,6 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.xml.VariableContract;
@@ -161,18 +160,7 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
         return target.getTopology();
     }
 
-    public ProActiveSecurityManager getProActiveApplicationSecurityManager() {
-        return target.getProActiveApplicationSecurityManager();
-    }
-
-    public void setProActiveApplicationSecurityManager(
-            ProActiveSecurityManager proactiveApplicationSecurityManager) {
-        target.setProActiveApplicationSecurityManager(proactiveApplicationSecurityManager);
-
-    }
-
     public void waitReady(long timeout) throws ProActiveTimeoutException {
         target.waitReady(timeout);
     }
-
 }

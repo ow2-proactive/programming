@@ -102,9 +102,6 @@ public class CommandBuilderProActive implements CommandBuilder {
     /** application security policy file */
     private PathElement applicationPolicy;
 
-    /** runtime security policy file */
-    private PathElement runtimePolicy;
-
     public CommandBuilderProActive() {
         GCMD_LOGGER.trace(this.getClass().getSimpleName() + " created");
         vns = new HashMap<String, GCMVirtualNodeInternal>();
@@ -198,13 +195,6 @@ public class CommandBuilderProActive implements CommandBuilder {
 
         }
 
-    }
-
-    public void setRuntimePolicy(PathElement pe) {
-        if (pe != null) {
-            GCMD_LOGGER.trace(" Set runtimePolicy relpath to " + pe.getRelPath());
-            runtimePolicy = pe;
-        }
     }
 
     public PathElement getUserProperties() {
@@ -378,14 +368,6 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(" ");
         }
 
-        if (runtimePolicy != null) {
-            command.append(CentralPAPropertyRepository.PA_RUNTIME_SECURITY.getCmdLine());
-            command.append("\"");
-            command.append(runtimePolicy.getFullPath(hostInfo, this));
-            command.append("\"");
-            command.append(" ");
-        }
-
         if (hostInfo.getDataSpacesScratchURL() != null) {
             command.append(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URL.getCmdLine());
             command.append("\"");
@@ -549,11 +531,6 @@ public class CommandBuilderProActive implements CommandBuilder {
         if (hostInfo.getNetworkInterface() != null) {
             command.add(CentralPAPropertyRepository.PA_NET_INTERFACE.getCmdLine() +
                 hostInfo.getNetworkInterface());
-        }
-
-        if (runtimePolicy != null) {
-            command.add(CentralPAPropertyRepository.PA_RUNTIME_SECURITY.getCmdLine() +
-                runtimePolicy.getFullPath(hostInfo, this));
         }
 
         if (hostInfo.getDataSpacesScratchURL() != null) {

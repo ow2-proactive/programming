@@ -46,7 +46,6 @@ import java.util.concurrent.TimeUnit;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
 /**
@@ -129,8 +128,6 @@ public class LocalFutureUpdateCallbacks {
             try {
                 this.body.sendRequest(mc, null, this.body);
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (RenegotiateSessionException e) {
                 e.printStackTrace();
             }
         }

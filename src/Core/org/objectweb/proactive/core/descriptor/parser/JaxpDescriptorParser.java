@@ -264,9 +264,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                         securityFile = descriptorDir + File.separator + securityFile;
                     }
                 }
-
-                logger.debug("creating ProActiveSecurityManager : " + securityFile);
-                proActiveDescriptor.createProActiveSecurityManager(securityFile);
             } else { // TODO : Policy node
             }
         }

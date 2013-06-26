@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.core.node;
 
+import java.net.URISyntaxException;
+import java.rmi.AlreadyBoundException;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
@@ -44,14 +47,10 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.net.URISyntaxException;
-import java.rmi.AlreadyBoundException;
 
 
 /**
@@ -111,24 +110,20 @@ public class NodeFactory {
      * @throws NodeException
      */
     public static synchronized Node getDefaultNode() throws NodeException {
-        ProActiveSecurityManager securityManager = null;
-
         ProActiveRuntime runtime = ProActiveRuntimeImpl.getProActiveRuntime();
 
         while (defaultNode == null) {
             try {
                 // hopefully no collision will occur
                 defaultNode = runtime.createLocalNode(DEFAULT_NODE_NAME + ProActiveRandom.nextPosInt(),
-                        false, securityManager, DEFAULT_VIRTUAL_NODE_NAME);
+                        false, DEFAULT_VIRTUAL_NODE_NAME);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the default Node", e);
             } catch (AlreadyBoundException e) {
                 //if this exception is risen, we generate another random name for the node
                 ProActiveLogger.logEatedException(logger, e);
             }
-
         }
-
         return defaultNode;
     }
 
@@ -140,11 +135,10 @@ public class NodeFactory {
      */
     public static synchronized Node getHalfBodiesNode() throws NodeException {
         ProActiveRuntime defaultRuntime = ProActiveRuntimeImpl.getProActiveRuntime();
-        ProActiveSecurityManager securityManager = null;
         while (halfBodiesNode == null) {
             try {
                 halfBodiesNode = defaultRuntime.createLocalNode(HALFBODIES_NODE_NAME +
-                    ProActiveRandom.nextPosInt(), false, securityManager, DEFAULT_VIRTUAL_NODE_NAME);
+                    ProActiveRandom.nextPosInt(), false, DEFAULT_VIRTUAL_NODE_NAME);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the halfbodies hosting Node", e);
             } catch (AlreadyBoundException e) {
@@ -204,17 +198,15 @@ public class NodeFactory {
      * @param nodeName 
      * 			name of the node to create. It musts comply to the following regular expression: "[a-zA-Z0-9_-]+"
      * @param replacePreviousBinding
-     * 			Should an already existing node with the same name be replaced or not			
-     * @param psm
-     * 			A {@link ProActiveSecurityManager} or null
+     * 			Should an already existing node with the same name be replaced or not
      * @param vnname
      * 			A Virtual Node name or null
      * @return  the newly created node on the local JVM
      * @exception NodeException 
      * 			if the node cannot be created or if the nodeName is invalid
      */
-    public static Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager psm, String vnname) throws NodeException, AlreadyBoundException {
+    public static Node createLocalNode(String nodeName, boolean replacePreviousBinding, String vnname)
+            throws NodeException, AlreadyBoundException {
         ProActiveRuntime proActiveRuntime;
 
         // Throws an Exception is the name is invalid
@@ -232,7 +224,7 @@ public class NodeFactory {
         //then create a node
         try {
             proActiveRuntime = RuntimeFactory.getDefaultRuntime();
-            return proActiveRuntime.createLocalNode(nodeName, replacePreviousBinding, psm, vnname);
+            return proActiveRuntime.createLocalNode(nodeName, replacePreviousBinding, vnname);
         } catch (Exception e) {
             throw new NodeException("Failed to create a local node. name=" + nodeName, e);
         }

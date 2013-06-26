@@ -39,8 +39,6 @@ package unitTests.dataspaces.mock;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.AlreadyBoundException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
 import java.util.List;
 
 import org.objectweb.proactive.Body;
@@ -60,16 +58,6 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.VMInformation;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.TypedCertificate;
-import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entities;
-import org.objectweb.proactive.core.security.securityentity.Entity;
 
 
 public class MOCKProActiveRuntime implements ProActiveRuntime {
@@ -89,14 +77,13 @@ public class MOCKProActiveRuntime implements ProActiveRuntime {
         return null;
     }
 
-    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName,
-            List<TechnicalService> tsList) throws NodeException, AlreadyBoundException {
+    public Node createGCMNode(String vnName, List<TechnicalService> tsList) throws NodeException,
+            AlreadyBoundException {
         return null;
     }
 
-    public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager nodeSecurityManager, String vnName) throws NodeException,
-            AlreadyBoundException {
+    public Node createLocalNode(String nodeName, boolean replacePreviousBinding, String vnName)
+            throws NodeException, AlreadyBoundException {
 
         return null;
     }
@@ -263,68 +250,6 @@ public class MOCKProActiveRuntime implements ProActiveRuntime {
     }
 
     public void unregisterVirtualNode(String virtualNodeName) throws ProActiveException {
-
-    }
-
-    public TypedCertificate getCertificate() throws SecurityNotAvailableException, IOException {
-
-        return null;
-    }
-
-    public Entities getEntities() throws SecurityNotAvailableException, IOException {
-
-        return null;
-    }
-
-    public SecurityContext getPolicy(Entities local, Entities distant) throws SecurityNotAvailableException,
-            IOException {
-
-        return null;
-    }
-
-    public ProActiveSecurityManager getProActiveSecurityManager(Entity user)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-
-        return null;
-    }
-
-    public PublicKey getPublicKey() throws SecurityNotAvailableException, IOException {
-
-        return null;
-    }
-
-    public byte[] publicKeyExchange(long sessionID, byte[] signature) throws SecurityNotAvailableException,
-            RenegotiateSessionException, KeyExchangeException, IOException {
-
-        return null;
-    }
-
-    public byte[] randomValue(long sessionID, byte[] clientRandomValue) throws SecurityNotAvailableException,
-            RenegotiateSessionException, IOException {
-
-        return null;
-    }
-
-    public byte[][] secretKeyExchange(long sessionID, byte[] encodedAESKey, byte[] encodedIVParameters,
-            byte[] encodedClientMacKey, byte[] encodedLockData, byte[] parametersSignature)
-            throws SecurityNotAvailableException, RenegotiateSessionException, IOException {
-
-        return null;
-    }
-
-    public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-
-    }
-
-    public long startNewSession(long distantSessionID, SecurityContext policy,
-            TypedCertificate distantCertificate) throws SessionException, SecurityNotAvailableException,
-            IOException {
-
-        return 0;
-    }
-
-    public void terminateSession(long sessionID) throws SecurityNotAvailableException, IOException {
 
     }
 

@@ -46,60 +46,34 @@ import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.message.MessageImpl;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.Utils;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.crypto.Session;
-import org.objectweb.proactive.core.security.crypto.Session.ActAs;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
 
 
 public class ReplyImpl extends MessageImpl implements Reply, Serializable {
 
-    /**
-     * The hypothetic result
-     */
+    /** The hypothetic result */
     protected MethodCallResult result;
 
-    // security features
-
-    /**
-     * the encrypted result
-     */
-    protected byte[][] encryptedResult;
-    protected boolean ciphered;
-
-    // true if this reply is sent by automatic continuation
+    /** true if this reply is sent by automatic continuation */
     private boolean isAC;
 
-    /*
-     * the session ID used to find the key and decrypt the reply
-     */
-    protected long sessionID;
-    protected transient ProActiveSecurityManager psm = null;
-
     public ReplyImpl(UniqueID senderID, long sequenceNumber, String methodName, MethodCallResult result,
-            ProActiveSecurityManager psm, MessageTags tags) {
-        this(senderID, sequenceNumber, methodName, result, psm, false, tags);
+            MessageTags tags) {
+        this(senderID, sequenceNumber, methodName, result, false, tags);
+    }
+
+    public ReplyImpl(UniqueID senderID, long sequenceNumber, String methodName, MethodCallResult result) {
+        this(senderID, sequenceNumber, methodName, result, false, null);
     }
 
     public ReplyImpl(UniqueID senderID, long sequenceNumber, String methodName, MethodCallResult result,
-            ProActiveSecurityManager psm) {
-        this(senderID, sequenceNumber, methodName, result, psm, false, null);
+            boolean isAutomaticContinuation) {
+        this(senderID, sequenceNumber, methodName, result, isAutomaticContinuation, null);
     }
 
     public ReplyImpl(UniqueID senderID, long sequenceNumber, String methodName, MethodCallResult result,
-            ProActiveSecurityManager psm, boolean isAutomaticContinuation) {
-        this(senderID, sequenceNumber, methodName, result, psm, isAutomaticContinuation, null);
-    }
-
-    public ReplyImpl(UniqueID senderID, long sequenceNumber, String methodName, MethodCallResult result,
-            ProActiveSecurityManager psm, boolean isAutomaticContinuation, MessageTags tags) {
+            boolean isAutomaticContinuation, MessageTags tags) {
         super(senderID, sequenceNumber, true, methodName, tags);
         this.result = result;
-        this.psm = psm;
         this.isAC = isAutomaticContinuation;
     }
 
@@ -127,66 +101,7 @@ public class ReplyImpl extends MessageImpl implements Reply, Serializable {
             result = (MethodCallResult) Utils.makeDeepCopy(result);
         }
 
-        // security
-        if (!ciphered && (psm != null)) {
-            try {
-                Session session = this.psm.getSessionTo(destinationBody.getCertificate());
-                if (!session.getSecurityContext().getSendReply().getCommunication()) {
-                    throw new CommunicationForbiddenException();
-                }
-                this.sessionID = session.getDistantSessionID();
-                long id = psm.getSessionIDTo(destinationBody.getCertificate());
-                encryptedResult = psm.encrypt(id, result, ActAs.SERVER);
-                ciphered = true;
-            } catch (SecurityNotAvailableException e) {
-                // do nothing
-            } catch (CommunicationForbiddenException e) {
-                e.printStackTrace();
-            } catch (RenegotiateSessionException e) {
-                psm.terminateSession(sessionID);
-                try {
-                    destinationBody.terminateSession(sessionID);
-                } catch (SecurityNotAvailableException e1) {
-                    e.printStackTrace();
-                }
-                this.send(destinationBody);
-            } catch (SessionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        // end security
-
         destinationBody.receiveReply(this);
-    }
-
-    // security issue
-    public boolean isCiphered() {
-        return ciphered;
-    }
-
-    public boolean decrypt(ProActiveSecurityManager psm) throws RenegotiateSessionException {
-        if ((sessionID != 0) && ciphered) {
-            byte[] decryptedMethodCall = psm.decrypt(sessionID, encryptedResult, ActAs.CLIENT);
-            try {
-                result = (MethodCallResult) ByteToObjectConverter.ObjectStream.convert(decryptedMethodCall);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return false;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.objectweb.proactive.core.body.reply.Reply#getSessionId()
-     */
-    public long getSessionId() {
-        return sessionID;
     }
 
     /**

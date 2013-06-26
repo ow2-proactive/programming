@@ -41,14 +41,11 @@ import java.io.Serializable;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.EndActive;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public class AOCrash1 implements Serializable, EndActive {
 
     private AOCrash2 ao2;
-
-    private StringWrapper future;
 
     public AOCrash1() {
 
@@ -60,7 +57,7 @@ public class AOCrash1 implements Serializable, EndActive {
 
     public void foo() {
         // the foo method will trigger a receiveReply from object ao2
-        future = ao2.foo2();
+        ao2.foo2();
     }
 
     public boolean terminate() {

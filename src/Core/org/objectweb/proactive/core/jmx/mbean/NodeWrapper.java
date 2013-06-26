@@ -38,7 +38,6 @@ package org.objectweb.proactive.core.jmx.mbean;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +51,6 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.filter.ProActiveInternalObjectFilter;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.runtime.LocalNode;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entity;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -79,9 +74,6 @@ public class NodeWrapper extends NotificationBroadcasterSupport implements Seria
     /** The url of the LocalNode */
     private String nodeUrl;
 
-    /** The url of the ProActive Runtime */
-    private String runtimeUrl;
-
     /** Used by the JMX notifications */
     private long counter = 1;
 
@@ -99,7 +91,6 @@ public class NodeWrapper extends NotificationBroadcasterSupport implements Seria
     public NodeWrapper(ObjectName objectName, LocalNode localNode, String runtimeUrl) {
         this.objectName = objectName;
         this.localNode = localNode;
-        this.runtimeUrl = runtimeUrl;
 
         URI runtimeURI = URI.create(runtimeUrl);
         String host = runtimeURI.getHost();
@@ -150,27 +141,5 @@ public class NodeWrapper extends NotificationBroadcasterSupport implements Seria
         Notification notification = new Notification(type, source, counter++);
         notification.setUserData(userData);
         sendNotification(notification);
-    }
-
-    public ProActiveSecurityManager getSecurityManager(Entity user) {
-        try {
-            return this.localNode.getProActiveSecurityManager(user);
-        } catch (AccessControlException e) {
-            e.printStackTrace();
-            return null;
-        } catch (SecurityNotAvailableException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void setSecurityManager(Entity user, PolicyServer policyServer) {
-        try {
-            this.localNode.setProActiveSecurityManager(user, policyServer);
-        } catch (AccessControlException e) {
-            e.printStackTrace();
-        } catch (SecurityNotAvailableException e) {
-            e.printStackTrace();
-        }
     }
 }

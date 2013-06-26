@@ -87,8 +87,6 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.ObjectReferenceReplacer;
 import org.objectweb.proactive.core.mop.ObjectReplacer;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
 /**
@@ -210,8 +208,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
      * @throws java.io.IOException if the request cannot be accepted
      */
     @Override
-    protected void internalReceiveRequest(Request request) throws java.io.IOException,
-            RenegotiateSessionException {
+    protected void internalReceiveRequest(Request request) throws java.io.IOException {
         // JMX Notification
         if (!isProActiveInternalObject && (this.mbean != null)) {
             String tagNotification = createTagNotification(request.getTags());
@@ -226,11 +223,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
         // request queue length = number of requests in queue
         // + the one to add now
-        try {
-            this.requestReceiver.receiveRequest(request, this);
-        } catch (CommunicationForbiddenException e) {
-            e.printStackTrace();
-        }
+
+        this.requestReceiver.receiveRequest(request, this);
     }
 
     /**
@@ -551,10 +545,10 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                                 " don't declare it to be thrown.");
                         }
                         reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(), request
-                                .getMethodName(), new MethodCallResult(null, exception), securityManager);
+                                .getMethodName(), new MethodCallResult(null, exception));
                     } else {
                         reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(), request
-                                .getMethodName(), new MethodCallResult(null, exception), securityManager);
+                                .getMethodName(), new MethodCallResult(null, exception));
                     }
 
                 } else {
@@ -677,12 +671,12 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             //                tags = currentreq.getTags();
 
             Reply exceptionReply = new ReplyImpl(reply.getSourceBodyID(), reply.getSequenceNumber(), reply
-                    .getMethodName(), new MethodCallResult(null, e), BodyImpl.this.securityManager/*, tags*/);
+                    .getMethodName(), new MethodCallResult(null, e));
             exceptionReply.send(destination);
         }
 
         public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
-                throws IOException, RenegotiateSessionException, CommunicationForbiddenException {
+                throws IOException {
             long sequenceID = getNextSequenceID();
 
             MessageTags tags = applyTags(sequenceID);

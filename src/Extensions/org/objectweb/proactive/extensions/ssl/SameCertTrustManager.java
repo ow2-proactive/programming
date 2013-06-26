@@ -43,7 +43,7 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.X509TrustManager;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.Arrays;
+import java.util.Arrays;
 
 
 /**
@@ -83,7 +83,7 @@ public class SameCertTrustManager implements X509TrustManager {
         for (X509Certificate authCert : this.authCerts) {
             byte[] pk1 = cert.getPublicKey().getEncoded();
             byte[] pk2 = authCert.getPublicKey().getEncoded();
-            if (Arrays.areEqual(pk1, pk2)) {
+            if (Arrays.equals(pk1, pk2)) {
                 try {
                     cert.verify(authCert.getPublicKey(), BouncyCastleProvider.PROVIDER_NAME);
                     return;

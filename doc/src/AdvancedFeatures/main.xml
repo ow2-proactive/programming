@@ -12,11 +12,8 @@
 
 	<!ENTITY BookInfo SYSTEM "BookInfo.xml">
 	<!ENTITY Contributors SYSTEM "Contributors.xml">
-	<!ENTITY Preface SYSTEM "Preface.xml">
-	<!ENTITY FaultTolerance SYSTEM "FaultTolerance.xml">
-	<!ENTITY Security SYSTEM "Security.xml">
-	<!ENTITY MessageTagging SYSTEM "MessageTagging.xml">
-	<!ENTITY WebServices SYSTEM "WebServices.xml">
+	<!ENTITY Preface SYSTEM "Preface.xml">	
+	<!ENTITY MessageTagging SYSTEM "MessageTagging.xml">	
 	<!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
 	<!ENTITY JMX SYSTEM "Jmx.xml">
 	<!ENTITY JMXMBean SYSTEM "JmxMBean.xml">
@@ -36,10 +33,8 @@
 	&Preface;
 
 	<part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
-
-		&Security;
+		
 		&MessageTagging;
-		&WebServices;
 		&AnnotationProcessing;
 		&JMX;
 		&JMXMBean;

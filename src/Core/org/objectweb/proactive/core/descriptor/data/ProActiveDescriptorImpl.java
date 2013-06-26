@@ -44,7 +44,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.descriptor.services.ServiceUser;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
 import org.objectweb.proactive.core.descriptor.services.TechnicalServiceWrapper;
@@ -57,11 +56,6 @@ import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityDescriptorHandler;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
-import org.objectweb.proactive.core.security.exceptions.InvalidPolicyFile;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
@@ -82,10 +76,6 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
  */
 public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
 
-    /**
-     *
-     */
-
     //
     //  ----- PRIVATE MEMBERS -----------------------------------------------------------------------------------
     //
@@ -104,16 +94,16 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
     /** map process id and process */
     // don't know how to describe that that map can contain either process or service
     // using the generics
-    private java.util.HashMap<String, Object> processMapping;
+    private HashMap<String, Object> processMapping;
 
     /** map process id and process updater for later update of the process */
-    private java.util.HashMap<String, ProcessUpdater> pendingProcessMapping;
+    private HashMap<String, ProcessUpdater> pendingProcessMapping;
 
     /** map process id and service */
-    private java.util.HashMap<String, UniversalService> serviceMapping;
+    private HashMap<String, UniversalService> serviceMapping;
 
     /** map process id and service updater for later update of the service */
-    private java.util.HashMap<String, Object> pendingServiceMapping;
+    private HashMap<String, Object> pendingServiceMapping;
 
     /** map filetransfer-id and filetransfer */
     private java.util.HashMap<String, FileTransferDefinition> fileTransferMapping;
@@ -125,10 +115,6 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
     private String url;
     private String descriptorURL;
     private boolean mainDefined;
-
-    /** security rules */
-    protected ProActiveSecurityManager proactiveSecurityManager;
-    public PolicyServer policyServer;
 
     //  public X509Certificate creatorCertificate;
     public String securityFile;
@@ -349,7 +335,7 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
             if (lookup) {
                 vn = new VirtualNodeLookup(vnName);
             } else {
-                vn = new VirtualNodeImpl(vnName, proactiveSecurityManager, this.url, isMainNode, this);
+                vn = new VirtualNodeImpl(vnName, this.url, isMainNode, this);
 
                 //System.out.println("vn created with url: " + padURL + " and jobid : " + ((VirtualNodeImpl) vn).jobID);
             }
@@ -549,41 +535,6 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
      */
     public int getVirtualNodeMappingSize() {
         return virtualNodeMapping.size();
-    }
-
-    // SECURITY
-
-    /**
-     * Initialize application security policy
-     * @param file link to the XML security policy file
-     */
-    public void createProActiveSecurityManager(String file) {
-        securityFile = file;
-
-        try {
-            policyServer = ProActiveSecurityDescriptorHandler.createPolicyServer(file);
-            proactiveSecurityManager = new ProActiveSecurityManager(EntityType.APPLICATION, policyServer);
-
-            // set the security policyserver to the default proactive meta object
-            // by the way, the HalfBody will be associated to a security manager
-            // derivated from this one.
-            ProActiveSecurityManager psm = proactiveSecurityManager.generateSiblingCertificate(
-                    EntityType.OBJECT, "HalfBody");
-            ProActiveMetaObjectFactory.newInstance().setProActiveSecurityManager(psm);
-        } catch (InvalidPolicyFile e) {
-            e.printStackTrace();
-        }
-    }
-
-    public PolicyServer getPolicyServer() {
-        return policyServer;
-    }
-
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor#getSecurityFilePath()
-     */
-    public String getSecurityFilePath() {
-        return securityFile;
     }
 
     //

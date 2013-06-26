@@ -65,7 +65,6 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.remoteobject.benchmark.RemoteObjectBenchmark;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -114,8 +113,7 @@ public class RemoteObjectSet implements Serializable, Observer {
      * Select the best suited RemoteRemoteObject (protocol related), and send it the Request
      * Fallback to default (according to the PA_COMMUNICATION_PROTOCOL property) if necessary
      */
-    public Reply receiveMessage(Request message) throws ProActiveException, RenegotiateSessionException,
-            IOException {
+    public Reply receiveMessage(Request message) throws ProActiveException, IOException {
         if (forcedProtocol != null) {
             return forcedProtocol.receiveMessage(message);
         }
@@ -152,12 +150,7 @@ public class RemoteObjectSet implements Serializable, Observer {
                     it.remove();
                     this.unreliables.add(rro);
                     continue;
-                } catch (RenegotiateSessionException rse) {
-                    it.remove();
-                    this.unreliables.add(rro);
-                    continue;
                 }
-
             }
         }
         // All RemoteRemoteObject lead to Exception, try with the default one
@@ -251,9 +244,6 @@ public class RemoteObjectSet implements Serializable, Observer {
         } catch (ProActiveRuntimeException e) {
             throw new RemoteRemoteObjectException(
                 "RemoteObjectSet: can't access RemoteObject through " + rro, e);
-        } catch (RenegotiateSessionException e) {
-            e.printStackTrace();
-            throw new RemoteRemoteObjectException(e);
         }
     }
 
@@ -271,9 +261,6 @@ public class RemoteObjectSet implements Serializable, Observer {
         } catch (IOException e) {
             throw new RemoteRemoteObjectException("RemoteObjectSet: can't get ProActiveRuntime urls from " +
                 rro, e);
-        } catch (RenegotiateSessionException e) {
-            e.printStackTrace();
-            throw new RemoteRemoteObjectException(e);
         }
     }
 

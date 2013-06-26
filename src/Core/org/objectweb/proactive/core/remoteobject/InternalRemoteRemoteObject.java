@@ -36,11 +36,10 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.security.SecurityEntity;
-
 import java.io.IOException;
 import java.net.URI;
+
+import org.objectweb.proactive.core.ProActiveException;
 
 
 /**
@@ -53,7 +52,7 @@ import java.net.URI;
  * object, hidden to the level on the protocol dependant part of the remote object it represents
  * that only provides a transport layer
  */
-public interface InternalRemoteRemoteObject extends RemoteRemoteObject, SecurityEntity {
+public interface InternalRemoteRemoteObject extends RemoteRemoteObject {
 
     /**
      * We redefine the super method

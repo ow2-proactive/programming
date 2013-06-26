@@ -41,9 +41,6 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.message.Message;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.security.Securizable;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
 /**
@@ -62,7 +59,7 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
  * @since   ProActive 0.9
  *
  */
-public interface Request extends Message, Securizable {
+public interface Request extends Message {
     // Next request to serve
     public static final int NFREQUEST_IMMEDIATE_PRIORITY = 2;
 
@@ -115,8 +112,7 @@ public interface Request extends Message, Securizable {
      * @param destinationBody the body destination of this request
      * @exception java.io.IOException if the request fails to be sent 
      */
-    public void send(UniversalBody destinationBody) throws java.io.IOException, RenegotiateSessionException,
-            CommunicationForbiddenException;
+    public void send(UniversalBody destinationBody) throws java.io.IOException;
 
     /**
      * Serves this request by executing the embedded method call using the given

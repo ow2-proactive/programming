@@ -39,8 +39,6 @@ package org.objectweb.proactive.core.runtime;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.AlreadyBoundException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
 import java.util.List;
 
 import org.objectweb.proactive.Body;
@@ -59,16 +57,6 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.TypedCertificate;
-import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entities;
-import org.objectweb.proactive.core.security.securityentity.Entity;
 
 
 /**
@@ -119,10 +107,9 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
         return target.createBody(nodeName, bodyConstructorCall, isNodeLocal);
     }
 
-    public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager nodeSecurityManager, String vnName) throws NodeException,
-            AlreadyBoundException {
-        return target.createLocalNode(nodeName, replacePreviousBinding, nodeSecurityManager, vnName);
+    public Node createLocalNode(String nodeName, boolean replacePreviousBinding, String vnName)
+            throws NodeException, AlreadyBoundException {
+        return target.createLocalNode(nodeName, replacePreviousBinding, vnName);
     }
 
     public void createVM(UniversalProcess remoteProcess) throws IOException, ProActiveException {
@@ -250,63 +237,9 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
         target.unregisterVirtualNode(virtualNodeName);
     }
 
-    public TypedCertificate getCertificate() throws SecurityNotAvailableException, IOException {
-        return target.getCertificate();
-    }
-
-    public Entities getEntities() throws SecurityNotAvailableException, IOException {
-        return target.getEntities();
-    }
-
-    public SecurityContext getPolicy(Entities local, Entities distant) throws SecurityNotAvailableException,
-            IOException {
-        return target.getPolicy(local, distant);
-    }
-
-    public ProActiveSecurityManager getProActiveSecurityManager(Entity user)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        return target.getProActiveSecurityManager(user);
-    }
-
-    public PublicKey getPublicKey() throws SecurityNotAvailableException, IOException {
-        return target.getPublicKey();
-    }
-
-    public byte[] publicKeyExchange(long sessionID, byte[] signature) throws SecurityNotAvailableException,
-            RenegotiateSessionException, KeyExchangeException, IOException {
-        return target.publicKeyExchange(sessionID, signature);
-    }
-
-    public byte[] randomValue(long sessionID, byte[] clientRandomValue) throws SecurityNotAvailableException,
-            RenegotiateSessionException, IOException {
-        return target.randomValue(sessionID, clientRandomValue);
-    }
-
-    public byte[][] secretKeyExchange(long sessionID, byte[] encodedAESKey, byte[] encodedIVParameters,
-            byte[] encodedClientMacKey, byte[] encodedLockData, byte[] parametersSignature)
-            throws SecurityNotAvailableException, RenegotiateSessionException, IOException {
-        return target.secretKeyExchange(sessionID, encodedAESKey, encodedIVParameters, encodedClientMacKey,
-                encodedLockData, parametersSignature);
-    }
-
-    public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        target.setProActiveSecurityManager(user, policyServer);
-    }
-
-    public long startNewSession(long distantSessionID, SecurityContext policy,
-            TypedCertificate distantCertificate) throws SessionException, SecurityNotAvailableException,
-            IOException {
-        return target.startNewSession(distantSessionID, policy, distantCertificate);
-    }
-
-    public void terminateSession(long sessionID) throws SecurityNotAvailableException, IOException {
-        target.terminateSession(sessionID);
-    }
-
-    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName,
-            List<TechnicalService> tsList) throws NodeException, AlreadyBoundException {
-        return target.createGCMNode(nodeSecurityManager, vnName, tsList);
+    public Node createGCMNode(String vnName, List<TechnicalService> tsList) throws NodeException,
+            AlreadyBoundException {
+        return target.createGCMNode(vnName, tsList);
     }
 
     public byte[] getClassData(String className) {

@@ -54,7 +54,6 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -281,9 +280,6 @@ public class BenchmarkMonitorThread extends Observable {
                         iter.remove();
                         unaccessibles.add(uri.getScheme());
                         continue;
-                    } catch (RenegotiateSessionException e) {
-                        e.printStackTrace();
-                        // Reflection part
                     } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {

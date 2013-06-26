@@ -36,20 +36,19 @@
  */
 package org.objectweb.proactive.core.body.migration;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Hashtable;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.ext.locationserver.LocationServer;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Hashtable;
 
 
 public class MixedLocationServer implements org.objectweb.proactive.RunActive, LocationServer {
@@ -140,8 +139,6 @@ public class MixedLocationServer implements org.objectweb.proactive.RunActive, L
                                         body.receiveRequest(oldest);
                                     } catch (IOException e) {
                                         e.printStackTrace();
-                                    } catch (RenegotiateSessionException e) {
-                                        e.printStackTrace();
                                     }
                                 } else {
                                     // if the delay is gone, serve the request
@@ -154,8 +151,6 @@ public class MixedLocationServer implements org.objectweb.proactive.RunActive, L
                                         try {
                                             body.receiveRequest(oldest);
                                         } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (RenegotiateSessionException e) {
                                             e.printStackTrace();
                                         }
                                     }

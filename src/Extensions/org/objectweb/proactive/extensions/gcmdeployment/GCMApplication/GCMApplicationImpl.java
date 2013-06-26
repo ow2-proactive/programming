@@ -62,7 +62,6 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.log.remote.ProActiveLogCollectorDeployer;
@@ -139,7 +138,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     private Object deploymentMutex = new Object();
     private boolean isStarted;
     private boolean isKilled;
-    private ProActiveSecurityManager proactiveApplicationSecurityManager;
 
     private VariableContractImpl vContract;
 
@@ -213,9 +211,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             virtualNodes = parser.getVirtualNodes();
             commandBuilder = parser.getCommandBuilder();
             nodeMapper = new NodeMapper(this, virtualNodes.values());
-
-            proactiveApplicationSecurityManager = parser.getProactiveApplicationSecurityManager();
-
             dataSpacesEnabled = parser.isDataSpacesEnabled();
             spacesConfigurations = parser.getInputOutputSpacesConfigurations();
             namingServiceURL = parser.getDataSpacesNamingServiceURL();
@@ -571,15 +566,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
     public Set<String> getVirtualNodeNames() {
         return new HashSet<String>(ROvirtualNodes.keySet());
-    }
-
-    public ProActiveSecurityManager getProActiveApplicationSecurityManager() {
-        return proactiveApplicationSecurityManager;
-    }
-
-    public void setProActiveApplicationSecurityManager(
-            ProActiveSecurityManager proactiveApplicationSecurityManager) {
-        this.proactiveApplicationSecurityManager = proactiveApplicationSecurityManager;
     }
 
     /*

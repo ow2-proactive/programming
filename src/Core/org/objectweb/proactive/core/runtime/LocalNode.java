@@ -36,6 +36,18 @@
  */
 package org.objectweb.proactive.core.runtime;
 
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
@@ -50,23 +62,8 @@ import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.security.*;
-import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entities;
-import org.objectweb.proactive.core.security.securityentity.Entity;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import javax.management.*;
-import java.lang.management.ManagementFactory;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 
 /**
@@ -75,11 +72,10 @@ import java.util.Properties;
  * and should not be used outside a runtime
  */
 
-public class LocalNode implements SecurityEntity {
+public class LocalNode {
     private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);
     private String name;
     private List<UniqueID> activeObjectsId;
-    private ProActiveSecurityManager securityManager;
     private String virtualNodeName;
     private Properties localProperties;
     private RemoteObjectExposer<ProActiveRuntime> runtimeRoe;
@@ -94,24 +90,12 @@ public class LocalNode implements SecurityEntity {
      * @param replacePreviousBinding if a node existing with the same name in the registry, replace it
      * @throws ProActiveException
      */
-    public LocalNode(String nodeName, ProActiveSecurityManager securityManager, String virtualNodeName,
-            boolean replacePreviousBinding) throws ProActiveException {
+    public LocalNode(String nodeName, String virtualNodeName, boolean replacePreviousBinding)
+            throws ProActiveException {
         this.name = nodeName;
-        this.securityManager = securityManager;
         this.virtualNodeName = virtualNodeName;
         this.activeObjectsId = new ArrayList<UniqueID>();
         this.localProperties = new Properties();
-
-        if (this.securityManager != null) {
-            ProActiveLogger.getLogger(Loggers.SECURITY_RUNTIME).debug(
-                    "Local Node : " + this.name + " VN name : " + this.virtualNodeName +
-                        " policyserver for app :" + this.securityManager.getApplicationName());
-
-            // setting virtual node name
-            //            this.securityManager.setVNName(this.virtualNodeName);
-            ProActiveLogger.getLogger(Loggers.SECURITY_RUNTIME).debug(
-                    "registering node certificate for VN " + this.virtualNodeName);
-        }
 
         this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>("LocalNode_" + name,
             ProActiveRuntime.class.getName(), ProActiveRuntimeImpl.getProActiveRuntime(),
@@ -168,20 +152,6 @@ public class LocalNode implements SecurityEntity {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * @return Returns the node' security manager.
-     */
-    public ProActiveSecurityManager getSecurityManager() {
-        return this.securityManager;
-    }
-
-    /**
-     * @param securityManager The securityManager to set.
-     */
-    public void setSecurityManager(ProActiveSecurityManager securityManager) {
-        this.securityManager = securityManager;
     }
 
     /**
@@ -334,98 +304,6 @@ public class LocalNode implements SecurityEntity {
      */
     public String getProperty(String key) {
         return this.localProperties.getProperty(key);
-    }
-
-    // Implements Security Entity
-    public TypedCertificate getCertificate() throws SecurityNotAvailableException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.getCertificate();
-    }
-
-    //	public byte[] getCertificateEncoded() throws SecurityNotAvailableException {
-    //		if (this.securityManager == null) {
-    //			throw new SecurityNotAvailableException();
-    //		}
-    //		return this.securityManager.getCertificateEncoded();
-    //	}
-    public Entities getEntities() throws SecurityNotAvailableException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.getEntities();
-    }
-
-    public SecurityContext getPolicy(Entities local, Entities distant) throws SecurityNotAvailableException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.getPolicy(local, distant);
-    }
-
-    public ProActiveSecurityManager getProActiveSecurityManager(Entity user)
-            throws SecurityNotAvailableException, AccessControlException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.getProActiveSecurityManager(user);
-    }
-
-    public PublicKey getPublicKey() throws SecurityNotAvailableException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.getPublicKey();
-    }
-
-    public byte[] publicKeyExchange(long sessionID, byte[] signature) throws SecurityNotAvailableException,
-            RenegotiateSessionException, KeyExchangeException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.publicKeyExchange(sessionID, signature);
-    }
-
-    public byte[] randomValue(long sessionID, byte[] clientRandomValue) throws SecurityNotAvailableException,
-            RenegotiateSessionException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.randomValue(sessionID, clientRandomValue);
-    }
-
-    public byte[][] secretKeyExchange(long sessionID, byte[] encodedAESKey, byte[] encodedIVParameters,
-            byte[] encodedClientMacKey, byte[] encodedLockData, byte[] parametersSignature)
-            throws SecurityNotAvailableException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.secretKeyExchange(sessionID, encodedAESKey, encodedIVParameters,
-                encodedClientMacKey, encodedLockData, parametersSignature);
-    }
-
-    public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
-            throws SecurityNotAvailableException, AccessControlException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        this.securityManager.setProActiveSecurityManager(user, policyServer);
-    }
-
-    public long startNewSession(long distantSessionID, SecurityContext policy,
-            TypedCertificate distantCertificate) throws SecurityNotAvailableException, SessionException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        return this.securityManager.startNewSession(distantSessionID, policy, distantCertificate);
-    }
-
-    public void terminateSession(long sessionID) throws SecurityNotAvailableException {
-        if (this.securityManager == null) {
-            throw new SecurityNotAvailableException();
-        }
-        this.securityManager.terminateSession(sessionID);
     }
 
     public String getURL() {

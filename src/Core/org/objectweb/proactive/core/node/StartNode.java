@@ -143,7 +143,7 @@ public class StartNode {
                 if (nodeName == null) {
                     node = NodeFactory.getDefaultNode();
                 } else {
-                    node = NodeFactory.createLocalNode(nodeName, !noRebind, null, null);
+                    node = NodeFactory.createLocalNode(nodeName, !noRebind, null);
                 }
 
                 logger.info("OK. Node " + node.getNodeInformation().getName() + " ( " +

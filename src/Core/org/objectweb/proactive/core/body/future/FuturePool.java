@@ -44,7 +44,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.AbstractBody;
@@ -55,7 +54,6 @@ import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.Utils;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -294,8 +292,6 @@ public class FuturePool extends Object implements java.io.Serializable {
                 ArrayList<UniversalBody> bodiesToContinue = (ArrayList<UniversalBody>) (futures
                         .getAutomaticContinuation(id, creatorID).clone());
                 if ((bodiesToContinue != null) && (bodiesToContinue.size() != 0)) {
-                    ProActiveSecurityManager psm = ((AbstractBody) PAActiveObject.getBodyOnThis())
-                            .getProActiveSecurityManager();
 
                     // lazy starting of the AC thread
                     if (!this.queueAC.isAlive()) {
@@ -321,7 +317,7 @@ public class FuturePool extends Object implements java.io.Serializable {
 
                     // add the deepcopied AC
                     queueAC.addACRequest(new ACService(bodiesToContinue, new ReplyImpl(creatorID, id, null,
-                        newResult, psm, true)));
+                        newResult, true)));
                 }
             }
             // 3) Remove futures from the futureMap
@@ -604,10 +600,10 @@ public class FuturePool extends Object implements java.io.Serializable {
      */
     private class ACService implements java.io.Serializable {
         // bodies that have to be updated
-        private ArrayList<UniversalBody> dests;
+        private final ArrayList<UniversalBody> dests;
 
         // reply to send
-        private Reply reply;
+        private final Reply reply;
 
         //
         // -- CONSTRUCTORS -----------------------------------------------
@@ -627,16 +623,12 @@ public class FuturePool extends Object implements java.io.Serializable {
                 // created to avoid the alteration of the original result.
                 int remainingSends = dests.size();
                 Reply toSend = null;
-                ProActiveSecurityManager psm = (remainingSends > 1) ? (((AbstractBody) PAActiveObject
-                        .getBodyOnThis()).getProActiveSecurityManager()) : null;
 
-                for (int i = 0; i < dests.size(); i++) {
-                    UniversalBody dest = (dests.get(i));
-
+                for (UniversalBody dest : dests) {
                     if (remainingSends > 1) {
                         // create a new reply to keep the original copy unchanged for next sending ...
                         toSend = new ReplyImpl(reply.getSourceBodyID(), reply.getSequenceNumber(), null,
-                            reply.getResult(), psm, true);
+                            reply.getResult(), true);
                     } else {
                         // last sending : the orignal can ben sent
                         toSend = reply;

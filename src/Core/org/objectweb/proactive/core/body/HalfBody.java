@@ -56,12 +56,6 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
-import org.objectweb.proactive.core.security.InternalBodySecurity;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
-import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class HalfBody extends AbstractBody {
@@ -90,21 +84,6 @@ public class HalfBody extends AbstractBody {
     private HalfBody(MetaObjectFactory factory) throws ActiveObjectCreationException, NodeException {
         super(initializeHalfBodyName(), NodeFactory.getHalfBodiesNode().getNodeInformation().getURL(),
                 factory);
-
-        //SECURITY
-        if (this.securityManager == null) {
-            this.securityManager = factory.getProActiveSecurityManager();
-        }
-
-        if (this.securityManager != null) {
-            this.securityManager = this.securityManager.generateSiblingCertificate(EntityType.OBJECT,
-                    "HalfBody");
-            //            this.securityManager.setBody(this);
-            this.isSecurityOn = this.securityManager.getCertificate() != null;
-            this.internalBodySecurity = new InternalBodySecurity(null); // SECURITY
-            ProActiveLogger.getLogger(Loggers.SECURITY_MANAGER).debug(
-                    "  ------> HalfBody Security is " + this.isSecurityOn);
-        }
 
         this.replyReceiver = factory.newReplyReceiverFactory().newReplyReceiver();
         setLocalBodyImpl(new HalfLocalBodyStrategy(factory.newRequestFactory()));
@@ -156,14 +135,6 @@ public class HalfBody extends AbstractBody {
      */
     @Override
     protected void internalReceiveReply(Reply reply) throws java.io.IOException {
-        try {
-            if (reply.isCiphered()) {
-                reply.decrypt(this.securityManager);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         this.replyReceiver.receiveReply(reply, this, getFuturePool());
     }
 
@@ -247,7 +218,7 @@ public class HalfBody extends AbstractBody {
         }
 
         public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
-                throws java.io.IOException, RenegotiateSessionException, CommunicationForbiddenException {
+                throws java.io.IOException {
             long sequenceID = getNextSequenceID();
 
             // Create DSI MessageTag

@@ -70,7 +70,7 @@ public class A implements Serializable {
 
     public boolean stopPropagateTag() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
-        Tag t = tags.addTag(new Tag("TEST_TAGS_01") {
+        tags.addTag(new Tag("TEST_TAGS_01") {
             public Tag apply() {
                 return null;
             }
@@ -110,7 +110,7 @@ public class A implements Serializable {
 
     public boolean checkNoLocalMemoryOnB() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
-        Tag t = tags.addTag(new Tag("TEST_TAGS_02") {
+        tags.addTag(new Tag("TEST_TAGS_02") {
             public Tag apply() {
                 return this;
             }

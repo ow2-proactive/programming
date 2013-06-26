@@ -43,9 +43,6 @@ import javax.management.ObjectName;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.securityentity.Entity;
 
 
 /**
@@ -109,22 +106,6 @@ public interface BodyWrapperMBean extends Serializable {
      *         {@link java.io.Serializable} <code>False</code> otherwise
      */
     public boolean getIsReifiedObjectSerializable();
-
-    /**
-     * Returns the security manager.
-     *
-     * @param user
-     * @return the security manager
-     */
-    public ProActiveSecurityManager getSecurityManager(Entity user);
-
-    /**
-     * Modify the security manager.
-     *
-     * @param user
-     * @param policyServer
-     */
-    public void setSecurityManager(Entity user, PolicyServer policyServer);
 
     /**
      * Migrate the body to the given node.

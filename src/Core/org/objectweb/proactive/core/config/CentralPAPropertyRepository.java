@@ -473,22 +473,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly.class.getName());
 
     /* ------------------------------------
-     *  SECURITY
-     */
-
-    /** this property indicates if a RMISecurityManager has to be instanciated*/
-    static public PAPropertyBoolean PA_SECURITYMANAGER = new PAPropertyBoolean("proactive.securitymanager",
-        false);
-
-    /** this property indicates the location of the runtime' security manager configuration file */
-    static public PAPropertyString PA_RUNTIME_SECURITY = new PAPropertyString("proactive.runtime.security",
-        false);
-
-    /** this property indicates the url of the security domain the runtime depends on */
-    static public PAPropertyString PA_RUNTIME_DOMAIN_URL = new PAPropertyString(
-        "proactive.runtime.domain.url", false);
-
-    /* ------------------------------------
      *  MESSAGE TAGGING
      */
     /** Set the max period for LocalMemoryTag lease time */

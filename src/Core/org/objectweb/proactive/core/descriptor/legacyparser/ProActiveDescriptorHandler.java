@@ -412,9 +412,6 @@ public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator im
                     path = descriptorDir + File.separator + path;
                 }
             }
-
-            logger.debug("creating ProActiveSecurityManager : " + path);
-            proActiveDescriptor.createProActiveSecurityManager(path);
         }
     }
 

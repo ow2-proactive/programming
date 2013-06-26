@@ -56,10 +56,6 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
     static {
         activatedRemoteObjectFactories = new Hashtable<String, RemoteObjectFactory>();
 
-        if ((System.getSecurityManager() == null) && CentralPAPropertyRepository.PA_SECURITYMANAGER.isTrue()) {
-            System.setSecurityManager(new java.rmi.RMISecurityManager());
-        }
-
         createClassServer();
     }
 

@@ -42,7 +42,6 @@ import java.util.Set;
 
 import javax.xml.xpath.XPathExpressionException;
 
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserConstants;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
@@ -92,11 +91,6 @@ public interface GCMApplicationParser extends GCMParserConstants {
      * @return the technical services for the defined application
      */
     public TechnicalServicesProperties getAppTechnicalServices();
-
-    public ProActiveSecurityManager getProactiveApplicationSecurityManager();
-
-    public void setProactiveApplicationSecurityManager(
-            ProActiveSecurityManager proactiveApplicationSecurityManager);
 
     /**
      * Checks whether Data Spaces should be enabled for an application.

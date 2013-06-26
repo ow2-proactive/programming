@@ -49,7 +49,6 @@ import org.objectweb.proactive.core.process.ExternalProcess;
 import org.objectweb.proactive.core.process.ExternalProcessDecorator;
 import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition;
-import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 
 
@@ -270,19 +269,6 @@ public interface ProActiveDescriptorInternal extends ProActiveDescriptor {
     //   */
     //  public void desactivateMapping(String virtualNodeName);
     public int getVirtualNodeMappingSize();
-
-    // SECURITY
-
-    /**
-     * Creates the initial Security Manager associated to an application
-     * @param file contains all related security information for the application :
-     * certificate, policy rules, ...
-     */
-    public void createProActiveSecurityManager(String file);
-
-    public PolicyServer getPolicyServer();
-
-    public String getSecurityFilePath();
 
     /**
      * Keeps a reference to the Variable Contract passed as parameter

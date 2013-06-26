@@ -65,7 +65,6 @@ import org.objectweb.proactive.core.component.request.SynchronousComponentReques
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManagerFactory;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ThreadStore;
 import org.objectweb.proactive.core.util.ThreadStoreFactory;
 import org.objectweb.proactive.core.util.converter.MakeDeepCopy;
@@ -138,7 +137,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     protected ThreadStoreFactory threadStoreFactoryInstance;
     protected ProActiveSPMDGroupManagerFactory proActiveSPMDGroupManagerFactoryInstance;
     protected PAComponentFactory componentFactoryInstance;
-    protected ProActiveSecurityManager proActiveSecurityManager;
     protected MessageTagsFactory requestTagsFactoryInstance;
 
     //
@@ -425,15 +423,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         public MessageTags newMessageTags() {
             return new MessageTags();
         }
-    }
-
-    // SECURITY
-    public void setProActiveSecurityManager(ProActiveSecurityManager psm) {
-        this.proActiveSecurityManager = psm;
-    }
-
-    public ProActiveSecurityManager getProActiveSecurityManager() {
-        return this.proActiveSecurityManager;
     }
 
     @Override

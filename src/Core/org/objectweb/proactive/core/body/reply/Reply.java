@@ -41,8 +41,6 @@ import java.io.IOException;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.message.Message;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
 public interface Reply extends Message {
@@ -55,13 +53,6 @@ public interface Reply extends Message {
      * @exception java.io.IOException if the reply fails to be sent
      */
     public void send(UniversalBody destinationBody) throws IOException;
-
-    // SECURITY
-    public boolean isCiphered();
-
-    public long getSessionId();
-
-    public boolean decrypt(ProActiveSecurityManager psm) throws RenegotiateSessionException;
 
     // AUTOMATIC CONTINUATION
     public boolean isAutomaticContinuation();

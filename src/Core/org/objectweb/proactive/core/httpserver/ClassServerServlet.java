@@ -85,8 +85,7 @@ public class ClassServerServlet extends HttpServlet {
     }
 
     private ClassServerServlet() {
-        // Set the security manager
-        if ((System.getSecurityManager() == null) && CentralPAPropertyRepository.PA_SECURITYMANAGER.isTrue()) {
+        if ((System.getSecurityManager() == null)) {
             System.setSecurityManager(new java.rmi.RMISecurityManager());
         }
     }

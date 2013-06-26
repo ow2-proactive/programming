@@ -53,7 +53,6 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.Context;
 import org.objectweb.proactive.core.body.HalfBody;
 import org.objectweb.proactive.core.body.LocalBodyStore;
@@ -80,8 +79,6 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.util.NonFunctionalServices;
 import org.objectweb.proactive.core.util.ProcessForAoCreation;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -427,28 +424,8 @@ public class PAActiveObject {
     public static Object newActive(String classname, Class<?>[] genericParameters,
             Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
             throws ActiveObjectCreationException, NodeException {
-
         if (factory == null) {
             factory = ProActiveMetaObjectFactory.newInstance();
-            if (factory.getProActiveSecurityManager() == null) {
-                factory.setProActiveSecurityManager(((AbstractBody) PAActiveObject.getBodyOnThis())
-                        .getProActiveSecurityManager());
-            }
-        }
-
-        MetaObjectFactory clonedFactory = factory;
-
-        ProActiveSecurityManager factorySM = factory.getProActiveSecurityManager();
-        if (factorySM != null) {
-            try {
-                clonedFactory = (MetaObjectFactory) factory.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-
-            ProActiveSecurityManager psm = clonedFactory.getProActiveSecurityManager();
-            psm = psm.generateSiblingCertificate(EntityType.OBJECT, classname);
-            clonedFactory.setProActiveSecurityManager(psm);
         }
 
         // using default proactive node
@@ -466,7 +443,7 @@ public class PAActiveObject {
             } else {
                 // create stub object
                 Object stub = MOP.createStubObject(classname, genericParameters, constructorParameters, node,
-                        activity, clonedFactory);
+                        activity, factory);
                 return stub;
             }
         } catch (MOPException e) {
@@ -798,27 +775,6 @@ public class PAActiveObject {
             NodeException {
         if (factory == null) {
             factory = ProActiveMetaObjectFactory.newInstance();
-            if (factory.getProActiveSecurityManager() == null) {
-                factory.setProActiveSecurityManager(((AbstractBody) PAActiveObject.getBodyOnThis())
-                        .getProActiveSecurityManager());
-            }
-        }
-
-        ProActiveSecurityManager factorySM = factory.getProActiveSecurityManager();
-
-        MetaObjectFactory clonedFactory = factory;
-
-        if (factorySM != null) {
-            try {
-                clonedFactory = (MetaObjectFactory) factory.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-
-            clonedFactory.setProActiveSecurityManager(factory.getProActiveSecurityManager()
-                    .generateSiblingCertificate(EntityType.OBJECT, nameOfTargetType));
-
-            ProActiveLogger.getLogger(Loggers.SECURITY).debug("new active object with security manager");
         }
 
         if (node == null) {
@@ -828,7 +784,7 @@ public class PAActiveObject {
 
         try {
             return (T) MOP.createStubObject(target, nameOfTargetType, genericParameters, node, activity,
-                    clonedFactory);
+                    factory);
         } catch (MOPException e) {
             Throwable t = e;
 
@@ -1031,22 +987,6 @@ public class PAActiveObject {
             factory = ProActiveMetaObjectFactory.newInstance();
         }
 
-        ProActiveSecurityManager factorySM = factory.getProActiveSecurityManager();
-
-        MetaObjectFactory clonedFactory = factory;
-
-        if (factorySM != null) {
-            try {
-                clonedFactory = (MetaObjectFactory) factory.clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-
-            clonedFactory.setProActiveSecurityManager(factory.getProActiveSecurityManager()
-                    .generateSiblingCertificate(EntityType.OBJECT, nameOfTargetType));
-            ProActiveLogger.getLogger(Loggers.SECURITY).debug("new active object with security manager");
-        }
-
         if (node == null) {
             // using default proactive node
             node = NodeFactory.getDefaultNode();
@@ -1054,7 +994,7 @@ public class PAActiveObject {
 
         try {
             return (T) MOP.createStubObject(target, nameOfTargetType, genericParameters, node, activity,
-                    clonedFactory);
+                    factory);
         } catch (MOPException e) {
             Throwable t = e;
 

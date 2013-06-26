@@ -37,8 +37,6 @@
 package org.objectweb.proactive.ext.hpc;
 
 import java.io.IOException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
 
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
@@ -46,17 +44,6 @@ import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityContext;
-import org.objectweb.proactive.core.security.TypedCertificate;
-import org.objectweb.proactive.core.security.crypto.KeyExchangeException;
-import org.objectweb.proactive.core.security.crypto.SessionException;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
-import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
-import org.objectweb.proactive.core.security.securityentity.Entities;
-import org.objectweb.proactive.core.security.securityentity.Entity;
-import org.objectweb.proactive.core.util.HeartbeatResponse;
 
 
 public class DummySender implements UniversalBody {
@@ -80,22 +67,15 @@ public class DummySender implements UniversalBody {
     //
 
     public void createShortcut(Shortcut shortcut) throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     public void disableAC() throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     public void enableAC() throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     public UniqueID getID() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -105,12 +85,11 @@ public class DummySender implements UniversalBody {
     }
 
     public String getReifiedClassName() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public UniversalBody getRemoteAdapter() {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
@@ -121,101 +100,29 @@ public class DummySender implements UniversalBody {
     public void receiveReply(Reply r) throws IOException {
     }
 
-    public void receiveRequest(Request request) throws IOException, RenegotiateSessionException {
+    public void receiveRequest(Request request) throws IOException {
     }
 
     @Deprecated
     public void register(String url) throws UnknownProtocolException {
-        // TODO Auto-generated method stub
-
     }
 
     public void setRegistered(boolean registered) throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     public void updateLocation(UniqueID id, UniversalBody body) throws IOException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public TypedCertificate getCertificate() throws SecurityNotAvailableException, IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Entities getEntities() throws SecurityNotAvailableException, IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public SecurityContext getPolicy(Entities local, Entities distant) throws SecurityNotAvailableException,
-            IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public ProActiveSecurityManager getProActiveSecurityManager(Entity user)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public PublicKey getPublicKey() throws SecurityNotAvailableException, IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public byte[] publicKeyExchange(long sessionID, byte[] signature) throws SecurityNotAvailableException,
-            RenegotiateSessionException, KeyExchangeException, IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public byte[] randomValue(long sessionID, byte[] clientRandomValue) throws SecurityNotAvailableException,
-            RenegotiateSessionException, IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public byte[][] secretKeyExchange(long sessionID, byte[] encodedAESKey, byte[] encodedIVParameters,
-            byte[] encodedClientMacKey, byte[] encodedLockData, byte[] parametersSignature)
-            throws SecurityNotAvailableException, RenegotiateSessionException, IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
-            throws SecurityNotAvailableException, AccessControlException, IOException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public long startNewSession(long distantSessionID, SecurityContext policy,
-            TypedCertificate distantCertificate) throws SessionException, SecurityNotAvailableException,
-            IOException {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public void terminateSession(long sessionID) throws SecurityNotAvailableException, IOException {
-        // TODO Auto-generated method stub
-
     }
 
     public String registerByName(String name, boolean rebind) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public String getUrl() {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     public String registerByName(String name, boolean rebind, String protocol) throws IOException {
-        // TODO Auto-generated method stub
         return null;
     }
 }
