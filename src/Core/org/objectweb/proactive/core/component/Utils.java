@@ -260,7 +260,7 @@ public class Utils {
     /**
      * Checks whether a component interface is a client interface.
      *
-     * @param itfName Component interface.
+     * @param itf Component interface.
      * @return True if the given interface is a client interface.
      */
     public static boolean isGCMClientItf(Interface itf) {
@@ -297,7 +297,7 @@ public class Utils {
     /**
      * Checks whether a component interface has a singleton cardinality.
      *
-     * @param itfName Component interface.
+     * @param itf Component interface.
      * @return True if the given interface has a singleton cardinality.
      */
     public static boolean isGCMSingletonItf(Interface itf) {
@@ -307,7 +307,7 @@ public class Utils {
     /**
      * Checks whether a component interface has a collection cardinality.
      *
-     * @param itfName Component interface.
+     * @param itf Component interface.
      * @return True if the given interface has a collection cardinality.
      */
     public static boolean isGCMCollectionItf(Interface itf) {
@@ -317,7 +317,7 @@ public class Utils {
     /**
      * Checks whether a component interface has a multicast cardinality.
      *
-     * @param itfName Component interface.
+     * @param itf Component interface.
      * @return True if the given interface has a multicast cardinality.
      */
     public static boolean isGCMMulticastItf(Interface itf) {
@@ -327,7 +327,7 @@ public class Utils {
     /**
      * Checks whether a component interface has a gathercast cardinality.
      *
-     * @param itfName Component interface.
+     * @param itf Component interface.
      * @return True if the given interface has a gathercast cardinality.
      */
     public static boolean isGCMGathercastItf(Interface itf) {
@@ -337,7 +337,7 @@ public class Utils {
     /**
      * Checks whether a component interface has a collective cardinality.
      *
-     * @param itfName Component interface.
+     * @param itf Component interface.
      * @return True if the given interface has a collective cardinality.
      */
     public static boolean isGCMCollectiveItf(Interface itf) {
@@ -410,7 +410,6 @@ public class Utils {
      * @param itfName Component interface name.
      * @param owner Reference on the component owner of the given component interface name.
      * @return True if the given interface name has a collective cardinality.
-     * @throws NoSuchInterfaceException If the component has no such component interface name.
      */
     public static boolean isGCMCollectiveItf(String itfName, Component owner) {
         try {
