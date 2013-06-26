@@ -86,6 +86,9 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
             } else {
                 newCodebase = servletCodebase;
             }
+            if (!CentralPAPropertyRepository.JAVA_RMI_SERVER_USECODEBASEONLY.isSet()) {
+                CentralPAPropertyRepository.JAVA_RMI_SERVER_USECODEBASEONLY.setValue(false);
+            }
             CentralPAPropertyRepository.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
 
             // next line is commented out for PROACTIVE-928
