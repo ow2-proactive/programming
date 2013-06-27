@@ -58,7 +58,7 @@ public class Test extends FunctionalTest {
     StringWrapper returnedValue;
 
     @BeforeClass
-    final public static void disable() {
+    public static void disable() {
         TestDisabler.unstable();
     }
 
