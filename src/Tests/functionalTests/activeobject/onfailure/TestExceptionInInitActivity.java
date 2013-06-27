@@ -44,6 +44,7 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedException;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
+import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -90,7 +91,7 @@ public class TestExceptionInInitActivity extends FunctionalTest {
         } catch (RuntimeException e) {
             e.printStackTrace();
             assertTrue((e instanceof FutureMonitoringPingFailureException) ||
-                (e instanceof BodyTerminatedException));
+                (e instanceof BodyTerminatedException) || (e instanceof InactiveBodyException));
             exception = true;
         }
         assertTrue(exception);
