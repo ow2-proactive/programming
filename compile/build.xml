@@ -238,12 +238,6 @@
 		<typedef name="class" classname="ant.AntStubGeneratorClass" classpath="${cl.utils.dir}" />
 	</target>
 
-
-	<target name="compile.trywithcatch" depends="-init" description="Compile ProActive Try With Catch classes">
-		<javac srcdir="${src.utils.dir}" destdir="${cl.utils.dir}" includes="trywithcatch/**" deprecation="on" source="${source}" debug="${debug}" />
-	</target>
-
-
 	<target name="compile.stubGenerator" depends="-init" description="Compile Stub Generator Classes">
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
