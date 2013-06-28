@@ -182,7 +182,7 @@ public class Test extends ComponentTest {
         Assert.assertEquals(new Message("composite-" + PrimitiveComponentB.MESSAGE).toString(), PAFuture
                 .getFutureValue(m2).toString());
 
-        StringBuffer resulting_msg = new StringBuffer();
+        StringBuilder resulting_msg = new StringBuilder();
         for (Message message : msg1) {
             resulting_msg.append(message.toString());
         }

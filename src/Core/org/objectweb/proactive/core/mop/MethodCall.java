@@ -473,7 +473,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     // build a key for uniquely identifying methods, including parameterized ones
     private static String buildKey(Method reifiedMethod, Map<TypeVariable<?>, Class<?>> genericTypesMapping) {
         //TODO It seems genericTypesMapping is always an empty map, It is either useless or not correctly built.
-        final StringBuffer sb = new StringBuffer((reifiedMethod.getDeclaringClass().getName()));
+        final StringBuilder sb = new StringBuilder((reifiedMethod.getDeclaringClass().getName()));
 
         // return type
         final Type returnType = reifiedMethod.getGenericReturnType();
@@ -489,13 +489,13 @@ public class MethodCall implements java.io.Serializable, Cloneable {
 
         // extracting conditional test from the loop reduce runtime by 20 to 30 %
         if ((genericTypesMapping != null) && (!genericTypesMapping.isEmpty())) {
-            for (int i = 0; i < parameters.length; i++) {
-                sb.append((genericTypesMapping.containsKey(parameters[i])) ? genericTypesMapping.get(
-                        parameters[i]).getName() : parameters[i]);
+            for (Type t : parameters) {
+                Class<?> gt = genericTypesMapping.get(t);
+                sb.append(gt == null ? t : gt.getName());
             }
         } else {
-            for (int i = 0; i < parameters.length; i++) {
-                sb.append(parameters[i]);
+            for (Type t : parameters) {
+                sb.append(t);
             }
         }
 

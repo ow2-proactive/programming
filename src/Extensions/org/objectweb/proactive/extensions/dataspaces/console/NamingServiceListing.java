@@ -175,7 +175,7 @@ public class NamingServiceListing {
         List<String> sorted = new ArrayList<String>(listing.size());
 
         for (SpaceInstanceInfo sii : listing) {
-            final StringBuffer sb = new StringBuffer();
+            final StringBuilder sb = new StringBuilder();
 
             sb.append(sii.getMountingPoint());
             sb.append("\t-> ");

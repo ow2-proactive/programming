@@ -120,7 +120,7 @@ public class Test extends ComponentTestDefaultNodes {
         message = null;
         I1Multicast i1 = (I1Multicast) pD1.getFcInterface("i1");
         List<Message> msg1 = i1.processInputMessage(new Message(MESSAGE));
-        StringBuffer resulting_msg = new StringBuffer();
+        StringBuilder resulting_msg = new StringBuilder();
         for (Message message : msg1) {
             System.err.println("msg: " + message);
             message.append(MESSAGE);

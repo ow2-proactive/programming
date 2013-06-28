@@ -179,7 +179,7 @@ public class Test extends ComponentTest {
                 break;
             }
         }
-        StringBuffer resulting_msg = new StringBuffer();
+        StringBuilder resulting_msg = new StringBuilder();
         int nb_messages = append(resulting_msg, messages);
         //        System.out.println("*** received " + nb_messages + "  : " +
         //            resulting_msg.toString());
@@ -193,7 +193,7 @@ public class Test extends ComponentTest {
         Assert.assertEquals(single_message + single_message, resulting_msg.toString());
     }
 
-    private int append(StringBuffer buffer, List<Message> messages) {
+    private int append(StringBuilder buffer, List<Message> messages) {
         int nb_messages = 0;
         for (Message message : messages) {
             nb_messages++;

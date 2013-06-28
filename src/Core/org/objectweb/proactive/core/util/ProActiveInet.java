@@ -391,8 +391,7 @@ public class ProActiveInet {
 
         private static String getBits(int value) {
             int displayMask = 1 << 31;
-            StringBuffer buf = new StringBuffer(35);
-
+            StringBuilder buf = new StringBuilder(35);
             for (int c = 1; c <= 32; c++) {
                 buf.append((value & displayMask) == 0 ? '0' : '1');
                 value <<= 1;

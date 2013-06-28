@@ -100,7 +100,7 @@ public class GroupOAR extends AbstractGroup {
     }
 
     public String buildOARSub() {
-        StringBuffer commandBuf = new StringBuffer();
+        StringBuilder commandBuf = new StringBuilder();
         if (getCommandPath() != null) {
             commandBuf.append(getCommandPath());
         } else {
@@ -217,9 +217,7 @@ public class GroupOAR extends AbstractGroup {
     }
 
     protected void setResourcesString() {
-        StringBuffer resourcesBuf = new StringBuffer();
-
-        resources = resourcesBuf.toString();
+        resources = "";
     }
 
     public void setWallTime(String nodeValue) {

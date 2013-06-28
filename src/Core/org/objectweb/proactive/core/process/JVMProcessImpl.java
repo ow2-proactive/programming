@@ -546,7 +546,7 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     // -- PRIVATE METHODS -----------------------------------------------
     //
     private static String convertClasspathToAbsolutePath(String classpath) {
-        StringBuffer absoluteClasspath = new StringBuffer();
+        StringBuilder absoluteClasspath = new StringBuilder();
         String pathSeparator = File.pathSeparator;
         StringTokenizer st = new StringTokenizer(classpath, pathSeparator);
         while (st.hasMoreTokens()) {

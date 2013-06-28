@@ -94,7 +94,7 @@ public class GroupLSF extends AbstractGroup {
     }
 
     private String buildBsub() {
-        StringBuffer commandBuf = new StringBuffer();
+        StringBuilder commandBuf = new StringBuilder();
         if (getCommandPath() != null) {
             commandBuf.append(getCommandPath());
         } else {

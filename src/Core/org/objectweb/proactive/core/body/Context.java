@@ -108,12 +108,13 @@ public class Context implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuffer res = new StringBuffer("Execution context for body " + this.body.getID() + " : ");
+        StringBuilder res = new StringBuilder("Execution context for body ");
+        res.append(this.body.getID()).append(" : ");
         if (this.currentRequest == null) {
             res.append("no current service.");
         } else {
-            res.append("service of " + this.currentRequest.getMethodName() + " from " +
-                this.currentRequest.getSourceBodyID());
+            res.append("service of ").append(this.currentRequest.getMethodName()).append(" from ").append(
+                    this.currentRequest.getSourceBodyID());
         }
         return res.toString();
     }

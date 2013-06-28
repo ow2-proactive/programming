@@ -212,7 +212,7 @@ abstract class PNPFrame {
 
         String pseudo[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 
-        StringBuffer out = new StringBuffer(buf.length * 2);
+        StringBuilder out = new StringBuilder(buf.length * 2);
         while (i < buf.length && i < len) {
             ch = (byte) (buf[i] & 0xF0); // Strip off high nibble
             ch = (byte) (ch >>> 4); // shift the bits down
@@ -222,8 +222,7 @@ abstract class PNPFrame {
             out.append(pseudo[(int) ch]); // convert the nibble to a String Character
             i++;
         }
-
-        return new String(out);
+        return out.toString();
     }
 
     /** Construct a PNP message from a {@link ChannelBuffer}

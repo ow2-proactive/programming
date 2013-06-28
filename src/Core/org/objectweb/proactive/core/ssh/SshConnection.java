@@ -118,7 +118,7 @@ public class SshConnection {
         if (!connection.isAuthenticationComplete()) {
             // Connection cannot be opened
             if (logger.isInfoEnabled()) {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append("SSH Authentication failed for " + username + "@" + hostname + ":" + port + ". ");
                 sb.append("Following SSH private keys have been tried:");
                 for (String key : keys) {

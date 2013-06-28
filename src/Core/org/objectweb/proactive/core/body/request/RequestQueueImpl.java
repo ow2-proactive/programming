@@ -289,17 +289,18 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
 
     @Override
     public synchronized String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("--- RequestQueueImpl n=").append(requestQueue.size()).append("   requests --- ->\n");
+        String ls = System.getProperty("line.separator");
+        StringBuilder sb = new StringBuilder();
+        sb.append("--- RequestQueueImpl n=");
+        sb.append(requestQueue.size());
+        sb.append("   requests --- ->").append(ls);
         int count = 0;
-        java.util.Iterator<Request> iterator = requestQueue.iterator();
-        while (iterator.hasNext()) {
-            Request currentrequest = iterator.next();
-            sb.append(count).append("--> ").append(currentrequest.getMethodName()).append("\n");
+        for (Request currentrequest : requestQueue) {
+            sb.append(count).append("--> ").append(currentrequest.getMethodName()).append(ls);
             count++;
         }
-        sb.append("--- End RequestQueueImpl ---");
-        sb.append("\n" + nfRequestsProcessor.toString());
+        sb.append("--- End RequestQueueImpl ---").append(ls);
+        sb.append(nfRequestsProcessor.toString());
         return sb.toString();
     }
 

@@ -106,7 +106,7 @@ public class GroupPBS extends AbstractGroup {
     }
 
     private String buildQsub() {
-        StringBuffer commandBuf = new StringBuffer();
+        StringBuilder commandBuf = new StringBuilder();
         if (getCommandPath() != null) {
             commandBuf.append(getCommandPath());
         } else {

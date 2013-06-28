@@ -1675,7 +1675,7 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
     private String getPath(Node node) throws SAXException {
         NodeList childNodes = node.getChildNodes();
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String pathSeparator = File.pathSeparator;
 
         boolean firstPathComponent = true;

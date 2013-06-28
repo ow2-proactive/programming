@@ -100,10 +100,10 @@ public class MessageImpl implements Message, java.io.Serializable {
     //
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("method=").append(methodName).append(", ");
-        sb.append("sender=").append(sourceID).append(", ");
-        sb.append("sequenceNumber=").append(sequenceNumber);
+        StringBuilder sb = new StringBuilder();
+        sb.append("method=").append(methodName);
+        sb.append(", sender=").append(sourceID);
+        sb.append(", sequenceNumber=").append(sequenceNumber);
         return sb.toString();
     }
 

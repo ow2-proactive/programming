@@ -77,24 +77,22 @@ public class ConstructorCallImpl implements ConstructorCall, Serializable {
     //
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("ConstructorCallImpl\n");
-        sb.append("reifiedConstructor=");
-        sb.append(reifiedConstructor);
-        sb.append("\n");
+        String ls = System.getProperty("line.separator");
+        StringBuilder sb = new StringBuilder("ConstructorCallImpl");
+        sb.append(ls).append("reifiedConstructor=").append(reifiedConstructor).append(ls);
         sb.append("effectiveArguments=");
         if (effectiveArguments == null) {
-            sb.append("null\n");
+            sb.append("null").append(ls);
         } else {
-            sb.append("\n");
+            sb.append(ls);
             for (int i = 0; i < effectiveArguments.length; i++) {
                 sb.append("   effectiveArguments[");
                 sb.append(i);
                 sb.append("]=");
                 sb.append(effectiveArguments[i]);
-                sb.append("\n");
+                sb.append(ls);
             }
-            sb.append("\n");
+            sb.append(ls);
         }
         return sb.toString();
     }

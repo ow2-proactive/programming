@@ -156,18 +156,12 @@ public class BodyMap /* extends AbstractEventProducer */implements Cloneable, ja
 
     @Override
     public synchronized String toString() {
-        StringBuffer sb = new StringBuffer();
-
-        sb.append(" -- BodyMap ------- \n");
-
-        java.util.Set<Map.Entry<UniqueID, UniversalBody>> entrySet = idToBodyMap.entrySet();
-        java.util.Iterator<Map.Entry<UniqueID, UniversalBody>> iterator = entrySet.iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<UniqueID, UniversalBody> entry = iterator.next();
-            sb.append(entry.getKey()).append("  body = ").append(entry.getValue()).append("\n");
+        String ls = System.getProperty("line.separator");
+        StringBuilder sb = new StringBuilder();
+        sb.append("-- BodyMap -------").append(ls);
+        for (Map.Entry<UniqueID, UniversalBody> entry : idToBodyMap.entrySet()) {
+            sb.append(entry.getKey()).append("  body = ").append(entry.getValue()).append(ls);
         }
-
         return sb.toString();
     }
 

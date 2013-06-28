@@ -255,7 +255,7 @@ public class ExportedVirtualNodesList {
     public String getExportedVirtualNodesBeforeCompositionAsString(String componentName) {
         List<LinkedVirtualNode> evn = getExportedVirtualNodes(componentName);
         Iterator<LinkedVirtualNode> it = evn.iterator();
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         LinkedVirtualNode lvn;
         while (it.hasNext()) {
             lvn = it.next();
@@ -275,7 +275,7 @@ public class ExportedVirtualNodesList {
     public String getExportedVirtualNodesAfterCompositionAsString(String componentName) {
         List<LinkedVirtualNode> evn = getExportedVirtualNodes(componentName);
         Iterator<LinkedVirtualNode> it = evn.iterator();
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         LinkedVirtualNode lvn;
         while (it.hasNext()) {
             lvn = it.next();
@@ -485,11 +485,11 @@ public class ExportedVirtualNodesList {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         Iterator<String> it1 = linkedVirtualNodes.keySet().iterator();
         while (it1.hasNext()) {
             String component_name = it1.next();
-            buffer.append(component_name + " : ");
+            buffer.append(component_name).append(" : ");
             List<LinkedVirtualNode> list = linkedVirtualNodes.get(component_name);
             Iterator<LinkedVirtualNode> it2 = list.iterator();
             while (it2.hasNext()) {

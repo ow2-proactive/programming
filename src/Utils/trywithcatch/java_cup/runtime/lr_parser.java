@@ -682,13 +682,13 @@ public abstract class lr_parser {
     /** Do debug output for stack state. [CSA]
      */
     public void debug_stack() {
-        StringBuffer sb = new StringBuffer("## STACK:");
+        StringBuilder sb = new StringBuilder("## STACK:");
         for (int i = 0; i < stack.size(); i++) {
             Symbol s = (Symbol) stack.elementAt(i);
             sb.append(" <state " + s.parse_state + ", sym " + s.sym + ">");
             if ((i % 3) == 2 || (i == (stack.size() - 1))) {
                 debug_message(sb.toString());
-                sb = new StringBuffer("         ");
+                sb = new StringBuilder("         ");
             }
         }
     }
@@ -1198,7 +1198,7 @@ public abstract class lr_parser {
     /** Utility function: unpacks parse tables from strings */
     protected static short[][] unpackFromStrings(String[] sa) {
         // Concatanate initialization strings.
-        StringBuffer sb = new StringBuffer(sa[0]);
+        StringBuilder sb = new StringBuilder(sa[0]);
         for (int i = 1; i < sa.length; i++)
             sb.append(sa[i]);
         int n = 0; // location in initialization string
