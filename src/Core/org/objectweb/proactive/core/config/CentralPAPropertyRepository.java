@@ -72,12 +72,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         true);
 
     /**
-     * Indicate the GCM provider class, to the ProActive implementation of
-     * Fractal/GCM set it to org.objectweb.proactive.core.component.Fractive
-     */
-    static public PAPropertyString GCM_PROVIDER = new PAPropertyString("gcm.provider", true);
-
-    /**
      * Indicate the Fractal provider class, to the ProActive implementation of
      * Fractal/GCM set it to org.objectweb.proactive.core.component.Fractive
      */
@@ -362,18 +356,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      */
     static public PAPropertyInteger PA_HTTP_CONNECT_TIMEOUT = new PAPropertyInteger(
         "proactive.http.connect_timeout", false);
-
-    /* ------------------------------------
-     *  COMPONENTS
-     */
-
-    /** Timeout in seconds for parallel creation of components */
-    static public PAPropertyInteger PA_COMPONENT_CREATION_TIMEOUT = new PAPropertyInteger(
-        "components.creation.timeout", false);
-
-    /** If 'true', the component framework should optimize communication between component using shortcut mechanism */
-    static public PAPropertyBoolean PA_COMPONENT_USE_SHORTCUTS = new PAPropertyBoolean(
-        "proactive.components.use_shortcuts", false);
 
     /* ------------------------------------
      *  MIGRATION

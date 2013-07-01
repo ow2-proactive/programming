@@ -48,9 +48,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PAFuture;
-import org.objectweb.proactive.core.component.ComponentMethodCallMetadata;
-import org.objectweb.proactive.core.component.representative.ItfID;
-import org.objectweb.proactive.core.component.request.ComponentRequest;
 import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 import org.objectweb.proactive.core.mop.MethodCallInfo.SynchronousReason;
 import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
@@ -128,7 +125,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     private transient Method reifiedMethod;
     private String key;
     private transient MethodCallExceptionContext exceptioncontext;
-    ComponentMethodCallMetadata componentMetaData = null;
     private transient Map<TypeVariable<?>, Class<?>> genericTypesMapping = null;
 
     /**
@@ -235,35 +231,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     }
 
     /**
-     * Returns a MethodCall object with extra info for component calls (the
-     * possible name of the functional interface invoked).
-     * @param reifiedMethod
-     * @param effectiveArguments
-     * @param interfaceName fractal interface name
-     * @param priority default is to 3 (strict FIFO)
-     * @return MethodCall
-     */
-    public synchronized static MethodCall getComponentMethodCall(Method reifiedMethod,
-            Object[] effectiveArguments, Map<TypeVariable<?>, Class<?>> genericTypesMapping,
-            String interfaceName, ItfID senderItfID, short priority) {
-        MethodCall mc = getMethodCall(reifiedMethod, effectiveArguments, genericTypesMapping);
-
-        mc.componentMetaData = new ComponentMethodCallMetadata();
-        mc.componentMetaData.setComponentInterfaceName(interfaceName);
-        mc.componentMetaData.setSenderItfID(senderItfID);
-        mc.componentMetaData.setPriority(priority);
-        mc.componentMetaData.setShortcut(null);
-        return mc;
-    }
-
-    public synchronized static MethodCall getComponentMethodCall(Method reifiedMethod,
-            Object[] effectiveArguments, Map<TypeVariable<?>, Class<?>> genericTypesMapping,
-            String interfaceName, ItfID senderItfID) {
-        return MethodCall.getComponentMethodCall(reifiedMethod, effectiveArguments, genericTypesMapping,
-                interfaceName, senderItfID, ComponentRequest.STRICT_FIFO_PRIORITY);
-    }
-
-    /**
      *        Tells the recycling process that the MethodCall object passed as parameter
      *        is ready for recycling. It is the responsibility of the caller of this
      *        method to make sure that this object can safely be disposed of.
@@ -275,8 +242,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
                 // Cleans up a MethodCall object
                 // It is preferable to do it here rather than at the moment
                 // the object is picked out of the pool, because it allows
-                // garbage-collecting the objects referenced in here
-                mc.componentMetaData = null;
+                // garbage-collecting the objects referenced in here                
                 mc.reifiedMethod = null;
                 mc.genericTypesMapping = null;
                 mc.effectiveArguments = null;
@@ -336,7 +302,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
      */
     public MethodCall getShallowCopy() {
         MethodCall mc = new MethodCall();
-        mc.componentMetaData = this.componentMetaData;
         mc.reifiedMethod = this.getReifiedMethod();
         mc.serializedEffectiveArguments = this.serializedEffectiveArguments;
         mc.effectiveArguments = this.effectiveArguments;
@@ -692,10 +657,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
         }
 
         return this.exceptioncontext;
-    }
-
-    public ComponentMethodCallMetadata getComponentMetadata() {
-        return this.componentMetaData;
     }
 
     public Map<TypeVariable<?>, Class<?>> getGenericTypesMapping() {

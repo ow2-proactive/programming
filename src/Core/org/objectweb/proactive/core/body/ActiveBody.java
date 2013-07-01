@@ -50,8 +50,6 @@ package org.objectweb.proactive.core.body;
  *
  */
 import org.apache.log4j.Logger;
-import org.etsi.uri.gcm.util.GCM;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
@@ -60,20 +58,15 @@ import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.body.migration.MigratableBody;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
-import org.objectweb.proactive.core.component.Utils;
-import org.objectweb.proactive.core.component.body.ComponentActivity;
-import org.objectweb.proactive.core.component.body.ComponentActivityPriority;
-import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
-import org.objectweb.proactive.core.component.body.ComponentMembraneActivity;
-import org.objectweb.proactive.core.component.body.ComponentMembraneActivityPriority;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
-public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.Serializable {
+public class ActiveBody extends MigratableBody implements Runnable, java.io.Serializable {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
     //
@@ -106,31 +99,9 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
             throws java.lang.reflect.InvocationTargetException, ConstructorCallExecutionFailedException,
             ActiveObjectCreationException {
         // Creates the reified object
-        super(c.execute(), nodeURL, activity, factory);
+        super(c.execute(), nodeURL, factory);
 
         Object reifiedObject = this.localBodyStrategy.getReifiedObject();
-
-        // when building a component, encapsulate the functional activity
-        // TODO_M read some flag before doing this?
-        if (getPAComponentImpl() != null) {
-            try {
-                GCM.getPriorityController(getPAComponentImpl());
-                Utils.getPAMembraneController(getPAComponentImpl());
-                activity = new ComponentMembraneActivityPriority(activity, reifiedObject);
-            } catch (NoSuchInterfaceException nsie1) {
-                try {
-                    GCM.getPriorityController(getPAComponentImpl());
-                    activity = new ComponentActivityPriority(activity, reifiedObject);
-                } catch (NoSuchInterfaceException nsie2) {
-                    try {
-                        Utils.getPAMembraneController(getPAComponentImpl());
-                        activity = new ComponentMembraneActivity(activity, reifiedObject);
-                    } catch (NoSuchInterfaceException nsie3) {
-                        activity = new ComponentActivity(activity, reifiedObject);
-                    }
-                }
-            }
-        }
 
         // InitActive
         if ((activity != null) && activity instanceof InitActive) {

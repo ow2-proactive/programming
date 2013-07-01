@@ -44,7 +44,6 @@ import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
@@ -577,13 +576,6 @@ public class PAActiveObject {
         }
 
         threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(CentralPAPropertyRepository.PA_COMPONENT_CREATION_TIMEOUT.getValue(),
-                    TimeUnit.SECONDS);
-        } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
 
         Class<?> classForResult = Class.forName(className);
         return result.toArray((Object[]) Array.newInstance(classForResult, result.size()));

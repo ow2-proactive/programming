@@ -45,26 +45,6 @@
 						<absolutePath
 							value="${PROACTIVE_HOME}/classes/" />
 						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/julia-runtime.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/dtdparser.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/julia-mixins.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/fractal-adl.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/fractal.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/ow_deployment_scheduling.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/fractal-gui.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/SVGGraphics.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/fractal-swing.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/components/julia-asm.jar" />
-						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/jini/jini-core.jar" />
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/jini/jini-ext.jar" />

@@ -51,7 +51,6 @@ import org.objectweb.proactive.core.body.request.RequestFactory;
 import org.objectweb.proactive.core.body.request.RequestQueue;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
-import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.node.NodeException;
@@ -231,10 +230,6 @@ public class HalfBody extends AbstractBody {
             Request request = this.internalRequestFactory.newRequest(methodCall, HalfBody.this,
                     future == null, sequenceID, tags);
 
-            // COMPONENTS : generate ComponentRequest for component messages
-            if (methodCall.getComponentMetadata() != null) {
-                request = new ComponentRequestImpl(request);
-            }
             if (future != null) {
                 future.setID(sequenceID);
                 this.futures.receiveFuture(future);

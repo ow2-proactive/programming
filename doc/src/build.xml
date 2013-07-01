@@ -7,9 +7,7 @@
 	<import file="../toolchain/doc_macros.xml" />
 	<import file="GetStarted/build.xml" />
 	<import file="ReferenceManual/build.xml" />
-	<import file="AdvancedFeatures/build.xml" />
-	<import file="Components/build.xml" />
-
+    <import file="AdvancedFeatures/build.xml" />
 
 	<!-- javadoc paths are not include through subant-->
 	<path id="docs.utils.classpath.javadoc">
@@ -26,8 +24,7 @@
 				doc.ProActive.javadoc.all,
 				doc.GetStarted.manual,
 				doc.ReferenceManual.manual,
-				doc.AdvancedFeatures.manual,
-				doc.Components.manual,
+				doc.AdvancedFeatures.manual,				
 				doc.ProActive.doc.zips"
 			description="Generate the ProActive Programming javadoc, manual, and zip archives" />
 
@@ -38,8 +35,6 @@
 			depends="
 				doc.GetStarted.manualSingleHtmlZip,
 				doc.GetStarted.manualHtmlZip,
-				doc.Components.manualSingleHtmlZip,
-				doc.Components.manualHtmlZip,
 				doc.ReferenceManual.manualSingleHtmlZip,
 				doc.ReferenceManual.manualHtmlZip,
 				doc.AdvancedFeatures.manualSingleHtmlZip,
@@ -55,8 +50,7 @@
 			depends="
 				doc.GetStarted.manualHtml,
 				doc.ReferenceManual.manualHtml,
-				doc.AdvancedFeatures.manualHtml,
-				doc.Components.manualHtml"
+				doc.AdvancedFeatures.manualHtml"
 			description="Generate all the Programming documentations in the multiple Html format" />
 
 	<!-- ================================================================ -->
@@ -66,8 +60,7 @@
 			depends="
 				doc.GetStarted.manualSingleHtml,
 				doc.ReferenceManual.manualSingleHtml,
-				doc.AdvancedFeatures.manualSingleHtml,
-				doc.Components.manualSingleHtml"
+				doc.AdvancedFeatures.manualSingleHtml"
 			description="Generate all the Programming documentations in the single Html format" />
 
 	<!-- ================================================================ -->
@@ -77,8 +70,7 @@
 			depends="
 				doc.GetStarted.manualPdf,
 				doc.ReferenceManual.manualPdf,
-				doc.AdvancedFeatures.manualPdf,
-				doc.Components.manualPdf"
+				doc.AdvancedFeatures.manualPdf"
 			description="Generate all the Programming documentations in the Pdf format" />
 
 	<!-- =============================================================== -->
@@ -167,8 +159,7 @@
 				<package name="org.objectweb.proactive.api" />
 				<package name="org.objectweb.proactive" />
 			</group>
-			<group title="ProActive Core: Body" packages="org.objectweb.proactive.core.body*" />
-			<group title="ProActive Core: Components (implementation of the Fractal model)" packages="org.objectweb.proactive.core.component*" />
+			<group title="ProActive Core: Body" packages="org.objectweb.proactive.core.body*" />			
 			<group title="ProActive Core: JMX API" packages="org.objectweb.proactive.core.jmx*" />
 			<group title="ProActive Core: Security" packages="org.objectweb.proactive.core.security*" />
 			<group title="ProActive Core: XML Descriptor (Deprecated Soon)" packages="org.objectweb.proactive.core.descriptor*" />
@@ -264,8 +255,7 @@
 				<package name="org.objectweb.proactive.api" />
 				<package name="org.objectweb.proactive" />
 			</group>
-			<group title="ProActive Core: Body" packages="org.objectweb.proactive.core.body*" />
-			<group title="ProActive Core: Components (implementation of the Fractal model)" packages="org.objectweb.proactive.core.component*" />
+			<group title="ProActive Core: Body" packages="org.objectweb.proactive.core.body*" />			
 			<group title="ProActive Core: JMX API" packages="org.objectweb.proactive.core.jmx*" />
 			<group title="ProActive Core: Security" packages="org.objectweb.proactive.core.security*" />
 			<group title="ProActive Core: XML Descriptor (Deprecated Soon)" packages="org.objectweb.proactive.core.descriptor*" />

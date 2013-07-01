@@ -40,6 +40,8 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.objectweb.proactive.api.PAActiveObject;
@@ -73,8 +75,7 @@ public class Test extends FunctionalTest {
         String baseclassName = "functionalTests.stub.stubgeneration.A";
         data = JavassistByteCodeStubBuilder.create(baseclassName, null);
         assertNotNull(data);
-        Class<?> stubClass = org.objectweb.proactive.core.component.gen.Utils.defineClass(
-                "pa.stub.functionalTests.stub.stubgeneration._StubA", data);
+        Class<?> stubClass = Test.defineClass("pa.stub.functionalTests.stub.stubgeneration._StubA", data);
         assertTrue("A isn't parent of its Stub!", A.class.isAssignableFrom(stubClass));
         stubClassName = Utils.convertClassNameToStubClassName(baseclassName, null);
         assertEquals(stubClassName + " not equals pa.stub.functionalTests.stub.stubgeneration._StubA",
@@ -88,7 +89,7 @@ public class Test extends FunctionalTest {
         data = JavassistByteCodeStubBuilder.create(baseclassName, new Class[] { My_PFirst_PType.class,
                 My_DSecond_PType.class });
         assertNotNull(data);
-        stubClass = org.objectweb.proactive.core.component.gen.Utils
+        stubClass = Test
                 .defineClass(
                         "pa.stub.parameterized.functionalTests.stub.stubgeneration._Stub__StubA__PTy__Dpe__Generics_GenericsfunctionalTests_Pstub_Pstubgeneration_PMy__PFirst__PType_DfunctionalTests_Pstub_Pstubgeneration_PMy__DSecond__PType",
                         data);
@@ -122,6 +123,29 @@ public class Test extends FunctionalTest {
         //        System.out.println("convertStubClassNameToClassName " +
         //            (System.currentTimeMillis() - begin));
         assertTrue(data != null);
+    }
+
+    public static Class<?> defineClass(final String className, final byte[] bytes)
+            throws ClassNotFoundException, SecurityException, NoSuchMethodException,
+            IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        // The following code invokes defineClass on the current thread classloader by reflection
+        Class<?> clc = Class.forName("java.lang.ClassLoader");
+        Class<?>[] argumentTypes = new Class<?>[4];
+        argumentTypes[0] = className.getClass();
+        argumentTypes[1] = bytes.getClass();
+        argumentTypes[2] = Integer.TYPE;
+        argumentTypes[3] = Integer.TYPE;
+
+        Method method = clc.getDeclaredMethod("defineClass", argumentTypes);
+        method.setAccessible(true);
+
+        Object[] effectiveArguments = new Object[4];
+        effectiveArguments[0] = className;
+        effectiveArguments[1] = bytes;
+        effectiveArguments[2] = Integer.valueOf(0);
+        effectiveArguments[3] = Integer.valueOf(bytes.length);
+
+        return (Class<?>) method.invoke(Thread.currentThread().getContextClassLoader(), effectiveArguments);
     }
 
     public static void main(String[] args) {

@@ -42,7 +42,6 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 
 
@@ -65,9 +64,6 @@ public class DummySender implements UniversalBody {
     //
     // ---- DUMMY SENDER ---
     //
-
-    public void createShortcut(Shortcut shortcut) throws IOException {
-    }
 
     public void disableAC() throws IOException {
     }

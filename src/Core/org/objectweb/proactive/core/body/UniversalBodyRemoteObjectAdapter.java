@@ -39,11 +39,9 @@ package org.objectweb.proactive.core.body;
 import java.io.IOException;
 
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 
@@ -97,14 +95,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
     @Override
     public String getName() {
         return name;
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.body.UniversalBody#createShortcut(org.objectweb.proactive.core.component.request.Shortcut)
-     */
-    public void createShortcut(Shortcut shortcut) throws IOException {
-        //      TODO implement
-        throw new ProActiveRuntimeException("create shortcut method not implemented yet");
     }
 
     /**

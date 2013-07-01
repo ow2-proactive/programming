@@ -8,8 +8,6 @@
 	<classpathentry excluding="doc/PublishedAPIDoclet.java" kind="src" output="classes/Utils" path="src/Utils"/>
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.11-SNAPSHOT-20120416-1530.jar"/>
-	<classpathentry kind="lib" path="lib/asm-3.2.jar"/>
-	<classpathentry kind="lib" path="lib/ast-core-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/cockpit-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
@@ -23,11 +21,7 @@
 	<classpathentry kind="lib" path="lib/cryptix-asn1.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix32.jar"/>
-	<classpathentry kind="lib" path="lib/dtdparser-1.21.jar"/>
 	<classpathentry kind="lib" path="lib/fluent-hc-4.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/fractal-adl-2.7-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/fractal-api-2.0.3-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/fractal-gcm-api-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/glite-wms-jdlj.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
@@ -43,9 +37,6 @@
 	<classpathentry kind="lib" path="lib/jna-platform-3.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/jna.jar"/>
 	<classpathentry kind="lib" path="lib/jsch-0.1.31.jar"/>
-	<classpathentry kind="lib" path="lib/julia-asm-2.5.3-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/julia-mixins-2.5.3-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/julia-runtime-2.5.3-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/netty-3.2.0.ALPHA2.jar"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
@@ -54,8 +45,6 @@
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/ssj.jar"/>
 	<classpathentry kind="lib" path="lib/synchronize-0.9.0.jar"/>
-	<classpathentry kind="lib" path="lib/task-deployment-2.4-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/task-framework-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/trilead-ssh2.jar"/>
 	<classpathentry kind="lib" path="lib/uploader-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/vfs_s3.jar"/>

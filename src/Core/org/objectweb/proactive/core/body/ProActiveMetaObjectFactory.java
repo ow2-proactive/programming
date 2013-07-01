@@ -42,7 +42,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.migration.MigrationManager;
@@ -57,11 +56,6 @@ import org.objectweb.proactive.core.body.request.RequestReceiver;
 import org.objectweb.proactive.core.body.request.RequestReceiverFactory;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
-import org.objectweb.proactive.core.component.ComponentParameters;
-import org.objectweb.proactive.core.component.identity.PAComponent;
-import org.objectweb.proactive.core.component.identity.PAComponentFactory;
-import org.objectweb.proactive.core.component.identity.PAComponentImpl;
-import org.objectweb.proactive.core.component.request.SynchronousComponentRequestReceiver;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManagerFactory;
 import org.objectweb.proactive.core.mop.MethodCall;
@@ -113,8 +107,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 @PublicAPI
 //@snippet-start proactivemetaobjectfactory
 public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Serializable, Cloneable {
-    public static final String COMPONENT_PARAMETERS_KEY = "component-parameters";
-    public static final String SYNCHRONOUS_COMPOSITE_COMPONENT_KEY = "synchronous-composite";
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
 
     //
@@ -136,7 +128,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     //    protected RemoteBodyFactory remoteBodyFactoryInstance;
     protected ThreadStoreFactory threadStoreFactoryInstance;
     protected ProActiveSPMDGroupManagerFactory proActiveSPMDGroupManagerFactoryInstance;
-    protected PAComponentFactory componentFactoryInstance;
     protected MessageTagsFactory requestTagsFactoryInstance;
 
     //
@@ -148,33 +139,9 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         this.requestReceiverFactoryInstance = newRequestReceiverFactorySingleton();
         this.requestQueueFactoryInstance = newRequestQueueFactorySingleton();
         this.migrationManagerFactoryInstance = newMigrationManagerFactorySingleton();
-        //        this.remoteBodyFactoryInstance = newRemoteBodyFactorySingleton();
         this.threadStoreFactoryInstance = newThreadStoreFactorySingleton();
         this.proActiveSPMDGroupManagerFactoryInstance = newProActiveSPMDGroupManagerFactorySingleton();
         this.requestTagsFactoryInstance = newRequestTagsFactorySingleton();
-    }
-
-    /**
-     * Constructor with parameters
-     * It is used for per-active-object configurations of ProActive factories
-     * @param parameters the parameters of the factories; these parameters can be of any type
-     */
-    public ProActiveMetaObjectFactory(Map<String, Object> parameters) {
-        this.parameters = parameters;
-        if (parameters.containsKey(COMPONENT_PARAMETERS_KEY)) {
-            ComponentParameters initialComponentParameters = (ComponentParameters) parameters
-                    .get(COMPONENT_PARAMETERS_KEY);
-            this.componentFactoryInstance = newComponentFactorySingleton(initialComponentParameters);
-            this.requestFactoryInstance = newRequestFactorySingleton();
-            this.replyReceiverFactoryInstance = newReplyReceiverFactorySingleton();
-            this.requestReceiverFactoryInstance = newRequestReceiverFactorySingleton();
-            this.requestQueueFactoryInstance = newRequestQueueFactorySingleton();
-            this.migrationManagerFactoryInstance = newMigrationManagerFactorySingleton();
-            //            this.remoteBodyFactoryInstance = newRemoteBodyFactorySingleton();
-            this.threadStoreFactoryInstance = newThreadStoreFactorySingleton();
-            this.proActiveSPMDGroupManagerFactoryInstance = newProActiveSPMDGroupManagerFactorySingleton();
-            this.requestTagsFactoryInstance = newRequestTagsFactorySingleton();
-        }
     }
 
     //
@@ -230,10 +197,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         return this.proActiveSPMDGroupManagerFactoryInstance;
     }
 
-    public PAComponentFactory newComponentFactory() {
-        return this.componentFactoryInstance;
-    }
-
     public MessageTagsFactory newRequestTagsFactory() {
         return this.requestTagsFactoryInstance;
     }
@@ -272,10 +235,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         return new ProActiveSPMDGroupManagerFactoryImpl();
     }
 
-    protected PAComponentFactory newComponentFactorySingleton(ComponentParameters initialComponentParameters) {
-        return new ProActiveComponentFactoryImpl(initialComponentParameters);
-    }
-
     protected MessageTagsFactory newRequestTagsFactorySingleton() {
         return new MessageTagsFactoryImpl();
     }
@@ -307,11 +266,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     // end inner class ReplyReceiverFactoryImpl
     protected class RequestReceiverFactoryImpl implements RequestReceiverFactory, java.io.Serializable {
         public RequestReceiver newRequestReceiver() {
-            if (ProActiveMetaObjectFactory.this.parameters.containsKey(SYNCHRONOUS_COMPOSITE_COMPONENT_KEY) &&
-                ((Boolean) ProActiveMetaObjectFactory.this.parameters
-                        .get(ProActiveMetaObjectFactory.SYNCHRONOUS_COMPOSITE_COMPONENT_KEY)).booleanValue()) {
-                return new SynchronousComponentRequestReceiver();
-            }
             return new org.objectweb.proactive.core.body.request.RequestReceiverImpl();
         }
     }
@@ -319,18 +273,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     // end inner class RequestReceiverFactoryImpl
     protected class RequestQueueFactoryImpl implements RequestQueueFactory, java.io.Serializable {
         public BlockingRequestQueue newRequestQueue(UniqueID ownerID) {
-            if ("true".equals(ProActiveMetaObjectFactory.this.parameters
-                    .get(SYNCHRONOUS_COMPOSITE_COMPONENT_KEY))) {
-                return null;
-            }
-
-            //if (componentFactoryInstance != null) {
-            // COMPONENTS
-            // we need a request queue for components
-            //return new ComponentRequestQueueImpl(ownerID);
-            //} else {
             return new org.objectweb.proactive.core.body.request.BlockingRequestQueueImpl(ownerID);
-            //}
         }
     }
 
@@ -401,18 +344,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     }
 
     // end inner class ProActiveGroupManagerFactoryImpl
-    protected class ProActiveComponentFactoryImpl implements PAComponentFactory, java.io.Serializable {
-        // COMPONENTS
-        private ComponentParameters componentParameters;
-
-        public ProActiveComponentFactoryImpl(ComponentParameters initialComponentParameters) {
-            this.componentParameters = initialComponentParameters;
-        }
-
-        public PAComponent newPAComponent(Body myBody) {
-            return new PAComponentImpl(this.componentParameters, myBody);
-        }
-    }
 
     // REQUEST-TAGS
     protected static class MessageTagsFactoryImpl implements MessageTagsFactory, Serializable {

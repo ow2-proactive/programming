@@ -47,8 +47,6 @@ import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.component.representative.ItfID;
-import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.mop.MethodCall;
 
@@ -98,11 +96,6 @@ public class MOCKBody implements Body {
     }
 
     public UniqueID getParentUID() {
-
-        return null;
-    }
-
-    public UniversalBody getShortcutTargetBody(ItfID functionalItfID) {
 
         return null;
     }
@@ -196,10 +189,6 @@ public class MOCKBody implements Body {
     }
 
     public void serveWithException(Request request, Throwable exception) {
-
-    }
-
-    public void createShortcut(Shortcut shortcut) throws IOException {
 
     }
 

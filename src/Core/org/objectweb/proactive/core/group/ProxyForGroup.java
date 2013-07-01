@@ -36,6 +36,21 @@
  */
 package org.objectweb.proactive.core.group;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
@@ -50,16 +65,16 @@ import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.proxy.AbstractProxy;
 import org.objectweb.proactive.core.body.proxy.SendingQueueProxy;
 import org.objectweb.proactive.core.group.spmd.MethodCallSetSPMDGroup;
-import org.objectweb.proactive.core.mop.*;
+import org.objectweb.proactive.core.mop.ClassNotReifiableException;
+import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedException;
+import org.objectweb.proactive.core.mop.ConstructorCall;
+import org.objectweb.proactive.core.mop.MOP;
+import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.mop.Proxy;
+import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.*;
-import java.util.concurrent.CountDownLatch;
 
 
 @PublicAPI
@@ -530,7 +545,6 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 // if (MOP.isReifiedObject(o)) {
                 // return this.memberList.add(o);
                 // }
-                // // COMPONENTS
                 //
                 // /* if o is a reference on a component interface */
                 // else if (o instanceof PAFutureInterface) {

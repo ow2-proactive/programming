@@ -73,8 +73,6 @@ import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.Tag;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
-import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
-import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapper;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
@@ -313,24 +311,19 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     }
 
     private void checkImmediateServiceMode(String methodName, Class<?>[] parametersTypes, boolean uniqueThread) {
-        // see PROACTIVE-309
-        if (!((ComponentBodyImpl) this).isComponent()) {
-            if (parametersTypes == null) { // all args
-                if (!((ComponentBodyImpl) this).isComponent()) {
-                    if (!checkMethod(methodName)) {
-                        throw new NoSuchMethodError(methodName + " is not defined in " +
-                            getReifiedObject().getClass().getName());
-                    }
+        if (parametersTypes == null) { // all args               
+            if (!checkMethod(methodName)) {
+                throw new NoSuchMethodError(methodName + " is not defined in " +
+                    getReifiedObject().getClass().getName());
+            }
+        } else { // args are specified
+            if (!checkMethod(methodName, parametersTypes)) {
+                String signature = methodName + "(";
+                for (int i = 0; i < parametersTypes.length; i++) {
+                    signature += parametersTypes[i] + ((i < parametersTypes.length - 1) ? "," : "");
                 }
-            } else { // args are specified
-                if (!checkMethod(methodName, parametersTypes)) {
-                    String signature = methodName + "(";
-                    for (int i = 0; i < parametersTypes.length; i++) {
-                        signature += parametersTypes[i] + ((i < parametersTypes.length - 1) ? "," : "");
-                    }
-                    signature += " is not defined in " + getReifiedObject().getClass().getName();
-                    throw new NoSuchMethodError(signature);
-                }
+                signature += " is not defined in " + getReifiedObject().getClass().getName();
+                throw new NoSuchMethodError(signature);
             }
         }
     }
@@ -683,11 +676,6 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
             Request request = this.internalRequestFactory.newRequest(methodCall, BodyImpl.this,
                     future == null, sequenceID, tags);
-
-            // COMPONENTS : generate ComponentRequest for component messages
-            if (methodCall.getComponentMetadata() != null) {
-                request = new ComponentRequestImpl(request);
-            }
 
             if (future != null) {
                 future.setID(sequenceID);

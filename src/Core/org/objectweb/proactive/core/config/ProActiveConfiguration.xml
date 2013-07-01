@@ -42,7 +42,6 @@
 		<!-- <prop key="proactive.ssh.key_directory" value="/user/mlacage/home/.ssh/"/> -->
 		<!-- <prop key="proactive.ssh.port" value="22"/> -->
 		<!-- <prop key="proactive.ssh.username" value="mlacage"/> -->
-        <prop key="components.creation.timeout" value="10000" /> <!-- timeout in seconds for parallel creation of components -->		
 		<!-- ***************************************************** -->
 		<!-- Message Tagging -->
 		<prop key="proactive.tagmemory.lease.max" value="60" />

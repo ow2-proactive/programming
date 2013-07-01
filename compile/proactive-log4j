@@ -37,13 +37,6 @@ log4j.logger.proactive.pnp = INFO
 #log4j.logger.proactive.migration = DEBUG
 #log4j.logger.proactive.communication.requests = DEBUG
 
-#log4j.logger.proactive.components = DEBUG
-#log4j.logger.proactive.components.requests = DEBUG
-#log4j.logger.proactive.components.activity = DEBUG
-#log4j.logger.proactive.components.bytecodegeneration = DEBUG
-#log4j.logger.proactive.components.adl = DEBUG
-#log4j.logger.proactive.components.gui = DEBUG
-
 #log4j.logger.proactive.dataspaces = DEBUG
 #log4j.logger.proactive.dataspaces.vfs = DEBUG
 #log4j.logger.proactive.dataspaces.mountmanager = DEBUG

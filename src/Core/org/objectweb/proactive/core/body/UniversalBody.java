@@ -44,7 +44,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -111,14 +110,6 @@ public interface UniversalBody extends Serializable {
      * @exception java.io.IOException if a pb occurs during this method call
      */
     public void updateLocation(UniqueID id, UniversalBody body) throws java.io.IOException;
-
-    /**
-     * similar to the {@link UniversalBody#updateLocation(org.objectweb.proactive.core.UniqueID, UniversalBody)} method,
-     * it allows direct communication to the target of a functional call, across membranes of composite components.
-     * @param shortcut the shortcut to create
-     * @exception java.io.IOException if a problem occurs during this method call
-     */
-    public void createShortcut(Shortcut shortcut) throws java.io.IOException;
 
     /**
      * Returns the remote friendly version of this body

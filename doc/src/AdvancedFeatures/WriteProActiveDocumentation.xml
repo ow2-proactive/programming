@@ -302,25 +302,6 @@
 </example>]]></programlisting>
 		</example>
 
-		<example xml:id="XMLprogramlistingwithfileinclusion_42">
-			<info>
-				<title>XML program listing with file inclusion</title>
-			</info>
-			<programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
-		</example>
-
-		<example xml:id="DSC_XMLprogramlistingwithfileinclusion_42">
-			<info>
-				<title>Documentation source code of <xref linkend="XMLprogramlistingwithfileinclusion_42" /></title>
-			</info>
-			<programlisting language="xml"><![CDATA[<example xml:id="XMLprogramlistingwithfileinclusion_42">
-	<info>
-		<title>XML program listing with file inclusion</title>
-	</info>
-	<programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
-</example>]]></programlisting>
-		</example>
-
 		<para>Here is a screen example. For instance, this could be some code inside a unix shell:</para>
 
 		<example xml:id="screen_42">

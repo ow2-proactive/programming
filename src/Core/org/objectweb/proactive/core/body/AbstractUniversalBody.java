@@ -36,22 +36,17 @@
  */
 package org.objectweb.proactive.core.body;
 
+import java.io.Serializable;
+import java.net.URI;
+import java.net.UnknownHostException;
+
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.component.representative.ItfID;
-import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -83,8 +78,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
 
     /** A remote version of this body that is used to send to remote peer */
     protected transient UniversalBody remoteBody;
-
-    protected Map<ItfID, Shortcut> shortcuts = null; // key = functionalItfID, value=shortcut
 
     protected transient RemoteObjectExposer<UniversalBody> roe;
 
@@ -223,16 +216,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    /*
-     * @see org.objectweb.proactive.core.body.UniversalBody#createShortcut(org.objectweb.proactive.core.component.request.Shortcut)
-     */
-    public void createShortcut(Shortcut shortcut) throws IOException {
-        if (this.shortcuts == null) {
-            this.shortcuts = new HashMap<ItfID, Shortcut>();
-        }
-        this.shortcuts.put(shortcut.getLinkedInterfaceID(), shortcut);
     }
 
     /*

@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.component.gen.Utils;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -99,13 +98,6 @@ public class FileProcess {
         // try to get the class as a generated stub
         // generate it if necessary
         b = org.objectweb.proactive.core.mop.MOPClassLoader.getMOPClassLoader().getClassData(className);
-        if (b != null) {
-            return b;
-        }
-
-        // COMPONENTS
-        // try to get the class as a generated component interface reference
-        b = Utils.getClassData(className);
         if (b != null) {
             return b;
         }

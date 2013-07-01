@@ -40,7 +40,6 @@ import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.LocalBodyStrategy;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 
 
@@ -164,15 +163,6 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
      * @return the MBean associated to this active object.
      */
     public BodyWrapperMBean getMBean();
-
-    /**
-     * Returns the body that is the target of this shortcut for this component interface
-     * 
-     * @param functionalItfID
-     *            the id of the interface on which the shortcut is available
-     * @return the body that is the target of this shortcut for this interface
-     */
-    public UniversalBody getShortcutTargetBody(ItfID functionalItfID);
 
     // /**
     // * set the policy server of the active object

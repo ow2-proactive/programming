@@ -104,7 +104,6 @@ public class TestNodes extends FunctionalTest {
      *
      */
 
-    // COMPONENTS
     public Object[] action(Object[] parameters) throws Exception {
         action();
         return null;

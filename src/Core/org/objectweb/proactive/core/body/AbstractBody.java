@@ -62,8 +62,6 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.tags.LocalMemoryTag;
 import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
-import org.objectweb.proactive.core.component.representative.ItfID;
-import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
@@ -439,22 +437,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         } else {
             // it was not found in this vm let's try the location table
             return this.location.getBody(bodyID);
-        }
-    }
-
-    /*
-     * 
-     * @see org.objectweb.proactive.Body#getShortcutTargetBody(org.objectweb.proactive.core.component.representative.ItfID)
-     */
-    public UniversalBody getShortcutTargetBody(ItfID functionalItfID) {
-        if (this.shortcuts == null) {
-            return null;
-        } else {
-            if (this.shortcuts.containsKey(functionalItfID)) {
-                return ((Shortcut) this.shortcuts.get(functionalItfID)).getShortcutTargetBody();
-            } else {
-                return null;
-            }
         }
     }
 

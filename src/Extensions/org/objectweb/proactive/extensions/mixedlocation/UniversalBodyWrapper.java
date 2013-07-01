@@ -44,7 +44,6 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.component.request.Shortcut;
 
 
 public class UniversalBodyWrapper implements UniversalBody, Runnable {
@@ -182,11 +181,6 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
      */
     public Object receiveHeartbeat() throws IOException {
         return this.wrappedBody.receiveHeartbeat();
-    }
-
-    public void createShortcut(Shortcut shortcut) throws IOException {
-        // TODO implement
-        throw new ProActiveRuntimeException("create shortcut method not implemented yet");
     }
 
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException {

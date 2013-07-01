@@ -1039,25 +1039,15 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // tries to generate a stub without using MOP methods
     private byte[] generateStub(String className) {
         byte[] classData = null;
-
         if (Utils.isStubClassName(className)) {
             // do not use directly MOP methods (avoid classloader cycles)
             String classname = Utils.convertStubClassNameToClassName(className);
             classData = JavassistByteCodeStubBuilder.create(classname, null);
             if (classData != null) {
                 ClassDataCache.instance().addClassData(className, classData);
-                return classData;
             }
         }
-
-        // try to get the class as a generated component interface reference
-        classData = org.objectweb.proactive.core.component.gen.Utils.getClassData(className);
-        if (classData != null) {
-            ClassDataCache.instance().addClassData(className, classData);
-            return classData;
-        }
-
-        return null;
+        return classData;
     }
 
     public String getVNName(String nodename) throws ProActiveException {
