@@ -21,7 +21,6 @@
         <prop key="proactive.rmi.port" value="1099" />
        
        <!--<prop key="proactive.java.policy" value="../../../../../../scripts/unix/proactive.java.policy"/>-->
-        <prop key="gcm.provider" value="org.objectweb.proactive.core.component.Fractive" />
        <!-- <prop key="proactive.tunneling.connect_timeout" value="2000"/> -->
         <prop key="proactive.communication.rmissh.try_normal_first" value="false" />
 		<!-- <prop key="proactive.communication.benchmark.class" value="org.objectweb.proactive.core.remoteobject.benchmark.LargeByteArrayBenchmark"/> -->
