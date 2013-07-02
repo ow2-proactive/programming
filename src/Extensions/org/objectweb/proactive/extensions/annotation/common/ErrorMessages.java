@@ -37,7 +37,6 @@
 package org.objectweb.proactive.extensions.annotation.common;
 
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
-import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 
 
 /**
@@ -79,29 +78,7 @@ public interface ErrorMessages {
     public static final String NO_NULL_RETURN_ERROR_MSG = "A method of an active object should not return null,"
         + " as the caller cannot check the future value against the null literal";
 
-    // @MigrationSignal
-    // the annotation is not used inside an Active Object class declaration
-    public static final String NOT_IN_ACTIVE_OBJECT_ERROR_MESSAGE = "The " +
-        MigrationSignal.class.getName() +
-        " annotation has no sense outside an active object.\n" +
-        "If you think about using the enclosing class as an active object, maybe you should annotate it with " +
-        ActiveObject.class.getName() + "\n";
-    // the migration method is not public
-    public static final String NOT_PUBLIC_MIGRATION_SIGNAL_ERROR_MESSAGE = " The method is not public. It does not make sense to have a migration signal that cannot be used from outside the class definition.\n";
-    // the migrateTo call is not the last one in the method
-    public static final String MIGRATE_TO_NOT_FINAL_STATEMENT_ERROR_MESSAGE = "Incorrect usage of the migrateTo method. It should be the last statement in the method block where it appears, otherwise it can cause undefined behaviour.\n";
-
-    // the migrateTo call can not be found in the migrateTo method
-    public static final String MIGRATE_TO_NOT_FOUND_ERROR_MESSAGE = " The migrateTo call could not be found inside the body of the method. Are you sure this method defines a migration signal?\n ";
-
-    // MigrationStrategy - @OnDeparture/@OnArrival
-    public static final String INVALID_MIGRATION_STRATEGY_METHOD = " Invalid signature for a method which implements a migration strategy";
-
     // @VirtualNodeIsReadyCallback and @NodeAttachmentCallback
     public static final String INCORRECT_METHOD_SIGNATURE_FOR_ISREADY_CALLBACK = "Incorrect method signature. \nIsReady callback method must have the following signature: void method(String)";
     public static final String INCORRECT_METHOD_SIGNATURE_FOR_NODE_ATTACHEMENT_CALLBACK = "Incorrect method signature. \nNode attachement callback method must have the following signature: void method(Node, String)";
-
-    // @Migratable
-    public static final String MIGRATABLE_NOT_AO = "The class is not annotated using the @ActiveObject annotation. A migratable object must be an active object.";
-    public static final String MIGRATABLE_SERIALIZABLE = "A migratable object should implement the Serializable interface.";
 }

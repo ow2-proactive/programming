@@ -41,11 +41,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.migration.MigrationManager;
-import org.objectweb.proactive.core.body.migration.MigrationManagerFactory;
 import org.objectweb.proactive.core.body.reply.ReplyReceiver;
 import org.objectweb.proactive.core.body.reply.ReplyReceiverFactory;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
@@ -62,8 +59,6 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.util.ThreadStore;
 import org.objectweb.proactive.core.util.ThreadStoreFactory;
 import org.objectweb.proactive.core.util.converter.MakeDeepCopy;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 // TODO JAVADOC SHOULD BE REWRITTEN
@@ -107,7 +102,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 @PublicAPI
 //@snippet-start proactivemetaobjectfactory
 public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Serializable, Cloneable {
-    protected static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
 
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
@@ -123,7 +117,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     protected ReplyReceiverFactory replyReceiverFactoryInstance;
     protected RequestReceiverFactory requestReceiverFactoryInstance;
     protected RequestQueueFactory requestQueueFactoryInstance;
-    protected MigrationManagerFactory migrationManagerFactoryInstance;
 
     //    protected RemoteBodyFactory remoteBodyFactoryInstance;
     protected ThreadStoreFactory threadStoreFactoryInstance;
@@ -138,7 +131,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         this.replyReceiverFactoryInstance = newReplyReceiverFactorySingleton();
         this.requestReceiverFactoryInstance = newRequestReceiverFactorySingleton();
         this.requestQueueFactoryInstance = newRequestQueueFactorySingleton();
-        this.migrationManagerFactoryInstance = newMigrationManagerFactorySingleton();
         this.threadStoreFactoryInstance = newThreadStoreFactorySingleton();
         this.proActiveSPMDGroupManagerFactoryInstance = newProActiveSPMDGroupManagerFactorySingleton();
         this.requestTagsFactoryInstance = newRequestTagsFactorySingleton();
@@ -182,10 +174,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         return this.requestQueueFactoryInstance;
     }
 
-    public MigrationManagerFactory newMigrationManagerFactory() {
-        return this.migrationManagerFactoryInstance;
-    }
-
     //    public RemoteBodyFactory newRemoteBodyFactory() {
     //        return this.remoteBodyFactoryInstance;
     //    }
@@ -218,10 +206,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     protected RequestQueueFactory newRequestQueueFactorySingleton() {
         return new RequestQueueFactoryImpl();
-    }
-
-    protected MigrationManagerFactory newMigrationManagerFactorySingleton() {
-        return new MigrationManagerFactoryImpl();
     }
 
     //    protected RemoteBodyFactory newRemoteBodyFactorySingleton() {
@@ -277,57 +261,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         }
     }
 
-    // end inner class RequestQueueFactoryImpl
-    protected static class MigrationManagerFactoryImpl implements MigrationManagerFactory,
-            java.io.Serializable {
-        public MigrationManager newMigrationManager() {
-            //########### example de code pour les nouvelles factories
-            //			if(System.getProperty("migration.stategy").equals("locationserver")){
-            //				return new MigrationManagerWithLocationServer(LocationServerFactory.getLocationServer());
-            //			}else{
-            return new org.objectweb.proactive.core.body.migration.MigrationManagerImpl();
-            //}
-        }
-    }
-
-    //@snippet-break proactivemetaobjectfactory
-    // end inner class MigrationManagerFactoryImpl
-    //    protected static class RemoteBodyFactoryImpl implements RemoteBodyFactory,
-    //        java.io.Serializable {
-    //        public UniversalBody newRemoteBody(UniversalBody body) {
-    //            try {
-    //                if (Constants.XMLHTTP_PROTOCOL_IDENTIFIER.equals(
-    //                            ProActiveConfiguration.getInstance()
-    //                                                      .getProperty(Constants.PROPERTY_PA_COMMUNICATION_PROTOCOL))) {
-    //                    if (logger.isDebugEnabled()) {
-    //                        logger.debug(
-    //                            "Using http factory for creating remote body");
-    //                    }
-    //
-    //                    return new org.objectweb.proactive.core.body.http.HttpBodyAdapter(body);
-    //                } else if (Constants.RMISSH_PROTOCOL_IDENTIFIER.equals(
-    //                            ProActiveConfiguration.getInstance()
-    //                                                      .getProperty(Constants.PROPERTY_PA_COMMUNICATION_PROTOCOL))) {
-    //                    if (logger.isDebugEnabled()) {
-    //                        logger.debug(
-    //                            "Using rmissh factory for creating remote body");
-    //                    }
-    //                    return new org.objectweb.proactive.core.body.rmi.SshRmiBodyAdapter(body);
-    //                } else {
-    //                    if (logger.isDebugEnabled()) {
-    //                        logger.debug(
-    //                            "Using rmi factory for creating remote body");
-    //                    }
-    //                    return new org.objectweb.proactive.core.body.rmi.RmiBodyAdapter(body);
-    //                }
-    //            } catch (ProActiveException e) {
-    //                throw new ProActiveRuntimeException("Cannot create Remote body adapter ",
-    //                    e);
-    //            }
-    //        }
-    //    }
-    //@snippet-resume proactivemetaobjectfactory
-
     // end inner class RemoteBodyFactoryImpl
     protected static class ThreadStoreFactoryImpl implements ThreadStoreFactory, java.io.Serializable {
         public ThreadStore newThreadStore() {
@@ -342,8 +275,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
             return new ProActiveSPMDGroupManager();
         }
     }
-
-    // end inner class ProActiveGroupManagerFactoryImpl
 
     // REQUEST-TAGS
     protected static class MessageTagsFactoryImpl implements MessageTagsFactory, Serializable {

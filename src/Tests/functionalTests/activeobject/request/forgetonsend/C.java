@@ -37,8 +37,6 @@
 package functionalTests.activeobject.request.forgetonsend;
 
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PAMobileAgent;
-import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.node.Node;
 
 
@@ -90,10 +88,6 @@ public class C implements java.io.Serializable {
 
     public void rdv(C c) {
         c.rdv();
-    }
-
-    public void moveTo(Node dest) throws MigrationException {
-        PAMobileAgent.migrateTo(dest);
     }
 
     //

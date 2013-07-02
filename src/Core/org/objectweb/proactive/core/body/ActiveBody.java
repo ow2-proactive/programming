@@ -45,9 +45,7 @@ package org.objectweb.proactive.core.body;
  * @version 1.0,  2001/10/23
  * @since   ProActive 0.9
  * @see org.objectweb.proactive.Body
- * @see AbstractBody
- * @see org.objectweb.proactive.core.body.migration.MigratableBody
- *
+ * @see AbstractBody 
  */
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
@@ -58,7 +56,6 @@ import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.body.migration.MigratableBody;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
@@ -66,7 +63,7 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
-public class ActiveBody extends MigratableBody implements Runnable, java.io.Serializable {
+public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializable {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
     //
@@ -190,8 +187,8 @@ public class ActiveBody extends MigratableBody implements Runnable, java.io.Seri
             callTerminate = true;
 
         } finally {
-            // execute the end of activity if not after migration
-            if ((!this.hasJustMigrated) && (this.endActive != null)) {
+            // execute the end of activity
+            if (this.endActive != null) {
                 this.endActive.endActivity(this);
             }
             if (callTerminate) {
@@ -271,5 +268,13 @@ public class ActiveBody extends MigratableBody implements Runnable, java.io.Seri
         public void runActivity(Body body) {
             new Service(body).fifoServing();
         }
+    }
+
+    /*
+     * @see org.objectweb.proactive.core.body.LocalBodyStrategy#getNextSequenceID()
+     */
+    @Override
+    public long getNextSequenceID() {
+        return localBodyStrategy.getNextSequenceID();
     }
 }

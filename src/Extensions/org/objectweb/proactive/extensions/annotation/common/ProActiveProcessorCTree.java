@@ -55,20 +55,12 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
-import org.objectweb.proactive.extensions.annotation.Migratable;
-import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 import org.objectweb.proactive.extensions.annotation.NodeAttachmentCallback;
-import org.objectweb.proactive.extensions.annotation.OnArrival;
-import org.objectweb.proactive.extensions.annotation.OnDeparture;
 import org.objectweb.proactive.extensions.annotation.RemoteObject;
 import org.objectweb.proactive.extensions.annotation.VirtualNodeIsReadyCallback;
 import org.objectweb.proactive.extensions.annotation.activeobject.ActiveObjectVisitorCTree;
 import org.objectweb.proactive.extensions.annotation.callbacks.isready.VirtualNodeIsReadyCallbackVisitorCTree;
 import org.objectweb.proactive.extensions.annotation.callbacks.nodeattachment.NodeAttachmentCallbackVisitorCTree;
-import org.objectweb.proactive.extensions.annotation.migratable.MigratableVisitorCTree;
-import org.objectweb.proactive.extensions.annotation.migration.signal.MigrationSignalVisitorCTree;
-import org.objectweb.proactive.extensions.annotation.migration.strategy.OnArrivalVisitorCTree;
-import org.objectweb.proactive.extensions.annotation.migration.strategy.OnDepartureVisitorCTree;
 import org.objectweb.proactive.extensions.annotation.remoteobject.RemoteObjectVisitorCTree;
 
 import com.sun.source.util.TreePathScanner;
@@ -88,9 +80,6 @@ import com.sun.source.util.Trees;
 @SupportedAnnotationTypes( { "org.objectweb.proactive.extensions.annotation.*"
 /*"org.objectweb.proactive.extensions.annotation.activeobject.ActiveObject",
  "org.objectweb.proactive.extensions.annotation.remoteobject.RemoteObject",
- "org.objectweb.proactive.extensions.annotation.migration.signal.MigrationSignal",
- "org.objectweb.proactive.extensions.annotation.migration.strategy.OnDeparture",
- "org.objectweb.proactive.extensions.annotation.migration.strategy.OnArrival",
  "org.objectweb.proactive.extensions.annotation.callbacks.isready.VirtualNodeIsReadyCallback",
  "org.objectweb.proactive.extensions.annotation.callbacks.nodeattachment.NodeAttachmentCallback"*/
 })
@@ -115,14 +104,10 @@ public class ProActiveProcessorCTree extends AbstractProcessor {
     private void populateAVMap(ProcessingEnvironment processingEnv) {
         scanners.put(ActiveObject.class.getName(), new ActiveObjectVisitorCTree(processingEnv));
         scanners.put(RemoteObject.class.getName(), new RemoteObjectVisitorCTree(processingEnv));
-        scanners.put(MigrationSignal.class.getName(), new MigrationSignalVisitorCTree(processingEnv));
-        scanners.put(OnDeparture.class.getName(), new OnDepartureVisitorCTree(processingEnv));
-        scanners.put(OnArrival.class.getName(), new OnArrivalVisitorCTree(processingEnv));
         scanners.put(VirtualNodeIsReadyCallback.class.getName(), new VirtualNodeIsReadyCallbackVisitorCTree(
             processingEnv));
         scanners.put(NodeAttachmentCallback.class.getName(), new NodeAttachmentCallbackVisitorCTree(
             processingEnv));
-        scanners.put(Migratable.class.getName(), new MigratableVisitorCTree(processingEnv));
     }
 
     @Override

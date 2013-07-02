@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ProActiveUserProperties>
     <properties>
-        <prop key="proactive.locationserver"
-            value="org.objectweb.proactive.ext.locationserver.LocationServer" />
-        <prop key="proactive.locationserver.rmi" value="//localhost/LocationServer" />        
-        <prop key="proactive.mixedlocation.ttl" value="-1" />
-        <prop key="proactive.mixedlocation.updatingForwarder"
-            value="false" />
-        <prop key="proactive.mixedlocation.maxMigrationNb" value="-1" />
-        <prop key="proactive.mixedlocation.maxTimeOnSite" value="-1" />
      	<prop key="proactive.implicitgetstubonthis" value="false"/>
     
     	<prop key="proactive.net.disableIPv6" value="true" />

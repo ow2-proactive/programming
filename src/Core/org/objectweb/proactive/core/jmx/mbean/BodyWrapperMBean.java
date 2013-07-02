@@ -41,7 +41,6 @@ import java.io.Serializable;
 import javax.management.ObjectName;
 
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 
 
@@ -106,12 +105,4 @@ public interface BodyWrapperMBean extends Serializable {
      *         {@link java.io.Serializable} <code>False</code> otherwise
      */
     public boolean getIsReifiedObjectSerializable();
-
-    /**
-     * Migrate the body to the given node.
-     *
-     * @param nodeUrl
-     * @throws MigrationException
-     */
-    public void migrateTo(String nodeUrl) throws MigrationException;
 }

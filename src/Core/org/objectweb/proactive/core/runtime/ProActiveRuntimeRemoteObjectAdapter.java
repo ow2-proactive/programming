@@ -198,10 +198,6 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
         target.newRemote(className);
     }
 
-    public UniversalBody receiveBody(String nodeName, Body body) throws ProActiveException {
-        return target.receiveBody(nodeName, body);
-    }
-
     public void register(ProActiveRuntime proActiveRuntimeDist, String proActiveRuntimeUrl, String creatorID,
             String creationProtocol, String vmName) throws ProActiveException {
         target.register(proActiveRuntimeDist, proActiveRuntimeUrl, creatorID, creationProtocol, vmName);

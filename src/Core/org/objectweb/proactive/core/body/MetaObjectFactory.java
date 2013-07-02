@@ -38,7 +38,6 @@ package org.objectweb.proactive.core.body;
 
 import java.util.Map;
 
-import org.objectweb.proactive.core.body.migration.MigrationManagerFactory;
 import org.objectweb.proactive.core.body.reply.ReplyReceiverFactory;
 import org.objectweb.proactive.core.body.request.RequestFactory;
 import org.objectweb.proactive.core.body.request.RequestQueueFactory;
@@ -88,13 +87,6 @@ public interface MetaObjectFactory {
      * @see RequestQueueFactory
      */
     public RequestQueueFactory newRequestQueueFactory();
-
-    /**
-     * Creates or reuses a MigrationManagerFactory
-     * @return a new or existing MigrationManagerFactory
-     * @see MigrationManagerFactory
-     */
-    public MigrationManagerFactory newMigrationManagerFactory();
 
     //    /**
     //     * Creates or reuses a RemoteBodyFactory

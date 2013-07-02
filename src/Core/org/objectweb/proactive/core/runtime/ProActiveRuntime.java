@@ -265,22 +265,6 @@ public interface ProActiveRuntime {
             throws ProActiveException, ConstructorCallExecutionFailedException,
             java.lang.reflect.InvocationTargetException;
 
-    /**
-     * <p>
-     * This method is the basis for migrating active objects.
-     * It receives a <code>Body</code> that embbeds the reified object and its graph of
-     * passive objects. Once transfered remotely using serialization, the body should restart
-     * itself and perform all updates needed to be functionning.
-     * </p><p>
-     * The method returns a reference on the RMI stub of the migrated body.
-     * </p>
-     * @param nodeName the name of the node the newly created active object will be associated to
-     * @param body the body of the active object migrating to this node.
-     * @return a RMI stub on the migrated body.
-     * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
-     */
-    public UniversalBody receiveBody(String nodeName, Body body) throws ProActiveException;
-
     // SECURITY
     public String getVNName(String Nodename) throws ProActiveException;
 

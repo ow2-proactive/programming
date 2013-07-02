@@ -57,7 +57,6 @@ public interface Loggers {
     static final public String GROUPS = CORE + ".groups";
     public static final String GC = CORE + ".gc";
     public static final String HTTP_TRANSPORT = CORE + ".communication.transport.http";
-    public static final String MIGRATION = CORE + ".migration";
     public static final String REQUESTS = CORE + ".communication.requests";
     static final public String UTIL = CORE + ".util";
     static final public String LOG = CORE + ".util.log";

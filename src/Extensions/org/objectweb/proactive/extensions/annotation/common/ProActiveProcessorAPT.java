@@ -44,19 +44,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
-import org.objectweb.proactive.extensions.annotation.Migratable;
 import org.objectweb.proactive.extensions.annotation.NodeAttachmentCallback;
-import org.objectweb.proactive.extensions.annotation.OnArrival;
-import org.objectweb.proactive.extensions.annotation.OnDeparture;
 import org.objectweb.proactive.extensions.annotation.RemoteObject;
 import org.objectweb.proactive.extensions.annotation.VirtualNodeIsReadyCallback;
 import org.objectweb.proactive.extensions.annotation.activeobject.ActiveObjectVisitorAPT;
 import org.objectweb.proactive.extensions.annotation.callbacks.isready.VirtualNodeIsReadyCallbackVisitorAPT;
 import org.objectweb.proactive.extensions.annotation.callbacks.nodeattachment.NodeAttachmentCallbackVisitorAPT;
 import org.objectweb.proactive.extensions.annotation.common.UtilsAPT;
-import org.objectweb.proactive.extensions.annotation.migratable.MigratableVisitorAPT;
-import org.objectweb.proactive.extensions.annotation.migration.strategy.OnArrivalVisitorAPT;
-import org.objectweb.proactive.extensions.annotation.migration.strategy.OnDepartureVisitorAPT;
 import org.objectweb.proactive.extensions.annotation.remoteobject.RemoteObjectVisitorAPT;
 
 import com.sun.mirror.apt.AnnotationProcessor;
@@ -102,13 +96,10 @@ public class ProActiveProcessorAPT implements AnnotationProcessor {
     private void populateAVMap() {
         _annotationVisitors.put(ActiveObject.class, new ActiveObjectVisitorAPT(_messager));
         _annotationVisitors.put(RemoteObject.class, new RemoteObjectVisitorAPT(_messager));
-        _annotationVisitors.put(OnDeparture.class, new OnDepartureVisitorAPT(_messager));
-        _annotationVisitors.put(OnArrival.class, new OnArrivalVisitorAPT(_messager));
         _annotationVisitors
                 .put(NodeAttachmentCallback.class, new NodeAttachmentCallbackVisitorAPT(_messager));
         _annotationVisitors.put(VirtualNodeIsReadyCallback.class, new VirtualNodeIsReadyCallbackVisitorAPT(
             _messager));
-        _annotationVisitors.put(Migratable.class, new MigratableVisitorAPT(_messager));
     }
 
     private void populateADMap() {

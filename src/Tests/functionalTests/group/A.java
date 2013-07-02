@@ -41,7 +41,6 @@ import org.objectweb.proactive.EndActive;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PAMobileAgent;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 
@@ -99,12 +98,6 @@ public class A implements InitActive, RunActive, EndActive, java.io.Serializable
             e.printStackTrace();
             return "getNodeName failed";
         }
-    }
-
-    public void moveTo(String nodeURL) throws Exception {
-        // System.out.println(" I am going to migate");
-        PAMobileAgent.migrateTo(nodeURL);
-        // System.out.println("migration done");
     }
 
     public void endBodyActivity() throws Exception {

@@ -51,17 +51,10 @@ import javax.management.NotificationBroadcasterSupport;
 import javax.management.ObjectName;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.api.PAMobileAgent;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.AbstractBody;
-import org.objectweb.proactive.core.body.migration.Migratable;
-import org.objectweb.proactive.core.body.migration.MigrationException;
-import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
-import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
-import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -190,19 +183,6 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
         } else {
             notifications.add(notification);
         }
-    }
-
-    public void migrateTo(String nodeUrl) throws MigrationException {
-        if (!(this.body instanceof Migratable)) {
-            throw new MigrationException("Object cannot Migrate");
-        }
-        Node node = null;
-        try {
-            node = NodeFactory.getNode(nodeUrl);
-        } catch (NodeException e) {
-            throw new MigrationException("Cannot find node " + nodeUrl, e);
-        }
-        PAMobileAgent.migrateTo(body, node, true, Request.NFREQUEST_IMMEDIATE_PRIORITY);
     }
 
     //

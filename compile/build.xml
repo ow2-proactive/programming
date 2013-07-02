@@ -660,7 +660,6 @@
 			<jvmargs>
 				<jvmarg value="-Dproactive.communication.protocol=http" />
 				<jvmarg value="-Dproactive.http.port=2026" />
-				<jvmarg value="-Dproactive.locationserver.rmi=http://locahost:2026/LocationServer" />
 			</jvmargs>
 			</runTestsMacro>
 	</target>

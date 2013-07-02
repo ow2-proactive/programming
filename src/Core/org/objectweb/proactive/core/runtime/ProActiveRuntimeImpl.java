@@ -70,10 +70,8 @@ import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
 import org.objectweb.proactive.core.descriptor.data.VirtualNodeInternal;
@@ -909,23 +907,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             // localBody="+localBody+" on node "+nodeName);
             return localBody.getRemoteAdapter();
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public UniversalBody receiveBody(String nodeName, Body body) throws MigrationException {
-        if (NodeFactory.isHalfBodiesNode(nodeName)) {
-            throw new MigrationException("Cannot migrate an active object on the reserved halfbodies node.");
-        }
-
-        registerBody(nodeName, body);
-
-        // register futures that have been deserialized in the body
-        ((AbstractBody) body).registerIncomingFutures();
-
-        return body.getRemoteAdapter();
     }
 
     /**

@@ -358,35 +358,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         "proactive.http.connect_timeout", false);
 
     /* ------------------------------------
-     *  MIGRATION
-     */
-
-    /** The class or interface of the location server to be looked up */
-    static public PAPropertyString PA_LOCATION_SERVER = new PAPropertyString("proactive.locationserver",
-        false);
-
-    /** The bind name of a location server, used during lookup */
-    static public PAPropertyString PA_LOCATION_SERVER_RMI = new PAPropertyString(
-        "proactive.locationserver.rmi", false);
-
-    /** The lifetime (in seconds) of a forwarder left after a migration when using the mixed location scheme */
-    static public PAPropertyInteger PA_MIXEDLOCATION_TTL = new PAPropertyInteger(
-        "proactive.mixedlocation.ttl", false);
-
-    /** If set to true, a forwarder will send an update to a location server when reaching
-     * the end of its lifetime */
-    static public PAPropertyBoolean PA_MIXEDLOCATION_UPDATINGFORWARDER = new PAPropertyBoolean(
-        "proactive.mixedlocation.updatingForwarder", false);
-
-    /** The maximum number of migration allowed before an object must send its new location to a location server */
-    static public PAPropertyInteger PA_MIXEDLOCATION_MAXMIGRATIONNB = new PAPropertyInteger(
-        "proactive.mixedlocation.maxMigrationNb", false);
-
-    /** The maximum time (in seconds) an object can spend on a site before updating its location to a location server */
-    static public PAPropertyInteger PA_MIXEDLOCATION_MAXTIMEONSITE = new PAPropertyInteger(
-        "proactive.mixedlocation.maxTimeOnSite", false);
-
-    /* ------------------------------------
      *  RMISSH
      */
 
