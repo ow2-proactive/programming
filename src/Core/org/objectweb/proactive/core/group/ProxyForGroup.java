@@ -52,18 +52,13 @@ import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.AbstractBody;
-import org.objectweb.proactive.core.body.LocalBodyStore;
-import org.objectweb.proactive.core.body.SendingQueue;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.proxy.AbstractProxy;
-import org.objectweb.proactive.core.body.proxy.SendingQueueProxy;
 import org.objectweb.proactive.core.group.spmd.MethodCallSetSPMDGroup;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedException;
@@ -289,34 +284,6 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         // doneSignal = new CountDownLatch(memberList.size());
         // }
         //
-        // -- BEGIN ForgetOnSend Control --
-        //
-        Body sourceBody = LocalBodyStore.getInstance().getContext().getBody();
-        // Check if this sending is "legal" regarding its sterility, otherwise raise an
-        // IOException
-        if (sourceBody.isSterile()) {
-            // A sterile body is only authorized to send sterile requests to himself or its
-            // parent
-            throw new InvocationTargetException(new java.io.IOException("Unable to send " + mc.getName() +
-                "(): the current service is sterile."), "A sterile body cannot send request to a group.");
-        }
-
-        // Retrieve the SendingQueue attached to the local body (can be null if FOS never used)
-        SendingQueue sendingQueue = ((AbstractBody) sourceBody).getSendingQueue();
-
-        if (sendingQueue != null) {
-            // Some FOS have been declared on the local body
-
-            // Retrieve the SQP attached to this proxy (and creates it if needed)
-            SendingQueueProxy sqp = sendingQueue.getSendingQueueProxyFor(this);
-
-            /* If we use FOS strategy to send this call, the methodcall must be sterile */
-            mc.setSterility(sqp.isFosRequest(mc.getName()));
-        }
-        //
-        // -- END ForgetOnSend Control --
-        //
-
         /* if OneWay : do not construct result */
         if (mc.isOneWayCall()) {
             exceptionList = new ExceptionListException();

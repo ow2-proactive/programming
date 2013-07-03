@@ -50,12 +50,10 @@ import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.ActiveBody;
 import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.MetaObjectFactory;
-import org.objectweb.proactive.core.body.SendingQueue;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
 import org.objectweb.proactive.core.body.future.Future;
@@ -351,82 +349,13 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         ExceptionHandler.addRequest(methodCall, (FutureProxy) future);
 
         try {
-            Body sourceBody = LocalBodyStore.getInstance().getContext().getBody();
-
-            // Check if this sending is "legal" regarding its sterility, otherwise raise an
-            // IOException
-            if (sourceBody.isSterile()) {
-                // A sterile body is only authorized to send sterile requests to himself or its
-                // parent
-                if ((!this.getBodyID().equals(sourceBody.getID())) &&
-                    (!this.getBodyID().equals(sourceBody.getParentUID()))) {
-                    throw new java.io.IOException("Unable to send " + methodCall.getName() +
-                        "(): the current service is sterile.");
-                }
-
-                // A request sent by a sterile body must be sterile too
-                methodCall.setSterility(true);
-            }
-
-            // Retrieve the SendingQueue attached to the local body (can be null if FOS never used)
-            SendingQueue sendingQueue = ((AbstractBody) sourceBody).getSendingQueue();
-
-            if (sendingQueue != null) {
-                // Some FOS have been declared on the local body
-
-                // Delegating rendezvous is forbidden for loopback calls
-                boolean isLoopbackCall = sourceBody.getID().equals(this.getBodyID());
-
-                // Retrieve the SQP attached to this proxy (and creates it if needed)
-                SendingQueueProxy sqp = isLoopbackCall ? null : sendingQueue.getSendingQueueProxyFor(this);
-
-                if (!isLoopbackCall && sqp.isFosRequest(methodCall.getName())) {
-                    /*
-                     * ForgetOnSend Strategy (delegated rendezvous)
-                     */
-                    // FOS requests must be sterile
-                    methodCall.setSterility(true);
-                    // if needed, waking up the threadPool that will retrieve and send our requests
-                    sendingQueue.wakeUpThreadPool();
-                    // enqueue the request for future sending
-                    sqp.put(new RequestToSend(methodCall, future, (AbstractBody) sourceBody, this));
-
-                } else {
-                    /*
-                     * Standard Strategy Mixed With FOS (with rendezvous)
-                     */
-                    // Some FOS requests have already be sent from this body.
-                    // To avoid Causal Ordering disruptions, we must wait until
-                    // some or all the pending FOS requests to send from the
-                    // local body are sent, depending on the sterility status
-                    // of the request
-                    if (!isLoopbackCall && (methodCall.isSterile() || methodCall.isAnnotedSterile())) {
-                        // useful if annotedSterile but not set as sterile yet
-                        methodCall.setSterility(true);
-                        // only waits on the destination sending queue
-                        sqp.waitForEmpty();
-                    } else {
-                        // waits on all the sending queues
-                        sendingQueue.waitForAllSendingQueueEmpty();
-                    }
-                    sendRequest(methodCall, future, sourceBody);
-                }
-            } else {
-                /*
-                 * Standard Strategy
-                 */
-                // FOS requests have never be sent from this body.
-                sendRequest(methodCall, future, sourceBody);
-            }
-
+            sendRequest(methodCall, future, LocalBodyStore.getInstance().getContext().getBody());
         } catch (java.io.IOException ioe) {
             if (future != null) {
                 /* (future == null) happens on one-way calls */
                 ExceptionHandler.addResult((FutureProxy) future);
             }
             throw ioe;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 

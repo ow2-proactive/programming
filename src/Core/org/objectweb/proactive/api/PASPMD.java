@@ -50,8 +50,6 @@ import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
-import org.objectweb.proactive.ext.hpc.exchange.ExchangeManager;
-import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
 
 
 /**
@@ -450,72 +448,5 @@ public class PASPMD {
             System.err.println("Unable to invoke a method call to control groups");
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Performs an exchange on a complex structure of doubles between two Active Objects.
-     * 
-     * @param tag
-     * @param destRank
-     * @param src
-     * @param dst
-     */
-    public static void exchange(String tag, int destRank, ExchangeableDouble src, ExchangeableDouble dst) {
-        Object destAO = PAGroup.get(PASPMD.getSPMDGroup(), destRank);
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, src, dst);
-    }
-
-    /**
-     * Performs an exchange on an integer array between two Active Objects.
-     * 
-     * @param tag
-     * @param destRank
-     * @param srcArray
-     * @param srcOffset
-     * @param dstArray
-     * @param dstOffset
-     * @param len
-     */
-    public static void exchange(String tag, int destRank, int[] srcArray, int srcOffset, int[] dstArray,
-            int dstOffset, int len) {
-        Object destAO = PAGroup.get(PASPMD.getSPMDGroup(), destRank);
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
-                dstOffset, len);
-    }
-
-    /**
-     * Performs an exchange on a double array between two Active Objects.
-     * 
-     * @param tag
-     * @param destRank
-     * @param srcArray
-     * @param srcOffset
-     * @param dstArray
-     * @param dstOffset
-     * @param len
-     */
-    public static void exchange(String tag, int destRank, double[] srcArray, int srcOffset,
-            double[] dstArray, int dstOffset, int len) {
-        Object destAO = PAGroup.get(PASPMD.getSPMDGroup(), destRank);
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
-                dstOffset, len);
-    }
-
-    /**
-     * Performs an exchange on a byte array between two Active Objects.
-     * 
-     * @param tag
-     * @param destRank
-     * @param srcArray
-     * @param srcOffset
-     * @param dstArray
-     * @param dstOffset
-     * @param len
-     */
-    public static void exchange(String tag, int destRank, byte[] srcArray, int srcOffset, byte[] dstArray,
-            int dstOffset, int len) {
-        Object destAO = PAGroup.get(PASPMD.getSPMDGroup(), destRank);
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
-                dstOffset, len);
     }
 }

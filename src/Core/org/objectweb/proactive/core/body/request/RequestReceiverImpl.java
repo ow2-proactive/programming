@@ -126,7 +126,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     private transient Map<UniqueID, ThreadForImmediateService> threadsForCallers;
 
     public RequestReceiverImpl() {
-        serviceModes = new Hashtable<String, Map<ClassArrayWrapper, ServiceMode>>(4);
+        serviceModes = new Hashtable<String, Map<ClassArrayWrapper, ServiceMode>>(3);
         // Set by default immediate services
         final Hashtable<ClassArrayWrapper, ServiceMode> ts = new Hashtable<ClassArrayWrapper, ServiceMode>(1);
         ts.put(ANY_PARAMETERS, ServiceMode.IMMEDIATE_MULTI_THREAD);
@@ -137,9 +137,6 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         final Hashtable<ClassArrayWrapper, ServiceMode> ti = new Hashtable<ClassArrayWrapper, ServiceMode>(1);
         ti.put(ANY_PARAMETERS, ServiceMode.IMMEDIATE_MULTI_THREAD);
         serviceModes.put("_terminateAOImmediately", ti);
-        final Hashtable<ClassArrayWrapper, ServiceMode> icd = new Hashtable<ClassArrayWrapper, ServiceMode>(1);
-        icd.put(ANY_PARAMETERS, ServiceMode.IMMEDIATE_MULTI_THREAD);
-        serviceModes.put("_ImmediateMethodCallDummy", icd);
         this.inImmediateService = new AtomicInteger(0);
         this.threadsForCallers = new Hashtable<UniqueID, ThreadForImmediateService>();
     }

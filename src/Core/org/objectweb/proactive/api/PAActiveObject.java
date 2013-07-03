@@ -82,8 +82,6 @@ import org.objectweb.proactive.core.util.NonFunctionalServices;
 import org.objectweb.proactive.core.util.ProcessForAoCreation;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.ext.hpc.exchange.ExchangeManager;
-import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
 import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
@@ -1249,38 +1247,6 @@ public class PAActiveObject {
     }
 
     /**
-     * Set a ForgetOnSend (FOS) strategy when invoking <i>methodName</i> on <i>activeObject</i>.
-     * With this stategy, the <i>ProActive Rendez-Vous</i> is delegated to a parallel thread.</br>
-     * </br> *Warning*:<br>
-     * When sending a request with the ForgetOnSend strategy, you have to complain with two
-     * constraints :</br> First, *you must not* modify the arguments after the call, otherwise
-     * unexpected concurrent problems on parameters should occurs.</br> Second, the method must be
-     * <i>sterile</i>. A request is known as <i>sterile</i> if it does not have any descendant,
-     * i.e. if during its service it does not send new requests, except to itself or to the activity
-     * which sent the request it is serving (its parent).
-     * 
-     * @param activeObject
-     *            the remote active object you want to send FOS requests
-     * @param methodName
-     *            the name of the targeted method
-     */
-    public static void setForgetOnSend(Object activeObject, String methodName) {
-        PAActiveObject.getBodyOnThis().setForgetOnSendRequest(activeObject, methodName);
-    }
-
-    /**
-     * Remove the ForgetOnSend strategy for the specified method on the specified active object.
-     * 
-     * @param activeObject
-     *            the remote active object you want to send FOS requests
-     * @param methodName
-     *            the name of the targeted method
-     */
-    public static void removeForgetOnSend(Object activeObject, String methodName) {
-        PAActiveObject.getBodyOnThis().removeForgetOnSendRequest(activeObject, methodName);
-    }
-
-    /**
      * Return the URL of the node of the remote <code>activeObject</code>.
      * 
      * @param activeObject
@@ -1498,69 +1464,6 @@ public class PAActiveObject {
      */
     public static boolean isInActiveObject() {
         return LocalBodyStore.getInstance().isInAo();
-    }
-
-    /**
-     * Performs an exchange on a byte array between two Active Objects.
-     * 
-     * @param tag
-     * @param destAO
-     * @param srcArray
-     * @param srcOffset
-     * @param dstArray
-     * @param dstOffset
-     * @param len
-     */
-    public static void exchange(String tag, Object destAO, byte[] srcArray, int srcOffset, byte[] dstArray,
-            int dstOffset, int len) {
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
-                dstOffset, len);
-    }
-
-    /**
-     * Performs an exchange on a double array between two Active Objects.
-     * 
-     * @param tag
-     * @param destAO
-     * @param srcArray
-     * @param srcOffset
-     * @param dstArray
-     * @param dstOffset
-     * @param len
-     */
-    public static void exchange(String tag, Object destAO, double[] srcArray, int srcOffset,
-            double[] dstArray, int dstOffset, int len) {
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
-                dstOffset, len);
-    }
-
-    /**
-     * Performs an exchange on an integer array between two Active Objects.
-     * 
-     * @param tag
-     * @param destAO
-     * @param srcArray
-     * @param srcOffset
-     * @param dstArray
-     * @param dstOffset
-     * @param len
-     */
-    public static void exchange(String tag, Object destAO, int[] srcArray, int srcOffset, int[] dstArray,
-            int dstOffset, int len) {
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
-                dstOffset, len);
-    }
-
-    /**
-     * Performs an exchange on a complex structure of doubles between two Active Objects.
-     * 
-     * @param tag
-     * @param destAO
-     * @param src
-     * @param dst
-     */
-    public static void exchange(String tag, Object destAO, ExchangeableDouble src, ExchangeableDouble dst) {
-        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, src, dst);
     }
 
     // -------------------------------------------------------------------------------------------

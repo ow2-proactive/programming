@@ -110,17 +110,7 @@ public class MOCKBody implements Body {
         return false;
     }
 
-    public boolean isSterile() {
-
-        return false;
-    }
-
     public void registerIncomingFutures() {
-
-    }
-
-    public void removeForgetOnSendRequest(Object activeObject, String methodName) {
-
     }
 
     public void removeImmediateService(String methodName) {
@@ -131,20 +121,12 @@ public class MOCKBody implements Body {
 
     }
 
-    public void setForgetOnSendRequest(Object activeObject, String methodName) {
-
-    }
-
     @Deprecated
     public void setImmediateService(String methodName) {
 
     }
 
     public void setImmediateService(String methodName, Class<?>[] parametersTypes) {
-
-    }
-
-    public void setSterility(boolean isSterile, UniqueID parentUID) {
 
     }
 

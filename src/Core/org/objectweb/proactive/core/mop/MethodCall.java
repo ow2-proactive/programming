@@ -104,12 +104,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     //
 
     /**
-     * The service of a "sterile" method call will not be able to send other
-     * method calls, except to itself or the source of this method call
-     */
-    private boolean isSterile = false;
-
-    /**
      * The array holding the arguments of the method call
      */
     private Object[] effectiveArguments;
@@ -216,7 +210,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
                 result.effectiveArguments = effectiveArguments;
                 result.key = buildKey(reifiedMethod, genericTypesMapping);
                 result.exceptioncontext = exceptioncontext;
-                result.setSterility(false);
                 return result;
             }
         }
@@ -661,33 +654,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
 
     public Map<TypeVariable<?>, Class<?>> getGenericTypesMapping() {
         return this.genericTypesMapping;
-    }
-
-    /**
-     * Get the sterility state of this method call
-     * @return
-     */
-    public boolean isSterile() {
-        return isSterile;
-    }
-
-    /**
-     * Set the sterility state for this method call
-     * @param isSterile
-     */
-    public void setSterility(boolean isSterile) {
-        this.isSterile = isSterile;
-    }
-
-    public boolean isAnnotedSterile() {
-        String classname = "org.objectweb.proactive.extensions.annotation.Sterile";
-        try {
-            Class sterile = Class.forName(classname);
-            return getReifiedMethod().isAnnotationPresent(sterile);
-
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
     }
 
     //
