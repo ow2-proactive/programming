@@ -306,7 +306,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         "java.rmi.server.codebase", true);
 
     static public PAPropertyBoolean JAVA_RMI_SERVER_USECODEBASEONLY = new PAPropertyBoolean(
-        "java.rmi.server.useCodebaseOnly", true);
+        "java.rmi.server.useCodebaseOnly", true, false);
 
     /**
      * Sockets used by the RMI remote object factory connect to the remote server
