@@ -465,7 +465,8 @@
 				<jvmarg value="-Djava.security.policy=${base.dir}/compile/proactive.java.policy" />
 				<jvmarg value="-Dlog4j.configuration=file:${base.dir}/compile/proactive-log4j" />
 				<jvmarg value="-DfunctionalTests.descriptor.defaultnodes.file=@{nodeDescriptor}" />
-
+				<jvmarg value="-Dproactive.runtime.ping=false" />
+				
 				<jvmargs />
 
 				<!--
