@@ -8,24 +8,15 @@
 	<classpathentry excluding="doc/PublishedAPIDoclet.java" kind="src" output="classes/Utils" path="src/Utils"/>
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.11-SNAPSHOT-20120416-1530.jar"/>
-	<classpathentry kind="lib" path="lib/cockpit-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.4.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199-tests.jar"/>
 	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199.jar"/>
-	<classpathentry kind="lib" path="lib/fluent-hc-4.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/httpcore-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/jackrabbit-jcr-commons-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jackrabbit-webdav-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/java-xmlbuilder-0.4.jar"/>
 	<classpathentry kind="lib" path="lib/javassist.jar"/>
-	<classpathentry kind="lib" path="lib/jets3t-0.9.0.jar"/>
-	<classpathentry kind="lib" path="lib/jets3t-gui-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-6.1.18.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-util-6.1.18.jar"/>
 	<classpathentry kind="lib" path="lib/jna-platform-3.3.0.jar"/>
@@ -37,13 +28,11 @@
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.11.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/ssj.jar"/>
-	<classpathentry kind="lib" path="lib/synchronize-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/trilead-ssh2.jar"/>
-	<classpathentry kind="lib" path="lib/uploader-0.9.0.jar"/>
-	<classpathentry kind="lib" path="lib/vfs_s3.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/winp-1.17-patched.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/bouncycastle.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jdk1.6.0_45/lib/tools.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

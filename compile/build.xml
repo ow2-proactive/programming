@@ -774,9 +774,6 @@
 		<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices/" />
 		<delete dir="${webservices.dir}/servicedeployer/build" />
 		<delete dir="${tutorials.dir}" />
-		<subant target="doc.clean" inheritall="true">
-			<fileset dir="../doc/toolchain" includes="doc.xml" />
-		</subant>
 	</target>
 
 
