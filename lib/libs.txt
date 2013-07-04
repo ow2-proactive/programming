@@ -7,9 +7,6 @@
 ./bouncycastle.jar
 ./trilead-ssh2.jar
 ./javassist.jar
-./glite
-./glite/classad.jar
-./glite/glite-wms-jdlj.jar
 ./libs.txt
 ./xercesImpl.jar
 ./log4j.jar
