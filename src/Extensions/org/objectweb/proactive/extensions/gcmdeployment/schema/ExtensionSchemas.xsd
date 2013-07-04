@@ -29,8 +29,7 @@
 <!--
 	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupARCSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupCGSPSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupFuraSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupGlobusSchema.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupFuraSchema.xsd" />	
 	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupGridBusSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupOARSHSchema.xsd" />
  -->

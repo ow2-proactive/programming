@@ -56,14 +56,6 @@
 				<stderr>jobs/jobtrace_err.txt</stderr>
 			</gridEngineGroup>
 
-<!-- 		<globusGroup hostname="globus_frontend" id="globusgroup" bookedNodesAccess="rsh">
-				<count>8</count>
-				<maxTime>120</maxTime>
-				<stderr>${GLOBUS_USER_HOME}/error.txt</stderr>
-			</globusGroup>
- -->
-
-
 			<oarGroup bookedNodesAccess="ssh" id="oargroup" interactive="true" >
 				<scriptPath base="proactive" relpath="scripts/unix/cluster/oarStartRuntime.sh"  />
 				<resources nodes="2" cpu="4" />

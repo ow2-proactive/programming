@@ -5,14 +5,6 @@
 ./jung/colt.jar
 ./jung/commons-collections-3.2.jar
 ./bouncycastle.jar
-./globus
-./globus/cryptix.jar
-./globus/cog-jglobus-1.2.jar
-./globus/puretls.jar
-./globus/cryptix32.jar
-./globus/cryptix-asn1.jar
-./globus/cog-ogce.jar
-./globus/cog-jglobus.jar
 ./trilead-ssh2.jar
 ./javassist.jar
 ./glite

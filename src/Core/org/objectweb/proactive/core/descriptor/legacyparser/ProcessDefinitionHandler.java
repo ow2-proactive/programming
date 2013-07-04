@@ -49,7 +49,6 @@ import org.objectweb.proactive.core.process.IndependentListProcess;
 import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.JVMProcess.PriorityLevel;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
-import org.objectweb.proactive.core.process.globus.GlobusProcess;
 import org.objectweb.proactive.core.process.gridengine.GridEngineSubProcess;
 import org.objectweb.proactive.core.process.lsf.LSFBSubProcess;
 import org.objectweb.proactive.core.process.mpi.MPIProcess;
@@ -87,7 +86,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
         this.addHandler(SSH_PROCESS_TAG, new SSHProcessHandler(proActiveDescriptor));
         this.addHandler(RLOGIN_PROCESS_TAG, new RLoginProcessHandler(proActiveDescriptor));
         this.addHandler(BSUB_PROCESS_TAG, new BSubProcessHandler(proActiveDescriptor));
-        this.addHandler(GLOBUS_PROCESS_TAG, new GlobusProcessHandler(proActiveDescriptor));
         this.addHandler(PRUN_PROCESS_TAG, new PrunProcessHandler(proActiveDescriptor));
         this.addHandler(PBS_PROCESS_TAG, new PBSProcessHandler(proActiveDescriptor));
         this.addHandler(GRID_ENGINE_PROCESS_TAG, new GridEngineProcessHandler(proActiveDescriptor));
@@ -1041,48 +1039,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
     }
 
     // end of inner class BSubProcessHandler
-    protected class GlobusProcessHandler extends ProcessHandler {
-        public GlobusProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {
-            super(proActiveDescriptor);
-            this.addHandler(GLOBUS_OPTIONS_TAG, new GlobusOptionHandler());
-        }
-
-        protected class GlobusOptionHandler extends PassiveCompositeUnmarshaller {
-            public GlobusOptionHandler() {
-                this.addHandler(COUNT_TAG, new SingleValueUnmarshaller());
-                this.addHandler(GLOBUS_MAXTIME_TAG, new SingleValueUnmarshaller());
-                this.addHandler(OUTPUT_FILE, new SingleValueUnmarshaller());
-                this.addHandler(ERROR_FILE, new SingleValueUnmarshaller());
-            }
-
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-            }
-
-            @Override
-            protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                    throws org.xml.sax.SAXException {
-                // we know that it is a globus process since we are
-                // in globus option!!!
-                GlobusProcess globusProcess = (GlobusProcess) targetProcess;
-
-                if (name.equals(COUNT_TAG)) {
-                    globusProcess.setCount((String) activeHandler.getResultObject());
-                } else if (name.equals(GLOBUS_MAXTIME_TAG)) {
-                    globusProcess.setMaxTime((String) activeHandler.getResultObject());
-                } else if (name.equals(OUTPUT_FILE)) {
-                    globusProcess.setStdout((String) activeHandler.getResultObject());
-                } else if (name.equals(ERROR_FILE)) {
-                    globusProcess.setStderr((String) activeHandler.getResultObject());
-                } else {
-                    super.notifyEndActiveHandler(name, activeHandler);
-                }
-            }
-        }
-
-        //end of inner class GlobusOptionHandler
-    }
 
     protected class NGProcessHandler extends ProcessHandler {
         public NGProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {

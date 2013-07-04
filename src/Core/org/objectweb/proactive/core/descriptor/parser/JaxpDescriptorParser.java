@@ -80,7 +80,6 @@ import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.JVMProcess.PriorityLevel;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
-import org.objectweb.proactive.core.process.globus.GlobusProcess;
 import org.objectweb.proactive.core.process.gridengine.GridEngineSubProcess;
 import org.objectweb.proactive.core.process.loadleveler.LoadLevelerProcess;
 import org.objectweb.proactive.core.process.lsf.LSFBSubProcess;
@@ -684,8 +683,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                 new BSubProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(LOADLEVELER_PROCESS_TAG)) {
                 new LoadLevelerProcessExtractor(node, infrastructureContext);
-            } else if (processType.equals(GLOBUS_PROCESS_TAG)) {
-                new GlobusProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(PRUN_PROCESS_TAG)) {
                 new PrunProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(PBS_PROCESS_TAG)) {
@@ -1167,42 +1164,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                     } else if (nodeName.equals(SCRIPT_PATH_TAG)) {
                         String path = getPath(childNode);
                         bSubProcess.setScriptLocation(path);
-                    }
-                }
-            }
-        }
-    }
-
-    protected class GlobusProcessExtractor extends ProcessExtractor {
-        public GlobusProcessExtractor(Node node, Node context) throws XPathExpressionException, SAXException,
-                ProActiveException {
-            super(node, context);
-
-            Node optionNode = (Node) xpath.evaluate(XMLNS_PREFIX + GLOBUS_OPTIONS_TAG, node,
-                    XPathConstants.NODE);
-            new GlobusOptionsExtractor(targetProcess, optionNode);
-        }
-
-        protected class GlobusOptionsExtractor {
-            public GlobusOptionsExtractor(ExternalProcess targetProcess, Node node) throws SAXException {
-                GlobusProcess globusProcess = (GlobusProcess) targetProcess;
-                NodeList childNodes = node.getChildNodes();
-                for (int j = 0; j < childNodes.getLength(); ++j) {
-                    Node child = childNodes.item(j);
-                    if (child.getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-
-                    String nodeValue = getNodeExpandedValue(child);
-                    String nodeName = child.getNodeName();
-                    if (nodeName.equals(COUNT_TAG)) {
-                        globusProcess.setCount(nodeValue);
-                    } else if (nodeName.equals(GLOBUS_MAXTIME_TAG)) {
-                        globusProcess.setMaxTime(nodeValue);
-                    } else if (nodeName.equals(OUTPUT_FILE)) {
-                        globusProcess.setStdout(nodeValue);
-                    } else if (nodeName.equals(ERROR_FILE)) {
-                        globusProcess.setStderr(nodeValue);
                     }
                 }
             }

@@ -142,12 +142,6 @@
 			<xs:field xpath="@refid" />
 			<!--This section references the processid key defined above to ensure that the refid attribute defined in  processes/processDefinition/bsubProcess/processReference has a corresponding value in infrastructure/processes/processDefinition@id-->
 		</xs:keyref>
-		<xs:keyref name="globusprocessReferenceid" refer="processid">
-			<xs:selector
-				xpath="./pa:infrastructure/pa:processes/pa:processDefinition/pa:globusProcess/pa:processReference" />
-			<xs:field xpath="@refid" />
-			<!--This section references the processid key defined above to ensure that the refid attribute defined in  processes/processDefinition/globusProcess/processReference has a corresponding value in infrastructure/processes/processDefinition@id-->
-		</xs:keyref>
 		<xs:keyref name="hierarchicalprocessProcessReferenceid"
 			refer="processid">
 			<xs:selector
@@ -204,12 +198,12 @@
 			<xs:selector
 				xpath="./pa:infrastructure/pa:processes/pa:processDefinition" />
 			<xs:field xpath="@id" />
-			<!-- Key definition for the attribute id located at  infrastructure/processes/processDefinition. This key will be used to ensure either that the refid attribute defined in deployment/jvms/jvm/creation/ has a correponding value in infrastructure/processes/processDefinition@id and also that the refid attribute defined in infrastructure/processDefinition/rshProcess-sshProcess-rloginProcess-bsubProcess-globusProcess/processReference@refid has a correponding value in infrastructure/processes/processDefinition@id -->
+			<!-- Key definition for the attribute id located at  infrastructure/processes/processDefinition. This key will be used to ensure either that the refid attribute defined in deployment/jvms/jvm/creation/ has a correponding value in infrastructure/processes/processDefinition@id and also that the refid attribute defined in infrastructure/processDefinition/rshProcess-sshProcess-rloginProcess-bsubProcess/processReference@refid has a correponding value in infrastructure/processes/processDefinition@id -->
 		</xs:key>
 		<xs:key name="serviceid">
 			<xs:selector xpath="./pa:infrastructure/pa:services/*" />
 			<xs:field xpath="@id" />
-			<!-- Key definition for the attribute id located at  infrastructure/processes/processDefinition. This key will be used to ensure either that the refid attribute defined in deployment/jvms/jvm/creation/ has a correponding value in infrastructure/processes/processDefinition@id and also that the refid attribute defined in infrastructure/processDefinition/rshProcess-sshProcess-rloginProcess-bsubProcess-globusProcess/processReference@refid has a correponding value in infrastructure/processes/processDefinition@id -->
+			<!-- Key definition for the attribute id located at  infrastructure/processes/processDefinition. This key will be used to ensure either that the refid attribute defined in deployment/jvms/jvm/creation/ has a correponding value in infrastructure/processes/processDefinition@id and also that the refid attribute defined in infrastructure/processDefinition/rshProcess-sshProcess-rloginProcess-bsubProcess/processReference@refid has a correponding value in infrastructure/processes/processDefinition@id -->
 		</xs:key>
 		<!-- Key definition for the attribute id located at  infrastructure/services/serviceDefinition. This key will be used to ensure either that the refid attribute defined in deployment/jvms/jvm/acquisition/ has a correponding value in infrastructure/services/serviceDefinition@id -->
 		<!--		<xs:key name="serviceid">
@@ -823,7 +817,7 @@
 				type="ProcessDefinitionType" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
-	<!-- processDefinition element has seven childs: jvmProcess, rshProcess, sshProcess, rloginProcess, bsubProcess, globusProcess, prunProcess. But only one child can be present in the parent element. Such processes will be used to create jvms. This element contains also an attribute: id which must appear once and only once and represents the id of the process in order for processes or  jvms(processReference element in deployment/jvms/jvm/creation/processReference)  to reference other processes-->
+	<!-- processDefinition element has seven childs: jvmProcess, rshProcess, sshProcess, rloginProcess, bsubProcess, prunProcess. But only one child can be present in the parent element. Such processes will be used to create jvms. This element contains also an attribute: id which must appear once and only once and represents the id of the process in order for processes or  jvms(processReference element in deployment/jvms/jvm/creation/processReference)  to reference other processes-->
 	<xs:complexType name="ProcessDefinitionType">
 		<xs:choice>
 			<xs:element name="jvmProcess" type="JvmProcessType" />
@@ -840,8 +834,7 @@
 			<xs:element name="loadLevelerProcess" type="LoadLevelerProcessType" />
 			<xs:element name="oarGridProcess" type="oarGridProcessType" />
 			<xs:element name="clusterForkProcess"
-				type="clusterForkProcessType" />
-			<xs:element name="globusProcess" type="GlobusProcessType" />
+				type="clusterForkProcessType" />			
 			<xs:element name="prunProcess" type="prunProcessType" />
 			<xs:element name="gridEngineProcess" type="sgeProcessType" />
 			<xs:element name="ngProcess" type="NGProcessType" />
@@ -1429,35 +1422,6 @@
 		</xs:all>
 	</xs:complexType>
 
-	<!--globusProcess element has three childs: processReference element which represents a process defined elsewhere in the infrastructure section(ProcessDefinition@id) , environment, and globusOption element  which represents different options of globus command.They may not appear and two attributes: class which is required and can take only one value: org.objectweb.proactive.core.process.globus.GlobusProcess, and hostname which is required and represents the globus host where the RSL request is destinated -->
-	<xs:complexType name="GlobusProcessType" mixed="true">
-		<xs:all>
-			<xs:element ref="environment" minOccurs="0" />
-			<xs:element ref="processReference" />
-			<!--	<xs:element ref="commandPath" minOccurs="0"/>-->
-			<xs:element name="globusOption" type="GlobusOptionType"
-				minOccurs="0" />
-		</xs:all>
-		<xs:attribute name="class" type="xs:string" use="required"
-			fixed="org.objectweb.proactive.core.process.globus.GlobusProcess" />
-		<xs:attribute name="closeStream" type="CloseStreamType"
-			use="optional" />
-		<xs:attribute name="hostname" type="xs:string" use="required" />
-		<xs:attribute name="queue" type="xs:string" use="optional" />
-	</xs:complexType>
-	<!--globusOption element has one child count element-->
-	<xs:complexType name="GlobusOptionType" mixed="true">
-		<xs:all>
-			<xs:element name="count" type="PosintOrVariableType"
-				minOccurs="0" />
-			<xs:element name="maxTime" type="PosintOrVariableType"
-				minOccurs="0" />
-			<xs:element name="outputFile" type="TextOrVariableType"
-				minOccurs="0" />
-			<xs:element name="errorFile" type="TextOrVariableType"
-				minOccurs="0" />
-		</xs:all>
-	</xs:complexType>
 	<xs:complexType name="hierarchicalProcessType" mixed="true">
 		<xs:all>
 			<xs:element ref="processReference" />

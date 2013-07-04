@@ -71,20 +71,6 @@
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/ws/soap.jar" />
 						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/globus/cog-jglobus-1.2.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/globus/cryptix32.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/globus/cog-jglobus.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/globus/puretls.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/globus/cryptix-asn1.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/globus/cryptix.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/globus/cog-ogce.jar" />
-						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/examples/clibwrapper_jiio.jar" />
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/examples/mlibwrapper_jai.jar" />

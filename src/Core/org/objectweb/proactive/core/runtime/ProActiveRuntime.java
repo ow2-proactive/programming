@@ -41,8 +41,6 @@ import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.globus.ogce.broker.util.jobset.Job;
-import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
@@ -94,7 +92,6 @@ public interface ProActiveRuntime {
      * @param replacePreviousBinding
      * @return the url of the newly created node in the target VM
      * @exception NodeException if the new node cannot be created
-     * @see Job
      */
     public Node createLocalNode(String nodeName, boolean replacePreviousBinding, String vnName)
             throws NodeException, AlreadyBoundException;

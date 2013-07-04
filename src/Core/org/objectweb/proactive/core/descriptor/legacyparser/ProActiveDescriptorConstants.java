@@ -88,7 +88,6 @@ public interface ProActiveDescriptorConstants {
     public static final String RLOGIN_PROCESS_TAG = "rloginProcess";
     public static final String BSUB_PROCESS_TAG = "bsubProcess";
     public static final String LOADLEVELER_PROCESS_TAG = "loadLevelerProcess";
-    public static final String GLOBUS_PROCESS_TAG = "globusProcess";
     public static final String PRUN_PROCESS_TAG = "prunProcess";
     public static final String PBS_PROCESS_TAG = "pbsProcess";
     public static final String OAR_PROCESS_TAG = "oarProcess";
@@ -141,9 +140,7 @@ public interface ProActiveDescriptorConstants {
     public static final String LL_TASK_REP_TASKS_PER_HOSTS = "tasksPerHosts";
     public static final String RES_REQ_TAG = "resourceRequirement";
     public static final String SCRIPT_PATH_TAG = "scriptPath";
-    public static final String GLOBUS_OPTIONS_TAG = "globusOption";
     public static final String COUNT_TAG = "count";
-    public static final String GLOBUS_MAXTIME_TAG = "maxTime";
     public static final String PRUN_OPTIONS_TAG = "prunOption";
     public static final String PROCESSOR_TAG = "processor";
     public static final String HOSTS_NUMBER_TAG = "hostsNumber";
