@@ -175,9 +175,6 @@ public interface ProActiveDescriptorConstants {
     public static final String SECURITY_TAG = "security";
     public static final String SECURITY_FILE_TAG = "file";
     public static final String RMI_LOOKUP_TAG = "RMIRegistryLookup";
-    public static final String UNICORE_KEYFILE_PATH_TAG = "keyFilePath";
-    public static final String UNICORE_USITE_TAG = "usite";
-    public static final String UNICORE_VSITE_TAG = "vsite";
     public static final String FILE_TRANSFER_DEFINITIONS_TAG = "fileTransferDefinitions";
     public static final String FILE_TRANSFER_TAG = "fileTransfer";
     public static final String FILE_TRANSFER_FILE_TAG = "file";

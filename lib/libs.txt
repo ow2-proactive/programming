@@ -11,13 +11,6 @@
 ./glite/classad.jar
 ./glite/glite-wms-jdlj.jar
 ./libs.txt
-./unicore
-./unicore/client.jar
-./unicore/ajo.jar
-./unicore/SystemDefaults.txt
-./unicore/njs_client.jar
-./unicore/scriptPlugin.jar
-./unicore/jh.jar
 ./xercesImpl.jar
 ./log4j.jar
 ./scilab
