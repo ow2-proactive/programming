@@ -1,9 +1,0 @@
-...
-<host id="host" os="${os}" hostCapacity="2" vmCapacity="1">
-    <homeDirectory base="root" relpath="${user.home}" />
-    <scratch>
-        <remoteAccess url="sftp://bob@#{hostname}/tmp/dataspaces" />
-        <path base="root" relpath="/tmp/dataspaces" />
-    </scratch>
-</host>
-...

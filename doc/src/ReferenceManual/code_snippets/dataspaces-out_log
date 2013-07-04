@@ -1,8 +1,0 @@
-[INFO   proactive.examples] Nodes started: 2 nodes deployed
-[INFO   proactive.examples] Processing input wiki_proactive
-[INFO   proactive.examples] partial results written: wiki_proactive: 514
-[INFO   proactive.examples] Processing input wiki_grid_computing
-[INFO   proactive.examples] partial results written: wiki_grid_computing: 732
-[INFO   proactive.examples] Gathering and aggregating partial results
-[INFO   proactive.examples] Results gathered, partial results number: 2
-[INFO   proactive.examples] Application stopped

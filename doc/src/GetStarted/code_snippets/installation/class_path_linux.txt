@@ -1,3 +1,0 @@
-cd [Your ProActive install directory]
-PA_PATH=$(pwd)
-export CLASSPATH=.:${PA_PATH}/dist/lib/ProActive_examples.jar:${PA_PATH}/dist/lib/ProActive.jar
