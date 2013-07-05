@@ -37,8 +37,6 @@
 package org.objectweb.proactive.core.component.body;
 
 import org.etsi.uri.gcm.api.control.PriorityController;
-import org.etsi.uri.gcm.api.control.PriorityController.RequestPriority;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
 
@@ -50,26 +48,15 @@ import org.objectweb.proactive.core.body.request.RequestFilter;
  * @author The ProActive Team
  */
 public class NF1NF2RequestFilter implements RequestFilter {
-    PriorityController pc = null;
-    NFRequestFilterImpl nfRequestFilter = null;
+    NF1RequestFilter nf1RequestFilter = null;
+    NF2RequestFilter nf2RequestFilter = null;
 
     public NF1NF2RequestFilter(PriorityController pc) {
-        this.pc = pc;
-
-        nfRequestFilter = new NFRequestFilterImpl();
+        this.nf1RequestFilter = new NF1RequestFilter(pc);
+        this.nf2RequestFilter = new NF2RequestFilter(pc);
     }
 
     public boolean acceptRequest(Request request) {
-        try {
-            if (nfRequestFilter.acceptRequest(request) ||
-                pc.getGCMPriority(null, request.getMethodName(), null).equals(RequestPriority.NF2)) {
-                return true;
-            }
-        } catch (NoSuchMethodException e) {
-            // ignore
-        } catch (NoSuchInterfaceException e) {
-            // ignore
-        }
-        return false;
+        return this.nf1RequestFilter.acceptRequest(request) || this.nf2RequestFilter.acceptRequest(request);
     }
 }
