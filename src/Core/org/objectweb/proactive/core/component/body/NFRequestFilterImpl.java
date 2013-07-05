@@ -39,6 +39,7 @@ package org.objectweb.proactive.core.component.body;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
 import org.objectweb.proactive.core.component.request.ComponentRequest;
+import org.objectweb.proactive.core.util.NonFunctionalServices;
 
 
 /**
@@ -59,6 +60,9 @@ public class NFRequestFilterImpl implements RequestFilter, java.io.Serializable 
     public boolean acceptRequest(Request request) {
         if (request instanceof ComponentRequest) {
             return acceptRequest((ComponentRequest) request);
+        } else if (request.getMethodName().equals(NonFunctionalServices.terminateAOMethod.getName())) {
+            // special case for terminating the component
+            return true;
         } else {
             // standard requests cannot be component controller requests
             return false;

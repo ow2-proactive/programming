@@ -42,6 +42,7 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
 import org.objectweb.proactive.core.component.request.ComponentRequest;
+import org.objectweb.proactive.core.util.NonFunctionalServices;
 
 
 /**
@@ -60,9 +61,10 @@ public class NF1RequestFilter implements RequestFilter {
     public boolean acceptRequest(Request request) {
         if (request instanceof ComponentRequest) {
             try {
-                return ((ComponentRequest) request).isControllerRequest() &&
-                    !pc.getGCMPriority(null, request.getMethodName(), null).equals(RequestPriority.NF2) &&
-                    !pc.getGCMPriority(null, request.getMethodName(), null).equals(RequestPriority.NF3);
+                return (((ComponentRequest) request).isControllerRequest() &&
+                    !pc.getGCMPriority(null, request.getMethodName(), null).equals(RequestPriority.NF2) && !pc
+                        .getGCMPriority(null, request.getMethodName(), null).equals(RequestPriority.NF3)) ||
+                    (request.getMethodName().equals(NonFunctionalServices.terminateAOMethod.getName()));
             } catch (NoSuchInterfaceException e) {
                 // ignore
                 return false;

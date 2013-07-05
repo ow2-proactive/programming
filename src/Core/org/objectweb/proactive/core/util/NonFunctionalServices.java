@@ -53,10 +53,10 @@ import org.objectweb.proactive.core.mop.Proxy;
  *
  */
 public class NonFunctionalServices {
-    static Class<?> nonFunctionalServicesClass = null;
-    static Method terminateAOMethod = null;
-    static Method terminateAOImmediatelyMethod = null;
-    static Class<?>[] paramTypes;
+    public static Class<?> nonFunctionalServicesClass = null;
+    public static Method terminateAOMethod = null;
+    public static Method terminateAOImmediatelyMethod = null;
+    public static Class<?>[] paramTypes;
 
     static {
         try {
