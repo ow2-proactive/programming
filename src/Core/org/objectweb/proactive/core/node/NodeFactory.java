@@ -230,6 +230,24 @@ public class NodeFactory {
         }
     }
 
+    /** Creates a new node on the local ProActive runtime.
+     * 
+     * @param nodeName 
+     * 			name of the node to create. It musts comply to the following regular expression: "[a-zA-Z0-9_-]+"
+     * @param replacePreviousBinding
+     * 			Should an already existing node with the same name be replaced or not
+     * @param nullParam a null parameter required for backward compatibility
+     * @param vnname
+     * 			A Virtual Node name or null
+     * @return  the newly created node on the local JVM
+     * @exception NodeException 
+     * 			if the node cannot be created or if the nodeName is invalid
+     */
+    public static Node createLocalNode(String nodeName, boolean replacePreviousBinding, Object nullParam,
+            String vnname) throws NodeException, AlreadyBoundException {
+        return createLocalNode(nodeName, replacePreviousBinding, vnname);
+    }
+
     /**
      * Returns the reference to the node located at the given url.
      * This url can be either local or remote.
