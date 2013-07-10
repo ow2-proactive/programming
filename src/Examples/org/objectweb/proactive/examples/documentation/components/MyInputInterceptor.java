@@ -68,13 +68,13 @@ public class MyInputInterceptor extends AbstractPAController implements InputInt
         // foo implementation
     }
 
-    public void afterInputMethodInvocation(MethodCall methodCall) {
-        System.out.println("post processing an intercepted an incoming functional invocation");
+    public void beforeInputMethodInvocation(MethodCall methodCall) {
+        System.out.println("pre processing an intercepted an incoming functional invocation");
         // interception code
     }
 
-    public void beforeInputMethodInvocation(MethodCall methodCall) {
-        System.out.println("pre processing an intercepted an incoming functional invocation");
+    public void afterInputMethodInvocation(MethodCall methodCall, Object result) {
+        System.out.println("post processing an intercepted an incoming functional invocation");
         // interception code
     }
 }

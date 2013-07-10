@@ -53,16 +53,6 @@ import functionalTests.component.controller.DummyController;
  *
  */
 public class InputInterceptor1Impl extends AbstractPAController implements InputInterceptor1 {
-
-    /**
-     *
-     */
-    private int beforeInvocationCounter = 0;
-    private int afterInvocationCounter = 0;
-
-    /**
-     * @param owner
-     */
     public InputInterceptor1Impl(Component owner) {
         super(owner);
     }
@@ -97,15 +87,11 @@ public class InputInterceptor1Impl extends AbstractPAController implements Input
         }
     }
 
-    public void afterInputMethodInvocation(MethodCall methodCall) {
-        //System.out.println("after method invocation");
-        setDummyValue(getDummyValue() + InputInterceptor1.AFTER_INTERCEPTION);
-        afterInvocationCounter++;
+    public void beforeInputMethodInvocation(MethodCall methodCall) {
+        setDummyValue(getDummyValue() + InputInterceptor1.BEFORE_INTERCEPTION);
     }
 
-    public void beforeInputMethodInvocation(MethodCall methodCall) {
-        //        System.out.println("before method invocation");
-        setDummyValue(getDummyValue() + InputInterceptor1.BEFORE_INTERCEPTION);
-        beforeInvocationCounter++;
+    public void afterInputMethodInvocation(MethodCall methodCall, Object result) {
+        setDummyValue(getDummyValue() + InputInterceptor1.AFTER_INTERCEPTION);
     }
 }

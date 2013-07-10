@@ -84,6 +84,7 @@ public interface InputInterceptor {
     /**
      * This method is executed when an input invocation has been intercepted, after the execution of the input invocation.
      * @param methodCall the method that has been executed (MethodCall objects include method parameters and other ProActive-specific infos)
+     * @param result the result of the method that has been executed
      */
-    public void afterInputMethodInvocation(MethodCall methodCall);
+    public void afterInputMethodInvocation(MethodCall methodCall, Object result);
 }

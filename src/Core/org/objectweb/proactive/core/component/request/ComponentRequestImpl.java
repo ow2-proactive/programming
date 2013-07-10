@@ -185,7 +185,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                     }
                     result = methodCall.execute(targetBody.getReifiedObject());
                 }
-                interceptAfterInvocation(targetBody);
+                interceptAfterInvocation(targetBody, result);
             }
         } catch (NoSuchInterfaceException nsie) {
             throw new ServeException("cannot serve request : problem accessing a component controller", nsie);
@@ -223,7 +223,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
     }
 
     // intercept and delegate for postprocessing from the inputInterceptors 
-    private void interceptAfterInvocation(Body targetBody) {
+    private void interceptAfterInvocation(Body targetBody, Object result) {
         if (methodCall.getReifiedMethod() != null) {
             if (((ComponentBody) targetBody).getPAComponentImpl() != null) {
                 List<Interface> interceptors = ((ComponentBody) targetBody).getPAComponentImpl()
@@ -237,7 +237,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                     it.next();
                 }
                 while (it.hasPrevious()) {
-                    ((InputInterceptor) it.previous()).afterInputMethodInvocation(methodCall);
+                    ((InputInterceptor) it.previous()).afterInputMethodInvocation(methodCall, result);
                 }
             }
         }

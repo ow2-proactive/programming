@@ -84,6 +84,7 @@ public interface OutputInterceptor {
     /**
      * This method is executed when an output invocation has been intercepted, after the execution of the output invocation.
      * @param methodCall the method that has been executed (MethodCall objects include method parameters and other ProActive-specific infos)
+     * @param result the result of the method that has been executed
      */
-    public void afterOutputMethodInvocation(MethodCall methodCall);
+    public void afterOutputMethodInvocation(MethodCall methodCall, Object result);
 }

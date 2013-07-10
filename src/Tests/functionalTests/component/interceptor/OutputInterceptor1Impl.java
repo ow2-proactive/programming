@@ -51,10 +51,6 @@ import functionalTests.component.controller.DummyController;
 
 public class OutputInterceptor1Impl extends AbstractPAController implements OutputInterceptor1,
         OutputInterceptor {
-
-    /**
-     *
-     */
     public OutputInterceptor1Impl(Component owner) {
         super(owner);
     }
@@ -89,11 +85,11 @@ public class OutputInterceptor1Impl extends AbstractPAController implements Outp
         }
     }
 
-    public void afterOutputMethodInvocation(MethodCall methodCall) {
-        setDummyValue(getDummyValue() + OutputInterceptor1.AFTER_INTERCEPTION);
-    }
-
     public void beforeOutputMethodInvocation(MethodCall methodCall) {
         setDummyValue(getDummyValue() + OutputInterceptor1.BEFORE_INTERCEPTION);
+    }
+
+    public void afterOutputMethodInvocation(MethodCall methodCall, Object result) {
+        setDummyValue(getDummyValue() + OutputInterceptor1.AFTER_INTERCEPTION);
     }
 }

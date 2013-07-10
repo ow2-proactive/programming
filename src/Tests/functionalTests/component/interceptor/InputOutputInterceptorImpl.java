@@ -53,14 +53,6 @@ import functionalTests.component.controller.DummyController;
  *
  */
 public class InputOutputInterceptorImpl extends AbstractPAController implements InputOutputInterceptor {
-
-    /**
-     *
-     */
-
-    /**
-     * @param owner
-     */
     public InputOutputInterceptorImpl(Component owner) {
         super(owner);
     }
@@ -96,21 +88,21 @@ public class InputOutputInterceptorImpl extends AbstractPAController implements 
         }
     }
 
-    public void afterInputMethodInvocation(MethodCall methodCall) {
-        //System.out.println("after method invocation");
-        setDummyValue(getDummyValue() + InputOutputInterceptor.AFTER_INPUT_INTERCEPTION);
-    }
-
     public void beforeInputMethodInvocation(MethodCall methodCall) {
         //        System.out.println("before method invocation");
         setDummyValue(getDummyValue() + InputOutputInterceptor.BEFORE_INPUT_INTERCEPTION);
     }
 
-    public void afterOutputMethodInvocation(MethodCall methodCall) {
-        setDummyValue(getDummyValue() + InputOutputInterceptor.AFTER_OUTPUT_INTERCEPTION);
+    public void afterInputMethodInvocation(MethodCall methodCall, Object result) {
+        //System.out.println("after method invocation");
+        setDummyValue(getDummyValue() + InputOutputInterceptor.AFTER_INPUT_INTERCEPTION);
     }
 
     public void beforeOutputMethodInvocation(MethodCall methodCall) {
         setDummyValue(getDummyValue() + InputOutputInterceptor.BEFORE_OUTPUT_INTERCEPTION);
+    }
+
+    public void afterOutputMethodInvocation(MethodCall methodCall, Object result) {
+        setDummyValue(getDummyValue() + InputOutputInterceptor.AFTER_OUTPUT_INTERCEPTION);
     }
 }

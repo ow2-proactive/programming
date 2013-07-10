@@ -1923,7 +1923,14 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					<literal>MethodCall</literal> objects are reified
 					representations of method invocations and they contain
 					<literal>Method</literal> objects as well as the
-					parameters of the invocation.
+					parameters of the invocation. The methods
+					<literal>afterInputMethodInvocation</literal> and
+					<literal>afterOutputMethodInvocation</literal> also
+					take as argument the return value of the method
+					invocation. If the method returns <literal>void</literal>,
+					then <literal>null</literal> is given as parameter. If
+					the method returned a primitive type, then it is wrapped
+					inside the appropriate wrapper object.
 				</para>
 
 				<para>

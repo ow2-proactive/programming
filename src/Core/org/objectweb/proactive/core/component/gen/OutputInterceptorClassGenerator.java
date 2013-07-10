@@ -288,7 +288,12 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
             body += "it.next();\n";
             body += "}\n";
             body += "while (it.hasPrevious()) {\n";
-            body += "  ((org.objectweb.proactive.core.component.interception.OutputInterceptor) it.previous()).afterOutputMethodInvocation(methodCall);\n";
+            body += "  ((org.objectweb.proactive.core.component.interception.OutputInterceptor) it.previous()).afterOutputMethodInvocation(methodCall, ";
+            if (returnType != CtClass.voidType) {
+                body += "result);\n";
+            } else {
+                body += "null);\n";
+            }
             body += "}\n";
 
             // return casted result
