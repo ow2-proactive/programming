@@ -46,18 +46,25 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
 
 /**
- *The controller providing means to retrieve and set the state of a component controller
- * @author The ProActive Team
+ * Implementation of {@link ControllerStateDuplication}.
  *
+ * @author The ProActive Team
  */
 public class ControllerStateDuplicationImpl extends AbstractPAController implements
         ControllerStateDuplication {
-
+    /**
+     * Creates a {@link ControllerStateDuplicationImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public ControllerStateDuplicationImpl(Component owner) {
         super(owner);
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -70,6 +77,10 @@ public class ControllerStateDuplicationImpl extends AbstractPAController impleme
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void duplicateController(Object c) {
         ControllerStateDuplication reified_Object = (ControllerStateDuplication) ((PAComponent) getFcItfOwner())
                 .getReferenceOnBaseObject();
@@ -77,11 +88,14 @@ public class ControllerStateDuplicationImpl extends AbstractPAController impleme
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ControllerState getState() {
         ControllerStateDuplication reified_Object = (ControllerStateDuplication) ((PAComponent) getFcItfOwner())
                 .getReferenceOnBaseObject();
         return reified_Object.getState();
 
     }
-
 }

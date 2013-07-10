@@ -49,7 +49,6 @@ import org.objectweb.proactive.core.node.Node;
  */
 @PublicAPI
 public interface PAController extends Interface {
-
     /**
      * This method is called after creation of all functional and non-functional(controller)
      * interfaces. Controllers requiring initialization *after* all interfaces are instantiated

@@ -69,22 +69,29 @@ import org.objectweb.proactive.core.node.Node;
 
 
 /**
- * Implementation of the {@link GathercastController} interface.<br>
+ * Implementation of the {@link GathercastController gathercast controller}.
  *
  * @author The ProActive Team
  * @see GathercastController
  */
 public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceController implements
         GathercastController, ControllerStateDuplication {
-
     private Map<String, List<Object>> bindingsOnServerItfs = new HashMap<String, List<Object>>();
     private Map<String, PAInterface> gatherItfs = new HashMap<String, PAInterface>();
     private GatherRequestsQueues gatherRequestsHandler;
 
+    /**
+     * Creates a {@link PAGathercastControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public PAGathercastControllerImpl(Component owner) {
         super(owner);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void initController() {
         gatherRequestsHandler = new GatherRequestsQueues(owner);
@@ -117,6 +124,9 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Method searchMatchingMethod(Method clientSideMethod, Method[] serverSideMethods,
             boolean clientItfIsMulticast, boolean serverItfIsGathercast, PAInterface serverSideItf) {
@@ -140,9 +150,8 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         return null;
     }
 
-    /*
-     * @seeorg.objectweb.proactive.core.component.control.AbstractPAController#
-     * setControllerItfType()
+    /**
+     * {@inheritDoc}
      */
     @Override
     protected void setControllerItfType() {
@@ -166,12 +175,12 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         return gatherRequestsHandler.addRequest(r);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     /*
      * TODO : throw exception when binding already exists? (this would make the method synchronous)
-     *
-     * @seeorg.objectweb.proactive.core.component.control.PABindingController#
-     * addedBindingOnServerItf(org.objectweb.proactive.core.component.PAInterface,
-     * org.objectweb.proactive.core.component.PAInterface)
      */
     public void notifyAddedGCMBinding(String gathercastItfName, Component owner, String clientItfName) {
         ItfID itfID = new ItfID(clientItfName, ((PAComponent) owner).getID());
@@ -188,11 +197,10 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         }
     }
 
-    /*
-     * @seeorg.objectweb.proactive.core.component.control.PABindingController#
-     * removedBindingOnServerItf(java.lang.String,
-     * org.objectweb.proactive.core.component.identity.PAComponent, java.lang.String)
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public void notifyRemovedGCMBinding(String gathercastItfName, Component owner, String clientItfName) {
         ItfID itfID = new ItfID(clientItfName, ((PAComponent) owner).getID());
         if (bindingsOnServerItfs.containsKey(gathercastItfName)) {
@@ -209,10 +217,17 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Object> getGCMConnectedClients(String gathercastItfName) {
         return bindingsOnServerItfs.get(gathercastItfName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void migrateDependentActiveObjectsTo(Node node) throws MigrationException {
         if (gatherRequestsHandler != null) {
@@ -220,6 +235,10 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void ensureGCMCompatibility(InterfaceType itfType, Interface itf) {
         // nothing to do in this version
     }
@@ -232,6 +251,10 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         in.defaultReadObject();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void duplicateController(Object c) {
         if (c instanceof GatherCastItfState) {
 
@@ -247,6 +270,10 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ControllerState getState() {
 
         return new ControllerState(new GatherCastItfState(
@@ -291,5 +318,4 @@ public class PAGathercastControllerImpl extends AbstractCollectiveInterfaceContr
             this.gatherRequestsHandler = gatherRequestsHandler;
         }
     }
-
 }

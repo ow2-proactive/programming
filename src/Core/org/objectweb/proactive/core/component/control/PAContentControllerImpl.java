@@ -70,7 +70,7 @@ import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 /**
- * Implementation of {@link org.objectweb.fractal.api.control.ContentController content controller}
+ * Implementation of {@link ContentController content controller}.
  *
  * @author The ProActive Team
  */
@@ -80,13 +80,18 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
     protected List<Component> fcSubComponents;
 
     /**
-     * Constructor for PAContentController.
+     * Creates a {@link PAContentControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
      */
     public PAContentControllerImpl(Component owner) {
         super(owner);
         fcSubComponents = new ArrayList<Component>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -98,10 +103,12 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     /*
-     * @see org.objectweb.fractal.api.control.ContentController#getFcInternalInterfaces()
-     *
-     * in this implementation, the external interfaces are also internal interfaces
+     * In this implementation, the external interfaces are also internal interfaces
      */
     public Object[] getFcInternalInterfaces() {
         Object[] itfs = ((PAComponent) getFcItfOwner()).getRepresentativeOnThis().getFcInterfaces();
@@ -117,18 +124,21 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         return internalItfs.toArray(new Interface[internalItfs.size()]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     /*
-     * @see org.objectweb.fractal.api.control.ContentController#getFcInternalInterface(String)
-     *
-     * in this implementation, the external interfaces are also internal interfaces
+     * In this implementation, the external interfaces are also internal interfaces
      */
     public Object getFcInternalInterface(String interfaceName) throws NoSuchInterfaceException {
         return ((PAComponent) getFcItfOwner()).getRepresentativeOnThis().getFcInterface(interfaceName);
     }
 
-    /*
-     * @see org.objectweb.fractal.api.control.ContentController#getFcSubComponents()
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public Component[] getFcSubComponents() {
         return fcSubComponents.toArray(new Component[fcSubComponents.size()]);
     }
@@ -148,10 +158,12 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     /*
-     * @see org.objectweb.fractal.api.control.ContentController#addFcSubComponent(Component)
-     *
-     * if subComponent is a group, each element of the group is added as a subcomponent
+     * If subComponent is a group, each element of the group is added as a subcomponent
      */
     public void addFcSubComponent(Component subComponent) throws IllegalLifeCycleException,
             IllegalContentException {
@@ -221,9 +233,10 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         }
     }
 
-    /*
-     * @see org.objectweb.fractal.api.control.ContentController#removeFcSubComponent(Component)
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public void removeFcSubComponent(Component subComponent) throws IllegalLifeCycleException,
             IllegalContentException {
         checkLifeCycleIsStopped();
@@ -262,8 +275,9 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
 
     /*
      * Returns all the direct and indirect sub components of the given component.
-     *
+     * 
      * @param component a component.
+     * 
      * @return all the direct and indirect sub components of the given component.
      */
     private List<Component> getAllSubComponents(final Component component) {
@@ -297,6 +311,10 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         return allSubComponents;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addFcSubComponent(List<Component> subComponents)
             throws ContentControllerExceptionListException {
         ThreadFactory tf = new NamedThreadFactory("ProActive/GCM add subcomponents");
@@ -321,6 +339,10 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeFcSubComponent(List<Component> subComponents)
             throws ContentControllerExceptionListException {
         ThreadFactory tf = new NamedThreadFactory("ProActive/GCM remove subcomponents");
@@ -395,6 +417,10 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void duplicateController(Object c) {
         if (c instanceof ContentControllerState) {
             ContentControllerState state = (ContentControllerState) c;
@@ -408,6 +434,10 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ControllerState getState() {
         return new ControllerState(new ContentControllerState((ArrayList<Component>) fcSubComponents));
     }

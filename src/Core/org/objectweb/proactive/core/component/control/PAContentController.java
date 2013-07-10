@@ -45,16 +45,12 @@ import org.objectweb.proactive.core.component.exceptions.ContentControllerExcept
 
 
 /**
- * This controller interface extends {@link org.objectweb.fractal.api.control.ContentController}
- * by proposing methods for managing lists of components. The methods may be implemented using
- * multithreading, which can help scaling.
- *
+ * Extension of the standard Fractal {@link ContentController content controller}.
  *
  * @author The ProActive Team
  */
 @PublicAPI
 public interface PAContentController extends ContentController {
-
     /**
      * Adds a list of sub components, possibly in parallel. This method delegates the addition
      * of individual components to the

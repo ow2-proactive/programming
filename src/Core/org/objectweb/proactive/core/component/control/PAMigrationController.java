@@ -43,10 +43,9 @@ import org.objectweb.proactive.core.node.Node;
 
 
 /**
-  * This interface defines an extension of the {@link MigrationController}.
+ * Extension of the standard GCM {@link MigrationController migration controller}.
  *
  * @author The ProActive Team
- * @see MigrationController
  */
 @PublicAPI
 public interface PAMigrationController extends MigrationController {

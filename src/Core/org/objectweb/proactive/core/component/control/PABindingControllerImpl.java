@@ -81,8 +81,7 @@ import org.objectweb.proactive.core.component.webservices.WSInfo;
 
 
 /**
- * Implementation of the
- * {@link org.objectweb.fractal.api.control.BindingController BindingController} interface.
+ * Implementation of the {@link BindingController binding controller}.
  *
  * @author The ProActive Team
  */
@@ -90,14 +89,19 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         Serializable, ControllerStateDuplication {
     protected Bindings bindings; // key = clientInterfaceName ; value = Binding
 
-    //    private Map<String, Map<PAComponent, List<String>>> bindingsOnServerItfs = new HashMap<String, Map<ProActiveComponent,List<String>>>(0);
-
-    // Map(serverItfName, Map(owner, clientItfName))
+    /**
+     * Creates a {@link PABindingControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public PABindingControllerImpl(Component owner) {
         super(owner);
         bindings = new Bindings();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -249,10 +253,9 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
     }
 
     /**
-     * see
-     *
-     * @link org.objectweb.fractal.api.control.BindingController#lookupFc(String)
+     * {@inheritDoc}
      */
+    @Override
     public Object lookupFc(String clientItfName) throws NoSuchInterfaceException {
         Object itf = null;
         if (isPrimitive()) {
@@ -269,9 +272,9 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
     }
 
     /**
-     * implementation of the interface BindingController see
-     * {@link BindingController#bindFc(java.lang.String, java.lang.Object)}
+     * {@inheritDoc}
      */
+    @Override
     public void bindFc(String clientItfName, Object serverItf) throws NoSuchInterfaceException,
             IllegalBindingException, IllegalLifeCycleException {
         // get value of (eventual) future before casting
@@ -527,9 +530,11 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         addBinding(new Binding(clientItf, clientItfName, serverItf));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     /*
-     * @see org.objectweb.fractal.api.control.BindingController#unbindFc(String)
-     *
      * CAREFUL : unbinding action on collective interfaces will remove all the bindings to this
      * interface.
      */
@@ -569,12 +574,9 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
     }
 
     /**
-     * @see org.objectweb.fractal.api.control.BindingController#listFc() In case
-     *      of a client collection interface, only the interfaces generated at
-     *      runtime and members of the collection are returned (a reference on
-     *      the collection interface itself is not returned, because it is just
-     *      a typing artifact and does not exist at runtime).
+     * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public String[] listFc() {
         if (isPrimitive()) {
@@ -651,6 +653,10 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         throw new NoSuchInterfaceException(clientItfName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Boolean isBound() {
         String[] client_itf_names = listFc();
 
@@ -672,6 +678,10 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         return bindings;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void duplicateController(Object c) {
         if (c instanceof Bindings) {
             bindings = (Bindings) c;
@@ -682,6 +692,10 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ControllerState getState() {
         return new ControllerState(bindings);
     }
@@ -696,6 +710,10 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         return newListItfs.toArray(new Interface[] {});
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Boolean isBoundTo(Component component) {
         Object[] serverItfsComponent = filterServerItfs(component.getFcInterfaces());
         Object[] itfs = getFcItfOwner().getFcInterfaces();

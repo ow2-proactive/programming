@@ -42,13 +42,12 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**
- * Extension of the standard Fractal {@link org.objectweb.fractal.api.control.BindingController BindingController }
+ * Extension of the standard Fractal {@link BindingController binding controller}.
  *
  * @author The ProActive Team
  */
 @PublicAPI
 public interface PABindingController extends BindingController {
-
     /**
      * Check if the current component's client interfaces are bounded.
      *

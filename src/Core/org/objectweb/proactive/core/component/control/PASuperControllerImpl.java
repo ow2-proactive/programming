@@ -47,17 +47,24 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
 
 /**
- * Implementation of the {@link PASuperController} interface.
- *
+ * Implementation of the {@link PASuperController super controller}.
+ * 
  * @author The ProActive Team
- * @see PASuperController
  */
 public class PASuperControllerImpl extends AbstractPAController implements Serializable, PASuperController,
         ControllerStateDuplication {
+    /**
+     * Creates a {@link PASuperControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public PASuperControllerImpl(Component owner) {
         super(owner);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -72,6 +79,10 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
     // the following is borrowed from the Julia implementation
     public Component[] fcParents;
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Component[] getFcSuperComponents() {
         if (fcParents == null) {
             return new Component[0];
@@ -80,6 +91,10 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addParent(final Component parent) {
         int length = (fcParents == null) ? 1 : (fcParents.length + 1);
         Component[] parents = new Component[length];
@@ -90,6 +105,10 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
         fcParents = parents;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeParent(final Component parent) {
         int length = fcParents.length - 1;
         if (length == 0) {
@@ -106,6 +125,10 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void duplicateController(Object c) {
         if (c instanceof SuperControllerState) {
             fcParents = ((SuperControllerState) c).getParents();
@@ -116,6 +139,10 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ControllerState getState() {
         return new ControllerState(new SuperControllerState(fcParents));
     }

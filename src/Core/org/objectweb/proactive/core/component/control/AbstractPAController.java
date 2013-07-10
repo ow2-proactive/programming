@@ -69,9 +69,9 @@ public abstract class AbstractPAController implements PAController, Serializable
     protected PAComponent owner;
 
     /**
-     * Constructor for AbstractPAController.
-     *
-     * @param owner the component that wants this controller is in the {@link Constants} class.
+     * Creates a {@link AbstractPAController}.
+     * 
+     * @param owner Component owning the controller.
      */
     public AbstractPAController(Component owner) {
         this.owner = (PAComponent) owner;
@@ -79,7 +79,7 @@ public abstract class AbstractPAController implements PAController, Serializable
     }
 
     /**
-     * Default void implementation of the the initController method. A controller requiring
+     * Default void implementation of the initController method. A controller requiring
      * initialization *after* all interfaces are instantiated have to override this method.
      *
      * @see org.objectweb.proactive.core.component.control.PAController#initController()

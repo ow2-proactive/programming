@@ -43,12 +43,11 @@ import org.objectweb.proactive.core.component.PAInterface;
 
 
 /**
- * Abstract parent class for controllers of collective interfaces
+ * Abstract parent class for controllers of collective interfaces.
  *
  * @author The ProActive Team
  */
 public abstract class AbstractCollectiveInterfaceController extends AbstractPAController {
-
     public AbstractCollectiveInterfaceController(Component owner) {
         super(owner);
     }

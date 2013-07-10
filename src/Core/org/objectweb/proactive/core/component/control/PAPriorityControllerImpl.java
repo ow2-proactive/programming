@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
 
 /**
+ * Implementation of the {@link PriorityController priority controller}.
+ * 
  * @author The ProActive Team
  */
 public class PAPriorityControllerImpl extends AbstractPAController implements PriorityController {
@@ -57,6 +59,11 @@ public class PAPriorityControllerImpl extends AbstractPAController implements Pr
     private Map<String, Object> nf2s;
     private Map<String, Object> nf3s;
 
+    /**
+     * Creates a {@link PAPriorityControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public PAPriorityControllerImpl(Component owner) {
         super(owner);
         nf2s = new Hashtable<String, Object>(2);
@@ -65,6 +72,9 @@ public class PAPriorityControllerImpl extends AbstractPAController implements Pr
         nf3s.put("setPriorityNF3", ANY_PARAMETERS);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -79,7 +89,10 @@ public class PAPriorityControllerImpl extends AbstractPAController implements Pr
     ///////////////////////////////////////
     // PriorityController IMPLEMENTATION //
     ///////////////////////////////////////
-    // TODO_C for a NF? priority check that the method is in a controller
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setGCMPriority(String itfName, String methodName, Class<?>[] parameterTypes,
             RequestPriority priority) {
         switch (priority) {
@@ -100,6 +113,10 @@ public class PAPriorityControllerImpl extends AbstractPAController implements Pr
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public RequestPriority getGCMPriority(String itfName, String methodName, Class<?>[] parameterTypes) {
         if (nf2s.get(methodName) != null) {
             return RequestPriority.NF2;

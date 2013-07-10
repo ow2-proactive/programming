@@ -75,6 +75,11 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
+/**
+ * Implementation of the {@link MonitorController monitor controller}.
+ * 
+ * @author The ProActive Team
+ */
 public class PAMonitorControllerImpl extends AbstractPAController implements MonitorController,
         NotificationListener {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
@@ -87,11 +92,20 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
 
     private Map<String, String> keysList;
 
+    /**
+     * Creates a {@link PAMonitorControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public PAMonitorControllerImpl(Component owner) {
         super(owner);
         jmxNotificationManager = JMXNotificationManager.getInstance();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected void setControllerItfType() {
         try {
             setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(Constants.MONITOR_CONTROLLER,
@@ -182,6 +196,10 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isGCMMonitoringStarted() {
         return started;
     }
@@ -193,6 +211,10 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void startGCMMonitoring() {
         if (statistics == null) {
             registerMethods();
@@ -211,6 +233,10 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void stopGCMMonitoring() {
         if (started) {
             jmxNotificationManager.unsubscribe(FactoryName.createActiveObjectName(PAActiveObject
@@ -219,11 +245,19 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void resetGCMMonitoring() {
         stopGCMMonitoring();
         startGCMMonitoring();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Object getGCMStatistics(String itfName, String methodName, Class<?>[] parameterTypes)
             throws NoSuchMethodException {
         String supposedCorrespondingKey = PAMonitorControllerHelper.generateKey(itfName, methodName,
@@ -263,6 +297,10 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Map<String, Object> getAllGCMStatistics() {
         return statistics;
     }

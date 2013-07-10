@@ -52,11 +52,24 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 
 
+/**
+ * Implementation of the {@link PAMigrationController migration controller}.
+ * 
+ * @author The ProActive Team
+ */
 public class PAMigrationControllerImpl extends AbstractPAController implements PAMigrationController {
+    /**
+     * Creates a {@link PAMembraneControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public PAMigrationControllerImpl(Component owner) {
         super(owner);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -69,6 +82,10 @@ public class PAMigrationControllerImpl extends AbstractPAController implements P
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void migrateGCMComponentTo(Object node) throws MigrationException {
         // need to migrate gathercast futures handlers active objects first
         try {
@@ -79,6 +96,10 @@ public class PAMigrationControllerImpl extends AbstractPAController implements P
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void migrateGCMComponentTo(URL nodeUrl) throws MigrationException {
         try {
             migrateGCMComponentTo(NodeFactory.getNode(nodeUrl.toString()));
@@ -87,6 +108,10 @@ public class PAMigrationControllerImpl extends AbstractPAController implements P
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void migrateGCMComponentTo(String nodeUrl) throws MigrationException {
         try {
             migrateGCMComponentTo(NodeFactory.getNode(nodeUrl));

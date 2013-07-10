@@ -46,10 +46,9 @@ import org.objectweb.proactive.core.mop.MethodCall;
 
 
 /**
- * This interface defines an extension of the {@link MulticastController}.
+ * Extension of the standard GCM {@link MulticastController multicast controller}.
  *
  * @author The ProActive Team
- * @see MulticastController
  */
 @PublicAPI
 public interface PAMulticastController extends MulticastController {

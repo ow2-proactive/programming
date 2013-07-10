@@ -78,11 +78,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * The class implementing the membrane controller.
- * 
+ * Implementation of the {@link PAMembraneController membrane controller}.
  * 
  * @author The ProActive Team
- *
  */
 public class PAMembraneControllerImpl extends AbstractPAController implements PAMembraneController,
         Serializable, ControllerStateDuplication {
@@ -92,6 +90,11 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     private NFBindings nfBindings;//TODO : This structure has to be updated every time a with the membrane is added or removed
     private String membraneState;
 
+    /**
+     * Creates a {@link PAMembraneControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
+     */
     public PAMembraneControllerImpl(Component owner) {
         super(owner);
         nfComponents = new HashMap<String, Component>();
@@ -99,6 +102,9 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         nfBindings = new NFBindings();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -137,10 +143,12 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     /**
-     * Adds a NF component to the membrane.<br/>
+     * {@inheritDoc}
+     * <br>
      * For adding a NF component B to the membrane of component A, the lifecycle and membrane of A
      * must be stopped, and the membrane of B must be started.
      */
+    @Override
     public void nfAddFcSubComponent(Component component) throws IllegalContentException,
             IllegalLifeCycleException {
 
@@ -280,7 +288,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
             // If the owner is a primitive component, the implementation of the component must be
             // notified of the binding: ie. call its bind method if any
-            if (hostComponentisPrimitive()) {
+            if (hostComponentIsPrimitive()) {
                 try {
                     GCM.getBindingController(owner).bindFc(clItf, srItf);
                 } catch (NoSuchInterfaceException nsie) {
@@ -343,8 +351,9 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     /**
-     * Binding of NF interfaces, or of NF components.
+     * {@inheritDoc}
      */
+    @Override
     public void nfBindFc(String clientItf, String serverItf) throws NoSuchInterfaceException,
             IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException {
         ComponentAndInterface client = getComponentAndInterface(clientItf);
@@ -490,6 +499,10 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void nfBindFc(String clientItf, Object serverItf) throws NoSuchInterfaceException,
             IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException {// Binds external NF client itf with External NF Server
         serverItf = PAFuture.getFutureValue(serverItf);
@@ -543,6 +556,10 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String nfGetFcState(String component) throws NoSuchComponentException, NoSuchInterfaceException,
             IllegalLifeCycleException {
         if (!nfComponents.containsKey(component)) {
@@ -552,11 +569,19 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         return GCM.getGCMLifeCycleController(nfComponents.get(component)).getFcState();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Component[] nfGetFcSubComponents() {
         List<Component> nfSubComponents = new ArrayList<Component>(nfComponents.values());
         return nfSubComponents.toArray(new Component[nfSubComponents.size()]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String[] nfListFc(String component) throws NoSuchComponentException, NoSuchInterfaceException,
             IllegalLifeCycleException {
         if (!nfComponents.containsKey(component)) {
@@ -566,6 +591,10 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         return GCM.getBindingController(nfComponents.get(component)).listFc();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Object nfLookupFc(String itfname) throws NoSuchInterfaceException, NoSuchComponentException {
         ComponentAndInterface itf = getComponentAndInterface(itfname);
         PAInterface theItf = (PAInterface) itf.getInterface();
@@ -598,6 +627,10 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void nfRemoveFcSubComponent(Component component) throws IllegalContentException,
             IllegalLifeCycleException, NoSuchComponentException {
         try { /* Check the lifecycle of the membrane and the component */
@@ -648,6 +681,10 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         nfComponents.remove(componentname);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setControllerObject(String itf, Object controllerclass) throws NoSuchInterfaceException {
         try {
             if (membraneState.equals(PAMembraneController.MEMBRANE_STARTED) ||
@@ -664,10 +701,11 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     /**
-     * Start the F lifecycle of a NF component.
-     * 
+     * {@inheritDoc}
+     * <br>
      * Requisite: the membrane of the NF component must be started.
      */
+    @Override
     public void nfStartFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
             NoSuchInterfaceException {
         if (!nfComponents.containsKey(component)) {
@@ -679,11 +717,11 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     /**
-     * Stop the F lifecycle of a NF component
-     * 
-     * Requisite: the membrane of the NF component must be stopped
+     * {@inheritDoc}
+     * <br>
+     * Requisite: the membrane of the NF component must be stopped.
      */
-
+    @Override
     public void nfStopFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
             NoSuchInterfaceException {
         if (!nfComponents.containsKey(component)) {
@@ -695,11 +733,11 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     /**
-     * Unbinds client interfaces exposed by the membrane, or client interfaces of non-functional components.
-     * 
-     * Requisite: the Membrane must be stopped
-     * 
+     * {@inheritDoc}
+     * <br>
+     * Requisite: the Membrane must be stopped.
      */
+    @Override
     public void nfUnbindFc(String clientItf) throws NoSuchInterfaceException, IllegalLifeCycleException,
             IllegalBindingException, NoSuchComponentException {
 
@@ -716,7 +754,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
             // If the owner is a primitive component, the implementation of the component must be
             // notified of the removing of the binding: ie. call its unbind method
-            if (hostComponentisPrimitive()) {
+            if (hostComponentIsPrimitive()) {
                 try {
                     GCM.getBindingController(owner).unbindFc(clientItf);
                 } catch (NoSuchInterfaceException nsie) {
@@ -743,9 +781,9 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     /**
-     * Start the Membrane of this component, and starts the F lifecycle of inner NF components
-     * (does not start membranes recursively).
+     * {@inheritDoc}
      */
+    @Override
     public void startMembrane() throws IllegalLifeCycleException {
         InterfaceType[] itfTypes = ((PAComponentType) getFcItfOwner().getFcType()).getNfFcInterfaceTypes();
 
@@ -783,9 +821,9 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     /**
-     * Stop the membrane of this component, and stops the F lifecycle of inner NF components
-     * (does not stop membranes recursively)
+     * {@inheritDoc}
      */
+    @Override
     public void stopMembrane() throws IllegalLifeCycleException {
 
         for (Component c : nfComponents.values()) {
@@ -846,7 +884,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         return null;
     }
 
-    public boolean hostComponentisPrimitive() {
+    private boolean hostComponentIsPrimitive() {
         try {
             return owner.getComponentParameters().getHierarchicalType().equals(Constants.PRIMITIVE);
         } catch (Exception e) {
@@ -855,10 +893,18 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Component nfGetFcSubComponent(String name) {
         return nfComponents.get(name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void duplicateController(Object c) {
         if (c instanceof HashMap<?, ?>) {
             nfComponents = (HashMap<String, Component>) c;
@@ -893,7 +939,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             }
             Component searchComponent = null;
             try {
-                if (!hostComponentisPrimitive()) { //Is it a functional component?
+                if (!hostComponentIsPrimitive()) { //Is it a functional component?
                     searchComponent = getFunctionalComponent(itfTab[0]);
                 }
 
@@ -943,7 +989,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
     }
 
-    public void checkInternalInterfaces() throws IllegalLifeCycleException {
+    private void checkInternalInterfaces() throws IllegalLifeCycleException {
         InterfaceType[] itfTypes = ((PAComponentType) getFcItfOwner().getFcType()).getNfFcInterfaceTypes();
         PAGCMInterfaceType paItfT;
         for (InterfaceType itfT : itfTypes) {
@@ -1010,5 +1056,4 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     public String getMembraneState() {
         return membraneState;
     }
-
 }

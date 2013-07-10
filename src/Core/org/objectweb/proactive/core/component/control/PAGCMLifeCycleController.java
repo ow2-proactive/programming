@@ -42,18 +42,12 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**
- * This interface defines an extension of the {@link GCMLifeCycleController}, which
- * is able to handle prioritized requests.
- *<p>
- * (Under development)
- * </p>
+ * Extension of the standard GCM {@link GCMLifeCycleController life cycle controller}.
  *
  * @author The ProActive Team
- * @see GCMLifeCycleController
  */
 @PublicAPI
 public interface PAGCMLifeCycleController extends GCMLifeCycleController {
-
     /**
      * @see org.objectweb.fractal.api.control.LifeCycleController#getFcState()
      */

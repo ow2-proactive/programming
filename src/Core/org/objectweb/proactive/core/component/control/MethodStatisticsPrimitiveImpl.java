@@ -41,7 +41,6 @@ import java.util.Vector;
 
 
 public class MethodStatisticsPrimitiveImpl extends MethodStatisticsAbstract implements Serializable {
-
     public MethodStatisticsPrimitiveImpl(String itfName, String methodName, Class<?>[] parametersTypes) {
         this.itfName = itfName;
         this.methodName = methodName;

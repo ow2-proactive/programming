@@ -46,10 +46,9 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
 
 /**
- * Implementation of the {@link org.objectweb.fractal.api.control.NameController}
- *
+ * Implementation of the {@link NameController name controller}.
+ * 
  * @author The ProActive Team
- *
  */
 public class PANameControllerImpl extends AbstractPAController implements NameController,
         ControllerStateDuplication {
@@ -57,12 +56,17 @@ public class PANameControllerImpl extends AbstractPAController implements NameCo
     String name;
 
     /**
-     * @param owner
+     * Creates a {@link PANameControllerImpl}.
+     * 
+     * @param owner Component owning the controller.
      */
     public PANameControllerImpl(Component owner) {
         super(owner);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void setControllerItfType() {
         try {
@@ -74,20 +78,26 @@ public class PANameControllerImpl extends AbstractPAController implements NameCo
         }
     }
 
-    /*
-     * @see org.objectweb.fractal.api.control.NameController#getFcName()
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public String getFcName() {
         return name;
     }
 
-    /*
-     * @see org.objectweb.fractal.api.control.NameController#setFcName(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public void setFcName(String name) {
         this.name = name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void duplicateController(Object c) {
         if (c instanceof String) {
             name = (String) c;
@@ -99,6 +109,10 @@ public class PANameControllerImpl extends AbstractPAController implements NameCo
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ControllerState getState() {
         return new ControllerState(name);
     }

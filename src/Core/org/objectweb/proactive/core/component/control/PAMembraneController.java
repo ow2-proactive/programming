@@ -52,7 +52,6 @@ import org.objectweb.proactive.core.component.exceptions.NoSuchComponentExceptio
  */
 @PublicAPI
 public interface PAMembraneController {
-
     public final static String MEMBRANE_STOPPED = "MEMBRANE_STOPPED";
     public final static String MEMBRANE_STARTED = "MEMBRANE_STARTED";
 

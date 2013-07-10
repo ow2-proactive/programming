@@ -42,14 +42,12 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**
- * Extension of the {@link SuperController} interface.
+ * Extension of the standard Fractal {@link SuperController super controller}.
  *
  * @author The ProActive Team
- * @see SuperController
  */
 @PublicAPI
 public interface PASuperController extends SuperController {
-
     /**
      * Add a parent component.
      *
