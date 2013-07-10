@@ -272,8 +272,8 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                 if (inner_components != null) {
                     for (int i = 0; i < inner_components.length; i++) {
                         try {
-                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState().equals(
-                                    PAMembraneController.MEMBRANE_STOPPED)) {
+                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState()
+                                    .equals(PAMembraneController.MEMBRANE_STOPPED)) {
                                 throw new IllegalLifeCycleException(
                                     "Before starting all subcomponents, make sure that the membrane of all of them is started");
                             }
@@ -315,8 +315,8 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                 if (inner_components != null) {
                     for (int i = 0; i < inner_components.length; i++) {
                         try {
-                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState().equals(
-                                    PAMembraneController.MEMBRANE_STOPPED)) {
+                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState()
+                                    .equals(PAMembraneController.MEMBRANE_STOPPED)) {
                                 throw new IllegalLifeCycleException(
                                     "Before stopping all subcomponents, make sure that the membrane of all them is started");
                             }
@@ -384,30 +384,6 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
             throw new IllegalLifeCycleException(
                 "Cannot terminate component because the component is not stopped");
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getFcState(short priority) {
-        return getFcState();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startFc(short priority) throws IllegalLifeCycleException {
-        startFc();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void stopFc(short priority) {
-        stopFc();
     }
 
     /**

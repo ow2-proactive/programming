@@ -49,21 +49,6 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public interface PAGCMLifeCycleController extends GCMLifeCycleController {
     /**
-     * @see org.objectweb.fractal.api.control.LifeCycleController#getFcState()
-     */
-    public String getFcState(short priority);
-
-    /**
-     * @see org.objectweb.fractal.api.control.LifeCycleController#startFc()
-     */
-    public void startFc(short priority) throws IllegalLifeCycleException;
-
-    /**
-     * @see org.objectweb.fractal.api.control.LifeCycleController#stopFc()
-     */
-    public void stopFc(short priority) throws IllegalLifeCycleException;
-
-    /**
      * Terminates the component to which this interface belongs.
      * 
      * @param immediate
