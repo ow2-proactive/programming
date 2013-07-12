@@ -51,7 +51,6 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.NameController;
-import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.proactive.Body;
@@ -125,7 +124,6 @@ public class PAComponentImpl implements PAComponent, Serializable {
      *            a reference on the body (required notably to get a reference
      *            on the request queue, used to control the life cycle of the
      *            component)
-     * @throws InstantiationException
      */
     public PAComponentImpl(ComponentParameters componentParameters, Body myBody) {
         this.body = myBody;
@@ -237,7 +235,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
 
             } catch (Exception e) {
                 throw new ProActiveRuntimeException("Could not create NF interface '" + itfName +
-                    "' while instantiating component'" + this.componentParameters.getName() +
+                    "' while instantiating component '" + this.componentParameters.getName() +
                     "'. Check the declared NF type.\n" + e.getMessage(), e);
             }
         }
@@ -363,13 +361,18 @@ public class PAComponentImpl implements PAComponent, Serializable {
             InterfaceType[] f = this.componentParameters.getComponentType().getFcInterfaceTypes();
             InterfaceType[] nf = nfType.toArray(new InterfaceType[] {});
             for (InterfaceType i : nf) {
+                if (!i.getFcItfName().endsWith("-controller")) {
+                    throw new RuntimeException("Could not create NF interface '" + i.getFcItfName() +
+                        "' because the interface name does not end by \"-controller\"");
+                }
                 loggerADL.debug("[PAComponentImpl] Interface: " + i.getFcItfName());
             }
             // Re-Set the real ComponentType
             this.componentParameters.setComponentType(tf.createFcType(f, nf));
         } catch (Exception e) {
             logger.error("NF type could not be set");
-            e.printStackTrace();
+            throw new ProActiveRuntimeException("Could not create NF type while instantiating component '" +
+                this.componentParameters.getName() + " : " + e.getMessage(), e);
         }
 
     }

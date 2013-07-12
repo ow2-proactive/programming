@@ -40,36 +40,25 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.control.AbstractPAController;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
 
 /**
  * @author The ProActive Team
  */
-public class DummyControllerImpl extends AbstractPAController implements DummyController {
-    private String dummyValue = null;
-
-    public DummyControllerImpl(Component owner) {
+public class DummyControllerErrorImpl extends DummyControllerImpl {
+    public DummyControllerErrorImpl(Component owner) {
         super(owner);
     }
 
     @Override
     protected void setControllerItfType() {
         try {
-            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(DummyController.DUMMY_CONTROLLER_NAME,
+            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType("dummy-controller-error",
                     DummyController.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                     TypeFactory.SINGLE));
         } catch (InstantiationException e) {
             throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
         }
-    }
-
-    public void setDummyValue(String value) {
-        dummyValue = value;
-    }
-
-    public String getDummyValue() {
-        return dummyValue;
     }
 }

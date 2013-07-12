@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<componentConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="../../../org/objectweb/proactive/core/component/config/component-config.xsd" name="interception">
+    <controllers>
+        <controller>
+            <interface>org.objectweb.proactive.core.component.control.PABindingController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PABindingControllerImpl</implementation>
+        </controller>
+        <controller>
+            <interface>org.objectweb.proactive.core.component.control.PAContentController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAContentControllerImpl</implementation>
+        </controller>
+        <controller>
+            <interface>org.objectweb.proactive.core.component.control.PAGCMLifeCycleController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAGCMLifeCycleControllerImpl</implementation>
+        </controller>
+        <controller>
+            <interface>org.objectweb.proactive.core.component.control.PASuperController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PASuperControllerImpl</implementation>
+        </controller>
+        <controller>
+            <interface>org.objectweb.fractal.api.control.NameController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PANameControllerImpl</implementation>
+        </controller>
+        <!-- specific controllers & interceptors -->
+        <controller>
+            <interface>functionalTests.component.controller.DummyController</interface>
+            <implementation>functionalTests.component.controller.DummyControllerErrorImpl</implementation>
+        </controller>
+    </controllers>
+    
+</componentConfiguration>
+    
+

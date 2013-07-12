@@ -54,15 +54,11 @@ import functionalTests.component.creation.ComponentInfo;
 
 
 /**
+ * Test custom controllers.
+ * 
  * @author The ProActive Team
- *
- * creates a new component
  */
 public class Test extends ComponentTest {
-
-    /**
-     *
-     */
     Component componentA;
     String name;
     String nodeUrl;
@@ -72,9 +68,6 @@ public class Test extends ComponentTest {
         super("Components : Addition of a custom controller", "Components : Addition of a custom controller");
     }
 
-    /**
-     * @see testsuite.test.FunctionalTest#action()
-     */
     @org.junit.Test
     public void action() throws Exception {
         Component boot = Utils.getBootstrapComponent();
@@ -94,5 +87,22 @@ public class Test extends ComponentTest {
                 .getDummyValue();
 
         Assert.assertEquals("DUMMY", result);
+    }
+
+    @org.junit.Test(expected = org.objectweb.fractal.api.factory.InstantiationException.class)
+    public void testInvalidControllerName() throws Exception {
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        GenericFactory cf = GCM.getGenericFactory(boot);
+
+        componentA = cf.newFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
+                .createFcItfType("componentInfo", ComponentInfo.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE), }), new ControllerDescription(
+            "componentA", Constants.PRIMITIVE, getClass().getResource(
+                    "/functionalTests/component/controller/config-error.xml").getPath()),
+                new ContentDescription(ComponentA.class.getName(), new Object[] { "toto" }));
+
+        Assert
+                .fail("Creation of a component with a controller name not ending by\"-controller\" has succeeded whereas it should not");
     }
 }
