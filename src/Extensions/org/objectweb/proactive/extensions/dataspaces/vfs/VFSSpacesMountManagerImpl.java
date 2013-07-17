@@ -248,6 +248,9 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         String errorMessage = "An error occurred while trying to mount " + spaceInfo.getName() +
             " here are all the errors received : " + nl;
         int nbMountedSpace = 0;
+        if (spaceInfo.getUrls().size() == 0) {
+            throw new IllegalStateException("Empty Space configuration");
+        }
         for (String accessUrl : spaceInfo.getUrls()) {
             // for backward compatibility, in the case where there is only one url, we preserve the behaviour where the local (file system)
             // path will be computed and used instead of the provided url for access on the same host
@@ -289,13 +292,22 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         LinkedHashSet<String> allRootUris = availableSpacesList.get(spacePart);
         try {
             mountedRoot = vfsManager.resolveFile(spaceRootFOUri);
+
+            if (mountedRoot != null && !mountedRoot.exists()) {
+                String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
+                logger.info(err);
+                allRootUris.remove(spaceRootFOUri);
+                availableSpacesList.put(spacePart, allRootUris);
+                throw new FileSystemException(err);
+            }
         } catch (org.apache.commons.vfs.FileSystemException x) {
             String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
             logger.info(err);
 
             allRootUris.remove(spaceRootFOUri);
             availableSpacesList.put(spacePart, allRootUris);
-            throw new FileSystemException(x);
+            throw new FileSystemException(err, x);
+
         }
         if (mountedRoot != null) {
             synchronized (readLock) {
