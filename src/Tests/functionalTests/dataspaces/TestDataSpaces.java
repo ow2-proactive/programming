@@ -168,23 +168,28 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(outputWithFileFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithFileFileUri));
 
-        final String outputWithNothingFileUri1 = ao1.writeOutputFile(OUTPUT_WITH_NOTHING1_NAME,
-                OUTPUT_FILE_NAME, OUTPUT_FILE_CONTENT1);
-        assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithNothingFileUri1));
-        assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithNothingFileUri1));
-        assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithNothingFileUri1));
-        assertEquals(OUTPUT_FILE_CONTENT1, ao4.readFile(outputWithNothingFileUri1));
-        assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(outputWithNothingFileUri1));
-        assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithNothingFileUri1));
+        // TODO the following code tests the automatic creation of a remote root folder of a dataspace when it doesn't automatically exists
+        // currently this feature is disabled, because we cannot mount any more a dataspace based on a folder which doesn't exist
+        // in order to reenable it, we could add an additional method PADataSpaces like resolveOutputOrCreate which would generate
+        // unexisting root folder
 
-        final String outputWithNothingFileUri2 = ao1.writeOutputFile(OUTPUT_WITH_NOTHING2_NAME, null,
-                OUTPUT_FILE_CONTENT1);
-        assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithNothingFileUri2));
-        assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithNothingFileUri2));
-        assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithNothingFileUri2));
-        assertEquals(OUTPUT_FILE_CONTENT1, ao4.readFile(outputWithNothingFileUri2));
-        assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(outputWithNothingFileUri2));
-        assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithNothingFileUri2));
+        //        final String outputWithNothingFileUri1 = ao1.writeOutputFile(OUTPUT_WITH_NOTHING1_NAME,
+        //                OUTPUT_FILE_NAME, OUTPUT_FILE_CONTENT1);
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithNothingFileUri1));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithNothingFileUri1));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithNothingFileUri1));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao4.readFile(outputWithNothingFileUri1));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(outputWithNothingFileUri1));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithNothingFileUri1));
+        //
+        //        final String outputWithNothingFileUri2 = ao1.writeOutputFile(OUTPUT_WITH_NOTHING2_NAME, null,
+        //                OUTPUT_FILE_CONTENT1);
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithNothingFileUri2));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithNothingFileUri2));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithNothingFileUri2));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, ao4.readFile(outputWithNothingFileUri2));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(outputWithNothingFileUri2));
+        //        assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithNothingFileUri2));
 
         // write to scratches:
         final String scratchFileUri1 = ao1.writeScratchFile(OUTPUT_FILE_NAME, OUTPUT_FILE_CONTENT1);
