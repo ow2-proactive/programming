@@ -175,13 +175,11 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
                                 parametersTypes);
                         keysList.put(m.getName(), key);
                         if (subcomponentMonitors.isEmpty()) {
-                            statistics.put(key,
-                                    new MethodStatisticsPrimitiveImpl(itf.getFcItfName(), m.getName(),
-                                        parametersTypes));
+                            statistics.put(key, new MethodStatisticsPrimitiveImpl(itf.getFcItfName(), m
+                                    .getName(), parametersTypes));
                         } else {
-                            statistics.put(key,
-                                    new MethodStatisticsCompositeImpl(itf.getFcItfName(), m.getName(),
-                                        parametersTypes, subcomponentMonitors));
+                            statistics.put(key, new MethodStatisticsCompositeImpl(itf.getFcItfName(), m
+                                    .getName(), parametersTypes, subcomponentMonitors));
                         }
                         controllerLogger.debug(m.getName() + " (server) added to monitoring on component " +
                             name + "!!!");
@@ -219,9 +217,9 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
         if (!started) {
             initMethodStatistics();
             try {
-                jmxNotificationManager.subscribe(
-                        FactoryName.createActiveObjectName(PAActiveObject.getBodyOnThis().getID()), this,
-                        FactoryName.getCompleteUrl(ProActiveRuntimeImpl.getProActiveRuntime().getURL()));
+                jmxNotificationManager.subscribe(FactoryName.createActiveObjectName(PAActiveObject
+                        .getBodyOnThis().getID()), this, FactoryName.getCompleteUrl(ProActiveRuntimeImpl
+                        .getProActiveRuntime().getURL()));
             } catch (IOException e) {
                 throw new ProActiveRuntimeException("JMX subscribtion for the MonitorController has failed",
                     e);
@@ -236,8 +234,8 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
     @Override
     public void stopGCMMonitoring() {
         if (started) {
-            jmxNotificationManager.unsubscribe(
-                    FactoryName.createActiveObjectName(PAActiveObject.getBodyOnThis().getID()), this);
+            jmxNotificationManager.unsubscribe(FactoryName.createActiveObjectName(PAActiveObject
+                    .getBodyOnThis().getID()), this);
             started = false;
         }
     }

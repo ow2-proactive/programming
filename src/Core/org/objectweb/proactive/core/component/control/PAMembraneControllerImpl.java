@@ -236,8 +236,8 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
         // Check whether the binding exists
         try {
-            if (nfBindings.hasBinding("membrane", clItf, GCM.getNameController(srOwner).getFcName(),
-                    srItf.getFcItfName())) {
+            if (nfBindings.hasBinding("membrane", clItf, GCM.getNameController(srOwner).getFcName(), srItf
+                    .getFcItfName())) {
                 throw new IllegalBindingException("The binding : membrane." + clItf + "--->" +
                     GCM.getNameController(srOwner).getFcName() + "." + srItf.getFcItfName() +
                     " already exists");
@@ -315,8 +315,8 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
         // Check whether the binding exists
         try {
-            if (nfBindings.hasBinding("membrane", clItf, GCM.getNameController(srOwner).getFcName(),
-                    srItf.getFcItfName())) {
+            if (nfBindings.hasBinding("membrane", clItf, GCM.getNameController(srOwner).getFcName(), srItf
+                    .getFcItfName())) {
                 throw new IllegalBindingException("The binding : membrane." + clItf + "--->" +
                     GCM.getNameController(srOwner).getFcName() + "." + srItf.getFcItfName() +
                     " already exists");
@@ -764,8 +764,8 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             if (theComp instanceof PANFComponentRepresentative) {
                 if (clItfType.isFcClientItf()) {
                     GCM.getBindingController(theComp).unbindFc(theItf.getInterface().getFcItfName());
-                    nfBindings.removeClientAliasBinding(GCM.getNameController(theComp).getFcName(),
-                            it.getFcItfName());
+                    nfBindings.removeClientAliasBinding(GCM.getNameController(theComp).getFcName(), it
+                            .getFcItfName());
                 } else {//The interface is not client. It should be.
                     throw new IllegalBindingException("You should specify a client singleton interface");
                 }
@@ -948,13 +948,13 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                         throw new NoSuchComponentException("There is no : " + itfTab[0] + " component");
                     } else {
                         // The component is non-functional
-                        return new ComponentAndInterface(searchComponent,
-                            (Interface) searchComponent.getFcInterface(itfTab[1]));
+                        return new ComponentAndInterface(searchComponent, (Interface) searchComponent
+                                .getFcInterface(itfTab[1]));
                     }
                 } else {
                     // The component is functional 
-                    return new ComponentAndInterface(searchComponent,
-                        (Interface) searchComponent.getFcInterface(itfTab[1]));
+                    return new ComponentAndInterface(searchComponent, (Interface) searchComponent
+                            .getFcInterface(itfTab[1]));
                 }
             } catch (NoSuchInterfaceException e) {
                 throw e;
@@ -975,8 +975,8 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     private void checkMembraneIsStarted(Component comp) throws IllegalLifeCycleException {
 
         try {
-            if (Utils.getPAMembraneController(comp).getMembraneState()
-                    .equals(PAMembraneController.MEMBRANE_STOPPED)) {
+            if (Utils.getPAMembraneController(comp).getMembraneState().equals(
+                    PAMembraneController.MEMBRANE_STOPPED)) {
                 throw new IllegalLifeCycleException(
                     "The desired operation can not be performed. The membrane of a non-functional component is stopped. It should be started.");
             }

@@ -268,8 +268,8 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                 if (inner_components != null) {
                     for (int i = 0; i < inner_components.length; i++) {
                         try {
-                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState()
-                                    .equals(PAMembraneController.MEMBRANE_STOPPED)) {
+                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState().equals(
+                                    PAMembraneController.MEMBRANE_STOPPED)) {
                                 throw new IllegalLifeCycleException(
                                     "Before starting all subcomponents, make sure that the membrane of all of them is started");
                             }
@@ -311,8 +311,8 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                 if (inner_components != null) {
                     for (int i = 0; i < inner_components.length; i++) {
                         try {
-                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState()
-                                    .equals(PAMembraneController.MEMBRANE_STOPPED)) {
+                            if (Utils.getPAMembraneController(inner_components[i]).getMembraneState().equals(
+                                    PAMembraneController.MEMBRANE_STOPPED)) {
                                 throw new IllegalLifeCycleException(
                                     "Before stopping all subcomponents, make sure that the membrane of all them is started");
                             }

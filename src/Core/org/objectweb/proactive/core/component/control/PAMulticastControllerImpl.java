@@ -117,8 +117,8 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
             PAGCMInterfaceType type = (PAGCMInterfaceType) itfTypes[i];
             if (type.isGCMMulticastItf()) {
                 try {
-                    addClientSideProxy(type.getFcItfName(),
-                            (PAInterface) owner.getFcInterface(type.getFcItfName()));
+                    addClientSideProxy(type.getFcItfName(), (PAInterface) owner.getFcInterface(type
+                            .getFcItfName()));
                 } catch (NoSuchInterfaceException e) {
                     throw new ProActiveRuntimeException(e);
                 }
@@ -168,8 +168,8 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
 
                 for (Method method : clientSideItfMethods) {
                     Method serverSideMatchingMethod = searchMatchingMethod(method, serverSideItfMethods,
-                            ((GCMInterfaceType) itfType).isGCMMulticastItf(),
-                            serverSideItfType.isGCMGathercastItf(), ((PAInterface) itf));
+                            ((GCMInterfaceType) itfType).isGCMMulticastItf(), serverSideItfType
+                                    .isGCMGathercastItf(), ((PAInterface) itf));
                     if (serverSideMatchingMethod == null) {
                         throw new IllegalBindingException("binding incompatibility between " +
                             itfType.getFcItfName() + " (" + itfType.getFcItfSignature() + ") and " +
@@ -428,11 +428,11 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
             //			}
 
             for (int generatedMethodCallIndex = 0; generatedMethodCallIndex < expectedMethodCallsNb; generatedMethodCallIndex++) {
-                Method matchingMethodInServerInterface = matchingMethods
-                        .get(mc.getComponentMetadata().getComponentInterfaceName())
-                        .get(((InterfaceType) ((PAInterface) delegatee.get(generatedMethodCallIndex %
-                            delegatee.size())).getFcItfType()).getFcItfSignature())
-                        .get(new SerializableMethod(mc.getReifiedMethod())).getMethod();
+                Method matchingMethodInServerInterface = matchingMethods.get(
+                        mc.getComponentMetadata().getComponentInterfaceName()).get(
+                        ((InterfaceType) ((PAInterface) delegatee.get(generatedMethodCallIndex %
+                            delegatee.size())).getFcItfType()).getFcItfSignature()).get(
+                        new SerializableMethod(mc.getReifiedMethod())).getMethod();
                 Object[] individualEffectiveArguments = new Object[matchingMethodInServerInterface
                         .getParameterTypes().length];
 
@@ -442,8 +442,8 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
                 }
 
                 // no need for a "component" method call
-                result.add(MethodCall.getMethodCall(matchingMethodInServerInterface,
-                        mc.getGenericTypesMapping(), individualEffectiveArguments, mc.getExceptionContext()));
+                result.add(MethodCall.getMethodCall(matchingMethodInServerInterface, mc
+                        .getGenericTypesMapping(), individualEffectiveArguments, mc.getExceptionContext()));
                 //                      generatedMethodCallIndex % delegatee.size()); // previous workaround deemed unecessary with new initialization of result group
                 // default is to do some round robin when nbGeneratedMethodCalls > nbReceivers
             }
