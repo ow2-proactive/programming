@@ -49,7 +49,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.management.Notification;
 import javax.management.NotificationListener;
 
-import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.control.MonitorController;
 import org.etsi.uri.gcm.api.type.GCMInterfaceType;
 import org.etsi.uri.gcm.util.GCM;
@@ -71,8 +70,6 @@ import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.jmx.notification.RequestNotificationData;
 import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -82,8 +79,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAMonitorControllerImpl extends AbstractPAController implements MonitorController,
         NotificationListener {
-    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
-
     private transient JMXNotificationManager jmxNotificationManager;
 
     private boolean started;
@@ -180,14 +175,16 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
                                 parametersTypes);
                         keysList.put(m.getName(), key);
                         if (subcomponentMonitors.isEmpty()) {
-                            statistics.put(key, new MethodStatisticsPrimitiveImpl(itf.getFcItfName(), m
-                                    .getName(), parametersTypes));
+                            statistics.put(key,
+                                    new MethodStatisticsPrimitiveImpl(itf.getFcItfName(), m.getName(),
+                                        parametersTypes));
                         } else {
-                            statistics.put(key, new MethodStatisticsCompositeImpl(itf.getFcItfName(), m
-                                    .getName(), parametersTypes, subcomponentMonitors));
+                            statistics.put(key,
+                                    new MethodStatisticsCompositeImpl(itf.getFcItfName(), m.getName(),
+                                        parametersTypes, subcomponentMonitors));
                         }
-                        logger.debug(m.getName() + " (server) added to monitoring on component " + name +
-                            "!!!");
+                        controllerLogger.debug(m.getName() + " (server) added to monitoring on component " +
+                            name + "!!!");
                     }
                 }
             } catch (ClassNotFoundException e) {
@@ -222,9 +219,9 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
         if (!started) {
             initMethodStatistics();
             try {
-                jmxNotificationManager.subscribe(FactoryName.createActiveObjectName(PAActiveObject
-                        .getBodyOnThis().getID()), this, FactoryName.getCompleteUrl(ProActiveRuntimeImpl
-                        .getProActiveRuntime().getURL()));
+                jmxNotificationManager.subscribe(
+                        FactoryName.createActiveObjectName(PAActiveObject.getBodyOnThis().getID()), this,
+                        FactoryName.getCompleteUrl(ProActiveRuntimeImpl.getProActiveRuntime().getURL()));
             } catch (IOException e) {
                 throw new ProActiveRuntimeException("JMX subscribtion for the MonitorController has failed",
                     e);
@@ -239,8 +236,8 @@ public class PAMonitorControllerImpl extends AbstractPAController implements Mon
     @Override
     public void stopGCMMonitoring() {
         if (started) {
-            jmxNotificationManager.unsubscribe(FactoryName.createActiveObjectName(PAActiveObject
-                    .getBodyOnThis().getID()), this);
+            jmxNotificationManager.unsubscribe(
+                    FactoryName.createActiveObjectName(PAActiveObject.getBodyOnThis().getID()), this);
             started = false;
         }
     }

@@ -46,7 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.type.GCMInterfaceType;
 import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
@@ -76,8 +75,6 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.Proxy;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.util.SerializableMethod;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -87,8 +84,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceController implements
         PAMulticastController, Serializable, ControllerStateDuplication {
-    private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
-    private static Logger multicastLogger = ProActiveLogger.getLogger(Loggers.COMPONENTS_MULTICAST);
     private Map<String, PAInterface> multicastItfs = new HashMap<String, PAInterface>();
     private Map<String, Proxy> clientSideProxies = new HashMap<String, Proxy>();
     // Mapping between methods of client side and methods of server side
@@ -122,8 +117,8 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
             PAGCMInterfaceType type = (PAGCMInterfaceType) itfTypes[i];
             if (type.isGCMMulticastItf()) {
                 try {
-                    addClientSideProxy(type.getFcItfName(), (PAInterface) owner.getFcInterface(type
-                            .getFcItfName()));
+                    addClientSideProxy(type.getFcItfName(),
+                            (PAInterface) owner.getFcInterface(type.getFcItfName()));
                 } catch (NoSuchInterfaceException e) {
                     throw new ProActiveRuntimeException(e);
                 }
@@ -173,8 +168,8 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
 
                 for (Method method : clientSideItfMethods) {
                     Method serverSideMatchingMethod = searchMatchingMethod(method, serverSideItfMethods,
-                            ((GCMInterfaceType) itfType).isGCMMulticastItf(), serverSideItfType
-                                    .isGCMGathercastItf(), ((PAInterface) itf));
+                            ((GCMInterfaceType) itfType).isGCMMulticastItf(),
+                            serverSideItfType.isGCMGathercastItf(), ((PAInterface) itf));
                     if (serverSideMatchingMethod == null) {
                         throw new IllegalBindingException("binding incompatibility between " +
                             itfType.getFcItfName() + " (" + itfType.getFcItfSignature() + ") and " +
@@ -269,12 +264,12 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
             // the specific part is in the bindFc method in this class
             GCM.getBindingController(owner).bindFc(multicastItfName, serverItf);
         } catch (NoSuchInterfaceException e) {
-            logger.warn("No such interface: " + multicastItfName, e);
+            controllerLogger.warn("No such interface: " + multicastItfName, e);
         } catch (IllegalBindingException e) {
-            logger.warn("Illegal binding between " + multicastItfName + " and " +
+            controllerLogger.warn("Illegal binding between " + multicastItfName + " and " +
                 ((Interface) serverItf).getFcItfName(), e);
         } catch (IllegalLifeCycleException e) {
-            logger.warn("Illegal life cycle component for binding " + multicastItfName + " and " +
+            controllerLogger.warn("Illegal life cycle component for binding " + multicastItfName + " and " +
                 ((Interface) serverItf).getFcItfName(), e);
         }
     }
@@ -289,9 +284,10 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
             //PAInterface itf = multicastItfs.get(clientItfName);
             //Group<PAInterface> g = PAGroup.getGroup(itf);
             if (g.remove(serverItf)) {
-                logger.debug("removed connected interface from multicast interface : " + multicastItfName);
+                controllerLogger.debug("removed connected interface from multicast interface : " +
+                    multicastItfName);
             } else {
-                logger.error("cannot remove connected interface from multicast interface : " +
+                controllerLogger.error("cannot remove connected interface from multicast interface : " +
                     multicastItfName);
             }
         } else {
@@ -432,11 +428,11 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
             //			}
 
             for (int generatedMethodCallIndex = 0; generatedMethodCallIndex < expectedMethodCallsNb; generatedMethodCallIndex++) {
-                Method matchingMethodInServerInterface = matchingMethods.get(
-                        mc.getComponentMetadata().getComponentInterfaceName()).get(
-                        ((InterfaceType) ((PAInterface) delegatee.get(generatedMethodCallIndex %
-                            delegatee.size())).getFcItfType()).getFcItfSignature()).get(
-                        new SerializableMethod(mc.getReifiedMethod())).getMethod();
+                Method matchingMethodInServerInterface = matchingMethods
+                        .get(mc.getComponentMetadata().getComponentInterfaceName())
+                        .get(((InterfaceType) ((PAInterface) delegatee.get(generatedMethodCallIndex %
+                            delegatee.size())).getFcItfType()).getFcItfSignature())
+                        .get(new SerializableMethod(mc.getReifiedMethod())).getMethod();
                 Object[] individualEffectiveArguments = new Object[matchingMethodInServerInterface
                         .getParameterTypes().length];
 
@@ -446,8 +442,8 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
                 }
 
                 // no need for a "component" method call
-                result.add(MethodCall.getMethodCall(matchingMethodInServerInterface, mc
-                        .getGenericTypesMapping(), individualEffectiveArguments, mc.getExceptionContext()));
+                result.add(MethodCall.getMethodCall(matchingMethodInServerInterface,
+                        mc.getGenericTypesMapping(), individualEffectiveArguments, mc.getExceptionContext()));
                 //                      generatedMethodCallIndex % delegatee.size()); // previous workaround deemed unecessary with new initialization of result group
                 // default is to do some round robin when nbGeneratedMethodCalls > nbReceivers
             }
@@ -465,10 +461,10 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
     }
 
     protected void bindFc(String clientItfName, PAInterface serverItf) {
-        if (logger.isDebugEnabled()) {
+        if (controllerLogger.isDebugEnabled()) {
             try {
                 if (!PAGroup.isGroup(serverItf.getFcItfOwner())) {
-                    logger.debug("multicast binding : " + clientItfName + " to : " +
+                    controllerLogger.debug("multicast binding : " + clientItfName + " to : " +
                         GCM.getNameController(serverItf.getFcItfOwner()).getFcName() + "." +
                         serverItf.getFcItfName());
                 }

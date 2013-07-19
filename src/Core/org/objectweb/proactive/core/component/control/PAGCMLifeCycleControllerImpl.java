@@ -39,7 +39,6 @@ package org.objectweb.proactive.core.component.control;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.control.GCMLifeCycleController;
 import org.etsi.uri.gcm.api.type.GCMInterfaceType;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
@@ -62,8 +61,6 @@ import org.objectweb.proactive.core.component.PAInterface;
 import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -74,7 +71,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAGCMLifeCycleControllerImpl extends AbstractPAController implements PAGCMLifeCycleController,
         Serializable, ControllerStateDuplication {
-    static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     protected String fcState = LifeCycleController.STOPPED;
 
     /**
@@ -229,7 +225,7 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                                                         subComponents[j]).lookupFc(subComponentItfs[k]);
                                             } catch (NoSuchInterfaceException nsie) {
                                                 // should never happen
-                                                logger.error("Interface " + subComponentItfs[k] +
+                                                controllerLogger.error("Interface " + subComponentItfs[k] +
                                                     " in component " + subComponents[j] + " does not exist",
                                                         nsie);
                                             }
@@ -292,13 +288,13 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
 
             //getRequestQueue().start();
             fcState = LifeCycleController.STARTED;
-            if (logger.isDebugEnabled()) {
-                logger.debug("started " + GCM.getNameController(owner).getFcName());
+            if (controllerLogger.isDebugEnabled()) {
+                controllerLogger.debug("started " + GCM.getNameController(owner).getFcName());
             }
         } catch (ClassNotFoundException cnfe) {
-            logger.error("class not found : " + cnfe.getMessage(), cnfe);
+            controllerLogger.error("class not found : " + cnfe.getMessage(), cnfe);
         } catch (NoSuchInterfaceException nsie) {
-            logger.error("interface not found : " + nsie.getMessage(), nsie);
+            controllerLogger.error("interface not found : " + nsie.getMessage(), nsie);
         }
     }
 
@@ -335,13 +331,13 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
 
             //getRequestQueue().stop();
             fcState = LifeCycleController.STOPPED;
-            if (logger.isDebugEnabled()) {
-                logger.debug("stopped" + GCM.getNameController(owner).getFcName());
+            if (controllerLogger.isDebugEnabled()) {
+                controllerLogger.debug("stopped" + GCM.getNameController(owner).getFcName());
             }
         } catch (NoSuchInterfaceException nsie) {
-            logger.error("interface not found : " + nsie.getMessage());
+            controllerLogger.error("interface not found : " + nsie.getMessage());
         } catch (IllegalLifeCycleException ilce) {
-            logger.error("illegal life cycle operation : " + ilce.getMessage());
+            controllerLogger.error("illegal life cycle operation : " + ilce.getMessage());
         }
     }
 

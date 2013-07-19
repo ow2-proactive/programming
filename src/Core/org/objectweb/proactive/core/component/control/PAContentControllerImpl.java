@@ -45,7 +45,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
@@ -64,8 +63,6 @@ import org.objectweb.proactive.core.component.exceptions.ContentControllerExcept
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.group.Group;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
@@ -76,7 +73,6 @@ import org.objectweb.proactive.utils.NamedThreadFactory;
  */
 public class PAContentControllerImpl extends AbstractPAController implements PAContentController,
         Serializable, ControllerStateDuplication {
-    protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     protected List<Component> fcSubComponents;
 
     /**
@@ -191,7 +187,7 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
                         GCM.getNameController(subComponent).getFcName() + " has no super controller");
             }
         } catch (NoSuchInterfaceException e) {
-            logger
+            controllerLogger
                     .error("could not check that the subcomponent is not shared, continuing ignoring this verification ... " +
                         e);
         }
@@ -205,7 +201,7 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
                 throw new IllegalArgumentException("cannot add " +
                     GCM.getNameController(getFcItfOwner()).getFcName() + " component into itself ");
             } catch (NoSuchInterfaceException e) {
-                logger.error(e.getMessage());
+                controllerLogger.error(e.getMessage());
             }
         }
 
@@ -329,10 +325,11 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         try {
             boolean terminated = threadPool.awaitTermination(120, TimeUnit.SECONDS);
             if (!terminated) {
-                logger.error("Threadpool cannot be properly terminated: termination timeout reached");
+                controllerLogger
+                        .error("Threadpool cannot be properly terminated: termination timeout reached");
             }
         } catch (InterruptedException ie) {
-            logger.error("Threadpool cannot be properly terminated: " + ie.getMessage(), ie);
+            controllerLogger.error("Threadpool cannot be properly terminated: " + ie.getMessage(), ie);
         }
         if (!e.isEmpty()) {
             throw e;
@@ -357,10 +354,11 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
         try {
             boolean terminated = threadPool.awaitTermination(120, TimeUnit.SECONDS);
             if (!terminated) {
-                logger.error("Threadpool cannot be properly terminated: termination timeout reached");
+                controllerLogger
+                        .error("Threadpool cannot be properly terminated: termination timeout reached");
             }
         } catch (InterruptedException ie) {
-            logger.error("Threadpool cannot be properly terminated: " + ie.getMessage(), ie);
+            controllerLogger.error("Threadpool cannot be properly terminated: " + ie.getMessage(), ie);
         }
         if (!e.isEmpty()) {
             throw e;
