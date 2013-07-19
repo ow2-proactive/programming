@@ -36,19 +36,11 @@
  */
 package org.objectweb.proactive.core.remoteobject.rmi;
 
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.mop.SunMarshalInputStream;
-import org.objectweb.proactive.core.mop.SunMarshalOutputStream;
-import org.objectweb.proactive.core.remoteobject.*;
-import org.objectweb.proactive.core.rmi.RegistryHelper;
-import org.objectweb.proactive.core.util.ProActiveInet;
-import org.objectweb.proactive.core.util.URIBuilder;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -60,6 +52,27 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.mop.SunMarshalInputStream;
+import org.objectweb.proactive.core.mop.SunMarshalOutputStream;
+import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;
+import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
+import org.objectweb.proactive.core.remoteobject.NotBoundException;
+import org.objectweb.proactive.core.remoteobject.RemoteObject;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
+import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
+import org.objectweb.proactive.core.rmi.RegistryHelper;
+import org.objectweb.proactive.core.util.ProActiveInet;
+import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -244,7 +257,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             LOGGER_RO.debug(modifiedURI.toString() + " looked up successfully");
         } catch (java.rmi.NotBoundException e) {
             // there are one rmiregistry on target computer but nothing bound to this url is not bound
-            throw new ProActiveException("The url " + modifiedURI + " is not bound to any known object", e);
+            throw new NotBoundException("The url " + modifiedURI + " is not bound to any known object", e);
         } catch (RemoteException e) {
             throw new ProActiveException("Registry could not be contacted, " + modifiedURI, e);
         }

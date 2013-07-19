@@ -51,6 +51,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
+import org.objectweb.proactive.core.remoteobject.NotBoundException;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
@@ -161,7 +162,7 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
             }
             return new RemoteObjectAdapter(new AMQPFederationRemoteObject(uri));
         } catch (IOException e) {
-            throw new ProActiveException(String.format("unable to lookup object at %s", uri.toString()), e);
+            throw new NotBoundException(String.format("unable to lookup object at %s", uri.toString()), e);
         }
 
     }
