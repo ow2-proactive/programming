@@ -42,7 +42,7 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.component.representative.PAComponentRepresentativeImpl;
+import org.objectweb.proactive.core.component.identity.PAComponent;
 
 
 /**
@@ -63,7 +63,6 @@ public abstract class PAInterfaceImpl implements PAInterface, Serializable {
     }
 
     /*
-     *
      * @see org.objectweb.fractal.api.Interface#getFcItfOwner()
      */
     public Component getFcItfOwner() {
@@ -71,7 +70,6 @@ public abstract class PAInterfaceImpl implements PAInterface, Serializable {
     }
 
     /*
-     *
      * @see org.objectweb.fractal.api.Interface#getFcItfName()
      */
     public String getFcItfName() {
@@ -79,7 +77,6 @@ public abstract class PAInterfaceImpl implements PAInterface, Serializable {
     }
 
     /*
-     *
      * @see org.objectweb.fractal.api.Interface#getFcItfType()
      */
     public Type getFcItfType() {
@@ -87,7 +84,6 @@ public abstract class PAInterfaceImpl implements PAInterface, Serializable {
     }
 
     /*
-     *
      * @see org.objectweb.fractal.api.Interface#isFcInternalItf()
      */
     public boolean isFcInternalItf() {
@@ -149,8 +145,8 @@ public abstract class PAInterfaceImpl implements PAInterface, Serializable {
             boolean nameEquality = itf.getFcItfName().equals(name);
 
             // Are the two itf belong to the same component?
-            UniqueID objectID = ((PAComponentRepresentativeImpl) itf.getFcItfOwner()).getID();
-            UniqueID thisID = ((PAComponentRepresentativeImpl) owner).getID();
+            UniqueID objectID = ((PAComponent) itf.getFcItfOwner()).getID();
+            UniqueID thisID = ((PAComponent) owner).getID();
             boolean ownerEquality = objectID.equals(thisID);
 
             return nameEquality && ownerEquality;
