@@ -56,7 +56,7 @@ public class ControllerImplementation extends AbstractPAController implements Co
     //@snippet-start component_userguide_12
     protected void setControllerItfType() {
         try {
-            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType("Name of the controller",
+            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType("controllername-controller",
                     ControllerItf.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                     TypeFactory.SINGLE));
         } catch (InstantiationException e) {
