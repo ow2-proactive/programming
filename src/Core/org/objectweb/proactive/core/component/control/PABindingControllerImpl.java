@@ -70,7 +70,6 @@ import org.objectweb.proactive.core.component.gen.GatherItfAdapterProxy;
 import org.objectweb.proactive.core.component.gen.OutputInterceptorClassGenerator;
 import org.objectweb.proactive.core.component.gen.WSProxyClassGenerator;
 import org.objectweb.proactive.core.component.identity.PAComponent;
-import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
@@ -340,9 +339,9 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         }
 
         // checks binding from internal client interface of composite component to server interface of subcomponent
-        if (isComposite() && !Utils.isGCMClientItf(clientItfName, getFcItfOwner())) {
+        if (isComposite() && !Utils.isGCMClientItf(clientItfName, owner)) {
             Component sComponent = sItf.getFcItfOwner();
-            Component[] subComponents = GCM.getContentController(getFcItfOwner()).getFcSubComponents();
+            Component[] subComponents = GCM.getContentController(owner).getFcSubComponents();
             boolean isSubComponent = false;
             for (Component subComponent : subComponents) {
                 if (subComponent.equals(sComponent)) {
@@ -360,16 +359,17 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
             }
         }
 
-        // if output interceptors are defined
-        // TODO check with groups : interception is here done at the beginning
-        // of the group invocation,
-        // not for each element of the group
-        List<Interface> outputInterceptors = ((PAComponentImpl) getFcItfOwner()).getOutputInterceptors();
+        // If output interceptors may be defined (ie the component has an interceptor controller)
+        // TODO check with groups : interception is here done at the beginning of the group invocation,
+        // not for each element of the group.
+        try {
+            PAInterceptorControllerImpl interceptorController = (PAInterceptorControllerImpl) ((PAInterface) Utils
+                    .getPAInterceptorController(owner)).getFcItfImpl();
 
-        if (!outputInterceptors.isEmpty()) {
             try {
                 // replace server itf with an interface of the same type+same proxy, but with interception code
-                sItf = OutputInterceptorClassGenerator.instance().generateInterface(sItf, outputInterceptors);
+                sItf = OutputInterceptorClassGenerator.instance().generateInterface(sItf,
+                        interceptorController, clientItfName);
             } catch (InterfaceGenerationFailedException e) {
                 controllerLogger.error("could not generate output interceptor for client interface " +
                     clientItfName + " : " + e.getMessage());
@@ -380,6 +380,8 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
                 ibe.initCause(e);
                 throw ibe;
             }
+        } catch (NoSuchInterfaceException nsie) {
+            // No PAInterceptorController, nothing to do
         }
 
         // Multicast bindings are handled here

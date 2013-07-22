@@ -36,11 +36,17 @@
  */
 package functionalTests.component.interceptor;
 
-public class B implements FooItf {
+public class B implements FooItf, Foo2Itf {
     public B() {
     }
 
+    @Override
     public void foo() {
+        // nothing
+    }
+
+    @Override
+    public void foo2() {
         // nothing
     }
 }

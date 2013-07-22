@@ -55,6 +55,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.component.control.PABindingController;
 import org.objectweb.proactive.core.component.control.PAContentController;
 import org.objectweb.proactive.core.component.control.PAGCMLifeCycleController;
+import org.objectweb.proactive.core.component.control.PAInterceptorController;
 import org.objectweb.proactive.core.component.control.PAMembraneController;
 import org.objectweb.proactive.core.component.control.PAMigrationController;
 import org.objectweb.proactive.core.component.control.PAMulticastController;
@@ -218,6 +219,18 @@ public class Utils {
     public static PAMembraneController getPAMembraneController(final Component component)
             throws NoSuchInterfaceException {
         return (PAMembraneController) component.getFcInterface(Constants.MEMBRANE_CONTROLLER);
+    }
+
+    /**
+     * Returns the {@link PAInterceptorController} interface of the given component.
+     *
+     * @param component Reference on a component.
+     * @return {@link PAInterceptorController} interface of the given component.
+     * @throws NoSuchInterfaceException If there is no such interface.
+     */
+    public static PAInterceptorController getPAInterceptorController(final Component component)
+            throws NoSuchInterfaceException {
+        return (PAInterceptorController) component.getFcInterface(Constants.INTERCEPTOR_CONTROLLER);
     }
 
     /**

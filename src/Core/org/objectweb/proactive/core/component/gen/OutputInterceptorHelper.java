@@ -36,16 +36,18 @@
  */
 package org.objectweb.proactive.core.component.gen;
 
-import java.util.List;
+import org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl;
 
 
 /**
- * This interface specifies a helper method for setting the list of output interceptors.
- * (it is implemented by the generated output interceptors)
+ * This interface specifies a helper method for setting the {@link PAInterceptorControllerImpl}
+ * and the client interface name (It is implemented by the generated output interceptors).
  *
  * @author The ProActive Team
  *
  */
 public interface OutputInterceptorHelper {
-    public void setOutputInterceptors(List outputInterceptors);
+    public void setInterceptorController(PAInterceptorControllerImpl interceptorController);
+
+    public void setClientInterfaceName(String clientInterfaceName);
 }

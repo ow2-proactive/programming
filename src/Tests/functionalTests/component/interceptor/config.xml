@@ -24,20 +24,20 @@
         </controller>
         <!-- specific controllers & interceptors -->
         <controller>
+            <interface>org.objectweb.proactive.core.component.control.PAInterceptorController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl</implementation>
+        </controller>
+        <controller>
             <interface>functionalTests.component.controller.DummyController</interface>
             <implementation>functionalTests.component.controller.DummyControllerImpl</implementation>
         </controller>
-        <controller input-interceptor="true">
-            <interface>functionalTests.component.interceptor.InputInterceptor1</interface>
-            <implementation>functionalTests.component.interceptor.InputInterceptor1Impl</implementation>
+        <controller>
+            <interface>functionalTests.component.interceptor.Interceptor1</interface>
+            <implementation>functionalTests.component.interceptor.Interceptor1Impl</implementation>
         </controller>
-        <controller input-interceptor="true" output-interceptor="true">
-            <interface>functionalTests.component.interceptor.InputOutputInterceptor</interface>
-            <implementation>functionalTests.component.interceptor.InputOutputInterceptorImpl</implementation>
-        </controller>
-        <controller output-interceptor="true">
-            <interface>functionalTests.component.interceptor.OutputInterceptor1</interface>
-            <implementation>functionalTests.component.interceptor.OutputInterceptor1Impl</implementation>
+        <controller>
+            <interface>functionalTests.component.interceptor.Interceptor2</interface>
+            <implementation>functionalTests.component.interceptor.Interceptor2Impl</implementation>
         </controller>
     </controllers>
     

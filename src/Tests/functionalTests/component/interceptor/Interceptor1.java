@@ -36,14 +36,13 @@
  */
 package functionalTests.component.interceptor;
 
-public interface InputOutputInterceptor extends InputInterceptor1, OutputInterceptor1 {
-    public static final String INPUT_OUTPUT_INTERCEPTOR_NAME = "input-output-interceptor-controller";
-    public static final String AFTER_INPUT_INTERCEPTION = " - after-input-interception-" +
-        INPUT_OUTPUT_INTERCEPTOR_NAME + " - ";
-    public static final String BEFORE_INPUT_INTERCEPTION = " - before-input-interception-" +
-        INPUT_OUTPUT_INTERCEPTOR_NAME + " - ";
-    public static final String AFTER_OUTPUT_INTERCEPTION = " - after-output-interception-" +
-        INPUT_OUTPUT_INTERCEPTOR_NAME + " - ";
-    public static final String BEFORE_OUTPUT_INTERCEPTION = " - before-output-interception-" +
-        INPUT_OUTPUT_INTERCEPTOR_NAME + " - ";
+import org.objectweb.proactive.core.component.interception.Interceptor;
+
+import functionalTests.component.controller.DummyController;
+
+
+public interface Interceptor1 extends DummyController, Interceptor {
+    public static final String INTERCEPTOR1_NAME = "interceptor1-controller";
+    public static final String BEFORE_INTERCEPTION = " - before-interception-" + INTERCEPTOR1_NAME + " - ";
+    public static final String AFTER_INTERCEPTION = " - after-interception-" + INTERCEPTOR1_NAME + " - ";
 }

@@ -38,9 +38,7 @@ package org.objectweb.proactive.core.component.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -64,8 +62,6 @@ import org.xml.sax.SAXException;
 public class ComponentConfigurationHandler extends AbstractUnmarshallerDecorator implements
         ComponentConfigurationConstants {
     Map<String, String> controllers = new HashMap<String, String>();
-    List<String> inputInterceptors = new ArrayList<String>();
-    List<String> outputInterceptors = new ArrayList<String>();
     public static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 
     //private ComponentsDescriptor componentsDescriptor;
@@ -74,14 +70,6 @@ public class ComponentConfigurationHandler extends AbstractUnmarshallerDecorator
     public ComponentConfigurationHandler() {
         //super(true);
         addHandler(CONTROLLERS_ELEMENT, new ControllersHandler());
-    }
-
-    public List<String> getInputInterceptors() {
-        return inputInterceptors;
-    }
-
-    public List<String> getOutputInterceptors() {
-        return outputInterceptors;
     }
 
     public Map<String, String> getControllers() {
@@ -190,8 +178,6 @@ public class ComponentConfigurationHandler extends AbstractUnmarshallerDecorator
     public class ControllerHandler extends AbstractUnmarshallerDecorator {
         String interfaceSignature = null;
         String implementationSignature = null;
-        boolean inputInterception = false;
-        boolean outputInterception = false;
 
         public ControllerHandler() {
             UnmarshallerHandler singleValueHandler = new SingleValueUnmarshaller();
@@ -200,12 +186,6 @@ public class ComponentConfigurationHandler extends AbstractUnmarshallerDecorator
         }
 
         public void startContextElement(String name, Attributes attributes) throws SAXException {
-            if ("true".equals(attributes.getValue(INPUT_INTERCEPTOR_ATTRIBUTE))) {
-                inputInterception = true;
-            }
-            if ("true".equals(attributes.getValue(OUTPUT_INTERCEPTOR_ATTRIBUTE))) {
-                outputInterception = true;
-            }
         }
 
         @Override
@@ -221,16 +201,8 @@ public class ComponentConfigurationHandler extends AbstractUnmarshallerDecorator
 
         public Object getResultObject() throws SAXException {
             controllers.put(interfaceSignature, implementationSignature);
-            if (inputInterception) {
-                inputInterceptors.add(implementationSignature);
-            }
-            if (outputInterception) {
-                outputInterceptors.add(implementationSignature);
-            }
             interfaceSignature = null;
             implementationSignature = null;
-            inputInterception = false;
-            outputInterception = false;
             return null;
         }
     }

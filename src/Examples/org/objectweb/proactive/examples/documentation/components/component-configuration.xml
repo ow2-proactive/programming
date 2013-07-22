@@ -15,25 +15,11 @@
         <!-- other controllers -->
         <!-- @snippet-break component_userguide_10 -->
         <!-- @snippet-start component_userguide_13 -->
-        <controller input-interceptor="true" output-interceptor="true">
-            <interface>
-                InterceptorControllerInterface
-            </interface>
-            <implementation>
-                ControllerImplementation
-            </implementation>
+        <controller>
+            <interface>org.objectweb.proactive.core.component.control.PAInterceptorController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl</implementation>
         </controller>
         <!-- @snippet-end component_userguide_13 -->
-        <!-- @snippet-start component_userguide_15 -->
-        <controller input-interceptor="true">
-            <interface>
-                org.objectweb.proactive.examples.documentation.components.ControllerItf
-            </interface>
-            <implementation>
-                org.objectweb.proactive.examples.documentation.components.MyInputInterceptor
-            </implementation>
-        </controller>
-        <!-- @snippet-end component_userguide_15 -->
         <!-- @snippet-resume component_userguide_10 -->
     </controllers>
 </componentConfiguration>

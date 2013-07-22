@@ -1814,19 +1814,15 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_10.snip"/></textobject></programlisting>
 
-				<para>
-					Unless these controllers are also interceptors
-					(see later on), the controllers do not have to be
-					ordered.
-				</para>
+				<para>The controllers do not have to be ordered.</para>
 
 				<para>
 					A default configuration file is provided, it
 					defines the default controllers available for
 					every ProActive component (super, binding, content,
-					naming, lifecycle, multicast, gathercast and monitor
-					controllers, the priority controller is not
-					available by default).
+					naming, lifecycle, multicast, gathercast, monitor
+					and priority controllers, the interceptor controller
+					is not available by default).
 				</para>
 
 				<para>
@@ -1901,6 +1897,12 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							component configuration file.
 						</para>
 					</listitem>
+					<listitem>
+						<para>
+							The controller interface name must end by
+							"-controller".
+						</para>
+					</listitem>
 				</orderedlist>
 
 			</section>
@@ -1909,96 +1911,76 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					Controllers can also act as interceptors: they can
-					intercept incoming invocations and outgoing
-					invocations. For each invocation, pre and post
-					processings are defined in the methods
-					<literal>beforeInputMethodInvocation</literal>,
-					<literal>afterInputMethodInvocation</literal>,
-					<literal>beforeOutputMethodInvocation</literal>, and
-					<literal>afterOutputMethodInvocation</literal>. These
-					methods are defined in the interfaces
-					<literal>InputInterceptor</literal> and
-					<literal>OutputInterceptor</literal> and take a
-					<literal>MethodCall</literal> object as an argument.
-					<literal>MethodCall</literal> objects are reified
-					representations of method invocations and they contain
-					<literal>Method</literal> objects as well as the
-					parameters of the invocation. The methods
-					<literal>afterInputMethodInvocation</literal> and
-					<literal>afterOutputMethodInvocation</literal> also
-					take as argument the return value of the method
-					invocation. If the method returns <literal>void</literal>,
-					then <literal>null</literal> is given as parameter. If
-					the method returned a primitive type, then it is wrapped
-					inside the appropriate wrapper object.
+					intercept incoming invocations and/or outgoing
+					invocations. To do so, controllers must implement
+					the <literal>Interceptor</literal> interface. For
+					each invocation, pre and post processings are defined
+					in the methods
+					<literal>beforeMethodInvocation</literal> and
+					<literal>afterMethodInvocation</literal>. These
+					methods are defined in the
+					<literal>Interceptor</literal> interface and take the
+					name of the interface on which the interception has
+					been made and a <literal>MethodCall</literal> object
+					as arguments. <literal>MethodCall</literal> objects
+					are reified representations of method invocations
+					and they contain <literal>Method</literal> objects as
+					well as the parameters of the invocation. The
+					<literal>afterMethodInvocation</literal> method also
+					takes as argument the return value of the method
+					invocation. If the method returns
+					<literal>void</literal>, then <literal>null</literal>
+					is given as parameter. If the method returns a
+					primitive type, then it is wrapped inside the
+					appropriate wrapper object.
 				</para>
 
 				<para>
-					Interceptors are configured in the controllers XML
-					configuration file, by simply adding
-					input-interceptor="true" or/and
-					output-interceptor="true" as attributes of the
-					controller element in the definition of a controller
-					(specify of course if the interceptor is an input
-					or/and output interceptor). For example a controller
-					that would be an input interceptor and an output
-					interceptor would be defined as follows:
+					Interceptors are configured with the interceptor
+					controller. This controller is not included in the
+					default controllers configuration file so it must be
+					explicitely added:
 				</para>
 
 				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_13.snip"/></textobject></programlisting>
 
+				<para>
+					The management of the interceptors is then done
+					through the methods of the interceptor controller
+					(where <literal>interceptorID</literal> is the
+					controller interface name of a controller
+					that implements the <literal>Interceptor</literal>
+					interface):
+				</para>
+
+				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_15.snip"/></textobject></programlisting>
+
 				<para>Interceptors can be composed in a sequentially manner.</para>
 
 				<para>
-					For input interceptors, the
-					<literal>beforeInputMethodInvocation</literal> method
-					is called sequentially for each controller in the order
-					they are defined in the controllers configuration file.
-					The <literal>afterInputMethodInvocation</literal> method
-					is called sequentially for each controller in the reverse
-					order they are defined in the controller configuration
-					file.
+					The <literal>beforeMethodInvocation</literal>
+					method is called sequentially for each controller
+					in the order they have been set with the interceptor
+					controller.
+					The <literal>afterMethodInvocation</literal> method
+					is called sequentially for each controller in the
+					reverse order they have been set with the interceptor
+					controller.
 				</para>
 
 				<para>
-					In the controller configuration file, if the list of
-					input interceptors is in this order (the order in the
-					controller configuration file is from top to bottom):
+					For instance, if 2 interceptors are attached to an interface
+					in this order:
 				</para>
 
-				<screen>InputInterceptor1 InputInterceptor2</screen>
+				<screen>Interceptor1 and then Interceptor2</screen>
 
 				<para>
-					This means that an invocation on a server interface will
-					follow this path:
+					This means that an invocation on the interface will follow
+					this path:
 				</para>
 
-				<programlisting language="java">&mdash;&gt; caller &mdash;&gt; InputInterceptor1.beforeInputMethodInvocation &mdash;&gt; InputInterceptor2.beforeInputMethodInvocation &mdash;&gt; callee.invocation &mdash;&gt; InputInterceptor2.afterInputMethodInvocation &mdash;&gt; InputInterceptor1.afterInputMethodInvocation</programlisting>
-
-				<para>
-					For output interceptors, the
-					<literal>beforeOutputMethodInvocation</literal> method is
-					called sequentially for each controller in the order they
-					are defined in the controllers configuration file.
-					The <literal>afterOutputMethodInvocationmethodM</literal>
-					is called sequentially for each controller in the reverse
-					order they are defined in the controller configuration file.
-				</para>
-
-				<para>
-					In the controller configuration file, if the list of
-					input interceptors is in this order (the order in the
-					controller configuration file is from top to bottom):
-				</para>
-
-				<screen>OutputInterceptor1 OutputInterceptor2</screen>
-
-				<para>
-					This means that an invocation on a server interface will
-					follow this path:
-				</para>
-
-				<programlisting language="java">&mdash;&gt; currentComponent &mdash;&gt; OutputInterceptor1.beforeOutputMethodInvocation &mdash;&gt; OutputInterceptor2.beforeOutputMethodInvocation &mdash;&gt; callee.invocation &mdash;&gt; OutputInterceptor2.afterOutputMethodInvocation &mdash;&gt; OutputInterceptor1.afterOutputMethodInvocation</programlisting>
+				<programlisting language="java">&mdash;&gt; caller &mdash;&gt; Interceptor1.beforeMethodInvocation &mdash;&gt; Interceptor2.beforeMethodInvocation &mdash;&gt; callee.invocation &mdash;&gt; Interceptor2.afterMethodInvocation &mdash;&gt; Interceptor1.afterMethodInvocation</programlisting>
 
 			</section>
 
@@ -2011,21 +1993,23 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				</para>
 
 				<para>
-					Input interceptors and output interceptors has to
-					implement respectively the interfaces
-					<literal>InputInterceptor</literal> and
-					<literal>OutputInterceptor</literal>, which declare
+					Interceptors have to implement the
+					<literal>Interceptor</literal> interface, which declares
 					interception methods (pre/post interception) that have
 					to be implemented.
 				</para>
 
-				<para>Here is a simple example of an input interceptor:</para>
+				<para>Here is a simple example of an interceptor:</para>
 
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_userguide_14.snip"/></textobject></programlisting>
 
-				<para>The configuration file would state:</para>
+				<para>
+					Then for instance such an interceptor could be attached
+					to an interface named "itf" by simply calling the
+					<literal>addInterceptorOnInterface</literal> method
+					of the interceptor controller:</para>
 
-				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_15.snip"/></textobject></programlisting>
+				<programlisting language="java">Utils.getPAInterceptorController(component).addInterceptorOnInterface("itf", "myinterceptor-controller");</programlisting>
 
 			</section>
 

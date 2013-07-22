@@ -57,6 +57,7 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.core.component.ItfStubObject;
 import org.objectweb.proactive.core.component.PAInterface;
 import org.objectweb.proactive.core.component.PAInterfaceImpl;
+import org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
@@ -71,8 +72,11 @@ import org.objectweb.proactive.core.util.ClassDataCache;
  * @author The ProActive Team
  */
 public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGenerator {
-    List<?> outputInterceptors;
     private static OutputInterceptorClassGenerator instance;
+
+    private PAInterceptorControllerImpl interceptorController;
+
+    private String clientInterfaceName;
 
     public static OutputInterceptorClassGenerator instance() {
         if (instance == null) {
@@ -82,12 +86,16 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
         }
     }
 
-    public PAInterface generateInterface(PAInterface representative, List<?> outputInterceptors)
+    public PAInterface generateInterface(PAInterface representative,
+            PAInterceptorControllerImpl interceptorController, String clientInterfaceName)
             throws InterfaceGenerationFailedException {
-        this.outputInterceptors = outputInterceptors;
+        this.interceptorController = interceptorController;
+        this.clientInterfaceName = clientInterfaceName;
         PAInterface generated = generateInterface(representative.getFcItfName(), representative
                 .getFcItfOwner(), (PAGCMInterfaceType) representative.getFcItfType(), false, true);
+
         ((StubObject) generated).setProxy(((StubObject) representative).getProxy());
+
         return generated;
     }
 
@@ -152,15 +160,21 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
                 genericTypesMappingField.setModifiers(Modifier.STATIC);
                 generatedCtClass.addField(genericTypesMappingField);
 
-                // add outputInterceptorsField
-                CtField outputInterceptorsField = new CtField(pool.get(List.class.getName()),
-                    "outputInterceptors", generatedCtClass);
-                generatedCtClass.addField(outputInterceptorsField, "new java.util.ArrayList();");
-                CtMethod outputInterceptorsSetter = CtNewMethod.setter("setOutputInterceptors",
-                        outputInterceptorsField);
-                generatedCtClass.addMethod(outputInterceptorsSetter);
+                // add interceptorControllerField and clientInterfaceNameField
                 generatedCtClass.addInterface(pool.get(OutputInterceptorHelper.class.getName()));
-                //                methodsListField.setModifiers(Modifier.STATIC);
+                CtField interceptorControllerField = new CtField(pool.get(PAInterceptorControllerImpl.class
+                        .getName()), "interceptorController", generatedCtClass);
+                generatedCtClass.addField(interceptorControllerField, "null;");
+                CtMethod interceptorControllerSetter = CtNewMethod.setter("setInterceptorController",
+                        interceptorControllerField);
+                generatedCtClass.addMethod(interceptorControllerSetter);
+                CtField clientInterfaceNameField = new CtField(pool.get(String.class.getName()),
+                    "clientInterfaceName", generatedCtClass);
+                generatedCtClass.addField(clientInterfaceNameField, "null;");
+                CtMethod clientInterfaceNameSetter = CtNewMethod.setter("setClientInterfaceName",
+                        clientInterfaceNameField);
+                generatedCtClass.addMethod(clientInterfaceNameSetter);
+
                 // list all methods to implement
                 Map<String, CtMethod> methodsToImplement = new HashMap<String, CtMethod>();
                 List<String> classesIndexer = new Vector<String>();
@@ -241,7 +255,8 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
             reference.setFcType(interfaceType);
             reference.setFcIsInternal(isInternal);
 
-            ((OutputInterceptorHelper) reference).setOutputInterceptors(outputInterceptors);
+            ((OutputInterceptorHelper) reference).setInterceptorController(this.interceptorController);
+            ((OutputInterceptorHelper) reference).setClientInterfaceName(this.clientInterfaceName);
 
             return reference;
         } catch (Exception e) {
@@ -269,9 +284,10 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
                 "(java.lang.reflect.Method)overridenMethods[" + i + "]" + ", parameters, null, interfaceName, senderItfID);\n");
 
             // delegate to outputinterceptors
+            body += "java.util.List outputInterceptors = this.interceptorController.getInterceptors(this.clientInterfaceName);\n";
             body += "java.util.ListIterator it = outputInterceptors.listIterator();\n";
             body += "while (it.hasNext()) {\n";
-            body += "  ((org.objectweb.proactive.core.component.interception.OutputInterceptor) it.next()).beforeOutputMethodInvocation(methodCall);\n";
+            body += "  ((org.objectweb.proactive.core.component.interception.Interceptor) it.next()).beforeMethodInvocation(this.clientInterfaceName, methodCall);\n";
             body += "}\n";
 
             CtClass returnType = reifiedMethods[i].getReturnType();
@@ -280,7 +296,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
             }
             body += ("myProxy.reify(methodCall);\n");
 
-            //              delegate to outputinterceptors
+            //  delegate to outputinterceptors
             body += "it = outputInterceptors.listIterator();\n";
             // use output interceptors in reverse order after invocation
             // go to the end of the list first
@@ -288,7 +304,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
             body += "it.next();\n";
             body += "}\n";
             body += "while (it.hasPrevious()) {\n";
-            body += "  ((org.objectweb.proactive.core.component.interception.OutputInterceptor) it.previous()).afterOutputMethodInvocation(methodCall, ";
+            body += "  ((org.objectweb.proactive.core.component.interception.Interceptor) it.previous()).afterMethodInvocation(this.clientInterfaceName, methodCall, ";
             if (returnType != CtClass.voidType) {
                 body += "result);\n";
             } else {
@@ -350,8 +366,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
             }
             body += ";";
             body += "\n}";
-            //                                 System.out.println("method : " + reifiedMethods[i].getName() +
-            //                                     " : \n" + body);
+
             CtMethod methodToGenerate = CtNewMethod.make(reifiedMethods[i].getReturnType(), reifiedMethods[i]
                     .getName(), reifiedMethods[i].getParameterTypes(), reifiedMethods[i].getExceptionTypes(),
                     body, generatedClass);

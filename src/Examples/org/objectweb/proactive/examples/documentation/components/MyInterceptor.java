@@ -34,62 +34,49 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.interceptor;
+//@snippet-start component_userguide_14
+package org.objectweb.proactive.examples.documentation.components;
 
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.control.AbstractPAController;
-import org.objectweb.proactive.core.component.interception.OutputInterceptor;
+import org.objectweb.proactive.core.component.interception.Interceptor;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
 
-import functionalTests.component.controller.DummyController;
 
+public class MyInterceptor extends AbstractPAController implements Interceptor, ControllerItf {
 
-public class OutputInterceptor1Impl extends AbstractPAController implements OutputInterceptor1,
-        OutputInterceptor {
-    public OutputInterceptor1Impl(Component owner) {
+    public MyInterceptor(Component owner) {
         super(owner);
     }
 
-    @Override
     protected void setControllerItfType() {
         try {
-            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(OUTPUT_INTERCEPTOR_1_NAME,
-                    OutputInterceptor1.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType("myinterceptor-controller",
+                    ControllerItf.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                     TypeFactory.SINGLE));
         } catch (InstantiationException e) {
-            throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
+            throw new ProActiveRuntimeException("cannot create controller" + this.getClass().getName());
         }
     }
 
-    public void setDummyValue(String value) {
-        try {
-            ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
-                    .setDummyValue(value);
-        } catch (NoSuchInterfaceException e) {
-            e.printStackTrace();
-        }
+    // foo is defined in the MyController interface
+    public void foo() {
+        // foo implementation
     }
 
-    public String getDummyValue() {
-        try {
-            return ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
-                    .getDummyValue();
-        } catch (NoSuchInterfaceException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
+        System.out.println("pre processing an intercepted a functional invocation");
+        // interception code
     }
 
-    public void beforeOutputMethodInvocation(MethodCall methodCall) {
-        setDummyValue(getDummyValue() + OutputInterceptor1.BEFORE_INTERCEPTION);
-    }
-
-    public void afterOutputMethodInvocation(MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + OutputInterceptor1.AFTER_INTERCEPTION);
+    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
+        System.out.println("post processing an intercepted a functional invocation");
+        // interception code
     }
 }
+//@snippet-end component_userguide_14
+

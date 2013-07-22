@@ -36,11 +36,17 @@
  */
 package org.objectweb.proactive.core.component.request;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.body.ComponentBody;
+import org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl;
+import org.objectweb.proactive.core.component.interception.Interceptor;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -71,16 +77,24 @@ public class SynchronousComponentRequestReceiver extends RequestReceiverImpl {
         if (r instanceof ComponentRequest) {
             if (!((ComponentRequest) r).isControllerRequest()) {
                 if (CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue()) {
-                    if (!((ComponentBody) bodyReceiver).getPAComponentImpl().getInputInterceptors().isEmpty() ||
-                        !((ComponentBody) bodyReceiver).getPAComponentImpl().getOutputInterceptors()
-                                .isEmpty()) {
-                        if (logger.isDebugEnabled()) {
-                            logger
-                                    .debug("shortcut is stopped in this component, because functional invocations are intercepted");
-                        }
 
-                        // no shortcut if there is an interception
-                        return super.receiveRequest(r, bodyReceiver);
+                    try {
+                        List<Interceptor> interceptors = ((PAInterceptorControllerImpl) Utils
+                                .getPAInterceptorController(((ComponentBody) bodyReceiver)
+                                        .getPAComponentImpl())).getInterceptors(r.getMethodCall()
+                                .getComponentMetadata().getComponentInterfaceName());
+
+                        if (!interceptors.isEmpty()) {
+                            if (logger.isDebugEnabled()) {
+                                logger
+                                        .debug("shortcut is stopped in this component, because functional invocations are intercepted");
+                            }
+
+                            // no shortcut if there is an interception
+                            return super.receiveRequest(r, bodyReceiver);
+                        }
+                    } catch (NoSuchInterfaceException e) {
+                        // No PAInterceptorController, shorcut can be done
                     }
 
                     ((ComponentRequest) r).shortcutNotification(r.getSender(), bodyReceiver

@@ -48,26 +48,23 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import functionalTests.component.controller.DummyController;
 
 
-/**
- * @author The ProActive Team
- *
- */
-public class InputInterceptor1Impl extends AbstractPAController implements InputInterceptor1 {
-    public InputInterceptor1Impl(Component owner) {
+public class Interceptor1Impl extends AbstractPAController implements Interceptor1 {
+    public Interceptor1Impl(Component owner) {
         super(owner);
     }
 
     @Override
     protected void setControllerItfType() {
         try {
-            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(
-                    InputInterceptor1.INPUT_INTERCEPTOR1_NAME, InputInterceptor1.class.getName(),
-                    TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE));
+            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(Interceptor1.INTERCEPTOR1_NAME,
+                    Interceptor1.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                    TypeFactory.SINGLE));
         } catch (InstantiationException e) {
             throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
         }
     }
 
+    @Override
     public void setDummyValue(String value) {
         try {
             ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
@@ -77,6 +74,7 @@ public class InputInterceptor1Impl extends AbstractPAController implements Input
         }
     }
 
+    @Override
     public String getDummyValue() {
         try {
             return ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
@@ -87,11 +85,13 @@ public class InputInterceptor1Impl extends AbstractPAController implements Input
         }
     }
 
-    public void beforeInputMethodInvocation(MethodCall methodCall) {
-        setDummyValue(getDummyValue() + InputInterceptor1.BEFORE_INTERCEPTION);
+    @Override
+    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
+        setDummyValue(getDummyValue() + Interceptor1.BEFORE_INTERCEPTION);
     }
 
-    public void afterInputMethodInvocation(MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + InputInterceptor1.AFTER_INTERCEPTION);
+    @Override
+    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
+        setDummyValue(getDummyValue() + Interceptor1.AFTER_INTERCEPTION);
     }
 }

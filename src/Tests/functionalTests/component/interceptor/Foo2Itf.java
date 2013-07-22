@@ -36,15 +36,9 @@
  */
 package functionalTests.component.interceptor;
 
-import org.objectweb.proactive.core.component.interception.OutputInterceptor;
+public interface Foo2Itf {
+    public static final String CLIENT_ITF_NAME = "foo2-client";
+    public static final String SERVER_ITF_NAME = "foo2-server";
 
-import functionalTests.component.controller.DummyController;
-
-
-public interface OutputInterceptor1 extends OutputInterceptor, DummyController {
-    public static final String OUTPUT_INTERCEPTOR_1_NAME = "output-interceptor-1-controller";
-    public static final String AFTER_INTERCEPTION = " - after-interception-" + OUTPUT_INTERCEPTOR_1_NAME +
-        " - ";
-    public static final String BEFORE_INTERCEPTION = " - before-interception-" + OUTPUT_INTERCEPTOR_1_NAME +
-        " - ";
+    public void foo2();
 }

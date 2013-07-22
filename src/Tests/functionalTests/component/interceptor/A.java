@@ -42,38 +42,52 @@ import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 
 
-public class A implements FooItf, BindingController {
-    FooItf b;
+public class A implements FooItf, Foo2Itf, BindingController {
+    private FooItf b;
+    private Foo2Itf b2;
 
     public A() {
     }
 
+    @Override
     public void foo() {
-        b.foo();
+        this.b.foo();
     }
 
+    @Override
+    public void foo2() {
+        this.b2.foo2();
+    }
+
+    @Override
     public void bindFc(String clientItfName, Object serverItf) throws NoSuchInterfaceException,
             IllegalBindingException, IllegalLifeCycleException {
         if (clientItfName.equals(FooItf.CLIENT_ITF_NAME)) {
-            b = (FooItf) serverItf;
-            //logger.debug("MotorImpl : added binding on a wheel");
+            this.b = (FooItf) serverItf;
+        } else if (clientItfName.equals(Foo2Itf.CLIENT_ITF_NAME)) {
+            this.b2 = (Foo2Itf) serverItf;
         } else {
             throw new IllegalBindingException(
                 "no such binding is possible : client interface name does not match");
         }
     }
 
+    @Override
     public String[] listFc() {
         return null;
     }
 
+    @Override
     public Object lookupFc(String clientItfName) throws NoSuchInterfaceException {
-        if ("foo-client".equals(clientItfName)) {
-            return b;
+        if (FooItf.CLIENT_ITF_NAME.equals(clientItfName)) {
+            return this.b;
+        } else if (Foo2Itf.CLIENT_ITF_NAME.equals(clientItfName)) {
+            return this.b2;
         }
         throw new NoSuchInterfaceException(clientItfName);
     }
 
+    @Override
     public void unbindFc(String clientItfName) throws NoSuchInterfaceException, IllegalBindingException,
             IllegalLifeCycleException {
     }

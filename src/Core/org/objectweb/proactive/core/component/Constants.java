@@ -59,6 +59,7 @@ public interface Constants {
     public final static String CONTROLLER_STATE_DUPLICATION = "controller-state-duplication-controller";
     public final static String GATHERCAST_CONTROLLER = "gathercast-controller";
     public final static String HOST_SETTER_CONTROLLER = "host-setter-controller";
+    public final static String INTERCEPTOR_CONTROLLER = "interceptor-controller";
     public final static String LIFECYCLE_CONTROLLER = "lifecycle-controller";
     public final static String MEMBRANE_CONTROLLER = "membrane-controller";
     public final static String MIGRATION_CONTROLLER = "migration-controller";
