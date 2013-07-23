@@ -59,7 +59,7 @@ import org.objectweb.proactive.core.node.NodeFactory;
  */
 public class PAMigrationControllerImpl extends AbstractPAController implements PAMigrationController {
     /**
-     * Creates a {@link PAMembraneControllerImpl}.
+     * Creates a {@link PAMigrationControllerImpl}.
      * 
      * @param owner Component owning the controller.
      */
