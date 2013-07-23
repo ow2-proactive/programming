@@ -62,7 +62,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * to be extendible (private fields and classes). So this one, implements directly Compiler.
  * 
  * 
- * @author cruz
+ * @author The ProActive Team
  *
  */
 public class PAComponentCompiler implements BindingController, Compiler {
