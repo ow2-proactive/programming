@@ -40,6 +40,7 @@ import java.util.Map;
 
 import org.objectweb.fractal.adl.ADLErrors;
 import org.objectweb.fractal.adl.ADLException;
+import org.objectweb.fractal.adl.BasicFactory;
 import org.objectweb.fractal.adl.Compiler;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Factory;
@@ -165,46 +166,11 @@ public class DebugFactory implements BindingController, Factory {
     // Suppress unchecked warning to avoid to change Factory interface
     @SuppressWarnings("unchecked")
     public Object newComponent(final String name, final Map context) throws ADLException {
-
-        //  DEBUG
-        if (name.contains("cruz")) {
-            System.out.println("=====================================================================");
-            System.out.println("[Factory] Loading file: " + name);
-            System.out.println("---------------------------------------------------------------------");
-        }
-        //--DEBUG
         final Definition d = loader.load(name, context);
-
-        //  DEBUG
-        if (name.contains("cruz")) {
-            try {
-                final java.io.PrintWriter pw = new java.io.PrintWriter(System.err, true);
-                pw.println("---------------------------------------------------------------------");
-                pw.println("[After LOAD phase] AST obtained");
-                new org.objectweb.fractal.adl.xml.XMLWriter(pw).write(d);
-                pw.flush();
-            } catch (final java.io.IOException e) {
-            }
-            System.err.println();
-            System.err.println("---------------------------------------------------------------------");
-        }
-        //--DEBUG
 
         final TaskMap m = new FractalADLTaskMap();
         compiler.compile(d, m, context);
         final Task[] tasks = m.getTasks();
-
-        //  DEBUG
-        if (name.contains("cruz")) {
-            System.err.println();
-            System.err.println("---------------------------------------------------------------------");
-            System.err.println("[After COMPILE phase] List of tasks:");
-            final Task[] ts = m.getTasks();
-            for (int i = 0; i < ts.length; ++i) {
-                System.err.println(ts[i]);
-            }
-        }
-        //--DEBUG
 
         try {
             System.err.println();
