@@ -98,7 +98,6 @@ public class Launcher {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static Object createComponent(String[] pargs) throws Exception {
         if (pargs[0].equals("-java")) {
             Factory f = FactoryFactory.getFactory(FactoryFactory.JAVA_BACKEND);

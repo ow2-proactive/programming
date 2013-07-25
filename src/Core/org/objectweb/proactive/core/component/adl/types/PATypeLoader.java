@@ -39,9 +39,11 @@ package org.objectweb.proactive.core.component.adl.types;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.api.type.GCMInterfaceType;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
+import org.objectweb.fractal.adl.Loader;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.implementations.Controller;
@@ -56,10 +58,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * A {@link org.objectweb.fractal.adl.Loader} to check {@link GCMTypeInterface}
- * nodes in definitions. This loader checks that the Java interfaces specified
- * in these nodes exist.<br/><br/>
- * 
+ * A {@link Loader} to check {@link GCMInterfaceType} nodes in definitions. This
+ * loader checks that the Java interfaces specified in these nodes exist.
+ * <br/><br/>
  * The {@link PATypeLoader} checks all the &lt;interface&gt; nodes and check
  * that the Java interfaces specified exist, including interfaces defined inside
  * &lt;controller&gt; nodes. 

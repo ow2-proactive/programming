@@ -74,7 +74,7 @@ public interface PAMulticastController extends MulticastController {
      * Performs a binding between a multicast client interface and a server
      * interface
      *
-     * @param clientItfName
+     * @param multicastItfName
      *            name of a multicast client interface
      *
      * @param serverItf

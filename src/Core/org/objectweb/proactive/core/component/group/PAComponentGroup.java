@@ -119,8 +119,6 @@ public class PAComponentGroup {
      * @param componentType parameters of this component
      * @param controllerDesc TODO
      * @return a stub/proxy
-     * @throws ClassNotFoundException
-     * @throws java.lang.InstantiationException
      */
     public static PAComponentRepresentative newComponentRepresentativeGroup(ComponentType componentType,
             ControllerDescription controllerDesc) throws ClassNotFoundException, InstantiationException {
@@ -167,8 +165,6 @@ public class PAComponentGroup {
      * @param componentType parameters of this component
      * @param controllerDesc TODO
      * @return a stub/proxy
-     * @throws ClassNotFoundException
-     * @throws java.lang.InstantiationException
      */
     public static PAComponentRepresentative newNFComponentRepresentativeGroup(ComponentType componentType,
             ControllerDescription controllerDesc) throws ClassNotFoundException, InstantiationException {

@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.component.body;
 
 import org.objectweb.proactive.Active;
+import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
 
 

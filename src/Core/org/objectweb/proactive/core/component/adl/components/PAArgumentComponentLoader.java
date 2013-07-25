@@ -46,13 +46,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.CompilerError;
-import org.objectweb.fractal.adl.ContextMap;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
 import org.objectweb.fractal.adl.arguments.ArgumentComponentLoader;
-import org.objectweb.fractal.adl.arguments.ArgumentErrors;
-import org.objectweb.fractal.adl.arguments.ArgumentHelper;
-import org.objectweb.fractal.adl.arguments.ArgumentLoader;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.components.ComponentDefinition;
@@ -300,54 +296,30 @@ public class PAArgumentComponentLoader extends ArgumentComponentLoader {
 
     // However, in GCM there are no shared components (so this is not necessary now)
     /*
-     protected void resolveSharedComponentContainer(
-     final ComponentContainer topLevelDefinition,
-     final ComponentContainer container, final Map<Object, Object> context)
-     throws ADLException {
-     final Component[] comps = container.getComponents();
-     for (int i = 0; i < comps.length; i++) {
-     final Component comp = comps[i];
-     resolveSharedComponentContainer(topLevelDefinition, comp, context);
-     String definition = comp.getDefinition();
-     if (definition != null) {
-     final List<String> defs = parseDefinitions(definition, comp);
-     if (defs.size() == 1 && isShared(defs.get(0))) {
-     // shared component
-     comp.setDefinition(null);
-     ((Node) comp).astSetDecoration("definition", definition);
-     if (definition.startsWith("./")) {
-     definition = definition.substring(2);
-     }
-     final Component c = getPathComponent(topLevelDefinition, definition);
-     if (c == null) {
-     throw new ADLException(ComponentErrors.INVALID_PATH, comp,
-     definition);
-     }
-     if (!c.getName().equals(comps[i].getName())) {
-     throw new ADLException(ComponentErrors.SHARED_WITH_DIFFERENT_NAME,
-     comp);
-     }
-     final Map<Node, Node> replacements = new HashMap<Node, Node>();
-
-     // comp and c are in fact the same component, merge their descriptions
-     // and replace there references where needed.
-     Node merged;
-     try {
-     logger.debug("[PAArgumentComponentLoader]   Merging(rs): Node: "+ comp.toString() + " ... Super: "+ c.toString());
-     merged = nodeMergerItf.merge(comp, c, nameAttributes);
-     } catch (final MergeException e) {
-     throw new CompilerError(ComponentErrors.MERGE_ERROR,
-     new NodeErrorLocator(comp), e, definition);
-     }
-     if (comp != merged) {
-     replacements.put(comp, merged);
-     }
-     replacements.put(c, merged);
-     replaceComponents(topLevelDefinition, replacements);
-     }
-     }
-     }
-     }*/
+     * protected void resolveSharedComponentContainer( final ComponentContainer topLevelDefinition,
+     * final ComponentContainer container, final Map<Object, Object> context) throws ADLException {
+     * final Component[] comps = container.getComponents(); for (int i = 0; i < comps.length; i++) {
+     * final Component comp = comps[i]; resolveSharedComponentContainer(topLevelDefinition, comp,
+     * context); String definition = comp.getDefinition(); if (definition != null) { final
+     * List<String> defs = parseDefinitions(definition, comp); if (defs.size() == 1 &&
+     * isShared(defs.get(0))) { // shared component comp.setDefinition(null); ((Node)
+     * comp).astSetDecoration("definition", definition); if (definition.startsWith("./")) {
+     * definition = definition.substring(2); } final Component c =
+     * getPathComponent(topLevelDefinition, definition); if (c == null) { throw new
+     * ADLException(ComponentErrors.INVALID_PATH, comp, definition); } if
+     * (!c.getName().equals(comps[i].getName())) { throw new
+     * ADLException(ComponentErrors.SHARED_WITH_DIFFERENT_NAME, comp); } final Map<Node, Node>
+     * replacements = new HashMap<Node, Node>();
+     * 
+     * // comp and c are in fact the same component, merge their descriptions // and replace there
+     * references where needed. Node merged; try {
+     * logger.debug("[PAArgumentComponentLoader]   Merging(rs): Node: "+ comp.toString() +
+     * " ... Super: "+ c.toString()); merged = nodeMergerItf.merge(comp, c, nameAttributes); } catch
+     * (final MergeException e) { throw new CompilerError(ComponentErrors.MERGE_ERROR, new
+     * NodeErrorLocator(comp), e, definition); } if (comp != merged) { replacements.put(comp,
+     * merged); } replacements.put(c, merged); replaceComponents(topLevelDefinition, replacements);
+     * } } } }
+     */
 
     //-------------------------------------------------------------------
     // Helpers

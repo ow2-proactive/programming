@@ -205,13 +205,6 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
 
         /**
          * Creates a Functional component using the PAGenericFactory
-         * 
-         * @param type
-         * @param controllerDesc
-         * @param contentDesc
-         * @param adlVN
-         * @return
-         * @throws Exception
          */
         public Component createFComponent(ComponentType type, ControllerDescription controllerDesc,
                 ContentDescription contentDesc, VirtualNode adlVN) throws Exception {
@@ -223,13 +216,6 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
 
         /**
          * Creates a Non-Functional component using the PAGenericFactory
-         * 
-         * @param type
-         * @param controllerDesc
-         * @param contentDesc
-         * @param adlVN
-         * @return
-         * @throws Exception
          */
         public Component createNFComponent(ComponentType type, ControllerDescription controllerDesc,
                 ContentDescription contentDesc, VirtualNode adlVN) throws Exception {

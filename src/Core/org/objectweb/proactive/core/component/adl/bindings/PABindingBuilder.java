@@ -38,6 +38,7 @@ package org.objectweb.proactive.core.component.adl.bindings;
 
 import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.util.GCM;
+import org.objectweb.fractal.adl.bindings.BindingBuilder;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.BindingController;
