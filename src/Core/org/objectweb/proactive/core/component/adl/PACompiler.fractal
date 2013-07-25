@@ -27,6 +27,10 @@
 		<interface role="client" name="builder" signature="org.objectweb.proactive.core.component.adl.bindings.PABindingBuilderItf"/>
 		<content class="org.objectweb.proactive.core.component.adl.bindings.PABindingCompiler"/>
 	</component>
+	<component name="interceptor-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
+		<interface role="client" name="builder" signature="org.objectweb.proactive.core.component.adl.interceptors.InterceptorBuilder"/>
+		<content class="org.objectweb.proactive.core.component.adl.interceptors.InterceptorCompiler"/>
+	</component>
 	<component name="exportedVirtualNodes-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
 		<interface role="client" name="builder" signature="org.objectweb.proactive.core.component.adl.vnexportation.ExportedVirtualNodesBuilder"/>
 		<content class="org.objectweb.proactive.core.component.adl.vnexportation.ExportedVirtualNodesCompiler"/>
@@ -64,12 +68,18 @@
 		<interface role="server" name="builder" signature="org.objectweb.fractal.adl.attributes.AttributeBuilder"/>
 		<content class="org.objectweb.fractal.adl.attributes.FractalAttributeBuilder"/>
 	</component>
+	<component name="interceptor-builder">
+		<interface role="server" name="builder" signature="org.objectweb.proactive.core.component.adl.interceptors.InterceptorBuilder"/>
+		<content class="org.objectweb.proactive.core.component.adl.interceptors.InterceptorBuilderImpl"/>
+	</component>
 	<component name="exportedVirtualNodes-builder">
 		<interface role="server" name="builder" signature="org.objectweb.proactive.core.component.adl.vnexportation.ExportedVirtualNodesBuilder"/>
 		<content class="org.objectweb.proactive.core.component.adl.vnexportation.ExportedVirtualNodesBuilderImpl"/>
 	</component>
 
 	<!-- Additional bindings -->
-	<binding client="main-compiler.primitive-compilers5" server="exportedVirtualNodes-compiler.compiler"/>
+	<binding client="main-compiler.primitive-compilers5" server="interceptor-compiler.compiler"/>
+	<binding client="interceptor-compiler.builder" server="interceptor-builder.builder"/>
+	<binding client="main-compiler.primitive-compilers6" server="exportedVirtualNodes-compiler.compiler"/>
 	<binding client="exportedVirtualNodes-compiler.builder" server="exportedVirtualNodes-builder.builder"/>
 </definition>

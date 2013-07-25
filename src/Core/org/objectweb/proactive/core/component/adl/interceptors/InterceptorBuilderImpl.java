@@ -34,21 +34,27 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.component.adl.types;
+package org.objectweb.proactive.core.component.adl.interceptors;
 
-import org.objectweb.fractal.adl.types.TypeInterface;
+import org.objectweb.fractal.api.Component;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.interception.Interceptor;
 
 
-public interface PATypeInterface extends TypeInterface {
-    final String INTERNAL_SERVER_ROLE = "internal-server";
-    final String INTERNAL_CLIENT_ROLE = "internal-client";
-
-    final String MULTICAST_CARDINALITY = "multicast";
-    final String GATHERCAST_CARDINALITY = "gathercast";
-
-    final String INTERCEPTORS_ATTRIBUTE_NAME = "interceptors";
-
-    String getInterceptors();
-
-    void setInterceptors(String arg);
+/**
+ * ProActive based implementation of the {@link InterceptorBuilder} interface.
+ * <br>
+ * Uses the API to add {@link Interceptor interceptors} to functional interfaces.
+ * 
+ * @author The ProActive Team
+ */
+public class InterceptorBuilderImpl implements InterceptorBuilder {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addInterceptor(Object component, String interfaceName, String interceptorID) throws Exception {
+        Utils.getPAInterceptorController((Component) component).addInterceptorOnInterface(interfaceName,
+                interceptorID);
+    }
 }

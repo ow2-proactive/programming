@@ -1955,17 +1955,36 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_15.snip"/></textobject></programlisting>
 
+				<para>
+					Interceptors can also be attached to interfaces
+					throught ADL. To do so, an addional attribute
+					must be used in the <literal>interface</literal>
+					tag of the interface on which to attach the
+					interceptor(s). This attribute is
+					<literal>interceptors</literal> and takes as
+					value the list of controller interfaces that
+					must act as interceptors for this interface.
+					The controller interfaces must be prefixed
+					by the "this." keyword like for bindings and
+					controller interfaces must be separated by a
+					comma. When using this attribute, it becomes
+					useless to explicitely add the interceptor
+					controller to the list of controllers because
+					it will be automatically added if it is not
+					present by default.
+				</para>
+
 				<para>Interceptors can be composed in a sequentially manner.</para>
 
 				<para>
 					The <literal>beforeMethodInvocation</literal>
 					method is called sequentially for each controller
 					in the order they have been set with the interceptor
-					controller.
+					controller or through ADL.
 					The <literal>afterMethodInvocation</literal> method
 					is called sequentially for each controller in the
 					reverse order they have been set with the interceptor
-					controller.
+					controller or through ADL.
 				</para>
 
 				<para>
@@ -2007,9 +2026,17 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					Then for instance such an interceptor could be attached
 					to an interface named "itf" by simply calling the
 					<literal>addInterceptorOnInterface</literal> method
-					of the interceptor controller:</para>
+					of the interceptor controller:
+				</para>
 
 				<programlisting language="java">Utils.getPAInterceptorController(component).addInterceptorOnInterface("itf", "myinterceptor-controller");</programlisting>
+
+				<para>
+					By using ADL, the interceptor could be attached to
+					the interface like that:
+				</para>
+
+				<programlisting language="xml">&lt;interface signature="signature-itf" role="server" name="itf" interceptors="this.myinterceptor-controller"/&gt;</programlisting>
 
 			</section>
 

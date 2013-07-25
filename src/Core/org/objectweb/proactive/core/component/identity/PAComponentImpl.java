@@ -72,6 +72,7 @@ import org.objectweb.proactive.core.component.control.PABindingControllerImpl;
 import org.objectweb.proactive.core.component.control.PAContentControllerImpl;
 import org.objectweb.proactive.core.component.control.PAController;
 import org.objectweb.proactive.core.component.control.PAGCMLifeCycleControllerImpl;
+import org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl;
 import org.objectweb.proactive.core.component.control.PAMembraneControllerImpl;
 import org.objectweb.proactive.core.component.control.PANameControllerImpl;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
@@ -412,7 +413,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
                 // ASSERTIONS: controller implements PABindingController, and controllerName is "binding-controller"
             }
 
-            // MEMBRANE Controller
+            // Membrane Controller
             // Must be created if the interface has been defined (generated) and has not been assigned an implementation yet
             // (i.e. no implementation has been defined in the configuration file)
             if (existsNfInterface(Constants.MEMBRANE_CONTROLLER)) {
@@ -428,6 +429,24 @@ public class PAComponentImpl implements PAComponent, Serializable {
 
                 }
                 // ASSERTIONS: controller implements PAMembraneController, and controllerName is "membrane-controller"
+            }
+
+            // Interceptor Controller
+            // Must be created if the interface has been defined (generated) and has not been assigned an implementation yet
+            // (i.e. no implementation has been defined in the configuration file)
+            if (existsNfInterface(Constants.INTERCEPTOR_CONTROLLER)) {
+                PAInterface interceptorItfRef = (PAInterface) this.nfServerItfs
+                        .get(Constants.INTERCEPTOR_CONTROLLER);
+                if (interceptorItfRef.getFcItfImpl() == null) {
+                    // default implementation of PAInterceptorController 
+                    controllerClass = PAInterceptorControllerImpl.class;
+                    itfRef = createObjectController(controllerClass);
+                    // replace the current entry for "interceptor-controller" (null implementation) by the recently created one
+                    this.nfServerItfs.put(itfRef.getFcItfName(), itfRef);
+                    // don't re-add it to the InterfaceType vector again, because it already exists
+
+                }
+                // ASSERTIONS: controller implements PAInterceptorController, and controllerName is "interceptor-controller"
             }
 
         } catch (Exception e) {

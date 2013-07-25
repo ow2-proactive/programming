@@ -54,10 +54,12 @@ import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeCompiler;
 import org.objectweb.fractal.adl.types.TypeInterface;
+import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.task.core.TaskMap;
 import org.objectweb.fractal.task.deployment.lib.AbstractFactoryProviderTask;
 import org.objectweb.proactive.core.component.Constants;
+import org.objectweb.proactive.core.component.control.PAInterceptorController;
 import org.objectweb.proactive.core.component.control.PAMembraneController;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -141,13 +143,18 @@ public class PATypeCompiler extends TypeCompiler {
             // collects and creates the F interfaces
             List<Object> fItfTypes = new ArrayList<Object>();
             Interface[] fItfs = container.getInterfaces();
+            boolean hasInterceptors = false;
             for (Interface itf : fItfs) {
                 logger.debug("[PATypeCompiler] --> ITF: " + itf.toString());
                 if (itf instanceof TypeInterface) {
-                    TypeInterface tItf = (TypeInterface) itf;
+                    PATypeInterface tItf = (PATypeInterface) itf;
                     Object itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf
                             .getRole(), tItf.getContingency(), tItf.getCardinality(), context);
                     fItfTypes.add(itfType);
+
+                    if (tItf.getInterceptors() != null) {
+                        hasInterceptors = true;
+                    }
                 }
             }
 
@@ -155,6 +162,7 @@ public class PATypeCompiler extends TypeCompiler {
             List<Object> nfItfTypes = new ArrayList<Object>();
             Interface[] nfItfs = null;
             boolean membraneControllerDefined = false;
+            boolean interceptorControllerDefined = false;
             if (container instanceof ControllerContainer) {
                 Controller ctrl = ((ControllerContainer) container).getController();
                 if (ctrl != null) {
@@ -175,6 +183,8 @@ public class PATypeCompiler extends TypeCompiler {
                                 nfItfTypes.add(itfType);
                                 if (Constants.MEMBRANE_CONTROLLER.equals(tItf.getName())) {
                                     membraneControllerDefined = true;
+                                } else if (Constants.INTERCEPTOR_CONTROLLER.equals(tItf.getName())) {
+                                    interceptorControllerDefined = true;
                                 }
                             }
                         }
@@ -187,6 +197,13 @@ public class PATypeCompiler extends TypeCompiler {
                             nfItfTypes.add(itfType);
                         }
 
+                        if (hasInterceptors && !interceptorControllerDefined) {
+                            Object itfType = builder.createInterfaceType(Constants.INTERCEPTOR_CONTROLLER,
+                                    PAInterceptorController.class.getName(), TypeInterface.SERVER_ROLE,
+                                    TypeInterface.MANDATORY_CONTINGENCY, TypeInterface.SINGLETON_CARDINALITY,
+                                    context);
+                            nfItfTypes.add(itfType);
+                        }
                     }
                 }
             }

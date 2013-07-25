@@ -129,6 +129,7 @@
   signature CDATA #IMPLIED
   contingency (mandatory | optional) #IMPLIED
   cardinality (singleton | collection | multicast | gathercast) #IMPLIED
+  interceptors CDATA #IMPLIED
 >
 
 <!ELEMENT binding (comment*) >

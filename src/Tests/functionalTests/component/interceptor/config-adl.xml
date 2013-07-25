@@ -24,10 +24,6 @@
         </controller>
         <!-- Specific controllers -->
         <controller>
-            <interface>org.objectweb.proactive.core.component.control.PAInterceptorController</interface>
-            <implementation>org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl</implementation>
-        </controller>
-        <controller>
             <interface>functionalTests.component.controller.DummyController</interface>
             <implementation>functionalTests.component.controller.DummyControllerImpl</implementation>
         </controller>
@@ -39,5 +35,5 @@
             <interface>functionalTests.component.interceptor.Interceptor2</interface>
             <implementation>functionalTests.component.interceptor.Interceptor2Impl</implementation>
         </controller>
-    </controllers>    
+    </controllers>
 </componentConfiguration>

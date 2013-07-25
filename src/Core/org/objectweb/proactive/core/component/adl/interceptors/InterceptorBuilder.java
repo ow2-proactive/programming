@@ -34,21 +34,25 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.component.adl.types;
+package org.objectweb.proactive.core.component.adl.interceptors;
 
-import org.objectweb.fractal.adl.types.TypeInterface;
+import org.objectweb.proactive.core.component.interception.Interceptor;
 
 
-public interface PATypeInterface extends TypeInterface {
-    final String INTERNAL_SERVER_ROLE = "internal-server";
-    final String INTERNAL_CLIENT_ROLE = "internal-client";
-
-    final String MULTICAST_CARDINALITY = "multicast";
-    final String GATHERCAST_CARDINALITY = "gathercast";
-
-    final String INTERCEPTORS_ATTRIBUTE_NAME = "interceptors";
-
-    String getInterceptors();
-
-    void setInterceptors(String arg);
+/**
+ * A builder interface for adding interceptors to functional interfaces.
+ *
+ * @author The ProActive Team
+ */
+public interface InterceptorBuilder {
+    /**
+     * Adds at the last position the {@link Interceptor interceptor} with the specified ID to the interface
+     * with the specified name owned by the specified component.
+     * 
+     * @param component Component owning the interface on which to add the {@link Interceptor interceptor}.
+     * @param interfaceName Name of the interface on which to add the {@link Interceptor interceptor}.
+     * @param interceptorID ID of the {@link Interceptor interceptor} to add.
+     * @throws Exception If there is an error while adding the {@link Interceptor interceptor} to the interface.
+     */
+    public void addInterceptor(Object component, String interfaceName, String interceptorID) throws Exception;
 }

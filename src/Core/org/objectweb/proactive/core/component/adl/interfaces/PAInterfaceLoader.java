@@ -51,6 +51,7 @@ import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.interfaces.InterfaceErrors;
 import org.objectweb.fractal.adl.interfaces.InterfaceLoader;
+import org.objectweb.proactive.core.component.adl.types.PATypeInterface;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -121,11 +122,26 @@ public class PAInterfaceLoader extends InterfaceLoader {
             if (itf.getName() == null) {
                 throw new ADLException(InterfaceErrors.INTERFACE_NAME_MISSING, itf);
             }
+
             logger.debug("[PAInterfaceLoader] Found interface " + itf.toString() + " " +
                 (functional ? "F" : "NF"));
+
+            if (itf.astGetAttributes().get(PATypeInterface.INTERCEPTORS_ATTRIBUTE_NAME) != null) {
+                String[] interceptors = itf.astGetAttributes().get(
+                        PATypeInterface.INTERCEPTORS_ATTRIBUTE_NAME).split(",");
+
+                for (String interceptor : interceptors) {
+                    if (!interceptor.startsWith("this.")) {
+                        throw new ADLException(PAInterfaceErrors.WRONG_INTERCEPTOR_NAME, itf, interceptor,
+                            itf.getName());
+                    }
+                }
+            }
+
             if (!functional) {
                 itf.astSetDecoration("NF", true);
             }
+
             final Interface previousDefinition = names.put(itf.getName(), itf);
             if (previousDefinition != null) {
                 throw new ADLException(InterfaceErrors.DUPLICATED_INTERFACE_NAME, itf, itf.getName(),

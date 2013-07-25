@@ -66,6 +66,7 @@ import org.objectweb.proactive.core.component.control.AbstractPAController;
 import org.objectweb.proactive.core.component.control.PABindingControllerImpl;
 import org.objectweb.proactive.core.component.control.PAContentControllerImpl;
 import org.objectweb.proactive.core.component.control.PAGCMLifeCycleControllerImpl;
+import org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl;
 import org.objectweb.proactive.core.component.control.PAMembraneControllerImpl;
 import org.objectweb.proactive.core.component.control.PANameControllerImpl;
 import org.objectweb.proactive.core.component.gen.RepresentativeInterfaceClassGenerator;
@@ -319,12 +320,6 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         if (itfType.isFcCollectionItf()) {
             return true;
         }
-        /*
-        // MEMBRANE controller must be created as an object controller
-        if(Constants.MEMBRANE_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal()) {
-        	//logger.warn("Ignored NF Interface '"+ Constants.MEMBRANE_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
-        	return true;
-        }*/
 
         // CONTENT controller is not created for primitives
         if (Constants.CONTENT_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() &&
@@ -524,7 +519,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                 // ASSERTIONS: controller implements PABindingController, and controllerName is "binding-controller"
             }
 
-            // MEMBRANE Controller ...
+            // Membrane Controller
             // Must be created it was declared and it has no implementation yet
             if (existsNfInterface(Constants.MEMBRANE_CONTROLLER)) {
                 PAInterface membraneItfRef = (PAInterface) this.nfItfs.get(Constants.MEMBRANE_CONTROLLER);
@@ -537,6 +532,22 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                     // but don't re-add the type to the nfType vector, because it already exists
                 }
                 // ASSERTIONS: controller implements PAMembraneController, and controllerName is "membrane-controller"
+            }
+
+            // Interceptor Controller
+            // Must be created it was declared and it has no implementation yet
+            if (existsNfInterface(Constants.INTERCEPTOR_CONTROLLER)) {
+                PAInterface interceptorItfRef = (PAInterface) this.nfItfs
+                        .get(Constants.INTERCEPTOR_CONTROLLER);
+                if (((StubObject) interceptorItfRef).getProxy() == null) {
+                    // default implementation of PAInterceptorController 
+                    controllerClass = PAInterceptorControllerImpl.class;
+                    itfRef = createControllerRepresentative(controllerClass);
+                    // replace the previous entry for 'interceptor-controller'
+                    this.nfItfs.put(itfRef.getFcItfName(), itfRef);
+                    // but don't re-add the type to the nfType vector, because it already exists
+                }
+                // ASSERTIONS: controller implements PAInterceptorController, and controllerName is "interceptor-controller"
             }
 
         } catch (Exception e) {

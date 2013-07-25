@@ -39,6 +39,7 @@ package functionalTests.component.interceptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
@@ -46,6 +47,8 @@ import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.objectweb.fractal.adl.ADLException;
+import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.IllegalBindingException;
@@ -57,6 +60,7 @@ import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.adl.FactoryFactory;
 import org.objectweb.proactive.core.component.control.PAInterceptorController;
 
 import functionalTests.ComponentTest;
@@ -73,6 +77,7 @@ import functionalTests.component.controller.DummyController;
  */
 public class TestInterceptor extends ComponentTest {
     private Component componentA;
+    private Component componentB;
     private PAInterceptorController interceptorController;
     private DummyController dummyController;
     private FooItf fooItf;
@@ -93,20 +98,19 @@ public class TestInterceptor extends ComponentTest {
         GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
         GenericFactory cf = GCM.getGenericFactory(boot);
 
-        this.componentA = cf.newFcInstance(
-                type_factory.createFcType(new InterfaceType[] {
-                        type_factory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
-                                TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                        type_factory.createFcItfType(Foo2Itf.SERVER_ITF_NAME, Foo2Itf.class.getName(),
-                                TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                        type_factory.createFcItfType(FooItf.CLIENT_ITF_NAME, FooItf.class.getName(),
-                                TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                        type_factory.createFcItfType(Foo2Itf.CLIENT_ITF_NAME, Foo2Itf.class.getName(),
-                                TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE) }),
+        this.componentA = cf.newFcInstance(type_factory.createFcType(new InterfaceType[] {
+                type_factory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
+                        TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                type_factory.createFcItfType(Foo2Itf.SERVER_ITF_NAME, Foo2Itf.class.getName(),
+                        TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                type_factory.createFcItfType(FooItf.CLIENT_ITF_NAME, FooItf.class.getName(),
+                        TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                type_factory.createFcItfType(Foo2Itf.CLIENT_ITF_NAME, Foo2Itf.class.getName(),
+                        TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE) }),
                 new ControllerDescription("A", Constants.PRIMITIVE, getClass().getResource(
                         "/functionalTests/component/interceptor/config.xml").getPath()),
                 new ContentDescription(A.class.getName(), new Object[] {}));
-        this.interceptorController = Utils.getPAInterceptorController(componentA);
+        this.interceptorController = Utils.getPAInterceptorController(this.componentA);
         this.dummyController = (DummyController) this.componentA
                 .getFcInterface(DummyController.DUMMY_CONTROLLER_NAME);
         this.fooItf = (FooItf) this.componentA.getFcInterface(FooItf.SERVER_ITF_NAME);
@@ -114,19 +118,19 @@ public class TestInterceptor extends ComponentTest {
         this.fooMethod = FooItf.class.getDeclaredMethod("foo", new Class[0]);
         this.foo2Method = Foo2Itf.class.getDeclaredMethod("foo2", new Class[0]);
 
-        Component componentB = cf.newFcInstance(type_factory.createFcType(new InterfaceType[] {
+        this.componentB = cf.newFcInstance(type_factory.createFcType(new InterfaceType[] {
                 type_factory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
                 type_factory.createFcItfType(Foo2Itf.SERVER_ITF_NAME, Foo2Itf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) }),
                 new ControllerDescription("B", Constants.PRIMITIVE), new ContentDescription(
                     B.class.getName(), new Object[] {}));
-        GCM.getGCMLifeCycleController(componentB).startFc();
+        GCM.getGCMLifeCycleController(this.componentB).startFc();
 
         GCM.getBindingController(this.componentA).bindFc(FooItf.CLIENT_ITF_NAME,
-                componentB.getFcInterface(FooItf.SERVER_ITF_NAME));
+                this.componentB.getFcInterface(FooItf.SERVER_ITF_NAME));
         GCM.getBindingController(this.componentA).bindFc(Foo2Itf.CLIENT_ITF_NAME,
-                componentB.getFcInterface(Foo2Itf.SERVER_ITF_NAME));
+                this.componentB.getFcInterface(Foo2Itf.SERVER_ITF_NAME));
     }
 
     @Test
@@ -141,15 +145,15 @@ public class TestInterceptor extends ComponentTest {
         this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
                 Interceptor2.INTERCEPTOR2_NAME);
 
-        Assert.assertEquals(expectedInterceptorIDs,
-                this.interceptorController.getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
+        Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
+                .getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
 
         expectedInterceptorIDs.remove(Interceptor2.INTERCEPTOR2_NAME);
         this.interceptorController.removeInterceptorFromInterface(FooItf.SERVER_ITF_NAME,
                 Interceptor2.INTERCEPTOR2_NAME);
 
-        Assert.assertEquals(expectedInterceptorIDs,
-                this.interceptorController.getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
+        Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
+                .getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
     }
 
     @Test
@@ -419,6 +423,67 @@ public class TestInterceptor extends ComponentTest {
     public void testRemoveInvalidInterceptor() throws Exception {
         this.interceptorController.removeInterceptorFromInterface(FooItf.SERVER_ITF_NAME,
                 Constants.NAME_CONTROLLER);
+    }
+
+    @Test
+    public void testAddInterceptorsWithADL() throws Exception {
+        Factory factory = FactoryFactory.getFactory();
+        this.componentA = (Component) factory.newComponent("functionalTests.component.interceptor.A",
+                new HashMap<String, Object>());
+        this.interceptorController = Utils.getPAInterceptorController(this.componentA);
+        this.dummyController = (DummyController) this.componentA
+                .getFcInterface(DummyController.DUMMY_CONTROLLER_NAME);
+        this.fooItf = (FooItf) this.componentA.getFcInterface(FooItf.SERVER_ITF_NAME);
+        this.foo2Itf = (Foo2Itf) this.componentA.getFcInterface(Foo2Itf.SERVER_ITF_NAME);
+
+        GCM.getGCMLifeCycleController(this.componentB).stopFc();
+
+        GCM.getBindingController(this.componentA).bindFc(FooItf.CLIENT_ITF_NAME,
+                this.componentB.getFcInterface(FooItf.SERVER_ITF_NAME));
+        GCM.getBindingController(this.componentA).bindFc(Foo2Itf.CLIENT_ITF_NAME,
+                this.componentB.getFcInterface(Foo2Itf.SERVER_ITF_NAME));
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+        GCM.getGCMLifeCycleController(this.componentB).startFc();
+
+        List<String> expectedInterceptorIDs = new ArrayList<String>();
+        expectedInterceptorIDs.add(Interceptor1.INTERCEPTOR1_NAME);
+        expectedInterceptorIDs.add(Interceptor2.INTERCEPTOR2_NAME);
+
+        Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
+                .getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
+        Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
+                .getInterceptorIDsFromInterface(FooItf.CLIENT_ITF_NAME));
+
+        expectedInterceptorIDs.clear();
+
+        Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
+                .getInterceptorIDsFromInterface(Foo2Itf.SERVER_ITF_NAME));
+        Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
+                .getInterceptorIDsFromInterface(Foo2Itf.CLIENT_ITF_NAME));
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
+            Interceptor2.BEFORE_INTERCEPTION + Interceptor1.BEFORE_INTERCEPTION +
+            Interceptor2.BEFORE_INTERCEPTION + Interceptor2.AFTER_INTERCEPTION +
+            Interceptor1.AFTER_INTERCEPTION + Interceptor2.AFTER_INTERCEPTION +
+            Interceptor1.AFTER_INTERCEPTION);
+
+        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
+    }
+
+    @Test(expected = ADLException.class)
+    public void testAddInterceptorsWithADLWithThisKeywordMissing() throws Exception {
+        Factory factory = FactoryFactory.getFactory();
+        this.componentA = (Component) factory.newComponent(
+                "functionalTests.component.interceptor.A-ThisKeywordMissing", new HashMap<String, Object>());
+    }
+
+    @Test(expected = ADLException.class)
+    public void testAddInterceptorsWithADLWithNonExistingInterceptor() throws Exception {
+        Factory factory = FactoryFactory.getFactory();
+        this.componentA = (Component) factory.newComponent(
+                "functionalTests.component.interceptor.A-NonExistingInterceptor",
+                new HashMap<String, Object>());
     }
 
     private void callAndCheckResult(Method method, Object instance, String expectedResult)
