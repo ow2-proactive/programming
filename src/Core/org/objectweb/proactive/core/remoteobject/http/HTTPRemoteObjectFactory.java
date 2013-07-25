@@ -53,6 +53,7 @@ import org.objectweb.proactive.core.mop.PAObjectOutputStream;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
+import org.objectweb.proactive.core.remoteobject.NotBoundException;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
@@ -161,7 +162,7 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         RemoteRemoteObject result = message.getReturnedObject();
 
         if (result == null) {
-            throw new ProActiveException("The url " + url + " is not bound to any known object");
+            throw new NotBoundException("The url " + url + " is not bound to any known object");
         } else {
             return new RemoteObjectAdapter(result);
         }

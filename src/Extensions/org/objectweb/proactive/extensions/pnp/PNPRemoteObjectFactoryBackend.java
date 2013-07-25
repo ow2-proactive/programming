@@ -49,6 +49,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
+import org.objectweb.proactive.core.remoteobject.NotBoundException;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
@@ -173,7 +174,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
             message.send();
             RemoteRemoteObject result = message.getReturnedObject();
             if (result == null) {
-                throw new ProActiveException("The uri " + uri + " is not bound to any known object");
+                throw new NotBoundException("The uri " + uri + " is not bound to any known object");
             } else {
                 return new RemoteObjectAdapter(result);
             }

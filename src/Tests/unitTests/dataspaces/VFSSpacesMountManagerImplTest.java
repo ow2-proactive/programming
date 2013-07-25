@@ -117,6 +117,7 @@ public class VFSSpacesMountManagerImplTest {
     private DataSpacesURI outputUri;
     private DataSpacesURI scratchUri;
     private DataSpacesFileObject fileObject;
+    private static String fakeFileUri = "file:///Z:/toto/tata";
     private static String inputSpaceFileUrl;
     private static String outputSpaceFileUrl;
     private static String scratchSpaceFileUrl;
@@ -146,6 +147,7 @@ public class VFSSpacesMountManagerImplTest {
         osw.close();
         inputSpaceFileUrl = inputSpaceDir.toURI().toURL().toString();
         ArrayList<String> rootinputuris = new ArrayList<String>();
+        rootinputuris.add(fakeFileUri);
         rootinputuris.add(inputSpaceFileUrl);
         rootinputuris.add(fakeUri);
         rootinputuris.add(serverInput.getVFSRootURL());

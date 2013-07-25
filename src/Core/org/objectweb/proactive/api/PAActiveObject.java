@@ -68,7 +68,6 @@ import org.objectweb.proactive.core.body.proxy.BodyProxy;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
-import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.mop.Proxy;
@@ -142,7 +141,7 @@ public class PAActiveObject {
     /**
      * Creates a new ActiveObject based on classname attached to a default node in the local JVM.
      * 
-     * @param classn
+     * @param clazz
      *            the class to instantiate as active
      * @param constructorParameters
      *            the parameters of the constructor.
@@ -185,7 +184,7 @@ public class PAActiveObject {
     /**
      * Creates a new ActiveObject based on classname attached to the node of the given URL.
      * 
-     * @param classname
+     * @param clazz
      *            the class to instantiate as active
      * @param constructorParameters
      *            the parameters of the constructor.
@@ -232,7 +231,7 @@ public class PAActiveObject {
      * Creates a new ActiveObject based on class attached to the given node or on a default node
      * in the local JVM if the given node is null.
      * 
-     * @param classname
+     * @param clazz
      *            the class to instantiate as active
      * @param constructorParameters
      *            the parameters of the constructor.
@@ -274,8 +273,8 @@ public class PAActiveObject {
     /**
      * Creates a new ActiveObject based on classname attached to a default node in the local JVM.
      * 
-     * @param classname
-     *            the name of the class to instantiate as active
+     * @param clazz
+     *            the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
      * @param constructorParameters
@@ -327,8 +326,8 @@ public class PAActiveObject {
     /**
      * Creates a new ActiveObject based on classname attached to the node of the given URL.
      * 
-     * @param classname
-     *            the name of the class to instantiate as active
+     * @param clazz
+     *            the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
      * @param constructorParameters
@@ -376,7 +375,7 @@ public class PAActiveObject {
      * Creates a new ActiveObject based on the class attached to the given node or on a default node
      * in the local JVM if the given node is null.
      * 
-     * @param classname
+     * @param clazz
      *            the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
@@ -516,7 +515,7 @@ public class PAActiveObject {
      * proxy can either be local of remote, depending or the respective location of the object
      * calling the newActive and the active object itself.
      * 
-     * @param classname
+     * @param clazz
      *            the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
@@ -1525,8 +1524,11 @@ public class PAActiveObject {
                 throw new IOException("The remote object located at " + url +
                     " is not an Active Object. class=" + o.getClass().getName());
             }
+        } catch (org.objectweb.proactive.core.remoteobject.NotBoundException e) {
+            throw new org.objectweb.proactive.core.exceptions.NotBoundException("Lookup of " + classname +
+                " at " + url + " failed", e);
         } catch (ProActiveException e) {
-            throw new IOException6("Lookup of " + classname + " at " + url + " failed", e);
+            throw new IOException("Lookup of " + classname + " at " + url + " failed", e);
         } catch (MOPException e) {
             Throwable t = e;
 
