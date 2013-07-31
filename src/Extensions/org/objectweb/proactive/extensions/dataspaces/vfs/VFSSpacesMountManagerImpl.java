@@ -296,7 +296,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
 
             // normally it should never happen
             if (mountedRoot == null) {
-                removeSpaceRootUri(spacePart,spaceRootFOUri);
+                removeSpaceRootUri(spacePart, spaceRootFOUri);
                 return false;
             }
 
@@ -304,7 +304,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             if (!mountedRoot.exists()) {
                 String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
                 logger.info(err);
-                removeSpaceRootUri(spacePart,spaceRootFOUri);
+                removeSpaceRootUri(spacePart, spaceRootFOUri);
                 throw new FileSystemException(err);
             }
 
@@ -317,11 +317,10 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 logger.debug(String.format("Mounted space: %s (access URL: %s)", spacePart, spaceRootFOUri));
             return true;
 
-
         } catch (org.apache.commons.vfs.FileSystemException x) {
             String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
             logger.info(err);
-            removeSpaceRootUri(spacePart,spaceRootFOUri);
+            removeSpaceRootUri(spacePart, spaceRootFOUri);
             throw new FileSystemException(err, x);
 
         }
