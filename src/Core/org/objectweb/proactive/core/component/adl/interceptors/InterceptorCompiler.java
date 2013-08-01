@@ -86,7 +86,14 @@ public class InterceptorCompiler implements PrimitiveCompiler, BindingController
                     String[] interceptors = interceptorsAttributeValue.split(",");
 
                     for (String interceptor : interceptors) {
-                        String interceptorID = interceptor.substring(interceptor.indexOf('.') + 1);
+                        String interceptorID = null;
+
+                        if (interceptor.startsWith("this.")) { // Controller interface
+                            interceptorID = interceptor.substring(interceptor.indexOf('.') + 1);
+                        } else { // Server interface of a NF component
+                            interceptorID = interceptor;
+                        }
+
                         InterceptorTask interceptorTask = new InterceptorTask(this.builder, itf.getName(),
                             interceptorID);
                         TaskMap.TaskHole interceptorTaskHole = tasks.addTask("interceptor" + itf.getName() +

@@ -34,103 +34,62 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.interceptor;
+package functionalTests.component.interceptor.controllerobject;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.fractal.adl.ADLException;
-import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
-import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
-import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
-import org.objectweb.proactive.core.component.adl.FactoryFactory;
-import org.objectweb.proactive.core.component.control.PAInterceptorController;
+import org.objectweb.proactive.core.component.exceptions.IllegalInterceptorException;
 
-import functionalTests.ComponentTest;
 import functionalTests.component.controller.DummyController;
+import functionalTests.component.interceptor.A;
+import functionalTests.component.interceptor.CommonSetup;
+import functionalTests.component.interceptor.Foo2Itf;
+import functionalTests.component.interceptor.FooItf;
 
 
 /**
  *
  * Checks that interception of functional invocations works.
  * <br>
- * Interceptors are only placed around the "A" component.
+ * Interceptors are only controller objects and are only placed around the "A" component.
  *
  * @author The ProActive Team
  */
-public class TestInterceptor extends ComponentTest {
-    private Component componentA;
-    private Component componentB;
-    private PAInterceptorController interceptorController;
-    private DummyController dummyController;
-    private FooItf fooItf;
-    private Foo2Itf foo2Itf;
-    private Method fooMethod;
-    private Method foo2Method;
-
-    public static final String DUMMY_VALUE = "dummy-value";
-
-    public TestInterceptor() {
+public class TestControllerObjectInterceptors extends CommonSetup {
+    public TestControllerObjectInterceptors() {
         super("Components : interception of functional invocations",
                 "Components : interception of functional invocations");
     }
 
-    @Before
-    public void setUp() throws Exception {
-        Component boot = Utils.getBootstrapComponent();
-        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
-        GenericFactory cf = GCM.getGenericFactory(boot);
-
-        this.componentA = cf.newFcInstance(type_factory.createFcType(new InterfaceType[] {
-                type_factory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
+    @Override
+    protected Component newComponentA() throws Exception {
+        return this.genericFactory.newFcInstance(this.typeFactory.createFcType(new InterfaceType[] {
+                this.typeFactory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                type_factory.createFcItfType(Foo2Itf.SERVER_ITF_NAME, Foo2Itf.class.getName(),
+                this.typeFactory.createFcItfType(Foo2Itf.SERVER_ITF_NAME, Foo2Itf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                type_factory.createFcItfType(FooItf.CLIENT_ITF_NAME, FooItf.class.getName(),
+                this.typeFactory.createFcItfType(FooItf.CLIENT_ITF_NAME, FooItf.class.getName(),
                         TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                type_factory.createFcItfType(Foo2Itf.CLIENT_ITF_NAME, Foo2Itf.class.getName(),
+                this.typeFactory.createFcItfType(Foo2Itf.CLIENT_ITF_NAME, Foo2Itf.class.getName(),
                         TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE) }),
                 new ControllerDescription("A", Constants.PRIMITIVE, getClass().getResource(
-                        "/functionalTests/component/interceptor/config.xml").getPath()),
-                new ContentDescription(A.class.getName(), new Object[] {}));
-        this.interceptorController = Utils.getPAInterceptorController(this.componentA);
-        this.dummyController = (DummyController) this.componentA
-                .getFcInterface(DummyController.DUMMY_CONTROLLER_NAME);
-        this.fooItf = (FooItf) this.componentA.getFcInterface(FooItf.SERVER_ITF_NAME);
-        this.foo2Itf = (Foo2Itf) this.componentA.getFcInterface(Foo2Itf.SERVER_ITF_NAME);
-        this.fooMethod = FooItf.class.getDeclaredMethod("foo", new Class[0]);
-        this.foo2Method = Foo2Itf.class.getDeclaredMethod("foo2", new Class[0]);
-
-        this.componentB = cf.newFcInstance(type_factory.createFcType(new InterfaceType[] {
-                type_factory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
-                        TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                type_factory.createFcItfType(Foo2Itf.SERVER_ITF_NAME, Foo2Itf.class.getName(),
-                        TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) }),
-                new ControllerDescription("B", Constants.PRIMITIVE), new ContentDescription(
-                    B.class.getName(), new Object[] {}));
-        GCM.getGCMLifeCycleController(this.componentB).startFc();
-
-        GCM.getBindingController(this.componentA).bindFc(FooItf.CLIENT_ITF_NAME,
-                this.componentB.getFcInterface(FooItf.SERVER_ITF_NAME));
-        GCM.getBindingController(this.componentA).bindFc(Foo2Itf.CLIENT_ITF_NAME,
-                this.componentB.getFcInterface(Foo2Itf.SERVER_ITF_NAME));
+                        "/functionalTests/component/interceptor/controllerobject/config/config.xml")
+                        .getPath()), new ContentDescription(A.class.getName(), new Object[] {}));
     }
 
     @Test
@@ -139,19 +98,16 @@ public class TestInterceptor extends ComponentTest {
 
         expectedInterceptorIDs.add(Interceptor1.INTERCEPTOR1_NAME);
         expectedInterceptorIDs.add(Interceptor2.INTERCEPTOR2_NAME);
-
         this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
                 Interceptor1.INTERCEPTOR1_NAME);
         this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
                 Interceptor2.INTERCEPTOR2_NAME);
-
         Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
                 .getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
 
         expectedInterceptorIDs.remove(Interceptor2.INTERCEPTOR2_NAME);
         this.interceptorController.removeInterceptorFromInterface(FooItf.SERVER_ITF_NAME,
                 Interceptor2.INTERCEPTOR2_NAME);
-
         Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
                 .getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
     }
@@ -165,9 +121,15 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor2.BEFORE_INTERCEPTION +
-            Interceptor1.BEFORE_INTERCEPTION + Interceptor1.AFTER_INTERCEPTION +
-            Interceptor2.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -179,8 +141,11 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -192,8 +157,11 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -207,9 +175,15 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor2.BEFORE_INTERCEPTION + Interceptor2.AFTER_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -223,9 +197,15 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor2.BEFORE_INTERCEPTION + Interceptor2.AFTER_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -235,13 +215,19 @@ public class TestInterceptor extends ComponentTest {
         List<String> interceptorsIDs = new ArrayList<String>();
         interceptorsIDs.add(Interceptor1.INTERCEPTOR1_NAME);
         interceptorsIDs.add(Interceptor2.INTERCEPTOR2_NAME);
-        this.interceptorController.addInterceptorsOnInterface(FooItf.CLIENT_ITF_NAME, interceptorsIDs);
+        this.interceptorController.addInterceptorsOnInterface(FooItf.SERVER_ITF_NAME, interceptorsIDs);
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor2.BEFORE_INTERCEPTION + Interceptor2.AFTER_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -252,11 +238,17 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE +
-            Interceptor1.BEFORE_INTERCEPTION + Interceptor1.AFTER_INTERCEPTION);
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, Foo2Itf.SERVER_ITF_NAME,
+                    this.foo2Method.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, Foo2Itf.SERVER_ITF_NAME,
+                    this.foo2Method.getName()));
     }
 
     @Test
@@ -265,11 +257,17 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE +
-            Interceptor1.BEFORE_INTERCEPTION + Interceptor1.AFTER_INTERCEPTION);
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, Foo2Itf.CLIENT_ITF_NAME,
+                    this.foo2Method.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, Foo2Itf.CLIENT_ITF_NAME,
+                    this.foo2Method.getName()));
     }
 
     @Test
@@ -278,13 +276,25 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor1.BEFORE_INTERCEPTION + Interceptor1.AFTER_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE +
-            Interceptor1.BEFORE_INTERCEPTION + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION + Interceptor1.AFTER_INTERCEPTION);
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, Foo2Itf.SERVER_ITF_NAME,
+                    this.foo2Method.getName()) +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, Foo2Itf.CLIENT_ITF_NAME,
+                    this.foo2Method.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, Foo2Itf.CLIENT_ITF_NAME,
+                    this.foo2Method.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, Foo2Itf.SERVER_ITF_NAME,
+                    this.foo2Method.getName()));
     }
 
     @Test(expected = IllegalLifeCycleException.class)
@@ -295,7 +305,7 @@ public class TestInterceptor extends ComponentTest {
                 Interceptor1.INTERCEPTOR1_NAME);
     }
 
-    @Test(expected = IllegalBindingException.class)
+    @Test(expected = IllegalInterceptorException.class)
     public void testAddInterceptorAtInvalidPosition() throws Exception {
         this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
                 Interceptor1.INTERCEPTOR1_NAME, 1);
@@ -307,8 +317,13 @@ public class TestInterceptor extends ComponentTest {
                 Interceptor1.INTERCEPTOR1_NAME);
     }
 
-    @Test(expected = IllegalBindingException.class)
-    public void testAddInvalidInterceptor() throws Exception {
+    @Test(expected = NoSuchInterfaceException.class)
+    public void testAddInterceptorWithNonExistingInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME, "error-interface");
+    }
+
+    @Test(expected = IllegalInterceptorException.class)
+    public void testAddInterceptorWithIllegalInterceptor() throws Exception {
         this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
                 Constants.NAME_CONTROLLER);
     }
@@ -323,8 +338,11 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor2.BEFORE_INTERCEPTION +
-            Interceptor2.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -340,8 +358,11 @@ public class TestInterceptor extends ComponentTest {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor2.BEFORE_INTERCEPTION +
-            Interceptor2.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
@@ -408,7 +429,7 @@ public class TestInterceptor extends ComponentTest {
                 Interceptor1.INTERCEPTOR1_NAME);
     }
 
-    @Test(expected = IllegalBindingException.class)
+    @Test(expected = IllegalInterceptorException.class)
     public void testRemoveInterceptorAtInvalidPosition() throws Exception {
         this.interceptorController.removeInterceptorFromInterface(FooItf.SERVER_ITF_NAME, 0);
     }
@@ -419,24 +440,27 @@ public class TestInterceptor extends ComponentTest {
                 Interceptor1.INTERCEPTOR1_NAME);
     }
 
-    @Test(expected = IllegalBindingException.class)
-    public void testRemoveInvalidInterceptor() throws Exception {
+    @Test(expected = NoSuchInterfaceException.class)
+    public void testRemoveInterceptorWithNonExistingInterface() throws Exception {
+        this.interceptorController.removeInterceptorFromInterface(FooItf.SERVER_ITF_NAME, "error-interface");
+    }
+
+    @Test(expected = IllegalInterceptorException.class)
+    public void testRemoveInterceptorWithIllegalInterceptor() throws Exception {
         this.interceptorController.removeInterceptorFromInterface(FooItf.SERVER_ITF_NAME,
                 Constants.NAME_CONTROLLER);
     }
 
     @Test
     public void testAddInterceptorsWithADL() throws Exception {
-        Factory factory = FactoryFactory.getFactory();
-        this.componentA = (Component) factory.newComponent("functionalTests.component.interceptor.A",
-                new HashMap<String, Object>());
+        this.componentA = (Component) this.factory
+                .newComponent("functionalTests.component.interceptor.controllerobject.adl.A",
+                        new HashMap<String, Object>());
         this.interceptorController = Utils.getPAInterceptorController(this.componentA);
         this.dummyController = (DummyController) this.componentA
                 .getFcInterface(DummyController.DUMMY_CONTROLLER_NAME);
         this.fooItf = (FooItf) this.componentA.getFcInterface(FooItf.SERVER_ITF_NAME);
         this.foo2Itf = (Foo2Itf) this.componentA.getFcInterface(Foo2Itf.SERVER_ITF_NAME);
-
-        GCM.getGCMLifeCycleController(this.componentB).stopFc();
 
         GCM.getBindingController(this.componentA).bindFc(FooItf.CLIENT_ITF_NAME,
                 this.componentB.getFcInterface(FooItf.SERVER_ITF_NAME));
@@ -444,52 +468,52 @@ public class TestInterceptor extends ComponentTest {
                 this.componentB.getFcInterface(Foo2Itf.SERVER_ITF_NAME));
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
-        GCM.getGCMLifeCycleController(this.componentB).startFc();
 
         List<String> expectedInterceptorIDs = new ArrayList<String>();
         expectedInterceptorIDs.add(Interceptor1.INTERCEPTOR1_NAME);
         expectedInterceptorIDs.add(Interceptor2.INTERCEPTOR2_NAME);
-
         Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
                 .getInterceptorIDsFromInterface(FooItf.SERVER_ITF_NAME));
         Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
                 .getInterceptorIDsFromInterface(FooItf.CLIENT_ITF_NAME));
-
         expectedInterceptorIDs.clear();
-
         Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
                 .getInterceptorIDsFromInterface(Foo2Itf.SERVER_ITF_NAME));
         Assert.assertEquals(expectedInterceptorIDs, this.interceptorController
                 .getInterceptorIDsFromInterface(Foo2Itf.CLIENT_ITF_NAME));
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor2.BEFORE_INTERCEPTION + Interceptor1.BEFORE_INTERCEPTION +
-            Interceptor2.BEFORE_INTERCEPTION + Interceptor2.AFTER_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION + Interceptor2.AFTER_INTERCEPTION +
-            Interceptor1.AFTER_INTERCEPTION);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor2.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()) +
+            this.getInterceptionMessage(Interceptor1.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
+                    this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
     }
 
     @Test(expected = ADLException.class)
-    public void testAddInterceptorsWithADLWithThisKeywordMissing() throws Exception {
-        Factory factory = FactoryFactory.getFactory();
-        this.componentA = (Component) factory.newComponent(
-                "functionalTests.component.interceptor.A-ThisKeywordMissing", new HashMap<String, Object>());
-    }
-
-    @Test(expected = ADLException.class)
-    public void testAddInterceptorsWithADLWithNonExistingInterceptor() throws Exception {
-        Factory factory = FactoryFactory.getFactory();
-        this.componentA = (Component) factory.newComponent(
-                "functionalTests.component.interceptor.A-NonExistingInterceptor",
+    public void testAddInterceptorWithADLWithThisKeywordMissing() throws Exception {
+        this.componentA = (Component) this.factory.newComponent(
+                "functionalTests.component.interceptor.controllerobject.adl.A-ThisKeywordMissing",
                 new HashMap<String, Object>());
     }
 
-    private void callAndCheckResult(Method method, Object instance, String expectedResult)
-            throws IllegalAccessException, InvocationTargetException, IllegalArgumentException {
-        this.dummyController.setDummyValue(TestInterceptor.DUMMY_VALUE);
-        method.invoke(instance, new Object[0]);
-        Assert.assertEquals(expectedResult, this.dummyController.getDummyValue());
+    @Test(expected = ADLException.class)
+    public void testAddInterceptorWithADLWithNonExistingInterceptor() throws Exception {
+        this.componentA = (Component) this.factory.newComponent(
+                "functionalTests.component.interceptor.controllerobject.adl.A-NonExistingInterceptor",
+                new HashMap<String, Object>());
     }
 }

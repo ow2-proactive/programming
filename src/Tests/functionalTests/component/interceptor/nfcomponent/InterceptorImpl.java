@@ -34,64 +34,42 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.interceptor;
+package functionalTests.component.interceptor.nfcomponent;
 
-import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
-import org.objectweb.fractal.api.factory.InstantiationException;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.control.AbstractPAController;
-import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
+import org.objectweb.proactive.core.component.interception.Interceptor;
 import org.objectweb.proactive.core.mop.MethodCall;
 
 import functionalTests.component.controller.DummyController;
 
 
-public class Interceptor2Impl extends AbstractPAController implements Interceptor2 {
-    public Interceptor2Impl(Component owner) {
-        super(owner);
-    }
+public class InterceptorImpl implements DummyController, Interceptor {
+    public static final String COMPONENT_NAME = "interceptor";
+    public static final String DUMMY_SERVICES = "dummy-services";
+    public static final String INTERCEPTOR_SERVICES = "interceptor-services";
+    public static final String BEFORE_INTERCEPTION = " - before-interception - ";
+    public static final String AFTER_INTERCEPTION = " - after-interception - ";
 
-    @Override
-    protected void setControllerItfType() {
-        try {
-            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(Interceptor2.INTERCEPTOR2_NAME,
-                    Interceptor2.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                    TypeFactory.SINGLE));
-        } catch (InstantiationException e) {
-            throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
-        }
-    }
+    private String dummyValue = null;
 
     @Override
     public void setDummyValue(String value) {
-        try {
-            ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
-                    .setDummyValue(value);
-        } catch (NoSuchInterfaceException e) {
-            e.printStackTrace();
-        }
+        this.dummyValue = value;
     }
 
     @Override
     public String getDummyValue() {
-        try {
-            return ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
-                    .getDummyValue();
-        } catch (NoSuchInterfaceException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return this.dummyValue;
     }
 
     @Override
     public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
-        setDummyValue(getDummyValue() + Interceptor2.BEFORE_INTERCEPTION);
+        setDummyValue(getDummyValue() + BEFORE_INTERCEPTION + interfaceName + "-" + methodCall.getName() +
+            " - ");
     }
 
     @Override
     public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + Interceptor2.AFTER_INTERCEPTION);
+        setDummyValue(getDummyValue() + AFTER_INTERCEPTION + interfaceName + "-" + methodCall.getName() +
+            " - ");
     }
 }

@@ -131,7 +131,44 @@ public class PAInterfaceLoader extends InterfaceLoader {
                         PATypeInterface.INTERCEPTORS_ATTRIBUTE_NAME).split(",");
 
                 for (String interceptor : interceptors) {
-                    if (!interceptor.startsWith("this.")) {
+                    if (interceptor.startsWith("this.")) {
+                        continue;
+                    } else {
+                        String[] interceptorElements = interceptor.split("\\.");
+
+                        if (interceptorElements.length == 2) {
+                            String nfComponentName = interceptorElements[0];
+                            String interfaceName = interceptorElements[1];
+                            boolean found = false;
+
+                            if (container instanceof ControllerContainer) {
+                                Controller controller = ((ControllerContainer) container).getController();
+
+                                if ((controller != null) && (controller instanceof ComponentContainer)) {
+                                    for (Component nfComponent : ((ComponentContainer) controller)
+                                            .getComponents()) {
+                                        if (nfComponentName.equals(nfComponent.getName())) {
+                                            if (nfComponent instanceof InterfaceContainer) {
+                                                for (Interface itfNfComponent : ((InterfaceContainer) nfComponent)
+                                                        .getInterfaces()) {
+                                                    if (interfaceName.equals(itfNfComponent.getName())) {
+                                                        found = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            break;
+                                        }
+                                    }
+
+                                    if (found) {
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+
                         throw new ADLException(PAInterfaceErrors.WRONG_INTERCEPTOR_NAME, itf, interceptor,
                             itf.getName());
                     }

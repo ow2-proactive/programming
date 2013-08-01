@@ -34,41 +34,15 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.component.adl.interceptors;
+package functionalTests.component.interceptor.controllerobject;
 
-import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
-import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.interception.Interceptor;
 
+import functionalTests.component.controller.DummyController;
 
-/**
- * ProActive based implementation of the {@link InterceptorBuilder} interface.
- * <br>
- * Uses the API to add {@link Interceptor interceptors} to functional interfaces.
- * 
- * @author The ProActive Team
- */
-public class InterceptorBuilderImpl implements InterceptorBuilder {
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addInterceptor(Object component, String interfaceName, String interceptorID) throws Exception {
-        try {
-            // The membrane controller must be started to use the interceptor controller
-            Utils.getPAMembraneController((Component) component).startMembrane();
-        } catch (NoSuchInterfaceException nsie) {
-            // No membrane controller, ignore this exception
-        }
 
-        Utils.getPAInterceptorController((Component) component).addInterceptorOnInterface(interfaceName,
-                interceptorID);
-
-        try {
-            Utils.getPAMembraneController((Component) component).stopMembrane();
-        } catch (NoSuchInterfaceException nsie) {
-            // No membrane controller, ignore this exception
-        }
-    }
+public interface Interceptor2 extends DummyController, Interceptor {
+    public static final String INTERCEPTOR2_NAME = "interceptor2-controller";
+    public static final String BEFORE_INTERCEPTION = " - before-interception-" + INTERCEPTOR2_NAME + " - ";
+    public static final String AFTER_INTERCEPTION = " - after-interception-" + INTERCEPTOR2_NAME + " - ";
 }

@@ -41,10 +41,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
-import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
@@ -52,6 +52,9 @@ import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.Constants;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.exceptions.IllegalInterceptorException;
+import org.objectweb.proactive.core.component.exceptions.NoSuchComponentException;
 import org.objectweb.proactive.core.component.interception.Interceptor;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
@@ -62,6 +65,8 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
  * @author The ProActive Team
  */
 public class PAInterceptorControllerImpl extends AbstractPAController implements PAInterceptorController {
+    private PAMembraneController membraneController;
+
     private Map<String, List<Interceptor>> interceptors;
 
     /**
@@ -92,8 +97,15 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void initController() {
+        try {
+            this.membraneController = Utils.getPAMembraneController(this.owner);
+        } catch (NoSuchInterfaceException nsie) {
+            // No membrane controller
+            this.membraneController = null;
+        }
+
         this.interceptors = new HashMap<String, List<Interceptor>>();
-        InterfaceType[] interfaceTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
+        InterfaceType[] interfaceTypes = ((ComponentType) this.owner.getFcType()).getFcInterfaceTypes();
 
         for (InterfaceType interfaceType : interfaceTypes) {
             this.interceptors.put(interfaceType.getFcItfName(), new ArrayList<Interceptor>());
@@ -124,7 +136,20 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
             List<String> interceptorIDs = new ArrayList<String>();
 
             for (Interceptor interceptor : this.interceptors.get(interfaceName)) {
-                interceptorIDs.add(((Interface) interceptor).getFcItfName());
+                Interface itf = (Interface) interceptor;
+                Component componentOwner = itf.getFcItfOwner();
+
+                if (componentOwner.equals(this.owner)) {
+                    interceptorIDs.add(itf.getFcItfName());
+                } else { // Functional interface of a NF component
+                    try {
+                        interceptorIDs.add(GCM.getNameController(componentOwner).getFcName() + "." +
+                            itf.getFcItfName());
+                    } catch (NoSuchInterfaceException nsie) {
+                        // Should never happen since a NF component must have a name
+                        controllerLogger.error(nsie);
+                    }
+                }
             }
 
             return interceptorIDs;
@@ -134,14 +159,41 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
     }
 
     private Interceptor getInterceptorFromID(String interceptorID) throws NoSuchInterfaceException,
-            IllegalBindingException {
-        Object controllerInterface = owner.getFcInterface(interceptorID);
+            NoSuchComponentException, IllegalInterceptorException {
+        try {
+            Object controllerInterface = this.owner.getFcInterface(interceptorID);
 
-        if (controllerInterface instanceof Interceptor) {
-            return (Interceptor) controllerInterface;
-        } else {
-            throw new IllegalBindingException("The controller interface " + interceptorID +
-                " does not implement the Interceptor interface");
+            if (controllerInterface instanceof Interceptor) {
+                return (Interceptor) controllerInterface;
+            } else {
+                throw new IllegalInterceptorException("The controller interface " + interceptorID +
+                    " does not implement the Interceptor interface");
+            }
+        } catch (NoSuchInterfaceException nsie) { // No controller interface with such a name, maybe a NF component?
+            String[] interceptorIDElements = interceptorID.split("\\.");
+
+            if (interceptorIDElements.length == 2) { // Interceptor is an interface of a NF component
+                if (this.membraneController != null) {
+                    String nfComponentName = interceptorIDElements[0];
+                    String interfaceName = interceptorIDElements[1];
+
+                    Object itf = this.membraneController.nfGetFcSubComponent(nfComponentName).getFcInterface(
+                            interfaceName);
+
+                    if (itf instanceof Interceptor) {
+                        return (Interceptor) itf;
+                    } else {
+                        throw new IllegalInterceptorException("The interface " + interfaceName +
+                            " of the NF component " + nfComponentName +
+                            " does not implement the Interceptor interface");
+                    }
+                } else {
+                    throw new IllegalInterceptorException("Invalid interceptor ID " + interceptorID +
+                        " since there is no membrane controller");
+                }
+            } else { // The interceptor ID does not a match the format for a NF component
+                throw nsie;
+            }
         }
     }
 
@@ -150,14 +202,15 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void addInterceptorOnInterface(String interfaceName, String interceptorID, int index)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException {
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         if (this.interceptors.containsKey(interfaceName)) {
             if ((index >= 0) && (index <= this.interceptors.get(interfaceName).size())) {
                 this.interceptors.get(interfaceName).add(index, this.getInterceptorFromID(interceptorID));
             } else {
-                throw new IllegalBindingException(
+                throw new IllegalInterceptorException(
                     "The specified index for the new interceptor is invalid, current size of the interceptors = " +
                         this.interceptors.get(interfaceName).size() + ", specified index = " + index);
             }
@@ -180,7 +233,8 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void addInterceptorOnInterface(String interfaceName, String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException {
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         internalAddInterceptorOnInterface(interfaceName, this.getInterceptorFromID(interceptorID));
@@ -191,7 +245,8 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void addInterceptorsOnInterface(String interfaceName, List<String> interceptorIDs)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException {
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         for (String interceptorID : interceptorIDs) {
@@ -204,12 +259,12 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void addInterceptorOnAllServerInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException {
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         Interceptor interceptor = this.getInterceptorFromID(interceptorID);
 
-        for (InterfaceType interfaceType : ((ComponentType) owner.getFcType()).getFcInterfaceTypes()) {
+        for (InterfaceType interfaceType : ((ComponentType) this.owner.getFcType()).getFcInterfaceTypes()) {
             if (!interfaceType.isFcClientItf()) {
                 try {
                     this.internalAddInterceptorOnInterface(interfaceType.getFcItfName(), interceptor);
@@ -226,12 +281,12 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void addInterceptorOnAllClientInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException {
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         Interceptor interceptor = this.getInterceptorFromID(interceptorID);
 
-        for (InterfaceType interfaceType : ((ComponentType) owner.getFcType()).getFcInterfaceTypes()) {
+        for (InterfaceType interfaceType : ((ComponentType) this.owner.getFcType()).getFcInterfaceTypes()) {
             if (interfaceType.isFcClientItf()) {
                 try {
                     this.internalAddInterceptorOnInterface(interfaceType.getFcItfName(), interceptor);
@@ -248,7 +303,7 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void addInterceptorOnAllInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException {
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         Interceptor interceptor = this.getInterceptorFromID(interceptorID);
@@ -268,14 +323,14 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void removeInterceptorFromInterface(String interfaceName, int index)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException {
+            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         if (this.interceptors.containsKey(interfaceName)) {
             if ((index > -1) && (index < this.interceptors.get(interfaceName).size())) {
                 this.interceptors.get(interfaceName).remove(index);
             } else {
-                throw new IllegalBindingException(
+                throw new IllegalInterceptorException(
                     "The specified index for the interceptor to remove is invalid, current size of the interceptors = " +
                         this.interceptors.get(interfaceName).size() + ", specified index = " + index);
             }
@@ -298,7 +353,8 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void removeInterceptorFromInterface(String interfaceName, String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException {
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         internalRemoveInterceptorFromInterface(interfaceName, this.getInterceptorFromID(interceptorID));
@@ -324,12 +380,13 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void removeInterceptorFromAllServerInterfaces(String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException {
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         Interceptor interceptor = this.getInterceptorFromID(interceptorID);
 
-        for (InterfaceType interfaceType : ((ComponentType) owner.getFcType()).getFcInterfaceTypes()) {
+        for (InterfaceType interfaceType : ((ComponentType) this.owner.getFcType()).getFcInterfaceTypes()) {
             if (!interfaceType.isFcClientItf()) {
                 try {
                     this.internalRemoveInterceptorFromInterface(interfaceType.getFcItfName(), interceptor);
@@ -346,12 +403,13 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void removeInterceptorFromAllClientInterfaces(String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException {
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         Interceptor interceptor = this.getInterceptorFromID(interceptorID);
 
-        for (InterfaceType interfaceType : ((ComponentType) owner.getFcType()).getFcInterfaceTypes()) {
+        for (InterfaceType interfaceType : ((ComponentType) this.owner.getFcType()).getFcInterfaceTypes()) {
             if (interfaceType.isFcClientItf()) {
                 try {
                     this.internalRemoveInterceptorFromInterface(interfaceType.getFcItfName(), interceptor);
@@ -368,7 +426,7 @@ public class PAInterceptorControllerImpl extends AbstractPAController implements
      */
     @Override
     public void removeInterceptorFromAllInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException {
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException {
         checkLifeCycleIsStopped();
 
         Interceptor interceptor = this.getInterceptorFromID(interceptorID);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<definition name="functionalTests.component.interceptor.nfcomponent.adl.A-NonExistingInterface">
+	<interface signature="functionalTests.component.interceptor.FooItf" role="server" name="foo-server" interceptors="interceptor.interface-error"/>
+	<interface signature="functionalTests.component.interceptor.Foo2Itf" role="server" name="foo2-server"/>
+	<interface signature="functionalTests.component.interceptor.FooItf" role="client" name="foo-client"/>
+	<interface signature="functionalTests.component.interceptor.Foo2Itf" role="client" name="foo2-client"/>
+
+	<content class="functionalTests.component.interceptor.A"/>
+
+	<controller>
+		<interface name="dummy-controller" role="server" signature="functionalTests.component.controller.DummyController"/>
+
+		<component name="interceptor" definition="functionalTests.component.interceptor.nfcomponent.adl.Interceptor"/>
+
+		<binding client="this.dummy-controller" server="interceptor.dummy-services"/>
+	</controller>
+</definition>

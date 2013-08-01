@@ -1790,12 +1790,12 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 	<section xml:id="Advanced_53"><info><title>Advanced</title></info>
 
-		<section xml:id="configuration_html_Controllers_and_interceptors_n"><info><title>Controllers and interceptors</title></info>
+		<section xml:id="configuration_html_controllers_n"><info><title>Controllers</title></info>
 
 			<para>
 				This section explains how to customize the component
 				membranes through the configuration, composition and
-				creation of controllers and interceptors.
+				creation of controllers.
 			</para>
 
 			<section xml:id="Configurationofcontrollers_53"><info><title>Configuration of controllers</title></info>
@@ -1904,139 +1904,6 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						</para>
 					</listitem>
 				</orderedlist>
-
-			</section>
-
-			<section xml:id="Configurationofinterceptors_53"><info><title>Configuration of interceptors</title></info>
-
-				<para>
-					Controllers can also act as interceptors: they can
-					intercept incoming invocations and/or outgoing
-					invocations. To do so, controllers must implement
-					the <literal>Interceptor</literal> interface. For
-					each invocation, pre and post processings are defined
-					in the methods
-					<literal>beforeMethodInvocation</literal> and
-					<literal>afterMethodInvocation</literal>. These
-					methods are defined in the
-					<literal>Interceptor</literal> interface and take the
-					name of the interface on which the interception has
-					been made and a <literal>MethodCall</literal> object
-					as arguments. <literal>MethodCall</literal> objects
-					are reified representations of method invocations
-					and they contain <literal>Method</literal> objects as
-					well as the parameters of the invocation. The
-					<literal>afterMethodInvocation</literal> method also
-					takes as argument the return value of the method
-					invocation. If the method returns
-					<literal>void</literal>, then <literal>null</literal>
-					is given as parameter. If the method returns a
-					primitive type, then it is wrapped inside the
-					appropriate wrapper object.
-				</para>
-
-				<para>
-					Interceptors are configured with the interceptor
-					controller. This controller is not included in the
-					default controllers configuration file so it must be
-					explicitely added:
-				</para>
-
-				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_13.snip"/></textobject></programlisting>
-
-				<para>
-					The management of the interceptors is then done
-					through the methods of the interceptor controller
-					(where <literal>interceptorID</literal> is the
-					controller interface name of a controller
-					that implements the <literal>Interceptor</literal>
-					interface):
-				</para>
-
-				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_15.snip"/></textobject></programlisting>
-
-				<para>
-					Interceptors can also be attached to interfaces
-					throught ADL. To do so, an addional attribute
-					must be used in the <literal>interface</literal>
-					tag of the interface on which to attach the
-					interceptor(s). This attribute is
-					<literal>interceptors</literal> and takes as
-					value the list of controller interfaces that
-					must act as interceptors for this interface.
-					The controller interfaces must be prefixed
-					by the "this." keyword like for bindings and
-					controller interfaces must be separated by a
-					comma. When using this attribute, it becomes
-					useless to explicitely add the interceptor
-					controller to the list of controllers because
-					it will be automatically added if it is not
-					present by default.
-				</para>
-
-				<para>Interceptors can be composed in a sequentially manner.</para>
-
-				<para>
-					The <literal>beforeMethodInvocation</literal>
-					method is called sequentially for each controller
-					in the order they have been set with the interceptor
-					controller or through ADL.
-					The <literal>afterMethodInvocation</literal> method
-					is called sequentially for each controller in the
-					reverse order they have been set with the interceptor
-					controller or through ADL.
-				</para>
-
-				<para>
-					For instance, if 2 interceptors are attached to an interface
-					in this order:
-				</para>
-
-				<screen>Interceptor1 and then Interceptor2</screen>
-
-				<para>
-					This means that an invocation on the interface will follow
-					this path:
-				</para>
-
-				<programlisting language="java">&mdash;&gt; caller &mdash;&gt; Interceptor1.beforeMethodInvocation &mdash;&gt; Interceptor2.beforeMethodInvocation &mdash;&gt; callee.invocation &mdash;&gt; Interceptor2.afterMethodInvocation &mdash;&gt; Interceptor1.afterMethodInvocation</programlisting>
-
-			</section>
-
-			<section xml:id="Writingacustominterceptor_53"><info><title>Writing a custom interceptor</title></info>
-
-				<para>
-					An interceptor being a controller, it has to follow the
-					rules explained above for the creation of a custom
-					controller.
-				</para>
-
-				<para>
-					Interceptors have to implement the
-					<literal>Interceptor</literal> interface, which declares
-					interception methods (pre/post interception) that have
-					to be implemented.
-				</para>
-
-				<para>Here is a simple example of an interceptor:</para>
-
-				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_userguide_14.snip"/></textobject></programlisting>
-
-				<para>
-					Then for instance such an interceptor could be attached
-					to an interface named "itf" by simply calling the
-					<literal>addInterceptorOnInterface</literal> method
-					of the interceptor controller:
-				</para>
-
-				<programlisting language="java">Utils.getPAInterceptorController(component).addInterceptorOnInterface("itf", "myinterceptor-controller");</programlisting>
-
-				<para>
-					By using ADL, the interceptor could be attached to
-					the interface like that:
-				</para>
-
-				<programlisting language="xml">&lt;interface signature="signature-itf" role="server" name="itf" interceptors="this.myinterceptor-controller"/&gt;</programlisting>
 
 			</section>
 
@@ -3245,6 +3112,219 @@ GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));</pr
 					is set to true, the component system will automatically
 					establish short cuts between components whenever possible.
 				</para>
+
+			</section>
+
+		</section>
+
+		<section xml:id="configuration_html_interceptors_n"><info><title>Interceptors</title></info>
+
+			<para>
+				This section explains how to create and use interceptors.
+			</para>
+
+			<section xml:id="Configurationofinterceptors_53"><info><title>Configuration of interceptors</title></info>
+
+				<para>
+					Controllers and non functional components can also
+					act as interceptors: they can intercept incoming
+					invocations and/or outgoing invocations. To do so,
+					controllers must implement the
+					<literal>Interceptor</literal> interface and non
+					functional components must provide a functional
+					server interface implementing the
+					<literal>Interceptor</literal> interface. For each
+					invocation, pre and post processings are defined in
+					the methods <literal>beforeMethodInvocation</literal>
+					and <literal>afterMethodInvocation</literal>. These
+					methods are defined in the
+					<literal>Interceptor</literal> interface and take the
+					name of the interface on which the interception has
+					been made and a <literal>MethodCall</literal> object
+					as arguments. <literal>MethodCall</literal> objects
+					are reified representations of method invocations
+					and they contain <literal>Method</literal> objects as
+					well as the parameters of the invocation. The
+					<literal>afterMethodInvocation</literal> method also
+					takes as argument the return value of the method
+					invocation. If the method returns
+					<literal>void</literal>, then <literal>null</literal>
+					is given as parameter. If the method returns a
+					primitive type, then it is wrapped inside the
+					appropriate wrapper object.
+				</para>
+
+				<para>
+					Interceptors are configured with the interceptor
+					controller. This controller is not included in the
+					default controllers configuration so it must be
+					explicitely added:
+				</para>
+
+				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_13.snip"/></textobject></programlisting>
+
+				<para>
+					The management of the interceptors is then done
+					through the methods of the interceptor controller:
+				</para>
+
+				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_15.snip"/></textobject></programlisting>
+
+				<para>
+					Most of these methods take as parameter, among others,
+					an <literal>interceptorID</literal>. This identifier
+					may be:
+				</para>
+
+				<itemizedlist>
+					<listitem>
+						<para>
+							The controller interface name of a controller
+							that implements the <literal>Interceptor</literal>
+							interface. For instance:
+							<literal>myinterceptor-controller</literal>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Or the concatenation of the name of a non
+							functional component and the name of one
+							of its server interfaces, that implements
+							the <literal>Interceptor</literal>
+							interface, separated by a point. For instance:
+							<literal>InterceptorNFComponent.interceptor-services</literal>
+						</para>
+					</listitem>
+				</itemizedlist>
+
+				<para>
+					Interceptors can also be attached to interfaces
+					throught ADL. To do so, an additional attribute
+					must be used in the <literal>interface</literal>
+					tag of the interface on which to attach the
+					interceptor(s). This attribute is
+					<literal>interceptors</literal> and takes as
+					value the list of interceptor identifiers that
+					must act as interceptors for this interface.
+					If the interceptor identifier represents a
+					controller interface, the identifier must be
+					prefixed by the "this." keyword like for
+					bindings. If the interceptor identifier
+					represents a server interface of a non
+					functional component, the identifier is the
+					same than the one used for the interceptor
+					controller API (ie. the concatenation of the
+					name of the non functional component and the
+					name of its server interface). Each interceptor
+					identifiers must be separated by a comma. When
+					using this attribute, it becomes useless to
+					explicitely add the interceptor controller to
+					the list of controllers because it will be
+					automatically added if it is not present by default.
+				</para>
+
+				<para>Interceptors can be composed in a sequentially manner.</para>
+
+				<para>
+					The <literal>beforeMethodInvocation</literal>
+					method is called sequentially for each controller
+					in the order they have been set with the interceptor
+					controller or through ADL.
+					The <literal>afterMethodInvocation</literal> method
+					is called sequentially for each controller in the
+					reverse order they have been set with the interceptor
+					controller or through ADL.
+				</para>
+
+				<para>
+					For instance, if 2 interceptors are attached to an interface
+					in this order:
+				</para>
+
+				<screen>Interceptor1 and then Interceptor2</screen>
+
+				<para>
+					This means that an invocation on the interface will follow
+					this path:
+				</para>
+
+				<programlisting language="java">&mdash;&gt; caller &mdash;&gt; Interceptor1.beforeMethodInvocation &mdash;&gt; Interceptor2.beforeMethodInvocation &mdash;&gt; callee.invocation &mdash;&gt; Interceptor2.afterMethodInvocation &mdash;&gt; Interceptor1.afterMethodInvocation</programlisting>
+
+			</section>
+
+			<section xml:id="Writingacustominterceptor_53"><info><title>Writing a custom interceptor</title></info>
+
+				<para>
+					To implement an interceptor as a controller object,
+					it has to follow the rules explained in
+					<xref linkend="configuration_html_controllers_n"/>
+					for the
+					creation of a custom controller. In addition of that,
+					the controller object has to implement the
+					<literal>Interceptor</literal> interface, which declares
+					interception methods (pre/post interception) that have
+					to be implemented.
+				</para>
+
+				<para>
+					Here is a simple example of a controller object acting as
+					an interceptor:
+				</para>
+
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_userguide_14.snip"/></textobject></programlisting>
+
+				<para>
+					Then for instance such an interceptor could be attached
+					to an interface named "itf" by simply calling the
+					<literal>addInterceptorOnInterface</literal> method
+					of the interceptor controller:
+				</para>
+
+				<programlisting language="java">Utils.getPAInterceptorController(component).addInterceptorOnInterface("itf", "myinterceptor-controller");</programlisting>
+
+				<para>
+					By using ADL, the interceptor could be attached to
+					the interface like that:
+				</para>
+
+				<programlisting language="xml">&lt;interface signature="signature-itf" role="server" name="itf" interceptors="this.myinterceptor-controller"/&gt;</programlisting>
+
+				<para>
+					To implement an interceptor as a non functional component,
+					it has to follow the rules in explained in
+					<xref linkend="Structuringthemembranewithnonfunctionalcomponents_53"/>
+					for the creation of a non functional component. In addition
+					of that, the non functional component has to provide a
+					functional server interface that implements the
+					<literal>Interceptor</literal> interface, which declares
+					interception methods (pre/post interception) that have
+					to be implemented.
+				</para>
+
+				<para>
+					Here is a simple example of the ADL definition of a non
+					functional component acting as an interceptor:
+				</para>
+
+				<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/component_userguide_18.snip"/></textobject></programlisting>
+
+				<para>
+					Assuming this non functional component is named
+					<literal>InterceptorNFComponent</literal>, then for
+					instance such an interceptor could be attached
+					to an interface named "itf" by simply calling the
+					<literal>addInterceptorOnInterface</literal> method
+					of the interceptor controller:
+				</para>
+
+				<programlisting language="java">Utils.getPAInterceptorController(component).addInterceptorOnInterface("itf", "InterceptorNFComponent.interceptor-services");</programlisting>
+
+				<para>
+					By using ADL, the interceptor could be attached to
+					the interface like that:
+				</para>
+
+				<programlisting language="xml">&lt;interface signature="signature-itf" role="server" name="itf" interceptors="InterceptorNFComponent.interceptor-services"/&gt;</programlisting>
 
 			</section>
 

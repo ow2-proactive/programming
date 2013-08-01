@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<!-- @snippet-start component_userguide_18 -->
+<definition name="org.objectweb.proactive.examples.components.interception.Interceptor">
+	<interface signature="org.objectweb.proactive.core.component.interception.Interceptor" role="server" name="interceptor-services"/>
+
+	<content class="org.objectweb.proactive.examples.components.interception.InterceptorImpl"/>
+</definition>
+<!-- @snippet-end component_userguide_18 -->

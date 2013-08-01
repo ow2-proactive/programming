@@ -39,18 +39,27 @@ package org.objectweb.proactive.core.component.control;
 import java.util.List;
 
 import org.objectweb.fractal.api.NoSuchInterfaceException;
-import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.component.exceptions.IllegalInterceptorException;
+import org.objectweb.proactive.core.component.exceptions.NoSuchComponentException;
 import org.objectweb.proactive.core.component.interception.Interceptor;
 
 
 /**
  * Controller for the {@link Interceptor interceptors} of the component.
  * <br>
- * Each {@link Interceptor} is represented by an ID which corresponds to the controller
- * interface name of the controller object implementing the {@link Interceptor} interface
- * and which must act as an interceptor.
+ * Each {@link Interceptor} is represented by an ID which can correspond to:
+ * <ul>
+ * <li>
+ * The controller interface name of a controller object implementing the {@link Interceptor}
+ * interface. For instance: {@code controllername-controller}.
+ * </li>
+ * <li>
+ * Or the name of a Non Functional component of the membrane followed by the name of one of its
+ * functional server interfaces implementing the {@link Interceptor} interface. For instance:
+ * {@code nfComponentName.interfaceName}.
+ * </li>
  * <br>
  * Each {@link Interceptor} can be attached to one or several client and/or server
  * functional interfaces.
@@ -78,12 +87,15 @@ public interface PAInterceptorController {
      * @param index Position on which to add the {@link Interceptor interceptor}.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
      * @throws NoSuchInterfaceException If there is no such interface or if the ID does not represent a
-     * controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface or if the index is invalid.
+     * controller interface nor a server interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor} or if the index is invalid.
      */
     public void addInterceptorOnInterface(String interfaceName, String interceptorID, int index)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException;
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException;
 
     /**
      * Adds at the last position the {@link Interceptor interceptor} with the specified ID to the interface
@@ -93,12 +105,15 @@ public interface PAInterceptorController {
      * @param interceptorID ID of the {@link Interceptor interceptor} to add.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
      * @throws NoSuchInterfaceException If there is no such interface or if the ID does not represent a
-     * controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * controller interface nor a server interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void addInterceptorOnInterface(String interfaceName, String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException;
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException;
 
     /**
      * Adds the {@link Interceptor interceptors} with the specified IDs to the interface with the specified
@@ -107,13 +122,16 @@ public interface PAInterceptorController {
      * @param interfaceName Name of the interface on which to add the {@link Interceptor interceptor}.
      * @param interceptorIDs IDs of the {@link Interceptor interceptors} to add.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
-     * @throws NoSuchInterfaceException If there is no such interface or if one of the IDs does not represent
-     * a controller interface.
-     * @throws IllegalBindingException If one of the IDs does not represent a controller interface which
-     * implements the {@link Interceptor} interface.
+     * @throws NoSuchInterfaceException If there is no such interface or if one of the ID does not represent a
+     * controller interface nor a server interface of a NF component.
+     * @throws NoSuchComponentException If one the IDs matches the format of the concatenation of a NF component
+     * name and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void addInterceptorsOnInterface(String interfaceName, List<String> interceptorIDs)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException;
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException;
 
     /**
      * Adds at the last position the {@link Interceptor interceptor} with the specified ID to all the
@@ -121,12 +139,15 @@ public interface PAInterceptorController {
      * 
      * @param interceptorID ID of the {@link Interceptor interceptor} to add.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
-     * @throws NoSuchInterfaceException If the ID does not represent a controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * @throws NoSuchInterfaceException If the ID does not represent a controller interface nor a server
+     * interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void addInterceptorOnAllServerInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException;
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException;
 
     /**
      * Adds at the last position the {@link Interceptor interceptor} with the specified ID to all the
@@ -134,12 +155,15 @@ public interface PAInterceptorController {
      * 
      * @param interceptorID ID of the {@link Interceptor interceptor} to add.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
-     * @throws NoSuchInterfaceException If the ID does not represent a controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * @throws NoSuchInterfaceException If the ID does not represent a controller interface nor a server
+     * interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void addInterceptorOnAllClientInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException;
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException;
 
     /**
      * Adds at the last position the {@link Interceptor interceptor} with the specified ID to all the
@@ -147,12 +171,15 @@ public interface PAInterceptorController {
      * 
      * @param interceptorID ID of the {@link Interceptor interceptor} to add.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
-     * @throws NoSuchInterfaceException If the ID does not represent a controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * @throws NoSuchInterfaceException If the ID does not represent a controller interface nor a server
+     * interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void addInterceptorOnAllInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException;
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException;
 
     /**
      * Removes the {@link Interceptor interceptor} located at the specified position from the interface
@@ -162,10 +189,10 @@ public interface PAInterceptorController {
      * @param index Position of the {@link Interceptor interceptor} to remove.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
      * @throws NoSuchInterfaceException If there is no such interface.
-     * @throws IllegalBindingException If the index is invalid.
+     * @throws IllegalInterceptorException If the index is invalid.
      */
     public void removeInterceptorFromInterface(String interfaceName, int index)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException;
+            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalInterceptorException;
 
     /**
      * Removes the first occurrence of the {@link Interceptor interceptor} with the specified ID from the
@@ -175,12 +202,15 @@ public interface PAInterceptorController {
      * @param interceptorID ID of the {@link Interceptor interceptor} to remove.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
      * @throws NoSuchInterfaceException If there is no such interface or if the ID does not represent a
-     * controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * controller interface nor a server interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void removeInterceptorFromInterface(String interfaceName, String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException;
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException;
 
     /**
      * Removes all the {@link Interceptor interceptors} from the interface with the specified name.
@@ -198,12 +228,16 @@ public interface PAInterceptorController {
      * 
      * @param interceptorID ID of the {@link Interceptor interceptor} to remove.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
-     * @throws NoSuchInterfaceException If the ID does not represent a controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * @throws NoSuchInterfaceException If the ID does not represent a controller interface nor a server
+     * interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void removeInterceptorFromAllServerInterfaces(String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException;
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException;
 
     /**
      * Removes the first occurrence of the {@link Interceptor interceptor} with the specified ID from all the
@@ -211,12 +245,16 @@ public interface PAInterceptorController {
      * 
      * @param interceptorID ID of the {@link Interceptor interceptor} to remove.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
-     * @throws NoSuchInterfaceException If the ID does not represent a controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * @throws NoSuchInterfaceException If the ID does not represent a controller interface nor a server
+     * interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void removeInterceptorFromAllClientInterfaces(String interceptorID)
-            throws IllegalLifeCycleException, NoSuchInterfaceException, IllegalBindingException;
+            throws IllegalLifeCycleException, NoSuchInterfaceException, NoSuchComponentException,
+            IllegalInterceptorException;
 
     /**
      * Removes the first occurrence of the {@link Interceptor interceptor} with the specified ID from all the
@@ -224,11 +262,14 @@ public interface PAInterceptorController {
      * 
      * @param interceptorID ID of the {@link Interceptor interceptor} to remove.
      * @throws IllegalLifeCycleException If the component is not in the stopped state.
-     * @throws NoSuchInterfaceException If the ID does not represent a controller interface.
-     * @throws IllegalBindingException If the ID does not represent a controller interface which implements the
-     * {@link Interceptor} interface.
+     * @throws NoSuchInterfaceException If the ID does not represent a controller interface nor a server
+     * interface of a NF component.
+     * @throws NoSuchComponentException If the ID matches the format of the concatenation of a NF component name
+     * and a server interface name but there is no NF component with such a name.
+     * @throws IllegalInterceptorException If there is a problem with the ID or with the
+     * {@link Interceptor interceptor}.
      */
     public void removeInterceptorFromAllInterfaces(String interceptorID) throws IllegalLifeCycleException,
-            NoSuchInterfaceException, IllegalBindingException;
+            NoSuchInterfaceException, NoSuchComponentException, IllegalInterceptorException;
     //@snippet-end component_userguide_15
 }

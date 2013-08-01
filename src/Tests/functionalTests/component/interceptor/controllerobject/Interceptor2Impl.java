@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.interceptor;
+package functionalTests.component.interceptor.controllerobject;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
@@ -48,16 +48,16 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import functionalTests.component.controller.DummyController;
 
 
-public class Interceptor1Impl extends AbstractPAController implements Interceptor1 {
-    public Interceptor1Impl(Component owner) {
+public class Interceptor2Impl extends AbstractPAController implements Interceptor2 {
+    public Interceptor2Impl(Component owner) {
         super(owner);
     }
 
     @Override
     protected void setControllerItfType() {
         try {
-            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(Interceptor1.INTERCEPTOR1_NAME,
-                    Interceptor1.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(Interceptor2.INTERCEPTOR2_NAME,
+                    Interceptor2.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                     TypeFactory.SINGLE));
         } catch (InstantiationException e) {
             throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
@@ -87,11 +87,13 @@ public class Interceptor1Impl extends AbstractPAController implements Intercepto
 
     @Override
     public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
-        setDummyValue(getDummyValue() + Interceptor1.BEFORE_INTERCEPTION);
+        setDummyValue(getDummyValue() + Interceptor2.BEFORE_INTERCEPTION + interfaceName + "-" +
+            methodCall.getName() + " - ");
     }
 
     @Override
     public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + Interceptor1.AFTER_INTERCEPTION);
+        setDummyValue(getDummyValue() + Interceptor2.AFTER_INTERCEPTION + interfaceName + "-" +
+            methodCall.getName() + " - ");
     }
 }

@@ -34,15 +34,15 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.interceptor;
+package functionalTests.component.interceptor.controllerobject;
 
 import org.objectweb.proactive.core.component.interception.Interceptor;
 
 import functionalTests.component.controller.DummyController;
 
 
-public interface Interceptor2 extends DummyController, Interceptor {
-    public static final String INTERCEPTOR2_NAME = "interceptor2-controller";
-    public static final String BEFORE_INTERCEPTION = " - before-interception-" + INTERCEPTOR2_NAME + " - ";
-    public static final String AFTER_INTERCEPTION = " - after-interception-" + INTERCEPTOR2_NAME + " - ";
+public interface Interceptor1 extends DummyController, Interceptor {
+    public static final String INTERCEPTOR1_NAME = "interceptor1-controller";
+    public static final String BEFORE_INTERCEPTION = " - before-interception-" + INTERCEPTOR1_NAME + " - ";
+    public static final String AFTER_INTERCEPTION = " - after-interception-" + INTERCEPTOR1_NAME + " - ";
 }
