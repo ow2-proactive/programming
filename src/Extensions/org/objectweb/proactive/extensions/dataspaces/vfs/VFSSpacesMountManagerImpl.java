@@ -234,14 +234,14 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
 
         final DataSpacesURI mountingPoint = spaceInfo.getMountingPoint();
 
+        if (!mountedSpaces.containsKey(mountingPoint)) {
+            mountedSpaces.put(mountingPoint, new HashMap<String, FileObject>());
+        }
+
         if (!availableSpacesList.containsKey(spaceInfo)) {
             LinkedHashSet<String> srl = new LinkedHashSet<String>();
             srl.addAll(spaceInfo.getUrls());
             availableSpacesList.put(mountingPoint, srl);
-        }
-
-        if (!mountedSpaces.containsKey(mountingPoint)) {
-            mountedSpaces.put(mountingPoint, new HashMap<String, FileObject>());
         }
 
         String nl = System.getProperty("line.separator");
@@ -267,6 +267,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             }
         }
         if (nbMountedSpace == 0) {
+            mountedSpaces.remove(mountingPoint);
             throw new FileSystemException(errorMessage);
         }
     }
@@ -293,23 +294,21 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         try {
             mountedRoot = vfsManager.resolveFile(spaceRootFOUri);
 
-            if (mountedRoot != null && !mountedRoot.exists()) {
+            // normally it should never happen
+            if (mountedRoot == null) {
+                removeSpaceRootUri(spacePart, spaceRootFOUri);
+                return false;
+            }
+
+            // the remote file system is accessible but the root path doesn't exist (in the remote filesystem)
+            if (!mountedRoot.exists()) {
                 String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
                 logger.info(err);
-                allRootUris.remove(spaceRootFOUri);
-                availableSpacesList.put(spacePart, allRootUris);
+                removeSpaceRootUri(spacePart, spaceRootFOUri);
                 throw new FileSystemException(err);
             }
-        } catch (org.apache.commons.vfs.FileSystemException x) {
-            String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
-            logger.info(err);
 
-            allRootUris.remove(spaceRootFOUri);
-            availableSpacesList.put(spacePart, allRootUris);
-            throw new FileSystemException(err, x);
-
-        }
-        if (mountedRoot != null) {
+            // the fs is accessible and the root exists
             synchronized (readLock) {
                 fos.put(spaceRootFOUri, mountedRoot);
                 mountedSpaces.put(spacePart, fos);
@@ -317,10 +316,24 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             if (logger.isDebugEnabled())
                 logger.debug(String.format("Mounted space: %s (access URL: %s)", spacePart, spaceRootFOUri));
             return true;
+
+        } catch (org.apache.commons.vfs.FileSystemException x) {
+            String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
+            logger.info(err);
+            removeSpaceRootUri(spacePart, spaceRootFOUri);
+            throw new FileSystemException(err, x);
+
         }
+    }
+
+    private void removeSpaceRootUri(DataSpacesURI spacePart, String spaceRootFOUri) {
+        LinkedHashSet<String> allRootUris = availableSpacesList.get(spacePart);
         allRootUris.remove(spaceRootFOUri);
-        availableSpacesList.put(spacePart, allRootUris);
-        return false;
+        if (allRootUris.isEmpty()) {
+            availableSpacesList.remove(spacePart);
+        } else {
+            availableSpacesList.put(spacePart, allRootUris);
+        }
     }
 
     /*
