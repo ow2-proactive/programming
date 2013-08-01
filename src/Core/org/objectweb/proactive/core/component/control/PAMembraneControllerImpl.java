@@ -894,8 +894,12 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
      * {@inheritDoc}
      */
     @Override
-    public Component nfGetFcSubComponent(String name) {
-        return nfComponents.get(name);
+    public Component nfGetFcSubComponent(String name) throws NoSuchComponentException {
+        if (nfComponents.containsKey(name)) {
+            return nfComponents.get(name);
+        } else {
+            throw new NoSuchComponentException("There is no such non functional component: " + name);
+        }
     }
 
     /**
