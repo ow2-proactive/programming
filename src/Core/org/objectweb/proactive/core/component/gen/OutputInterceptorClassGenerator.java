@@ -78,12 +78,15 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
 
     private String clientInterfaceName;
 
+    private OutputInterceptorClassGenerator() {
+    }
+
     public static OutputInterceptorClassGenerator instance() {
         if (instance == null) {
-            return new OutputInterceptorClassGenerator();
-        } else {
-            return instance;
+            instance = new OutputInterceptorClassGenerator();
         }
+
+        return instance;
     }
 
     public PAInterface generateInterface(PAInterface representative,

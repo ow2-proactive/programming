@@ -85,12 +85,15 @@ import org.objectweb.proactive.core.util.ClassDataCache;
 public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
     private static WSProxyClassGenerator instance;
 
+    private WSProxyClassGenerator() {
+    }
+
     public static WSProxyClassGenerator instance() {
         if (instance == null) {
-            return new WSProxyClassGenerator();
-        } else {
-            return instance;
+            instance = new WSProxyClassGenerator();
         }
+
+        return instance;
     }
 
     /**

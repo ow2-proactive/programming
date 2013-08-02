@@ -84,15 +84,15 @@ public class RepresentativeInterfaceClassGenerator extends AbstractInterfaceClas
     // this boolean for deciding of a possible indirection for the functionnal calls
     protected boolean isPrimitive = false;
 
-    public RepresentativeInterfaceClassGenerator() {
+    private RepresentativeInterfaceClassGenerator() {
     }
 
     public static RepresentativeInterfaceClassGenerator instance() {
         if (instance == null) {
-            return new RepresentativeInterfaceClassGenerator();
-        } else {
-            return instance;
+            instance = new RepresentativeInterfaceClassGenerator();
         }
+
+        return instance;
     }
 
     @Override

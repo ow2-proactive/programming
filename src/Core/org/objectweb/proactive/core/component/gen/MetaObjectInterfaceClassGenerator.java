@@ -86,15 +86,15 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
     protected static final String IMPL_FIELD_NAME = "impl"; //delegatee
     private static MetaObjectInterfaceClassGenerator instance;
 
-    public MetaObjectInterfaceClassGenerator() {
+    private MetaObjectInterfaceClassGenerator() {
     }
 
     public static MetaObjectInterfaceClassGenerator instance() {
         if (instance == null) {
-            return new MetaObjectInterfaceClassGenerator();
-        } else {
-            return instance;
+            instance = new MetaObjectInterfaceClassGenerator();
         }
+
+        return instance;
     }
 
     @Override
