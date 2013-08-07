@@ -49,7 +49,7 @@ package org.objectweb.proactive.core.config;
  */
 public interface PAProperty {
     static public enum PropertyType {
-        STRING, INTEGER, BOOLEAN, LONG;
+        STRING, INTEGER, BOOLEAN, LONG, LIST
     }
 
     /**
