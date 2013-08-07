@@ -43,6 +43,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PARemoteObject;
@@ -218,8 +219,11 @@ public class RemoteObjectExposer<T> {
     private synchronized void multiExposeRemoteObject(String name, boolean rebind) {
         // Expose the remote object using all specified communication protocol
         if (CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.isSet()) {
-            for (String protocol : CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                    .getValue().split(",")) {
+            List<String> protocols = CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                    .getValue();
+            Iterator<String> it = protocols.iterator();
+            while (it.hasNext()) {
+                String protocol = it.next();
                 if (protocol.length() > 0) {
                     try {
                         // Create and store RRO in hashtable
@@ -248,21 +252,13 @@ public class RemoteObjectExposer<T> {
                                     protocol +
                                     " seems invalid for this runtime, this is not a critical error, the protocol will be dismiss." +
                                     pae);
-                        // First position
-                        CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                                .setValue(CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                                        .getValue().replace(protocol + ",", ""));
-                        // Or whatever position except first
-                        CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                                .setValue(CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                                        .getValue().replace(protocol, ""));
-                        // Suppress double occurence of ','
-                        CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                                .setValue(CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                                        .getValue().replace(",,", ","));
+
+                        // Remove the protocol
+                        it.remove();
                     }
                 }
             }
+            CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.setValue(protocols);
         }
     }
 

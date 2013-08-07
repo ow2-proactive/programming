@@ -459,12 +459,12 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      */
 
     /** Expose object using these protocols in addition to the default one (protocols separated by comma) */
-    public static PAPropertyString PA_COMMUNICATION_ADDITIONAL_PROTOCOLS = new PAPropertyString(
-        "proactive.communication.additional_protocols", false);
+    public static PAPropertyList PA_COMMUNICATION_ADDITIONAL_PROTOCOLS = new PAPropertyList(
+        "proactive.communication.additional_protocols", ",", false);
 
-    /** Impose a static order for protocols selection, this automatically desactivate benchmark */
-    public static PAPropertyString PA_COMMUNICATION_PROTOCOLS_ORDER = new PAPropertyString(
-        "proactive.communication.protocols.order", false);
+    /** Impose a static order for protocols selection, this automatically deactivate benchmark (protocols separated by comma) */
+    public static PAPropertyList PA_COMMUNICATION_PROTOCOLS_ORDER = new PAPropertyList(
+        "proactive.communication.protocols.order", ",", false);
 
     /** Specify a parameter for benchmark */
     public static PAPropertyString PA_BENCHMARK_PARAMETER = new PAPropertyString(
