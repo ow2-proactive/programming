@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
@@ -170,22 +171,21 @@ public class BenchmarkMonitorThread extends Observable {
         // Return all protocols from orderedProtocols' array
         // but reordered them in accordance with the property
         if (CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.isSet()) {
-            String[] fixedOrder = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.getValue()
-                    .split(",");
+            List<String> fixedOrder = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.getValue();
             String[] ret = new String[copy.length];
             boolean braek = false;
             // For each box to fill in the array
             for (int i = 0; i < ret.length; i++) {
                 // Try to keep the 'fixed order'
-                for (int j = 0; j < fixedOrder.length; j++) {
+                for (int j = 0; j < fixedOrder.size(); j++) {
                     braek = false;
                     // But check if it works
                     for (int k = 0; k < copy.length; k++) {
-                        if (fixedOrder[j] != null && copy[k] != null &&
-                            fixedOrder[j].equalsIgnoreCase(copy[k])) {
+                        if (fixedOrder.get(j) != null && copy[k] != null &&
+                            fixedOrder.get(j).equalsIgnoreCase(copy[k])) {
                             ret[i] = copy[k];
                             copy[k] = null;
-                            fixedOrder[j] = null;
+                            fixedOrder.set(j, null);
                             braek = true;
                             break;
                         }
