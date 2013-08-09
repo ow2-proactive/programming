@@ -53,7 +53,6 @@ import org.objectweb.proactive.core.node.Node;
  */
 @PublicAPI
 public interface PAGenericFactory extends GenericFactory {
-
     /**
      * Creates a non-functional component.
      *
@@ -65,8 +64,38 @@ public interface PAGenericFactory extends GenericFactory {
      * @return The {@link Component} interface of the created component.
      * @throws InstantiationException If the component cannot be created.
      */
-    public Component newNfFcInstance(Type type, Object controllerDesc, Object contentDesc)
+    Component newNfFcInstance(Type type, Object controllerDesc, Object contentDesc)
             throws InstantiationException;
+
+    /**
+     * Creates components in parallel.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the components to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the components to be created. This description is
+     * implementation specific.
+     * @param nbComponents The number of components to create in parallel.
+     * @return The {@link Component} interfaces of the created components.
+     * @throws InstantiationException If the components cannot be created.
+     */
+    Component[] newFcInstanceInParallel(Type type, Object controllerDesc, Object contentDesc, int nbComponents)
+            throws InstantiationException;
+
+    /**
+     * Creates non-functional components in parallel.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the components to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the components to be created. This description is
+     * implementation specific.
+     * @param nbComponents The number of components to create in parallel.
+     * @return The {@link Component} interfaces of the created components.
+     * @throws InstantiationException If the components cannot be created.
+     */
+    Component[] newNfFcInstanceInParallel(Type type, Object controllerDesc, Object contentDesc,
+            int nbComponents) throws InstantiationException;
 
     /**
      * Creates a component.
@@ -97,6 +126,36 @@ public interface PAGenericFactory extends GenericFactory {
             throws InstantiationException;
 
     /**
+     * Creates components in parallel.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the components to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the components to be created. This description is
+     * implementation specific.
+     * @param nbComponents The number of components to create in parallel.
+     * @return The {@link Component} interfaces of the created components.
+     * @throws InstantiationException If the components cannot be created.
+     */
+    Component[] newFcInstanceInParallel(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc, int nbComponents) throws InstantiationException;
+
+    /**
+     * Creates non-functional components in parallel.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the components to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the components to be created. This description is
+     * implementation specific.
+     * @param nbComponents The number of components to create in parallel.
+     * @return The {@link Component} interfaces of the created components.
+     * @throws InstantiationException If the components cannot be created.
+     */
+    Component[] newNfFcInstanceInParallel(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc, int nbComponents) throws InstantiationException;
+
+    /**
      * Creates a component on a given node.
      *
      * @param type An arbitrary component type.
@@ -105,7 +164,7 @@ public interface PAGenericFactory extends GenericFactory {
      * @param contentDesc A description of the content part of the component to be created. This description is
      * implementation specific.
      * @param node The node where to create the component.
-     * @return the {@link Component} interface of the created component.
+     * @return The {@link Component} interface of the created component.
      * @throws InstantiationException If the component cannot be created.
      */
     Component newFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc,
@@ -120,9 +179,41 @@ public interface PAGenericFactory extends GenericFactory {
      * @param contentDesc A description of the content part of the component to be created. This description is
      * implementation specific.
      * @param node The node where to create the component.
-     * @return the {@link Component} interface of the created component.
+     * @return The {@link Component} interface of the created component.
      * @throws InstantiationException If the component cannot be created.
      */
     Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc, Node node) throws InstantiationException;
+
+    /**
+     * Creates components in parallel on the given nodes.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the components to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the components to be created. This description is
+     * implementation specific.
+     * @param nbComponents The number of components to create in parallel.
+     * @param nodes The nodes where to create the components.
+     * @return The {@link Component} interfaces of the created components.
+     * @throws InstantiationException If the components cannot be created.
+     */
+    Component[] newFcInstanceInParallel(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc, int nbComponents, Node[] nodes) throws InstantiationException;
+
+    /**
+     * Creates non-functional components in parallel on the given nodes.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the components to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the components to be created. This description is
+     * implementation specific.
+     * @param nbComponents The number of components to create in parallel.
+     * @param nodes The nodes where to create the components.
+     * @return The {@link Component} interfaces of the created components.
+     * @throws InstantiationException If the components cannot be created.
+     */
+    Component[] newNfFcInstanceInParallel(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc, int nbComponents, Node[] nodes) throws InstantiationException;
 }

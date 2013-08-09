@@ -38,8 +38,16 @@ package org.objectweb.proactive.core.component;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 import javax.naming.NamingException;
 
@@ -77,6 +85,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 /**
@@ -91,7 +100,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 @PublicAPI
 public class Fractive implements PAGenericFactory, Component, Factory {
-    private static Fractive instance = null;
     private GCMTypeFactory typeFactory = PAGCMTypeFactoryImpl.instance();
     private Type type = null;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
@@ -103,46 +111,17 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /**
-     * Returns singleton
-     *
-     * @return Fractive a singleton
+     * {@inheritDoc}
      */
-    private static Fractive instance() {
-        if (instance == null) {
-            instance = new Fractive();
-        }
-        return instance;
-    }
-
-    /*
-     * @see org.objectweb.fractal.api.factory.Factory#newFcInstance()
-     */
+    @Override
     public Component newFcInstance() throws InstantiationException {
         return this;
     }
 
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newFcInstance(org.objectweb.fractal.api.Type,
-     *      org.objectweb.proactive.core.component.ControllerDescription,
-     *      org.objectweb.proactive.core.component.ContentDescription)
+    /**
+     * {@inheritDoc}
      */
-    public Component newFcInstance(Type type, ControllerDescription controllerDesc,
-            ContentDescription contentDesc) throws InstantiationException {
-        return newFcInstance(type, controllerDesc, contentDesc, (Node) null);
-    }
-
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type, org.objectweb.proactive.core.component.ControllerDescription, org.objectweb.proactive.core.component.ContentDescription)
-     */
-    public Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
-            ContentDescription contentDesc) throws InstantiationException {
-        return newNfFcInstance(type, controllerDesc, contentDesc, (Node) null);
-    }
-
-    /*
-     * @see org.objectweb.fractal.api.factory.GenericFactory#newFcInstance(org.objectweb.fractal.api.Type,
-     *      java.lang.Object, java.lang.Object)
-     */
+    @Override
     public Component newFcInstance(Type type, Object controllerDesc, Object contentDesc)
             throws InstantiationException {
         try {
@@ -192,10 +171,10 @@ public class Fractive implements PAGenericFactory, Component, Factory {
         }
     }
 
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type,
-     *      java.lang.Object, java.lang.Object)
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public Component newNfFcInstance(Type type, Object controllerDesc, Object contentDesc)
             throws InstantiationException {
         try {
@@ -243,14 +222,67 @@ public class Fractive implements PAGenericFactory, Component, Factory {
                 "With this implementation, parameters must be of respective types : " + Type.class.getName() +
                     ',' + ControllerDescription.class.getName() + ',' + ContentDescription.class.getName());
         }
+
     }
 
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newFcInstance(org.objectweb.fractal.api.Type,
-     *      org.objectweb.proactive.core.component.ControllerDescription,
-     *      org.objectweb.proactive.core.component.ContentDescription,
-     *      org.objectweb.proactive.core.node.Node)
+    /**
+     * {@inheritDoc}
      */
+    @Override
+    public Component[] newFcInstanceInParallel(final Type type, final Object controllerDesc,
+            final Object contentDesc, int nbComponents) throws InstantiationException {
+        return newFcInstanceInParallel(type, controllerDesc, contentDesc, nbComponents, null, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component[] newNfFcInstanceInParallel(final Type type, final Object controllerDesc,
+            final Object contentDesc, int nbComponents) throws InstantiationException {
+        return newFcInstanceInParallel(type, controllerDesc, contentDesc, nbComponents, null, false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component newFcInstance(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc) throws InstantiationException {
+        return newFcInstance(type, controllerDesc, contentDesc, (Node) null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc) throws InstantiationException {
+        return newNfFcInstance(type, controllerDesc, contentDesc, (Node) null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component[] newFcInstanceInParallel(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc, int nbComponents) throws InstantiationException {
+        return newFcInstanceInParallel(type, controllerDesc, contentDesc, nbComponents, (Node[]) null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component[] newNfFcInstanceInParallel(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc, int nbComponents) throws InstantiationException {
+        return newNfFcInstanceInParallel(type, controllerDesc, contentDesc, nbComponents, (Node[]) null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Component newFcInstance(Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc, Node node) throws InstantiationException {
         try {
@@ -268,12 +300,10 @@ public class Fractive implements PAGenericFactory, Component, Factory {
         }
     }
 
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type,
-     *      org.objectweb.proactive.core.component.ControllerDescription,
-     *      org.objectweb.proactive.core.component.ContentDescription,
-     *      org.objectweb.proactive.core.node.Node)
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc, Node node) throws InstantiationException {
         try {
@@ -289,6 +319,75 @@ public class Fractive implements PAGenericFactory, Component, Factory {
             ie.initCause(e);
             throw ie;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component[] newFcInstanceInParallel(final Type type, final ControllerDescription controllerDesc,
+            final ContentDescription contentDesc, int nbComponents, final Node[] nodes)
+            throws InstantiationException {
+        return newFcInstanceInParallel(type, controllerDesc, contentDesc, nbComponents, nodes, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component[] newNfFcInstanceInParallel(final Type type, final ControllerDescription controllerDesc,
+            final ContentDescription contentDesc, int nbComponents, final Node[] nodes)
+            throws InstantiationException {
+        return newFcInstanceInParallel(type, controllerDesc, contentDesc, nbComponents, nodes, false);
+    }
+
+    private Component[] newFcInstanceInParallel(final Type type, final Object controllerDesc,
+            final Object contentDesc, int nbComponents, final Node[] nodes, final boolean isFunctional)
+            throws InstantiationException {
+        ThreadFactory threadFactory = new NamedThreadFactory("Fractive thread pool");
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime()
+                .availableProcessors(), threadFactory);
+        List<Future<Component>> futures = new ArrayList<Future<Component>>();
+
+        for (int i = 0; i < nbComponents; i++) {
+            final Node node = (nodes == null) ? null : nodes[i];
+
+            futures.add(executorService.submit(new Callable<Component>() {
+                @Override
+                public Component call() throws Exception {
+                    if (node != null) {
+                        if (isFunctional) {
+                            return newFcInstance(type, (ControllerDescription) controllerDesc,
+                                    (ContentDescription) contentDesc, node);
+                        } else {
+                            return newNfFcInstance(type, (ControllerDescription) controllerDesc,
+                                    (ContentDescription) contentDesc, node);
+                        }
+                    } else {
+                        if (isFunctional) {
+                            return newFcInstance(type, (ControllerDescription) controllerDesc,
+                                    (ContentDescription) contentDesc);
+                        } else {
+                            return newNfFcInstance(type, controllerDesc, contentDesc);
+                        }
+                    }
+                }
+            }));
+        }
+
+        Component[] components = new Component[nbComponents];
+
+        for (int i = 0; i < nbComponents; i++) {
+            try {
+                components[i] = futures.get(i).get();
+            } catch (InterruptedException e) {
+                throw new InstantiationException(e.getMessage());
+            } catch (ExecutionException e) {
+                throw new InstantiationException(e.getMessage());
+            }
+        }
+
+        return components;
     }
 
     /*

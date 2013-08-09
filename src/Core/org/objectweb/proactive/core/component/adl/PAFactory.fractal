@@ -3,12 +3,15 @@
 
 <!-- This definition does not extend org.objectweb.fractal.adl.BasicFactory because it does not require any argument (the compiler is always the same) -->
 <definition name="org.objectweb.proactive.core.component.adl.PAFactory" extends="org.objectweb.fractal.adl.FactoryType">
+	<interface name="factory" role="server" signature="org.objectweb.proactive.core.component.adl.PAFactory"/>
+
 	<!-- Factory component -->
 	<component name="factory" definition="org.objectweb.fractal.adl.FactoryType">
+		<interface name="factory" role="server" signature="org.objectweb.proactive.core.component.adl.PAFactory"/>
 		<interface role="client" name="loader" signature="org.objectweb.fractal.adl.Loader"/>
 		<interface role="client" name="compiler" signature="org.objectweb.fractal.adl.Compiler"/>
 		<interface role="client" name="scheduler" signature="org.objectweb.fractal.task.core.Scheduler"/>
-		<content class="org.objectweb.fractal.adl.BasicFactory"/>
+		<content class="org.objectweb.proactive.core.component.adl.PABasicFactory"/>
 	</component>
 
 	<!-- Loader component -->
