@@ -11,6 +11,7 @@ subprojects {
     }
 
     dependencies {
+        compile 'log4j:log4j:1.2.14'
         testCompile 'junit:junit:4.11'
     }
 }
@@ -18,7 +19,6 @@ subprojects {
 project(':programming-core') {
     dependencies {
         compile(
-                'log4j:log4j:1.2.14',
                 'org.mortbay.jetty:jetty:6.1.18',
                 'org.tmatesoft.svnkit:trilead-ssh2:build213-svnkit-1.3-patch',
                 'commons-cli:commons-cli:1.1',
@@ -26,6 +26,55 @@ project(':programming-core') {
                 'xerces:xercesImpl:2.8.1',
 
                 project(':programming-annotation')
+        )
+    }
+}
+
+project('programming-extensions') {
+    subprojects {
+        dependencies {
+            compile(
+                    project(':programming-core')
+            )
+        }
+    }
+}
+
+project('programming-extensions:programming-extension-amqp') {
+    dependencies {
+        compile(
+                'com.rabbitmq:amqp-client:3.0.2',
+        )
+    }
+}
+
+
+project('programming-extensions:programming-extension-annotation') {
+    dependencies {
+        compile(
+                files("${System.properties['java.home']}/../lib/tools.jar"),
+        )
+    }
+}
+
+
+project('programming-extensions:programming-extension-vfsprovider') {
+    dependencies {
+        compile(
+                'commons-logging:commons-logging:1.1.1',
+                'org.apache.commons:commons-vfs2:2.0',
+
+                project(':programming-extensions:programming-extension-annotation')
+        )
+    }
+}
+
+project('programming-extensions:programming-extension-dataspaces') {
+    dependencies {
+        compile(
+                'org.apache.commons:commons-vfs2:2.0',
+
+                project(':programming-extensions:programming-extension-vfsprovider')
         )
     }
 }

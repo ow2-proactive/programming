@@ -1,2 +1,7 @@
 include 'programming-annotation'
 include 'programming-core'
+include 'programming-extensions'
+include 'programming-extensions:programming-extension-amqp'
+include 'programming-extensions:programming-extension-annotation'
+include 'programming-extensions:programming-extension-vfsprovider'
+include 'programming-extensions:programming-extension-dataspaces'
