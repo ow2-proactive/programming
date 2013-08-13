@@ -14,6 +14,7 @@
 /timitOutputDirectory
 /.classpath*
 /generated
+build/
 
 # /compile/
 /compile/eclipse_formatter_config.properties
