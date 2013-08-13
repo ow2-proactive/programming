@@ -1,0 +1,12 @@
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    group='org.objectweb.proactive'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
