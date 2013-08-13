@@ -86,3 +86,11 @@ project('programming-extensions:programming-extension-gcmdeployment') {
         )
     }
 }
+
+project('programming-extensions:programming-extension-gcmdeployment') {
+    dependencies {
+        compile(
+                'commons-cli:commons-cli:1.1'
+        )
+    }
+}
