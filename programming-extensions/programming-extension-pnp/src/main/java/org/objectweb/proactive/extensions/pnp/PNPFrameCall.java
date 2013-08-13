@@ -39,33 +39,48 @@ package org.objectweb.proactive.extensions.pnp;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import org.objectweb.proactive.extensions.pnp.exception.PNPMalformedMessageException;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBufferInputStream;
 import org.jboss.netty.buffer.ChannelBuffers;
-import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
-import org.objectweb.proactive.extensions.pnp.exception.PNPMalformedMessageException;
 
 
-/** A PNP frame for a call response
+/** A PNP frame for a call
  *
- * A call response is sent by the server to the client. The payload depends of the call payload.
+ * A call is sent be the client to the server. The payload is a {@link PNPROMessage} that
+ * is executed by the remote server.
  *
- * A call response is identified by an unique call id (the id of the call).
+ * A call is identified by an unique call id. To nicely handle network failure, an heartbeat period
+ * can be specified.
+ *
  * @since ProActive 4.3.0
  */
-class PNPFrameCallResponse extends PNPFrame {
+class PNPFrameCall extends PNPFrame {
     /** The offset of the payload */
-    static final private int RESPONSE_MESSAGE_HEADER_LENGTH = PNPFrame.Field.getTotalOffset() +
+    static final private int REQUEST_MESSAGE_HEADER_LENGTH = PNPFrame.Field.getTotalOffset() +
         Field.getTotalOffset();
 
-    /**
-     * Fields of the {@link PNPFrameCall} header.
+    /** Fields of the {@link PNPFrameCall} header.
      *
      * These fields are put after the {@link PNPFrame} header.
      */
     public enum Field {
-        /** The unique id of the call*/
-        CALL_ID(8, Long.class);
+        /** An unique identifier for a call */
+        CALL_ID(8, Long.class),
+        /** Is this a one way call ?
+         *
+         * One way calls does not expect {@link PNPFrameCallResponse} and there
+         * is no way to know if the frame has been received or not
+         */
+        ONE_WAY(4, Integer.class), // Could be a bool but int to avoid padding issue
+        /** The heartbeat period.
+         *
+         * If >0 the server must send an heartbeat on the channel at least every
+         * {@link #HEARTBEAT_PERIOD}
+         */
+        HEARTBEAT_PERIOD(8, Long.class),
+        /** The call service timeout */
+        SERVICE_TIMEOUT(8, Long.class);
 
         private int length;
         private int myOffset = 0;
@@ -135,30 +150,38 @@ class PNPFrameCallResponse extends PNPFrame {
             switch (this) {
                 case CALL_ID:
                     return "CALL_ID";
+                case HEARTBEAT_PERIOD:
+                    return "EARTHBEAT_PERID";
+                case ONE_WAY:
+                    return "ONE_WAY";
+                case SERVICE_TIMEOUT:
+                    return "SERVICE_TIMEOUT";
                 default:
                     return super.toString();
             }
         }
     }
 
+    final protected boolean oneWay;
+    final protected long hearthbeatPeriod;
+    final protected long serviceTimeout;
     final protected long callId;
     final protected byte[] payload;
     final protected ChannelBuffer payloadChannelBuffer;
-
-    public long getCallId() {
-        return callId;
-    }
 
     /**
      * Create a {@link PNPFrameCall}
      *
      * All the parameters must be non null
-     *
      */
-    protected PNPFrameCallResponse(long callId, byte[] payload) {
-        super(PNPFrame.MessageType.CALL_RESPONSE);
+    public PNPFrameCall(long callId, boolean oneWay, long hearthbeatPeriod, long serviceTimeout,
+            byte[] payload) {
+        super(PNPFrame.MessageType.CALL);
 
         this.callId = callId;
+        this.oneWay = oneWay;
+        this.hearthbeatPeriod = hearthbeatPeriod;
+        this.serviceTimeout = serviceTimeout;
         this.payload = payload;
         this.payloadChannelBuffer = null;
     }
@@ -170,19 +193,55 @@ class PNPFrameCallResponse extends PNPFrame {
      *            a buffer which contains a message
      * @param offset
      *            the offset at which the message begins
-     * @throws MalformedMessageException
+     * @throws PNPMalformedMessageException
      *             If the buffer does not contain a valid message (proto ID,
      *             length etc.)
      */
-    protected PNPFrameCallResponse(ChannelBuffer buf, int offset) throws PNPMalformedMessageException {
+    protected PNPFrameCall(ChannelBuffer buf, int offset) throws PNPMalformedMessageException {
         super(buf, offset);
 
         this.callId = readCallId(buf, offset);
+        this.oneWay = readOneWay(buf, offset);
+        this.hearthbeatPeriod = readHearthbeatPeriod(buf, offset);
+        this.serviceTimeout = readServiceTimeout(buf, offset);
 
-        buf.readerIndex(0);
-        int datalength = buf.readableBytes() - RESPONSE_MESSAGE_HEADER_LENGTH;
-        this.payloadChannelBuffer = buf.slice(RESPONSE_MESSAGE_HEADER_LENGTH, datalength);
+        buf.resetReaderIndex();
+        int datalength = buf.readableBytes() - REQUEST_MESSAGE_HEADER_LENGTH;
+        if (datalength <= 0) {
+            throw new PNPMalformedMessageException("Invalid frame call: no payload");
+        }
+        this.payloadChannelBuffer = buf.slice(REQUEST_MESSAGE_HEADER_LENGTH, datalength);
         this.payload = null;
+    }
+
+    private long readServiceTimeout(ChannelBuffer buf, int offset) throws PNPMalformedMessageException {
+        long timeout = TypeHelper.channelBufferToLong(buf, offset + PNPFrame.Field.getTotalOffset() +
+            Field.SERVICE_TIMEOUT.getOffset());
+
+        if (timeout < 0) {
+            throw new PNPMalformedMessageException("Invalid " + Field.SERVICE_TIMEOUT + " value: " + timeout);
+        }
+
+        return timeout;
+    }
+
+    private long readHearthbeatPeriod(ChannelBuffer buf, int offset) throws PNPMalformedMessageException {
+        long heartbeat = TypeHelper.channelBufferToLong(buf, offset + PNPFrame.Field.getTotalOffset() +
+            Field.HEARTBEAT_PERIOD.getOffset());
+
+        if (heartbeat < 0) {
+            throw new PNPMalformedMessageException("Invalid " + Field.HEARTBEAT_PERIOD + " value: " +
+                heartbeat);
+        }
+
+        return heartbeat;
+    }
+
+    private boolean readOneWay(ChannelBuffer buf, int offset) {
+        int oneWay = TypeHelper.channelBufferToInt(buf, offset + PNPFrame.Field.getTotalOffset() +
+            Field.ONE_WAY.getOffset());
+
+        return oneWay != 0;
     }
 
     private long readCallId(ChannelBuffer buf, int offset) {
@@ -218,18 +277,42 @@ class PNPFrameCallResponse extends PNPFrame {
             payloadLenght = this.payload.length;
         }
 
-        return super.toString() + Field.CALL_ID.toString() + ":" + this.callId + "; PAYLOAD:(" +
-            payloadLenght + ")" + byteArrayToHexString(buf, 64);
+        return super.toString() + Field.CALL_ID.toString() + ":" + this.callId + ";" +
+            Field.HEARTBEAT_PERIOD.toString() + ":" + this.hearthbeatPeriod + ";" + Field.ONE_WAY.toString() +
+            ":" + this.oneWay + ";" + Field.SERVICE_TIMEOUT.toString() + ":" + this.serviceTimeout +
+            "; PAYLOAD" + ":(" + payloadLenght + ")" + byteArrayToHexString(buf, 64);
     }
 
     @Override
     public ChannelBuffer toChannelBuffer() {
 
-        byte[] header = new byte[RESPONSE_MESSAGE_HEADER_LENGTH];
+        byte[] header = new byte[REQUEST_MESSAGE_HEADER_LENGTH];
         super.writeHeader(header, 0);
         TypeHelper.longToByteArray(this.callId, header, PNPFrame.Field.getTotalOffset() +
             Field.CALL_ID.getOffset());
+        TypeHelper.intToByteArray(this.oneWay ? 1 : 0, header, PNPFrame.Field.getTotalOffset() +
+            Field.ONE_WAY.getOffset());
+        TypeHelper.longToByteArray(this.hearthbeatPeriod, header, PNPFrame.Field.getTotalOffset() +
+            Field.HEARTBEAT_PERIOD.getOffset());
+        TypeHelper.longToByteArray(this.serviceTimeout, header, PNPFrame.Field.getTotalOffset() +
+            Field.SERVICE_TIMEOUT.getOffset());
 
         return ChannelBuffers.wrappedBuffer(header, this.payload);
+    }
+
+    public boolean isOneWay() {
+        return this.oneWay;
+    }
+
+    public long getHearthbeatPeriod() {
+        return hearthbeatPeriod;
+    }
+
+    public long getServiceTimeout() {
+        return serviceTimeout;
+    }
+
+    public long getCallId() {
+        return callId;
     }
 }
