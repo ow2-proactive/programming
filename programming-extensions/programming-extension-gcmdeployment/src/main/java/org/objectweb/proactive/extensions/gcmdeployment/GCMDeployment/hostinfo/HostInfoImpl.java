@@ -36,16 +36,13 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo;
 
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
-
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.utils.OperatingSystem;
+
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class HostInfoImpl implements HostInfo {
@@ -282,56 +279,6 @@ public class HostInfoImpl implements HostInfo {
 
     public String getNetworkInterface() {
         return this.networkInterface;
-    }
-
-    @SuppressWarnings("unused")
-    static public class UnitTestHostInfoImpl {
-        HostInfoImpl notInitialized;
-        HostInfoImpl halfInitialized;
-        HostInfoImpl fullyInitialized;
-
-        @Before
-        public void before() {
-            notInitialized = new HostInfoImpl();
-
-            halfInitialized = new HostInfoImpl();
-            halfInitialized.setId("toto");
-            halfInitialized.addTool(new Tool("tool", "//path"));
-
-            fullyInitialized = new HostInfoImpl();
-            fullyInitialized.setId("id");
-            fullyInitialized.setOs(OperatingSystem.unix);
-            fullyInitialized.setHomeDirectory("//homeidr");
-            fullyInitialized.setUsername("usermane");
-            fullyInitialized.addTool(new Tool("tool", "//path"));
-        }
-
-        @Test
-        public void getTool1() {
-            Assert.assertNotNull(fullyInitialized.getTool("tool"));
-            Assert.assertNull(fullyInitialized.getTool("tool2"));
-        }
-
-        @Test
-        public void equality() {
-            HostInfoImpl tmp = new HostInfoImpl();
-            tmp.setId("id");
-            Assert.assertTrue(tmp.equals(fullyInitialized));
-
-            tmp = new HostInfoImpl();
-            tmp.setId("xxxxxxx");
-            Assert.assertFalse(tmp.equals(fullyInitialized));
-        }
-
-        @Test(expected = IllegalStateException.class)
-        public void checkReadygetHalfInitialized() {
-            halfInitialized.check();
-        }
-
-        @Test(expected = IllegalStateException.class)
-        public void checkReadygetHomeDirectory() {
-            notInitialized.check();
-        }
     }
 
 }
