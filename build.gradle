@@ -102,3 +102,14 @@ project('programming-extensions:programming-extension-pnp') {
         )
     }
 }
+
+project('programming-extensions:programming-extension-pnpssl') {
+    dependencies {
+        compile(
+                'bouncycastle:bcprov-jdk15:136',
+                'org.jboss.netty:netty:3.2.2.Final',
+                
+                project(':programming-extensions:programming-extension-pnp')
+        )
+    }
+}
