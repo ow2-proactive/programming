@@ -1,5 +1,6 @@
 subprojects {
 
+
     apply plugin: 'java'
     apply plugin: 'maven'
 
@@ -14,6 +15,11 @@ subprojects {
         compile 'log4j:log4j:1.2.14'
         testCompile 'junit:junit:4.11'
     }
+
+    test {
+        systemProperties << ['proactive.classloading.useHTTP': false]
+    }
+
 }
 
 project(':programming-core') {
@@ -34,7 +40,8 @@ project('programming-extensions') {
     subprojects {
         dependencies {
             compile(
-                    project(':programming-core')
+                    project(':programming-core'),
+                    project(':programming-annotation')
             )
         }
     }
@@ -63,6 +70,8 @@ project('programming-extensions:programming-extension-vfsprovider') {
         compile(
                 'commons-logging:commons-logging:1.1.1',
                 'org.apache.commons:commons-vfs2:2.0',
+                'commons-net:commons-net:2.2',
+                'com.jcraft:jsch:0.1.42',
 
                 project(':programming-extensions:programming-extension-annotation')
         )
@@ -73,6 +82,8 @@ project('programming-extensions:programming-extension-dataspaces') {
     dependencies {
         compile(
                 'org.apache.commons:commons-vfs2:2.0',
+                'commons-net:commons-net:2.2',
+                'com.jcraft:jsch:0.1.42',
 
                 project(':programming-extensions:programming-extension-vfsprovider')
         )
@@ -108,7 +119,7 @@ project('programming-extensions:programming-extension-pnpssl') {
         compile(
                 'bouncycastle:bcprov-jdk15:136',
                 'org.jboss.netty:netty:3.2.2.Final',
-                
+
                 project(':programming-extensions:programming-extension-pnp')
         )
     }
