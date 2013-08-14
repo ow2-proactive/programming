@@ -36,16 +36,17 @@
  */
 package functionalTests.gcmdeployment.gcmapplication;
 
-import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
-
 import functionalTests.GCMFunctionalTest;
+import org.junit.Test;
 
 
 public class WaitReadyWithTimeoutNOK extends GCMFunctionalTest {
 
-    public WaitReadyWithTimeoutNOK() {
+    public WaitReadyWithTimeoutNOK() throws ProActiveException {
         super(WaitReadyWithTimeoutNOK.class.getResource("gcma.xml"));
+        super.startDeployment();
     }
 
     @Test(expected = ProActiveTimeoutException.class)

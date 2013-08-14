@@ -36,10 +36,6 @@
  */
 package functionalTests.processbuilder.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,10 +43,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder;
@@ -60,10 +52,18 @@ import org.objectweb.proactive.extensions.processbuilder.PAOSProcessBuilderFacto
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
-
 import functionalTests.FunctionalTest;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+@Ignore // require suer
 public class WindowsAndLinuxTester extends FunctionalTest {
     final static boolean isLinux = System.getProperty("os.name").toLowerCase().startsWith("linux");
     final static boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");

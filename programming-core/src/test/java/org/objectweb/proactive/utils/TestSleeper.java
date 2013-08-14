@@ -44,22 +44,29 @@ public class TestSleeper {
     static final long SLEEP_TIME = 1000;
 
     @Test
-    public void test() {
-        Sleeper sleeper = new Sleeper(SLEEP_TIME);
-
-        T t = new T(Thread.currentThread());
+    public void test() throws InterruptedException {
+        final Sleeper sleeper = new Sleeper(SLEEP_TIME);
+        final long[] times = { 0, 0 };
+        Thread sleepyThread = new Thread() {
+            @Override
+            public void run() {
+                times[0] = System.currentTimeMillis();
+                sleeper.sleep();
+                times[1] = System.currentTimeMillis();
+            }
+        };
+        T t = new T(sleepyThread);
         Thread thread = new Thread(t);
         thread.setDaemon(true);
         thread.start();
 
-        long before = System.currentTimeMillis();
-        sleeper.sleep();
-        long after = System.currentTimeMillis();
-
+        sleepyThread.start();
+        sleepyThread.join();
         // -1 is here because System.nanoTime() is more accurate
         // than System.currentTimeMillis(). Rouding errors can leads to
         // after - before == SLEEP_TIME - 1
-        Assert.assertTrue(after - before >= SLEEP_TIME - 1);
+        Assert.assertTrue(times[1]- times[0] >= SLEEP_TIME - 1);
+        thread.interrupt();
     }
 
     private class T implements Runnable {

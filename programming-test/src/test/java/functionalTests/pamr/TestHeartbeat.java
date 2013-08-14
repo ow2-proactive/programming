@@ -47,8 +47,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
 import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
@@ -59,12 +57,13 @@ import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRPlainSocketFactory;
 import org.objectweb.proactive.extensions.pamr.router.Router;
-
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.connect.Connector;
 import com.sun.tools.jdi.SocketAttachingConnector;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;

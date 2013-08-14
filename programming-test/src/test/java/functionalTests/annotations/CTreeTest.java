@@ -48,17 +48,17 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
+import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
+import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler.CompilationTask;
-import javax.tools.JavaFileObject.Kind;
 
-import org.junit.Ignore;
 import org.objectweb.proactive.extensions.annotation.common.ProActiveProcessorCTree;
+import org.junit.Ignore;
 
 
 /**
@@ -171,7 +171,8 @@ public abstract class CTreeTest extends AnnotationTest {
             if (diagnistic.getKind().equals(Diagnostic.Kind.ERROR)) {
                 errors++;
             }
-            if (diagnistic.getKind().equals(Diagnostic.Kind.WARNING)) {
+            if (diagnistic.getKind().equals(Diagnostic.Kind.WARNING)
+                    && !diagnistic.getCode().equals("compiler.warn.proc.processor.incompatible.source.version")) {
                 warnings++;
             }
         }

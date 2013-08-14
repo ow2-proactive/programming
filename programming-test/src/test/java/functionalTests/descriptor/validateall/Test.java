@@ -36,21 +36,18 @@
  */
 package functionalTests.descriptor.validateall;
 
-import static junit.framework.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 
+import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
+import functionalTests.FunctionalTest;
 import org.apache.xerces.parsers.SAXParser;
 import org.junit.Before;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import functionalTests.FunctionalTest;
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -64,29 +61,15 @@ public class Test extends FunctionalTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        URL baseurl = Test.class.getResource("/functionalTests/");
-        URI baseuri = baseurl.toURI();
-
         // locates the descriptor directory
         // FIXME if ever the classes are compiled to a location other than a direct child of the PROACTIVE_DIR, the descriptor folder won't be found
-        URI descriptorsuri = baseuri.resolve("../../../descriptors");
-        File descriptorsfolder = new File(descriptorsuri);
-        assertTrue("\"" + descriptorsuri + "\" directory could not be found", descriptorsfolder.exists());
-        assertTrue("\"" + descriptorsuri + "\" is not a directory", descriptorsfolder.isDirectory());
-        assertTrue("\"" + descriptorsuri + "\" is read-protected", descriptorsfolder.canRead());
+        File descriptorsfolder = new File("../descriptors");
+        assertTrue("\"" + descriptorsfolder + "\" directory could not be found", descriptorsfolder.exists());
+        assertTrue("\"" + descriptorsfolder + "\" is not a directory", descriptorsfolder.isDirectory());
+        assertTrue("\"" + descriptorsfolder + "\" is read-protected", descriptorsfolder.canRead());
 
         // recurse into directory tree to locate xml files
         checkValidationRecursive(descriptorsfolder);
-
-        // locates the examples directory
-        URI examplesuri = baseuri.resolve("../../../descriptors/examples");
-        File examplesfolder = new File(examplesuri);
-        assertTrue("\"" + examplesuri + "\" directory could not be found", examplesfolder.exists());
-        assertTrue("\"" + examplesuri + "\" is not a directory", examplesfolder.isDirectory());
-        assertTrue("\"" + examplesuri + "\" is read-protected", examplesfolder.canRead());
-
-        // recurse into directory tree to locate xml files
-        checkValidationRecursive(examplesfolder);
 
         assertTrue(!handler.validationError);
     }

@@ -1,6 +1,4 @@
 subprojects {
-
-
     apply plugin: 'java'
     apply plugin: 'maven'
 
@@ -14,10 +12,6 @@ subprojects {
     dependencies {
         compile 'log4j:log4j:1.2.14'
         testCompile 'junit:junit:4.11'
-    }
-
-    test {
-        systemProperties << ['proactive.classloading.useHTTP': false]
     }
 
 }
@@ -58,9 +52,7 @@ project('programming-extensions:programming-extension-amqp') {
 
 project('programming-extensions:programming-extension-annotation') {
     dependencies {
-        compile(
-                files("${System.properties['java.home']}/../lib/tools.jar"),
-        )
+        compile files("${System.properties['java.home']}/../lib/tools.jar")
     }
 }
 
@@ -77,6 +69,9 @@ project('programming-extensions:programming-extension-vfsprovider') {
         )
         testCompile 'org.apache.commons:commons-vfs2:2.0:tests'
     }
+    test {
+        systemProperties << ['proactive.classloading.useHTTP': false]
+    }
 }
 
 project('programming-extensions:programming-extension-dataspaces') {
@@ -88,6 +83,9 @@ project('programming-extensions:programming-extension-dataspaces') {
 
                 project(':programming-extensions:programming-extension-vfsprovider')
         )
+    }
+    test {
+        systemProperties << ['proactive.classloading.useHTTP': false]
     }
 }
 
@@ -157,18 +155,25 @@ project(':programming-test') {
     }
 
     test {
-        include '**/activeobject/**'
-
         forkEvery 1
 
         testLogging {
             exceptionFormat = 'full'
         }
 
-        systemProperties << ['proactive.test.timeout': 60000]
-        systemProperties << ['proactive.communication.protocol': 'rmi']
-        systemProperties << ['proactive.rmi.port': '1099']
+        systemProperties << ['proactive.home': projectDir.absolutePath]
+        systemProperties << ['proactive.runtime.ping': false]
+        systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
 
-        systemProperties << ['proactive.home': '.']
+        // for TestHeartbeat
+        systemProperties << ['-Djdwp.port': 5550]
+        jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5550'
     }
+
+    task copyToLib(type: Copy) {
+        from configurations.testCompile
+        into "$buildDir/dist/lib"
+    }
+
+    test.dependsOn copyToLib
 }

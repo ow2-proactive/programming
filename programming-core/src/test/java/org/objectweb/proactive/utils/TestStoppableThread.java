@@ -118,7 +118,7 @@ public class TestStoppableThread {
             t.terminate(100, TimeUnit.MILLISECONDS);
             Assert.fail("Thread is unresponsive. An exception should be thrown.");
         } catch (NotStoppedException e) {
-            e.printStackTrace();
+            // expected
         }
 
         Assert.assertFalse(t.isStopped());

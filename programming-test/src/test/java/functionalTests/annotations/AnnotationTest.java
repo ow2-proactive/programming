@@ -37,14 +37,12 @@
 package functionalTests.annotations;
 
 import java.io.File;
-import java.util.Map;
 
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import functionalTests.FunctionalTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-
-import functionalTests.FunctionalTest;
 
 
 /**
@@ -99,16 +97,8 @@ public abstract class AnnotationTest extends FunctionalTest {
         return sb;
     }
 
-    private final String buildAnnotationProcessorPath(String proactive_home) {
-
-        File proactive_classes = new File(proactive_home, "classes");
-        StringBuilder buildProcPath = new StringBuilder();
-        String[] pathDirs = new String[] { "Core", "Extra", "Utils", "Extensions" };
-        for (String pathDir : pathDirs) {
-            buildProcPath.append((new File(proactive_classes, pathDir)) + File.pathSeparator);
-        }
-
-        return buildProcPath.toString();
+    private String buildAnnotationProcessorPath(String proactive_home) {
+        return System.getProperty("java.class.path");
     }
 
     // to be initialized by the subclasses
@@ -121,12 +111,13 @@ public abstract class AnnotationTest extends FunctionalTest {
     protected void inputFilesPathInit() {
         Class<? extends Object> testClass = this.getClass();
         TEST_FILES_PACKAGE = testClass.getPackage().getName() + ".inputs.";
-        String testFilesRelpath = File.separator + "src" + File.separator + "Tests" + File.separator +
-            TEST_FILES_PACKAGE.replace('.', File.separatorChar);
+        String testFilesRelpath = File.separator + "src" + File.separator + "test" + File.separator +
+                "java" + File.separator +
+        TEST_FILES_PACKAGE.replace('.', File.separatorChar);
 
         // HACK set the test classes in the classpath
         String cp = System.getProperty("java.class.path");
-        cp = cp + File.pathSeparator + PROACTIVE_HOME + File.separator + "classes" + File.separator + "Tests";
+        cp = cp + File.pathSeparator + PROACTIVE_HOME + File.separator + "classes" + File.separator + "test";
         System.setProperty("java.class.path", cp);
 
         INPUT_FILES_PATH = PROACTIVE_HOME + testFilesRelpath;

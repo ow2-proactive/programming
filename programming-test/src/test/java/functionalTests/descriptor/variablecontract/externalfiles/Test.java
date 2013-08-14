@@ -36,18 +36,17 @@
  */
 package functionalTests.descriptor.variablecontract.externalfiles;
 
-import static junit.framework.Assert.assertTrue;
-
 import java.io.File;
 import java.net.URL;
 
-import org.junit.Before;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
-
 import functionalTests.FunctionalTest;
+import org.junit.Before;
+
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -69,7 +68,7 @@ public class Test extends FunctionalTest {
     @org.junit.Test
     public void action() throws Exception {
         VariableContractImpl variableContract = new VariableContractImpl();
-        URL url = Test.class.getResource("/functionalTests/descriptor/variablecontract/externalfiles/");
+        URL url = Test.class.getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.properties");
         String path = new File(url.toURI()).getAbsolutePath();
         variableContract.setVariableFromProgram("RPATH", path, VariableContractType.ProgramVariable);
 

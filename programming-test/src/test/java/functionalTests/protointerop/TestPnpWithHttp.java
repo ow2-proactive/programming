@@ -36,8 +36,13 @@
  */
 package functionalTests.protointerop;
 
+import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectSet;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
+import org.junit.Test;
 
 
 public class TestPnpWithHttp extends AbstractProtoInterop {
@@ -48,6 +53,12 @@ public class TestPnpWithHttp extends AbstractProtoInterop {
 
     public TestPnpWithHttp() throws ProActiveException {
         super("http");
+    }
+
+    @Test(timeout = 10000)
+    public void test() throws ActiveObjectCreationException, NodeException, UnknownProtocolException,
+            RemoteObjectSet.NotYetExposedException {
+        super.test();
     }
 
 }

@@ -110,6 +110,7 @@ public class VFSFileObjectAdapterTest {
         final File aoDir = new File(rootDir, "ao1");
         final File someDir = new File(aoDir, "dir");
         final File someFile = new File(someDir, "file.txt");
+        AbstractIOOperationsBase.deleteRecursively(testDir);
         assertTrue(someDir.mkdirs());
         assertTrue(differentDir.mkdir());
         assertTrue(someFile.createNewFile());

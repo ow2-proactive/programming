@@ -36,7 +36,6 @@
  */
 package functionalTests.protointerop;
 
-import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
@@ -46,7 +45,6 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedEx
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
-
 import functionalTests.GCMFunctionalTest;
 
 
@@ -58,7 +56,6 @@ public class AbstractProtoInterop extends GCMFunctionalTest {
         super.startDeployment();
     }
 
-    @Test(timeout = 10000)
     public void test() throws ActiveObjectCreationException, NodeException, UnknownProtocolException,
             NotYetExposedException {
         Node node = super.getANode();

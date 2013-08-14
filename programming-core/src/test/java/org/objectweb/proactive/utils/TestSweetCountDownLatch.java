@@ -47,35 +47,64 @@ public class TestSweetCountDownLatch {
 
     @Test
     public void test() throws InterruptedException {
-        CountDownLatch latch = new SweetCountDownLatch(1);
+        final CountDownLatch latch = new SweetCountDownLatch(1);
 
-        T t = new T(latch, Thread.currentThread(), 0);
+        Thread latchThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    // eated by sweetcountdownlatch
+                }
+            }
+        });
+        T t = new T(latch, latchThread, 0);
         new Thread(t).start();
-        latch.await();
+
+        latchThread.start();
+        latchThread.join();
 
         Assert.assertEquals(0, latch.getCount());
     }
 
     @Test
-    public void testTimeoutExpired() {
-        SweetCountDownLatch latch = new SweetCountDownLatch(1);
+    public void testTimeoutExpired() throws InterruptedException {
+        final SweetCountDownLatch latch = new SweetCountDownLatch(1);
 
-        T t = new T(latch, Thread.currentThread(), 10000);
+        final boolean[] b = new boolean[1];
+        Thread latchThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                b[0] = latch.await(50, TimeUnit.MILLISECONDS);
+            }
+        });
+        T t = new T(latch, latchThread, 10000);
         new Thread(t).start();
-        boolean b = latch.await(50, TimeUnit.MILLISECONDS);
 
-        Assert.assertFalse(b);
+        latchThread.start();
+        latchThread.join();
+
+        Assert.assertFalse(b[0]);
     }
 
     @Test
-    public void testTimeout() {
-        SweetCountDownLatch latch = new SweetCountDownLatch(1);
-
-        T t = new T(latch, Thread.currentThread(), 0);
+    public void testTimeout() throws InterruptedException {
+        final SweetCountDownLatch latch = new SweetCountDownLatch(1);
+        final boolean[] b = new boolean[1];
+        Thread latchThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                   b[0] = latch.await(10000, TimeUnit.MILLISECONDS);
+            }
+        });
+        T t = new T(latch, latchThread, 0);
         new Thread(t).start();
-        boolean b = latch.await(10000, TimeUnit.MILLISECONDS);
 
-        Assert.assertTrue(b);
+        latchThread.start();
+        latchThread.join();
+
+        Assert.assertTrue(b[0]);
     }
 
     class T implements Runnable {

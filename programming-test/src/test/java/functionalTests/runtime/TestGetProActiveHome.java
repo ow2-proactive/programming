@@ -38,18 +38,18 @@ package functionalTests.runtime;
 
 import java.io.File;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-
 import functionalTests.FunctionalTest;
+import junit.framework.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
 
 
 /**
  * Test default runtime creation
  */
+@Ignore // coupled to project structure
 public class TestGetProActiveHome extends FunctionalTest {
 
     @Test
