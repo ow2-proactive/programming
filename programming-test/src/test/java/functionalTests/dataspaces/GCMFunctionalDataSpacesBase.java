@@ -57,8 +57,6 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 
-import unitTests.vfsprovider.AbstractIOOperationsBase;
-
 
 /**
  * Base of functional tests for Data Spaces. This class deploys Data Spaces with Naming Service,
@@ -205,9 +203,9 @@ public class GCMFunctionalDataSpacesBase extends GCMFunctionalTest {
     }
 
     @After
-    public void removeInputOutputSpacesContent() {
+    public void removeInputOutputSpacesContent() throws IOException {
         if (rootTmpDir.exists())
-            assertTrue(AbstractIOOperationsBase.deleteRecursively(rootTmpDir));
+            FileUtils.deleteDirectory(rootTmpDir);
     }
 
     @Before

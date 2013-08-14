@@ -38,15 +38,14 @@ package functionalTests.activeobject;
 
 import java.io.IOException;
 
-import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
-
 import functionalTests.GCMFunctionalTest;
+import org.junit.Test;
 
 
 public class TestGetUrl extends GCMFunctionalTest {

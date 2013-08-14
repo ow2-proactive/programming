@@ -34,10 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.vfsprovider;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+package vfsprovider;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -49,19 +46,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemException;
-import org.apache.commons.vfs.RandomAccessContent;
-import org.apache.commons.vfs.impl.DefaultFileSystemManager;
-import org.apache.commons.vfs.util.RandomAccessMode;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.RandomAccessContent;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.util.RandomAccessMode;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import unitTests.vfsprovider.AbstractIOOperationsBase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**

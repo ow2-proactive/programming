@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.vfsprovider;
+package vfsprovider;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -47,32 +47,30 @@ import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import junit.framework.Assert;
-import junit.framework.Test;
-
-import org.apache.commons.AbstractVfsTestCase;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemManager;
-import org.apache.commons.vfs.FilesCache;
-import org.apache.commons.vfs.cache.SoftRefFilesCache;
-import org.apache.commons.vfs.impl.DefaultFileSystemManager;
-import org.apache.commons.vfs.test.ProviderTestConfig;
-import org.apache.commons.vfs.test.ProviderTestSuite;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
+import junit.framework.Test;
+import org.apache.commons.AbstractVfsTestCase;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.commons.vfs2.FilesCache;
+import org.apache.commons.vfs2.cache.SoftRefFilesCache;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.test.ProviderTestConfig;
+import org.apache.commons.vfs2.test.ProviderTestSuite;
 
-import unitTests.vfsprovider.AbstractIOOperationsBase;
-import functionalTests.FunctionalTest;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 /**
  * Test suite for VFS ProActiveProvider basing on VFS generic provider tests (junit3).
  */
-public class TestProActiveProvider extends FunctionalTest implements ProviderTestConfig {
+public class TestProActiveProvider implements ProviderTestConfig {
     private final static URL TEST_DATA_SRC_ZIP_URL = TestProActiveProvider.class
-            .getResource("/functionalTests/vfsprovider/_DATA/test-data.zip");
+            .getResource("/vfsprovider/_DATA/test-data.zip");
 
     private final static File testDir = new File(System.getProperty("java.io.tmpdir"),
         "ProActive-TestProActiveProvider");
@@ -119,6 +117,11 @@ public class TestProActiveProvider extends FunctionalTest implements ProviderTes
     private FileSystemServerDeployer deployer;
     private FilesCache cache;
 
+    @Override
+    public DefaultFileSystemManager getDefaultFileSystemManager() {
+        return new DefaultFileSystemManager();
+    }
+
     public void prepare(final DefaultFileSystemManager manager) throws Exception {
         final ProActiveFileProvider provider = new ProActiveFileProvider();
         for (final String scheme : ProActiveFileName.getAllVFSSchemes()) {
@@ -163,8 +166,8 @@ public class TestProActiveProvider extends FunctionalTest implements ProviderTes
         if (testDir.exists()) {
             removeTestDir();
         }
-        Assert.assertFalse(testDir.exists());
-        Assert.assertTrue(testDir.mkdirs());
+        assertFalse(testDir.exists());
+        assertTrue(testDir.mkdirs());
 
         // extract files from archive with VFS provider test data
         final ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(
@@ -181,6 +184,6 @@ public class TestProActiveProvider extends FunctionalTest implements ProviderTes
 
     private void removeTestDir() {
         AbstractIOOperationsBase.deleteRecursively(testDir);
-        Assert.assertFalse(testDir.exists());
+        assertFalse(testDir.exists());
     }
 }

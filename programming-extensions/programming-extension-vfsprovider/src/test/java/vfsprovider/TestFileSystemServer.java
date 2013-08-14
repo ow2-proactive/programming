@@ -34,22 +34,38 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests;
+package vfsprovider;
 
-import org.apache.log4j.Logger;
-import org.junit.Ignore;
+import java.io.IOException;
+
+import org.objectweb.proactive.extensions.vfsprovider.exceptions.StreamNotFoundException;
+import org.objectweb.proactive.extensions.vfsprovider.exceptions.WrongStreamTypeException;
+import org.objectweb.proactive.extensions.vfsprovider.protocol.StreamMode;
+import org.objectweb.proactive.extensions.vfsprovider.server.FileSystemServerImpl;
+import org.junit.Assert;
+import org.junit.Test;
 
 
 /**
- * All in-place Unit tests must be declared here otherwise they will not be run.
- * 
- * Please use the following convention:
- * <ul>
- * <li>Add a static inner class to the class. Use <b>UnitTest</b> a prefix the for classname</li>
- * <li>Add this class to the following <b>SuiteClasses</b> annotation</li>
- * </ul>
+ * Simple usage test.
  */
-@Ignore
-public class UnitTests {
-    static final public Logger logger = Logger.getLogger("testsuite");
+public class TestFileSystemServer extends AbstractIOOperationsBase {
+
+    @Override
+    public String getTestDirFilename() {
+        return "PROACTIVE-FileSystemServerFunctionalTest";
+    }
+
+    @Test
+    public void test() throws IOException, StreamNotFoundException, WrongStreamTypeException {
+        FileSystemServerImpl server = new FileSystemServerImpl(testDir.getAbsolutePath());
+        server.startAutoClosing();
+        final String path = "/" + TEST_FILENAME;
+        final long stream = server.streamOpen(path, StreamMode.SEQUENTIAL_READ);
+        final int len = (int) server.fileGetInfo(path).getSize() % Integer.MAX_VALUE;
+        final byte[] content = server.streamRead(stream, len);
+        Assert.assertArrayEquals(TEST_FILE_CONTENT.getBytes(), content);
+        server.streamClose(stream);
+        server.stopServer();
+    }
 }

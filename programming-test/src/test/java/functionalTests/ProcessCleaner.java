@@ -267,7 +267,7 @@ public class ProcessCleaner {
         StringBuilder sb = new StringBuilder();
         sb.append(System.getProperty("java.home"));
         sb.append(File.separatorChar);
-        sb.append("..");
+        sb.append("src/main");
         sb.append(File.separatorChar);
         sb.append("bin");
         sb.append(File.separatorChar);

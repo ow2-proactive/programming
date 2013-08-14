@@ -36,6 +36,11 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
+import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
+import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemOptions;
@@ -52,11 +57,6 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.commons.vfs2.provider.url.UrlFileProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
-import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
-import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 
 
 /**
