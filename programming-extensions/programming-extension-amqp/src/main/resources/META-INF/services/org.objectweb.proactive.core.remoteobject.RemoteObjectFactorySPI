@@ -1,0 +1,2 @@
+org.objectweb.proactive.extensions.amqp.remoteobject.AMQPRemoteObjectFactorySPI
+org.objectweb.proactive.extensions.amqp.federation.AMQPFederationRemoteObjectFactorySPI
