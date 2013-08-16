@@ -64,6 +64,9 @@ project(':programming-core') {
         }
     }
     classes.dependsOn stub
+    test {
+        systemProperties << ['proactive.classloading.useHTTP': false]
+    }
 }
 
 project(':programming-build-utils') {

@@ -34,11 +34,13 @@
  */
 package org.objectweb.proactive.core.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import org.objectweb.proactive.core.mop.Utils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,17 +84,17 @@ public class CircularArrayListTest {
      * Serialization
      * @throws java.io.IOException
      */
-//    @Test
-//    @SuppressWarnings("unchecked")
-//    public void serialization() throws IOException {
-//        int nbElem = 50;
-//
-//        for (int i = 0; i < nbElem; i++)
-//            cal.add(i);
-//
-//        CircularArrayList<Integer> r = (CircularArrayList<Integer>) Utils.makeDeepCopy(cal);
-//        assertTrue(r.equals(cal));
-//    }
+    @Test
+    @SuppressWarnings("unchecked")
+    public void serialization() throws IOException {
+        int nbElem = 50;
+
+        for (int i = 0; i < nbElem; i++)
+            cal.add(i);
+
+        CircularArrayList<Integer> r = (CircularArrayList<Integer>) Utils.makeDeepCopy(cal);
+        assertTrue(r.equals(cal));
+    }
 
     @Test
     public void collectionAsParameter() {
