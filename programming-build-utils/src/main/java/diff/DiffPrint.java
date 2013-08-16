@@ -333,7 +333,7 @@ public class DiffPrint {
                        so that we will output another ed-command later
                        to change the double dot into a single dot.  */
                     if (".".equals(file1[i])) {
-                        outfile.println("..");
+                        outfile.println("src");
                         outfile.println(".");
                         /* Now change that double dot to the desired single dot.  */
                         outfile.println(i - first1 + first0 + 1 + "s/^\\.\\././");
