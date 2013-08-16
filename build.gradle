@@ -17,6 +17,7 @@ subprojects {
 }
 
 project(':programming-core') {
+    configurations { antClasspath }
     dependencies {
         compile(
                 'org.mortbay.jetty:jetty:6.1.18',
@@ -27,6 +28,44 @@ project(':programming-core') {
 
                 project(':programming-annotation')
         )
+        antClasspath project(':programming-build-utils')
+    }
+
+    task stub(dependsOn: ['compileJava', 'processResources']) {
+        inputs.file sourceSets.main.java.srcDirs
+        outputs.file fileTree(sourceSets.main.output.classesDir.parent)
+        doLast {
+            ant.taskdef(name: 'stub', classname: 'ant.AntStubGenerator', classpath: configurations.antClasspath.asPath)
+            ant.references.test = sourceSets.main.compileClasspath.files
+            ant.stub(srcdir: sourceSets.main.java.srcDirs.toArray()[0],
+                    dstdir: sourceSets.main.output.classesDir,
+                    classpath: (configurations.antClasspath + sourceSets.main.runtimeClasspath).asPath) {
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.BooleanWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.DoubleMutableWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.DoubleWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.FloatMutableWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.FloatWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.IntMutableWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.IntWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.LongMutableWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.LongWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.StringMutableWrapper")
+                'class'(name: "org.objectweb.proactive.core.util.wrapper.StringWrapper")
+
+                'class'(name: "org.objectweb.proactive.core.runtime.ProActiveRuntime")
+                'class'(name: "org.objectweb.proactive.core.body.UniversalBody")
+                'class'(name: "org.objectweb.proactive.core.jmx.util.JMXNotificationListener")
+                'class'(name: "org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector")
+                'class'(name: "org.objectweb.proactive.core.jmx.ProActiveConnection")
+                'class'(name: "org.objectweb.proactive.core.jmx.server.ProActiveServerImpl")
+            }
+        }
+    }
+    classes.dependsOn stub
+}
+
 project(':programming-build-utils') {
     dependencies {
         compile 'ant:ant:1.7.0'
