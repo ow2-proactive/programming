@@ -232,3 +232,47 @@ project(':programming-test') {
 
     test.dependsOn copyToLib
 }
+
+
+task ProActiveLibs(type: Copy) {
+    subprojects.each {
+        from it.configurations.runtime.files { it instanceof ExternalDependency }
+    }
+    into "dist/lib"
+}
+
+task ProActiveJar(type: Jar, dependsOn: ['ProActiveLibs', 'MergeMetaInfServices']) {
+    from "$buildDir/jar"
+    subprojects.each {
+        from it.jar.outputs.files.collect { zipTree(it) }
+    }
+    destinationDir file('dist/lib')
+    archiveName 'ProActive.jar'
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE // services are merged
+
+}
+
+task MergeMetaInfServices {
+    inputs.file subprojects.jar.outputs
+    outputs.file fileTree("$buildDir/jar/META-INF/services/")
+    doLast {
+        def serviceFile = subprojects.collect {
+            it.jar.outputs.files.collect {
+                zipTree(it).matching {
+                    include 'META-INF/services/**'
+                }.files
+            }
+        }.flatten()
+        serviceFile.groupBy { it.name }.each { k, v ->
+            new File("$buildDir/jar/META-INF/services/$k").with {
+                getParentFile().mkdirs();
+                write(v*.text.join('\n'))
+            }
+        }
+    }
+}
+
+task('build').dependsOn(ProActiveJar)
+ProActiveJar.dependsOn(subprojects.build)
+MergeMetaInfServices.dependsOn(subprojects.build)
+defaultTasks 'build'
