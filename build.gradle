@@ -67,10 +67,11 @@ project('programming-extensions:programming-extension-annotation') {
 project('programming-extensions:programming-extension-vfsprovider') {
     dependencies {
         compile(
-                'commons-logging:commons-logging:1.1.1',
                 'org.apache.commons:commons-vfs2:2.0',
                 'commons-net:commons-net:2.2',
+                'commons-httpclient:commons-httpclient:3.1',
                 'com.jcraft:jsch:0.1.42',
+                'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
 
                 project(':programming-extensions:programming-extension-annotation')
         )
@@ -86,7 +87,9 @@ project('programming-extensions:programming-extension-dataspaces') {
         compile(
                 'org.apache.commons:commons-vfs2:2.0',
                 'commons-net:commons-net:2.2',
+                'commons-httpclient:commons-httpclient:3.1',
                 'com.jcraft:jsch:0.1.42',
+                'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
 
                 project(':programming-extensions:programming-extension-vfsprovider')
         )
