@@ -13,8 +13,9 @@ subprojects {
         compile 'log4j:log4j:1.2.14'
         testCompile 'junit:junit:4.11'
     }
-
 }
+
+def distSubProjects = subprojects - project(':programming-build-utils') - project(':programming-test')
 
 project(':programming-core') {
     configurations { antClasspath }
@@ -238,7 +239,7 @@ project(':programming-test') {
 
 
 task ProActiveLibs(type: Copy) {
-    subprojects.each {
+    distSubProjects.each {
         from it.configurations.runtime.files { it instanceof ExternalDependency }
     }
     into "dist/lib"
@@ -246,20 +247,38 @@ task ProActiveLibs(type: Copy) {
 
 task ProActiveJar(type: Jar, dependsOn: ['ProActiveLibs', 'MergeMetaInfServices']) {
     from "$buildDir/jar"
-    subprojects.each {
+    distSubProjects.each {
         from it.jar.outputs.files.collect { zipTree(it) }
     }
     destinationDir file('dist/lib')
     archiveName 'ProActive.jar'
     duplicatesStrategy DuplicatesStrategy.EXCLUDE // services are merged
-
+    manifest {
+        attributes("Main-Class": "org.objectweb.proactive.Main",
+                "Implementation-Title": "ProActive",
+                "Implementation-Version": "",
+                "Implementation-Vendor": "OASIS - INRIA Sophia Antipolis",
+                "Implementation-URL": "http://proactive.inria.fr")
+    }
+    outputs.file file('dist/lib')
+    doLast {
+        // generate INDEX.list
+        ant.jar(update: true, index: true, destfile: file('dist/lib/ProActive.jar')) {
+            indexjars {
+                fileset(dir: 'dist/lib/') {
+                    include(name: '*.jar')
+                    exclude(name: 'ProActive.jar')
+                }
+            }
+        }
+    }
 }
 
 task MergeMetaInfServices {
-    inputs.file subprojects.jar.outputs
+    inputs.file distSubProjects.jar.outputs
     outputs.file fileTree("$buildDir/jar/META-INF/services/")
     doLast {
-        def serviceFile = subprojects.collect {
+        def serviceFile = distSubProjects.collect {
             it.jar.outputs.files.collect {
                 zipTree(it).matching {
                     include 'META-INF/services/**'
@@ -275,7 +294,7 @@ task MergeMetaInfServices {
     }
 }
 
-task('build').dependsOn(ProActiveJar)
-ProActiveJar.dependsOn(subprojects.build)
-MergeMetaInfServices.dependsOn(subprojects.build)
+task('build').dependsOn(ProActiveJar, subprojects.build)
+ProActiveJar.dependsOn(distSubProjects.jar)
+MergeMetaInfServices.dependsOn(distSubProjects.jar)
 defaultTasks 'build'
