@@ -36,6 +36,7 @@
  */
 package org.objectweb.proactive.extensions.vfsprovider;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -134,6 +135,7 @@ public final class FileSystemServerDeployer {
      */
     public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing, boolean rebind,
             String protocol) throws IOException {
+        createFolderIfNotExists(rootPath);
         fileSystemServer = new FileSystemServerImpl(rootPath);
         try {
             roe = PARemoteObject.newRemoteObject(FileSystemServer.class.getName(), this.fileSystemServer);
@@ -155,6 +157,21 @@ public final class FileSystemServerDeployer {
         }
         if (autoclosing)
             fileSystemServer.startAutoClosing();
+    }
+
+    private void createFolderIfNotExists(String rootPath) {
+        File rootFile = new File(rootPath);
+        if (!rootFile.exists()) {
+            boolean created = rootFile.mkdirs();
+            if (!created) {
+                throw new IllegalStateException("Error when trying to create directories inside the path " +
+                    rootPath + " , is it write-protected ?");
+            }
+        } else {
+            if (!rootFile.isDirectory()) {
+                throw new IllegalArgumentException("Provided folder is not a directory");
+            }
+        }
     }
 
     public FileSystemServerImpl getLocalFileSystemServer() {
