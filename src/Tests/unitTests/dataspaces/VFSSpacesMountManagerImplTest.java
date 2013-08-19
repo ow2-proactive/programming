@@ -53,10 +53,13 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.impl.DefaultFileSystemManager;
 import org.apache.log4j.Level;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -77,6 +80,7 @@ import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerImpl;
 import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import unitTests.vfsprovider.AbstractIOOperationsBase;
 
@@ -125,6 +129,18 @@ public class VFSSpacesMountManagerImplTest {
     private static FileSystemServerDeployer serverScratch;
 
     private String fakeUri = "ftp://fake";
+
+    private static DefaultFileSystemManager fileSystemManager;
+
+    @BeforeClass
+    static public void init() throws org.apache.commons.vfs.FileSystemException {
+        fileSystemManager = VFSFactory.createDefaultFileSystemManager();
+    }
+
+    @AfterClass
+    static public void close() {
+        fileSystemManager.close();
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -207,6 +223,9 @@ public class VFSSpacesMountManagerImplTest {
         directory.register(scratchSpaceInfo);
 
         manager = new VFSSpacesMountManagerImpl(directory);
+
+        fileSystemManager = VFSFactory.createDefaultFileSystemManager();
+
     }
 
     @After
@@ -299,6 +318,60 @@ public class VFSSpacesMountManagerImplTest {
             fail("Exception expected");
         } catch (IllegalArgumentException x) {
         }
+    }
+
+    @Test
+    public void testEnsureExistingOrSwitch() throws Exception {
+        String wrongpath = createWrongFileUri();
+
+        ArrayList<String> rootUrisWithWrongFileUri = new ArrayList<String>();
+        rootUrisWithWrongFileUri.add(wrongpath);
+        rootUrisWithWrongFileUri.add(serverOutput.getVFSRootURL());
+
+        VFSSpacesMountManagerImpl manager2 = createManagerForEnsureExistingTest(wrongpath);
+
+        FileObject fileObjectWithWrongFileUri = fileSystemManager.resolveFile(wrongpath);
+
+        // create Adapter
+        DataSpacesFileObject dsFileObjectWithWrongFileUri = new VFSFileObjectAdapter(
+            fileObjectWithWrongFileUri, outputUri, fileObjectWithWrongFileUri.getName(),
+            rootUrisWithWrongFileUri, wrongpath, manager2);
+
+        // switch to existing
+        DataSpacesFileObject newfo = dsFileObjectWithWrongFileUri.ensureExistingOrSwitch();
+        assertEquals(serverOutput.getVFSRootURL(), newfo.getSpaceRootURI());
+    }
+
+    private String createWrongFileUri() throws org.apache.commons.vfs.FileSystemException {
+        String wrongpath;
+        if (OperatingSystem.getOperatingSystem() == OperatingSystem.windows) {
+            wrongpath = "file:///C:/path/which/does/not/exist";
+
+        } else {
+            wrongpath = "file:/path/which/does/not/exist";
+        }
+        return wrongpath;
+    }
+
+    private VFSSpacesMountManagerImpl createManagerForEnsureExistingTest(String wrongpath) throws Exception {
+
+        // create output space configuration with wrong file uri
+        File outputSpaceDir = new File(spacesDir, "output");
+        outputSpaceFileUrl = outputSpaceDir.toURI().toURL().toString();
+        ArrayList<String> rootoutputuris = new ArrayList<String>();
+        rootoutputuris.add(wrongpath);
+        rootoutputuris.add(serverOutput.getVFSRootURL());
+
+        InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration
+                .createOutputSpaceConfiguration(rootoutputuris, null, null, "read_write_space");
+        SpaceInstanceInfo outputSpaceInfo = new SpaceInstanceInfo(123, outputSpaceConf);
+
+        // create manager
+        SpacesDirectory directory2 = new SpacesDirectoryImpl();
+        directory2.register(outputSpaceInfo);
+        VFSSpacesMountManagerImpl manager2 = new VFSSpacesMountManagerImpl(directory2);
+        return manager2;
+
     }
 
     private void assertIsWorkingInputSpaceDir(final DataSpacesFileObject fo) throws FileSystemException,
