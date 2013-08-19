@@ -34,32 +34,50 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.virtualnode;
+package gcmdeployment.virtualnode;
 
-import org.objectweb.proactive.core.node.NodeInformation;
-import org.objectweb.proactive.core.runtime.VMInformation;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.FakeNode;
+import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
+
+import functionalTests.FunctionalTest;
 
 
-public class NodeInformationMockUp implements NodeInformation {
-    String name;
+public class TestWaitReady extends FunctionalTest {
+    static final int TIMEOUT = 1000;
 
-    public NodeInformationMockUp(String name) {
-        this.name = name;
+    GCMVirtualNodeImpl vn;
+    GCMApplicationDescriptorMockup gcma;
+    ProActiveRuntimeImpl part;
+
+    @BeforeClass
+    static public void setCapacity() {
+        ProActiveRuntimeImpl.getProActiveRuntime().setCapacity(5);
     }
 
-    public String getName() {
-        return name;
+    @Before
+    public void before() {
+        vn = new GCMVirtualNodeImpl();
+        gcma = new GCMApplicationDescriptorMockup();
+        part = ProActiveRuntimeImpl.getProActiveRuntime();
     }
 
-    public String getProtocol() {
-        return null;
+    @Test(expected = ProActiveTimeoutException.class)
+    public void timeoutReached() throws ProActiveTimeoutException {
+        vn.setCapacity(5);
+        vn.waitReady(TIMEOUT);
     }
 
-    public String getURL() {
-        return null;
-    }
-
-    public VMInformation getVMInformation() {
-        return null;
+    @Test
+    public void everythingOK() throws ProActiveTimeoutException {
+        vn.setCapacity(5);
+        for (int i = 0; i < 5; i++) {
+            vn.addNode(new FakeNode(gcma, part));
+        }
+        vn.waitReady(TIMEOUT);
     }
 }

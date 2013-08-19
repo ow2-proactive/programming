@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.descriptorParser;
+package gcmdeployment.descriptorParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,15 +44,15 @@ import java.util.List;
 
 import javax.xml.xpath.XPath;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentParserImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridgeParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroupParser;
+import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
+import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 

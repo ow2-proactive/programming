@@ -34,18 +34,16 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.commandEscape;
+package gcmdeployment.commandEscape;
 
 import java.io.IOException;
 
+import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
+import org.objectweb.proactive.utils.OperatingSystem;
 import functionalTests.TestDisabler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
-import org.objectweb.proactive.utils.OperatingSystem;
-
-import static unitTests.UnitTests.logger;
 
 
 public class TestCommandEscape {
@@ -65,33 +63,25 @@ public class TestCommandEscape {
         String cmdT = cTrue;
         String cmdF = cFalse;
 
-        logger.debug("Executing: " + cTrue);
         Assert.assertTrue(exec(cTrue) == vTrue);
-        logger.debug("Executing: " + cFalse);
         Assert.assertTrue(exec(cFalse) == vFalse);
 
         cmdT = concat(sshLocalhost, cmdT);
         cmdF = concat(sshLocalhost, cmdF);
 
-        logger.debug("Executing: " + cTrue);
         Assert.assertTrue(exec(cTrue) == vTrue);
-        logger.debug("Executing: " + cFalse);
         Assert.assertTrue(exec(cFalse) == vFalse);
 
         cmdT = concat(sshLocalhost, cmdT);
         cmdF = concat(sshLocalhost, cmdF);
 
-        logger.debug("Executing: " + cTrue);
         Assert.assertTrue(exec(cTrue) == vTrue);
-        logger.debug("Executing: " + cFalse);
         Assert.assertTrue(exec(cFalse) == vFalse);
 
         cmdT = concat(sshLocalhost, cmdT);
         cmdF = concat(sshLocalhost, cmdF);
 
-        logger.debug("Executing: " + cTrue);
         Assert.assertTrue(exec(cTrue) == vTrue);
-        logger.debug("Executing: " + cFalse);
         Assert.assertTrue(exec(cFalse) == vFalse);
     }
 

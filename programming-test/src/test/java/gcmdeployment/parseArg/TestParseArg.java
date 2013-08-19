@@ -32,7 +32,7 @@
  *
  *  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.parseArg;
+package gcmdeployment.parseArg;
 
 import java.util.Arrays;
 import java.util.List;

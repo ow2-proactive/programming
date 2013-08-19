@@ -34,21 +34,19 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.variablecontract;
+package gcmdeployment.variablecontract;
 
 import java.io.File;
 import java.net.URISyntaxException;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationImpl;
-
+import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import functionalTests.FunctionalTest;
+import junit.framework.Assert;
+import org.junit.Test;
 
 
 public class TestVariableContract extends FunctionalTest {

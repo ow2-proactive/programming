@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.pathElement;
+package gcmdeployment.pathElement;
 
 import org.junit.Assert;
 import org.junit.Test;

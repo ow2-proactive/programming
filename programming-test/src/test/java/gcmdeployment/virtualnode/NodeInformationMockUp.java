@@ -34,49 +34,32 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.virtualnode;
+package gcmdeployment.virtualnode;
 
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.FakeNode;
-import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
-
-import functionalTests.FunctionalTest;
+import org.objectweb.proactive.core.node.NodeInformation;
+import org.objectweb.proactive.core.runtime.VMInformation;
 
 
-public class TestGetCurrentNodes extends FunctionalTest {
-    final int COUNT_1 = 50;
-    final int COUNT_2 = 100;
+public class NodeInformationMockUp implements NodeInformation {
+    String name;
 
-    GCMVirtualNodeImpl vn;
-    GCMApplicationDescriptorMockup gcma;
-    ProActiveRuntimeImpl part;
-
-    @Before
-    public void before() {
-        vn = new GCMVirtualNodeImpl();
-        gcma = new GCMApplicationDescriptorMockup();
-        part = ProActiveRuntimeImpl.getProActiveRuntime();
-        part.setCapacity(COUNT_1 + COUNT_2);
+    public NodeInformationMockUp(String name) {
+        this.name = name;
     }
 
-    @Test
-    public void test() {
-        for (int i = 0; i < COUNT_1; i++) {
-            vn.addNode(new FakeNode(gcma, part));
-        }
+    public String getName() {
+        return name;
+    }
 
-        Assert.assertEquals(COUNT_1, vn.getCurrentNodes().size());
-        Assert.assertEquals(COUNT_1, vn.getNbCurrentNodes());
+    public String getProtocol() {
+        return null;
+    }
 
-        for (int i = 0; i < COUNT_2; i++) {
-            vn.addNode(new FakeNode(gcma, part));
-        }
+    public String getURL() {
+        return null;
+    }
 
-        Assert.assertEquals(COUNT_1 + COUNT_2, vn.getCurrentNodes().size());
-        Assert.assertEquals(COUNT_1 + COUNT_2, vn.getNbCurrentNodes());
+    public VMInformation getVMInformation() {
+        return null;
     }
 }

@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.listGenerator;
+package gcmdeployment.listGenerator;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -42,9 +42,9 @@ import java.io.FileReader;
 import java.net.URL;
 import java.util.List;
 
+import org.objectweb.proactive.extensions.gcmdeployment.ListGenerator;
 import org.junit.Assert;
 import org.junit.Test;
-import org.objectweb.proactive.extensions.gcmdeployment.ListGenerator;
 
 
 public class TestListGenerator {

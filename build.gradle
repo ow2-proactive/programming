@@ -221,11 +221,12 @@ project(':programming-test') {
         systemProperties << ['proactive.runtime.ping': false]
         systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
     }
-    
+
     test.configure testConfiguration
     test.configure {
+        include 'functionalTests/**'
+        include 'gcmdeployment/**'
         exclude '**/TestHeartbeat*'
-        exclude '**/performanceTests/**'
     }
 
     task testPamrHeartBeat(type: Test) {
@@ -239,8 +240,7 @@ project(':programming-test') {
     task performanceTest(type: Test)
     performanceTest.configure testConfiguration
     performanceTest.configure {
-        exclude '**/functionalTests/**'
-        include '**/performanceTests/**'
+        include 'performanceTests/**'
     }
 
     task copyToLib(type: Copy) {

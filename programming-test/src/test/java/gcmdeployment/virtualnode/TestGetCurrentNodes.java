@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.virtualnode;
+package gcmdeployment.virtualnode;
 
 import junit.framework.Assert;
 
@@ -47,7 +47,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
 import functionalTests.FunctionalTest;
 
 
-public class TestGetNewNodes extends FunctionalTest {
+public class TestGetCurrentNodes extends FunctionalTest {
     final int COUNT_1 = 50;
     final int COUNT_2 = 100;
 
@@ -69,14 +69,14 @@ public class TestGetNewNodes extends FunctionalTest {
             vn.addNode(new FakeNode(gcma, part));
         }
 
-        Assert.assertEquals(COUNT_1, vn.getNewNodes().size());
-        Assert.assertEquals(0, vn.getNewNodes().size());
+        Assert.assertEquals(COUNT_1, vn.getCurrentNodes().size());
+        Assert.assertEquals(COUNT_1, vn.getNbCurrentNodes());
 
         for (int i = 0; i < COUNT_2; i++) {
             vn.addNode(new FakeNode(gcma, part));
         }
 
-        Assert.assertEquals(COUNT_2, vn.getNewNodes().size());
-        Assert.assertEquals(0, vn.getNewNodes().size());
+        Assert.assertEquals(COUNT_1 + COUNT_2, vn.getCurrentNodes().size());
+        Assert.assertEquals(COUNT_1 + COUNT_2, vn.getNbCurrentNodes());
     }
 }

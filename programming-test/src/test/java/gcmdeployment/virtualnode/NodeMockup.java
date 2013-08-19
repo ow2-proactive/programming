@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package unitTests.gcmdeployment.virtualnode;
+package gcmdeployment.virtualnode;
 
 import java.io.IOException;
 
