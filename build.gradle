@@ -207,9 +207,7 @@ project(':programming-test') {
         }
     }
 
-    test {
-        exclude '**/TestHeartbeat*'
-        
+    def testConfiguration = {
         forkEvery 1
 
         testLogging {
@@ -220,14 +218,27 @@ project(':programming-test') {
         systemProperties << ['proactive.runtime.ping': false]
         systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
     }
+    
+    test.configure testConfiguration
+    test.configure {
+        exclude '**/TestHeartbeat*'
+        exclude '**/performanceTests/**'
+    }
 
-    task testPamrHeartBeat(type:Test){
+    task testPamrHeartBeat(type: Test) {
         include '**/TestHeartbeat*'
 
         systemProperties << ['-Djdwp.port': 5550]
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5550'
     }
     test.dependsOn testPamrHeartBeat
+
+    task performanceTest(type: Test)
+    performanceTest.configure testConfiguration
+    performanceTest.configure {
+        exclude '**/functionalTests/**'
+        include '**/performanceTests/**'
+    }
 
     task copyToLib(type: Copy) {
         from configurations.testCompile

@@ -38,14 +38,13 @@ package performanceTests.throughput;
 
 import java.io.Serializable;
 
-import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
-
-import performanceTests.HudsonReport;
 import functionalTests.FunctionalTest;
+import org.junit.Test;
+import performanceTests.HudsonReport;
 
 
 public class TestHalfBody extends FunctionalTest {

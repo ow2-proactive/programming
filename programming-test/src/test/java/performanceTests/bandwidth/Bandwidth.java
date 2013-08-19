@@ -38,15 +38,14 @@ package performanceTests.bandwidth;
 
 import java.io.Serializable;
 
-import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
-
-import performanceTests.HudsonReport;
 import functionalTests.GCMFunctionalTest;
+import org.junit.Test;
+import performanceTests.HudsonReport;
 
 
 public abstract class Bandwidth extends GCMFunctionalTest {
