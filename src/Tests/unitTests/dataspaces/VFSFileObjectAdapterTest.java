@@ -117,9 +117,10 @@ public class VFSFileObjectAdapterTest {
         assertTrue(someFile.createNewFile());
 
         rootDirPath = rootDir.getCanonicalPath();
+        rootFileUri = rootDir.toURI().toURL().toExternalForm();
         differentDirPath = differentDir.getCanonicalPath();
 
-        final FileObject rootFileObject = fileSystemManager.resolveFile("file://" + rootDirPath);
+        final FileObject rootFileObject = fileSystemManager.resolveFile(rootFileUri);
         if (server == null) {
             server = new FileSystemServerDeployer(rootDirPath, false);
         }
@@ -128,7 +129,6 @@ public class VFSFileObjectAdapterTest {
         final FileName mountintPointFileName = rootFileObject.getName();
         adaptee = rootFileObject.resolveFile(fileURI.getRelativeToSpace());
 
-        rootFileUri = "file://" + rootDirPath;
         rootUris = new ArrayList<String>();
         rootUris.add(rootFileUri);
         rootUris.add(vfsServerUrl);
