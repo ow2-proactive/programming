@@ -304,14 +304,6 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 return false;
             }
 
-            // the remote file system is accessible but the root path doesn't exist (in the remote filesystem)
-            if (!mountedRoot.exists()) {
-                String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
-                logger.info(err);
-                removeSpaceRootUri(spacePart, spaceRootFOUri);
-                throw new FileSystemException(err);
-            }
-
             // the fs is accessible
             synchronized (readLock) {
                 fos.put(spaceRootFOUri, mountedRoot);
