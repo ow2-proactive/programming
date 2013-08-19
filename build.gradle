@@ -38,9 +38,9 @@ project(':programming-core') {
     task stub(dependsOn: ['compileJava', 'processResources']) {
         inputs.file sourceSets.main.java.srcDirs
         outputs.file fileTree(sourceSets.main.output.classesDir.parent)
+        sourceSets.main.compileClasspath += configurations.antClasspath // add dependency to build utils jar
         doLast {
             ant.taskdef(name: 'stub', classname: 'ant.AntStubGenerator', classpath: configurations.antClasspath.asPath)
-            ant.references.test = sourceSets.main.compileClasspath.files
             ant.stub(srcdir: sourceSets.main.java.srcDirs.toArray()[0],
                     dstdir: sourceSets.main.output.classesDir,
                     classpath: (configurations.antClasspath + sourceSets.main.runtimeClasspath).asPath) {
