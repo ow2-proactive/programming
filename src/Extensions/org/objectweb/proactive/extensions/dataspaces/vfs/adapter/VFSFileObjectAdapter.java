@@ -548,6 +548,25 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         return currentRootFOUri;
     }
 
+    @Override
+    public DataSpacesFileObject ensureExistingOrSwitch() throws FileSystemException, SpaceNotFoundException {
+        if (this.exists()) {
+            return this;
+        }
+        logger.debug(getRealURI() + " does not exist");
+        for (String newUri : rootFOUriSet) {
+            if (!newUri.equals(currentRootFOUri)) {
+                DataSpacesFileObject newdsfo = switchToSpaceRoot(newUri);
+                if (newdsfo.exists()) {
+                    return newdsfo;
+                }
+                logger.debug(newdsfo.getRealURI() + " does not exist");
+            }
+        }
+
+        return null;
+    }
+
     public List<String> getAllSpaceRootURIs() {
         return new ArrayList<String>(rootFOUriSet);
     }

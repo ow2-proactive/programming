@@ -144,8 +144,8 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             logger.debug("File access request: " + queryUri);
 
         if (!queryUri.isSuitableForUserPath()) {
-            logger.error("Requested URI is not suitable for user path");
-            throw new IllegalArgumentException("Requested URI is not suitable for user path");
+            logger.error("Requested URI " + queryUri + " is not suitable for user path");
+            throw new IllegalArgumentException("Requested URI " + queryUri + " is not suitable for user path");
         }
 
         final DataSpacesURI spaceURI = queryUri.getSpacePartOnly();
