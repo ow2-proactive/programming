@@ -106,7 +106,7 @@ public interface DataSpacesFileObject {
      * In case the dataspace is backed up by several Apache VFS. Returns all space Root URIs to which this FileObject has access.
      * Any of these URI can be used as parameter to the method switchToSpaceRoot
      *
-     * @return List of space root URI accessible to the file
+     * @return List of URI of accessible space roots
      */
     public abstract List<String> getAllSpaceRootURIs();
 
@@ -117,10 +117,17 @@ public interface DataSpacesFileObject {
      * the same real file system, but accessed via different protocols
      *
      * @param uri the new Apache VFS space root
+     * @return a new DataSpacesFileObject with the different space root (note that the current DSFO is not modified)
      * @throws IllegalArgumentException if the given uri don't represent a valid uri for this DFO
      */
     public abstract DataSpacesFileObject switchToSpaceRoot(String uri) throws FileSystemException,
             SpaceNotFoundException;
+
+    /**
+     * Returns the uri of the current space root
+     * @return current space root uri
+     */
+    public String getSpaceRootURI();
 
     /**
      * Determines if this file exists.
