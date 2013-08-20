@@ -211,6 +211,8 @@ project('programming-extensions:programming-extension-processbuilder') {
 
     if (hasGcc) {
         def configureSuer = { task, arch ->
+            buildDir.mkdirs()
+            task.ignoreExitValue = true
             task.inputs.file "${projectDir}/src/main/c/suer.c"
             task.outputs.file "${buildDir}/suer$arch"
             task.commandLine 'gcc'
@@ -274,8 +276,8 @@ project(':programming-test') {
         testProtocol.configure {
             include 'functionalTests/**'
             exclude '**/TestHeartbeat*'
-            testResultsDir = new File(project.testResultsDir, protocol)
-            testReportDir = new File(project.testReportDir, protocol)
+            reports.junitXml.destination file("${reports.junitXml.destination}/$protocol")
+            reports.html.destination file("${reports.html.destination}/$protocol")
             systemProperties << ['proactive.communication.protocol': protocol]
             systemProperties << ['proactive.pamr.router.address': 'localhost']
             systemProperties << ['proactive.pamr.router.port': 0]

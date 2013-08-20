@@ -1,33 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ProActiveUserProperties>
-    <properties>
-        <prop key="proactive.locationserver"
-            value="org.objectweb.proactive.ext.locationserver.LocationServer" />
-        <prop key="proactive.locationserver.rmi" value="//localhost/LocationServer" />
-        <prop key="proactive.securitymanager" value="true" />
-        <prop key="proactive.mixedlocation.ttl" value="-1" />
-        <prop key="proactive.mixedlocation.updatingForwarder"
-            value="false" />
-        <prop key="proactive.mixedlocation.maxMigrationNb" value="-1" />
-        <prop key="proactive.mixedlocation.maxTimeOnSite" value="-1" />
-     	<prop key="proactive.implicitgetstubonthis" value="false"/>
-    
-    	<prop key="proactive.net.disableIPv6" value="true" />
-	    
-        <prop key="proactive.future.ac" value="true" />
-        <prop key="proactive.stack_trace" value="false" /> <!-- complete stack traces in requests -->
-        <prop key="proactive.dgc" value="false" />
-        <prop key="proactive.exit_on_empty" value="false" /> <!-- destroy the JVM when there is no more active object -->
-        <prop key="schema.validation" value="true" />
-        <prop key="proactive.communication.protocol" value="rmi" />
-        <prop key="proactive.rmi.port" value="1099" />
-       
-       <!--<prop key="proactive.java.policy" value="../../../../../../scripts/unix/proactive.java.policy"/>-->
-        <prop key="gcm.provider" value="org.objectweb.proactive.core.component.Fractive" />
-       <!-- <prop key="proactive.tunneling.connect_timeout" value="2000"/> -->
-        <prop key="proactive.communication.rmissh.try_normal_first" value="false" />
+	<properties>
+		<prop key="proactive.implicitgetstubonthis" value="false"/>
+
+		<prop key="proactive.net.disableIPv6" value="true" />
+
+		<prop key="proactive.future.ac" value="true" />
+		<prop key="proactive.stack_trace" value="false" /> <!-- complete stack traces in requests -->
+		<prop key="proactive.exit_on_empty" value="false" /> <!-- destroy the JVM when there is no more active object -->
+		<prop key="schema.validation" value="true" />
+		<prop key="proactive.communication.protocol" value="rmi" />
+		<prop key="proactive.rmi.port" value="1099" />
+
+		<!--<prop key="proactive.java.policy" value="../../../../../../scripts/unix/proactive.java.policy"/>-->
+		<!-- <prop key="proactive.tunneling.connect_timeout" value="2000"/> -->
+		<prop key="proactive.communication.rmissh.try_normal_first" value="false" />
 		<!-- <prop key="proactive.communication.benchmark.class" value="org.objectweb.proactive.core.remoteobject.benchmark.LargeByteArrayBenchmark"/> -->
-        <prop key="proactive.classloading.useHTTP" value="true"/>
+		<prop key="proactive.classloading.useHTTP" value="true"/>
 
 		<!-- SSL cipher suites used for RMISSL communications.
 	List of cipher suites used for RMISSL, separated by commas.
@@ -44,46 +33,31 @@
 		<!-- <prop key="proactive.ssh.key_directory" value="/user/mlacage/home/.ssh/"/> -->
 		<!-- <prop key="proactive.ssh.port" value="22"/> -->
 		<!-- <prop key="proactive.ssh.username" value="mlacage"/> -->
-        <prop key="components.creation.timeout" value="10000" /> <!-- timeout in seconds for parallel creation of components -->		
 		<!-- ***************************************************** -->
-		<!-- MASTER/WORKER PROPERTIES VALUE -->
-		<!-- Period of the slave pinging (in ms) -->
-        <prop key="proactive.masterworker.pingperiod" value="10000" />
-        <!-- Compressing tasks in the repository -->
-        <prop key="proactive.masterworker.compresstasks" value="false" />
-        
 		<!-- Message Tagging -->
 		<prop key="proactive.tagmemory.lease.max" value="60" />
 		<prop key="proactive.tagmemory.lease.period" value="21" />
 		<prop key="proactive.tag.dsf" value="false" />
 
 		<!-- Workaround to fix rmissh conflict -->
-        <prop key="proactive.runtime.stayalive" value="true" />		
+		<prop key="proactive.runtime.stayalive" value="true" />
 
 		<!-- File Transfer Properties -->
-        <prop key="proactive.filetransfer.services_number" value="16" />
-        <prop key="proactive.filetransfer.blocks_number" value="8" />
-        <prop key="proactive.filetransfer.blocks_size_kb" value="512" />
-        <prop key="proactive.filetransfer.buffer_size_kb" value="256" />
+		<prop key="proactive.filetransfer.services_number" value="16" />
+		<prop key="proactive.filetransfer.blocks_number" value="8" />
+		<prop key="proactive.filetransfer.blocks_size_kb" value="512" />
+		<prop key="proactive.filetransfer.buffer_size_kb" value="256" />
 
-        <prop key="proactive.test.perf.duration" value="30000" />
-        
-        <prop key="proactive.log4j.appender.provider" value="org.objectweb.proactive.core.util.log.remote.ThrottlingProvider" />
+		<prop key="proactive.test.perf.duration" value="30000" />
 
-        <prop key="proactive.gcmd.unix.shell" value="/bin/sh"/>
+		<prop key="proactive.log4j.appender.provider" value="org.objectweb.proactive.core.util.log.remote.ThrottlingProvider" />
 
-        <prop key="proactive.mop.writestubondisk" value="false"/>                                        
+		<prop key="proactive.gcmd.unix.shell" value="/bin/sh"/>
 
-        <prop key="proactive.webservices.framework" value="cxf" />
-        <prop key="proactive.webservices.elementformdefault" value="false" />
-        
-    </properties>
-    <javaProperties>
-        <!-- <prop key="java.rmi.server.RMIClassLoaderSpi" value="org.objectweb.proactive.core.classloading.protocols.ProActiveRMIClassLoader"/> -->
-        <prop key="java.protocol.handler.pkgs" value="org.objectweb.proactive.core.ssh|org.objectweb.proactive.core.classloading.protocols" />
-        <prop key="ibis.name_server.host" value="localhost" />
-        <prop key="ibis.name_server.key" value="1" />
-        <prop key="ibis.io.serialization.classloader" value="org.objectweb.proactive.core.mop.MOPClassLoader" />
-        <prop key="ibis.serialization" value="ibis" />
-       </javaProperties>
+		<prop key="proactive.mop.writestubondisk" value="false"/>
+	</properties>
+	<javaProperties>
+		<!-- <prop key="java.rmi.server.RMIClassLoaderSpi" value="org.objectweb.proactive.core.classloading.protocols.ProActiveRMIClassLoader"/> -->
+		<prop key="java.protocol.handler.pkgs" value="org.objectweb.proactive.core.ssh|org.objectweb.proactive.core.classloading.protocols" />
+	</javaProperties>
 </ProActiveUserProperties>

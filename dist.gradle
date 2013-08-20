@@ -16,7 +16,11 @@ task ProActiveUtilsLibs(type: Jar) {
 task ProActiveJar(type: Jar, group: 'ProActive', dependsOn: ['ProActiveLibs', 'MergeMetaInfServices']) {
     from "$buildDir/jar"
     distSubProjects.each {
-        from it.jar.outputs.files.collect { zipTree(it) }
+        from it.jar.outputs.files.collect {
+            zipTree(it).matching {
+                exclude 'processbuilder/**'
+            }
+        }
     }
     destinationDir file('dist/lib')
     archiveName 'ProActive.jar'
