@@ -19,7 +19,7 @@ subprojects {
     }
 }
 
-boolean hasGcc = { try { p = "gcc --version".execute(); p.waitFor(); p.exitValue() == 0 } catch (e){ false } }
+ext.hasGcc = { try { def p = "gcc --version".execute(); p.waitFor(); p.exitValue() == 0 } catch (e){ false } }()
 
 class StubTask extends DefaultTask {
     @InputFiles

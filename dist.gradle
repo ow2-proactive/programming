@@ -1,5 +1,4 @@
 def distSubProjects = subprojects - project(':programming-build-utils') - project(':programming-test')
-boolean hasGcc = { p = "gcc --version".execute(); p.waitFor(); p.exitValue() == 0 }
 
 task ProActiveLibs(type: Copy) {
     distSubProjects.each {
