@@ -40,9 +40,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.api.PALifeCycle;
@@ -51,15 +48,16 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationSnapshot;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeSnapshot;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.utils.Sleeper;
-
 import functionalTests.GCMFunctionalTest;
 import functionalTests.ProActiveSetup;
+import junit.framework.Assert;
+import org.junit.Test;
 
 
 public class TestSnapshot extends GCMFunctionalTest {
@@ -71,7 +69,7 @@ public class TestSnapshot extends GCMFunctionalTest {
         super.startDeployment();
     }
 
-    @Test(timeout = 20000)
+    @Test
     public void test() throws ProActiveException, InterruptedException {
         Root r = PAActiveObject.newActive(Root.class, new Object[] {}, super.getANode());
 

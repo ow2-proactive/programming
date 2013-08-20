@@ -43,13 +43,11 @@ import org.objectweb.proactive.core.node.Node;
 import functionalTests.FunctionalTest;
 import functionalTests.descriptor.defaultnodes.TestNodes;
 import junit.framework.Assert;
-import org.junit.Ignore;
 
 
 // dispatch n tasks between 2 workers with n>2
 // task 1 on worker 1 sleeps for a while
 // --> check that worker 2 processed n-1 tasks
-@Ignore
 public class Test extends FunctionalTest {
     int nbTasks = 10;
 

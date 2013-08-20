@@ -67,7 +67,6 @@
 				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
 				<jvmParameters>
 						<parameter value="${JVM_PARAMETERS}"/>
-					<!-- 	<parameter value="-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"/> -->
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>
@@ -76,19 +75,23 @@
 					<jvmParameters>
 						<parameter value="-Dproactive.future.ac=true"/>
 						<parameter value="${JVM_PARAMETERS}"/>
-					<!-- 	<parameter value="-Xdebug -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=n"/> -->
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>
 			<processDefinition id="rshProcess">
-				<rshProcess class="org.objectweb.proactive.core.process.rsh.RSHProcess" hostname="sea">
-					<processReference refid="linuxJVM"/>
-				</rshProcess>
+				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
+				<jvmParameters>
+					<parameter value="${JVM_PARAMETERS}"/>
+				</jvmParameters>
+		</jvmProcess>
 			</processDefinition>
 			<processDefinition id="rshProcess-AC">
-				<rshProcess class="org.objectweb.proactive.core.process.rsh.RSHProcess" hostname="nahuel">
-					<processReference refid="linuxJVM-AC"/>
-				</rshProcess>
+				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
+				<jvmParameters>
+					<parameter value="-Dproactive.future.ac=true"/>
+					<parameter value="${JVM_PARAMETERS}"/>
+				</jvmParameters>
+				</jvmProcess>
 			</processDefinition>
 		</processes>
 	</infrastructure>
