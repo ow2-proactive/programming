@@ -6,6 +6,7 @@ subprojects {
     apply plugin: 'maven'
 
     group = 'org.objectweb.proactive'
+    version = '5.5.0-SNAPSHOT'
 
     repositories {
         mavenLocal()
@@ -18,10 +19,35 @@ subprojects {
     }
 }
 
-def distSubProjects = subprojects - project(':programming-build-utils') - project(':programming-test')
+boolean hasGcc = { p = "gcc --version".execute(); p.waitFor(); p.exitValue() == 0 }
+
+class StubTask extends DefaultTask {
+    @InputFiles
+    def input = project.sourceSets.main.java.srcDirs
+    @OutputFiles
+    def output = project.fileTree(project.sourceSets.main.output.classesDir.parent)
+    def classes
+
+    def StubTask() {
+        project.configurations { antClasspath }
+        project.dependencies { antClasspath project.project(':programming-build-utils') }
+        dependsOn project.compileJava, project.processResources
+        project.classes.dependsOn this
+        project.sourceSets.main.compileClasspath += project.configurations.antClasspath // add dependency to build utils jar
+    }
+
+    @TaskAction
+    def generate() {
+        ant.taskdef(name: 'stub', classname: 'ant.AntStubGenerator', classpath: project.configurations.antClasspath.asPath)
+        ant.stub(srcdir: input.toArray()[0],
+                dstdir: project.sourceSets.main.output.classesDir,
+                classpath: (project.configurations.antClasspath + project.sourceSets.main.runtimeClasspath).asPath) {
+            classes.collect { 'class'(name: it) }
+        }
+    }
+}
 
 project(':programming-core') {
-    configurations { antClasspath }
     dependencies {
         compile(
                 'org.mortbay.jetty:jetty:6.1.18',
@@ -32,42 +58,30 @@ project(':programming-core') {
 
                 project(':programming-annotation')
         )
-        antClasspath project(':programming-build-utils')
     }
 
-    task stub(dependsOn: ['compileJava', 'processResources']) {
-        inputs.file sourceSets.main.java.srcDirs
-        outputs.file fileTree(sourceSets.main.output.classesDir.parent)
-        sourceSets.main.compileClasspath += configurations.antClasspath // add dependency to build utils jar
-        doLast {
-            ant.taskdef(name: 'stub', classname: 'ant.AntStubGenerator', classpath: configurations.antClasspath.asPath)
-            ant.stub(srcdir: sourceSets.main.java.srcDirs.toArray()[0],
-                    dstdir: sourceSets.main.output.classesDir,
-                    classpath: (configurations.antClasspath + sourceSets.main.runtimeClasspath).asPath) {
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.BooleanWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.DoubleMutableWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.DoubleWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.FloatMutableWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.FloatWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.IntMutableWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.IntWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.LongMutableWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.LongWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.StringMutableWrapper")
-                'class'(name: "org.objectweb.proactive.core.util.wrapper.StringWrapper")
+    task stub(type: StubTask) {
+        classes = ['org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper',
+                'org.objectweb.proactive.core.util.wrapper.BooleanWrapper',
+                'org.objectweb.proactive.core.util.wrapper.DoubleMutableWrapper',
+                'org.objectweb.proactive.core.util.wrapper.DoubleWrapper',
+                'org.objectweb.proactive.core.util.wrapper.FloatMutableWrapper',
+                'org.objectweb.proactive.core.util.wrapper.FloatWrapper',
+                'org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper',
+                'org.objectweb.proactive.core.util.wrapper.IntMutableWrapper',
+                'org.objectweb.proactive.core.util.wrapper.IntWrapper',
+                'org.objectweb.proactive.core.util.wrapper.LongMutableWrapper',
+                'org.objectweb.proactive.core.util.wrapper.LongWrapper',
+                'org.objectweb.proactive.core.util.wrapper.StringMutableWrapper',
+                'org.objectweb.proactive.core.util.wrapper.StringWrapper',
 
-                'class'(name: "org.objectweb.proactive.core.runtime.ProActiveRuntime")
-                'class'(name: "org.objectweb.proactive.core.body.UniversalBody")
-                'class'(name: "org.objectweb.proactive.core.jmx.util.JMXNotificationListener")
-                'class'(name: "org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector")
-                'class'(name: "org.objectweb.proactive.core.jmx.ProActiveConnection")
-                'class'(name: "org.objectweb.proactive.core.jmx.server.ProActiveServerImpl")
-            }
-        }
+                'org.objectweb.proactive.core.runtime.ProActiveRuntime',
+                'org.objectweb.proactive.core.body.UniversalBody',
+                'org.objectweb.proactive.core.jmx.util.JMXNotificationListener',
+                'org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector',
+                'org.objectweb.proactive.core.jmx.ProActiveConnection',
+                'org.objectweb.proactive.core.jmx.server.ProActiveServerImpl']
     }
-    classes.dependsOn stub
     test {
         systemProperties << ['proactive.classloading.useHTTP': false]
     }
@@ -102,23 +116,23 @@ project('programming-extensions:programming-extension-amqp') {
     }
 }
 
-
 project('programming-extensions:programming-extension-annotation') {
     dependencies {
         compile files("${System.properties['java.home']}/../lib/tools.jar")
     }
 }
 
+def vfs2Dependencies = ['org.apache.commons:commons-vfs2:2.0',
+        'commons-net:commons-net:2.2',
+        'commons-httpclient:commons-httpclient:3.1',
+        'com.jcraft:jsch:0.1.42',
+        'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
+        'org.slf4j:slf4j-log4j12:1.5.3']
 
 project('programming-extensions:programming-extension-vfsprovider') {
     dependencies {
         compile(
-                'org.apache.commons:commons-vfs2:2.0',
-                'commons-net:commons-net:2.2',
-                'commons-httpclient:commons-httpclient:3.1',
-                'com.jcraft:jsch:0.1.42',
-                'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
-
+                vfs2Dependencies,
                 project(':programming-extensions:programming-extension-annotation')
         )
         testCompile 'org.apache.commons:commons-vfs2:2.0:tests'
@@ -126,38 +140,37 @@ project('programming-extensions:programming-extension-vfsprovider') {
     test {
         systemProperties << ['proactive.classloading.useHTTP': false]
     }
+    task stub(type: StubTask) {
+        classes = ['org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer',
+                'org.objectweb.proactive.extensions.vfsprovider.server.FileSystemServerImpl']
+    }
 }
 
 project('programming-extensions:programming-extension-dataspaces') {
     dependencies {
         compile(
-                'org.apache.commons:commons-vfs2:2.0',
-                'commons-net:commons-net:2.2',
-                'commons-httpclient:commons-httpclient:3.1',
-                'com.jcraft:jsch:0.1.42',
-                'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
-
+                vfs2Dependencies,
                 project(':programming-extensions:programming-extension-vfsprovider')
         )
     }
     test {
         systemProperties << ['proactive.classloading.useHTTP': false]
     }
-}
-
-project('programming-extensions:programming-extension-gcmdeployment') {
-    dependencies {
-        compile(
-                project(':programming-extensions:programming-extension-dataspaces')
-        )
+    task stub(type: StubTask) {
+        classes = ['org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService']
     }
 }
 
 project('programming-extensions:programming-extension-gcmdeployment') {
     dependencies {
         compile(
-                'commons-cli:commons-cli:1.1'
+                'commons-cli:commons-cli:1.1',
+                project(':programming-extensions:programming-extension-dataspaces')
         )
+    }
+    task stub(type: StubTask) {
+        classes = ['org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationImpl',
+                'org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl']
     }
 }
 
@@ -186,6 +199,19 @@ project('programming-extensions:programming-extension-processbuilder') {
                 'net.java.dev.jna:jna:3.4.0',
                 'net.java.dev.jna:platform:3.4.0'
         )
+    }
+
+    if (hasGcc) {
+        def configureSuer = { task, arch ->
+            task.inputs.file "${projectDir}/src/main/c/suer.c"
+            task.outputs.file "${buildDir}/suer$arch"
+            task.commandLine 'gcc'
+            task.args "-m$arch", '-o', "${buildDir}/suer$arch", "${projectDir}/src/main/c/suer.c", '-lutil', '-lpthread'
+        }
+        task(suer64, type: Exec) { task -> configureSuer(task, '64') }
+        task(suer32, type: Exec) { task -> configureSuer(task, '32') }
+        task(suer).dependsOn suer64, suer32
+        build.dependsOn suer
     }
 }
 
@@ -216,14 +242,18 @@ project(':programming-test') {
         testLogging {
             exceptionFormat = 'full'
         }
+        beforeTest { descriptor ->
+            logger.lifecycle("Running test: " + descriptor)
+        }
 
         systemProperties << ['proactive.home': projectDir.absolutePath]
         systemProperties << ['proactive.runtime.ping': false]
         systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
     }
 
-    test.configure testConfiguration
-    test.configure {
+    task functionalTest(type: Test)
+    functionalTest.configure testConfiguration
+    functionalTest.configure {
         include 'functionalTests/**'
         include 'gcmdeployment/**'
         exclude '**/TestHeartbeat*'
@@ -235,13 +265,14 @@ project(':programming-test') {
         systemProperties << ['-Djdwp.port': 5550]
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5550'
     }
-    test.dependsOn testPamrHeartBeat
 
     task performanceTest(type: Test)
     performanceTest.configure testConfiguration
     performanceTest.configure {
         include 'performanceTests/**'
     }
+
+    test.dependsOn testPamrHeartBeat, functionalTest, performanceTest
 
     task copyToLib(type: Copy) {
         from configurations.testCompile
@@ -251,64 +282,4 @@ project(':programming-test') {
     test.dependsOn copyToLib
 }
 
-
-task ProActiveLibs(type: Copy) {
-    distSubProjects.each {
-        from it.configurations.runtime.files { it instanceof ExternalDependency }
-    }
-    into "dist/lib"
-}
-
-task ProActiveJar(type: Jar, dependsOn: ['ProActiveLibs', 'MergeMetaInfServices']) {
-    from "$buildDir/jar"
-    distSubProjects.each {
-        from it.jar.outputs.files.collect { zipTree(it) }
-    }
-    destinationDir file('dist/lib')
-    archiveName 'ProActive.jar'
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE // services are merged
-    manifest {
-        attributes("Main-Class": "org.objectweb.proactive.Main",
-                "Implementation-Title": "ProActive",
-                "Implementation-Version": "",
-                "Implementation-Vendor": "OASIS - INRIA Sophia Antipolis",
-                "Implementation-URL": "http://proactive.inria.fr")
-    }
-    outputs.file file('dist/lib')
-    doLast {
-        // generate INDEX.list
-        ant.jar(update: true, index: true, destfile: file('dist/lib/ProActive.jar')) {
-            indexjars {
-                fileset(dir: 'dist/lib/') {
-                    include(name: '*.jar')
-                    exclude(name: 'ProActive.jar')
-                }
-            }
-        }
-    }
-}
-
-task MergeMetaInfServices {
-    inputs.file distSubProjects.jar.outputs
-    outputs.file fileTree("$buildDir/jar/META-INF/services/")
-    doLast {
-        def serviceFile = distSubProjects.collect {
-            it.jar.outputs.files.collect {
-                zipTree(it).matching {
-                    include 'META-INF/services/**'
-                }.files
-            }
-        }.flatten()
-        serviceFile.groupBy { it.name }.each { k, v ->
-            new File("$buildDir/jar/META-INF/services/$k").with {
-                getParentFile().mkdirs();
-                write(v*.text.join('\n'))
-            }
-        }
-    }
-}
-
-task('build').dependsOn(ProActiveJar, subprojects.build)
-ProActiveJar.dependsOn(distSubProjects.jar)
-MergeMetaInfServices.dependsOn(distSubProjects.jar)
-defaultTasks 'build'
+apply from: 'dist.gradle'

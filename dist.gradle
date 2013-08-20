@@ -1,0 +1,92 @@
+def distSubProjects = subprojects - project(':programming-build-utils') - project(':programming-test')
+boolean hasGcc = { p = "gcc --version".execute(); p.waitFor(); p.exitValue() == 0 }
+
+task ProActiveLibs(type: Copy) {
+    distSubProjects.each {
+        from it.configurations.runtime.files { it instanceof ExternalDependency }
+    }
+    into "dist/lib"
+}
+
+task ProActiveUtilsLibs(type: Jar) {
+    from project(':programming-build-utils').jar.outputs.files.collect { zipTree(it) }
+    destinationDir file('dist/lib')
+    archiveName 'ProActive_utils.jar'
+}
+
+task ProActiveJar(type: Jar, dependsOn: ['ProActiveLibs', 'MergeMetaInfServices']) {
+    from "$buildDir/jar"
+    distSubProjects.each {
+        from it.jar.outputs.files.collect { zipTree(it) }
+    }
+    destinationDir file('dist/lib')
+    archiveName 'ProActive.jar'
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE // services are merged
+    manifest {
+        attributes("Main-Class": "org.objectweb.proactive.Main",
+                "Implementation-Title": "ProActive",
+                "Implementation-Version": "",
+                "Implementation-Vendor": "OASIS - INRIA Sophia Antipolis",
+                "Implementation-URL": "http://proactive.inria.fr")
+    }
+    outputs.file file('dist/lib')
+    doLast {
+        // generate INDEX.list
+        ant.jar(update: true, index: true, destfile: file('dist/lib/ProActive.jar')) {
+            indexjars {
+                fileset(dir: 'dist/lib/') {
+                    include(name: '*.jar')
+                    exclude(name: 'ProActive.jar')
+                }
+            }
+        }
+    }
+}
+
+task MergeMetaInfServices {
+    inputs.file distSubProjects.jar.outputs
+    outputs.file fileTree("$buildDir/jar/META-INF/services/")
+    doLast {
+        def serviceFile = distSubProjects.collect {
+            it.jar.outputs.files.collect {
+                zipTree(it).matching {
+                    include 'META-INF/services/**'
+                }.files
+            }
+        }.flatten()
+        serviceFile.groupBy { it.name }.each { k, v ->
+            new File("$buildDir/jar/META-INF/services/$k").with {
+                getParentFile().mkdirs();
+                write(v*.text.join('\n'))
+            }
+        }
+    }
+}
+
+task ProcessBuilderScripts(type: Copy) {
+    from project('programming-extensions:programming-extension-processbuilder').jar.outputs.files.collect {
+        zipTree(it).matching {
+            include 'processbuilder/linux/*.sh'
+        }
+    }
+    into file('dist/scripts')
+}
+
+task ProActiveScripts(type: Copy) {
+    from file("${projectDir}/scripts/")
+    into file('dist/scripts')
+}
+
+task('build').dependsOn(ProActiveJar, ProActiveUtilsLibs, ProcessBuilderScripts, ProActiveScripts, subprojects.build)
+ProActiveJar.dependsOn(distSubProjects.jar)
+MergeMetaInfServices.dependsOn(distSubProjects.jar)
+defaultTasks 'build'
+
+if (hasGcc) {
+    task ProcessBuilderExec(type: Copy) {
+        from project('programming-extensions:programming-extension-processbuilder').suer32.outputs
+        from project('programming-extensions:programming-extension-processbuilder').suer64.outputs
+        into file('dist/scripts/processbuilder/linux')
+    }
+    build.dependsOn(ProcessBuilderExec)
+}
