@@ -1,12 +1,14 @@
+apply plugin: 'build-dashboard'
+
+group = 'org.objectweb.proactive'
+version = '5.5.0-SNAPSHOT'
+
 allprojects {
     apply plugin: 'eclipse'
 }
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
-
-    group = 'org.objectweb.proactive'
-    version = '5.5.0-SNAPSHOT'
 
     repositories {
         mavenLocal()
@@ -19,7 +21,13 @@ subprojects {
     }
 }
 
-ext.hasGcc = { try { def p = "gcc --version".execute(); p.waitFor(); p.exitValue() == 0 } catch (e){ false } }()
+ext.hasGcc = {
+    try {
+        def p = "gcc --version".execute(); p.waitFor(); p.exitValue() == 0
+    } catch (e) {
+        false
+    }
+}()
 
 class StubTask extends DefaultTask {
     @InputFiles
@@ -243,7 +251,7 @@ project(':programming-test') {
             exceptionFormat = 'full'
         }
         beforeTest { descriptor ->
-            logger.lifecycle("Running test: " + descriptor)
+            logger.lifecycle("Running: " + descriptor)
         }
 
         systemProperties << ['proactive.home': projectDir.absolutePath]
@@ -251,7 +259,7 @@ project(':programming-test') {
         systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
     }
 
-    task functionalTest(type: Test)
+    task functionalTest(type: Test, group: 'ProActive')
     functionalTest.configure testConfiguration
     functionalTest.configure {
         include 'functionalTests/**'
@@ -259,27 +267,39 @@ project(':programming-test') {
         exclude '**/TestHeartbeat*'
     }
 
-    task testPamrHeartBeat(type: Test) {
+    def protocols = ['rmi', 'pnp', 'pamr', 'pnps', 'rmissl', 'rmissh', 'http']
+    protocols.each { protocol ->
+        def testProtocol = task "functionalTest-$protocol"(type: Test)
+        testProtocol.configure testConfiguration
+        testProtocol.configure {
+            include 'functionalTests/**'
+            exclude '**/TestHeartbeat*'
+            testResultsDir = new File(project.testResultsDir, protocol)
+            testReportDir = new File(project.testReportDir, protocol)
+            systemProperties << ['proactive.communication.protocol': protocol]
+            systemProperties << ['proactive.pamr.router.address': 'localhost']
+            systemProperties << ['proactive.pamr.router.port': 0]
+        }
+    }
+    task "functionalTest-all"(dependsOn: protocols.collect { "functionalTest-$it" })
+
+    task pamrHearbeatTest(type: Test, group: 'ProActive') {
         include '**/TestHeartbeat*'
 
         systemProperties << ['-Djdwp.port': 5550]
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5550'
     }
 
-    task performanceTest(type: Test)
+    task performanceTest(type: Test, group: 'ProActive')
     performanceTest.configure testConfiguration
     performanceTest.configure {
         include 'performanceTests/**'
     }
 
-    test.dependsOn testPamrHeartBeat, functionalTest, performanceTest
+    // disable test, use allTest to run the tests
+    task(allTest).dependsOn pamrHearbeatTest, functionalTest, performanceTest
+    test.enabled = false
 
-    task copyToLib(type: Copy) {
-        from configurations.testCompile
-        into "$buildDir/dist/lib"
-    }
-
-    test.dependsOn copyToLib
 }
 
 apply from: 'dist.gradle'

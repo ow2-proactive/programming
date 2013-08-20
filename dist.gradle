@@ -13,7 +13,7 @@ task ProActiveUtilsLibs(type: Jar) {
     archiveName 'ProActive_utils.jar'
 }
 
-task ProActiveJar(type: Jar, dependsOn: ['ProActiveLibs', 'MergeMetaInfServices']) {
+task ProActiveJar(type: Jar, group: 'ProActive', dependsOn: ['ProActiveLibs', 'MergeMetaInfServices']) {
     from "$buildDir/jar"
     distSubProjects.each {
         from it.jar.outputs.files.collect { zipTree(it) }
@@ -24,7 +24,7 @@ task ProActiveJar(type: Jar, dependsOn: ['ProActiveLibs', 'MergeMetaInfServices'
     manifest {
         attributes("Main-Class": "org.objectweb.proactive.Main",
                 "Implementation-Title": "ProActive",
-                "Implementation-Version": "",
+                "Implementation-Version": rootProject.version,
                 "Implementation-Vendor": "OASIS - INRIA Sophia Antipolis",
                 "Implementation-URL": "http://proactive.inria.fr")
     }
