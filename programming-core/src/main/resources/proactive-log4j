@@ -1,0 +1,103 @@
+# This file represents the log4j config file for non regression tests.
+# It is given as property (in the proactive.xml) when starting nonregression tests
+
+# The default logging level is INFO
+# The root logger logs in the test.log file
+
+log4j.rootLogger=INFO,CONSOLE
+ 
+# If INFO is enabled Jetty is too verbose at startup
+log4j.logger.org.mortbay = WARN
+
+log4j.logger.proactive.pnp = INFO
+
+########### The following are existing categories in ProActive
+#log4j.logger.proactive = INFO
+#log4j.logger.proactive.classloading = DEBUG
+#log4j.logger.proactive.events = DEBUG
+#log4j.logger.proactive.runtime = DEBUG
+#log4j.logger.proactive.body = DEBUG
+#log4j.logger.proactive.mop = DEBUG
+#log4j.logger.proactive.groups = DEBUG
+#log4j.logger.proactive.sync_call = DEBUG
+#log4j.logger.proactive.deployment = DEBUG
+#log4j.logger.proactive.deployment.log = DEBUG
+#log4j.logger.proactive.deployment.process = DEBUG
+#log4j.logger.proactive.deployment.filetransfer = DEBUG,CONSOLE
+#log4j.logger.proactive.filetransfer = DEBUG
+#log4j.logger.proactive.nfe = FATAL
+#log4j.logger.proactive.gc = DEBUG
+#log4j.logger.proactive.ft = DEBUG
+#log4j.logger.proactive.ft.cic = DEBUG
+#log4j.logger.proactive.ft.pml = DEBUG
+#log4j.logger.proactive.communication.transport.http = DEBUG
+#log4j.logger.proactive.communication.rmi = DEBUG
+#log4j.logger.proactive.communication.ssh = DEBUG
+#log4j.logger.proactive.communication.transport.http = DEBUG
+#log4j.logger.proactive.migration = DEBUG
+#log4j.logger.proactive.communication.requests = DEBUG
+
+#log4j.logger.proactive.dataspaces = DEBUG
+#log4j.logger.proactive.dataspaces.vfs = DEBUG
+#log4j.logger.proactive.dataspaces.mountmanager = DEBUG
+#log4j.logger.proactive.dataspaces.configurator = DEBUG
+#log4j.logger.proactive.dataspaces.namingservice = DEBUG
+
+#log4j.logger.proactive.vfsprovider = DEBUG
+#log4j.logger.proactive.vfsprovider.server = DEBUG
+
+#log4j.logger.proactive.configuration = DEBUG
+#log4j.logger.proactive.remoteobject = DEBUG
+#log4j.logger.proactive.forwarding = TRACE
+#log4j.logger.proactive.forwarding.router.admin = DEBUG
+#log4j.logger.proactive.runtime.node = DEBUG
+#log4j.logger.proactive.http = DEBUG
+
+#log4j.logger.proactive.jmx = DEBUG
+#log4j.logger.proactive.jmx.mbean = DEBUG
+#log4j.logger.proactive.jmx.notification = DEBUG
+
+#log4j.logger.proactive.webservices = DEBUG
+
+#log4j.logger.proactive.messagetagging = DEBUG    
+#log4j.logger.proactive.messagetagging.localmemory = DEBUG
+#log4j.logger.proactive.messagetagging.localmemory.leasing = DEBUG
+
+################ Appenders ####################
+#
+# Appender output can be configured by using a pattern layout
+# See: http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
+#
+#   - %c the category of the logging event
+#   - %d the date
+#   - %m he application supplied message
+#   - %n the platform dependent line separator character or characters
+#   - %p the priority of the logging event
+#   - %t the name of the thread that generated the logging event
+#   - %X{hostname}         the hostname 
+#   - %X{id@hostname}      the VMID and the hostname 
+#   - %X{shortid@hostname} the short VMID and the hostname (a collision can occur between two shortids, you should use id@hostname) 
+#   - %X{runtime}          the ProActive runtime url (does not work very well since a different MDC is associated to each thread)
+
+
+# CONSOLE appender is used by default
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=%X{shortid@hostname} - [%d %p %20.20c{2}] %m%n
+
+# Appender FILE writes to the file "tests.log".
+# This file is recreated a file for each run
+log4j.appender.FILE=org.apache.log4j.FileAppender
+log4j.appender.FILE.File=tests.log
+log4j.appender.FILE.Append=false
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.ConversionPattern=%5p [%t]: %m%n
+
+
+
+
+log4j.appender.CHAINSAW=org.apache.log4j.net.SocketAppender
+log4j.appender.CHAINSAW.Port=4560
+log4j.appender.CHAINSAW.RemoteHost=britany.activeeon.com
+#log4j.appender.CHAINSAW.layout=org.apache.log4j.PatternLayout
+#log4j.appender.CHAINSAW.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20c{2}] %m%n
