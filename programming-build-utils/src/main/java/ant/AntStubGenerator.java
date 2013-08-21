@@ -115,7 +115,7 @@ public class AntStubGenerator extends Java {
      * @author ProActive team
      * @since  ProActive 4.4.0
      */
-    static private class Main {
+    static public class Main {
         private File srcDir;
         private File dstDir;
         private List<String> classNames = new LinkedList<String>();

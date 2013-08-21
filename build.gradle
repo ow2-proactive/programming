@@ -29,29 +29,24 @@ ext.hasGcc = {
     }
 }()
 
-class StubTask extends DefaultTask {
+class StubTask extends JavaExec {
     @InputFiles
     def input = project.sourceSets.main.java.srcDirs
     @OutputFiles
     def output = project.fileTree(project.sourceSets.main.output.classesDir.parent)
-    def classes
 
     def StubTask() {
-        project.configurations { antClasspath }
-        project.dependencies { antClasspath project.project(':programming-build-utils') }
-        dependsOn project.compileJava, project.processResources
-        project.classes.dependsOn this
-        project.sourceSets.main.compileClasspath += project.configurations.antClasspath // add dependency to build utils jar
+        project.configurations { stubClasspath }
+        project.dependencies { stubClasspath project.project(':programming-build-utils') }
+        project.jar.dependsOn this
+        setMain('ant.AntStubGenerator$Main')
+        setClasspath((project.configurations.stubClasspath + project.sourceSets.main.runtimeClasspath))
+        setArgs([ input.toArray()[0], project.sourceSets.main.output.classesDir])
+        logging.captureStandardOutput LogLevel.INFO
     }
 
-    @TaskAction
-    def generate() {
-        ant.taskdef(name: 'stub', classname: 'ant.AntStubGenerator', classpath: project.configurations.antClasspath.asPath)
-        ant.stub(srcdir: input.toArray()[0],
-                dstdir: project.sourceSets.main.output.classesDir,
-                classpath: (project.configurations.antClasspath + project.sourceSets.main.runtimeClasspath).asPath) {
-            classes.collect { 'class'(name: it) }
-        }
+    def setClasses(List classes){
+        setArgs(getArgs() + classes)
     }
 }
 
