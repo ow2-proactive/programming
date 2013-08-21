@@ -43,6 +43,7 @@ import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import functionalTests.FunctionalTest;
 import org.apache.xerces.parsers.SAXParser;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -54,6 +55,7 @@ import static junit.framework.Assert.assertTrue;
  * A stripped-down Active Object example. The object has only one public method,
  * sayHello() The object does nothing but reflect the host its on.
  */
+@Ignore // no more files to test
 public class Test extends FunctionalTest {
     ProActiveDescriptor pad;
     transient SAXParser parser = null;

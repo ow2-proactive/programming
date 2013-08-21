@@ -36,24 +36,10 @@
  */
 package dataspaces;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileType;
-import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
@@ -66,9 +52,23 @@ import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSNodeScratchSpaceImpl;
-
 import dataspaces.mock.MOCKBody;
 import dataspaces.mock.MOCKNode;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -112,6 +112,7 @@ public class VFSApplicationScratchSpaceImplTest {
     public void setUp() throws ConfigurationException, IOException {
         testDir = new File(System.getProperty("java.io.tmpdir"),
             "ProActive-VFSApplicationScratchSpaceImplTest");
+        AbstractIOOperationsBase.deleteRecursively(testDir);
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();
         scratchDataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID, APP_ID);
@@ -222,7 +223,7 @@ public class VFSApplicationScratchSpaceImplTest {
      * Check if returning space info is valid.
      */
     @Test
-    public void testGetInstanceInfo() {
+    public void testGetInstanceInfo() throws URISyntaxException {
         final String spaceAccessURL = Utils.appendSubDirs(ACCESS_URL, RUNTIME_ID, NODE_ID, APP_ID);
         final SpaceInstanceInfo sii = applicationScratchSpace.getSpaceInstanceInfo();
         final String hostname = Utils.getHostname();
@@ -232,7 +233,7 @@ public class VFSApplicationScratchSpaceImplTest {
         assertEquals(SpaceType.SCRATCH, sii.getType());
         assertEquals(hostname, sii.getHostname());
         assertEquals(scratchDataSpacePath, sii.getPath());
-        assertEquals(spaceAccessURL, sii.getUrls().get(0));
+        assertTrue(sii.getUrls().contains(spaceAccessURL));
         assertNull(sii.getName());
     }
 

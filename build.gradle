@@ -259,6 +259,7 @@ project(':programming-test') {
         systemProperties << ['proactive.home': projectDir.absolutePath]
         systemProperties << ['proactive.runtime.ping': false]
         systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
+        dependsOn 'copyToLib'
     }
 
     task functionalTest(type: Test, group: 'ProActive')
@@ -301,6 +302,12 @@ project(':programming-test') {
     // disable test, use allTest to run the tests
     task(allTest).dependsOn pamrHearbeatTest, functionalTest, performanceTest
     test.enabled = false
+
+    // for the test nodes to have the ProActive jars
+    task copyToLib(type: Copy) {
+        from configurations.testCompile
+        into "$buildDir/dist/lib"
+    }
 
 }
 

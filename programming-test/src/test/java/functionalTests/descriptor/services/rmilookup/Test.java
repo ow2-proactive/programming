@@ -36,19 +36,18 @@
  */
 package functionalTests.descriptor.services.rmilookup;
 
-import static junit.framework.Assert.assertTrue;
-
-import org.junit.After;
-import org.junit.Before;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
-
 import functionalTests.FunctionalTest;
 import functionalTests.TestDisabler;
+import org.junit.After;
+import org.junit.Before;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -94,8 +93,12 @@ public class Test extends FunctionalTest {
 
     @After
     public void endTest() throws Exception {
-        pad.killall(false);
-        pad1.killall(false);
+        if (pad != null){
+            pad.killall(false);
+        }
+        if (pad1 != null) {
+            pad1.killall(false);
+        }
     }
 
     public static void main(String[] args) {
