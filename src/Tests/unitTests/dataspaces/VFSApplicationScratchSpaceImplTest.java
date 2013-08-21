@@ -110,15 +110,16 @@ public class VFSApplicationScratchSpaceImplTest {
 
     @Before
     public void setUp() throws ConfigurationException, IOException {
+        // we use a path with a whitespace to test possible errors
         testDir = new File(System.getProperty("java.io.tmpdir"),
-            "ProActive-VFSApplicationScratchSpaceImplTest");
+            "ProActive-VFSApplicationScratch SpaceImplTest");
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();
         scratchDataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID, APP_ID);
 
         node = new MOCKNode(RUNTIME_ID, NODE_ID);
         body = new MOCKBody();
-        ACCESS_URL = (new File(testDirPath).toURI().toURL().toString()).replace("file:/", "file:///");
+        ACCESS_URL = (new File(testDirPath).toURI().toURL().toString());
         localAccessConfig = new BaseScratchSpaceConfiguration(ACCESS_URL, testDirPath);
         nodeScratchSpace = new VFSNodeScratchSpaceImpl();
 
@@ -223,7 +224,8 @@ public class VFSApplicationScratchSpaceImplTest {
      */
     @Test
     public void testGetInstanceInfo() {
-        final String spaceAccessURL = Utils.appendSubDirs(ACCESS_URL, RUNTIME_ID, NODE_ID, APP_ID);
+        // a trailing slash is added here as toURI() will add or not a trailing slash if the directory exists or not
+        final String spaceAccessURL = Utils.appendSubDirs(ACCESS_URL, RUNTIME_ID, NODE_ID, APP_ID) + "/";
         final SpaceInstanceInfo sii = applicationScratchSpace.getSpaceInstanceInfo();
         final String hostname = Utils.getHostname();
 

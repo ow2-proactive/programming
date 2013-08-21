@@ -36,7 +36,9 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.core;
 
+import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import org.objectweb.proactive.extensions.dataspaces.Utils;
@@ -166,7 +168,12 @@ public class BaseScratchSpaceConfiguration implements Serializable {
         ArrayList<String> urls = new ArrayList<String>();
         final String newUrl = Utils.appendSubDirs(getUrl(), subDirs);
         final String newPath = Utils.appendSubDirs(getPath(), subDirs);
-        String localPathUrl = "file://" + (newPath.startsWith("/") ? "" : "/") + newPath.replace("\\", "/");
+        String localPathUrl = null;
+        try {
+            localPathUrl = (new File(newPath)).toURI().toURL().toString();
+        } catch (MalformedURLException e) {
+            throw new ConfigurationException(e);
+        }
         if (!newUrl.equals(localPathUrl)) {
             urls.add(localPathUrl);
         }
