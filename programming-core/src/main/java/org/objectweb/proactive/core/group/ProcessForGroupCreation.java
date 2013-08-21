@@ -66,6 +66,7 @@ public class ProcessForGroupCreation extends AbstractProcessForGroup implements 
         this.doneSignal = doneSignal;
     }
 
+    @SuppressWarnings("unchecked")
     public void run() {
         try {
             this.proxyGroup.set(this.groupIndex, PAActiveObject.newActive(className, genericParameters,

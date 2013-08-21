@@ -60,6 +60,7 @@ public class ProcessForAsyncCall extends AbstractProcessForGroup implements Runn
     CountDownLatch doneSignal;
     DispatchMonitor dispatchMonitor;
 
+    @SuppressWarnings("unchecked")
     public ProcessForAsyncCall(ProxyForGroup proxyGroup, Vector memberList, Vector memberListOfResultGroup,
             int groupIndex, MethodCall mc, int resultIndex, Body body, CountDownLatch doneSignal) {
         this.proxyGroup = proxyGroup;

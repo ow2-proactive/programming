@@ -39,7 +39,6 @@ package org.objectweb.proactive.api;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -57,6 +56,7 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -91,6 +91,7 @@ public class PARemoteObject {
         return new RemoteObjectExposer<T>(className, target, targetRemoteObjectAdapter);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T bind(RemoteObjectExposer<T> roe, URI uri) throws ProActiveException {
         RemoteRemoteObject irro = roe.createRemoteObject(uri);
         return (T) new RemoteObjectAdapter(irro).getObjectProxy();

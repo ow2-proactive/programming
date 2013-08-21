@@ -105,6 +105,7 @@ public interface RemoteObjectFactory {
      * @return
      * @throws ProActiveException
      */
+    @SuppressWarnings("unchecked")
     public <T> RemoteObject<T> lookup(URI url) throws ProActiveException;
 
     /**

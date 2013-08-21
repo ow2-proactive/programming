@@ -289,6 +289,7 @@ public class FuturePool extends Object implements java.io.Serializable {
 
             // 2) create and put ACservices
             if (this.registerACs) {
+                @SuppressWarnings("unchecked")
                 ArrayList<UniversalBody> bodiesToContinue = (ArrayList<UniversalBody>) (futures
                         .getAutomaticContinuation(id, creatorID).clone());
                 if ((bodiesToContinue != null) && (bodiesToContinue.size() != 0)) {
@@ -437,6 +438,7 @@ public class FuturePool extends Object implements java.io.Serializable {
             boolean queueStarted = in.readBoolean();
             if (queueStarted) {
                 // create a new ActiveACQueue
+                @SuppressWarnings("unchecked")
                 ArrayList<ACService> queue = (ArrayList<ACService>) (in.readObject());
                 queueAC = new ActiveACQueue(queue);
                 queueAC.start();

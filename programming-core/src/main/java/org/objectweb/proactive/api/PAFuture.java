@@ -93,6 +93,7 @@ public class PAFuture {
      * @param timeout to wait in ms
      * @throws ProActiveException if the timeout expire
      */
+    @SuppressWarnings("unchecked")
     public static <T> T getFutureValue(T future, long timeout) throws ProActiveTimeoutException {
         TimeoutAccounter ta = TimeoutAccounter.getAccounter(timeout);
         while (true) {

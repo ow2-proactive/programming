@@ -213,6 +213,7 @@ public class BasicTaskFactory implements TaskFactory {
     }
 
     protected Vector<Object> initializeResultsGroup(Object result, int nbExpectedResults) {
+        @SuppressWarnings("unchecked")
         Vector<Object> memberListOfResultGroup = ((ProxyForGroup) ((StubObject) result).getProxy()).memberList;
 
         // default group size for async call == size of target group (1 result

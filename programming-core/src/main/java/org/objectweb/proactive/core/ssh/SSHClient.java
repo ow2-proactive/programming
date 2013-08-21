@@ -39,18 +39,19 @@ package org.objectweb.proactive.core.ssh;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.objectweb.proactive.utils.TimeoutAccounter;
+import com.trilead.ssh2.ChannelCondition;
+import com.trilead.ssh2.Connection;
+import com.trilead.ssh2.Session;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.objectweb.proactive.utils.TimeoutAccounter;
-
-import com.trilead.ssh2.ChannelCondition;
-import com.trilead.ssh2.Connection;
-import com.trilead.ssh2.Session;
 
 
 /**
@@ -157,7 +158,7 @@ public class SSHClient {
             verbose = true;
         }
 
-        List<String> remArgs = cmd.getArgList();
+        List<String> remArgs = new ArrayList<String>(Arrays.asList(cmd.getArgs()));
         if (remArgs.size() == 0) {
             System.err.println("[E] You must specify an hostname");
             printHelp(true);

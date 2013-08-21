@@ -93,6 +93,11 @@ project(':programming-core') {
     test {
         systemProperties << ['proactive.classloading.useHTTP': false]
     }
+
+    // to get rid of warning about sun internal api usage
+    compileJava.options.useAnt = true
+    compileJava.options.compilerArgs <<  '-XDignore.symbol.file'
+    compileJava.options.compilerArgs <<  '-Xlint:unchecked'
 }
 
 project(':programming-build-utils') {

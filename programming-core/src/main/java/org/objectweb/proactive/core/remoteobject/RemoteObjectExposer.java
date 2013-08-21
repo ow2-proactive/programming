@@ -45,7 +45,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -56,6 +55,7 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -94,6 +94,7 @@ public class RemoteObjectExposer<T> {
      *            the adapter object that allows to implement specific behaviour
      *            like cache mechanism
      */
+    @SuppressWarnings("unchecked")
     public RemoteObjectExposer(String name, String className, Object target,
             Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         this.className = className;

@@ -151,7 +151,8 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      *            the urn (in fact its url + name) the remote Body is registered to
      * @return a UniversalBody
      */
-    public RemoteObject lookup(URI url) throws ProActiveException {
+    @SuppressWarnings("unchecked")
+    public <T> RemoteObject<T> lookup(URI url) throws ProActiveException {
 
         HttpRemoteObjectLookupMessage message = new HttpRemoteObjectLookupMessage(url.toString());
         try {

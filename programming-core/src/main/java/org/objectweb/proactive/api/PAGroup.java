@@ -39,7 +39,6 @@ package org.objectweb.proactive.api;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.body.future.FutureProxy;
@@ -58,6 +57,7 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -126,6 +126,7 @@ public class PAGroup {
      * @return the <code>ProxyForGroup</code> of the typed group <code>ogroup</code>.
      * <code>null</code> if <code>ogroup</code> does not represent a Group.
      */
+    @SuppressWarnings("unchecked")
     public static <E> ProxyForGroup<E> findProxyForGroup(Object ogroup) {
         if (!(MOP.isReifiedObject(ogroup))) {
             return null;

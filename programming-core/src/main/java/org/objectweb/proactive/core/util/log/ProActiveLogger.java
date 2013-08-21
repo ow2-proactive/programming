@@ -45,13 +45,13 @@ import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.apache.log4j.Appender;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.config.ProActiveConfiguration;
 
 
 /**
@@ -202,6 +202,7 @@ public class ProActiveLogger extends Logger {
                     logger.setAdditivity(oldLogger.getAdditivity());
                     logger.setLevel(oldLogger.getLevel());
 
+                    @SuppressWarnings("unchecked")
                     Enumeration<Appender> appenders = oldLogger.getAllAppenders();
                     while (appenders.hasMoreElements()) {
                         Appender appender = appenders.nextElement();

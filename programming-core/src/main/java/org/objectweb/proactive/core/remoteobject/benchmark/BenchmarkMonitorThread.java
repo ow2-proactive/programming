@@ -49,7 +49,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -57,6 +56,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 
 
 public class BenchmarkMonitorThread extends Observable {
@@ -211,6 +211,7 @@ public class BenchmarkMonitorThread extends Observable {
             return copy;
     }
 
+    @SuppressWarnings("unchecked")
     public class BenchmarkThread implements Runnable {
         public void run() {
             finished = false;

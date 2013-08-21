@@ -45,7 +45,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
@@ -82,6 +81,7 @@ import org.objectweb.proactive.core.util.ProcessForAoCreation;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -141,6 +141,7 @@ public class PAActiveObject {
      * @exception NodeException
      *                if the DefaultNode cannot be created
      */
+    @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Object[] constructorParameters)
             throws ActiveObjectCreationException, NodeException {
         return (T) newActive(clazz.getName(), null, constructorParameters, (Node) null, null, null);
@@ -233,6 +234,7 @@ public class PAActiveObject {
      * @exception NodeException
      *                if the node was null and that the DefaultNode cannot be created
      */
+    @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Object[] constructorParameters, Node node)
             throws ActiveObjectCreationException, NodeException {
         return (T) newActive(clazz.getName(), null, constructorParameters, node, null, null);
@@ -331,6 +333,7 @@ public class PAActiveObject {
      * @exception NodeException
      *                if the node URL cannot be resolved as an existing Node
      */
+    @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Class<?>[] genericParameters,
             Object[] constructorParameters, String nodeURL) throws ActiveObjectCreationException,
             NodeException {
@@ -489,6 +492,7 @@ public class PAActiveObject {
      * @exception NodeException
      *                if the node was null and that the DefaultNode cannot be created
      */
+    @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Class<?>[] genericParameters,
             Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
             throws ActiveObjectCreationException, NodeException {
@@ -759,6 +763,7 @@ public class PAActiveObject {
      * @exception NodeException
      *                if the node was null and that the DefaultNode cannot be created
      */
+    @SuppressWarnings("unchecked")
     public static <T> T turnActive(T target, String nameOfTargetType, Class<?>[] genericParameters,
             Node node, Active activity, MetaObjectFactory factory) throws ActiveObjectCreationException,
             NodeException {
@@ -969,6 +974,7 @@ public class PAActiveObject {
      * @exception NodeException
      *                if the node was null and that the DefaultNode cannot be created
      */
+    @SuppressWarnings("unchecked")
     public static <T> T turnActive(T target, Class<?>[] genericParameters, String nameOfTargetType,
             Node node, Active activity, MetaObjectFactory factory) throws ActiveObjectCreationException,
             NodeException {
@@ -1354,6 +1360,7 @@ public class PAActiveObject {
      * @exception ActiveObjectCreationException
      *                if the stub-proxy couple cannot be created
      */
+    @SuppressWarnings("unchecked")
     public static <T> T lookupActive(Class<T> clazz, String url) throws ActiveObjectCreationException,
             java.io.IOException {
         return (T) lookupActive(clazz.getName(), url);

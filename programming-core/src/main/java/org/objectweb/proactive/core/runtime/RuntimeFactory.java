@@ -36,7 +36,8 @@
  */
 package org.objectweb.proactive.core.runtime;
 
-import org.apache.log4j.Logger;
+import java.net.URI;
+
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -46,8 +47,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.net.URI;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -193,6 +193,7 @@ public class RuntimeFactory {
      * @return ProActiveRuntime
      * @throws ProActiveException if the runtime cannot be found
      */
+    @SuppressWarnings("unchecked")
     public static ProActiveRuntime getRuntime(String proActiveRuntimeURL) throws ProActiveException {
         runtimeLogger.debug("proActiveRunTimeURL " + proActiveRuntimeURL);
 

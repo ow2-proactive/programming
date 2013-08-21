@@ -66,6 +66,7 @@ public class NodeCreationListenerForAoCreation implements NodeCreationEventListe
         this.threadpool = threadpool;
     }
 
+    @SuppressWarnings("unchecked")
     public void nodeCreated(NodeCreationEvent event) {
         threadpool.execute(new ProcessForAoCreation(this.result, this.className, this.genericParameters,
             this.constructorParameters, event.getNode()));

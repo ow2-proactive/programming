@@ -53,7 +53,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.SunMarshalInputStream;
@@ -73,6 +72,7 @@ import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -239,6 +239,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
     /* (non-Javadoc)
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#lookup(java.net.URI)
      */
+    @SuppressWarnings("unchecked")
     public <T> RemoteObject<T> lookup(URI uri) throws ProActiveException {
         Object o = null;
 

@@ -87,8 +87,8 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
 
             //--The property is specified
 
-            Class<? extends LocalBTCallback> btCallbackClass;
-            btCallbackClass = (Class<? extends LocalBTCallback>) Class
+            @SuppressWarnings("unchecked")
+            Class<? extends LocalBTCallback> btCallbackClass = (Class<? extends LocalBTCallback>) Class
                     .forName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_CALLBACK_CLASS
                             .getValueAsString());
 
@@ -279,6 +279,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
      * Warning : clone !
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Vector<RTBroadcastAction> listRTBroadcastAction() {
         return (Vector<RTBroadcastAction>) rtAction.clone();
     }
