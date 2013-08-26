@@ -297,6 +297,46 @@ public class TestControllerObjectInterceptors extends CommonSetup {
                     this.foo2Method.getName()));
     }
 
+    @Test
+    public void testAddBeforeBlockingInterceptorOnServerInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
+                BeforeBlockingInterceptor.BEFORE_BLOCKING_INTERCEPTOR_NAME);
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+    }
+
+    @Test
+    public void testAddAfterBlockingInterceptorOnServerInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
+                AfterBlockingInterceptor.AFTER_BLOCKING_INTERCEPTOR_NAME);
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+    }
+
+    @Test
+    public void testAddBeforeBlockingInterceptorOnClientInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.CLIENT_ITF_NAME,
+                BeforeBlockingInterceptor.BEFORE_BLOCKING_INTERCEPTOR_NAME);
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+    }
+
+    @Test
+    public void testAddAfterBlockingInterceptorOnClientInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.CLIENT_ITF_NAME,
+                AfterBlockingInterceptor.AFTER_BLOCKING_INTERCEPTOR_NAME);
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+    }
+
     @Test(expected = IllegalLifeCycleException.class)
     public void testAddInterceptorOnStartedComponent() throws Exception {
         GCM.getGCMLifeCycleController(this.componentA).startFc();

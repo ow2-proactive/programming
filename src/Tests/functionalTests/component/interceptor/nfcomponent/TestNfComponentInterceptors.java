@@ -81,6 +81,10 @@ import functionalTests.component.interceptor.FooItf;
 public class TestNfComponentInterceptors extends CommonSetup {
     private static final String INTERCEPTOR_ID = InterceptorImpl.COMPONENT_NAME + "." +
         InterceptorImpl.INTERCEPTOR_SERVICES;
+    private static final String BEFORE_BLOCKING_INTERCEPTOR_ID = BeforeBlockingInterceptorImpl.COMPONENT_NAME +
+        "." + BeforeBlockingInterceptorImpl.INTERCEPTOR_SERVICES;
+    private static final String AFTER_BLOCKING_INTERCEPTOR_ID = AfterBlockingInterceptorImpl.COMPONENT_NAME +
+        "." + AfterBlockingInterceptorImpl.INTERCEPTOR_SERVICES;
 
     public TestNfComponentInterceptors() {
         super("Components : interception of functional invocations",
@@ -113,6 +117,10 @@ public class TestNfComponentInterceptors extends CommonSetup {
                         PAInterceptorController.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                         TypeFactory.SINGLE),
                 this.typeFactory.createFcItfType(DummyController.DUMMY_CONTROLLER_NAME, DummyController.class
+                        .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                this.typeFactory.createFcItfType("before-blocking-dummy-controller", DummyController.class
+                        .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                this.typeFactory.createFcItfType("after-blocking-dummy-controller", DummyController.class
                         .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE)
 
         };
@@ -128,11 +136,29 @@ public class TestNfComponentInterceptors extends CommonSetup {
                 "functionalTests.component.interceptor.nfcomponent.adl.Interceptor",
                 new HashMap<String, Object>());
         GCM.getNameController(interceptor).setFcName(InterceptorImpl.COMPONENT_NAME);
+        Component beforeBlockingInterceptor = (Component) nfFactory.newComponent(
+                "functionalTests.component.interceptor.nfcomponent.adl.BeforeBlockingInterceptor",
+                new HashMap<String, Object>());
+        GCM.getNameController(beforeBlockingInterceptor).setFcName(
+                BeforeBlockingInterceptorImpl.COMPONENT_NAME);
+        Component afterBlockingInterceptor = (Component) nfFactory.newComponent(
+                "functionalTests.component.interceptor.nfcomponent.adl.AfterBlockingInterceptor",
+                new HashMap<String, Object>());
+        GCM.getNameController(afterBlockingInterceptor)
+                .setFcName(AfterBlockingInterceptorImpl.COMPONENT_NAME);
 
         PAMembraneController membraneController = Utils.getPAMembraneController(componentA);
         membraneController.nfAddFcSubComponent(interceptor);
+        membraneController.nfAddFcSubComponent(beforeBlockingInterceptor);
+        membraneController.nfAddFcSubComponent(afterBlockingInterceptor);
         membraneController.nfBindFc(DummyController.DUMMY_CONTROLLER_NAME, InterceptorImpl.COMPONENT_NAME +
             "." + InterceptorImpl.DUMMY_SERVICES);
+        membraneController.nfBindFc("before-blocking-dummy-controller",
+                BeforeBlockingInterceptorImpl.COMPONENT_NAME + "." +
+                    BeforeBlockingInterceptorImpl.DUMMY_SERVICES);
+        membraneController.nfBindFc("after-blocking-dummy-controller",
+                AfterBlockingInterceptorImpl.COMPONENT_NAME + "." +
+                    AfterBlockingInterceptorImpl.DUMMY_SERVICES);
         membraneController.startMembrane();
 
         return componentA;
@@ -181,6 +207,54 @@ public class TestNfComponentInterceptors extends CommonSetup {
                     this.fooMethod.getName()));
 
         this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
+    }
+
+    @Test
+    public void testAddBeforeBlockingInterceptorOnServerInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
+                BEFORE_BLOCKING_INTERCEPTOR_ID);
+        this.dummyController = (DummyController) this.componentA
+                .getFcInterface("before-blocking-dummy-controller");
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+    }
+
+    @Test
+    public void testAddAfterBlockingInterceptorOnServerInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
+                AFTER_BLOCKING_INTERCEPTOR_ID);
+        this.dummyController = (DummyController) this.componentA
+                .getFcInterface("after-blocking-dummy-controller");
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+    }
+
+    @Test
+    public void testAddBeforeBlockingInterceptorOnClientInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.CLIENT_ITF_NAME,
+                BEFORE_BLOCKING_INTERCEPTOR_ID);
+        this.dummyController = (DummyController) this.componentA
+                .getFcInterface("before-blocking-dummy-controller");
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+    }
+
+    @Test
+    public void testAddAfterBlockingInterceptorOnClientInterface() throws Exception {
+        this.interceptorController.addInterceptorOnInterface(FooItf.CLIENT_ITF_NAME,
+                AFTER_BLOCKING_INTERCEPTOR_ID);
+        this.dummyController = (DummyController) this.componentA
+                .getFcInterface("after-blocking-dummy-controller");
+
+        GCM.getGCMLifeCycleController(this.componentA).startFc();
+
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
     }
 
     @Test(expected = NoSuchComponentException.class)

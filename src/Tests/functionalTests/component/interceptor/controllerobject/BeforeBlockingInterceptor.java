@@ -36,39 +36,11 @@
  */
 package functionalTests.component.interceptor.controllerobject;
 
-import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.api.factory.InstantiationException;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
-import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.component.interception.Interceptor;
+
+import functionalTests.component.controller.DummyController;
 
 
-public class Interceptor1Impl extends AbstractInterceptorImpl implements Interceptor1 {
-    public Interceptor1Impl(Component owner) {
-        super(owner);
-    }
-
-    @Override
-    protected void setControllerItfType() {
-        try {
-            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(Interceptor1.INTERCEPTOR1_NAME,
-                    Interceptor1.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                    TypeFactory.SINGLE));
-        } catch (InstantiationException e) {
-            throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
-        }
-    }
-
-    @Override
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
-        setDummyValue(getDummyValue() + Interceptor1.BEFORE_INTERCEPTION + interfaceName + "-" +
-            methodCall.getName() + " - ");
-    }
-
-    @Override
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + Interceptor1.AFTER_INTERCEPTION + interfaceName + "-" +
-            methodCall.getName() + " - ");
-    }
+public interface BeforeBlockingInterceptor extends DummyController, Interceptor {
+    public static final String BEFORE_BLOCKING_INTERCEPTOR_NAME = "before-blocking-interceptor-controller";
 }

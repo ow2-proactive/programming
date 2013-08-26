@@ -39,5 +39,13 @@
             <interface>functionalTests.component.interceptor.controllerobject.Interceptor2</interface>
             <implementation>functionalTests.component.interceptor.controllerobject.Interceptor2Impl</implementation>
         </controller>
+        <controller>
+            <interface>functionalTests.component.interceptor.controllerobject.BeforeBlockingInterceptor</interface>
+            <implementation>functionalTests.component.interceptor.controllerobject.BeforeBlockingInterceptorImpl</implementation>
+        </controller>
+        <controller>
+            <interface>functionalTests.component.interceptor.controllerobject.AfterBlockingInterceptor</interface>
+            <implementation>functionalTests.component.interceptor.controllerobject.AfterBlockingInterceptorImpl</implementation>
+        </controller>
     </controllers>
 </componentConfiguration>

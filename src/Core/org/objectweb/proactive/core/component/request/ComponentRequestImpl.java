@@ -38,6 +38,7 @@ package org.objectweb.proactive.core.component.request;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -193,7 +194,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
         } catch (MethodCallExecutionFailedException e) {
             throw new ServeException("serve method " + methodCall.getReifiedMethod().toString() + " failed",
                 e);
-        } catch (java.lang.reflect.InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             exception = e.getTargetException();
             logger.debug("Serve method " + methodCall.getReifiedMethod().getName() + " failed: ", e);
 
@@ -207,7 +208,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
     }
 
     // intercept and delegate for preprocessing from the inputInterceptors 
-    private void interceptBeforeInvocation(Body targetBody) {
+    private void interceptBeforeInvocation(Body targetBody) throws InvocationTargetException {
         if (methodCall.getReifiedMethod() != null) {
             try {
                 PAInterceptorControllerImpl interceptorControllerImpl = (PAInterceptorControllerImpl) ((PAInterface) Utils
@@ -227,12 +228,14 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                 }
             } catch (NoSuchInterfaceException nsie) {
                 // No PAInterceptorController, nothing to do
+            } catch (RuntimeException re) {
+                throw new InvocationTargetException(re, "Interceptor raises an exception: " + re.getMessage());
             }
         }
     }
 
     // intercept and delegate for postprocessing from the inputInterceptors 
-    private void interceptAfterInvocation(Body targetBody, Object result) {
+    private void interceptAfterInvocation(Body targetBody, Object result) throws InvocationTargetException {
         if (methodCall.getReifiedMethod() != null) {
             if (((ComponentBody) targetBody).getPAComponentImpl() != null) {
                 try {
@@ -255,6 +258,9 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                     }
                 } catch (NoSuchInterfaceException nsie) {
                     // No PAInterceptorController, nothing to do
+                } catch (RuntimeException re) {
+                    throw new InvocationTargetException(re, "Interceptor raises an exception: " +
+                        re.getMessage());
                 }
             }
         }

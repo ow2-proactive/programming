@@ -37,18 +37,14 @@
 package functionalTests.component.interceptor.controllerobject;
 
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.control.AbstractPAController;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
 
-import functionalTests.component.controller.DummyController;
 
-
-public class Interceptor2Impl extends AbstractPAController implements Interceptor2 {
+public class Interceptor2Impl extends AbstractInterceptorImpl implements Interceptor2 {
     public Interceptor2Impl(Component owner) {
         super(owner);
     }
@@ -61,27 +57,6 @@ public class Interceptor2Impl extends AbstractPAController implements Intercepto
                     TypeFactory.SINGLE));
         } catch (InstantiationException e) {
             throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
-        }
-    }
-
-    @Override
-    public void setDummyValue(String value) {
-        try {
-            ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
-                    .setDummyValue(value);
-        } catch (NoSuchInterfaceException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public String getDummyValue() {
-        try {
-            return ((DummyController) getFcItfOwner().getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
-                    .getDummyValue();
-        } catch (NoSuchInterfaceException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 

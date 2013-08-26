@@ -36,23 +36,24 @@
  */
 package functionalTests.component.interceptor.nfcomponent;
 
-import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.component.interception.Interceptor;
+
+import functionalTests.component.controller.DummyController;
 
 
-public class InterceptorImpl extends AbstractInterceptorImpl {
-    public static final String COMPONENT_NAME = "interceptor";
-    public static final String BEFORE_INTERCEPTION = " - before-interception-" + COMPONENT_NAME + " - ";
-    public static final String AFTER_INTERCEPTION = " - after-interception-" + COMPONENT_NAME + " - ";
+public abstract class AbstractInterceptorImpl implements DummyController, Interceptor {
+    public static final String DUMMY_SERVICES = "dummy-services";
+    public static final String INTERCEPTOR_SERVICES = "interceptor-services";
+
+    private String dummyValue = null;
 
     @Override
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
-        setDummyValue(getDummyValue() + BEFORE_INTERCEPTION + interfaceName + "-" + methodCall.getName() +
-            " - ");
+    public void setDummyValue(String value) {
+        this.dummyValue = value;
     }
 
     @Override
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + AFTER_INTERCEPTION + interfaceName + "-" + methodCall.getName() +
-            " - ");
+    public String getDummyValue() {
+        return this.dummyValue;
     }
 }
