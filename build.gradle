@@ -1,14 +1,14 @@
 apply plugin: 'build-dashboard'
 
-group = 'org.objectweb.proactive'
-version = '5.5.0-SNAPSHOT'
-
 allprojects {
     apply plugin: 'eclipse'
 }
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
+
+    group = 'org.objectweb.proactive'
+    version = '5.5.0-SNAPSHOT'
 
     repositories {
         mavenLocal()
@@ -96,12 +96,13 @@ project(':programming-core') {
 }
 
 project(':programming-build-utils') {
+    apply plugin: 'groovy'
     dependencies {
+        compile gradleApi()
         compile 'ant:ant:1.7.0'
         compile 'commons-cli:commons-cli:1.2'
         compile "log4j:log4j:1.2.14"
         compile 'org.jvnet.winp:winp:1.14'
-
     }
 }
 
@@ -130,20 +131,22 @@ project('programming-extensions:programming-extension-annotation') {
     }
 }
 
-def vfs2Dependencies = ['org.apache.commons:commons-vfs2:2.0',
+def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.0']
+
+def vfs2RuntimeDependencies = [
         'commons-net:commons-net:2.2',
         'commons-httpclient:commons-httpclient:3.1',
         'com.jcraft:jsch:0.1.42',
-        'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
-        'org.slf4j:slf4j-log4j12:1.5.3']
+        'org.apache.jackrabbit:jackrabbit-webdav:1.5.2']
 
 project('programming-extensions:programming-extension-vfsprovider') {
     dependencies {
         compile(
-                vfs2Dependencies,
+                vfs2CompileDependencies,
                 project(':programming-extensions:programming-extension-annotation')
         )
         testCompile 'org.apache.commons:commons-vfs2:2.0:tests'
+        runtime vfs2RuntimeDependencies
     }
     test {
         systemProperties << ['proactive.classloading.useHTTP': false]
@@ -157,9 +160,10 @@ project('programming-extensions:programming-extension-vfsprovider') {
 project('programming-extensions:programming-extension-dataspaces') {
     dependencies {
         compile(
-                vfs2Dependencies,
+                vfs2CompileDependencies,
                 project(':programming-extensions:programming-extension-vfsprovider')
         )
+        runtime vfs2RuntimeDependencies
     }
     test {
         systemProperties << ['proactive.classloading.useHTTP': false]

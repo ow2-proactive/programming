@@ -43,7 +43,6 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Java;
@@ -143,7 +142,7 @@ public class AntStubGenerator extends Java {
         private void quiet() {
             // Do not use standard ProActive logger classes. Utils must not depends on the core
             Logger logger = Logger.getLogger("proactive.configuration");
-            logger.setLevel(Level.ERROR);
+//            logger.setLevel(Level.ERROR);
         }
 
         private void checkConfig() throws BuildException {
