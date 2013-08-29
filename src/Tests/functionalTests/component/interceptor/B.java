@@ -36,17 +36,20 @@
  */
 package functionalTests.component.interceptor;
 
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
+
+
 public class B implements FooItf, Foo2Itf {
     public B() {
     }
 
     @Override
-    public void foo() {
-        // nothing
+    public StringWrapper foo(String param) {
+        return new StringWrapper(param);
     }
 
     @Override
-    public void foo2() {
-        // nothing
+    public StringWrapper foo2(String param) {
+        return new StringWrapper(param);
     }
 }

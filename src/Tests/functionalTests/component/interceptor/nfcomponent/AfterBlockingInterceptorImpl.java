@@ -36,19 +36,20 @@
  */
 package functionalTests.component.interceptor.nfcomponent;
 
-import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.component.interception.InterceptedRequest;
 
 
 public class AfterBlockingInterceptorImpl extends AbstractInterceptorImpl {
     public static final String COMPONENT_NAME = "after-blocking-interceptor";
 
     @Override
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
+    public InterceptedRequest beforeMethodInvocation(InterceptedRequest interceptedRequest) {
         // Useless since afterMethodInvocation raises an exception
+        return interceptedRequest;
     }
 
     @Override
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
+    public InterceptedRequest afterMethodInvocation(InterceptedRequest interceptedRequest) {
         throw new RuntimeException("Invocation blocked by " + COMPONENT_NAME);
     }
 }

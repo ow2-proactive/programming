@@ -40,8 +40,9 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.component.interception.InterceptedRequest;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
-import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public class Interceptor1Impl extends AbstractInterceptorImpl implements Interceptor1 {
@@ -61,14 +62,25 @@ public class Interceptor1Impl extends AbstractInterceptorImpl implements Interce
     }
 
     @Override
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
-        setDummyValue(getDummyValue() + Interceptor1.BEFORE_INTERCEPTION + interfaceName + "-" +
-            methodCall.getName() + " - ");
+    public InterceptedRequest beforeMethodInvocation(InterceptedRequest interceptedRequest) {
+        interceptedRequest.setParameter(
+                interceptedRequest.getParameter(0) + Interceptor1.BEFORE_INTERCEPTION, 0);
+
+        setDummyValue(getDummyValue() + Interceptor1.BEFORE_INTERCEPTION +
+            interceptedRequest.getInterfaceName() + "-" + interceptedRequest.getMethodName() + " - ");
+
+        return interceptedRequest;
     }
 
     @Override
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + Interceptor1.AFTER_INTERCEPTION + interfaceName + "-" +
-            methodCall.getName() + " - ");
+    public InterceptedRequest afterMethodInvocation(InterceptedRequest interceptedRequest) {
+        interceptedRequest.setResult(new StringWrapper(((StringWrapper) interceptedRequest.getResult())
+                .getStringValue() +
+            Interceptor1.AFTER_INTERCEPTION));
+
+        setDummyValue(getDummyValue() + Interceptor1.AFTER_INTERCEPTION +
+            interceptedRequest.getInterfaceName() + "-" + interceptedRequest.getMethodName() + " - ");
+
+        return interceptedRequest;
     }
 }

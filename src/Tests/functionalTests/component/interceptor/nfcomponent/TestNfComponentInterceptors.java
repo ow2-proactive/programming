@@ -186,12 +186,13 @@ public class TestNfComponentInterceptors extends CommonSetup {
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
         this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            InterceptorImpl.BEFORE_INTERCEPTION + InterceptorImpl.AFTER_INTERCEPTION, DUMMY_VALUE +
             this.getInterceptionMessage(InterceptorImpl.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
                     this.fooMethod.getName()) +
             this.getInterceptionMessage(InterceptorImpl.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
                     this.fooMethod.getName()));
 
-        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
+        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
     @Test
@@ -201,15 +202,16 @@ public class TestNfComponentInterceptors extends CommonSetup {
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
         this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            InterceptorImpl.BEFORE_INTERCEPTION + InterceptorImpl.AFTER_INTERCEPTION, DUMMY_VALUE +
             this.getInterceptionMessage(InterceptorImpl.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
                     this.fooMethod.getName()) +
             this.getInterceptionMessage(InterceptorImpl.AFTER_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
                     this.fooMethod.getName()));
 
-        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
+        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testAddBeforeBlockingInterceptorOnServerInterface() throws Exception {
         this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
                 BEFORE_BLOCKING_INTERCEPTOR_ID);
@@ -218,10 +220,10 @@ public class TestNfComponentInterceptors extends CommonSetup {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testAddAfterBlockingInterceptorOnServerInterface() throws Exception {
         this.interceptorController.addInterceptorOnInterface(FooItf.SERVER_ITF_NAME,
                 AFTER_BLOCKING_INTERCEPTOR_ID);
@@ -230,10 +232,10 @@ public class TestNfComponentInterceptors extends CommonSetup {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testAddBeforeBlockingInterceptorOnClientInterface() throws Exception {
         this.interceptorController.addInterceptorOnInterface(FooItf.CLIENT_ITF_NAME,
                 BEFORE_BLOCKING_INTERCEPTOR_ID);
@@ -242,10 +244,10 @@ public class TestNfComponentInterceptors extends CommonSetup {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testAddAfterBlockingInterceptorOnClientInterface() throws Exception {
         this.interceptorController.addInterceptorOnInterface(FooItf.CLIENT_ITF_NAME,
                 AFTER_BLOCKING_INTERCEPTOR_ID);
@@ -254,7 +256,7 @@ public class TestNfComponentInterceptors extends CommonSetup {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
     @Test(expected = NoSuchComponentException.class)
@@ -282,9 +284,9 @@ public class TestNfComponentInterceptors extends CommonSetup {
 
         GCM.getGCMLifeCycleController(this.componentA).startFc();
 
-        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE);
+        this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE, DUMMY_VALUE);
 
-        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
+        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
     @Test(expected = NoSuchComponentException.class)
@@ -335,6 +337,8 @@ public class TestNfComponentInterceptors extends CommonSetup {
                 .getInterceptorIDsFromInterface(Foo2Itf.CLIENT_ITF_NAME));
 
         this.callAndCheckResult(this.fooMethod, this.fooItf, DUMMY_VALUE +
+            InterceptorImpl.BEFORE_INTERCEPTION + InterceptorImpl.BEFORE_INTERCEPTION +
+            InterceptorImpl.AFTER_INTERCEPTION + InterceptorImpl.AFTER_INTERCEPTION, DUMMY_VALUE +
             this.getInterceptionMessage(InterceptorImpl.BEFORE_INTERCEPTION, FooItf.SERVER_ITF_NAME,
                     this.fooMethod.getName()) +
             this.getInterceptionMessage(InterceptorImpl.BEFORE_INTERCEPTION, FooItf.CLIENT_ITF_NAME,
@@ -344,7 +348,7 @@ public class TestNfComponentInterceptors extends CommonSetup {
             this.getInterceptionMessage(InterceptorImpl.AFTER_INTERCEPTION, FooItf.SERVER_ITF_NAME,
                     this.fooMethod.getName()));
 
-        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE);
+        this.callAndCheckResult(this.foo2Method, this.foo2Itf, DUMMY_VALUE, DUMMY_VALUE);
     }
 
     @Test(expected = ADLException.class)

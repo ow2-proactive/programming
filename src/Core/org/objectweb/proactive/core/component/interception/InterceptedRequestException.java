@@ -34,14 +34,32 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.interceptor;
+package org.objectweb.proactive.core.component.interception;
 
-import org.objectweb.proactive.core.util.wrapper.StringWrapper;
+import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.ProActiveRuntimeException;
 
 
-public interface FooItf {
-    public static final String CLIENT_ITF_NAME = "foo-client";
-    public static final String SERVER_ITF_NAME = "foo-server";
+/**
+ * Exception thrown when an error related to an {@link InterceptedRequest} occurs.
+ *
+ * @author The ProActive Team
+ */
+@PublicAPI
+public class InterceptedRequestException extends ProActiveRuntimeException {
+    public InterceptedRequestException() {
+        super();
+    }
 
-    StringWrapper foo(String param);
+    public InterceptedRequestException(String message) {
+        super(message);
+    }
+
+    public InterceptedRequestException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public InterceptedRequestException(Throwable cause) {
+        super(cause);
+    }
 }

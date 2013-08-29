@@ -38,26 +38,26 @@ package org.objectweb.proactive.core.component.interception;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.component.control.PAInterceptorController;
-import org.objectweb.proactive.core.mop.MethodCall;
 
 
 /**
- * This interface must be implemented by controllers that need to intercept
- * incoming or outgoing functional invocations of a specific client or server
- * functional interface. <br>
+ * This interface must be implemented by controllers/NF components that need to
+ * intercept incoming or outgoing functional invocations of a specific client or
+ * server functional interface.
+ * <br>
  * Before executing (In the case of a primitive component) or transferring (In
  * the case of a composite component) an incoming or outgoing functional
  * request, the <code>beforeMethodInvocation</code> method is called, and the
  * <code>afterMethodInvocation</code> is called after the execution or
- * transfer of the invocation.<br>
- * These methods are executed on the controllers of the current component that
- * implement this interface.<br>
+ * transfer of the invocation.
+ * <br>
  * The <code>beforeMethodInvocation</code> method is called sequentially
- * for each controller in the order they have been set in the
- * {@link PAInterceptorController}.<br>
+ * for each controller/NF component in the order they have been set in the
+ * {@link PAInterceptorController}.
+ * <br>
  * The <code>afterMethodInvocation</code> method is called sequentially
- * for each controller in the <b>reverse order</b> they have been set in the
- * {@link PAInterceptorController}.<br>
+ * for each controller/NF controller in the <b>reverse order</b> they have
+ * been set in the {@link PAInterceptorController}.
  *
  * @author The ProActive Team
  */
@@ -67,22 +67,25 @@ public interface Interceptor {
      * This method is executed when an invocation is intercepted, before
      * executing the invocation.
      * 
-     * @param interfaceName The name of the functional interface on which the
-     *          invocation has been intercepted
-     * @param methodCall The method that will be executed (MethodCall objects
-     *          include method parameters and other ProActive-specific infos)
+     * @param interceptedRequest The {@link InterceptedRequest} instance
+     *          containing the information related to the request that has
+     *          been intercepted.
+     * @return The {@link InterceptedRequest} instance to give to the next
+     *          interceptor or to use, by using the parameter informations
+     *          it contains, to execute the intercepted request.
      */
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall);
+    public InterceptedRequest beforeMethodInvocation(InterceptedRequest interceptedRequest);
 
     /**
      * This method is executed when an invocation has been intercepted, after
      * the execution of the invocation.
      * 
-     * @param interfaceName The name of the functional interface on which the
-     *          invocation has been intercepted
-     * @param methodCall The method that has been executed (MethodCall objects
-     *          include method parameters and other ProActive-specific infos)
-     * @param result The result of the method that has been executed
+     * @param interceptedRequest The {@link InterceptedRequest} instance
+     *          containing the information related to the request that has
+     *          been intercepted.
+     * @return The {@link InterceptedRequest} instance to give to the next
+     *          interceptor or to use, by using the result information it
+     *          contains, to return the result of the intercepted request.
      */
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result);
+    public InterceptedRequest afterMethodInvocation(InterceptedRequest interceptedRequest);
 }

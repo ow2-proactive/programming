@@ -42,9 +42,9 @@ import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.control.AbstractPAController;
+import org.objectweb.proactive.core.component.interception.InterceptedRequest;
 import org.objectweb.proactive.core.component.interception.Interceptor;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
-import org.objectweb.proactive.core.mop.MethodCall;
 
 
 public class MyInterceptor extends AbstractPAController implements Interceptor, ControllerItf {
@@ -68,14 +68,18 @@ public class MyInterceptor extends AbstractPAController implements Interceptor, 
         // foo implementation
     }
 
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
+    public InterceptedRequest beforeMethodInvocation(InterceptedRequest interceptedRequest) {
         System.out.println("pre processing an intercepted a functional invocation");
         // interception code
+
+        return interceptedRequest;
     }
 
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
+    public InterceptedRequest afterMethodInvocation(InterceptedRequest interceptedRequest) {
         System.out.println("post processing an intercepted a functional invocation");
         // interception code
+
+        return interceptedRequest;
     }
 }
 //@snippet-end component_userguide_14

@@ -289,9 +289,11 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
             // delegate to outputinterceptors
             body += "java.util.List outputInterceptors = this.interceptorController.getInterceptors(this.clientInterfaceName);\n";
             body += "java.util.ListIterator it = outputInterceptors.listIterator();\n";
+            body += "org.objectweb.proactive.core.component.interception.InterceptedRequest interceptedRequest = new org.objectweb.proactive.core.component.interception.InterceptedRequest(this.clientInterfaceName, methodCall);\n";
             body += "while (it.hasNext()) {\n";
-            body += "  ((org.objectweb.proactive.core.component.interception.Interceptor) it.next()).beforeMethodInvocation(this.clientInterfaceName, methodCall);\n";
+            body += "  interceptedRequest = ((org.objectweb.proactive.core.component.interception.Interceptor) it.next()).beforeMethodInvocation(interceptedRequest);\n";
             body += "}\n";
+            body += "methodCall.setEffectiveArguments(interceptedRequest.getParameters());\n";
 
             CtClass returnType = reifiedMethods[i].getReturnType();
             if (returnType != CtClass.voidType) {
@@ -301,19 +303,23 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
 
             //  delegate to outputinterceptors
             body += "it = outputInterceptors.listIterator();\n";
+            body += "interceptedRequest = new org.objectweb.proactive.core.component.interception.InterceptedRequest(this.clientInterfaceName, methodCall";
+            if (returnType != CtClass.voidType) {
+                body += ", result);\n";
+            } else {
+                body += ");\n";
+            }
             // use output interceptors in reverse order after invocation
             // go to the end of the list first
             body += "while (it.hasNext()) {\n";
             body += "it.next();\n";
             body += "}\n";
             body += "while (it.hasPrevious()) {\n";
-            body += "  ((org.objectweb.proactive.core.component.interception.Interceptor) it.previous()).afterMethodInvocation(this.clientInterfaceName, methodCall, ";
-            if (returnType != CtClass.voidType) {
-                body += "result);\n";
-            } else {
-                body += "null);\n";
-            }
+            body += "  interceptedRequest = ((org.objectweb.proactive.core.component.interception.Interceptor) it.previous()).afterMethodInvocation(interceptedRequest);\n";
             body += "}\n";
+            if (returnType != CtClass.voidType) {
+                body += "result = interceptedRequest.getResult();\n";
+            }
 
             // return casted result
             String postWrap = null;

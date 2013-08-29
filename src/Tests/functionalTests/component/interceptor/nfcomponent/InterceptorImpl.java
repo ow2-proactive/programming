@@ -36,7 +36,8 @@
  */
 package functionalTests.component.interceptor.nfcomponent;
 
-import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.component.interception.InterceptedRequest;
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public class InterceptorImpl extends AbstractInterceptorImpl {
@@ -45,14 +46,24 @@ public class InterceptorImpl extends AbstractInterceptorImpl {
     public static final String AFTER_INTERCEPTION = " - after-interception-" + COMPONENT_NAME + " - ";
 
     @Override
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
-        setDummyValue(getDummyValue() + BEFORE_INTERCEPTION + interfaceName + "-" + methodCall.getName() +
-            " - ");
+    public InterceptedRequest beforeMethodInvocation(InterceptedRequest interceptedRequest) {
+        interceptedRequest.setParameter(interceptedRequest.getParameter(0) + BEFORE_INTERCEPTION, 0);
+
+        setDummyValue(getDummyValue() + BEFORE_INTERCEPTION + interceptedRequest.getInterfaceName() + "-" +
+            interceptedRequest.getMethodName() + " - ");
+
+        return interceptedRequest;
     }
 
     @Override
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
-        setDummyValue(getDummyValue() + AFTER_INTERCEPTION + interfaceName + "-" + methodCall.getName() +
-            " - ");
+    public InterceptedRequest afterMethodInvocation(InterceptedRequest interceptedRequest) {
+        interceptedRequest.setResult(new StringWrapper(((StringWrapper) interceptedRequest.getResult())
+                .getStringValue() +
+            AFTER_INTERCEPTION));
+
+        setDummyValue(getDummyValue() + AFTER_INTERCEPTION + interceptedRequest.getInterfaceName() + "-" +
+            interceptedRequest.getMethodName() + " - ");
+
+        return interceptedRequest;
     }
 }

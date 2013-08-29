@@ -36,9 +36,12 @@
  */
 package functionalTests.component.interceptor;
 
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
+
+
 public interface Foo2Itf {
     public static final String CLIENT_ITF_NAME = "foo2-client";
     public static final String SERVER_ITF_NAME = "foo2-server";
 
-    public void foo2();
+    StringWrapper foo2(String param);
 }

@@ -62,6 +62,7 @@ import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
 import org.objectweb.proactive.core.component.control.PAGathercastControllerImpl;
 import org.objectweb.proactive.core.component.control.PAInterceptorControllerImpl;
 import org.objectweb.proactive.core.component.identity.PAComponentImpl;
+import org.objectweb.proactive.core.component.interception.InterceptedRequest;
 import org.objectweb.proactive.core.component.interception.Interceptor;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
@@ -94,12 +95,12 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
     public ComponentRequestImpl(MethodCall methodCall, UniversalBody sender, boolean isOneWay,
             long nextSequenceID) {
         super(methodCall, sender, isOneWay, nextSequenceID);
-        declaringClass = methodCall.getReifiedMethod().getDeclaringClass();
+        declaringClass = this.methodCall.getReifiedMethod().getDeclaringClass();
     }
 
     public ComponentRequestImpl(Request request) {
         super(request.getMethodCall(), request.getSender(), request.isOneWay(), request.getSequenceNumber());
-        declaringClass = methodCall.getReifiedMethod().getDeclaringClass();
+        declaringClass = this.methodCall.getReifiedMethod().getDeclaringClass();
     }
 
     /**
@@ -115,9 +116,9 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
         PAComponentImpl actualComponent = ((ComponentBody) targetBody).getPAComponentImpl();
         if (logger.isDebugEnabled()) {
             try {
-                logger.debug("invocation on method [" + methodCall.getName() + "] of interface [" +
-                    methodCall.getComponentMetadata().getComponentInterfaceName() + "] on component : [" +
-                    GCM.getNameController(actualComponent).getFcName() + "]");
+                logger.debug("invocation on method [" + this.methodCall.getName() + "] of interface [" +
+                    this.methodCall.getComponentMetadata().getComponentInterfaceName() +
+                    "] on component : [" + GCM.getNameController(actualComponent).getFcName() + "]");
             } catch (NoSuchInterfaceException e) {
                 e.printStackTrace();
             }
@@ -129,7 +130,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                     "trying to execute a component method on an object that is not a component");
             }
 
-            Interface targetItf = (Interface) actualComponent.getFcInterface(methodCall
+            Interface targetItf = (Interface) actualComponent.getFcInterface(this.methodCall
                     .getComponentMetadata().getComponentInterfaceName());
             PAGCMInterfaceType itfType = (PAGCMInterfaceType) targetItf.getFcItfType();
 
@@ -142,12 +143,12 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                     result = ((PAGathercastControllerImpl) ((PAInterface) GCM
                             .getGathercastController(actualComponent)).getFcItfImpl())
                             .handleRequestOnGatherItf(this);
-                } else if (methodCall.getComponentMetadata().getComponentInterfaceName().equals(
+                } else if (this.methodCall.getComponentMetadata().getComponentInterfaceName().equals(
                         Constants.ATTRIBUTE_CONTROLLER)) {
                     // calls on the attribute controller have to be executed on the reified object
-                    result = methodCall.execute(targetBody.getReifiedObject());
+                    result = this.methodCall.execute(targetBody.getReifiedObject());
                 } else {
-                    result = methodCall.execute(targetItf);
+                    result = this.methodCall.execute(targetItf);
                 }
             } else {
                 // Serving functional request
@@ -170,7 +171,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                             // TODO allow stopping shortcut here
                         }
                         // executing on connected server interface
-                        result = methodCall.execute(targetItf);
+                        result = this.methodCall.execute(targetItf);
                     } catch (IllegalArgumentException e) {
                         throw new ServeException("could not reify method call : ", e);
                     } catch (Throwable e) {
@@ -185,21 +186,21 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                                 " membranes before reaching a primitive component");
                         }
                     }
-                    result = methodCall.execute(targetBody.getReifiedObject());
+                    result = this.methodCall.execute(targetBody.getReifiedObject());
                 }
-                interceptAfterInvocation(targetBody, result);
+                result = interceptAfterInvocation(targetBody, result);
             }
         } catch (NoSuchInterfaceException nsie) {
             throw new ServeException("cannot serve request : problem accessing a component controller", nsie);
         } catch (MethodCallExecutionFailedException e) {
-            throw new ServeException("serve method " + methodCall.getReifiedMethod().toString() + " failed",
-                e);
+            throw new ServeException("serve method " + this.methodCall.getReifiedMethod().toString() +
+                " failed", e);
         } catch (InvocationTargetException e) {
             exception = e.getTargetException();
-            logger.debug("Serve method " + methodCall.getReifiedMethod().getName() + " failed: ", e);
+            logger.debug("Serve method " + this.methodCall.getReifiedMethod().getName() + " failed: ", e);
 
             if (isOneWay) {
-                throw new ServeException("serve method " + methodCall.getReifiedMethod().toString() +
+                throw new ServeException("serve method " + this.methodCall.getReifiedMethod().toString() +
                     " failed", exception);
             }
         }
@@ -209,23 +210,26 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
 
     // intercept and delegate for preprocessing from the inputInterceptors 
     private void interceptBeforeInvocation(Body targetBody) throws InvocationTargetException {
-        if (methodCall.getReifiedMethod() != null) {
+        if (this.methodCall.getReifiedMethod() != null) {
             try {
                 PAInterceptorControllerImpl interceptorControllerImpl = (PAInterceptorControllerImpl) ((PAInterface) Utils
                         .getPAInterceptorController(((ComponentBody) targetBody).getPAComponentImpl()))
                         .getFcItfImpl();
-                List<Interceptor> inputInterceptors = interceptorControllerImpl.getInterceptors(methodCall
-                        .getComponentMetadata().getComponentInterfaceName());
+                List<Interceptor> inputInterceptors = interceptorControllerImpl
+                        .getInterceptors(this.methodCall.getComponentMetadata().getComponentInterfaceName());
                 Iterator<Interceptor> it = inputInterceptors.iterator();
+                InterceptedRequest interceptedRequest = new InterceptedRequest(this.methodCall
+                        .getComponentMetadata().getComponentInterfaceName(), this.methodCall);
 
                 while (it.hasNext()) {
                     try {
-                        it.next().beforeMethodInvocation(
-                                methodCall.getComponentMetadata().getComponentInterfaceName(), methodCall);
+                        interceptedRequest = it.next().beforeMethodInvocation(interceptedRequest);
                     } catch (NullPointerException e) {
                         logger.error("could not intercept invocation : " + e.getMessage());
                     }
                 }
+
+                this.methodCall.setEffectiveArguments(interceptedRequest.getParameters());
             } catch (NoSuchInterfaceException nsie) {
                 // No PAInterceptorController, nothing to do
             } catch (RuntimeException re) {
@@ -235,27 +239,30 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
     }
 
     // intercept and delegate for postprocessing from the inputInterceptors 
-    private void interceptAfterInvocation(Body targetBody, Object result) throws InvocationTargetException {
-        if (methodCall.getReifiedMethod() != null) {
+    private Object interceptAfterInvocation(Body targetBody, Object result) throws InvocationTargetException {
+        if (this.methodCall.getReifiedMethod() != null) {
             if (((ComponentBody) targetBody).getPAComponentImpl() != null) {
                 try {
                     PAInterceptorControllerImpl interceptorControllerImpl = (PAInterceptorControllerImpl) ((PAInterface) Utils
                             .getPAInterceptorController(((ComponentBody) targetBody).getPAComponentImpl()))
                             .getFcItfImpl();
                     List<Interceptor> inputInterceptors = interceptorControllerImpl
-                            .getInterceptors(methodCall.getComponentMetadata().getComponentInterfaceName());
+                            .getInterceptors(this.methodCall.getComponentMetadata()
+                                    .getComponentInterfaceName());
                     // use inputInterceptors in reverse order after invocation
                     ListIterator<Interceptor> it = inputInterceptors.listIterator();
+                    InterceptedRequest interceptedRequest = new InterceptedRequest(this.methodCall
+                            .getComponentMetadata().getComponentInterfaceName(), this.methodCall, result);
 
                     // go to the end of the list first
                     while (it.hasNext()) {
                         it.next();
                     }
                     while (it.hasPrevious()) {
-                        it.previous().afterMethodInvocation(
-                                methodCall.getComponentMetadata().getComponentInterfaceName(), methodCall,
-                                result);
+                        interceptedRequest = it.previous().afterMethodInvocation(interceptedRequest);
                     }
+
+                    result = interceptedRequest.getResult();
                 } catch (NoSuchInterfaceException nsie) {
                     // No PAInterceptorController, nothing to do
                 } catch (RuntimeException re) {
@@ -264,6 +271,8 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                 }
             }
         }
+
+        return result;
     }
 
     /*
@@ -271,7 +280,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
      */
     public boolean isControllerRequest() {
         // according to the Fractal spec v2.0 , section 4.1
-        return Utils.isControllerItfName(methodCall.getComponentMetadata().getComponentInterfaceName());
+        return Utils.isControllerItfName(this.methodCall.getComponentMetadata().getComponentInterfaceName());
     }
 
     /*
@@ -292,7 +301,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
     public void notifyReception(UniversalBody bodyReceiver) throws IOException {
         if (getShortcut() != null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("notifying reception of method " + methodCall.getName());
+                logger.debug("notifying reception of method " + this.methodCall.getName());
             }
             Shortcut shortcut = getShortcut();
             shortcut.updateDestination(bodyReceiver.getRemoteAdapter());
@@ -304,11 +313,11 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
     }
 
     public void shortcutNotification(UniversalBody sender, UniversalBody intermediate) {
-        methodCall.getComponentMetadata().shortcutNotification(sender, intermediate);
+        this.methodCall.getComponentMetadata().shortcutNotification(sender, intermediate);
     }
 
     public Shortcut getShortcut() {
-        return methodCall.getComponentMetadata().getShortcut();
+        return this.methodCall.getComponentMetadata().getShortcut();
     }
 
     public int getShortcutLength() {
@@ -319,6 +328,6 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
      * @see org.objectweb.proactive.core.component.request.ComponentRequest#getNFPriority()
      */
     public short getPriority() {
-        return methodCall.getComponentMetadata().getPriority();
+        return this.methodCall.getComponentMetadata().getPriority();
     }
 }

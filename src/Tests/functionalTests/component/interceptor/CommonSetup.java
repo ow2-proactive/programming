@@ -54,6 +54,7 @@ import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.adl.FactoryFactory;
 import org.objectweb.proactive.core.component.control.PAInterceptorController;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.controller.DummyController;
@@ -98,8 +99,8 @@ public abstract class CommonSetup extends ComponentTest {
                 .getFcInterface(DummyController.DUMMY_CONTROLLER_NAME);
         this.fooItf = (FooItf) this.componentA.getFcInterface(FooItf.SERVER_ITF_NAME);
         this.foo2Itf = (Foo2Itf) this.componentA.getFcInterface(Foo2Itf.SERVER_ITF_NAME);
-        this.fooMethod = FooItf.class.getDeclaredMethod("foo", new Class[0]);
-        this.foo2Method = Foo2Itf.class.getDeclaredMethod("foo2", new Class[0]);
+        this.fooMethod = FooItf.class.getDeclaredMethod("foo", new Class[] { String.class });
+        this.foo2Method = Foo2Itf.class.getDeclaredMethod("foo2", new Class[] { String.class });
 
         this.componentB = genericFactory.newFcInstance(typeFactory.createFcType(new InterfaceType[] {
                 typeFactory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
@@ -122,10 +123,13 @@ public abstract class CommonSetup extends ComponentTest {
         return interceptionID + interfaceName + "-" + methodName + " - ";
     }
 
-    protected void callAndCheckResult(Method method, Object instance, String expectedResult)
-            throws IllegalAccessException, InvocationTargetException, IllegalArgumentException {
+    protected void callAndCheckResult(Method method, Object instance, String expectedResult,
+            String expectedDummyValue) throws IllegalAccessException, InvocationTargetException,
+            IllegalArgumentException {
         this.dummyController.setDummyValue(CommonSetup.DUMMY_VALUE);
-        method.invoke(instance, new Object[0]);
-        Assert.assertEquals(expectedResult, this.dummyController.getDummyValue());
+        StringWrapper result = (StringWrapper) method.invoke(instance, new Object[] { this.dummyController
+                .getDummyValue() });
+        Assert.assertEquals(expectedResult, result.getStringValue());
+        Assert.assertEquals(expectedDummyValue, this.dummyController.getDummyValue());
     }
 }

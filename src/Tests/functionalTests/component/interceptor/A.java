@@ -40,6 +40,7 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public class A implements FooItf, Foo2Itf, BindingController {
@@ -50,13 +51,13 @@ public class A implements FooItf, Foo2Itf, BindingController {
     }
 
     @Override
-    public void foo() {
-        this.b.foo();
+    public StringWrapper foo(String param) {
+        return this.b.foo(param);
     }
 
     @Override
-    public void foo2() {
-        this.b2.foo2();
+    public StringWrapper foo2(String param) {
+        return this.b2.foo2(param);
     }
 
     @Override

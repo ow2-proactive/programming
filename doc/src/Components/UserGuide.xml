@@ -3133,25 +3133,55 @@ GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));</pr
 					<literal>Interceptor</literal> interface and non
 					functional components must provide a functional
 					server interface implementing the
-					<literal>Interceptor</literal> interface. For each
-					invocation, pre and post processings are defined in
-					the methods <literal>beforeMethodInvocation</literal>
-					and <literal>afterMethodInvocation</literal>. These
+					<literal>Interceptor</literal> interface.
+				</para>
+
+				<para>
+					For each invocation, pre and post processings are
+					defined in the methods
+					<literal>beforeMethodInvocation</literal> and
+					<literal>afterMethodInvocation</literal>. These
 					methods are defined in the
-					<literal>Interceptor</literal> interface and take the
-					name of the interface on which the interception has
-					been made and a <literal>MethodCall</literal> object
-					as arguments. <literal>MethodCall</literal> objects
-					are reified representations of method invocations
-					and they contain <literal>Method</literal> objects as
-					well as the parameters of the invocation. The
-					<literal>afterMethodInvocation</literal> method also
-					takes as argument the return value of the method
-					invocation. If the method returns
-					<literal>void</literal>, then <literal>null</literal>
-					is given as parameter. If the method returns a
-					primitive type, then it is wrapped inside the
-					appropriate wrapper object.
+					<literal>Interceptor</literal> interface and take an
+					<literal>InterceptedRequest</literal> object as
+					parameter. An <literal>InterceptedRequest</literal>
+					object contains the names of the interface and the
+					method on which the intercepted request has been
+					invoked, the parameter and return types of the
+					invoked method and the parameter values of the
+					invoked method. An
+					<literal>InterceptedRequest</literal> object may
+					also contain the return value of the method
+					invocation if the interception occurs after the
+					execution of the method (ie. in the
+					<literal>afterMethodInvocation</literal> method). If
+					the method has no return type (ie. returns
+					<literal>void</literal>), then <literal>null</literal>
+					is returned as result by the
+					<literal>InterceptedRequest</literal> object. If the
+					method returns a primitive type, then it is wrapped
+					inside the appropriate wrapper object.
+					<literal>beforeMethodInvocation</literal> and
+					<literal>afterMethodInvocation</literal> methods must
+					also return the <literal>InterceptedRequest</literal>
+					object that has been given as parameter. Thus it allows
+					to the interceptor implementation to modify some
+					information contained into the
+					<literal>InterceptedRequest</literal> object and to
+					propagate these modifications. Typically, it allows
+					to <literal>beforeMethodInvocation</literal>
+					implementations to modify the values of some of the
+					parameters before serving the request. In a similar way,
+					it allows to <literal>afterMethodInvocation</literal>
+					implementations to modify the value of the result of
+					the invocation of the request before returning it.
+					Finally, <literal>beforeMethodInvocation</literal> and
+					<literal>afterMethodInvocation</literal> methods
+					may also prevent the normal process of the invocation of
+					the request by throwing a RuntimeException, or any of
+					its subclasses. In such a case, the invocation of the
+					request will be stopped and the exception will be
+					returned to the invoker in case of non one-way request.
 				</para>
 
 				<para>

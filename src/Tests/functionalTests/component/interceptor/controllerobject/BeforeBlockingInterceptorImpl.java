@@ -40,8 +40,8 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.component.interception.InterceptedRequest;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
-import org.objectweb.proactive.core.mop.MethodCall;
 
 
 public class BeforeBlockingInterceptorImpl extends AbstractInterceptorImpl implements
@@ -63,13 +63,14 @@ public class BeforeBlockingInterceptorImpl extends AbstractInterceptorImpl imple
     }
 
     @Override
-    public void beforeMethodInvocation(String interfaceName, MethodCall methodCall) {
+    public InterceptedRequest beforeMethodInvocation(InterceptedRequest interceptedRequest) {
         throw new RuntimeException("Invocation blocked by " +
             BeforeBlockingInterceptor.BEFORE_BLOCKING_INTERCEPTOR_NAME);
     }
 
     @Override
-    public void afterMethodInvocation(String interfaceName, MethodCall methodCall, Object result) {
+    public InterceptedRequest afterMethodInvocation(InterceptedRequest interceptedRequest) {
         // Never used since beforeMethodInvocation raises an exception
+        return interceptedRequest;
     }
 }
