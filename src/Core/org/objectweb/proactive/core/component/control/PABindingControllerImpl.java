@@ -366,19 +366,21 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
             PAInterceptorControllerImpl interceptorController = (PAInterceptorControllerImpl) ((PAInterface) Utils
                     .getPAInterceptorController(owner)).getFcItfImpl();
 
-            try {
-                // replace server itf with an interface of the same type+same proxy, but with interception code
-                sItf = OutputInterceptorClassGenerator.instance().generateInterface(sItf,
-                        interceptorController, clientItfName);
-            } catch (InterfaceGenerationFailedException e) {
-                controllerLogger.error("could not generate output interceptor for client interface " +
-                    clientItfName + " : " + e.getMessage());
+            if (Utils.isGCMClientItf(clientItfName, this.owner)) { // Do not add output interceptors on server interfaces
+                try {
+                    // replace server itf with an interface of the same type+same proxy, but with interception code
+                    sItf = OutputInterceptorClassGenerator.instance().generateInterface(sItf,
+                            interceptorController, clientItfName);
+                } catch (InterfaceGenerationFailedException e) {
+                    controllerLogger.error("could not generate output interceptor for client interface " +
+                        clientItfName + " : " + e.getMessage());
 
-                IllegalBindingException ibe = new IllegalBindingException(
-                    "could not generate output interceptor for client interface " + clientItfName + " : " +
-                        e.getMessage());
-                ibe.initCause(e);
-                throw ibe;
+                    IllegalBindingException ibe = new IllegalBindingException(
+                        "could not generate output interceptor for client interface " + clientItfName +
+                            " : " + e.getMessage());
+                    ibe.initCause(e);
+                    throw ibe;
+                }
             }
         } catch (NoSuchInterfaceException nsie) {
             // No PAInterceptorController, nothing to do
