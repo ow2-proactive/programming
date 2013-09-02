@@ -195,6 +195,7 @@ public class PATypeCompiler extends TypeCompiler {
                                     TypeInterface.MANDATORY_CONTINGENCY, TypeInterface.SINGLETON_CARDINALITY,
                                     context);
                             nfItfTypes.add(itfType);
+                            membraneControllerDefined = true;
                         }
 
                         if (hasInterceptors && !interceptorControllerDefined) {
