@@ -3,6 +3,7 @@ apply plugin: 'build-dashboard'
 allprojects {
     apply plugin: 'eclipse'
 }
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -10,9 +11,24 @@ subprojects {
     group = 'org.objectweb.proactive'
     version = '5.5.0-SNAPSHOT'
 
+    sourceCompatibility = 1.6
+
     repositories {
         mavenLocal()
         mavenCentral()
+        mavenRepo url: 'http://repo.activeeon.com/content/repositories/snapshots/'
+        mavenRepo url:'http://repo.activeeon.com/content/repositories/releases/'
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "http://repo.activeeon.com/content/repositories/snapshots/") {
+                    authentication(userName: "${project.hasProperty('nexusUsername') ? nexusUsername : ""}",
+                            password: "${project.hasProperty('nexusPassword') ? nexusPassword : ""}")
+                }
+            }
+        }
     }
 
     dependencies {
