@@ -205,6 +205,17 @@ public class PATypeCompiler extends TypeCompiler {
                             nfItfTypes.add(itfType);
                         }
                     }
+
+                    if (ctrl instanceof ComponentContainer) {
+                        if ((((ComponentContainer) ctrl).getComponents().length > 0) &&
+                            !membraneControllerDefined) { // Add the membrane controller if there is NF components
+                            Object itfType = builder.createInterfaceType(Constants.MEMBRANE_CONTROLLER,
+                                    PAMembraneController.class.getName(), TypeInterface.SERVER_ROLE,
+                                    TypeInterface.MANDATORY_CONTINGENCY, TypeInterface.SINGLETON_CARDINALITY,
+                                    context);
+                            nfItfTypes.add(itfType);
+                        }
+                    }
                 }
             }
 
