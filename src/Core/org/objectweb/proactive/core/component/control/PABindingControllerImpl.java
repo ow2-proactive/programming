@@ -366,7 +366,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
             PAInterceptorControllerImpl interceptorController = (PAInterceptorControllerImpl) ((PAInterface) Utils
                     .getPAInterceptorController(owner)).getFcItfImpl();
 
-            if (Utils.isGCMClientItf(clientItfName, this.owner)) { // Do not add output interceptors on server interfaces
+            if (Utils.isGCMClientItf(clientItfName, this.owner) && !Utils.isControllerItfName(clientItfName)) { // Do not add output interceptors on server interfaces and controllers
                 try {
                     // replace server itf with an interface of the same type+same proxy, but with interception code
                     sItf = OutputInterceptorClassGenerator.instance().generateInterface(sItf,

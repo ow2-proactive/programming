@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.component;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.etsi.uri.gcm.api.type.GCMInterfaceType;
@@ -138,6 +139,30 @@ public class Utils {
     }
 
     /**
+     * Returns the {@link PAGCMTypeFactory} interface of the given component.
+     *
+     * @param component Reference on a component.
+     * @return {@link PAGCMTypeFactory} interface of the given component.
+     * @throws NoSuchInterfaceException If there is no such interface.
+     */
+    public static PAGCMTypeFactory getPAGCMTypeFactory(final Component component)
+            throws NoSuchInterfaceException {
+        return (PAGCMTypeFactory) component.getFcInterface(Constants.TYPE_FACTORY);
+    }
+
+    /**
+     * Returns the {@link PAGenericFactory} interface of the given component.
+     *
+     * @param component Reference on a component.
+     * @return {@link PAGenericFactory} interface of the given component.
+     * @throws NoSuchInterfaceException If there is no such interface.
+     */
+    public static PAGenericFactory getPAGenericFactory(final Component component)
+            throws NoSuchInterfaceException {
+        return (PAGenericFactory) component.getFcInterface(Constants.GENERIC_FACTORY);
+    }
+
+    /**
      * Returns the {@link PABindingController} interface of the given component.
      *
      * @param component Reference on a component.
@@ -234,30 +259,6 @@ public class Utils {
     }
 
     /**
-     * Returns the {@link PAGenericFactory} interface of the given component.
-     *
-     * @param component Reference on a component.
-     * @return {@link PAGenericFactory} interface of the given component.
-     * @throws NoSuchInterfaceException If there is no such interface.
-     */
-    public static PAGenericFactory getPAGenericFactory(final Component component)
-            throws NoSuchInterfaceException {
-        return (PAGenericFactory) component.getFcInterface(Constants.GENERIC_FACTORY);
-    }
-
-    /**
-     * Returns the {@link PAGCMTypeFactory} interface of the given component.
-     *
-     * @param component Reference on a component.
-     * @return {@link PAGCMTypeFactory} interface of the given component.
-     * @throws NoSuchInterfaceException If there is no such interface.
-     */
-    public static PAGCMTypeFactory getPAGCMTypeFactory(final Component component)
-            throws NoSuchInterfaceException {
-        return (PAGCMTypeFactory) component.getFcInterface(Constants.TYPE_FACTORY);
-    }
-
-    /**
      * Checks whether a component interface name match a controller interface. According to the
      * Fractal specification a controller interface name is either "component" or ends with
      * "-controller".
@@ -271,26 +272,18 @@ public class Utils {
     }
 
     /**
-     * Checks whether a component interface is a client interface.
-     *
-     * @param itf Component interface.
-     * @return True if the given interface is a client interface.
-     */
-    public static boolean isGCMClientItf(Interface itf) {
-        return ((GCMInterfaceType) itf.getFcItfType()).isFcClientItf();
-    }
-
-    /**
-     * Returns the cardinality of the given component interface name.
+     * Returns the interface type of the given component interface name.
      *
      * @param itfName Component interface name.
      * @param owner Reference on the component owner of the given component interface name.
-     * @return Cardinality of the given interface name.
+     * @return Interface type of the given component interface name.
      * @throws NoSuchInterfaceException If the component has no such component interface name.
      */
-    public static String getGCMCardinality(String itfName, Component owner) throws NoSuchInterfaceException {
+    public static GCMInterfaceType getGCMInterfaceType(String itfName, Component owner)
+            throws NoSuchInterfaceException {
         InterfaceType[] itfTypes = null;
         ComponentType componentType = (ComponentType) owner.getFcType();
+
         if (componentType instanceof PAComponentType) {
             itfTypes = ((PAComponentType) componentType).getAllFcInterfaceTypes();
         } else {
@@ -298,13 +291,25 @@ public class Utils {
         }
 
         for (InterfaceType itfType : itfTypes) {
-            if (itfType.getFcItfName().equals(itfName)) {
-                return ((GCMInterfaceType) itfType).getGCMCardinality();
-            } else if (itfType.isFcCollectionItf() && itfName.startsWith(itfType.getFcItfName())) {
-                return GCMTypeFactory.COLLECTION_CARDINALITY;
+            if (itfType.getFcItfName().equals(itfName) ||
+                (itfType.isFcCollectionItf() && itfName.startsWith(itfType.getFcItfName()))) {
+                return (GCMInterfaceType) itfType;
             }
         }
+
         throw new NoSuchInterfaceException(itfName);
+    }
+
+    /**
+     * Returns the cardinality of the given component interface name.
+     *
+     * @param itfName Component interface name.
+     * @param owner Reference on the component owner of the given component interface name.
+     * @return Cardinality of the given component interface name.
+     * @throws NoSuchInterfaceException If the component has no such component interface name.
+     */
+    public static String getGCMCardinality(String itfName, Component owner) throws NoSuchInterfaceException {
+        return getGCMInterfaceType(itfName, owner).getGCMCardinality();
     }
 
     /**
@@ -366,7 +371,7 @@ public class Utils {
      * @throws NoSuchInterfaceException If the component has no such component interface name.
      */
     public static boolean isGCMClientItf(String itfName, Component owner) throws NoSuchInterfaceException {
-        return isGCMClientItf((Interface) owner.getFcInterface(itfName));
+        return getGCMInterfaceType(itfName, owner).isFcClientItf();
     }
 
     /**
@@ -439,13 +444,15 @@ public class Utils {
      * @return Types of client interfaces.
      */
     public static InterfaceType[] getClientItfTypes(ComponentType componentType) {
-        ArrayList<InterfaceType> clientItfs = new ArrayList<InterfaceType>();
+        List<InterfaceType> clientItfs = new ArrayList<InterfaceType>();
         InterfaceType[] itfTypes = componentType.getFcInterfaceTypes();
+
         for (int i = 0; i < itfTypes.length; i++) {
             if (itfTypes[i].isFcClientItf()) {
                 clientItfs.add(itfTypes[i]);
             }
         }
+
         return clientItfs.toArray(new InterfaceType[clientItfs.size()]);
     }
 }
