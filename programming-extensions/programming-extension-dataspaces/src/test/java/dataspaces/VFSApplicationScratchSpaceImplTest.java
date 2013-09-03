@@ -36,10 +36,24 @@
  */
 package dataspaces;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
@@ -52,23 +66,9 @@ import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSNodeScratchSpaceImpl;
+
 import dataspaces.mock.MOCKBody;
 import dataspaces.mock.MOCKNode;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileType;
-import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -110,16 +110,16 @@ public class VFSApplicationScratchSpaceImplTest {
 
     @Before
     public void setUp() throws ConfigurationException, IOException {
+        // we use a path with a whitespace to test possible errors
         testDir = new File(System.getProperty("java.io.tmpdir"),
-            "ProActive-VFSApplicationScratchSpaceImplTest");
-        AbstractIOOperationsBase.deleteRecursively(testDir);
+                "ProActive-VFSApplicationScratch SpaceImplTest");
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();
         scratchDataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID, APP_ID);
 
         node = new MOCKNode(RUNTIME_ID, NODE_ID);
         body = new MOCKBody();
-        ACCESS_URL = (new File(testDirPath).toURI().toURL().toString()).replace("file:/", "file:///");
+        ACCESS_URL = (new File(testDirPath).toURI().toURL().toString());
         localAccessConfig = new BaseScratchSpaceConfiguration(ACCESS_URL, testDirPath);
         nodeScratchSpace = new VFSNodeScratchSpaceImpl();
 
@@ -150,7 +150,7 @@ public class VFSApplicationScratchSpaceImplTest {
 
     /**
      * Check if directory is being created.
-     * 
+     *
      * @throws FileSystemException
      * @throws FileSystemException
      */
@@ -164,7 +164,7 @@ public class VFSApplicationScratchSpaceImplTest {
 
     /**
      * Check if returned URI is valid.
-     * 
+     *
      * @throws FileSystemException
      * @throws org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException
      */
@@ -182,7 +182,7 @@ public class VFSApplicationScratchSpaceImplTest {
 
     /**
      * Check if existing files will be removed.
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -199,7 +199,7 @@ public class VFSApplicationScratchSpaceImplTest {
     /**
      * Check if created files in a scratch still remain there after calling second
      * {@link ApplicationScratchSpace#getScratchForAO}.
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -223,8 +223,9 @@ public class VFSApplicationScratchSpaceImplTest {
      * Check if returning space info is valid.
      */
     @Test
-    public void testGetInstanceInfo() throws URISyntaxException {
-        final String spaceAccessURL = Utils.appendSubDirs(ACCESS_URL, RUNTIME_ID, NODE_ID, APP_ID);
+    public void testGetInstanceInfo() {
+        // a trailing slash is added here as toURI() will add or not a trailing slash if the directory exists or not
+        final String spaceAccessURL = Utils.appendSubDirs(ACCESS_URL, RUNTIME_ID, NODE_ID, APP_ID) + "/";
         final SpaceInstanceInfo sii = applicationScratchSpace.getSpaceInstanceInfo();
         final String hostname = Utils.getHostname();
 
@@ -233,7 +234,7 @@ public class VFSApplicationScratchSpaceImplTest {
         assertEquals(SpaceType.SCRATCH, sii.getType());
         assertEquals(hostname, sii.getHostname());
         assertEquals(scratchDataSpacePath, sii.getPath());
-        assertTrue(sii.getUrls().contains(spaceAccessURL));
+        assertEquals(spaceAccessURL, sii.getUrls().get(0));
         assertNull(sii.getName());
     }
 
@@ -264,7 +265,7 @@ public class VFSApplicationScratchSpaceImplTest {
 
     /**
      * Try to close empty data space.
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -281,7 +282,7 @@ public class VFSApplicationScratchSpaceImplTest {
 
     /**
      * Check if all files are being removed.
-     * 
+     *
      * @throws IOException
      */
     @Test

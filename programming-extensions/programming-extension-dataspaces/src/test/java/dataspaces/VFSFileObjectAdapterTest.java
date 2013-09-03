@@ -116,9 +116,10 @@ public class VFSFileObjectAdapterTest {
         assertTrue(someFile.createNewFile());
 
         rootDirPath = rootDir.getCanonicalPath();
+        rootFileUri = rootDir.toURI().toURL().toExternalForm();
         differentDirPath = differentDir.getCanonicalPath();
 
-        final FileObject rootFileObject = fileSystemManager.resolveFile("file://" + rootDirPath);
+        final FileObject rootFileObject = fileSystemManager.resolveFile(rootFileUri);
         if (server == null) {
             server = new FileSystemServerDeployer(rootDirPath, false);
         }
@@ -127,12 +128,12 @@ public class VFSFileObjectAdapterTest {
         final FileName mountintPointFileName = rootFileObject.getName();
         adaptee = rootFileObject.resolveFile(fileURI.getRelativeToSpace());
 
-        rootFileUri = "file://" + rootDirPath;
         rootUris = new ArrayList<String>();
         rootUris.add(rootFileUri);
         rootUris.add(vfsServerUrl);
 
-        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName, rootUris);
+        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName, rootUris,
+            rootFileUri);
     }
 
     @After
@@ -153,7 +154,7 @@ public class VFSFileObjectAdapterTest {
         final FileName mountintPointFileName = rootFileObject.getName();
         final FileObject rootAdaptee = rootFileObject;
         final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI,
-            mountintPointFileName, rootUris);
+            mountintPointFileName, rootUris, rootFileUri);
 
         assertEquals(spaceURI.toString(), fo.getVirtualURI());
     }
@@ -206,7 +207,7 @@ public class VFSFileObjectAdapterTest {
         ArrayList<String> fos = new ArrayList<String>();
         fos.add("file:///");
         final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI,
-            mountintPointFileName, fos);
+            mountintPointFileName, fos, "file:///");
         fo.getParent();
     }
 
@@ -220,7 +221,7 @@ public class VFSFileObjectAdapterTest {
         final FileName diffName;
         diffName = fileSystemManager.resolveFile(differentDirPath).getName();
 
-        new VFSFileObjectAdapter(adaptee, spaceURI, diffName, rootUris);
+        new VFSFileObjectAdapter(adaptee, spaceURI, diffName, rootUris, rootUris.get(0));
     }
 
     private void assertIsSomeDir(DataSpacesFileObject parent) throws FileSystemException {
