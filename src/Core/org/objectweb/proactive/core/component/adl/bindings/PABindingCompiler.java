@@ -48,6 +48,7 @@ import org.objectweb.fractal.adl.bindings.Binding;
 import org.objectweb.fractal.adl.bindings.BindingBuilder;
 import org.objectweb.fractal.adl.bindings.BindingCompiler;
 import org.objectweb.fractal.adl.bindings.BindingContainer;
+import org.objectweb.fractal.adl.bindings.BindingErrors;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.components.ComponentPair;
@@ -273,12 +274,17 @@ public class PABindingCompiler extends BindingCompiler {
                         String clientCompName = value.substring(0, index);
                         String clientItfName = value.substring(index + 1);
                         Object clientComp = null;
-                        if (clientItfName.endsWith("-controller")) {
+                        if (fSubComponents.containsKey(clientCompName)) {
                             clientComp = fSubComponents.get(clientCompName);
                         } else {
                             clientComp = nfSubComponents.get(clientCompName);
                         }
-                        // if clientComp == null, we should throw and ADLException "Component not found"
+
+                        if (clientComp == null) {
+                            throw new ADLException(BindingErrors.INVALID_ITF_NO_SUCH_COMPONENT,
+                                clientCompName);
+                        }
+
                         TaskHole createClientTask = tasks.getTaskHole("create", clientComp);
 
                         // obtains the 'to' component and retrieves its 'create' task
@@ -291,12 +297,17 @@ public class PABindingCompiler extends BindingCompiler {
                             index = value.indexOf('.');
                             serverCompName = value.substring(0, index);
                             serverItfName = value.substring(index + 1);
-                            if (serverItfName.endsWith("-controller")) {
+                            if (fSubComponents.containsKey(serverCompName)) {
                                 serverComp = fSubComponents.get(serverCompName);
                             } else {
                                 serverComp = nfSubComponents.get(serverCompName);
                             }
-                            // if serverComp == null, we should throw and ADLException "Component not found"
+
+                            if (serverComp == null) {
+                                throw new ADLException(BindingErrors.INVALID_ITF_NO_SUCH_COMPONENT,
+                                    serverCompName);
+                            }
+
                             createServerTask = tasks.getTaskHole("create", serverComp);
                         } else {
                             serverItfName = value;

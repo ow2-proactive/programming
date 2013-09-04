@@ -690,6 +690,13 @@ public class PAComponentImpl implements PAComponent, Serializable {
 
         try {
             for (PAGCMInterfaceType interfaceType : interfaceTypes) {
+                if ((interfaceType.getFcItfName().endsWith("-controller") && !interfaceType.getFcItfName()
+                        .equals(Constants.ATTRIBUTE_CONTROLLER))) {
+                    throw new RuntimeException("Could not create functional interface '" +
+                        interfaceType.getFcItfName() +
+                        "' because the interface name ends by \"-controller\" which is reserved for controllers");
+                }
+
                 //for (int i = 0; i < interfaceTypes.length; i++) {
                 PAInterface itfRef = null;
 
