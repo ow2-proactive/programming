@@ -17,7 +17,7 @@ subprojects {
         mavenLocal()
         mavenCentral()
         mavenRepo url: 'http://repo.activeeon.com/content/repositories/snapshots/'
-        mavenRepo url:'http://repo.activeeon.com/content/repositories/releases/'
+        mavenRepo url: 'http://repo.activeeon.com/content/repositories/releases/'
     }
 
     uploadArchives {
@@ -57,11 +57,11 @@ class StubTask extends JavaExec {
         project.jar.dependsOn this
         setMain('ant.AntStubGenerator$Main')
         setClasspath((project.configurations.stubClasspath + project.sourceSets.main.runtimeClasspath))
-        setArgs([ input.toArray()[0], project.sourceSets.main.output.classesDir])
+        setArgs([input.toArray()[0], project.sourceSets.main.output.classesDir])
         logging.captureStandardOutput LogLevel.INFO
     }
 
-    def setClasses(List classes){
+    def setClasses(List classes) {
         setArgs(getArgs() + classes)
     }
 }
@@ -107,8 +107,8 @@ project(':programming-core') {
 
     // to get rid of warning about sun internal api usage
     compileJava.options.useAnt = true
-    compileJava.options.compilerArgs <<  '-XDignore.symbol.file'
-    compileJava.options.compilerArgs <<  '-Xlint:unchecked'
+    compileJava.options.compilerArgs << '-XDignore.symbol.file'
+    compileJava.options.compilerArgs << '-Xlint:unchecked'
 }
 
 project(':programming-build-utils') {
