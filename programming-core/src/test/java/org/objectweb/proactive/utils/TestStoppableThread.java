@@ -104,7 +104,7 @@ public class TestStoppableThread {
             @Override
             public void action() {
                 latch.countDown();
-                new Sleeper(500).sleep();
+                new Sleeper(5000).sleep();
             }
         };
 
@@ -113,7 +113,8 @@ public class TestStoppableThread {
         Assert.assertFalse(t.exitedOnError());
 
         t.start();
-        new Sleeper(10).sleep(); // avoid race condition between countdown and sleep
+        latch.countDown();
+        new Sleeper(1000).sleep(); // avoid race condition between countdown and sleep
 
         try {
             t.terminate(100, TimeUnit.MILLISECONDS);
@@ -126,7 +127,7 @@ public class TestStoppableThread {
         Assert.assertNull(t.getError());
         Assert.assertFalse(t.exitedOnError());
 
-        new Sleeper(500).sleep();
+        new Sleeper(5000).sleep();
 
         t.terminate(100, TimeUnit.MILLISECONDS);
         Assert.assertTrue(t.isStopped());
