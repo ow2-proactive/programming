@@ -1,0 +1,6 @@
+public static void synchronousCall() {
+    Worker charlie = new Worker(new IntWrapper(26), "Charlie");
+    Value v = charlie.foo();
+    v.bar();
+}
+

@@ -1,0 +1,20 @@
+// Retrieves the file corresponding to your application descriptor
+File applicationDescriptor = new File(descriptorPath);
+
+GCMApplication gcmad;
+try {
+
+    // Loads the application descriptor file
+    gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+
+    // Starts the deployment
+    gcmad.startDeployment();
+
+    // ...
+
+    // Terminates the deployment
+    gcmad.kill();
+
+} catch (ProActiveException e) {
+    e.printStackTrace();
+}

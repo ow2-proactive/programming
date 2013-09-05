@@ -1,0 +1,31 @@
+System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+PAException.tryWithCatch(Exception.class);
+try {
+    A a = PAActiveObject.newActive(A.class, null);
+    a.throwsException(true); // Asynchronous method call that can throw an exception
+    //...
+    // Throws exceptions which has been already raised by active object
+    PAException.throwArrivedException();
+
+    // Should appear since the exception did not have the time
+    // to be thrown (due to the sleep(5000))
+    System.out.println("Hello");
+    //...
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    // Throws exceptions which has been already raised by active object
+    PAException.throwArrivedException();
+
+    // Should not appear since the exception had the time to
+    // be thrown.
+    System.out.println("Hello");
+    System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    PAException.endTryWithCatch();
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    PAException.removeTryWithCatch();
+}

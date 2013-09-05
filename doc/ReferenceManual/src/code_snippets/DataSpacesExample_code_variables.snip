@@ -1,0 +1,8 @@
+private void setupVariables() {
+    vContract = new VariableContractImpl();
+    // this way of getting hostname is not the best solution, but it makes
+    // local execution of example possible without using protocols like SFTP
+    vContract.setVariableFromProgram(VAR_OUTPUT_HOSTNAME, Utils.getHostname(),
+            VariableContractType.ProgramVariable);
+}
+

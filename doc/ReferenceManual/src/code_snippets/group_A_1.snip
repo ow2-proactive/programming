@@ -1,0 +1,33 @@
+try {
+
+        /***** GCM Deployment *****/
+        File applicationDescriptor = new File(args[0]);
+        GCMApplication gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+        gcmad.startDeployment();
+
+        GCMVirtualNode vn = gcmad.getVirtualNode("VN");
+        Node node1 = vn.getANode();
+        Node node2 = vn.getANode();
+        Node[] nodes = new Node[] { node1, node2 };
+        /**************************/
+
+        A groupA;
+        if (sameParams) {
+            /**
+             * Same parameters will be used for object creations
+             */
+            Object[] params = new Object[] { "Node" };
+            groupA = (A) PAGroup.newGroup(A.class.getName(), params, nodes);
+        } else {
+            /**
+             * Different parameters will be used for object creations
+             */
+            Object[][] params = new Object[][] { new Object[] { "Node 1" }, new Object[] { "Node 2" } };
+            groupA = (A) PAGroup.newGroup(A.class.getName(), params, nodes);
+        }
+
+} catch (ClassNotReifiableException e) {
+    e.printStackTrace();
+} catch (ClassNotFoundException e) {
+    e.printStackTrace();
+}

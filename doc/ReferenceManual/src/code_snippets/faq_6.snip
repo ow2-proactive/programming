@@ -1,0 +1,35 @@
+public class A {
+    private int i;
+    private String s;
+
+    public A() {
+    }
+
+    public A(int i, String s) {
+        this.i = i;
+        this.s = s;
+    }
+
+
+    public void main(String[] args) throws Exception {
+
+        // instance based creation
+        A a1;
+        Object[] params = new Object[] { new Integer(26), "astring" };
+        try {
+            a = (A) PAActiveObject.newActive(A.class.getName(), params);
+        } catch (ActiveObjectCreationException e) {
+            // creation of ActiveObject failed
+            e.printStackTrace();
+        }
+        // object based creation
+        A a2 = new A(26, "astring");
+        try {
+            a = (A) PAActiveObject.turnActive(a);
+        } catch (ActiveObjectCreationException e) {
+            // creation of ActiveObject failed
+            e.printStackTrace();
+        }
+    }
+}
+

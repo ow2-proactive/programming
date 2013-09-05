@@ -1,0 +1,13 @@
+// Connects the client connector
+cc.connect();
+
+// Retrieves the ProActive connection
+ProActiveConnection pc = cc.getConnection();
+
+// Creates an ObjectName refering to an MBean
+ObjectName beanName = new ObjectName("SimpleAgent:name=hellothere");
+
+// Asynchronously invoke the "concat" method of this mbean with two Strings as parameters
+GenericTypeWrapper<?> returnedObject = pc.invokeAsynchronous(beanName, "concat", new Object[] {
+        "FirstString ", "| SecondString" }, new String[] { String.class.getName(),
+        String.class.getName() });

@@ -1,0 +1,5 @@
+/* Creates an active listener MyListener */
+MyListener listener = (MyListener) PAActiveObject.newActive(MyListener.class.getName(), null);
+
+/* Adds the listener to the Mbean server where we are connected to */
+pc.addNotificationListener(beanName, listener, null, null);

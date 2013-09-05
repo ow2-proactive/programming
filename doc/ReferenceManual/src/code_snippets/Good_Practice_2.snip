@@ -1,0 +1,9 @@
+Worker charlie = (Worker) PAActiveObject.newActive(Worker.class.getName(), null);
+Worker worker = charlie.getWorker();
+if (worker == null) {
+    System.out.println("worker is null");
+    worker.display();
+} else {
+    System.out.println("worker is not null");
+    worker.display();
+}

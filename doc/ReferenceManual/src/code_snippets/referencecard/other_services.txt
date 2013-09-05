@@ -1,0 +1,11 @@
+// Start a FIFO service policy. Call does not return.
+void fifoServing();
+
+// Invoke a LIFO policy. Call does not return.
+void lifoServing()
+
+// Serves the youngest request in the request queue
+void serveYoungest()
+
+// Removes all requests in the pending queue
+void flushAll()

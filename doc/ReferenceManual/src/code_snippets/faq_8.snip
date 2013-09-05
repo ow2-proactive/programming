@@ -1,0 +1,29 @@
+public class LIFOActivity implements RunActive {
+
+    // -- implements RunActive for serving request in a LIFO fashion
+    public void runActivity(Body body) {
+        Service service = new Service(body);
+        while (body.isActive()) {
+            service.blockingServeYoungest();
+        }
+    }
+}
+
+public class C implements InitActive {
+    private String myName;
+
+    public String getName() {
+        return myName;
+    }
+
+    // -- implements InitActive
+    public void initActivity(Body body) {
+        myName = body.getName();
+    }
+
+    public void main(String[] args) throws Exception {
+        C c = (C) PAActiveObject.newActive(C.class, null, null, null, new LIFOActivity(), null);
+        System.out.println("Name = " + c.getName());
+    }
+}
+

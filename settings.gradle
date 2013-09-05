@@ -13,3 +13,7 @@ include 'programming-extensions:programming-extension-processbuilder'
 include 'programming-extensions:programming-extension-rmissl'
 include 'programming-test'
 include 'programming-build-utils'
+
+include 'doc'
+include 'doc:ReferenceManual'
+include 'doc:AdvancedFeatures'

@@ -1,0 +1,53 @@
+package org.objectweb.proactive.examples.documentation.classes;
+
+import java.io.Serializable;
+import org.objectweb.proactive.Body;
+import org.objectweb.proactive.core.util.wrapper.IntWrapper;
+
+import org.objectweb.proactive.InitActive;
+
+
+
+/**
+ * @author ProActive Team
+ *
+ * Class used for documentation example, in particular
+ * for Chapter 9. Active Objects: Creation And Advanced Concepts.
+ */
+public class Worker implements Serializable, InitActive {
+
+    private IntWrapper age = new IntWrapper(0);
+    private String name = "Anonymous";
+
+    /**
+     * Empty no-arg constructor needed by ProActiv
+     */
+    public Worker() {
+    }
+
+    /**
+     * Constructor with arguments
+     *
+     * @param age
+     * @param name
+     */
+    public Worker(IntWrapper age, String name) {
+        this.setAge(age);
+        this.setName(name);
+    }
+
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.InitActive#initActivity(org.objectweb.proactive.Body)
+     */
+    public void initActivity(Body body) {
+        System.out.println("===> Started Active object: ");
+        System.out.println(body.getMBean().getName() + " on " + body.getMBean().getNodeUrl());
+    }
+
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.EndActive#endActivity(org.objectweb.proactive.Body)
+     */
+    public void endActivity(Body body) {
+        System.out.println("===> You have killed the active object");
+    }
+}

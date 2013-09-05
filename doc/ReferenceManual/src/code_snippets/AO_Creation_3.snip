@@ -1,0 +1,9 @@
+Worker charlie = new Worker(new IntWrapper(19), "Charlie");
+try {
+    charlie = (Worker) PAActiveObject.turnActive(charlie);
+} catch (ActiveObjectCreationException aoExcep) {
+    // the creation of ActiveObject failed
+    System.err.println(aoExcep.getMessage());
+} catch (NodeException nodeExcep) {
+    System.err.println(nodeExcep.getMessage());
+}

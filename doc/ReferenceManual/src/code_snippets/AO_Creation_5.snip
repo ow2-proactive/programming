@@ -1,0 +1,18 @@
+Worker charlie = new Worker(new IntWrapper(30), "Charlie");
+try {
+    // Declaration of the array of Class representing
+    // type parameters
+    Class<?>[] typeParameters = new Class<?>[] { Worker.class, String.class };
+
+    // Declaration of the constructor parameters
+    Object[] constructorParameters = new Object[] { charlie, "Researcher" };
+
+    // Instantiation of the active object
+    Pair<Worker, String> pair = (Pair<Worker, String>) PAActiveObject.newActive(Pair.class.getName(),
+            typeParameters, constructorParameters);
+
+} catch (ActiveObjectCreationException e) {
+    e.printStackTrace();
+} catch (NodeException e) {
+    e.printStackTrace();
+}

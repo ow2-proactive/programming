@@ -1,0 +1,29 @@
+/* Step (4): print the results  
+ * Parallel version: collect partial results and let master instance
+ * print it.
+ */
+   if (mynum==0) {
+      printf ("host calculated x = %7.5f\n", sum);
+      for (i=1; i<nprocs; i++) {
+         source = i;
+         info = MPI_Recv(&x, 1, MPI_FLOAT, source, type, MPI_COMM_WORLD, &status);
+         printf ("host got x = %7.5f\n", x);
+         sum=sum+x;
+         }
+      err = sum - pi;
+      printf ("sum, err = %7.5f, %10e\n", sum, err);
+      fflush(stdout);
+      }
+/* Other instances just send their sum and wait for more input */
+   else {
+      info = MPI_Send(&sum, 1, MPI_FLOAT, dest, type, MPI_COMM_WORLD);
+      if (info != 0) {
+         printf ("instance no, %d failed to send\n", mynum);
+         exit(0);
+         }
+      printf ("inst %d sent partial sum %7.2f to inst 0\n", mynum, sum);
+      fflush(stdout);
+      }
+   /* get a value of N for the next run */
+   solicit (&N, &nprocs, mynum);
+   }

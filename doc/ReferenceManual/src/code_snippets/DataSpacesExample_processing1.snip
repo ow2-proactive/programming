@@ -1,0 +1,24 @@
+public String writeIntoScratchFile(String fileName, String content) throws NotConfiguredException,
+        IOException, ConfigurationException {
+    DataSpacesFileObject file = null;
+    OutputStreamWriter writer = null;
+
+    try {
+        // resolve scratch for this AO, and get Data Spaces file representation of fileName;
+        // later, be sure that the file was created and open an output stream writer on this file;
+        file = PADataSpaces.resolveScratchForAO(fileName);
+        file.createFile();
+        writer = getWriter(file);
+        // finally, write the content and return files URI, valid for every AO
+        writer.write(content);
+
+        return file.getVirtualURI();
+    } catch (IOException e) {
+        logger.error("Exception while IO operation", e);
+        throw e;
+    } finally {
+        closeResource(writer);
+        closeResource(file);
+    }
+}
+

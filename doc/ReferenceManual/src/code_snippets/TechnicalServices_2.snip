@@ -1,0 +1,54 @@
+<GCMApplication xmlns="urn:gcm:application:1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd">
+
+    <environment>
+        <descriptorVariable name="PROACTIVE_LIB" value="dist/lib"/>
+        <javaPropertyVariable name="proactive.home" />
+        <descriptorDefaultVariable name="NUMBER_OF_VIRTUAL_NODES" value="20"/>
+        <programVariable name="VIRTUAL_NODE_NAME"/>
+        <javaPropertyVariable name="java.home"/>
+        <javaPropertyDescriptorDefault name="host.name" value="localhost"/>
+        <javaPropertyProgramDefault name="priority.queue"/>
+        <javaPropertyVariable name="user.home" />
+        <descriptorVariable name="hostCapacity" value="2"/>
+        <descriptorVariable name="vmCapacity" value="2"/>
+
+        <!-- Include external variables from files-->
+        <includePropertyFile location="file.properties"/>
+    </environment>
+
+
+    <application>
+        <proactive base="root" relpath="${proactive.home}">
+            <configuration>
+                <applicationClasspath>
+                    <!-- Use example -->
+                    <pathElement base="root" relpath="${proactive.home}/${PROACTIVE_LIB}/ProActive_examples.jar"/>
+
+                    <pathElement base="proactive" relpath="dist/lib/ibis-1.4.jar"/>
+                    <pathElement base="proactive" relpath="dist/lib/ibis-connect-1.0.jar"/>
+                    <pathElement base="proactive" relpath="dist/lib/ibis-util-1.0.jar"/>
+                </applicationClasspath>
+            </configuration>
+            <!-- ... -->
+
+            <technicalServices>
+                <class name="org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService">
+                    <property name="global" value="rmi://localhost:1100/FTServer" />
+                    <property name="resource" value="rmi://localhost:1100/FTServer" />
+                    <property name="ttc" value="5" />
+                    <property name="protocol" value="cic" />
+                </class>
+            </technicalServices>
+
+            <virtualNode id="Workers" capacity="4"/>
+    </proactive>
+    </application>
+
+    <resources>
+        <nodeProvider id="workers">
+            <file path="../GCMD_Local.xml" />
+        </nodeProvider>
+    </resources>
+</GCMApplication>

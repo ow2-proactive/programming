@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+	xml:id="ProxyCommand">
+	<info>
+		<title xml:id="ProxyCommand_1">Proxy Command</title>
+	</info>
+
+
+	<section xml:id="OverviewPC">
+		<info>
+			<title>Overview of proxy command : a bouncing connection command
+				mechanism</title>
+		</info>
+
+		<para>For dealing with filtered network topology, ProActive provide an
+			implementation of the OpenSSH ProxyCommand mechanism. It permit to do
+			a bouncing SSH connection using a gateway. A SSH server has to be
+			host by the gateway, and an implementation of the netcat command
+			should be available. </para>
+
+		<para>
+			The proxyCommand is implemented as an extension of the RMI+SSH
+			protocol, so
+			the protocol RMI+SSH must be selected by using the
+			ProActive Property :
+			<programlisting language="xml">
+				proactive.communication.protocol=rmissh</programlisting>
+		</para>
+
+	</section>
+
+	<section xml:id="Principles_PC">
+		<info>
+			<title>Principles</title>
+		</info>
+
+
+		<para> The proxyCommand consists in opening a connection to a
+			specified gateway, and then from this connection, bouncing all
+			request to the desired host. Thus it is possible to rely NATed
+			(Network Address Translation) LANs, Clusters, ...</para>
+
+		<!--
+			<emphasis role="bold">Proxy</emphasis> interface and provides an
+			implementation for the given
+		-->
+		<!-- <literal>new</literal>  -->
+
+		<figure xml:id="ProxyCommandFigure">
+			<info>
+				<title>An example of proxy command use</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						align="center" fileref="images/png/proxy_command.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+
+	</section>
+
+	<section xml:id="ConfigurationPC">
+		<info>
+			<title>Configuration</title>
+		</info>
+
+
+		<para>
+			The proxyCommand can be configured either by specifying a ProActive
+			property or by using the one found in the file .ssh/config. The
+			property to use is
+			<programlisting language="xml">proactive.communication.ssh.proxy.gateway
+			</programlisting>
+			.
+		</para>
+
+		<itemizedlist>
+			<listitem>
+				<para> PROPERTY : PROPERTY;RULE | RULE </para>
+			</listitem>
+			<listitem>
+				<para> RULE : HOSTDEF ':' GATEWAY ':' PORT </para>
+			</listitem>
+			<listitem>
+				<para> HOSTDEF : HOSTJOKER | SUBNET </para>
+			</listitem>
+			<listitem>
+				<para> HOSTJOKER : * '.' domain.tld | HOST </para>
+			</listitem>
+			<listitem>
+				<para> SUBNET : ip '/' cidr </para>
+			</listitem>
+			<listitem>
+				<para> GATEWAY : HOST </para>
+			</listitem>
+			<listitem>
+				<para> HOST : hostname | ip </para>
+			</listitem>
+			<listitem>
+				<para> PORT : integer </para>
+			</listitem>
+		</itemizedlist>
+
+		<para> Here is an example : </para>
+
+		<programlisting language="xml">
+			*.domain.com:gateway.domain.com:22;192.168.1.0/24:gateway.domain.com:22;
+		</programlisting>
+
+	</section>
+</chapter>

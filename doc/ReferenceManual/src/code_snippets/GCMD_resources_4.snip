@@ -1,0 +1,35 @@
+<infrastructure>
+    <!-- Hosts Description -->
+    <hosts>
+        <host id="myHost" os="unix" hostCapacity="2">
+
+            <!-- Mandatory element -->
+            <homeDirectory base="root" relpath="/home" />
+
+            <!-- Optional element -->
+            <networkInterface name="eth0"/>
+        </host>
+
+        <host id="hostsOfMyGroup" os="unix">
+            <!-- Mandatory element -->
+            <homeDirectory base="root" relpath="/home" />
+        </host>
+
+        <host id="hostsOfMyGroupAccessibleThroughMyBridge" os="unix" hostCapacity="2" vmCapacity="3">
+            <!-- Mandatory element -->
+            <homeDirectory base="root" relpath="/home" />
+        </host>
+    </hosts>
+
+    <groups>
+        <rshGroup id="myGroup" hostList="host1 host2 host3" />
+
+        <sshGroup id="groupAccessibleThroughMyBridge" hostList="host3 host4">
+            <privateKey base="root" relpath="/home/.ssh/id_rsa"/>
+        </sshGroup>
+    </groups>
+
+    <bridges>
+        <sshBridge  id="myBridge" hostname="brideHost" username="ProActiveTeam" />
+    </bridges>
+</infrastructure>

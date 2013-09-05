@@ -1,0 +1,13 @@
+void solicit (pN, pnprocs, mynum) int *pN, *pnprocs, mynum; {
+    /* Get a value for N, the number of intervals in the approximation.
+     * (Parallel versions: master instance reads in N and then
+     * broadcasts N to all the other instances of the program.)
+     */
+    int source = 0;
+
+    if (mynum == 0) {
+        printf ("Enter number of approximation intervals:(0 to exit)\n");
+        scanf ("%d", pN);
+    }
+    MPI_Bcast(pN, 1, MPI_INT, source, MPI_COMM_WORLD);
+}

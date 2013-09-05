@@ -1,0 +1,9 @@
+// Group creation
+Worker workers = (Worker) PASPMD.newSPMDGroup(Worker.class.getName(), params, nodesArray);
+DoubleWrapper wrappedResult;
+
+while (numOfIterations > 0) {
+    // Send the number of iterations to the first worker
+    Worker firstWorker = (Worker) PAGroup.getGroup(workers).get(0);
+    wrappedResult = firstWorker.start(numOfIterations);
+}

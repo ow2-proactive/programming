@@ -1,0 +1,60 @@
+public interface MetaObjectFactory {
+
+    /**
+     * Creates or reuses a RequestFactory
+     * @return a new or existing RequestFactory
+     * @see RequestFactory
+     */
+    public RequestFactory newRequestFactory();
+
+    /**
+     * Creates or reuses a ReplyReceiverFactory
+     * @return a new or existing ReplyReceiverFactory
+     * @see ReplyReceiverFactory
+     */
+    public ReplyReceiverFactory newReplyReceiverFactory();
+
+    /**
+     * Creates or reuses a RequestReceiverFactory
+     * @return a new or existing RequestReceiverFactory
+     * @see RequestReceiverFactory
+     */
+    public RequestReceiverFactory newRequestReceiverFactory();
+
+    /**
+     * Creates or reuses a RequestQueueFactory
+     * @return a new or existing RequestQueueFactory
+     * @see RequestQueueFactory
+     */
+    public RequestQueueFactory newRequestQueueFactory();
+
+    /**
+     * Creates or reuses a ThreadStoreFactory
+     * @return a new or existing ThreadStoreFactory
+     * @see ThreadStoreFactory
+     */
+    public ThreadStoreFactory newThreadStoreFactory();
+
+    // GROUP
+
+    /**
+     * Creates or reuses a ProActiveGroupManagerFactory
+     * @return a new ProActiveGroupManagerFactory
+     */
+    public ProActiveSPMDGroupManagerFactory newProActiveSPMDGroupManagerFactory();
+
+    /**
+     * accessor to the parameters of the factory (object-based configurations)
+     * @return the parameters of the factory
+     */
+    public Map<String, Object> getParameters();
+
+    public Object clone() throws CloneNotSupportedException;
+
+    // REQUEST-TAGS
+    /**
+     * Create the RequestTags manager.
+     * @return the RequestTags manager
+     */
+    public MessageTagsFactory newRequestTagsFactory();   
+}

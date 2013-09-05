@@ -1,0 +1,21 @@
+VariableContractImpl variableContract = new VariableContractImpl();
+variableContract.setVariableFromProgram("VIRTUAL_NODE_NAME", "testnode",
+        VariableContractType.ProgramVariable);
+variableContract.setVariableFromProgram("NUMBER_OF_VIRTUAL_NODES", "10",
+        VariableContractType.DescriptorDefaultVariable);
+variableContract.setVariableFromProgram("priority.queue", "vip",
+        VariableContractType.JavaPropertyProgramDefault);
+
+File descriptor = new File(gcmaFile);
+GCMApplication gcma;
+try {
+    gcma = PAGCMDeployment.loadApplicationDescriptor(descriptor, variableContract);
+
+    //Usage example
+    VariableContract vc = gcma.getVariableContract();
+    String proActiveHome = vc.getValue("PROACTIVE_HOME");
+
+} catch (ProActiveException e) {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+}

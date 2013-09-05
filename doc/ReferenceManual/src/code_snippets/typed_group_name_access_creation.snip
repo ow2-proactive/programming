@@ -1,0 +1,6 @@
+typedGroup = (A) PAGroup.newGroup(A.class.getName());
+
+Group<A> group = PAGroup.getGroup(typedGroup);
+group.addNamedElement("number0", new A("Agent0"));
+group.add(new A("Agent1"));
+group.addNamedElement("number2", new A("Agent2"));

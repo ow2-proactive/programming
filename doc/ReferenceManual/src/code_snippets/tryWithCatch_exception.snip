@@ -1,0 +1,14 @@
+System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+PAException.tryWithCatch(Exception.class);
+try {
+    A a = PAActiveObject.newActive(A.class, null);
+    a.throwsException(true); // Asynchronous method call that can throw an exception
+    System.out.println("Hello");
+    //...
+    PAException.endTryWithCatch();
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    PAException.removeTryWithCatch();
+}
+System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");

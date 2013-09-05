@@ -1,0 +1,20 @@
+System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+PAException.tryWithCatch(Exception.class);
+try {
+    A a = PAActiveObject.newActive(A.class, null);
+    a.throwsException(true); // Asynchronous method call that can throw an exception
+    //...
+    // At that moment, we want to be sure that no exception has been
+    // raised by the code before.
+    PAException.waitForPotentialException();
+    //...
+    // Should not appear since waitForPotentialException
+    // is blocking.
+    System.out.println("Hello");
+    System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    PAException.endTryWithCatch();
+} catch (Exception e) {
+    e.printStackTrace();
+} finally {
+    PAException.removeTryWithCatch();
+}

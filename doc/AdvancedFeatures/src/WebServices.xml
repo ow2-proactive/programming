@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="WebServices"><info><title xml:id="ExportingActiveObjectsasWebServices_29">Exporting active objects as Web Services</title></info>
+
+
+  <section xml:id="WS_Overwiew"><info><title xml:id="Overview_290">Overview</title></info>
+
+
+    <para>This feature allows to expose an active object as a web service and thus, to call it
+    from any client written in any foreign language.</para>
+
+    <para>Indeed, applications written in C#, for instance, cannot communicate
+    with ProActive applications. We have chosen web services technology to
+    enable interoperability because they are based on XML and HTTP. Thus, any
+    active object can be accessible from any enabled web services language.</para>
+  </section>
+
+  <section xml:id="Principles_29"><info><title>Principles</title></info>
+
+
+    <para>A <emphasis role="bold">web service</emphasis> is a software entity,
+    providing one or several functionalities, that can be exposed, discovered
+    and accessed over the network. Moreover, web services technology allows
+    heterogeneous applications to communicate and exchange data in a remotely
+    way. In our case, the useful elements of web services are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis role="bold">The SOAP Message</emphasis></para>
+
+        <indexterm>
+          <primary>SOAP</primary>
+        </indexterm>
+
+        <para>The SOAP message is used to exchange XML based data over the
+        internet. It can be sent via HTTP and provides a serialization format
+        for communicating over a network.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">The HTTP Server</emphasis></para>
+
+        <para>HTTP is the standard web protocol generally used over the 80
+        port. In order to receive SOAP messages, you can either install an HTTP
+        server that will be responsible of the data transfer or use the default HTTP server
+		  which is a Jetty server. However, This server is not sufficient to treat a SOAP request.
+		  For this, you also need a SOAP engine.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">The SOAP Engine</emphasis></para>
+
+        <para>A SOAP Engine is the mechanism responsible of making transparent
+        the unmarshalling of the request and the marshalling of the response.
+        Thus, the service developer doesn't have to worry with SOAP.
+		In our case, we use Apache CXF which can be installed into any HTTP server.
+		  </para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">The client</emphasis></para>
+
+        <para>Client's role is to consume a web service. It is the producer of
+        the SOAP message. The client developer does not have to worry about how
+        the service is implemented. The CXF java library provides classes to
+		  easily invoke a service (see examples).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para><figure xml:id="SOAP_call_steps"><info><title>Steps taken when an active object is called via SOAP</title></info>
+
+
+        <mediaobject>
+          <imageobject>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/provider_en.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+  </section>
+
+  <section xml:id="PrerequisiteInstallingtheWebServerandtheSOAP"><info><title>Pre-requisite: Installing the Web Server and the SOAP engine</title></info>
+
+  <para>
+  If you want to expose your active objects on the local embedded Jetty server or on Jetty servers deployed during your deployment, you just have to deploy proactive using
+  the <literal>build deploy</literal> command into the <literal>compile</literal> directory. If you want to expose them on an other http
+  server, you have to build the <literal>proactive.war</literal> archive.
+  For this, you have to go into your <literal>compile</literal> directory of your ProActive home and type <literal>build proActiveWar</literal>.
+  The <literal>proactive.war</literal> file will be built into the <literal>dist/</literal> directory.</para>
+
+  <para>If you have chosen to use the default Jetty server, then you have nothing else to do. Jetty server will automatically take files it needs.</para>
+
+  <para>If you have chosen to use your own HTTP server, then you just have to copy the proactive.war file into the <literal>webapp/</literal> directory of your HTTP server.
+  Some HTTP servers need to be restarted to take into account
+  this new web application but some others like Tomcat can handle hot deployment and, thus, do not need to be restarted.</para>
+
+  <warning>
+  <para>If you use your own HTTP server, you have to be aware that the Jetty server will be launched. Most of ProActive examples are launched
+  with the option '-Dproactive.http.port=8080' which specifies Jetty port. So, if you want to use your own server on port 8080, you have to modify the jetty port in
+  launching scripts or to change the port of your own server.</para>
+   </warning>
+
+  </section>
+
+
+
+  <section xml:id="Stepstoexposeanactiveobjectasa_29"><info><title>Steps to expose or unexpose an active object as a web services</title></info>
+
+
+    <para>The steps for exporting and using an active object as a web service
+    are the following:</para>
+
+    <itemizedlist>
+		<listitem>
+			<para>Write your active object in a classic way as below:</para>
+
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_1.snip" /></textobject></programlisting>
+      </listitem>
+
+      <listitem>
+			<para>Once the element created and activated, a <emphasis role="bold">WebServicesFactory</emphasis> object has to be instantiated: </para>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_4.snip" /></textobject></programlisting>
+			<para>or</para>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_5.snip" /></textobject></programlisting>
+		</listitem>
+		<listitem>
+			<para>Then, you have to instantiate a <emphasis role="bold">WebServices</emphasis> object as follows: </para>
+			<programlisting language="java">WebServices ws = wsf.getWebServices(myUrl);</programlisting>
+			<para>If you want to use the local Jetty server to expose your active object, you can use the following line
+			to retrieve the good URL:</para>
+			<programlisting language="java">String myUrl = AbstractWebServicesFactory.getLocalUrl();</programlisting>
+			<para>This will get the Jetty port which is a random port and build the url.</para>
+		</listitem>
+		<listitem>
+			<para>And finally, you can used one of the <literal>WebServices</literal> methods: </para>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/WebServices_Methods_AO.snip" /></textobject></programlisting>
+
+        <para>where:</para>
+
+        <itemizedlist>
+	      <listitem>
+                <para><emphasis role="bold">o</emphasis> is the active
+                object</para>
+            </listitem>
+
+            <listitem>
+                <para><emphasis role="bold">urn</emphasis> is the service name
+                which will identify the active object on the server.</para>
+            </listitem>
+
+            <listitem>
+                <para><emphasis role="bold">methods</emphasis> is a String or a Method array
+                containing the methods you want to make accessible. If
+                this parameter is null (or is absent), all the public methods will be
+                exposed.</para>
+            </listitem>
+        </itemizedlist>
+
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="exposeonremotejettyservers_29"><info><title>Exposing as a web service on remote Jetty servers launched during the deployment</title></info>
+	<para>
+		When you call the exposition of your active object,
+		the CXF servlet is deployed on the local Jetty server.
+		It is therefore possible to expose your object locally
+		without doing anything else.
+	</para>
+	<para>
+		Now, let us assume that your active object is deployed on a remote node.
+		In that case, you have a running jetty server on the remote host containing this node but no servlet has been deployed on it.
+		So, if you want to expose your active object on the remote host, you will have to make a small modification of the previous piece of code.
+	</para>
+	<para>
+		The web service extension provides classes that implements the <literal>InitActive</literal> interface which are in charge of deploying the CXF servlet on the host
+		where your object has been initialized. Thus, you just have to instantiate your active object using this implementation of <literal>InitActive</literal>.
+	</para>
+
+	<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_7.snip" /></textobject></programlisting>
+
+	<para>
+		Now, let us assume that your active object is deployed on a node or locally and that you want to expose it on a host where another node is deployed.
+		On this host, there is only a running Jetty server without any web services servlet.
+		In order to deploy the CXF servlet on it, you can use the following code:
+	</para>
+
+	<programlisting language="java">WebServicesInitActiveFactory.getInitActive("cxf").initServlet(myNode);</programlisting>
+
+	<para>
+		Then, you can expose your active object as a web service as in <xref linkend="Stepstoexposeanactiveobjectasa_29"/>.
+	</para>
+  </section>
+  <section xml:id="Accessingtheservices_29"><info><title>Accessing the services</title></info>
+
+
+    <para>Once the active object deployed, you can access it via any web service client (such as C#, SoapUI, Apache CXF API, Apache Axis2 API, ...) or
+    with your favorite browser (only if the returned type of your service methods are primitive types).</para>
+
+    <para>First of all, the client will get the WSDL file matching this active
+    object. This WSDL file is the 'identity card' of the service. It contains
+    the web service public interfaces and its location. Generally, WSDL files
+    are used to generate a proxy to the service. For example, for a given
+    service, say 'compute', you can get the WSDL document at <code>http://localhost:8080/proactive/services/compute?wsdl</code>.</para>
+
+    <para>Now that this client knows what and where to call the service, it
+    will send a SOAP message to the web server. The web server looks into the
+    message and performs the right call. Then, it returns the response into another
+    SOAP message to the client.</para>
+  </section>
+
+  <section xml:id="Limitations_29"><info><title>Limitations</title></info>
+
+    <para>Contrary to the previous version of the active object exposition using Apache SOAP, this new version which uses CXF can handle complex types.
+	 That is, with this version, you can implement a service which exposes a method returning or taking in argument an instance of any class.
+	 By using CXF and JAX-WS annotations, there is no limitation on the type of this class. It only implies to use the appropriate adapters (see the
+	 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://cxf.apache.org/docs/index.html">
+		CXF documentation
+	</link> for more details). However, if you do not want to use JAX-WS annotations or CXF, the class of this instance has to respect some criteria due
+	 to the serialization and CXF/Axis2 restrictions:</para>
+	 <itemizedlist>
+		 <listitem><para>This class has to be serializable</para></listitem>
+		 <listitem><para>This class has to supply a no-args constructor and preferably empty</para></listitem>
+		 <listitem><para>All the fields of this class has to be private or protected</para></listitem>
+		 <listitem><para>This class has to supply public getters and setters for each field.
+		 These getter and setter methods have to be in this class and not in one of its super classes.</para></listitem>
+	 </itemizedlist>
+  </section>
+
+  <section xml:id="AsimpleexampleHelloWorld_29"><info><title>A simple example: Hello World</title></info>
+
+
+    <section xml:id="HelloWorldwebservicecode_29"><info><title>Hello World web service code</title></info>
+
+
+      <para>Let's start with a simple example, an Hello world active object
+      exposed as a web service:</para>
+
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_2.snip" /></textobject></programlisting>
+
+      <para>The active object <literal>hw</literal> has been deployed as a web
+      service on the web server located at
+      <literal>http://localhost:8080/proactive/services/</literal> and its service name is
+		<literal>"MyHelloWorldService"</literal>. The accessible service
+      method are <literal>putTextToSayAndConfirm, putTextToSay and sayText</literal>.
+		You can see its wsdl file through the
+      <literal>http://localhost:8080/proactive/services/MyHelloWorldService?wsdl</literal> and you
+      call the <literal>helloWorld</literal> method with your browser through, for example,
+      <literal>http://localhost:8080/proactive/services/MyHelloWorldService/sayText</literal>.</para>
+
+
+      <para>If you want to expose a method which requires arguments, you can call using the same link as previously but
+      adding <literal>?[arg0]=[value]&amp;[arg1]=[value]...</literal> where [argn] is the name of the n-th argument
+      as written in the wsdl file.</para>
+
+		<para>You can also call a webservice using the ProActive client which uses a CXF client.
+		Here is an example:</para>
+
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_3.snip" /></textobject></programlisting>
+
+	<!--
+      <para>Now that the server-side Web service is deployed, we can create a
+      new client application in Visual Studio .NET.</para>
+	-->
+    </section>
+  </section>
+<!--
+    <section xml:id="AccesswithVisualStudio_29"><info><title>Access with Visual Studio</title></info>
+
+
+      <para/>
+
+      <para>In your new Visual Studio Project:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>In the Solution Explorer window, right-click References and
+          click Add Web Reference.</para>
+        </listitem>
+
+        <listitem>
+          <para>In the address box enter the WSDL service address, for
+          example: <code> http://localhost:8080/proactive/services/HelloWorld?wsdl</code>.
+	   When clicking the 'add reference' button, this will get the
+          service's WSDL and creates the specific proxy to the service.</para>
+        </listitem>
+
+        <listitem>
+          <para>Once the web reference is added, you can use the HelloWorld
+          service as an object and perform calls on it:</para>
+
+          <programlisting language="java">...
+localhost.helloWorld hw = new localhost.helloWorld();
+string s = hw.helloWorld ();
+...</programlisting>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+  <section xml:id="CinteroperabilityanexamplewithC3D_29"><info><title>C# interoperability: an example with C3D</title></info>
+
+
+    <section xml:id="Overview_29"><info><title>Overview</title></info>
+
+
+      <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/apps/c3d.html">C3D</link>
+      is a Java benchmark application that measures the performance of a 3D
+      raytracer renderer distributed over several Java virtual machines using
+      ProActive. C3D is composed of several parts: the distributed engine
+      (renderers) and the dispatcher that is an active objet. This dispactcher
+      permits users to see the 3D scene and to collaborate. Users can send
+      messages and render command to this dispatcher. This enhancement of C3D
+      is to send commands to the dispatcher from any language. To perform such
+      an enhancement, the Dispatcher object must be exposed as a web service
+      in order to a C# client for example controls it. Only one instruction
+      has been added in the main method:</para>
+
+      <programlisting language="java">WebServices.exposeAsWebService (dispatcher, "C3DDispatcher",
+                    "http://localhost:8080",  new String [] {
+                    "rotateRight", "getPicture", "rotateLeft", "rotateUp",
+                    "rotateDown", "getPixels", "getPixelMax", "waitForImage",
+                    "spinClock", "spinUnclock", "addRandomSphere", "resetScene",
+                    "registerWSUser", "unregisterWSUser"
+                });</programlisting>
+
+      <para>Once the dispatcher is deployed as a web service, we have a WSDL
+      url: <code>http://localhost:8080/proactive/servlet/id=C3DDispatcher</code>. It
+      will be usefull to construct the dispatcher client.</para>
+    </section>
+
+    <section xml:id="AccesswithaCclient_29"><info><title>Access with a C# client</title></info>
+
+
+      <para>First of all, we have to generate the service proxy following the
+      steps described for the hello world access.</para>
+
+      <para>All the SOAP calls will be managed by the generated proxy
+      <literal>localhost.C3DDispatcher</literal>. <figure xml:id="Thedispatcherhandlingallcalls_29"><info><title>The dispatcher handling all calls</title></info>
+
+
+          <mediaobject>
+            <imageobject>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/dispatcher_en.png" format="PNG"/>
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+    </section>
+
+    <section xml:id="Dispatchermethodscallsandcallbacks_29"><info><title>Dispatcher methods calls and callbacks</title></info>
+
+
+      <para>C# client registers to the C3D dispatcher and then can send
+      commands. C3D is a collaborative application. Indeed, when a client
+      performs a call, all others users must be advised by the dispatcher.
+      Although dispatcher can contact ProActive applications, it cannot
+      communicate with other applications (it cannot initiate the
+      communication). In other words, the dispacher must communicate remotely
+      with an application written in another language.</para>
+
+      <para>The answer to this problem is to use .Net web service on the C#
+      user machine. Such a web service is waiting for callback requests that
+      come from dispatcher. When receiving a request, the service sends it to
+      the client via a .Net Remoting shared object. Thus, when the .Net web
+      service receives a callback request, the C# client is updated thanks to
+      propagated events.</para>
+
+      <para>Here are screenshots of the user application: <figure xml:id="classic_pa_application"><info><title>The first screenshot is a classic ProActive
+          application</title></info>
+
+
+          <mediaobject>
+            <imageobject>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/scc3djava.png" format="PNG"/>
+            </imageobject>
+          </mediaobject>
+        </figure> <figure xml:id="CapplicationcommunicatingviaSOAP_29"><info><title>C# application communicating via SOAP</title></info>
+
+
+          <mediaobject>
+            <imageobject>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/scC3dcs.png" format="PNG"/>
+            </imageobject>
+
+            <caption><para>The application is using the same dispatcher the
+            ProActive user uses.</para></caption>
+          </mediaobject>
+        </figure></para>
+
+
+	</section>
+
+    <section xml:id="DownloadtheCexample_29"><info><title>Download the C# example</title></info>
+
+
+      <para>You can find <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/userfiles/file/apps/C3DCSharp.zip">here</link>
+      the whole C# Visual Studio .Net project. N.B: In order to run this
+      project, you must install the Microsoft IIS server.</para>
+    </section>
+
+ </section>
+-->
+</chapter>

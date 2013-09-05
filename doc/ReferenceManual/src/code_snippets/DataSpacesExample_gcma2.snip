@@ -1,0 +1,17 @@
+    </virtualNode>
+    <data>
+        <!--  input data spaces - HTTP resources to process -->
+        <input id="wiki_proactive">
+            <remoteAccess url="http://en.wikipedia.org/wiki/ProActive" />
+        </input>
+        <input id="wiki_grid_computing">
+            <remoteAccess url="http://en.wikipedia.org/wiki/Grid_computing" />
+        </input>
+        <!--  default output data space for results  -->
+        <outputDefault>
+            <remoteAccess
+                url="sftp://${user.name}@${OUTPUT_HOSTNAME}${user.home}/tmp/output/" />
+            <location hostname="${OUTPUT_HOSTNAME}" path="${user.home}/tmp/output/" />
+        </outputDefault>
+    </data>
+</proactive>

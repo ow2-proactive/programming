@@ -1,0 +1,31 @@
+package org.objectweb.proactive.examples.documentation.activeobjectconcepts;
+
+import org.objectweb.proactive.ActiveObjectCreationException;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.util.wrapper.IntWrapper;
+import org.objectweb.proactive.examples.documentation.classes.Value;
+import org.objectweb.proactive.examples.documentation.classes.Worker;
+
+
+public class Caller {
+
+    public static void asynchronousCall() {
+        try {
+
+            Object[] params = new Object[] { new IntWrapper(26), "Charlie" };
+            Worker charlie = PAActiveObject.newActive(Worker.class, params);
+            Value v = charlie.foo();
+            v.bar();
+
+        } catch (ActiveObjectCreationException aoExcep) {
+            System.err.println(aoExcep.getMessage());
+        } catch (NodeException nodeExcep) {
+            System.err.println(nodeExcep.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        asynchronousCall();
+    }
+}

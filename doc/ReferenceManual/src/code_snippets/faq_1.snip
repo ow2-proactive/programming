@@ -1,0 +1,7 @@
+Node node = NodeFactory.getNode("//X/node1");
+// Creates an active object on the remote node
+MyClass mc1 = (MyClass) PAActiveObject.newActive(MyClass.class, new Object[] {}, node);
+
+// Turns an existing object into an active object on the remote node
+MyClass mc2 = new MyClass();
+PAActiveObject.turnActive(mc2, node);

@@ -1,0 +1,19 @@
+A a3 = PAActiveObject.newActive(A.class, new Object[] { "Another A object" });
+
+/**
+ * Using the previous management representation, we insert
+ * a new A element with the name "nameA"
+ */
+grp.addNamedElement("namedA", a3);
+
+/**
+ * Retrieve this element using its name
+ */
+A named_a = (A) grp.getNamedElement("namedA");
+
+/**
+ * Display it to be sure it's the good one. Returns:
+ *
+ * A display =====> Another A object
+ */
+named_a.display();

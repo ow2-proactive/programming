@@ -1,0 +1,8 @@
+public Worker getWorker() {
+    if (this.name.compareTo("Anonymous") != 0) {
+        return this;
+    } else {
+        return null; //to avoid in ProActive
+    }
+}
+

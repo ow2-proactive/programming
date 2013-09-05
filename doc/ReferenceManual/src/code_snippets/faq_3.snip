@@ -1,0 +1,9 @@
+public class A {
+    public void main(String[] args) throws Exception {
+        A a = new A();
+        A activeA = (A) PAActiveObject.turnActive(a);
+        a.a1 = 2; // set the attribute a1 of the instance pointed by a to 2
+        activeA.a1 = 2; // set the attribute a1 of the stub instance to 2
+    }
+}
+

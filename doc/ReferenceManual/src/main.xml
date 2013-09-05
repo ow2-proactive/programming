@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Converted by db4-upgrade version 1.0
+!DOCTYPE book PUBLIC "-//INRIA//DTD DocBook V5.0-Based Subset V0.1//EN"-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd" [
+	<!-- WARNING: Please do not edit with XXE -->
+	<!-- This file is only meant as a concatenation of the other xml files -->
+
+	<!-- This has been added to write some special characters such as en and em dashes -->
+	<!ENTITY % iso-pub PUBLIC "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+		"http://www.oasis-open.org/docbook/xmlcharent/0.3/iso-pub.ent">
+		%iso-pub;
+
+	<!ENTITY BookInfo SYSTEM "BookInfo.xml">
+	<!ENTITY Contributors SYSTEM "Contributors.xml">
+	<!ENTITY Preface SYSTEM "Preface.xml">
+	<!ENTITY ProActiveBasis SYSTEM "ProActiveBasis.xml">
+	<!ENTITY AOCreation SYSTEM "ActiveObjectCreation.xml">
+	<!ENTITY TypedGroupCommunication SYSTEM "TypedGroupCommunication.xml">
+	<!ENTITY Exceptions SYSTEM "Exceptions.xml">
+	<!ENTITY OOSPMD SYSTEM "OOSPMD.xml">	
+	<!ENTITY DataSpaces SYSTEM "DataSpaces.xml">
+	<!ENTITY PAConfiguration SYSTEM "Configuration.xml">
+    <!ENTITY NetworkConfiguration SYSTEM "NetworkConfig.xml">
+	<!ENTITY PAMR SYSTEM "PAMR.xml">
+	<!ENTITY SSHTunneling SYSTEM "SSHTunneling.xml">
+	<!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">	
+	<!ENTITY FileTransfer SYSTEM "FileTransfer.xml">
+	<!ENTITY Termination SYSTEM "Termination.xml">
+	<!ENTITY VariableContract SYSTEM "VariableContract.xml">
+	<!ENTITY TechnicalService SYSTEM "TechnicalService.xml">
+	<!ENTITY FAQ SYSTEM "FAQ.xml">
+	<!ENTITY ReferenceCard SYSTEM "ReferenceCard.xml">
+	<!ENTITY Biblio SYSTEM "Biblio.xml">
+]>
+
+<book xmlns="http://docbook.org/ns/docbook" version="5.0">
+	&BookInfo;
+	&Contributors;
+
+	&Preface;
+
+	<part xml:id="ProActiveProgramming"><info><title xml:id="ProgrammingWithActiveObjects_2">Programming With Active Objects</title></info>
+		&ProActiveBasis;
+		&AOCreation;
+		&TypedGroupCommunication;		
+		&Exceptions;
+	</part>
+
+	<part xml:id="HighLevelAPI"><info><title xml:id="ProgrammingWithHighLevelAPIs_2">Programming With High Level APIs</title></info>		
+		&OOSPMD;		
+		&DataSpaces;
+	</part>
+
+	<part xml:id="ProActiveConfiguration"><info><title xml:id="ProActiveConfiguration_2">ProActive Configuration</title></info>
+		&PAConfiguration;
+        &NetworkConfiguration;
+        &SSHTunneling;
+	</part>
+
+	<part xml:id="ProActiveDeployment"><info><title xml:id="Deployment_2">Deployment</title></info>
+		&GCMDeployment;		
+		&FileTransfer;
+		&Termination;
+		&VariableContract;		
+		&TechnicalService;
+	</part>
+
+	<part xml:id="BackMatters"><info><title xml:id="Backmatters_2">Back matters</title></info>
+		&FAQ;
+		&ReferenceCard;
+	</part>
+
+	&Biblio;
+	<index xml:id="keywordIndex"/>
+</book>

@@ -1,0 +1,11 @@
+<infrastructure>
+    <hosts>
+        <host id="ComputeNode" os="unix" hostCapacity="1">
+            <homeDirectory base="root" relpath="${user.home}" />
+        </host>
+    </hosts>
+
+    <groups>
+        <rshGroup id="rshLan" hostList="kisscool paquito jily sgouirk" />
+    </groups>
+</infrastructure>

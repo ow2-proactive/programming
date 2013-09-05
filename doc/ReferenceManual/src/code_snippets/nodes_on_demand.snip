@@ -1,0 +1,11 @@
+// Loads the application descriptor file
+gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+
+// Starts the deployment
+gcmad.startDeployment();
+
+GCMVirtualNode vn = gcmad.getVirtualNode("Agent");
+vn.subscribeNodeAttachment(this, "nodeAttached", false);
+
+// Waiting for new nodes
+Thread.sleep(5000);

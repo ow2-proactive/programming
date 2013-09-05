@@ -1,0 +1,12 @@
+private void startGCM(String descriptorPath) throws ProActiveException {
+    gcmApplication = PAGCMDeployment.loadApplicationDescriptor(new File(descriptorPath), vContract);
+    gcmApplication.startDeployment();
+
+    final GCMVirtualNode vnode = gcmApplication.getVirtualNode(VIRTUAL_NODE_NAME);
+    vnode.waitReady();
+
+    // grab nodes here
+    nodesDeployed = vnode.getCurrentNodes();
+    logger.info("Nodes started: " + nodesDeployed.size() + " nodes deployed");
+}
+

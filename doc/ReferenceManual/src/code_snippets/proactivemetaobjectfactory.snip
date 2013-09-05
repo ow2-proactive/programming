@@ -1,0 +1,202 @@
+public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Serializable, Cloneable {
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
+
+    //
+    // -- PRIVATE MEMBERS -----------------------------------------------
+    //    
+    private static MetaObjectFactory instance = new ProActiveMetaObjectFactory();
+    public Map<String, Object> parameters = new HashMap<String, Object>();
+
+    //
+    // -- PROTECTED MEMBERS -----------------------------------------------
+    //
+    protected RequestFactory requestFactoryInstance;
+    protected ReplyReceiverFactory replyReceiverFactoryInstance;
+    protected RequestReceiverFactory requestReceiverFactoryInstance;
+    protected RequestQueueFactory requestQueueFactoryInstance;    
+
+    //    protected RemoteBodyFactory remoteBodyFactoryInstance;
+    protected ThreadStoreFactory threadStoreFactoryInstance;
+    protected ProActiveSPMDGroupManagerFactory proActiveSPMDGroupManagerFactoryInstance;            
+    protected MessageTagsFactory requestTagsFactoryInstance;    
+
+    //
+    // -- CONSTRUCTORS -----------------------------------------------
+    //
+    protected ProActiveMetaObjectFactory() {
+        this.requestFactoryInstance = newRequestFactorySingleton();
+        this.replyReceiverFactoryInstance = newReplyReceiverFactorySingleton();
+        this.requestReceiverFactoryInstance = newRequestReceiverFactorySingleton();
+        this.requestQueueFactoryInstance = newRequestQueueFactorySingleton();        
+        this.threadStoreFactoryInstance = newThreadStoreFactorySingleton();
+        this.proActiveSPMDGroupManagerFactoryInstance = newProActiveSPMDGroupManagerFactorySingleton();        
+        this.requestTagsFactoryInstance = newRequestTagsFactorySingleton();
+    }
+
+    /**
+     * Constructor with parameters
+     * It is used for per-active-object configurations of ProActive factories
+     * @param parameters the parameters of the factories; these parameters can be of any type
+     */
+    public ProActiveMetaObjectFactory(Map<String, Object> parameters) {
+        this.parameters = parameters;       
+    }
+
+    //
+    // -- PUBLICS METHODS -----------------------------------------------
+    //
+    public static MetaObjectFactory newInstance() {
+        return instance;
+    }
+
+    public static void setNewInstance(MetaObjectFactory mo) {
+        instance = mo;
+    }
+
+    /**
+     * getter for the parameters of the factory (per-active-object config)
+     * @return the parameters of the factory
+     */
+    public Map<String, Object> getParameters() {
+        return this.parameters;
+    }
+
+    //
+    // -- implements MetaObjectFactory -----------------------------------------------
+    //
+    public RequestFactory newRequestFactory() {
+        return this.requestFactoryInstance;
+    }
+
+    public ReplyReceiverFactory newReplyReceiverFactory() {
+        return this.replyReceiverFactoryInstance;
+    }
+
+    public RequestReceiverFactory newRequestReceiverFactory() {
+        return this.requestReceiverFactoryInstance;
+    }
+
+    public RequestQueueFactory newRequestQueueFactory() {
+        return this.requestQueueFactoryInstance;
+    }
+ 
+    public ThreadStoreFactory newThreadStoreFactory() {
+        return this.threadStoreFactoryInstance;
+    }
+
+    public ProActiveSPMDGroupManagerFactory newProActiveSPMDGroupManagerFactory() {
+        return this.proActiveSPMDGroupManagerFactoryInstance;
+    }
+
+    public MessageTagsFactory newRequestTagsFactory() {
+        return this.requestTagsFactoryInstance;
+    }
+
+    //
+    // -- PROTECTED METHODS -----------------------------------------------
+    //
+    protected RequestFactory newRequestFactorySingleton() {
+        return new RequestFactoryImpl();
+    }
+
+    protected ReplyReceiverFactory newReplyReceiverFactorySingleton() {
+        return new ReplyReceiverFactoryImpl();
+    }
+
+    protected RequestReceiverFactory newRequestReceiverFactorySingleton() {
+        return new RequestReceiverFactoryImpl();
+    }
+
+    protected RequestQueueFactory newRequestQueueFactorySingleton() {
+        return new RequestQueueFactoryImpl();
+    }
+	
+    protected ThreadStoreFactory newThreadStoreFactorySingleton() {
+        return new ThreadStoreFactoryImpl();
+    }
+
+    protected ProActiveSPMDGroupManagerFactory newProActiveSPMDGroupManagerFactorySingleton() {
+        return new ProActiveSPMDGroupManagerFactoryImpl();
+    }
+
+    protected MessageTagsFactory newRequestTagsFactorySingleton() {
+        return new MessageTagsFactoryImpl();
+    }
+
+    //  //
+    //  // -- INNER CLASSES -----------------------------------------------
+    //  //
+    protected static class RequestFactoryImpl implements RequestFactory, java.io.Serializable {
+        public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
+                long sequenceID, MessageTags tags) {
+            //########### exemple de code pour les nouvelles factories
+            //            if(System.getProperty("migration.stategy").equals("locationserver")){
+            //                  return new RequestWithLocationServer(methodCall, sourceBody,
+            //                isOneWay, sequenceID, LocationServerFactory.getLocationServer());
+            //            }else{
+            return new org.objectweb.proactive.core.body.request.RequestImpl(methodCall, sourceBody,
+                isOneWay, sequenceID, tags);
+            //}
+        }
+    }
+
+    // end inner class RequestFactoryImpl
+    protected static class ReplyReceiverFactoryImpl implements ReplyReceiverFactory, java.io.Serializable {
+        public ReplyReceiver newReplyReceiver() {
+            return new org.objectweb.proactive.core.body.reply.ReplyReceiverImpl();
+        }
+    }
+
+    // end inner class ReplyReceiverFactoryImpl
+    protected class RequestReceiverFactoryImpl implements RequestReceiverFactory, java.io.Serializable {
+        public RequestReceiver newRequestReceiver() {           
+            return new org.objectweb.proactive.core.body.request.RequestReceiverImpl();
+        }
+    }
+
+    // end inner class RequestReceiverFactoryImpl
+    protected class RequestQueueFactoryImpl implements RequestQueueFactory, java.io.Serializable {
+        public BlockingRequestQueue newRequestQueue(UniqueID ownerID) {          
+            return new org.objectweb.proactive.core.body.request.BlockingRequestQueueImpl(ownerID);            
+        }
+    }
+
+    // end inner class RemoteBodyFactoryImpl
+    protected static class ThreadStoreFactoryImpl implements ThreadStoreFactory, java.io.Serializable {
+        public ThreadStore newThreadStore() {
+            return new org.objectweb.proactive.core.util.ThreadStoreImpl();
+        }
+    }
+
+    // end inner class ThreadStoreFactoryImpl
+    protected static class ProActiveSPMDGroupManagerFactoryImpl implements ProActiveSPMDGroupManagerFactory,
+            java.io.Serializable {
+        public ProActiveSPMDGroupManager newProActiveSPMDGroupManager() {
+            return new ProActiveSPMDGroupManager();
+        }
+    }
+
+    // REQUEST-TAGS
+    protected static class MessageTagsFactoryImpl implements MessageTagsFactory, Serializable {
+
+        /**
+         * @see MessageTagsFactory#newMessageTags()
+         */
+        public MessageTags newMessageTags() {
+            return new MessageTags();
+        }
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+
+        try {
+            return MakeDeepCopy.WithObjectStream.makeDeepCopy(this);
+        } catch (IOException e) {
+            //TODO replace by CloneNotSupportedException(Throwable e) java 1.6
+            throw (CloneNotSupportedException) new CloneNotSupportedException(e.getMessage()).initCause(e);
+        } catch (ClassNotFoundException e) {
+            throw (CloneNotSupportedException) new CloneNotSupportedException(e.getMessage()).initCause(e);
+        }
+    }
+}

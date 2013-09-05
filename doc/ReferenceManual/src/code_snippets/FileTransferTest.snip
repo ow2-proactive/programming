@@ -1,0 +1,157 @@
+/**
+ * @author ffonteno
+ *
+ * This class has been made to test the ProActive File Transfer and
+ * extract code snippets for the documentation.
+ *
+ */
+public class FileTransferTest {
+
+    /**
+     * Returns the virtual node whose name is VNName and described in the GCM descriptor file whose
+     * path is descriptorPath
+     *
+     * @param descriptorPath path of the GCM descriptor file
+     * @param VNName name of the virtual node
+     * @return the virtual node whose name is VNName and described in the GCM descriptor file whose
+     * path is descriptorPath
+     */
+    public static GCMVirtualNode getGCMVirtualNode(String descriptorPath, String VNName) {
+        // Retrieves the file corresponding to your application descriptor
+        File applicationDescriptor = new File(descriptorPath);
+
+        GCMApplication gcmad;
+        try {
+
+            // Loads the application descriptor file
+            gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+
+            // Starts the deployment
+            gcmad.startDeployment();
+
+            GCMVirtualNode vn = gcmad.getVirtualNode(VNName);
+            vn.waitReady();
+
+            return vn;
+
+        } catch (ProActiveException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Copies the file whose path is sourcePath on the local host to the file with path destPath
+     * on each machine that hosts a node mapped with the virtual node VNName
+     *
+     * @param descriptorPath path of the GCM descriptor file
+     * @param VNName name of the virtual node
+     * @param sourcePath source path
+     * @param destPath destination path
+     * @throws IOException
+     * @throws NodeException
+     */
+    public static void testGCMFileTransfer(String descriptorPath, String VNName, String sourcePath,
+            String destPath) throws IOException, NodeException {
+
+        Node srcNode = NodeFactory.getDefaultNode();
+        System.out.println(srcNode.getVMInformation().getHostName());
+
+        GCMVirtualNode vn = FileTransferTest.getGCMVirtualNode(descriptorPath, VNName);
+        long nbNodes = vn.getNbCurrentNodes();
+
+        for (long l = 0; l < nbNodes; l++) {
+            System.out.println("Node number " + l);
+            Node destNode = vn.getANode();
+            System.out.println(destNode.getVMInformation().getHostName());
+            RemoteFile rf = PAFileTransfer.transfer(srcNode, new File(sourcePath), destNode, new File(
+                destPath));
+            rf.waitFor();
+            System.out.println(rf.getRemoteFilePath().getPath());
+        }
+    }
+
+    /**
+     * Returns the virtual node whose name is VNName and described in the XML descriptor file whose
+     * path is descriptorPath
+     *
+     * @param descriptorPath path of the XML descriptor file
+     * @param VNName name of the virtual node
+     * @return the virtual node whose name is VNName and described in the GCM descriptor file whose
+     * path is descriptorPath
+     * @throws ProActiveException
+     */
+    public static VirtualNode getXMLVirtualNode(String descriptorPath, String VNName)
+            throws ProActiveException {
+
+        // Creates the ProActiveDescriptor corresponding to the descriptor file
+        ProActiveDescriptor proActiveDescriptor = PADeployment.getProactiveDescriptor(descriptorPath);
+
+        // Gets the virtual node named VN1 described in the descriptor file.
+        VirtualNode virtualNode = proActiveDescriptor.getVirtualNode(VNName);
+
+        // Activates the virtual node.
+        // For activating several virtual node at once, you can use
+        // proActiveDescriptorAgent.activateMappings()
+        virtualNode.activate();
+
+        return virtualNode;
+    }
+
+    /**
+     * Copies the file whose path is sourcePath on the local host to the file with path destPath
+     * on each machine that hosts a node mapped with the virtual node VNName
+     *
+     * @param descriptorPath path of the XML descriptor file
+     * @param VNName name of the virtual node
+     * @param sourcePath source path
+     * @param destPath destination path
+     * @throws IOException
+     * @throws ProActiveException
+     */
+    public static void testXMLFileTransfer(String descriptorPath, String VNName, String sourcePath,
+            String destPath) throws IOException, ProActiveException {
+
+        Node srcNode = NodeFactory.getDefaultNode();
+        System.out.println(srcNode.getVMInformation().getHostName());
+
+        VirtualNode virtualNode = FileTransferTest.getXMLVirtualNode(descriptorPath, VNName);
+
+        long nbNodes = virtualNode.getNbMappedNodes();
+
+        for (long l = 0; l < nbNodes; l++) {
+            System.out.println("Node number " + l);
+            Node destNode = virtualNode.getNode();
+            System.out.println(destNode.getVMInformation().getHostName());
+            RemoteFile rf = PAFileTransfer.transfer(srcNode, new File(sourcePath), destNode, new File(
+                destPath));
+            rf.waitFor();
+            System.out.println(rf.getRemoteFilePath().getPath());
+        }
+
+    }
+
+    /**
+     * Test ProActive File Transfer with the two deployments.
+     *
+     * @param args should be: (GCMA.xml|Descriptor.xml) VirtualNodeName sourcePath destPath
+     * @throws ProActiveException
+     */
+    public static void main(String[] args) throws ProActiveException {
+        try {
+            if (args.length < 4) {
+                System.out.println("Wrong number of arguments");
+                System.out
+                        .println("Usage: java FileTransferTest (GCMA.xml|Descriptor.xml) VirtualNodeName sourcePath destPath");
+            }
+            //testGCMFileTransfer(args[0], args[1], args[2], args[3]);
+            testXMLFileTransfer(args[0], args[1], args[2], args[3]);
+        } catch (NodeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+}

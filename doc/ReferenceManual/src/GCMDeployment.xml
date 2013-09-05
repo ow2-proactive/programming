@@ -1,0 +1,1839 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="GCMDeployment">
+<info><title xml:id="ProActiveGridComponentModelDeployment_64">ProActive Grid Component Model Deployment</title></info>
+
+	<section xml:id="gcmd_introduction"><info><title xml:id="Introduction_64">Introduction</title></info>
+
+		<para>
+         This chapter is meant to explain the GCM deployment concept and to provide you with all the necessary knowledge to be able to deploy your applications.
+			The GCM Deployment is split in two parts: one for grid administrators and the other for grid application developers. On the grid
+			administration side, the administrator will write a Deployment Descriptor that will describe what resources the grid provides, and how
+			these resources are acquired. On the application side, the developer will write an Application Descriptor that will describe how the
+			application is launched, and what resources it needs. The link between the two sides is made through references from the Application
+			Descriptor to one or several Deployment Descriptors.
+		</para>     
+	</section>
+
+	<section xml:id="DeploymentRelatedConcepts_18"><info><title>Deployment Concepts</title></info>
+
+		<para>
+			A first principle is to fully eliminate from the source
+			code the following elements:
+			<itemizedlist>
+				<listitem>
+					<para>machine names</para>
+				</listitem>
+				<listitem>
+					<para>creation protocols</para>
+				</listitem>
+				<listitem>
+					<para>registry lookup protocols</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+		<para>
+			The goal is to deploy any application anywhere without
+			changing the source code. For instance, we must be able to
+			use various protocols, rsh, ssh, Globus, LSF, etc. for
+			the creation of the JVMs needed by the application. In the
+			same manner, the discovery of existing resources or the
+			registration of the ones created by the application can be
+			done with various protocols such as RMIregistry, Globus
+			etc. Therefore, we see that the creation, registration and
+			discovery of resources have to be done externally to the
+			application.
+		</para>
+		<para>
+			A second key principle is the capability to abstractly
+			describe an application, or part of it, in terms of its
+			conceptual activities. The description should indicate the
+			various parallel or distributed entities in the program.
+			For instance, an application that is designed to use three
+			interactive visualization nodes, a node to capture input
+			from a physics experiment, and a simulation engine
+			designed to run on a cluster of machines should somewhere
+			clearly advertise this information.
+		</para>
+		<para>
+			However, it important to keep in mind that the abstract description of an
+			application and the way to deploy it are not independent
+			pieces of information. If for example, we have
+			a simulation engine, it might register in a specific
+			registry protocol, and if so, the other entities of the
+			computation might have to use that lookup protocol to bind
+			to the engine. Moreover, one part of the program can just
+			lookup for the engine (assuming it is started
+			independently), or explicitly create the engine itself. To
+			summarize, in order to abstract away the underlying
+			execution platform, and to allow a source-independent
+			deployment, a framework has to provide the following
+			elements:
+			<itemizedlist>
+				<listitem>
+					<para>
+						an abstract description of the distributed
+						entities of a parallel program or component.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						an external mapping of those entities to real
+						machines, using actual creation, registry, and
+						lookup protocols.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+		<para>
+			To reach that goal, the programming model relies on the
+			specific notion of Virtual Nodes (VNs):
+			<itemizedlist>
+				<listitem>
+					<para>
+						a VN is identified by a name (a simple string)
+					</para>
+				</listitem>
+				<listitem>
+					<para>a VN is used in a program source</para>
+				</listitem>
+				<listitem>
+					<para>
+						a VN is defined and configured in a deployment
+						descriptor (XML format)
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						a VN, after activation, is mapped to one or to
+						a set of actual ProActive Nodes
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+		<para>
+			Of course, distributed entities (Active Objects), are
+			created on Nodes, not on Virtual Nodes. There is a strong
+			need for both Nodes and Virtual Nodes. Virtual Nodes are a
+			much richer abstraction, as they provide mechanisms such
+			as set or cyclic mapping. Another key aspect is the
+			capability to describe and trigger the mapping of a single
+			VN that generates the allocation of several JVMs. This is
+			critical if we want to get at once machines from a cluster
+			of PCs managed through Globus or LSF. It is even more
+			critical in a Grid application, when trying to achieve the
+			co-allocation of machines from several clusters across
+			several continents.
+		</para>
+		<para>
+			Moreover, a Virtual Node is a concept of a distributed
+			program or component, while a Node is actually a
+			deployment concept: it is an object that lives in a JVM,
+			hosting Active Objects. There is obviously a
+			correspondence between Virtual Nodes and Nodes: the
+			function created by the deployment, that is to say, the mapping. This
+			mapping is specified in the Application Descriptor.
+			The grid facilities are described in two deployment descriptor
+			separated by the different concerns of the application developer
+			and grid infrastructure administrator.
+      </para>
+      <para>
+			In the grid deployment descriptor, we describe:
+			<itemizedlist>
+				<listitem>
+					<para>the resources provided by the infrastructure</para>
+				</listitem>
+				<listitem>
+					<para>how to acquire the resources provided by the infrastructure</para>
+				</listitem>
+			</itemizedlist>
+
+
+			As for the application deployment descriptor, we describe:
+
+			<itemizedlist>
+				<listitem>
+					<para>how to launch the application</para>
+				</listitem>
+				<listitem>
+					<para>the resources needed by the application</para>
+				</listitem>
+				<listitem>
+					<para>the resource providers</para>
+				</listitem>
+			</itemizedlist>
+
+		</para>
+        <para>
+            Here is a picture that represents the deployment architecture and especially the relations between application, virtual node,
+            application descriptor and deployment descriptor:
+        </para>
+
+        <figure xml:id="Deploymentprocess_0"><info><title>Deployment architecture</title></info>
+            <mediaobject>
+                <imageobject>
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/deployment_architecture.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure>
+
+		<para>The following figure illustrates a simplified view of the deployment process. The ProActive application loads the deployment descriptor and
+			deploys on the remote machine according to the settings in the descriptor. Although the process behind the deployment is fairly complicated, it is
+			made seamless by ProActive. In the application, we only need to specify the application descriptor and tell ProActive to start virtual nodes, nodes and
+			active objects. The communication details are handled by ProActive according to the descriptor.
+		</para>
+
+		<figure xml:id="Deploymentprocess_1"><info><title>Deployment process </title></info>
+            <mediaobject>
+                <imageobject>
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/deployment_process.png" format="PNG"/>
+                </imageobject>
+            </mediaobject>
+        </figure>
+
+        <para>
+            The whole deployment process and environment configuration
+            is defined by means of XML descriptors
+            which depict the application requirements and deployment process. The
+            deployment of ProActive/GCM applications depends on two types of
+            descriptors:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    The GCM Application Descriptors (GCMA): the GCMA descriptors define
+                    applications-related properties, such as localization of libraries,
+                    file transfer, application parameters and non-functional services
+                    (logging, security and checkpoint). The resource requirement is also
+                    defined, but taking the VNs and nodes into account. Besides, the GCMA
+                    defines one or multiple resource providers.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    The GCM Deployment Descriptors (GCMD): the GCMD descriptors define
+                    the operation of the resource providers. This includes the access
+                    protocols to reach the resources (e.g. SSH, RSH, GSISSH, etc.),
+                    acquisition protocols and tools which are sometimes required to have
+                    access to resources (e.g. PBS, LSF, Sun Grid Engine, OAR, etc.),
+                    creation protocols which have a relation on how to launch processes
+                    (e.g. SSH, OAR, gLite, Globus) and communication protocols (e.g. RMI,
+                    RMISSH, HTTP, SOAP, etc).
+                </para>
+            </listitem>
+        </itemizedlist>
+        <para>
+            Overviews of these two descriptors are exposed respectively in <xref linkend="DeploymentDescriptor_18" /> and
+            in <xref linkend="ApplicationDescriptor_18" />. There are also completely described in <xref linkend="GCMDeploymentDescriptors_64" />.
+        </para>
+        <para>
+            The need of this two kinds of descriptor enforces a clear separation
+            between application definition and deployment process. The advantages
+            of this model are clear: if, in one side, users want to add a new
+            resource provider (e.g. a private cluster, production grid or cloud),
+            the application code does not change and a single line is enough to
+            add the resource provider to the application descriptor (GCMA). On the
+            other side, the definition of the deployment process happens just once
+            for each resource and can be reused for different applications.
+        </para>
+	</section>
+
+
+
+   <!-- APPLICATION DESCRIPTOR OVERVIEW -->
+
+   <section xml:id="DeploymentDescriptor_18"><info><title>GCM Deployment Descriptor Overview</title></info>
+
+		<para>
+			The deployment descriptor is an <literal>XML</literal> file containing
+			information on the properties listed above. We will use a
+			simple <literal>XML</literal> file to deploy our applications on a
+			remote machine. The deployment <literal>XML</literal> file is composed of several
+			parts, each with different options. In this section, we
+			will describe a simple version. To find out more about
+			deployment and deployment descriptors, please refer to
+		    <xref linkend="GCMDeploymentDescriptors_64" /> which strives to give an exhaustive list of possible
+            tags.
+		</para>
+		<para>
+			The document uses the
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd">
+				XML Schema
+			</link>
+			present at the Oasis website.
+		</para>
+		<para>
+			To avoid mistakes when building <literal>XML</literal> descriptors, ProActive
+			provides two <literal>XML</literal> Schemas, one for each descriptor type.
+      </para>
+      <para>
+         To validate your deployment descriptor file, the following line
+			has to be put at the top of the <literal>XML</literal> document.
+		</para>
+
+		<programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_1.snip"/></textobject></programlisting>
+
+		<para>
+			Both <literal>XML</literal> files have a section for defining variables needed
+			later in the document.
+         For instance, the following block defines the user home:
+		</para>
+
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_3.snip"/></textobject></programlisting>
+
+		<para>
+         Let's take a closer look at the deployment descriptor.
+			We first need to specify how the grid resources are organized together.
+			This is done in the resources section, in which we describe a tree-like structure
+			corresponding to the grid setup. There are three types of elements:
+			<itemizedlist>
+				<listitem>
+					<para>host: a single machine</para>
+				</listitem>
+				<listitem>
+					<para>bridge: a gateway to a set of machines
+					which cannot be reached individually</para>
+				</listitem>
+				<listitem>
+					<para>group: a group of machine sharing an identical
+					configuration (which is described by a host)</para>
+				</listitem>
+			</itemizedlist>
+
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_5.snip"/></textobject></programlisting>
+
+		</para>
+
+		<para>
+			Next is the infrastructure part that defines the elements (hosts, bridges, groups)
+			which are referenced in the resources part. In the following example, <literal>hosts</literal> tag defines only the home directory and the operating system.
+         Yet, you can also define the java home or the machine workload capacity.
+         In a general manner, <literal>bridges</literal> and <literal>groups</literal> tags
+			define what kind of configuration they are. Here, we have a group of machines accessible
+			through rsh. This group is then described in detail into the <literal>rshGroup</literal> tag where the <literal>hostList</literal> attribute
+         references all the host names.
+		</para>
+
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_6.snip"/></textobject></programlisting>
+
+      <para>
+         Thus, here is full and simple deployment descriptor:
+      </para>
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_7.snip"/></textobject></programlisting>
+
+
+      </section>
+      <!-- APPLICATION DESCRIPTOR OVERVIEW -->
+
+      <section xml:id="ApplicationDescriptor_18"><info><title>GCM Application Descriptor Overview</title></info>
+		<para>
+			Now, let's study application descriptors where we define the application
+			and its requirements.
+		</para>
+      <para>
+         In the same manner as for the deployment descriptor, the following line enables to validate our descriptor according to its schema:
+      </para>
+		<programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_2.snip"/></textobject></programlisting>
+
+		<para>
+			Like a deployment descriptor, an application descriptor starts with an environment section,
+			which follows the same syntax. The following block defines for example the proactive home as well as two descriptor variables which are respectively
+         the host capacity (number of JVMs per host) and the vmCapacity (number of nodes per JVM).
+      </para>
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_4.snip"/></textobject></programlisting>
+
+      <para>Then, there is the application section in which the application itself
+			is described: its type (ProActive or stand-alone executable), its configuration (dependencies,
+			invocation options) and its resource requirements (the virtual nodes).
+			In this example, we have defined a single virtual node named 'Agent'.
+			Virtual nodes refer to node providers, which are defined in the next section,
+			as sources of physical nodes.
+		</para>
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_8.snip"/></textobject></programlisting>
+
+		<para>
+			Finally, we link the application descriptor to one or several deployment descriptors
+			through its <literal>resources</literal> part. Into this part, you can define the node providers that are referenced
+			by the virtual nodes in the previous section.
+		</para>
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_9.snip"/></textobject></programlisting>
+
+		<para>
+         The whole application descriptor therefore looks as follows:
+      </para>
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployed_CMA_10.snip"/></textobject></programlisting>
+
+   </section>
+
+	<section xml:id="gcmd_appli"><info><title xml:id="ProActiveDeploymentAPI_64">ProActive Deployment API</title>
+		</info>
+
+		<para>There are several ways the grid resources can be used by a deployed application.
+		The application may require a fixed set of resources, or it may be flexible enough to work on any
+		amount of resources, or finally may require a minimum amount of resources and yet be able to scale
+		as more resources become available.</para>
+
+		<para>In all cases, the application must start by creating a <code>GCMApplication</code> object through
+		<code>PAGCMDeployment.loadApplicationDescriptor()</code>, and call <code>GCMApplication.startDeployment()</code>. The
+		application must quit through <code>GCMApplication.kill()</code>.</para>
+
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/start_deployment.snip"/></textobject></programlisting>
+
+		<section xml:id="ResourcesfixedbytheapplicationSPMD_64"><info><title>Resources fixed by the application (SPMD)</title>
+			</info>
+
+			<para>In this case, the application knows the amount of resources it requires. The acquisition of these resources
+			 by the application is done as follows:</para>
+
+			 <itemizedlist>
+					<listitem>
+						<para>Get the required virtual nodes through <code>GCMApplication.getVirtualNode(String vnName)</code>,
+						 or <code>GCMApplication.getVirtualNodes()</code></para>
+					</listitem>
+					<listitem>
+						<para>For each virtual node, use <code>GCMVirtualNode.getCurrentNodes()</code> as many times as needed,
+						until the virtual node has the expected numbers of physical nodes to run on.
+						<code>getCurrentNodes()</code> will return the list of nodes that have been acquired since the last time
+						it was called. Calls to it should be separated by calls to <code>Thread.sleep()</code>.
+						</para>
+					</listitem>
+			</itemizedlist>
+         <programlisting language="java"><textobject><textdata fileref="code_snippets/nodes_fixed_by_application.snip"/></textobject></programlisting>
+
+		</section>
+
+		<section xml:id="Resourcesfixedbytheapplicationdeployer_64"><info><title>Resources fixed by the application deployer</title>
+			</info>
+
+			<para>In this case, the application has no specific requirement on the resources it uses: the more the better.
+			This is the simplest case: the application only has to call <code>GCMApplication.waitReady()</code>.
+			This will block until all Virtual Nodes have their configured number of physical Nodes. In our case, we have only one virtual node (named Agent) whose capacity is 4.
+         Thus, our application will block until Agent gets its 4 nodes.</para>
+         <programlisting language="java"><textobject><textdata fileref="code_snippets/nodes_fixed_by_deployer.snip"/></textobject></programlisting>
+         <warning>
+         <para>
+			This may block forever if a Virtual Node does not have a limited number of nodes after which it
+			is in 'ready' state (the Virtual Node is said to be 'greedy', <code>GCMVirtualNode.isGreedy()</code> will return true).
+			</para>
+         </warning>
+
+		</section>
+
+		<section xml:id="OndemandScalability_64"><info><title>On demand Scalability</title>
+			</info>
+
+			<para>In this case, the application is able to expand on new resources as they become available.
+			This is an extension of the two other cases, in that it can work whether the application has fixed minimum requirements
+			or not. Once the initial deployment phase is finished, the application should call <code>GCMApplication.getVirtualNodes()</code>
+			to obtain the list of configured virtual nodes,
+			and then subscribe to the node attachment notifications for each of them (<code>GCMVirtualNode.subscribeNodeAttachment()</code>).
+			In the notification handler, the application should deal with the newly acquired node appropriately.
+			</para>
+         <programlisting language="java"><textobject><textdata fileref="code_snippets/nodes_on_demand.snip"/></textobject></programlisting>
+		</section>
+
+
+	</section>
+
+	<section xml:id="GCMDeploymentDescriptors_64"><info><title>GCM Deployment Descriptor</title></info>
+
+      <para>
+        This section aims at giving explanations on the structure of a GCM Deployment descriptor. We will not describe all the possible elements and
+        all the possible attributes since a
+        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
+        Javadoc-like documentation
+        </link>
+        is generated directly from the XSD schema (depicting the XML structure) and is
+        therefore up to date at any time.
+      </para>
+
+      <para>
+         As already said into the overview chapter, a GCM deployment descriptor is composed of 3 elements:
+         <itemizedlist>
+            <listitem><para><emphasis role="bold">&lt;environment&gt;</emphasis></para></listitem>
+            <listitem><para><emphasis role="bold">&lt;resources&gt;</emphasis></para></listitem>
+            <listitem><para><emphasis role="bold">&lt;infrastructure&gt;</emphasis></para></listitem>
+         </itemizedlist>
+      </para>
+
+      <para>The  following sections will details these three elements.</para>
+
+      <section xml:id="GCMD_Environment_8"><info><title>The &lt;environment&gt; element</title></info>
+
+         <para>
+            In the first part (&lt;environment&gt;), we can define environment variables such as the Java home, the ProActive home
+            or a JVM argument... There are height different kinds of variable:
+            <itemizedlist>
+                <listitem><para><emphasis role="bold">&lt;descriptorDefaultVariable&gt;</emphasis></para></listitem>
+                <listitem><para><emphasis role="bold">&lt;descriptorVariable&gt;</emphasis></para></listitem>
+                <listitem><para><emphasis role="bold">&lt;includePropertyFile&gt;</emphasis></para></listitem>
+                <listitem><para><emphasis role="bold">&lt;javaPropertyDescriptorDefault&gt;</emphasis></para></listitem>
+                <listitem><para><emphasis role="bold">&lt;javaPropertyProgramDefault&gt;</emphasis></para></listitem>
+                <listitem><para><emphasis role="bold">&lt;javaPropertyVariable&gt;</emphasis></para></listitem>
+                <listitem><para><emphasis role="bold">&lt;programDefaultVariable&gt;</emphasis></para></listitem>
+                <listitem><para><emphasis role="bold">&lt;programVariable&gt;</emphasis></para></listitem>
+            </itemizedlist>
+         </para>
+         <para>
+            Here is a brief example showing how to defined a "descriptorVariable" variable:
+         </para>
+
+         <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMD_environment_1.snip"/></textobject></programlisting>
+
+         <para>
+            As a chapter is dedicated for variables, please refer to <xref linkend="VariableContract"/>
+            or directly to the
+           <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
+           Javadoc-like documentation
+           </link>
+            if you want more information.
+         </para>
+         <note>
+            <para>
+               Such an element is also used by the GCM Application descriptor. It is therefore important to keep in mind
+               that environment variables are inherited from the GCM Application descriptor.
+            </para>
+         </note>
+
+      </section>
+
+      <section xml:id="GCMD_Resources_8"><info><title>The &lt;resources&gt; element</title></info>
+
+         <para>
+            The second part (&lt;resources&gt;) is used to represent the grid architecture. It is a <emphasis role="bold">tree-like structure into which we only specify ids</emphasis> that will be used in the
+            &lt;infrastructure&gt; part for describing each resource. If an id is used, it has to correspond to an existed id in the &lt;infrastructure&gt; element. If not, the XML file
+            will not be valid.
+         </para>
+         <para>
+            For instance, we can make reference to a single host as follows:
+         </para>
+
+         <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMD_resources_1.snip"/></textobject></programlisting>
+
+         <para>
+            Or we can describe a group of hosts. In this case, two ids are necessary: one for defining the group itself (group type, hosts list...) and one for characterizing
+            the host configuration (all the hosts of a group have the same configuration).
+         </para>
+         <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMD_resources_2.snip"/></textobject></programlisting>
+
+         <para>
+            Finally, we can define a bridge giving access to a host, a group of hosts or another bridge. The following example shows how to specify a bridge
+            towards a group of hosts.  In that case, three ids are needed: one for each element (bridge, group and host).
+         </para>
+         <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMD_resources_3.snip"/></textobject></programlisting>
+
+         <para>
+            To get more information on this part, please refer to the
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
+            Javadoc-like schema documentation
+            </link>.
+         </para>
+
+      </section>
+
+
+      <section xml:id="GCMD_Infrastructure_8"><info><title>The &lt;infrastructure&gt; element</title></info>
+
+         <para>
+            In this part, all the elements referenced into the &lt;resources&gt; element are described.
+            It is composed of three optional elements: <emphasis role="bold">&lt;hosts&gt;</emphasis> into which hosts configuration are specified, <emphasis role="bold">&lt;groups&gt;</emphasis> into
+            which groups are defined (depending on the group type) and <emphasis role="bold">&lt;bridges&gt;</emphasis> into which bridge are depicted (also depending on
+            the bridge type).
+         </para>
+         <warning>
+            <para>
+                These elements are optional from the point of view of the &lt;infrastructure&gt; element. However, if
+                you have made reference to a host in the &lt;resources&gt; element, you have to describe it into a &lt;hosts&gt;
+                element. Otherwise, the GCMD descriptor would not be valid. This feature also holds for &lt;groups&gt; and &lt;bridges&gt;
+                elements.
+            </para>
+         </warning>
+
+         <para>
+            Host definition is quite simple. The important thing to remind is that an <emphasis role="bold">"id"</emphasis> as well as a <emphasis role="bold">"os"</emphasis> have to be provided concerning
+            attributes. As for child elements, <emphasis role="bold">&lt;homeDirectory&gt;</emphasis> is the only mandatory element and it represents the path to the home directory.
+            It is also interesting to point out that the host capacity (number of JVMs per host) and the JVM capacity (number of nodes per JVMs) can be specify
+            through respectively the "hostCapacity" and "vmCapacity" attributes.
+         </para>
+
+         <para>
+            Concerning groups, there are ten different group type:
+            <itemizedlist>
+               <listitem><para><emphasis role="bold">&lt;cssGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;gLiteGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;gridEngineGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;loadLevelerGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;lsfGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;oarGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;pbsGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;prunGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;rshGroup&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;sshGroup&gt;</emphasis></para></listitem>
+		       <listitem><para><emphasis role="bold">&lt;mpiGroup&gt;</emphasis></para></listitem>
+            </itemizedlist>
+            All these groups are explained in the
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
+            schema documentation
+            </link>.
+            However, they all have two common attributes and one common child.
+            Indeed, each group has an <emphasis role="bold">"id"</emphasis> attribute (used in the &lt;resources&gt; element) and a <emphasis role="bold">"commandPath"</emphasis> attribute
+            (path of the command which is used to submit a job to the group protocol).
+            The common child is an <emphasis role="bold">&lt;environment&gt;</emphasis> element which is of the same type as the one seen before and is used for defining variables specific to the group.
+         </para>
+
+         <para>
+            As for bridges, they are three different bridge type:
+            <itemizedlist>
+               <listitem><para><emphasis role="bold">&lt;rshBridge&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;sshBridge&gt;</emphasis></para></listitem>
+               <listitem><para><emphasis role="bold">&lt;oarshBridge&gt;</emphasis></para></listitem>
+            </itemizedlist>
+            Only one attribute is common: the "id" attribute.
+         </para>
+
+         <para>
+            Here is a possible way to detail the hosts, groups and bridges previously defined in the &lt;resources&gt; element:
+         </para>
+
+         <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMD_resources_4.snip"/></textobject></programlisting>
+
+         <para>
+            To get more information on this part and specially on the different group and bridge type, please refer to the
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
+            schema documentation
+            </link>.
+         </para>
+
+      </section>
+
+		<!-- <section xml:id="HostInformation_64"><info><title>Host Information</title>
+			</info>
+
+			<para>
+				The HostInfo data structure describes a single machine and the environment it provides, with the following information:
+				<itemizedlist>
+					<listitem>
+						<para>userName: (string) the name of the user under which this host can be accessed</para>
+					</listitem>
+					<listitem>
+						<para>homeDirectory: (absolute path) the home directory of the user</para>
+					</listitem>
+					<listitem>
+						<para>os: ("unix" or "windows") the operating system the host is running on</para>
+					</listitem>
+					<listitem>
+						<para>
+							hostCapacity: (positive integer) the number of processes (VM or other executable) that this host can handle (default
+							value is 1)
+						</para>
+					</listitem>
+					<listitem>
+						<para>vmCapacity: (positive integer) the number of nodes a single VM on this host can handle (default value is 1)</para>
+					</listitem>
+					<listitem>
+						<para>id: (ID) an ID identifying the host</para>
+					</listitem>
+				</itemizedlist>
+
+			</para>
+		</section>
+
+		<section xml:id="Bridges_64"><info><title>Bridges</title>
+			</info>
+
+			<para>
+				A bridge is meant to represent a front-end to a computing resource. Many grid architectures have such a feature: each physical machine
+				is not accessible directly, the user has to go through a single machine called a front-end. In a deployment descriptor, a bridge
+				is a gateway toward either:
+				<itemizedlist>
+					<listitem>
+						<para>a host</para>
+					</listitem>
+					<listitem>
+						<para>a set of groups</para>
+					</listitem>
+					<listitem>
+						<para>another bridge</para>
+					</listitem>
+				</itemizedlist>
+
+				A bridge is defined as a base structure meant to be derived. The base structure only defines an id (string).
+			</para>
+
+			<section xml:id="RSH_101"><info><title>RSH</title>
+				</info>
+
+				<para>
+					An RSH bridge element can have the following attributes:
+					<itemizedlist>
+						<listitem>
+							<para>id (string): the id of the bridge connector corresponding to this definition</para>
+						</listitem>
+						<listitem>
+							<para>hostname (string): the network hostname of the physical machine which acts as the bridge</para>
+						</listitem>
+						<listitem>
+							<para>username (string, optional): the user name under which the machine can be accessed</para>
+						</listitem>
+						<listitem>
+							<para>commandPath (string, optional): the path of rsh client to use</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+
+
+			<section xml:id="SSH_640"><info><title>SSH</title>
+				</info>
+
+				<para>
+					An SSH bridge element can have the following child element:
+					<itemizedlist>
+						<listitem>
+							<para>privateKey (path string): the file of the private SSH key needed to access the bridge</para>
+						</listitem>
+					</itemizedlist>
+
+					An SSH bridge element can have the following attributes:
+					<itemizedlist>
+						<listitem>
+							<para>id (string): the id of the bridge connector corresponding to this definition</para>
+						</listitem>
+						<listitem>
+							<para>hostname (string): the network hostname of the physical machine which acts as the bridge</para>
+						</listitem>
+						<listitem>
+							<para>username (string, optional): the user name under which the machine can be accessed</para>
+						</listitem>
+						<listitem>
+							<para>commandPath (string): the path of the ssh client to use</para>
+						</listitem>
+						<listitem>
+							<para>commandOptions (string): options to pass to the ssh command</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+		</section>
+
+		<section xml:id="Groups_64"><info><title>Groups</title>
+			</info>
+
+			<para>
+				A Group is a data structure defining a set of machines with identical configuration (like a cluster). It is defined as a base structure
+				which can be derived in an Object-Oriented manner to implement any kind of group. There are currently two kinds of group:
+				<orderedlist>
+					<listitem>
+						<para>"direct" groups</para>
+					</listitem>
+					<listitem>
+						<para>job schedulers</para>
+					</listitem>
+				</orderedlist>
+			</para>
+			<para>It is therefore possible to define a standard-compliant deployment descriptor even on a grid which has its own job scheduler.</para>
+			<para>All group protocols have the following child elements:</para>
+			<itemizedlist>
+				<listitem>
+					<para>environment (environment): the environment for the command</para>
+				</listitem>
+			</itemizedlist>
+			<para>and the following attributes</para>
+			<itemizedlist>
+				<listitem>
+					<para>id (ID): the id of the group this element represents</para>
+				</listitem>
+				<listitem>
+					<para>commandPath (path string): path of the command which is used to submit a job to the group protocol</para>
+				</listitem>
+			</itemizedlist>
+
+			<section xml:id="CCS_64"><info><title>CCS</title>
+				</info>
+
+				<para>
+					This group handles Microsoft’s Compute Cluster Server. The CCS group definition has the following child elements:
+					<itemizedlist>
+						<listitem>
+							<para>
+								resources: the resources that will be allowed to the job. This element can have two children:
+								<itemizedlist>
+									<listitem>
+										<para>cpus (positive integer): the number of CPUs allocated for the job</para>
+									</listitem>
+									<listitem>
+										<para>runtime (time): the maximum runtime allowed for the job</para>
+									</listitem>
+								</itemizedlist>
+							</para>
+						</listitem>
+						<listitem>
+							<para>stdout (path string): path of the file where the standard output of the job will be stored</para>
+						</listitem>
+						<listitem>
+							<para>stderr (path string): path of the file where the standard error of the job will be stored</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+
+			<section xml:id="LSF_64"><info><title>LSF</title>
+				</info>
+
+				<para>
+					Group definition for the LSF scheduler. The LSF group definition has the following child elements:
+					<itemizedlist>
+						<listitem>
+							<para>
+								resource (string): this element has the following attributes:
+								<itemizedlist>
+									<listitem>
+										<para>(positive integer): number of processors requested</para>
+									</listitem>
+									<listitem>
+										<para>walltime (time): maximum time allowed for the job</para>
+									</listitem>
+								</itemizedlist>
+							</para>
+						</listitem>
+						<listitem>
+							<para>processorsNumber (positive integer): minimum number of processors requested to run the job</para>
+						</listitem>
+						<listitem>
+							<para>
+								resourceRequirement (string): a resource requirement string as defined by the LSF documentation (‘lsfintro’ manpage)
+							</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+				<para>
+					It also has the following attributes:
+					<itemizedlist>
+						<listitem>
+							<para>interactive (boolean): whether the job is interactive or not</para>
+						</listitem>
+						<listitem>
+							<para>jobName (string): name of the job</para>
+						</listitem>
+						<listitem>
+							<para>queue (string): name of the queue the job will be submitted in</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+
+			<section xml:id="OAR_64"><info><title>OAR</title>
+				</info>
+
+				<para>
+					Group definition for the OAR job scheduler [15]. The OAR group definition has the following child elements:
+					<itemizedlist>
+						<listitem>
+							<para>
+								resource (string): this element has the following attributes:
+								<itemizedlist>
+									<listitem>
+										<para>nodes (positive integer): number of nodes requested</para>
+									</listitem>
+									<listitem>
+										<para>cpu (positive integer): number of CPUs requested</para>
+									</listitem>
+									<listitem>
+										<para>core (positive integer): number of cores requested</para>
+									</listitem>
+									<listitem>
+										<para>walltime (time): maximum time allowed for the job</para>
+									</listitem>
+								</itemizedlist>
+
+								It also can have a string content which is passed through the ‘resource’ option of the oarsub command.
+							</para>
+						</listitem>
+
+						<listitem>
+							<para>directory (path string): the working directory of the job script</para>
+						</listitem>
+						<listitem>
+							<para>stdout (path string): path of the file where the standard output of the job will be stored</para>
+						</listitem>
+						<listitem>
+							<para>stderr (path string): path of the file where the standard error of the job will be stored</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+				<para>
+					It has the following attributes:
+					<itemizedlist>
+						<listitem>
+							<para>
+								interactive (boolean): start an interactive job. If true, open a login shell on the first node instead of running a
+								script (default is false).
+							</para>
+						</listitem>
+						<listitem>
+							<para>queue (string): name of the queue to submit the job to.</para>
+						</listitem>
+						<listitem>
+							<para>type (‘deploy’, ‘besteffort’, ‘cosystem’, ‘checkpoint’, ‘timesharing’): job type – the default is ‘deploy’.</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+
+			<section xml:id="PBS_64"><info><title>PBS</title>
+				</info>
+
+				<para>
+					Group definition for the PBS/Torque job scheduler. The PBS/Torque group definition has the following child elements:
+					<itemizedlist>
+
+						<listitem>
+							<para>
+								resource (string): this element has the following attributes:
+								<itemizedlist>
+									<listitem>
+										<para>nodes (positive integer): number of nodes requested</para>
+									</listitem>
+									<listitem>
+										<para>ppn (positive integer): number of CPUs requested</para>
+									</listitem>
+									<listitem>
+										<para>walltime (time): maximum time allowed for the job</para>
+									</listitem>
+								</itemizedlist>
+							</para>
+						</listitem>
+						<listitem>
+							<para>nodes (positive integer): number of nodes requested</para>
+						</listitem>
+						<listitem>
+							<para>processorsPerNode (positive integer): number of processors per node requested</para>
+						</listitem>
+						<listitem>
+							<para>
+								mailWhen (combination of Abort, Begin, End separated by ‘|’): when to send an email (Abort: if the job is aborted,
+								Begin: when the job is started, End: when the job terminates)
+							</para>
+						</listitem>
+						<listitem>
+							<para>mailTo (comma-seperated list of email addresses): where the job status emails should be sent</para>
+						</listitem>
+						<listitem>
+							<para>joinOutput (boolean): if true, join the output of stderr to stdout</para>
+						</listitem>
+						<listitem>
+							<para>stdout (path string): path of the file where the standard output of the job will be stored</para>
+						</listitem>
+						<listitem>
+							<para>stderr (path string): path of the file where the standard error of the job will be stored</para>
+						</listitem>
+					</itemizedlist>
+
+					It has the following attributes:
+					<itemizedlist>
+						<listitem>
+							<para>
+								queue (string): destination queue for the job. The argument can be of the following format:
+								<itemizedlist>
+									<listitem>
+										<para>queue: a queue on the default server</para>
+									</listitem>
+									<listitem>
+										<para>@server: the default queue on the server</para>
+									</listitem>
+									<listitem>
+										<para>queue@server: the queue on the given server</para>
+									</listitem>
+								</itemizedlist>
+							</para>
+						</listitem>
+						<listitem>
+							<para>jobName (15 char long string, no whitespace, first char must be alphabetic): the name of the job</para>
+						</listitem>
+						<listitem>
+							<para>interactive (boolean): whether the job is interactive or not</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+
+			<section xml:id="Prun_64"><info><title>Prun</title>
+				</info>
+
+				<para>
+					Group definition for the PRUN run server. The PRUN group definition has the following child elements:
+
+					<itemizedlist>
+						<listitem>
+							<para>
+								resource (string): this element has the following attributes:
+								<itemizedlist>
+									<listitem>
+										<para>nodes (positive integer): number of nodes requested</para>
+									</listitem>
+									<listitem>
+										<para>ppn (positive integer): number of CPUs requested</para>
+									</listitem>
+									<listitem>
+										<para>walltime (time): maximum time allowed for the job</para>
+									</listitem>
+								</itemizedlist>
+							</para>
+						</listitem>
+
+						<listitem>
+							<para>stdout (path string): name of the file in which the results will be printed</para>
+						</listitem>
+					</itemizedlist>
+
+					It has no attribute.
+				</para>
+			</section>
+
+			<section xml:id="HostList_64"><info><title>Host List</title>
+				</info>
+
+				<para>
+					A host list can be used with SSH and RSH groups as a shorthand to specify several machine names in a compact form. The format of a
+					host list is a whitespace-separated list of name patterns or hostnames. A name pattern describes a set of hostnames with a common
+					root. The format is as follows.
+					<programlisting language="xml">
+&lt;root name&gt;&lt;interval&gt;</programlisting>
+					with root name being an alphanumeric string (only letters and digits, no spaces or punctuation signs), and interval defining a set
+					of numerical values in the form of an interval or list of values, possibly followed by an exclusion interval or list of values.
+					The general form of an interval is:
+					<programlisting language="xml">
+[&lt;value set&gt;]^[&lt;value set&gt;]</programlisting>
+					or simply
+					<programlisting language="xml">
+[&lt;value set&gt;]</programlisting>
+					if no exclusion interval is needed.
+
+				</para>
+
+				<para>
+					A value set is a coma-seperated list of integers or integers pairs separated by a dash, meaning an interval of values. The values
+					of an interval must be specified in increasing order, and the generated values will be in increasing order. Also, the first
+					integer of an interval can have leading zeroes to indicate the number of digits (numbers will be padded with zeroes if needed).
+					Some examples:
+					<itemizedlist>
+						<listitem>
+							<para>host[0-5]: host0, host1 … host5;</para>
+						</listitem>
+						<listitem>
+							<para>host[0-5]^[4]: host0, host1, host2, host3, host5;</para>
+						</listitem>
+						<listitem>
+							<para>host[0-10]^[4-6]: host0, host1, host2, host3, host7, host8, host9, host10;</para>
+						</listitem>
+						<listitem>
+							<para>host[00-5]: host00, host01, host02… host05;</para>
+						</listitem>
+						<listitem>
+							<para>host[1, 004-7, 09]: host1, host004, host005, host006, host007, host09.</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+
+			</section>
+
+			<section xml:id="RSH_64"><info><title>RSH</title>
+				</info>
+
+				<para>
+					The RSH Group has the following child elements:
+					<itemizedlist>
+						<listitem>
+							<para>(host list): the list of hosts to connect to</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+
+			<section xml:id="SSH_64"><info><title>SSH</title>
+				</info>
+
+				<para>
+					The SSH Group has the following child elements:
+					<itemizedlist>
+						<listitem>
+							<para>(host list): the list of hosts to connect to</para>
+						</listitem>
+						<listitem>
+							<para>privateKey (path string): the file of the private SSH key needed to access the host</para>
+						</listitem>
+						<listitem>
+							<para>commandOptions (string): the list of options which will be passed to the ssh command</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+
+		</section>-->
+
+	</section>
+	<section xml:id="GCMApplicationdescriptor_64"><info><title>GCM Application Descriptor</title></info>
+
+      <para>
+        This section aims at giving explanations on the structure of a GCM Application descriptor. We will not describe all the possible elements and
+        all the possible attributes since a
+        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcma/index.html">
+        javadoc-like schema documentation
+        </link>
+        is generated directly from the XSD schema (depicting the XML structure) and is
+        therefore up to date at any time.
+      </para>
+
+      <para>
+         As already said into the overview chapter, a GCM application descriptor is composed of 3 elements:
+         <itemizedlist>
+            <listitem><para><emphasis role="bold">&lt;environment&gt;</emphasis></para></listitem>
+            <listitem><para><emphasis role="bold">&lt;application&gt;</emphasis></para></listitem>
+            <listitem><para><emphasis role="bold">&lt;resources&gt;</emphasis></para></listitem>
+         </itemizedlist>
+      </para>
+      <para>The following sections will details these three elements.</para>
+
+      <section xml:id="GCMA_Environment_9"><info><title>The &lt;environment&gt; element</title></info>
+         <para>
+            This elements is exactly the same as those presented in <xref linkend="GCMD_Environment_8"/>.
+            As evoked before, environment variable define here will be inherited to the GCM Deployment descriptor.
+         </para>
+      </section>
+
+      <section xml:id="GCMD__9"><info><title>The &lt;application&gt; element</title></info>
+
+      <para>This mandatory element is used for describing the application itself. It is composed of only one child element which can be either
+      <emphasis role="bold">&lt;proactive&gt;</emphasis> or <emphasis role="bold">&lt;executable&gt;</emphasis>.</para>
+
+		<section xml:id="Executable_64"><info><title>Executable</title></info>
+
+			<para>
+				This type of application describes the deployment of a stand-alone executable on the grid.
+			</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis role="bold">nodeProvider</emphasis>: empty element with a single <emphasis role="bold">"refId"</emphasis> attribute representing the id of a node provider (defined in the &lt;resources&gt;
+						part). There can be any number of such element.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">command</emphasis>: command which will be run on the portion of the grid defined by the specified node providers.
+			         It can have the following children (in this specified order):
+                  <itemizedlist>
+                     <listitem>
+                        <para><emphasis role="bold">&lt;path&gt;</emphasis>: the path of the executable</para>
+                     </listitem>
+
+                     <listitem>
+                        <para><emphasis role="bold">&lt;arg&gt;</emphasis>: the arg string which will be passed to the command. There can be any number of such elements.</para>
+                     </listitem>
+                  </itemizedlist>
+
+			         And it can have the following attribute:
+                  <itemizedlist>
+                     <listitem>
+                        <para>
+                           <emphasis role="bold">"name"</emphasis>: name of the executable. If a &lt;path&gt; child element is present, the value of this attribute will be
+                           appended to the value of the &lt;path&gt; child element.
+                        </para>
+                     </listitem>
+                  </itemizedlist>
+               </para>
+				</listitem>
+			</itemizedlist>
+
+			<para>The &lt;executable&gt; element can also have the following attribute:</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis role="bold">instances</emphasis>: number of instances of the command which will be run.
+                  It can be “onePerHost”, “onePerVM” or “onePerCapacity”.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+         <para>Here is a simple example of an executable application launching the "myCommand" command on the node provided by the "myNodeProvider" node provider:</para>
+
+         <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMA_Executable_1.snip"/></textobject></programlisting>
+
+		</section>
+
+		<section xml:id="ProActive_64"><info><title>ProActive</title></info>
+
+			<para>This element describes the deployment of a ProActive-based application. It can have the following children:</para>
+
+			<itemizedlist>
+				<listitem>
+					<para><emphasis role="bold">&lt;configuration&gt;</emphasis>: various configuration parameters</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;technicalServices&gt;</emphasis>: set of technical services global to this instance of ProActive</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;virtualNode&gt;</emphasis>: description of a virtual node. There can be any number of such an lement</para>
+				</listitem>
+			</itemizedlist>
+
+         <para>
+            And it has two mandatory attributes defining the ProActive home directory:
+         </para>
+
+			<itemizedlist>
+				<listitem>
+					<para><emphasis role="bold">"relpath"</emphasis>: relative path to the ProActive installation (relative to the base attribute)</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">"base"</emphasis>: base path to the ProActive installation. It can be either "home" or "root".
+                  "home" represents the user’s home directory whereas "root" is the root directory of the system.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+			<para>The <emphasis role="bold">&lt;configuration&gt;</emphasis> element can have the following child elements:</para>
+			<itemizedlist>
+				<listitem>
+					<para><emphasis role="bold">&lt;bootClasspath&gt;</emphasis>: the boot classpath for the JVM</para>
+				</listitem>
+
+				<listitem>
+					<para><emphasis role="bold">&lt;java&gt;</emphasis>: the path to the Java executable</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;jvmarg&gt;</emphasis>: arguments passed to the JVM</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;applicationClasspath&gt;</emphasis>: classpath for the application</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;proactiveClasspath&gt;</emphasis>: classpath used to override the standard ProActive classpath computed from its installation location</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;securityPolicy&gt;</emphasis>: path to the Java security policy file</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">&lt;proactiveSecurity&gt;</emphasis>: security policy for application and runtime. This element has two optional children:
+						<itemizedlist>
+							<listitem>
+								<para>
+									<emphasis role="bold">&lt;applicationPolicy&gt;</emphasis>: path to Java security policy file that will be applied on the application's
+									objects deployed at runtime, like nodes and active objects
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<emphasis role="bold">&lt;runtimePolicy&gt;</emphasis>: path to Java security policy file that will be applied on the ProActive Runtime
+								</para>
+							</listitem>
+						</itemizedlist>
+					</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;log4jProperties&gt;</emphasis>: path to the Java log4j configuration file</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;userProperties&gt;</emphasis>: path to a property file (defining Java and/or ProActive properties)</para>
+				</listitem>
+				<listitem>
+					<para><emphasis role="bold">&lt;debug&gt;</emphasis>: to be completed</para>
+				</listitem>
+
+			</itemizedlist>
+
+         <para>
+            A technical service is a non-functional requirement that may be
+            dynamically fulfilled at runtime by adapting the configuration of selected resources. 
+            For more information, please refer to <xref linkend="TechnicalService" />.
+            A technical service can be defined at the application level, at the virtual node level
+            or at the node provider level.
+         </para>
+
+
+			<para>The <emphasis role="bold">&lt;virtualNode&gt;</emphasis> element can have the following children:</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis role="bold">&lt;technicalServices&gt;</emphasis>: a technical service specific to this virtual node. There can be any number of such
+						children. Please refer to the previous paragraph.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">&lt;nodeProvider&gt;</emphasis>: node provider which will provide this virtual node with ProActive nodes.
+						There can be as many node providers as you want.
+                  A nodeProvider element can have a <emphasis role="bold">&lt;technicalServices&gt;</emphasis> child defined a technical service specific to this node provider.
+				      A &lt;nodeProvider&gt; can also have the following attributes:
+                  <itemizedlist>
+                     <listitem>
+                        <para><emphasis role="bold">"refid"</emphasis> (mandatory): the id of the node provider (as defined in the resources element)</para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                           <emphasis role="bold">"capacity"</emphasis>: the capacity of this ProActive node provider (that is, the number of ProActive nodes
+                           which will be requested from it)
+                        </para>
+                     </listitem>
+                  </itemizedlist>
+					</para>
+				</listitem>
+			</itemizedlist>
+
+			<para>A <emphasis role="bold">&lt;virtualNode&gt;</emphasis> element can also have the following attributes:</para>
+			<itemizedlist>
+				<listitem>
+					<para><emphasis role="bold">"id"</emphasis> (mandatory): a string identifying this virtual node. This identifier will be used in the Java program to deploy active objects on the nodes attached to this virtual node.</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">"capacity"</emphasis> (optional): the capacity requested by this virtual node (that is, the total number of nodes it will
+						request from the node providers which are affected to it). If no capacity is specified, then the virtual node will try to get as many nodes as possible. Such a virtual node is then characterized as greedy.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+         <para>Here is an simple example of such a proactive element: </para>
+         <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMA_ProActive_1.snip"/></textobject></programlisting>
+
+         <note>
+            <para>Your are not compelled to use virtual nodes. In that case, you have to handle your deployment using the three following methods of the <literal>org.objectweb.proactive.gcmdeployment.GCMApplication</literal> class:</para>
+            <itemizedlist>
+               <listitem><para>getAllNodes(): Returns all created or acquired Nodes</para></listitem>
+               <listitem><para>getTopology(): Returns the topology of this GCM Application</para></listitem>
+               <listitem><para>updateTopology(): Updates the Topology passed in parameter</para></listitem>
+            </itemizedlist>
+            <para>Warning: <emphasis role="bold">DO NOT USE THIS METHODS IF YOU HAVE DEFINED A VIRTUAL NODE</emphasis>. If you do this, you will get an <literal>IllegalStateException</literal>.</para>
+         </note>
+
+		</section>
+      </section>
+
+      <section xml:id="GCMA_Resources_9"><info><title>The &lt;resources&gt; element</title></info>
+	      <para>
+            This element is used to define the node providers which are referenced in the &lt;virtualNode&gt; elements.
+            The <emphasis role="bold">&lt;resources&gt;</emphasis> is therefore composed of a <emphasis role="bold">"id"</emphasis> attribute necessary to reference it.
+            It is also consisted of a <emphasis role="bold">&lt;file&gt;</emphasis> child which informs the path to a GCM Deployment descriptor.
+         </para>
+      <para>
+         Here is a simple examples of such an element definition:
+      </para>
+
+      <programlisting language="xml"><textobject><textdata fileref="code_snippets/GCMA_ProActive_2.snip"/></textobject></programlisting>
+      </section>
+   </section>
+<!--
+	<section xml:id="Tutorial_64"><info><title>Tutorial</title>
+		</info>
+
+		<para>
+			This tutorial shows how to deploy a grid-enabled application through the GCM standard. It will present the points of view of both the grid
+			administrator and the application developer.
+		</para>
+
+
+
+		<section xml:id="FortheGridAdministratorcreatingadeploymentdescriptor_64"><info><title>For the Grid Administrator: creating a deployment descriptor</title>
+			</info>
+
+			<para>
+				The task of a grid administrator is to make a model of his grid resources through a GCM Deployment Descriptor. Several examples are
+				available in the ProActive distribution. The deployment descriptor should represent the resources of the grid.
+
+				A deployment descriptor has the following XML structure:
+
+				<programlisting>
+
+&lt;environment&gt;
+		&lt;descriptorVariable …/&gt;
+…
+&lt;/environment&gt;
+
+&lt;resources&gt;
+		&lt;bridge …/&gt;
+		&lt;group&gt;
+			&lt;host …/&gt;
+			&lt;host …/&gt;
+			…
+		&lt;/group&gt;
+	…
+&lt;/resources&gt;
+
+&lt;acquisition&gt;
+		&lt;lookup …/&gt;
+	…
+&lt;/acquisition&gt;
+
+&lt;infrastructure&gt;
+		&lt;hosts&gt;
+			&lt;host…/&gt;
+		&lt;/hosts&gt;
+
+		&lt;groups&gt;
+			&lt;groupType …/&gt;
+		&lt;/group&gt;
+
+		&lt;bridges&gt;
+			&lt;bridgeType …/&gt;
+		&lt;/bridges&gt;
+	…
+&lt;/infrastructure&gt;
+
+
+
+				</programlisting>
+
+			</para>
+			<para>
+				The elements must be specified in this order. The &lt;environment&gt; and &lt;acquisition&gt; elements can be omitted, while the
+				&lt;resources&gt; and &lt;infrastructure&gt; ones are mandatory. They are the ones which define the model:
+
+				<orderedlist>
+					<listitem>
+						<para>
+							Infrastructure: this is a flat list of each individual element of the grid: hosts, groups and bridges listed in no
+							particular order.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Resources: this is a tree describing the hierarchical relationships between these infrastructure elements. These
+							relationships are defined by:
+							<itemizedlist>
+								<listitem>
+									<para>a host being within which group;</para>
+								</listitem>
+								<listitem>
+									<para>a group being behind a bridge;</para>
+								</listitem>
+								<listitem>
+									<para>a host being directly available.</para>
+								</listitem>
+							</itemizedlist>
+						</para>
+					</listitem>
+				</orderedlist>
+			</para>
+			<para>
+				Let's examine a couple of basic examples. Considering a very simple grid, that is two desktop PCs networked together. Such a setup
+				would be represented as follows (configuration parameters are omitted for the sake of clarity):
+			</para>
+
+			<programlisting>
+
+&lt;resources&gt;
+	&lt;hosts&gt;
+		&lt;host refid="host1"  /&gt;
+		&lt;host refid="host2"  /&gt;
+	&lt;/hosts&gt;
+&lt;/resources&gt;
+
+&lt;infrastructure&gt;
+    &lt;hosts&gt;
+		&lt;host id="host1"  /&gt;
+		&lt;host id="host2"  /&gt;
+	&lt;/hosts&gt;
+&lt;/infrastructure&gt;
+
+			</programlisting>
+
+			<para>
+				There is no hierarchical relation between the two hosts, so both resources and infrastructure parts are identical (aside of the extra
+				configuration parameters which are omitted here). A slightly more complex example would be a cluster of 12 mono-processor machines
+				running LSF. The representation in GCM Deployment would be as follows:
+			</para>
+
+			<programlisting>
+
+&lt;resources&gt;
+		&lt;group refid="LSF_GROUP"&gt;
+			&lt;host refid="LSF_GROUP_MEMBER" /&gt;
+		&lt;/group&gt;
+&lt;/resources&gt;
+
+&lt;infrastructure&gt;
+	&lt;hosts&gt;
+		&lt;host id="LSF_GROUP_MEMBER" /&gt;
+	&lt;/hosts&gt;
+
+	&lt;groups&gt;
+		&lt;lsfGroup id="LSF_GROUP" &gt;
+			&lt;resources processorNumber="12" /&gt;
+		&lt;/lsfGroup&gt;
+	&lt;/groups&gt;
+&lt;/infrastructure&gt;
+
+
+			</programlisting>
+
+			<para>
+				Within the &lt;infrastructure&gt;, the &lt;hosts&gt; part describes the configuration common to the machines in the group. The
+				&lt;groups&gt; part describes the LSF group itself. Finally, the &lt;resources&gt; part describes how they fit together, in this case
+				the host model being within the LSF group.
+			</para>
+
+			<para>The next paragraphs go more in depth on the content and usage of each element.</para>
+
+			<section xml:id="Environmentelement_64"><info><title>Environment element</title>
+				</info>
+				<para>
+					To allow for a bit of flexibility, it is possible to define variables in a descriptor. The variables can be used in any XML value
+					element. They cannot be used in an XML element name. The &lt;environment&gt; element is where the variables are defined. It is a
+					simple list of &lt;descriptorVariable&gt; elements. For example:
+
+					<programlisting>
+
+&lt;environment&gt;
+	&lt;descriptorVariable name="usertype" value="admin" /&gt;
+  &lt;descriptorVariable name="username" value="jsmith" /&gt;
+&lt;/environment&gt;
+
+
+					</programlisting>
+
+					This allows the following usage later on in the descriptor: &lt;sshGroup username="${username}" /&gt;
+
+
+				</para>
+			</section>
+
+			<section xml:id="Resourceselement_64"><info><title>Resources element</title>
+				</info>
+				<para>
+					The &lt;resource&gt; element describes the hierarchical structure of the available grid resources. This can be seen as the
+					topology of the grid: which hosts are part of a group, which group is behind a bridge, etc… All the grid resources which are
+					listed in it must be fully defined in the &lt;infrastructure&gt; element. However it doesn't have to hold every element listed in
+					&lt;infrastructure&gt;, it is meant to contain only the subset of resources which are actually used by the deployment.
+				</para>
+
+				<para>
+
+					You can use the following elements to build your grid topology:
+					<orderedlist>
+						<listitem>
+							<para>
+								&lt;host&gt;: this represents a single machine, or more precisely a single configuration. When used within a group,
+								it represents the common configuration of all machines within this group.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								&lt;group&gt;: this represents a set of machines all sharing a common configuration. Typically a cluster. The
+								configuration is represented through a Host element.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								&lt;bridge&gt;: this represents a machine which acts as a gateway to one or several other machines. Typically, a
+								front-end for a cluster.
+							</para>
+						</listitem>
+					</orderedlist>
+
+					These elements all take a single argument named 'refid'. The value of the argument is the id of the corresponding
+					host/bridge/group element defined in the &lt;infrastructure&gt; element. The topology must be described according to the following
+					rules:
+					<itemizedlist>
+						<listitem>
+							<para>A host can be at the top level, or in a group element</para>
+						</listitem>
+						<listitem>
+							<para>A group can be at the top level, or in a bridge element</para>
+						</listitem>
+						<listitem>
+							<para>A bridge can only be at the top level</para>
+						</listitem>
+					</itemizedlist>
+
+					For example, the following constructions are correct: Single host:
+
+					<programlisting>
+
+&lt;host refid="A_HOST" /&gt;
+
+					</programlisting>
+
+					Group:
+
+					<programlisting>
+
+&lt;group refid="CLUSTER"&gt;
+	&lt;host refid="CLUSTER_NODE" /&gt;
+&lt;/group&gt;
+
+					</programlisting>
+
+					Group behind a bridge:
+
+					<programlisting>
+
+&lt;bridge refid="CLUSTER_FRONT_END" /&gt;
+	&lt;group refid="CLUSTER"&gt;
+		&lt;host refid="CLUSTER_NODE" /&gt;
+	&lt;/group&gt;
+&lt;/bridge&gt;
+
+					</programlisting>
+
+				</para>
+
+			</section>
+
+			<section xml:id="Acquisitionelement_64"><info><title>Acquisition element</title>
+				</info>
+				<para>
+					An alternative to the &lt;infrastructure&gt; element, the &lt;acquisition&gt; element describes how resources which are already
+					running can be acquired. It contains one type of elements: &lt;lookup&gt;, in this order. Each element can either
+					have a single occurrence or be omitted. The &lt;lookup&gt; element has the following three attributes:
+					<orderedlist>
+						<listitem>
+							<para>type: one of "RMI", "HTTP";</para>
+						</listitem>
+						<listitem>
+							<para>hostlist: a HostList as defined in 5.1.1;</para>
+						</listitem>
+						<listitem>
+							<para>port: a positive integer.</para>
+						</listitem>
+					</orderedlist>
+				</para>
+			</section>
+
+			<section xml:id="Infrastructureelement_64"><info><title>Infrastructure element</title>
+				</info>
+				<para>
+					The &lt;infrastructure&gt; is where you will list the grid resources on which the deployment can take place, in no particular
+					order. Its purpose is to describe how these resources are deployed (i.e. through which protocols). It can have a single child
+					element of each of the following types: &lt;hosts&gt;, &lt;bridges&gt;, &lt;groups&gt;. &lt;bridges&gt; and &lt;groups&gt; may be
+					empty or omitted, but there should be at least one child element in &lt;hosts&gt;.
+				</para>
+
+
+			</section>
+
+
+		</section>
+
+
+		<section xml:id="FortheGridApplicationDevelopercreatinganapplication_64"><info><title>For the Grid Application Developer: creating an application descriptor</title>
+			</info>
+
+			<para>
+				While the Deployment Descriptor lists the grid resources, the application descriptor lists the resources the application needs.
+			</para>
+
+			<para>
+				The overall structure of an Application Descriptor is as follows:
+
+				<programlisting>
+
+&lt;environment&gt;
+		…
+&lt;/environment&gt;
+
+&lt;application&gt;
+…
+&lt;/application&gt;
+
+&lt;resources&gt;
+		&lt;nodeProvider&gt;
+			&lt;file …/&gt;
+			…
+		&lt;/nodeProvider&gt;
+		…
+&lt;/resources&gt;
+
+				</programlisting>
+
+			</para>
+
+			<para>
+				The &lt;environment&gt; element is similar to the one in the Deployment Descriptor. The &lt;application&gt; one is where the
+				application itself and the resources it requests are described (see GCM Application descriptor section). Finally, the
+				&lt;resources&gt; element is where you'll make the link between the requested resources and the deployed ones.
+			</para>
+
+			<para>
+				The &lt;application&gt; tag can hold either an &lt;executable&gt; or a &lt;proactive&gt; tag. &lt;executable&gt; is for stand-alone
+				applications which you want to run on a grid. &lt;proactive&gt; is for ProActive-based applications. In both cases the requested
+				resources are specified through &lt;nodeProvider&gt; elements. These elements only carry a single 'refid' attribute which points to a
+				corresponding &lt;nodeProvider&gt; element listed in the &lt;resources&gt; element.
+			</para>
+
+			<section xml:id="ExampleofExecutableelement_64"><info><title>Example of Executable element</title>
+				</info>
+
+				<para>
+					A stand-alone executable is very straightforward to describe. You only need to specify one or several &lt;nodeProvider&gt;s and
+					the application will be run on all the physical nodes these providers can yield.
+
+					<programlisting>
+
+	&lt;application&gt;
+		&lt;executable&gt;
+			&lt;command name="ls"&gt;
+				&lt;arg&gt;-lh&lt;/arg&gt;
+				&lt;arg&gt;-sort=time&lt;/arg&gt;
+				&lt;arg&gt;*&lt;/arg&gt;
+			&lt;/command&gt;
+			&lt;nodeProvider refid="COMPANY_LAN" /&gt;
+		&lt;/executable&gt;
+	&lt;/application&gt;
+
+	&lt;resources&gt;
+		&lt;nodeProvider id="COMPANY_LAN"&gt;
+			&lt;file path="deployment.xml" /&gt;
+		&lt;/nodeProvider&gt;
+	&lt;/resources&gt;
+
+
+
+					</programlisting>
+
+				</para>
+
+			</section>
+
+			<section xml:id="ExampleofProActiveelement_64"><info><title>Example of ProActive element</title>
+				</info>
+
+				<para>
+					A ProActive application runs on virtual nodes. These virtual nodes aggregate physical nodes that they fetch from the node provider
+					specified in the virtual node definition. In the following example, a ProActive application defines two virtual nodes ("master"
+					and "slaves"). The first will fetch a single physical node from the COMPANY_LAN node provider. The second will get as many nodes
+					as available (its capacity is set to "MAX") from both the COMPANY_LAN and REMOTE_CLUSTER providers.
+
+					<programlisting>
+
+
+	&lt;application&gt;
+		&lt;proactive relpath="Scratch/ProActive/"&gt;
+
+			&lt;configuration&gt;
+			&lt;!- ommitted for clarity -&gt;
+			&lt;/configuration&gt;
+
+			&lt;virtualNode id="master" capacity="1"&gt;
+				&lt;nodeProvider refid="COMPANY_LAN" /&gt;
+			&lt;/virtualNode&gt;
+
+			&lt;virtualNode id="slaves" capacity="max"&gt;
+				&lt;nodeProvider refid="COMPANY_LAN" /&gt;
+				&lt;nodeProvider refid="REMOTE_CLUSTER" /&gt;
+			&lt;/virtualNode&gt;
+		&lt;/proactive&gt;
+	&lt;/application&gt;
+
+	&lt;resources&gt;
+		&lt;nodeProvider id="COMPANY_LAN"&gt;
+			&lt;file path="deployment.xml" /&gt;
+		&lt;/nodeProvider&gt;
+		&lt;nodeProvider id="REMOTE_CLUSTER"&gt;
+			&lt;file path="deployment_cluster.xml" /&gt;
+		&lt;/nodeProvider&gt;
+	&lt;/resources&gt;
+
+
+
+					</programlisting>
+
+
+				</para>
+
+			</section>
+
+
+		</section>
+
+		<section xml:id="FortheGridApplicationDeveloperdeployingyourapplication_64"><info><title>For the Grid Application Developer: deploying your application on the grid</title>
+			</info>
+
+			<para>
+				To deploy your application on the grid, you need to get your application descriptor as a
+				<code>java.io.File</code>
+				. You then pass it to
+				<code>org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.loadApplicationDescriptor()</code>
+				which will return a <code>GCMApplication</code> object. To actually start the deployment, simply call the
+				<code>startDeployment()</code>
+				method.
+
+				<programlisting>
+
+GCMApplication app;
+
+File desc = new File(this.getClass().getResource("MyApplicationDescriptor.xml").getPath());
+
+app = PAGCMDeployment.loadApplicationDescriptor(desc);
+app.startDeployment();
+
+
+				</programlisting>
+
+			</para>
+
+			<para>
+				If needed you may want to also create a VariableContract and set some of its variables, then pass it as 2nd argument to
+				loadApplicationDescriptor():
+
+				<programlisting>
+
+VariableContractImpl vContract = new VariableContractImpl();
+vContract.setVariableFromProgram("HOST_CAPACITY", "4",
+				VariableContractType.DescriptorDefaultVariable);
+vContract.setVariableFromProgram("VM_CAPACITY", "1",
+                VariableContractType.DescriptorDefaultVariable);
+
+GCMApplication app;
+
+File desc = new File(this.getClass().getResource("MyApplicationDescriptor.xml").getPath());
+
+app = PAGCMDeployment.loadApplicationDescriptor(desc, vContract);
+app.startDeployment();
+
+
+				</programlisting>
+
+			</para>
+
+			<para>
+				In the case of a stand-alone application, it will simply be deployed on all the available nodes without any special intervention on
+				your side. In the case of a ProActive-based application, there are two ways for an application to handle the deployment process. The
+				simplest one is to call the
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMVirtualNode_waitReady.snip"/></textobject></programlisting>
+				method on your <code>GCMApplication</code> object. As the name of the method indicates, it amounts to "wait until everything is ready". The call
+				will block until all virtual nodes are ready, that is that they have acquired the minimum number of nodes they need. This method
+				should not be used if one of the virtual nodes is "greedy", in which case it will never be in a "ready" state. There's another version
+				of the method with a timeout parameter:
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMVirtualNode_waitReady_timeout.snip"/></textobject></programlisting>
+
+
+				However, a more flexible way is for your application to listen to the availability of new nodes on each virtual node, and act
+				accordingly. The method for this is
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMVirtualNode_subscribeNodeAttachment.snip"/></textobject></programlisting>
+				in
+				<code>GCMVirtualNode</code>
+				.
+				<code>methodName</code>
+				must be the name of a method of
+				<code>client</code>
+				, which prototype is
+				<code>method(GCMVirtualNode node, String virtualNodeName)</code>
+				. This method will be called by the virtual node for each new available node.
+
+				To get the list of virtual nodes for your <code>GCMApplication</code>, use
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMApplication_getVirtualNodes.snip"/></textobject></programlisting>
+
+				You can also get a specific virtual node if you know its name:
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMApplication_getVirtualNode.snip"/></textobject></programlisting>
+			</para>
+
+		</section>
+
+
+
+	</section>
+-->
+
+</chapter>
+

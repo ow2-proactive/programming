@@ -1,0 +1,17 @@
+public class SSHProcessList extends AbstractListProcessDecorator {
+
+    /**
+     *
+     */
+    public SSHProcessList() {
+        super();
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.process.AbstractListProcessDecorator#createProcess()
+     */
+    @Override
+    protected ExternalProcessDecorator createProcess() {
+        return new SSHProcess();
+    }
+}

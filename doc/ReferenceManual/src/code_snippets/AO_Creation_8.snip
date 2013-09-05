@@ -1,0 +1,22 @@
+// Set the constructor parameters
+Object[] params = new Object[] { new IntWrapper(26), "Charlie" };
+
+// Instantiate a LIFOActivity object
+LIFOActivity activity = new LIFOActivity();
+
+Worker charlie;
+try {
+    charlie = PAActiveObject.newActive(Worker.class, null, params, null, activity, null);
+
+    System.out.println(charlie.getName() + " is " + charlie.getAge());
+    charlie.setAge(new IntWrapper(25));
+    charlie.setName("Anonymous");
+    System.out.println(charlie.getName() + " is " + charlie.getAge());
+
+    PAActiveObject.terminateActiveObject(charlie, true);
+} catch (ActiveObjectCreationException aoExcep) {
+    // the creation of ActiveObject failed
+    System.err.println(aoExcep.getMessage());
+} catch (NodeException nodeExcep) {
+    System.err.println(nodeExcep.getMessage());
+}

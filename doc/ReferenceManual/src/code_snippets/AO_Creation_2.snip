@@ -1,0 +1,24 @@
+/***** GCM Deployment *****/
+File applicationDescriptor = new File(gcmaPath);
+
+GCMApplication gcmad;
+try {
+    gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+} catch (ProActiveException e) {
+    e.printStackTrace();
+    return;
+}
+gcmad.startDeployment();
+
+// Take 2 nodes from the available nodes of VN
+GCMVirtualNode vn = gcmad.getVirtualNode("VN");
+vn.waitReady();
+Node[] nodes = vn.getCurrentNodes().toArray(new Node[(int) vn.getNbCurrentNodes()]);
+/**************************/
+
+try {
+    Worker[] workers = (Worker[]) PAActiveObject.newActiveInParallel(Worker.class.getName(),
+            new Object[nodes.length][], nodes);
+} catch (ClassNotFoundException classExcep) {
+    System.err.println(classExcep.getMessage());
+}

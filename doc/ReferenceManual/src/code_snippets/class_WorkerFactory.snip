@@ -1,0 +1,37 @@
+package org.objectweb.proactive.examples.documentation.classes;
+
+import org.objectweb.proactive.ActiveObjectCreationException;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.util.wrapper.IntWrapper;
+
+
+/**
+ * @author ProActive Team
+ *
+ * Factory used to instantiate Worker active objects
+ */
+public class WorkerFactory {
+
+    /**
+     * Create a new Worker active object
+     *
+     * @param age
+     * @param name
+     * @param node
+     * @return the Worker active object
+     */
+    public static Worker createActiveWorker(int age, String name, Node node) {
+        Object[] params = new Object[] { new IntWrapper(age), name };
+        try {
+            return (Worker) PAActiveObject.newActive(Worker.class.getName(), params, node);
+        } catch (ActiveObjectCreationException e) {
+            e.printStackTrace();
+            return null;
+        } catch (NodeException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}

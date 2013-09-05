@@ -1,0 +1,38 @@
+/**
+ * Create a group of parameters
+ */
+Object[][] params = new Object[][] { new Object[] { "Param 1" }, new Object[] { "Param 2" } };
+StringWrapper strWrapper = (StringWrapper) PAGroup.newGroup(StringWrapper.class.getName(),
+        params);
+
+/**
+ * Call the setScatterGroup method on this group
+ */
+PAGroup.setScatterGroup(strWrapper);
+
+/**
+ * Dispatch parameters
+ */
+A resultGroup = groupA.setStrWrapper(strWrapper);
+
+/**
+ * Call the unsetScatterGroup method on the parameter group
+ */
+PAGroup.unsetScatterGroup(strWrapper);
+
+/**
+ * Call the display method on the result group which displays:
+ *
+ * A display =====> Param 1
+ * A display =====> Param 2
+ */
+resultGroup.display();
+
+/**
+ * Call the display method on the whole group which displays:
+ *
+ * A display =====> Param 1
+ * A display =====> Param 2
+ * B display =====> B Object
+ */
+groupA.display();

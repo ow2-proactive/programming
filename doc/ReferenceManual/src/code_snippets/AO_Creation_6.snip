@@ -1,0 +1,30 @@
+/***** GCM Deployment *****/
+File applicationDescriptor = new File(gcmaPath);
+
+GCMApplication gcmad;
+try {
+    gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+} catch (ProActiveException e) {
+    e.printStackTrace();
+    return;
+}
+gcmad.startDeployment();
+
+// Take a node from the available nodes of VN
+GCMVirtualNode vn = gcmad.getVirtualNode("VN");
+vn.waitReady();
+Node node = vn.getANode();
+/**************************/
+
+// Set the constructor parameters
+Object[] params = new Object[] { new IntWrapper(26), "Charlie" };
+
+Worker charlie;
+try {
+    charlie = PAActiveObject.newActive(Worker.class, params, node);
+} catch (ActiveObjectCreationException aoExcep) {
+    // the creation of ActiveObject failed
+    System.err.println(aoExcep.getMessage());
+} catch (NodeException nodeExcep) {
+    System.err.println(nodeExcep.getMessage());
+}

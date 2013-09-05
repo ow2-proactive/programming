@@ -4,6 +4,19 @@ allprojects {
     apply plugin: 'eclipse'
 }
 
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'http://repo.activeeon.com/content/repositories/snapshots/' }
+        maven { url 'http://repo.activeeon.com/content/repositories/releases/' }
+    }
+
+    dependencies {
+        classpath 'org.ow2.proactive:documentation:1.0.0-SNAPSHOT'
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -330,6 +343,14 @@ project(':programming-test') {
         into "$buildDir/dist/lib"
     }
 
+}
+
+project(':doc').subprojects {
+    apply plugin: 'documentation'
+    documentation.outputName = project.name
+    documentation.docDir = 'src'
+    documentation.sharedDir = '../shared'
+    documentation.snippetsStart = rootProject.projectDir
 }
 
 apply from: 'dist.gradle'

@@ -1,0 +1,8 @@
+public MyClass getMyClass(boolean returnNull) {
+    if (!returnNull) {
+        return new MyClass();
+    } else {
+        return null; //--> to avoid in ProActive
+    }
+}
+

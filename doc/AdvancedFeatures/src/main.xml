@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Converted by db4-upgrade version 1.0
+!DOCTYPE book PUBLIC "-//INRIA//DTD DocBook V5.0-Based Subset V0.1//EN"-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd" [
+	<!-- WARNING: Please do not edit with XXE -->
+	<!-- This file is only meant as a concatenation of the other xml files -->
+
+	<!-- This has been added to write some special characters such as en and em dashes -->
+	<!ENTITY % iso-pub PUBLIC "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+		"http://www.oasis-open.org/docbook/xmlcharent/0.3/iso-pub.ent">
+		%iso-pub;
+
+	<!ENTITY BookInfo SYSTEM "BookInfo.xml">
+	<!ENTITY Contributors SYSTEM "Contributors.xml">
+	<!ENTITY Preface SYSTEM "Preface.xml">	
+	<!ENTITY MessageTagging SYSTEM "MessageTagging.xml">	
+	<!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
+	<!ENTITY JMX SYSTEM "Jmx.xml">
+	<!ENTITY JMXMBean SYSTEM "JmxMBean.xml">
+	<!ENTITY WriteDocumentation SYSTEM "WriteProActiveDocumentation.xml">
+	<!ENTITY DevFileTransfer SYSTEM "AddingAFileTransferProtocol.xml">
+	<!ENTITY MOP SYSTEM "MOP.xml">	
+	<!ENTITY ProxyCommand SYSTEM "ProxyCommand.xml">
+	<!ENTITY MultiProtocol SYSTEM "MultiProtocol.xml">
+	<!ENTITY Biblio SYSTEM "Biblio.xml">
+]>
+
+<book xmlns="http://docbook.org/ns/docbook" version="5.0">
+	&BookInfo;
+	&Contributors;
+
+	&Preface;
+
+	<part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
+		
+		&MessageTagging;
+		&AnnotationProcessing;
+		&JMX;
+		&JMXMBean;
+		&ProxyCommand;
+		&MultiProtocol;
+	</part>
+
+	<part xml:id="ExtendingProActive"><info><title xml:id="ExtendingProActive_2">Extending ProActive</title></info>
+
+		&WriteDocumentation;
+		&DevFileTransfer;
+		&MOP;
+	</part>
+
+	
+	&Biblio;
+	<index xml:id="keywordIndex"/>
+</book>

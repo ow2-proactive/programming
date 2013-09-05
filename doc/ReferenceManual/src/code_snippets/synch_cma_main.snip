@@ -1,0 +1,42 @@
+public static void main(String args[]) {
+    try {
+        GCMVirtualNode vn = deploy(args[0]);
+        Vector<CMAgentChained> agents = new Vector<CMAgentChained>();
+        //create the active objects
+        //create a collection of active objects
+        for (Node node : vn.getCurrentNodes()) {
+            CMAgentChained ao = (CMAgentChained) PAActiveObject.newActive(CMAgentChained.class.getName(),
+                    null, node);
+            agents.add(ao);
+
+            //connect to the neighbour
+            int size = agents.size();
+            if (size > 1) {
+                CMAgentChained lastAgent = agents.get(size - 1);
+                CMAgentChained previousAgent = agents.get(size - 2);
+                lastAgent.setPreviousNeighbour(previousAgent);
+            }
+        }
+        //start chained call                
+        Vector<State> states = agents.get(agents.size() / 2).getAllPreviousStates();
+        for (State s : states) {
+            System.out.println(s.toString());
+        }
+
+        states = agents.get(agents.size() / 2).getAllNextStates();
+        for (State s : states) {
+            System.out.println(s.toString());
+        }
+    } catch (ActiveObjectCreationException e) {
+        System.err.println(e.getMessage());
+    } catch (NodeException nodeExcep) {
+        System.err.println(nodeExcep.getMessage());
+    } catch (ProActiveException e) {
+        System.err.println(e.getMessage());
+    } finally {
+        //stopping all the objects and JVMS
+        if (pad != null)
+            pad.kill();
+        PALifeCycle.exitSuccess();
+    }
+}

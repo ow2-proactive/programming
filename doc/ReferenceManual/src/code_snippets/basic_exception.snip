@@ -1,0 +1,10 @@
+System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+try {
+    A a = PAActiveObject.newActive(A.class, null);
+    a.throwsException(true); //Synchronous method due to the potential exception
+    System.out.println("Hello");
+    //...
+} catch (Exception e) {
+    e.printStackTrace();
+}
+System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");

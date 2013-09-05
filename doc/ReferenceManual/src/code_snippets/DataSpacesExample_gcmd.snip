@@ -1,0 +1,20 @@
+<infrastructure>
+
+    <hosts>
+        <host id="host" os="${os}" hostCapacity="2" vmCapacity="1">
+            <homeDirectory base="root" relpath="${user.home}" />
+            <scratch>
+                <path base="root" relpath="${java.io.tmpdir}/dataspaces" />
+                <!--
+                    Use this if you prefer SFTP rather than ProActiveProvider file access:
+                    <remoteAccess url="sftp://${user.name}@#{hostname}${java.io.tmpdir}/dataspaces"/>
+                -->
+            </scratch>
+        </host>
+    </hosts>
+
+    <groups>
+        <sshGroup id="remoteThroughSSH" hostList="${HOST}" />
+    </groups>
+
+</infrastructure>

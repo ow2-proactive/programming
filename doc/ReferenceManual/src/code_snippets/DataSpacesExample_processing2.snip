@@ -1,0 +1,36 @@
+public StringWrapper computePartials(String inputName) throws SpaceNotFoundException,
+        NotConfiguredException, IOException, ConfigurationException {
+
+    logger.info("Processing input " + inputName);
+    DataSpacesFileObject inputFile = null;
+    BufferedReader reader = null;
+    int lines = 0;
+
+    try {
+        // resolve a named input that's name was passed as a method's parameter
+        // as input represents file that's content is to be processed, open a reader
+        inputFile = PADataSpaces.resolveInput(inputName);
+        reader = getReader(inputFile);
+
+        // count lines here..
+        while (reader.readLine() != null)
+            lines++;
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(inputName).append(": ").append(lines).append('\n');
+
+        // store the partial result in a file within AO's scratch
+        String fileUri = writeIntoScratchFile(PARTIAL_RESULTS_FILENAME, sb.toString());
+        logger.info("partial results written: " + sb.toString());
+
+        // finally return file's URI
+        return new StringWrapper(fileUri);
+    } catch (IOException e) {
+        logger.error("Exception while IO operation", e);
+        throw e;
+    } finally {
+        closeResource(reader);
+        closeResource(inputFile);
+    }
+}
+

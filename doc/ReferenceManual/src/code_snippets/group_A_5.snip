@@ -1,0 +1,14 @@
+/**
+ * Call the getB method on groupA which returns a group of B
+ */
+B groupB2 = groupA.getB();
+
+/**
+ * Wait and capture the first returned member of groupB2
+ */
+B firstB = (B) PAGroup.waitAndGetOne(groupB2);
+
+/**
+ * To wait all the members of vg are arrived
+ */
+PAGroup.waitAll(groupB2);

@@ -1,0 +1,12 @@
+/**
+ * Call the getB method on groupA which returns a group of B
+ */
+B groupB = groupA.getB();
+
+/**
+ * Call the display method on groupB.
+ * A wait-by-necessity process is therefore launch in order to
+ * wait the end of every getB method previously called on each
+ * A member of groupA.
+ */
+groupB.display();

@@ -1,0 +1,28 @@
+<environment>
+    <descriptorVariable name="PROACTIVE_LIB" value="dist/lib"/>
+    <javaPropertyVariable name="proactive.home" />
+    <descriptorDefaultVariable name="NUMBER_OF_VIRTUAL_NODES" value="20"/>
+    <programVariable name="VIRTUAL_NODE_NAME"/>
+    <javaPropertyVariable name="java.home"/>
+    <javaPropertyDescriptorDefault name="host.name" value="localhost"/>
+    <javaPropertyProgramDefault name="priority.queue"/>
+    <javaPropertyVariable name="user.home" />
+    <descriptorVariable name="hostCapacity" value="2"/>
+    <descriptorVariable name="vmCapacity" value="2"/>
+
+    <!-- Include external variables from files-->
+    <includePropertyFile location="file.properties"/>
+</environment>
+
+
+<application>
+    <proactive base="root" relpath="${proactive.home}">
+        <configuration>
+            <applicationClasspath>
+                <!-- Use example -->
+                <pathElement base="root" relpath="${proactive.home}/${PROACTIVE_LIB}/ProActive_examples.jar"/>
+            </applicationClasspath>
+        </configuration>
+        <!-- ... -->
+</proactive>
+</application>

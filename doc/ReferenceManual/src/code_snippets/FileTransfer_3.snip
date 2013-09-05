@@ -1,0 +1,26 @@
+<processDefinition id="ssh_jily">
+    <sshProcess
+        class="org.objectweb.proactive.core.process.ssh.SSHProcess"
+        hostname="jily.inria.fr">
+        <processReference refid="localJVM" />
+
+        <!--
+            Inside the process, the FileTransfer tag becomes an element instead of
+            an attribute.  This happens because FileTransfer information is process specific.
+            Note that the destination hostname and username can be omitted,
+            and implicitly inferred from the process information.
+        -->
+
+        <fileTransferDeploy refid="implicit">
+            <copyProtocol>processDefault, rcp, scp, pft</copyProtocol>
+            <sourceInfo prefix="/tmp"/>
+            <destinationInfo prefix="/tmp"/>
+        </fileTransferDeploy>
+
+        <fileTransferRetrieve refid="implicit">
+            <sourceInfo prefix="/tmp"/>
+            <destinationInfo prefix="/tmp"/>
+        </fileTransferRetrieve>
+
+    </sshProcess>
+</processDefinition>

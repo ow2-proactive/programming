@@ -1,0 +1,27 @@
+public class B implements InitActive, RunActive {
+
+    private String myName;
+
+    public String getName() {
+        return myName;
+    }
+
+    // -- implements InitActive
+    public void initActivity(Body body) {
+        myName = body.getName();
+    }
+
+    // -- implements RunActive for serving request in a LIFO fashion
+    public void runActivity(Body body) {
+        Service service = new Service(body);
+        while (body.isActive()) {
+            service.blockingServeYoungest();
+        }
+    }
+
+    public void main(String[] args) throws Exception {
+        B b = (B) PAActiveObject.newActive(B.class.getName(), null);
+        System.out.println("Name = " + b.getName());
+    }
+}
+

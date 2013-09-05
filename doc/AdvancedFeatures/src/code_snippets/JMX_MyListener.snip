@@ -1,0 +1,21 @@
+import javax.management.Notification;
+import javax.management.NotificationListener;
+
+import org.objectweb.proactive.examples.documentation.jmx.mbeans.Hello;
+
+
+public class MyListener implements NotificationListener {
+
+    public void handleNotification(Notification notification, Object handback) {
+
+        String type = notification.getType();
+
+        System.out.println("\nReceiving Notification: ");
+        System.out.println("My type is " + type);
+        if (type.equals(Hello.NOTIFICATION_NAME)) {
+            Hello h = (Hello) notification.getUserData();
+            System.out.println("my current message is: " + h.getMessage());
+            h.saySomething();
+        }
+    }
+}

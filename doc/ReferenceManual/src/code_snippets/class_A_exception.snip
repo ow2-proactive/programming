@@ -1,0 +1,12 @@
+/**
+ * Example of a method which can throw an exception
+ *
+ * @param hasToThrow boolean saying whether the method should
+ *                   throw an exception
+ * @throws Exception
+ */
+public void throwsException(boolean hasToThrow) throws Exception {
+    Thread.sleep(5000);
+    if (hasToThrow)
+        throw new Exception("Class A has thrown an exception");
+}

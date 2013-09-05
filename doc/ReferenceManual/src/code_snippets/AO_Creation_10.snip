@@ -1,0 +1,9 @@
+Object[] params = new Object[] { new IntWrapper(26), "Charlie" };
+try {
+    Worker charlie = (Worker) PAActiveObject.newActive(Worker.class.getName(), null, params, null,
+            null, CustomMetaObjectFactory.newInstance());
+} catch (ActiveObjectCreationException e) {
+    e.printStackTrace();
+} catch (NodeException e) {
+    e.printStackTrace();
+}

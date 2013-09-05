@@ -1,0 +1,33 @@
+
+/**
+ * Definition of one standard Java object and two active objects
+ */
+A a1 = new A();
+A a2 = PAActiveObject.newActive(A.class, new Object[] { "A Object" });
+B b = PAActiveObject.newActive(B.class, new Object[] { "B Object" });
+
+/**
+ * For management purposes, get the management representation
+ */
+Group<A> grp = PAGroup.getGroup(groupA);
+
+/**
+ * Add nodes into the group
+ * Note: B extends A
+ * Note: Objects and active objects are mixed into the group
+ */
+grp.add(a1);
+grp.add(a2);
+grp.add(b);
+
+/**
+ * Call the display method on every group member
+ * Note: only methods of A can be called but we can override
+ * a method of A in B as it is done for the display method.
+ */
+groupA.display();
+
+/**
+ * A new reference to the typed group can also be built as follows
+ */
+A groupAnew = (A) grp.getGroupByType();

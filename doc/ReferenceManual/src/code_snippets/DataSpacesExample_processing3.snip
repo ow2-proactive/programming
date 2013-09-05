@@ -1,0 +1,48 @@
+public void gatherPartials(Iterable<StringWrapper> partialResults) throws MalformedURIException,
+        DataSpacesException, IOException {
+    logger.info("Gathering and aggregating partial results");
+
+    final List<String> results = new ArrayList<String>();
+
+    // for every URI that was passed...
+    for (StringWrapper uriWrapped : partialResults) {
+        DataSpacesFileObject partialResultsFile = null;
+        BufferedReader reader = null;
+        try {
+            // ... resolve file pointed by that URI and open a reader, as it contains partial result
+            partialResultsFile = PADataSpaces.resolveFile(uriWrapped.getStringValue());
+            reader = getReader(partialResultsFile);
+
+            // ... and gather partial results in a list
+            results.add(reader.readLine());
+        } catch (IOException x) {
+            logger.error("Reading one's partial result file failed, trying to continue", x);
+        } finally {
+            closeResource(reader);
+            closeResource(partialResultsFile);
+        }
+    }
+
+    DataSpacesFileObject outputFile = null;
+    OutputStreamWriter writer = null;
+    try {
+        // resolve a file from the default output space (as such is been defined in the GCM-A);
+        // be sure that the file exists and write gathered results using the output stream writer
+        outputFile = PADataSpaces.resolveDefaultOutput(FINAL_RESULTS_FILENAME);
+        outputFile.createFile();
+        writer = getWriter(outputFile);
+
+        for (String line : results)
+            if (line != null) {
+                writer.write(line);
+                writer.write('\n');
+            }
+        logger.info("Results gathered, partial results number: " + results.size());
+    } catch (IOException e) {
+        logger.error("Exception while IO operation", e);
+        throw e;
+    } finally {
+        closeResource(writer);
+        closeResource(outputFile);
+    }
+}

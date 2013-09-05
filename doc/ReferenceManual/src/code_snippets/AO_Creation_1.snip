@@ -1,0 +1,12 @@
+// Set the constructor parameters
+Object[] params = new Object[] { new IntWrapper(26), "Charlie" };
+
+Worker charlie;
+try {
+    charlie = PAActiveObject.newActive(Worker.class, params);
+} catch (ActiveObjectCreationException aoExcep) {
+    // the creation of ActiveObject failed
+    System.err.println(aoExcep.getMessage());
+} catch (NodeException nodeExcep) {
+    System.err.println(nodeExcep.getMessage());
+}

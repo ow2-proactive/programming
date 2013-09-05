@@ -1,0 +1,51 @@
+package org.objectweb.proactive.examples.documentation.classes;
+
+import java.io.Serializable;
+import java.net.InetAddress;
+
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PAMobileAgent;
+
+
+/**
+ * @author The ProActive Team
+ *
+ */
+public class SimpleAgent implements Serializable {
+
+    /**
+     * Empty, no-arg constructor required by ProActive
+     */
+    public SimpleAgent() {
+    }
+
+    /**
+     * Migrates the active object
+     * 
+     * @param url - URL of the node where you want to 
+     *              migrate your active object to
+     */
+    public void moveTo(String url) {
+        try {
+            PAMobileAgent.migrateTo(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Retrieves the name of the host where the active
+     * object is.
+     * 
+     * @return The node url and the hostname where the active object is
+     */
+    public String whereAreYou() {
+        try {
+            return PAActiveObject.getActiveObjectNodeUrl(PAActiveObject.getStubOnThis()) + " on host " +
+                InetAddress.getLocalHost().getHostName();
+        } catch (Exception e) {
+            return "Localhost lookup failed";
+        }
+    }
+}

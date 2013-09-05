@@ -1,0 +1,29 @@
+package org.objectweb.proactive.examples.userguide.cmagent.simple;
+
+import org.objectweb.proactive.ActiveObjectCreationException;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PALifeCycle;
+import org.objectweb.proactive.core.node.NodeException;
+
+
+public class Main {
+    public static void main(String args[]) {
+        try {
+            String currentState = new String();
+            //TODO 1. Create the active object
+            CMAgent ao = (CMAgent) PAActiveObject.newActive(CMAgent.class.getName(), null);
+            //TODO 2. Get the current state
+            currentState = ao.getCurrentState().toString();
+            //TODO 3. Print the state
+            System.out.println(currentState);
+            //TODO 4. Stop the active object and
+            //        terminate the application
+            PAActiveObject.terminateActiveObject(ao, true);
+            PALifeCycle.exitSuccess();
+        } catch (NodeException nodeExcep) {
+            System.err.println(nodeExcep.getMessage());
+        } catch (ActiveObjectCreationException aoExcep) {
+            System.err.println(aoExcep.getMessage());
+        }
+    }
+}
