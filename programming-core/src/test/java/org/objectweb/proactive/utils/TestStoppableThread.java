@@ -87,6 +87,7 @@ public class TestStoppableThread {
 
         t.start();
         latch.await(60, TimeUnit.SECONDS);
+        new Sleeper(1000).sleep(); // avoid race condition between countdown and exception
 
         Assert.assertTrue(t.isStopped());
         Assert.assertTrue(t.exitedOnError());
