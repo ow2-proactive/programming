@@ -36,18 +36,20 @@
  */
 package functionalTests;
 
+import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
+import org.objectweb.proactive.utils.SafeTimerTask;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.utils.SafeTimerTask;
 
 
 @Ignore
@@ -128,10 +130,14 @@ public class FunctionalTest {
         @Override
         public void run() {
             System.err.println("Shutdown hook. Killing remaining processes");
+            System.err.println("Dumping thread states before killing processes");
+            printAllThreadsStackTraces(System.err);
             try {
                 timer.cancel();
                 paSetup.shutdown();
                 cleaner.killAliveProcesses();
+                System.err.println("Killing current JVM");
+                System.exit(-42);
             } catch (Exception e) {
                 logger.error("Failed to kill remaining proccesses", e);
             }
@@ -146,6 +152,15 @@ public class FunctionalTest {
                 cleaner.killAliveProcesses();
             } catch (Exception e) {
                 logger.error("Failed to kill remaining proccesses", e);
+            }
+        }
+    }
+
+    private static void printAllThreadsStackTraces(PrintStream stream) {
+        for (Map.Entry<Thread, StackTraceElement[]> threadEntry : Thread.getAllStackTraces().entrySet()) {
+            stream.println(threadEntry.getKey());
+            for (StackTraceElement stackTraceElement : threadEntry.getValue()) {
+                stream.println("\t" + stackTraceElement);
             }
         }
     }
