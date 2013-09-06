@@ -112,7 +112,7 @@ public abstract class AnnotationTest extends FunctionalTest {
         Class<? extends Object> testClass = this.getClass();
         TEST_FILES_PACKAGE = testClass.getPackage().getName() + ".inputs.";
         String testFilesRelpath = File.separator + "src" + File.separator + "test" + File.separator +
-                "java" + File.separator +
+                "annotations" + File.separator +
         TEST_FILES_PACKAGE.replace('.', File.separatorChar);
 
         // HACK set the test classes in the classpath
@@ -120,7 +120,7 @@ public abstract class AnnotationTest extends FunctionalTest {
         cp = cp + File.pathSeparator + PROACTIVE_HOME + File.separator + "classes" + File.separator + "test";
         System.setProperty("java.class.path", cp);
 
-        INPUT_FILES_PATH = PROACTIVE_HOME + testFilesRelpath;
+        INPUT_FILES_PATH = PROACTIVE_HOME + File.separator + "programming-test" + File.separator + testFilesRelpath;
     }
 
     // initialization needed in order to perform the tests

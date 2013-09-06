@@ -31,7 +31,7 @@
 	<resources>
 
 		<nodeProvider id="localhost1">
-			<file path="${proactive.home}/src/test/resources/functionalTests/gcmdeployment/descriptorurl/deployment/localhost1.xml"/>
+			<file path="${proactive.home}/programming-test/src/test/resources/functionalTests/gcmdeployment/descriptorurl/deployment/localhost1.xml"/>
 		</nodeProvider>	
 	</resources>
 

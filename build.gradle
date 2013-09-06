@@ -271,15 +271,6 @@ project(':programming-test') {
         )
     }
 
-    sourceSets {
-        test {
-            java {
-                srcDir 'src'
-                exclude '**/functionalTests/annotations/*/inputs/**'
-            }
-        }
-    }
-
     def testConfiguration = {
         forkEvery 1
 
@@ -290,7 +281,7 @@ project(':programming-test') {
             logger.lifecycle("Running: " + descriptor)
         }
 
-        systemProperties << ['proactive.home': projectDir.absolutePath]
+        systemProperties << ['proactive.home': rootDir.absolutePath]
         systemProperties << ['proactive.runtime.ping': false]
         systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
         dependsOn 'copyToLib'

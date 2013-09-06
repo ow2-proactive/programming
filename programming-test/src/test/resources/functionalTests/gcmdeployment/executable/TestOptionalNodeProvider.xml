@@ -17,7 +17,7 @@
 	<application>
 		<executable instances="onePerHost">
 			<command name="${java.home}/bin/java">
-				<arg>-cp "${proactive.home}/build/classes/test"</arg>
+				<arg>-cp "${proactive.home}/programming-test/build/classes/test"</arg>
 				<arg>functionalTests.gcmdeployment.executable.Executable</arg>
 				<arg>${tmpDir}</arg>
 			</command>

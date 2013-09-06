@@ -24,8 +24,8 @@
 				<jvmarg value="-Dproactive.home=&quot;${proactive.home}&quot;"/>
                 <jvmarg value="-Djava.security.egd=file:/dev/urandom"/>
 				<proactiveClasspath type="append">
-					<pathElement base="proactive" relpath="build/classes/test/"/>
-					<pathElement base="proactive" relpath="build/resources/test/"/>
+					<pathElement base="proactive" relpath="programming-test/build/classes/test/"/>
+					<pathElement base="proactive" relpath="programming-test/build/resources/test/"/>
 					<pathElement base="proactive" relpath="build/dist/lib/*"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
 				</proactiveClasspath>	
