@@ -89,7 +89,7 @@ import org.apache.log4j.Logger;
  * active object, and to get a reference on it. It also provides methods to register and lookup an
  * active object through the network. Finally, it allows to control the synchronicity related
  * behavior of an active object such as automatic continuation or immediate services.
- * 
+ *
  * @author The ProActive Team
  * @since ProActive 3.9 (December 2007)
  */
@@ -101,7 +101,7 @@ public class PAActiveObject {
         ProActiveConfiguration.load();
         @SuppressWarnings("unused")
         // Execute RuntimeFactory's static blocks
-        Class<?> c = org.objectweb.proactive.core.runtime.RuntimeFactory.class;
+          Class<?> c = org.objectweb.proactive.core.runtime.RuntimeFactory.class;
     }
 
     //
@@ -112,7 +112,7 @@ public class PAActiveObject {
 
     /**
      * Creates a new ActiveObject based on classname attached to a default node in the local JVM.
-     * 
+     *
      * @param classname
      *            the name of the class to instantiate as active
      * @param constructorParameters
@@ -124,13 +124,13 @@ public class PAActiveObject {
      *                if the DefaultNode cannot be created
      */
     public static Object newActive(String classname, Object[] constructorParameters)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return newActive(classname, null, constructorParameters, (Node) null, null, null);
     }
 
     /**
      * Creates a new ActiveObject based on classname attached to a default node in the local JVM.
-     * 
+     *
      * @param clazz
      *            the class to instantiate as active
      * @param constructorParameters
@@ -143,13 +143,13 @@ public class PAActiveObject {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Object[] constructorParameters)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return (T) newActive(clazz.getName(), null, constructorParameters, (Node) null, null, null);
     }
 
     /**
      * Creates a new ActiveObject based on classname attached to the node of the given URL.
-     * 
+     *
      * @param classname
      *            the name of the class to instantiate as active
      * @param constructorParameters
@@ -164,7 +164,7 @@ public class PAActiveObject {
      *                if the node URL cannot be resolved as an existing Node
      */
     public static Object newActive(String classname, Object[] constructorParameters, String nodeURL)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         if (nodeURL == null) {
             return newActive(classname, null, constructorParameters, (Node) null, null, null);
         } else {
@@ -174,7 +174,7 @@ public class PAActiveObject {
 
     /**
      * Creates a new ActiveObject based on classname attached to the node of the given URL.
-     * 
+     *
      * @param clazz
      *            the class to instantiate as active
      * @param constructorParameters
@@ -189,7 +189,7 @@ public class PAActiveObject {
      *                if the node URL cannot be resolved as an existing Node
      */
     public static <T> T newActive(Class<T> clazz, Object[] constructorParameters, String nodeURL)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         if (nodeURL == null) {
             return (T) newActive(clazz, null, constructorParameters, (Node) null, null, null);
         } else {
@@ -200,7 +200,7 @@ public class PAActiveObject {
     /**
      * Creates a new ActiveObject based on classname attached to the given node or on a default node
      * in the local JVM if the given node is null.
-     * 
+     *
      * @param classname
      *            the name of the class to instantiate as active
      * @param constructorParameters
@@ -214,14 +214,14 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static Object newActive(String classname, Object[] constructorParameters, Node node)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return newActive(classname, null, constructorParameters, node, null, null);
     }
 
     /**
      * Creates a new ActiveObject based on class attached to the given node or on a default node
      * in the local JVM if the given node is null.
-     * 
+     *
      * @param clazz
      *            the class to instantiate as active
      * @param constructorParameters
@@ -236,13 +236,13 @@ public class PAActiveObject {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Object[] constructorParameters, Node node)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return (T) newActive(clazz.getName(), null, constructorParameters, node, null, null);
     }
 
     /**
      * Creates a new ActiveObject based on classname attached to a default node in the local JVM.
-     * 
+     *
      * @param classname
      *            the name of the class to instantiate as active
      * @param genericParameters
@@ -256,7 +256,7 @@ public class PAActiveObject {
      *                if the DefaultNode cannot be created
      */
     public static Object newActive(String classname, Class<?>[] genericParameters,
-            Object[] constructorParameters) throws ActiveObjectCreationException, NodeException {
+      Object[] constructorParameters) throws ActiveObjectCreationException, NodeException {
         // avoid ambiguity for method parameters types
         Node nullNode = null;
         return newActive(classname, genericParameters, constructorParameters, nullNode, null, null);
@@ -264,7 +264,7 @@ public class PAActiveObject {
 
     /**
      * Creates a new ActiveObject based on classname attached to a default node in the local JVM.
-     * 
+     *
      * @param clazz
      *            the class to instantiate as active
      * @param genericParameters
@@ -278,7 +278,7 @@ public class PAActiveObject {
      *                if the DefaultNode cannot be created
      */
     public static <T> T newActive(Class<T> clazz, Class<?>[] genericParameters, Object[] constructorParameters)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         // avoid ambiguity for method parameters types
         Node nullNode = null;
         return newActive(clazz, genericParameters, constructorParameters, nullNode, null, null);
@@ -286,7 +286,7 @@ public class PAActiveObject {
 
     /**
      * Creates a new ActiveObject based on classname attached to the node of the given URL.
-     * 
+     *
      * @param classname
      *            the name of the class to instantiate as active
      * @param genericParameters
@@ -303,21 +303,21 @@ public class PAActiveObject {
      *                if the node URL cannot be resolved as an existing Node
      */
     public static Object newActive(String classname, Class<?>[] genericParameters,
-            Object[] constructorParameters, String nodeURL) throws ActiveObjectCreationException,
-            NodeException {
+      Object[] constructorParameters, String nodeURL) throws ActiveObjectCreationException,
+      NodeException {
         if (nodeURL == null) {
             // avoid ambiguity for method parameters types
             Node nullNode = null;
             return newActive(classname, genericParameters, constructorParameters, nullNode, null, null);
         } else {
             return newActive(classname, genericParameters, constructorParameters, NodeFactory
-                    .getNode(nodeURL), null, null);
+              .getNode(nodeURL), null, null);
         }
     }
 
     /**
      * Creates a new ActiveObject based on classname attached to the node of the given URL.
-     * 
+     *
      * @param clazz
      *            the class to instantiate as active
      * @param genericParameters
@@ -335,8 +335,8 @@ public class PAActiveObject {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Class<?>[] genericParameters,
-            Object[] constructorParameters, String nodeURL) throws ActiveObjectCreationException,
-            NodeException {
+      Object[] constructorParameters, String nodeURL) throws ActiveObjectCreationException,
+      NodeException {
         return (T) newActive(clazz.getName(), genericParameters, constructorParameters, nodeURL);
 
     }
@@ -344,7 +344,7 @@ public class PAActiveObject {
     /**
      * Creates a new ActiveObject based on classname attached to the given node or on a default node
      * in the local JVM if the given node is null.
-     * 
+     *
      * @param classname
      *            the name of the class to instantiate as active
      * @param genericParameters
@@ -360,14 +360,14 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static Object newActive(String classname, Class<?>[] genericParameters,
-            Object[] constructorParameters, Node node) throws ActiveObjectCreationException, NodeException {
+      Object[] constructorParameters, Node node) throws ActiveObjectCreationException, NodeException {
         return newActive(classname, genericParameters, constructorParameters, node, null, null);
     }
 
     /**
      * Creates a new ActiveObject based on the class attached to the given node or on a default node
      * in the local JVM if the given node is null.
-     * 
+     *
      * @param clazz
      *            the class to instantiate as active
      * @param genericParameters
@@ -383,7 +383,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T newActive(Class<T> clazz, Class<?>[] genericParameters,
-            Object[] constructorParameters, Node node) throws ActiveObjectCreationException, NodeException {
+      Object[] constructorParameters, Node node) throws ActiveObjectCreationException, NodeException {
         return newActive(clazz, genericParameters, constructorParameters, node, null, null);
     }
 
@@ -394,7 +394,7 @@ public class PAActiveObject {
      * the proxy object that reference the body of the active object. The body referenced by the
      * proxy can either be local of remote, depending or the respective location of the object
      * calling the newActive and the active object itself.
-     * 
+     *
      * @param classname
      *            the name of the class to instantiate as active
      * @param genericParameters
@@ -421,8 +421,8 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static Object newActive(String classname, Class<?>[] genericParameters,
-            Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
-            throws ActiveObjectCreationException, NodeException {
+      Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
+      throws ActiveObjectCreationException, NodeException {
         if (factory == null) {
             factory = ProActiveMetaObjectFactory.newInstance();
         }
@@ -438,11 +438,11 @@ public class PAActiveObject {
             if (activatedClass.isMemberClass() && !Modifier.isStatic(activatedClass.getModifiers())) {
                 // the activated class is an internal member class (not static, i.e. not nested top level).
                 throw new ActiveObjectCreationException(
-                    "Cannot create an active object from a non static member class.");
+                  "Cannot create an active object from a non static member class.");
             } else {
                 // create stub object
                 Object stub = MOP.createStubObject(classname, genericParameters, constructorParameters, node,
-                        activity, factory);
+                  activity, factory);
                 return stub;
             }
         } catch (MOPException e) {
@@ -466,7 +466,7 @@ public class PAActiveObject {
      * the proxy object that reference the body of the active object. The body referenced by the
      * proxy can either be local of remote, depending or the respective location of the object
      * calling the newActive and the active object itself.
-     * 
+     *
      * @param clazz
      *            the class to instantiate as active
      * @param genericParameters
@@ -494,10 +494,10 @@ public class PAActiveObject {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newActive(Class<T> clazz, Class<?>[] genericParameters,
-            Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
-            throws ActiveObjectCreationException, NodeException {
+      Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
+      throws ActiveObjectCreationException, NodeException {
         return (T) newActive(clazz.getName(), genericParameters, constructorParameters, node, activity,
-                factory);
+          factory);
     }
 
     /**
@@ -512,7 +512,7 @@ public class PAActiveObject {
      * <p>
      * The condition to use this method is that: <b>constructorParameters.length == nodes.length</b>
      * </p>
-     * 
+     *
      * @param className
      *            the name of the class to instantiate as active.
      * @param constructorParameters
@@ -526,7 +526,7 @@ public class PAActiveObject {
      *             in the case of className is not a class.
      */
     public static Object[] newActiveInParallel(String className, Object[][] constructorParameters,
-            Node[] nodes) throws ClassNotFoundException {
+      Node[] nodes) throws ClassNotFoundException {
         return newActiveInParallel(className, null, constructorParameters, nodes);
     }
 
@@ -542,7 +542,7 @@ public class PAActiveObject {
      * <p>
      * The condition to use this method is that: <b>constructorParameters.length == nodes.length</b>
      * </p>
-     * 
+     *
      * @param className
      *            the name of the class to instantiate as active.
      * @param genericParameters
@@ -558,10 +558,10 @@ public class PAActiveObject {
      *             in the case of className is not a class.
      */
     public static Object[] newActiveInParallel(String className, Class<?>[] genericParameters,
-            Object[][] constructorParameters, Node[] nodes) throws ClassNotFoundException {
+      Object[][] constructorParameters, Node[] nodes) throws ClassNotFoundException {
         if (constructorParameters.length != nodes.length) {
             throw new ProActiveRuntimeException("The total of constructors must"
-                + " be equal to the total of nodes");
+              + " be equal to the total of nodes");
         }
 
         ThreadFactory tf = new NamedThreadFactory("ProActive newActive in //");
@@ -573,7 +573,7 @@ public class PAActiveObject {
         // The Virtual Node is already activate
         for (int i = 0; i < constructorParameters.length; i++) {
             threadPool.execute(new ProcessForAoCreation(result, className, genericParameters,
-                constructorParameters[i], nodes[i % nodes.length]));
+              constructorParameters[i], nodes[i % nodes.length]));
         }
 
         threadPool.shutdown();
@@ -585,7 +585,7 @@ public class PAActiveObject {
     /**
      * Turns the target object into an ActiveObject attached to a default node in the local JVM. The
      * type of the stub is is the type of the existing object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @return a reference (possibly remote) on a Stub of the existing object
@@ -601,7 +601,7 @@ public class PAActiveObject {
     /**
      * Turns the target object into an Active Object and send it to the Node identified by the given
      * url. The type of the stub is is the type of the existing object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param nodeURL
@@ -614,12 +614,12 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, String nodeURL) throws ActiveObjectCreationException,
-            NodeException {
+      NodeException {
         if (nodeURL == null) {
             return turnActive(target, null, target.getClass().getName(), null, null, null);
         } else {
             return turnActive(target, null, target.getClass().getName(), NodeFactory.getNode(nodeURL), null,
-                    null);
+              null);
         }
     }
 
@@ -627,7 +627,7 @@ public class PAActiveObject {
      * Turns the target object into an Active Object and send it to the given Node or to a default
      * node in the local JVM if the given node is null. The type of the stub is is the type of the
      * target object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param node
@@ -647,7 +647,7 @@ public class PAActiveObject {
      * Turns the target object into an Active Object and send it to the given Node or to a default
      * node in the local JVM if the given node is null. The type of the stub is is the type of the
      * target object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param node
@@ -668,7 +668,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, Node node, Active activity, MetaObjectFactory factory)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return turnActive(target, null, target.getClass().getName(), node, activity, factory);
     }
 
@@ -676,7 +676,7 @@ public class PAActiveObject {
      * Turns a Java object into an Active Object and send it to a remote Node or to a local node if
      * the given node is null. The type of the stub is given by the parameter
      * <code>nameOfTargetType</code>.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param nameOfTargetType
@@ -692,7 +692,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, String nameOfTargetType, Node node)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return turnActive(target, null, nameOfTargetType, node, null, null);
     }
 
@@ -703,7 +703,7 @@ public class PAActiveObject {
      * The result of the call will be an instance of the Stub class pointing to the proxy object
      * pointing to the body object pointing to the existing object. The body can be remote or local
      * depending if the existing is sent remotely or not.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param nameOfTargetType
@@ -727,7 +727,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, String nameOfTargetType, Node node, Active activity,
-            MetaObjectFactory factory) throws ActiveObjectCreationException, NodeException {
+      MetaObjectFactory factory) throws ActiveObjectCreationException, NodeException {
         return turnActive(target, null, nameOfTargetType, node, activity, factory);
     }
 
@@ -738,7 +738,7 @@ public class PAActiveObject {
      * The result of the call will be an instance of the Stub class pointing to the proxy object
      * pointing to the body object pointing to the existing object. The body can be remote or local
      * depending if the existing is sent remotely or not.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -765,8 +765,8 @@ public class PAActiveObject {
      */
     @SuppressWarnings("unchecked")
     public static <T> T turnActive(T target, String nameOfTargetType, Class<?>[] genericParameters,
-            Node node, Active activity, MetaObjectFactory factory) throws ActiveObjectCreationException,
-            NodeException {
+      Node node, Active activity, MetaObjectFactory factory) throws ActiveObjectCreationException,
+      NodeException {
         if (factory == null) {
             factory = ProActiveMetaObjectFactory.newInstance();
         }
@@ -778,7 +778,7 @@ public class PAActiveObject {
 
         try {
             return (T) MOP.createStubObject(target, nameOfTargetType, genericParameters, node, activity,
-                    factory);
+              factory);
         } catch (MOPException e) {
             Throwable t = e;
 
@@ -793,7 +793,7 @@ public class PAActiveObject {
     /**
      * Turns the target object into an ActiveObject attached to a default node in the local JVM. The
      * type of the stub is is the type of the existing object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -805,14 +805,14 @@ public class PAActiveObject {
      *                if the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, Class<?>[] genericParameters)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return turnActive(target, genericParameters, (Node) null, (Active) null, (MetaObjectFactory) null);
     }
 
     /**
      * Turns the target object into an Active Object and send it to the Node identified by the given
      * url. The type of the stub is is the type of the existing object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -827,12 +827,12 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, Class<?>[] genericParameters, String nodeURL)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         if (nodeURL == null) {
             return turnActive(target, genericParameters, target.getClass().getName(), null, null, null);
         } else {
             return turnActive(target, genericParameters, target.getClass().getName(), NodeFactory
-                    .getNode(nodeURL), null, null);
+              .getNode(nodeURL), null, null);
         }
     }
 
@@ -840,7 +840,7 @@ public class PAActiveObject {
      * Turns the target object into an Active Object and send it to the given Node or to a default
      * node in the local JVM if the given node is null. The type of the stub is is the type of the
      * target object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -855,7 +855,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, Class<?>[] genericParameters, Node node)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return turnActive(target, genericParameters, target.getClass().getName(), node, null, null);
     }
 
@@ -863,7 +863,7 @@ public class PAActiveObject {
      * Turns the target object into an Active Object and send it to the given Node or to a default
      * node in the local JVM if the given node is null. The type of the stub is is the type of the
      * target object.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -886,7 +886,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, Class<?>[] genericParameters, Node node, Active activity,
-            MetaObjectFactory factory) throws ActiveObjectCreationException, NodeException {
+      MetaObjectFactory factory) throws ActiveObjectCreationException, NodeException {
         return turnActive(target, genericParameters, target.getClass().getName(), node, activity, factory);
     }
 
@@ -894,7 +894,7 @@ public class PAActiveObject {
      * Turns a Java object into an Active Object and send it to a remote Node or to a local node if
      * the given node is null. The type of the stub is given by the parameter
      * <code>nameOfTargetType</code>.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -912,7 +912,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T> T turnActive(T target, Class<?>[] genericParameters, String nameOfTargetType, Node node)
-            throws ActiveObjectCreationException, NodeException {
+      throws ActiveObjectCreationException, NodeException {
         return turnActive(target, genericParameters, nameOfTargetType, node, null, null);
     }
 
@@ -920,7 +920,7 @@ public class PAActiveObject {
      * Turns a Java object into an Active Object and send it to a remote Node or to a local node if
      * the given node is null. The type of the stub is given by the parameter
      * <code>nameOfTargetType</code>.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -938,7 +938,7 @@ public class PAActiveObject {
      *                if the node was null and that the DefaultNode cannot be created
      */
     public static <T, G> T turnActive(T target, Class<?>[] genericParameters, Class<G> nameOfTargetType,
-            Node node) throws ActiveObjectCreationException, NodeException {
+      Node node) throws ActiveObjectCreationException, NodeException {
         return turnActive(target, genericParameters, nameOfTargetType.getName(), node, null, null);
     }
 
@@ -949,7 +949,7 @@ public class PAActiveObject {
      * The result of the call will be an instance of the Stub class pointing to the proxy object
      * pointing to the body object pointing to the existing object. The body can be remote or local
      * depending if the existing is sent remotely or not.
-     * 
+     *
      * @param target
      *            The object to turn active
      * @param genericParameters
@@ -976,8 +976,8 @@ public class PAActiveObject {
      */
     @SuppressWarnings("unchecked")
     public static <T> T turnActive(T target, Class<?>[] genericParameters, String nameOfTargetType,
-            Node node, Active activity, MetaObjectFactory factory) throws ActiveObjectCreationException,
-            NodeException {
+      Node node, Active activity, MetaObjectFactory factory) throws ActiveObjectCreationException,
+      NodeException {
         if (factory == null) {
             factory = ProActiveMetaObjectFactory.newInstance();
         }
@@ -989,7 +989,7 @@ public class PAActiveObject {
 
         try {
             return (T) MOP.createStubObject(target, nameOfTargetType, genericParameters, node, activity,
-                    factory);
+              factory);
         } catch (MOPException e) {
             Throwable t = e;
 
@@ -1025,7 +1025,7 @@ public class PAActiveObject {
     }
 
     public static String registerByName(Object obj, String name, boolean rebind, String protocol)
-            throws ProActiveException {
+      throws ProActiveException {
         try {
             UniversalBody body = getRemoteBody(obj);
 
@@ -1043,7 +1043,7 @@ public class PAActiveObject {
     /**
      * Looks-up all Active Objects registered on a host, using a registry(RMI or HTTP) The
      * registry where to look for is fully determined with the protocol included in the url.
-     * 
+     *
      * @param url
      *            The url where to perform the lookup. The url takes the following form:
      *            protocol://machine_name:port. Protocol and port can be ommited if respectively RMI
@@ -1071,7 +1071,7 @@ public class PAActiveObject {
 
     /**
      * Kill an Active Object by calling terminate() method on its body.
-     * 
+     *
      * @param ao
      *            the active object to kill
      * @param immediate
@@ -1107,7 +1107,7 @@ public class PAActiveObject {
 
     /**
      * Kill the calling active object by calling terminate() method on its body.
-     * 
+     *
      * @param immediate
      *            if this boolean is true, this method is served as an immediate service. The
      *            termination is then synchronous. The active object dies immediately. Else, the kill
@@ -1121,7 +1121,7 @@ public class PAActiveObject {
     /**
      * Ping the target active object. Note that this method does not take into account the state of
      * the target object : pinging an inactive but reachable active object actually returns true.
-     * 
+     *
      * @param target
      *            the pinged active object.
      * @return true if the active object is reachable, false otherwise.
@@ -1148,17 +1148,17 @@ public class PAActiveObject {
     /**
      * Set an immediate execution for the caller active object of the method methodName, ie request
      * of name methodName will be executed right away upon arrival at the caller AO context.
-     * 
+     *
      * Optionally, an immediate service can be configured with "unique thread mode" : a 
      * dedicated thread is created for each different caller ; all the methods set as immediate 
      * service with unique thread called from the same caller object are executed only by this thread. 
      * This can be useful for methods that use java.util.concurrency.Lock locks, which must be locked 
      * and unlocked by the same thread.
-     * 
+     *
      * Warning: the execution of an Immediate Service method is achieved in parallel of the current
      * services, so it is the programmer responsibility to ensure that Immediate Services do not
      * interfere with any other methods.
-     * 
+     *
      * @param methodName
      *            the name of the method
      * @param uniqueThread
@@ -1173,17 +1173,17 @@ public class PAActiveObject {
      * Set an immediate execution for the caller active object obj of the method methodName with
      * parameters parametersType, ie request of name methodName will be executed right away upon
      * arrival at the caller AO context. 
-     * 
+     *
      * Optionally, an immediate service can be configured with "unique thread mode" : a 
      * dedicated thread is created for each different caller ; all the methods set as immediate 
      * service with unique thread called from the same caller object are executed only by this thread. 
      * This can be useful for methods that use java.util.concurrency.Lock locks, which must be locked 
      * and unlocked by the same thread.
-     * 
+     *
      * Warning: the execution of an Immediate Service method is
      * achieved in parallel of the current services, so it is the programmer responsibility to
      * ensure that Immediate Services do not interfere with any other methods.
-     * 
+     *
      * @param methodName
      *            the name of the method
      * @param parametersTypes
@@ -1202,7 +1202,7 @@ public class PAActiveObject {
      * Warning: the execution of an Immediate Service method is achieved in parallel of the current
      * services, so it is the programmer responsibility to ensure that Immediate Services do not
      * interfere with any other methods.
-     * 
+     *
      * @param methodName
      *            the name of the method
      */
@@ -1216,7 +1216,7 @@ public class PAActiveObject {
      * arrival at the caller AO context. Warning: the execution of an Immediate Service method is
      * achieved in parallel of the current services, so it is the programmer responsibility to
      * ensure that Immediate Services do not interfere with any other methods.
-     * 
+     *
      * @param methodName
      *            the name of the method
      * @param parametersTypes
@@ -1229,7 +1229,7 @@ public class PAActiveObject {
     /**
      * Removes an immmediate execution for the active object obj, i.e. requests corresponding to the
      * name will be executed by the calling thread, and not added in the request queue.
-     * 
+     *
      * @param methodName
      *            the name of the method
      */
@@ -1241,7 +1241,7 @@ public class PAActiveObject {
      * Removes an immmediate execution for the active object obj, i.e. requests corresponding to the
      * name and types of parameters will be executed by the calling thread, and not added in the
      * request queue.
-     * 
+     *
      * @param methodName
      *            the name of the method
      * @param parametersTypes
@@ -1253,7 +1253,7 @@ public class PAActiveObject {
 
     /**
      * Return the URL of the node of the remote <code>activeObject</code>.
-     * 
+     *
      * @param activeObject
      *            the remote active object.
      * @return the URL of the node of the <code>activeObject</code>.
@@ -1270,7 +1270,7 @@ public class PAActiveObject {
 
     /**
      * Unregisters an active object previously registered into a registry.
-     * 
+     *
      * @param url
      *            the url under which the active object is registered.
      * @exception java.io.IOException
@@ -1302,7 +1302,7 @@ public class PAActiveObject {
      * Return the current execution context for the calling thread. The execution context contains a
      * reference to the body associated to this thread, and some informations about the currently
      * served request if any.
-     * 
+     *
      * @return the current execution context associated to the calling thread.
      * @see org.objectweb.proactive.core.body.Context
      */
@@ -1313,7 +1313,7 @@ public class PAActiveObject {
     /**
      * Returns a Stub-Proxy couple pointing to the local body associated to the active object whose
      * active thread is calling this method.
-     * 
+     *
      * @return a Stub-Proxy couple pointing to the local body, or null if the calling thread is not
      *         an active thread.
      * @see PAActiveObject#getBodyOnThis
@@ -1346,7 +1346,7 @@ public class PAActiveObject {
      * under a given URL. If the lookup is successful, the method reconstructs a Stub-Proxy couple
      * and point it to the remote nody found. The registry where to look for is fully determined
      * with the protocol included in the url
-     * 
+     *
      * @param clazz
      *            the class the generated stub should inherit from.
      * @param url
@@ -1362,7 +1362,7 @@ public class PAActiveObject {
      */
     @SuppressWarnings("unchecked")
     public static <T> T lookupActive(Class<T> clazz, String url) throws ActiveObjectCreationException,
-            java.io.IOException {
+      java.io.IOException {
         return (T) lookupActive(clazz.getName(), url);
     }
 
@@ -1372,7 +1372,7 @@ public class PAActiveObject {
      * under a given URL. If the lookup is successful, the method reconstructs a Stub-Proxy couple
      * and point it to the remote body found. The registry where to look for is fully determined
      * with the protocol included in the url
-     * 
+     *
      *
      * @param classname
      *            the fully qualified name of the class the stub should inherit from.
@@ -1388,7 +1388,7 @@ public class PAActiveObject {
      *                if the stub-proxy couple cannot be created
      */
     public static Object lookupActive(String classname, String url) throws ActiveObjectCreationException,
-            java.io.IOException {
+      java.io.IOException {
         logger.debug("Trying to lookup " + url);
         RemoteObject<?> rmo;
         URI uri = RemoteObjectHelper.expandURI(URI.create(url));
@@ -1402,11 +1402,11 @@ public class PAActiveObject {
                 return MOP.createStubObject(classname, (UniversalBody) o);
             } else {
                 throw new IOException("The remote object located at " + url +
-                    " is not an Active Object. class=" + o.getClass().getName());
+                  " is not an Active Object. class=" + o.getClass().getName());
             }
         } catch (org.objectweb.proactive.core.remoteobject.NotBoundException e) {
             throw new org.objectweb.proactive.core.exceptions.NotBoundException("Lookup of " + classname +
-                " at " + url + " failed", e);
+              " at " + url + " failed", e);
         } catch (ProActiveException e) {
             throw new IOException("Lookup of " + classname + " at " + url + " failed", e);
         } catch (MOPException e) {
@@ -1438,7 +1438,7 @@ public class PAActiveObject {
 
     /**
      * Return the URL of a given remote object using the default remote object factory
-     * 
+     *
      * @param ao An active object
      * @return the URL of the remote object
      * @throws ProActiveRuntimeException if ao is not an active object
@@ -1446,6 +1446,18 @@ public class PAActiveObject {
     public static String getUrl(Object ao) {
         UniversalBody body = getRemoteBody(ao);
         return body.getUrl();
+    }
+
+    /**
+     * Return all URLs of a given remote object using the default remote object factory
+     *
+     * @param ao An active object
+     * @return all the URLs of the remote object
+     * @throws ProActiveRuntimeException if ao is not an active object
+     */
+    public static String[] getUrls(Object ao) {
+        UniversalBody body = getRemoteBody(ao);
+        return body.getUrls();
     }
 
     /**
@@ -1458,7 +1470,7 @@ public class PAActiveObject {
      * When a reified method wants to get a reference to the Body associated to the active object,
      * it can invoke this method. Assuming that the current thread is the active thread, the
      * associated body is returned.
-     * 
+     *
      * @return the body associated to the active object whose active thread is calling this method.
      * @throws ProActiveException
      */
@@ -1468,7 +1480,7 @@ public class PAActiveObject {
 
     /**
      * Indicate if the caller is executing in an active object
-     * 
+     *
      * @return true if in an active object, false otherwise (half body or plain java thread)
      */
     public static boolean isInActiveObject() {
@@ -1483,7 +1495,7 @@ public class PAActiveObject {
     private static StubObject getStubForBody(Body body) {
         try {
             return MOP.createStubObject(body.getReifiedObject(), new Object[] { body }, body
-                    .getReifiedObject().getClass().getName(), null);
+              .getReifiedObject().getClass().getName(), null);
         } catch (MOPException e) {
             throw new ProActiveRuntimeException("Cannot create Stub for this Body e=", e);
         }
@@ -1532,7 +1544,7 @@ public class PAActiveObject {
      *          If obj isn't an ActiveObject
      */
     public static void forceProtocol(Object obj, String protocol) throws UnknownProtocolException,
-            NotYetExposedException {
+      NotYetExposedException {
         if (!(obj instanceof StubObject)) {
             throw new IllegalArgumentException("This method must be call on an ActiveObject");
         }
@@ -1548,7 +1560,7 @@ public class PAActiveObject {
                 ((RemoteObjectAdapter) ro).forceProtocol(protocol);
             } else {
                 throw new IllegalArgumentException(
-                    "Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
+                  "Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
             }
         } else {
             throw new IllegalArgumentException("The object " + obj + " isn't an ActiveObject");

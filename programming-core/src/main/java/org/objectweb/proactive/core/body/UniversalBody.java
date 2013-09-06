@@ -149,6 +149,11 @@ public interface UniversalBody extends Serializable {
      */
     public String getUrl();
 
+    /**
+     * @return in case of multi protocols, all urls of this body
+     */
+    public String[] getUrls();
+
     public String registerByName(String name, boolean rebind, String protocol) throws IOException,
             ProActiveException;
 }
