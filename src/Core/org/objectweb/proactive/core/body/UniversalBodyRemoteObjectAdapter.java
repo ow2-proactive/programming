@@ -244,4 +244,8 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
         return this.target.getUrl();
     }
 
+    public String[] getUrls() {
+        return this.target.getUrls();
+    }
+
 }

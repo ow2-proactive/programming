@@ -366,6 +366,10 @@ public class MOCKBody implements Body {
         return null;
     }
 
+    public String[] getUrls() {
+        return null;
+    }
+
     public void setImmediateService(String methodName, boolean uniqueThread) {
         // TODO Auto-generated method stub
 

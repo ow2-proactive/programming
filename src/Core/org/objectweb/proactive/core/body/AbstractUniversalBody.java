@@ -36,6 +36,13 @@
  */
 package org.objectweb.proactive.core.body;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
@@ -45,13 +52,6 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -169,6 +169,10 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
 
     public String getUrl() {
         return this.roe.getURL();
+    }
+
+    public String[] getUrls() {
+        return this.roe.getURLs();
     }
 
     public String getNodeURL() {

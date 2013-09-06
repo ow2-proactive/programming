@@ -183,9 +183,14 @@ public interface UniversalBody extends Serializable, SecurityEntity {
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException;
 
     /**
-     * @return The URL of this body (using the default remote object factory)
+     * @return The main URL of this body (using the default remote object factory)
      */
     public String getUrl();
+
+    /**
+     * @return in case of multi protocols, all urls of this body
+     */
+    public String[] getUrls();
 
     public String registerByName(String name, boolean rebind, String protocol) throws IOException,
             ProActiveException;

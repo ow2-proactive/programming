@@ -36,6 +36,13 @@
  */
 package org.objectweb.proactive.core.body.proxy;
 
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
@@ -47,17 +54,17 @@ import org.objectweb.proactive.core.body.exceptions.SendRequestCommunicationExce
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.mop.*;
+import org.objectweb.proactive.core.mop.MOP;
+import org.objectweb.proactive.core.mop.MOPException;
+import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
+import org.objectweb.proactive.core.mop.MethodCallInfo;
+import org.objectweb.proactive.core.mop.Proxy;
+import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 
 public abstract class AbstractBodyProxy extends AbstractProxy implements BodyProxy, java.io.Serializable {
@@ -66,10 +73,17 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
     //
     private static Logger syncCallLogger = ProActiveLogger.getLogger(Loggers.SYNC_CALL);
 
+    private static String UNKNOWN = "[unknown]";
+
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.PAPROXY);
+
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
     protected Integer cachedHashCode = null;
+
+    protected String sourceBodyUrl = UNKNOWN;
+    protected String targetBodyUrl = UNKNOWN;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
@@ -123,8 +137,8 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
 
     private Object invokeOnBody(MethodCall methodCall) throws Exception, RenegotiateSessionException,
             Throwable {
+        initUrls();
         // Now gives the MethodCall object to the body
-
         MethodCallInfo mci = methodCall.getMethodCallInfo();
 
         try {
@@ -140,10 +154,12 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
 
             if (!isToString(methodCall) && !isHashCode(methodCall) &&
                 syncCallLogger.isEnabledFor(Level.DEBUG)) {
-                String msg = "[DEBUG: synchronous call] All calls to the method below are synchronous " +
+                String msg = "[Proxy DEBUG: synchronous call] All calls to the method below are synchronous " +
                     "(not an error, but may lead to performance issues or deadlocks):" +
-                    System.getProperty("line.separator") + methodCall.getReifiedMethod() +
-                    System.getProperty("line.separator") + "They are synchronous for the following reason: " +
+                    System.getProperty("line.separator") +
+                    methodCall.getReifiedMethod() +
+                    System.getProperty("line.separator") +
+                    "They are synchronous for the following reason: " +
                     mci.getMessage();
 
                 if (loggedSyncCalls.add(msg)) {
@@ -154,6 +170,36 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
             return reifyAsSynchronous(methodCall);
         } catch (MethodCallExecutionFailedException e) {
             throw new ProActiveRuntimeException(e.getMessage(), e.getTargetException());
+        }
+    }
+
+    private void initUrls() {
+
+        if (sourceBodyUrl.equals(UNKNOWN)) {
+            try {
+                sourceBodyUrl = urls2String(LocalBodyStore.getInstance().getContext().getBody().getUrls());
+            } catch (Exception e) {
+                logger.debug("[Proxy] Could not retrieve urls of the source active object (" +
+                    e.getMessage() + ")");
+            }
+        }
+
+        if (targetBodyUrl.equals(UNKNOWN)) {
+            try {
+                targetBodyUrl = urls2String(this.getBody().getUrls());
+            } catch (Exception e) {
+                logger.debug("[Proxy] Could not retrieve urls of the target active object (" +
+                    e.getMessage() + ")");
+            }
+        }
+
+    }
+
+    private String urls2String(String[] urls) {
+        if (urls.length == 1) {
+            return urls[0];
+        } else {
+            return Arrays.asList(urls).toString();
         }
     }
 
@@ -188,6 +234,10 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
      * 
      */
     protected void reifyAsOneWay(MethodCall methodCall) throws Exception, RenegotiateSessionException {
+
+        logger.debug("[Proxy] reify " + methodCall.getName() + "() as one-way from " + sourceBodyUrl +
+            " to " + targetBodyUrl);
+
         sendRequest(methodCall, null);
     }
 
@@ -204,11 +254,10 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         StubObject futureobject = null;
 
         // Creates a stub + FutureProxy for representing the result
-        String sourceBodyUrl = "[unknown]";
-        try {
-            sourceBodyUrl = LocalBodyStore.getInstance().getContext().getBody().getUrl();
-        } catch (Exception e) {
-        }
+
+        logger.debug("[Proxy] reify " + methodCall.getName() + "() as asynchronous from " + sourceBodyUrl +
+            " to " + targetBodyUrl);
+
         try {
 
             Class<?> returnType = null;
@@ -228,11 +277,13 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
                         Constants.DEFAULT_FUTURE_PROXY_CLASS_NAME, null);
             }
         } catch (MOPException e) {
-            throw new FutureCreationException("Exception occured in reifyAsAsynchronous from " +
-                sourceBodyUrl + " while creating future for methodcall = " + methodCall.getName(), e);
+            throw new FutureCreationException("[Proxy] Exception occurred in reifyAsAsynchronous from " +
+                sourceBodyUrl + " to " + targetBodyUrl + " while creating future for methodcall = " +
+                methodCall.getName(), e);
         } catch (ClassNotFoundException e) {
-            throw new FutureCreationException("Exception occured in reifyAsAsynchronous from " +
-                sourceBodyUrl + " while creating future for methodcall = " + methodCall.getName(), e);
+            throw new FutureCreationException("[Proxy] Exception occurred in reifyAsAsynchronous from " +
+                sourceBodyUrl + " to " + targetBodyUrl + " while creating future for methodcall = " +
+                methodCall.getName(), e);
         }
 
         // Set the id of the body creator in the created future
@@ -245,8 +296,8 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
             sendRequest(methodCall, fp);
         } catch (java.io.IOException e) {
             throw new SendRequestCommunicationException(
-                "Exception occured in reifyAsAsynchronous while sending request for methodcall = " +
-                    methodCall.getName() + " from " + sourceBodyUrl + " to " + this.getBodyID(), e);
+                "[Proxy] Exception occurred in reifyAsAsynchronous while sending request for methodcall = " +
+                    methodCall.getName() + " from " + sourceBodyUrl + " to " + targetBodyUrl, e);
         }
 
         // And return the future object
@@ -260,18 +311,15 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         fp.setCreatorID(this.getBodyID());
         fp.setUpdater(this.getBody());
 
-        String sourceBodyUrl = "[unknown]";
-        try {
-            sourceBodyUrl = LocalBodyStore.getInstance().getContext().getBody().getUrl();
-        } catch (Exception e) {
-        }
+        logger.debug("[Proxy] reify " + methodCall.getName() + "() as synchronous from " + sourceBodyUrl +
+            " to " + targetBodyUrl);
 
         try {
             sendRequest(methodCall, fp);
         } catch (java.io.IOException e) {
             throw new SendRequestCommunicationException(
-                "Exception occured in reifyAsSynchronous while sending request for methodcall = " +
-                    methodCall.getName() + " from " + sourceBodyUrl + " to " + this.getBodyID(), e);
+                "[Proxy] Exception occurred in reifyAsSynchronous while sending request for methodcall = " +
+                    methodCall.getName() + " from " + sourceBodyUrl + " to " + targetBodyUrl, e);
         }
 
         // PROACTIVE_1180

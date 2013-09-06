@@ -291,4 +291,8 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
     public String getUrl() {
         return this.wrappedBody.getUrl();
     }
+
+    public String[] getUrls() {
+        return this.wrappedBody.getUrls();
+    }
 }
