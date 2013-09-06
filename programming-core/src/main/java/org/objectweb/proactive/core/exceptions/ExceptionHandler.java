@@ -39,6 +39,7 @@ package org.objectweb.proactive.core.exceptions;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.MethodCallExceptionContext;
@@ -134,7 +135,7 @@ public class ExceptionHandler {
         ExceptionMaskStack stack = ExceptionMaskStack.get();
         synchronized (stack) {
             if (!stack.isExceptionTypeCaught(exception.getClass())) {
-                RuntimeException re = new IllegalStateException("Invalid Future Usage");
+                RuntimeException re = new ProActiveRuntimeException();
                 re.initCause(exception);
                 throw re;
             }
