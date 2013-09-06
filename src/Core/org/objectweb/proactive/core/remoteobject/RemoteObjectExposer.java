@@ -37,7 +37,6 @@
 package org.objectweb.proactive.core.remoteobject;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -97,28 +96,9 @@ public class RemoteObjectExposer<T> {
     public RemoteObjectExposer(String name, String className, Object target,
             Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         this.className = className;
-        try {
-            this.remoteObject = new RemoteObjectImpl(name, className, target, targetRemoteObjectAdapter);
-            this.remoteObject.setRemoteObjectExposer(this);
-        } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this.remoteObject = new RemoteObjectImpl(name, className, target, targetRemoteObjectAdapter);
+        this.remoteObject.setRemoteObjectExposer(this);
+
         this.activeRemoteRemoteObjects = new LinkedHashMap<URI, InternalRemoteRemoteObject>();
     }
 
@@ -230,15 +210,15 @@ public class RemoteObjectExposer<T> {
                         createRemoteObject(name, true, protocol);
                         if (LOGGER_RO.isDebugEnabled()) {
                             LOGGER_RO.debug("[Multi-Protocol] Object " + name +
-                                " expose with additionnal protocol : " + protocol);
+                                " exposed with additionnal protocol : " + protocol);
                         }
                     } catch (ProActiveRuntimeException pare) {
                         // Not so beautiful
                         if (protocol.equalsIgnoreCase("pamr")) {
-                            LOGGER_RO.warn("The PAMR router seems to be down");
+                            LOGGER_RO.warn("The PAMR router seems to be down", pare);
                         } else {
                             LOGGER_RO.warn("The exposition of " + name + ", through the protocol " +
-                                protocol + " doesn't succeed");
+                                protocol + " didn't succeed", pare);
                         }
                     } catch (ProActiveException pae) {
                         if (pae.getCause() instanceof AlreadyBoundException) {
@@ -250,7 +230,7 @@ public class RemoteObjectExposer<T> {
                         LOGGER_RO
                                 .warn("Protocol " +
                                     protocol +
-                                    " seems invalid for this runtime, this is not a critical error, the protocol will be dismiss." +
+                                    " seems invalid for this runtime, this is not a critical error, the protocol will be disabled." +
                                     pae);
 
                         // Remove the protocol
@@ -259,6 +239,48 @@ public class RemoteObjectExposer<T> {
                 }
             }
             CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.setValue(protocols);
+        }
+    }
+
+    /**
+     * This method cleans the remote object at the given url (unexport if applicable and unregister it)
+     */
+    private void cleanRemoteObject(URI url) throws ProActiveException {
+        InternalRemoteRemoteObject irro = this.activeRemoteRemoteObjects.remove(url);
+        if (irro == null) {
+            throw new IllegalArgumentException("Unknown remote object located at " + url);
+        }
+        RemoteRemoteObject rro = irro.getRemoteRemoteObject();
+        RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(url.getScheme());
+        try {
+            // unexport rro object (mostly rmi case - see PROACTIVE-419)
+            rof.unexport(rro);
+        } catch (Exception e) {
+            LOGGER_RO.debug("", e);
+        }
+        try {
+            // unregister (--> unbind) related rro
+            rof.unregister(url);
+        } catch (Exception e) {
+            LOGGER_RO.debug("", e);
+        }
+    }
+
+    /**
+     * see PROACTIVE-1234
+     * This method disable a specific protocol from a Remote Object
+     * by applying the cleanRemoteObject method call to any end point, whose URL starts with that protocol
+     */
+    public void disableProtocol(String protocol) throws ProActiveException {
+        ArrayList<URI> toBeCleaned = new ArrayList<URI>();
+        for (URI uri : this.activeRemoteRemoteObjects.keySet()) {
+            if (uri.getScheme().equals(protocol)) {
+                toBeCleaned.add(uri);
+            }
+        }
+
+        for (URI uri : toBeCleaned) {
+            cleanRemoteObject(uri);
         }
     }
 
@@ -328,8 +350,7 @@ public class RemoteObjectExposer<T> {
             try {
                 PARemoteObject.unregister(uri);
             } catch (ProActiveException e) {
-                ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).info(
-                        "Could not unregister " + uri + ". Error message: " + e.getMessage());
+                LOGGER_RO.info("Could not unregister " + uri + ". Error message: " + e.getMessage());
                 throw e;
             }
         }

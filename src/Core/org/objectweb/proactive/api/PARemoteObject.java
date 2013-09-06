@@ -210,16 +210,49 @@ public class PARemoteObject {
         }
     }
 
-    public static void forceToDefault(Object obj) throws UnknownProtocolException, NotYetExposedException {
-        forceProtocol(obj, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+    /**
+     * Force the given object to use the default protocol
+     * @param aRemoteObject
+     * @throws UnknownProtocolException
+     * @throws NotYetExposedException
+     */
+    public static void forceToDefault(Object aRemoteObject) throws UnknownProtocolException,
+            NotYetExposedException {
+        forceProtocol(aRemoteObject, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
     }
 
-    public static void unforceProtocol(Object obj) throws UnknownProtocolException, NotYetExposedException {
-        forceProtocol(obj, null);
+    /**
+     * UnForce the given object to use the default protocol
+     * @param aRemoteObject
+     * @throws UnknownProtocolException
+     * @throws NotYetExposedException
+     */
+    public static void unforceProtocol(Object aRemoteObject) throws UnknownProtocolException,
+            NotYetExposedException {
+        forceProtocol(aRemoteObject, null);
     }
 
-    public static void addProtocol(RemoteObjectExposer<?> roe, String protocol) throws ProActiveException {
-        roe.createRemoteObject(ADD_PROTOCOL_PREFIX + counter.incrementAndGet(), false, protocol);
+    /**
+     * add the protocol to the given RemoteObjectExposer
+     * @param aRemoteObjectExposer
+     * @param protocolToActivate
+     * @throws ProActiveException
+     */
+    public static void addProtocol(RemoteObjectExposer<?> aRemoteObjectExposer, String protocolToActivate)
+            throws ProActiveException {
+        aRemoteObjectExposer.createRemoteObject(ADD_PROTOCOL_PREFIX + counter.incrementAndGet(), false,
+                protocolToActivate);
+    }
+
+    /**
+     * Disable the protocol on the given RemoteObjectExposer
+     * @param aRemoteObjectExposer a RemoteObjectExposer
+     * @param protocolToDisable
+     * @throws ProActiveException
+     */
+    public static void disableProtocol(RemoteObjectExposer<?> aRemoteObjectExposer, String protocolToDisable)
+            throws ProActiveException {
+        aRemoteObjectExposer.disableProtocol(protocolToDisable);
     }
 
 }

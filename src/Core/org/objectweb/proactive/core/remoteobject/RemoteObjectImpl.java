@@ -36,6 +36,13 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.security.AccessControlException;
+import java.security.PublicKey;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
@@ -59,13 +66,6 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.security.AccessControlException;
-import java.security.PublicKey;
-
 
 /**
  *         Implementation of a remote object.
@@ -84,21 +84,16 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
     protected RemoteObjectExposer<T> roe;
     protected String name;
 
-    public RemoteObjectImpl(String name, String className, T target) throws IllegalArgumentException,
-            SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException,
-            NoSuchMethodException {
+    public RemoteObjectImpl(String name, String className, T target) {
         this(name, className, target, null);
     }
 
-    public RemoteObjectImpl(String name, String className, T target, Class<Adapter<T>> adapter)
-            throws IllegalArgumentException, SecurityException, InstantiationException,
-            IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public RemoteObjectImpl(String name, String className, T target, Class<Adapter<T>> adapter) {
         this(name, className, target, adapter, null);
     }
 
     public RemoteObjectImpl(String name, String className, T target, Class<Adapter<T>> adapter,
-            ProActiveSecurityManager psm) throws IllegalArgumentException, SecurityException,
-            InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+            ProActiveSecurityManager psm) {
         this.target = target;
         this.name = name;
         this.className = className;
