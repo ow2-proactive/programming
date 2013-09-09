@@ -36,6 +36,10 @@
  */
 package org.objectweb.proactive.core.body.future;
 
+import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
@@ -47,13 +51,9 @@ import org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalServi
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.LocalNode;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.util.Pair;
+import org.objectweb.proactive.core.util.ActiveObjectLocationInfo;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class FutureMonitoring implements Runnable {
@@ -197,7 +197,7 @@ public class FutureMonitoring implements Runnable {
         return body.getID();
     }
 
-    private static Pair<UniqueID, String> getUpdaterBodyIdAndNodeUrl(FutureProxy fp) {
+    private static ActiveObjectLocationInfo getUpdaterLocationInfo(FutureProxy fp) {
         if (isFTEnabled()) {
             return null;
         }
@@ -213,7 +213,7 @@ public class FutureMonitoring implements Runnable {
         } catch (Throwable e) {
 
         }
-        return new Pair<UniqueID, String>(id, nodeUrl);
+        return new ActiveObjectLocationInfo(id, nodeUrl);
     }
 
     public static void removeFuture(FutureProxy fp) {
@@ -240,12 +240,12 @@ public class FutureMonitoring implements Runnable {
         if (fp.isAvailable()) {
             return;
         }
-        Pair<UniqueID, String> pair = getUpdaterBodyIdAndNodeUrl(fp);
-        UniqueID updaterId = pair.getFirst();
+        ActiveObjectLocationInfo info = getUpdaterLocationInfo(fp);
+        UniqueID updaterId = info.getBodyId();
         if (updaterId == null) {
             return;
         }
-        String nodeUrl = pair.getSecond();
+        String nodeUrl = info.getNodeUrl();
         synchronized (futuresToMonitor) {
             /*
              * Avoid a race with the suppression in the ConcurrentHashMap when the

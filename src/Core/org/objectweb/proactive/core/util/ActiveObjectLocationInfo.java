@@ -36,26 +36,28 @@ package org.objectweb.proactive.core.util;
 
 import java.io.Serializable;
 
+import org.objectweb.proactive.core.UniqueID;
+
 
 /**
- * Pair
+ * ActiveObjectLocationInfo
  *
  * @author The ProActive Team
  */
-public class Pair<P extends Serializable, R extends Serializable> implements Serializable {
-    private P first;
-    private R second;
+public class ActiveObjectLocationInfo implements Serializable {
+    private final UniqueID bodyId;
+    private final String nodeUrl;
 
-    public Pair(P first, R second) {
-        this.first = first;
-        this.second = second;
+    public ActiveObjectLocationInfo(UniqueID bodyId, String nodeUrl) {
+        this.bodyId = bodyId;
+        this.nodeUrl = nodeUrl;
     }
 
-    public P getFirst() {
-        return first;
+    public UniqueID getBodyId() {
+        return bodyId;
     }
 
-    public R getSecond() {
-        return second;
+    public String getNodeUrl() {
+        return nodeUrl;
     }
 }
