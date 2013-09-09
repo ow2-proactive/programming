@@ -415,9 +415,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     public static PAPropertyList PA_COMMUNICATION_ADDITIONAL_PROTOCOLS = new PAPropertyList(
         "proactive.communication.additional_protocols", ",", false);
 
-    /** Impose a static order for protocols selection, this automatically deactivate benchmark (protocols separated by comma) */
+    /** Impose a static order for protocols selection, this order will supersede the benchmark order, if benchmark is
+     * activated */
     public static PAPropertyList PA_COMMUNICATION_PROTOCOLS_ORDER = new PAPropertyList(
         "proactive.communication.protocols.order", ",", false);
+
+    /** Activate the protocol benchmark, false by default */
+    public static PAPropertyBoolean PA_BENCHMARK_ACTIVATE = new PAPropertyBoolean(
+        "proactive.communication.benchmark.activate", false, false);
 
     /** Specify a parameter for benchmark */
     public static PAPropertyString PA_BENCHMARK_PARAMETER = new PAPropertyString(
@@ -427,6 +432,10 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     public static PAPropertyString PA_BENCHMARK_CLASS = new PAPropertyString(
         "proactive.communication.benchmark.class", false,
         org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly.class.getName());
+
+    /** time waited before two benchmarks */
+    public static PAPropertyLong PA_BENCHMARK_PERIOD = new PAPropertyLong(
+        "proactive.communication.benchmark.period", false, 600000L);
 
     /* ------------------------------------
      *  MESSAGE TAGGING

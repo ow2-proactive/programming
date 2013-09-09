@@ -39,6 +39,7 @@ package org.objectweb.proactive.core.remoteobject.benchmark;
 import java.io.Serializable;
 
 import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectSet;
 
 
 public class SelectionOnly extends RemoteObjectRequest implements BenchmarkObject, Serializable {
@@ -54,8 +55,8 @@ public class SelectionOnly extends RemoteObjectRequest implements BenchmarkObjec
     }
 
     public int getResult() {
-        // Keep the pre etablished order
-        return 0;
+        // Keep the pre established order
+        return RemoteObjectSet.NOCHANGE_VALUE;
     }
 
     public void init() {

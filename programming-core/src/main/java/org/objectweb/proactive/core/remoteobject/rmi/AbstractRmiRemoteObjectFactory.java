@@ -202,7 +202,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
         try {
             String bindingName = URIBuilder.getNameFromURI(url);
-            LOGGER_RO.debug(" trying to bind " + bindingName);
+            LOGGER_RO.debug(" trying to bind " + url);
             if (replacePreviousBinding) {
                 reg.rebind(bindingName, rro);
             } else {

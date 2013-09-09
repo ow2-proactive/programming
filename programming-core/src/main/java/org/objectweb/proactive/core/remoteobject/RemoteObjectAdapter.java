@@ -67,6 +67,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class RemoteObjectAdapter implements RemoteObject, Serializable {
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
+    static final String UNKNOWN = "[unknown]";
+
     protected RemoteObjectSet remoteObjectSet;
 
     /**
@@ -77,10 +79,10 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
     /**
      * the URI where the remote remote is bound
      */
-    protected URI uri;
+    protected String uri;
 
-    protected String displayROURI = "[unkownn]";
-    protected String displayCaller = "[unknown]";
+    protected String displayROURI = UNKNOWN;
+    protected String displayCaller = UNKNOWN;
 
     /**
      * Array of methods belonging to the RemoteObject class. These methods are
@@ -127,23 +129,15 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
 
     public RemoteObjectAdapter(RemoteRemoteObject ro) throws ProActiveException {
 
-        URI rouri = null;
-        try {
-            rouri = ro.getURI();
-            if (rouri != null) {
-                this.displayROURI = rouri.toString();
-            }
-        } catch (IOException e) {
-            LOGGER_RO.warn(displayCaller + " : unable to initialize remote object", e);
-        }
-
-        if (this.displayCaller.equals("[unknown]")) {
+        if (this.displayCaller.equals(UNKNOWN)) {
             this.displayCaller = Thread.currentThread().getName();
         }
 
         // Retrieve from the RemoteRemoteObject (client-side) gave as parameter, all the exposed protocols on server-side
         this.remoteObjectSet = this.getRemoteObjectSet(ro);
 
+        // At initialization of the adapter, we use the RemoteObjectSet, which will contain a list of url (one for each used protocol)
+        displayROURI = this.remoteObjectSet.toString();
     }
 
     public void forceProtocol(String protocol) throws UnknownProtocolException, NotYetExposedException {
@@ -156,7 +150,8 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
             // for each RRO ordered from faster to slower
             return remoteObjectSet.receiveMessage(message);
         } catch (ProActiveException e) {
-            throw new IOException6(e);
+            throw new IOException6("Exception received when trying to contact remote object " + displayROURI,
+                e);
         } catch (IOException e) {
             // Log for keeping a trace
             LOGGER_RO.warn(displayCaller + " : unable to contact remote object " + displayROURI +
@@ -180,11 +175,11 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
                 ((StubObject) this.stub).setProxy(new SynchronousProxy(null, new Object[] { this }));
             } catch (SecurityException e) {
                 LOGGER_RO.info(displayCaller +
-                    " : exception in remote object adapter while forwarding the method call to" +
+                    " : exception in remote object adapter while forwarding the method call to " +
                     displayROURI, e);
             } catch (IOException e) {
                 LOGGER_RO.info(displayCaller +
-                    " : exception in remote object adapter while forwarding the method call to" +
+                    " : exception in remote object adapter while forwarding the method call to " +
                     displayROURI, e);
             }
         }
@@ -210,11 +205,14 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
             // We keep locally the result of this call as the name can be used later when identifying the remote object
             return answer;
         } catch (SecurityException e) {
-            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call to " +
+                displayROURI, e);
         } catch (ProActiveException e) {
-            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call to " +
+                displayROURI, e);
         } catch (IOException e) {
-            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call to " +
+                displayROURI, e);
         }
 
         return null;
@@ -230,20 +228,17 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
 
             return (String) reply.getResult().getResult();
         } catch (SecurityException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         }
 
         return null;
@@ -259,15 +254,13 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
 
             return (String) reply.getResult().getResult();
         } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         }
         return null;
     }
@@ -331,15 +324,13 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
 
             return (Class<?>) reply.getResult().getResult();
         } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         }
         return null;
     }
@@ -354,10 +345,9 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
 
             return (Class<?>) reply.getResult().getResult();
         } catch (Exception e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         }
         return null;
     }
@@ -373,9 +363,7 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             URI uri = (URI) reply.getResult().getResult();
-            if (this.displayROURI.equals("[unknown]")) {
-                this.displayROURI = uri.toString();
-            }
+
             return uri;
         } catch (IOException e) {
             throw new ProActiveException(e);
@@ -412,15 +400,13 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
 
             return (RemoteObjectProperties) reply.getResult().getResult();
         } catch (ProActiveException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         } catch (IOException e) {
-            LOGGER_RO
-                    .info(displayCaller +
-                        " : exception in remote object adapter while forwarding the method call to" +
-                        displayROURI, e);
+            LOGGER_RO.info(displayCaller +
+                " : exception in remote object adapter while forwarding the method call to " + displayROURI,
+                    e);
         }
         return null;
     }
