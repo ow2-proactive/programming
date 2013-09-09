@@ -69,14 +69,14 @@ public class RemoteObjectBenchmark {
      * If needed launch benchmark or simply add RemoteObjectSet as an observer
      */
     public void subscribeAsObserver(RemoteObjectSet ros, Map<URI, RemoteRemoteObject> remoteObjects,
-            String runtimeName) {
+            String runtimeName, Map<URI, Integer> lastBenchmarkResults) {
 
         BenchmarkMonitorThread bmt;
 
         if ((bmt = this.benchmarkMonitors.get(runtimeName)) != null) {
             // Benchmark is in progress or finished
             bmt.addObserver(ros);
-            bmt.addAndRestartIfNecessary(remoteObjects);
+            bmt.addOnTheFly(remoteObjects, lastBenchmarkResults);
         } else {
             bmt = new BenchmarkMonitorThread(remoteObjects, CentralPAPropertyRepository.PA_BENCHMARK_CLASS
                     .getValue());

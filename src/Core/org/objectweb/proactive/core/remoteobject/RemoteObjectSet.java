@@ -46,21 +46,27 @@ import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.net.URI;
 import java.rmi.dgc.VMID;
-import java.util.Arrays;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.remoteobject.benchmark.RemoteObjectBenchmark;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
@@ -72,21 +78,66 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RemoteObjectSet implements Serializable, Observer {
+
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
-    // *transient * Each RRO need a special marshalling processing
-    // * Use LinkedHashMap for keeping the insertion-order
-    private transient LinkedHashMap<URI, RemoteRemoteObject> rros;
-    private HashSet<RemoteRemoteObject> unreliables;
-    private transient RemoteRemoteObject defaultRO;
+    public static final int UNREACHABLE_VALUE = Integer.MIN_VALUE;
+    public static final int NOCHANGE_VALUE = 0;
+
+    private ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
+
+    /**
+     * Protocol order received from the proactive.communication.protocols.order property
+     */
+    private static List<String> defaultProtocolOrder;
+
+    /**
+     * Order received when reading a stub or when creating the RemoteObjectSet locally.
+     * The order will be used each time this RemoteObjectSet will serialized
+     */
+    private List<URI> initialorder;
+
     private static Method getURI;
-    private String[] order = new String[] {};
-    private String remoteRuntimeName;
-    private RemoteRemoteObject forcedProtocol = null;
-    private VMID vmid = null;
+
+    /**
+     * Results of the benchmarks, or if no benchmark is done, stores the natural order & the fact that some protocols are
+     * not reachable
+     */
+    private transient ConcurrentHashMap<URI, Integer> lastBenchmarkResults;
+
+    // The following can be modified only atomically
+    // *transient * Each RRO need a special marshalling processing
+    /**
+     * Map of all RRO, indexed by the rro uri
+     */
+    private transient HashMap<URI, RemoteRemoteObject> rros;
+
+    /**
+     * Sorted list of RRO uris, according to natural order, benchmark or reachability
+     */
+    private transient ArrayList<URI> sortedrros;
+
+    /**
+     * The default protocol of this remote object set
+     */
+    private transient RemoteRemoteObject defaultRO;
     private transient URI defaultURI = null;
 
+    private String remoteRuntimeName;
+    private VMID vmid = null;
+
+    /**
+     * A forced protocol, if any
+     */
+    private RemoteRemoteObject forcedProtocol = null;
+
     static {
+        if (CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.isSet()) {
+            defaultProtocolOrder = new ArrayList<String>(
+                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.getValue());
+        } else {
+            defaultProtocolOrder = Collections.emptyList();
+        }
         try {
             getURI = InternalRemoteRemoteObject.class.getDeclaredMethod("getURI", new Class<?>[0]);
         } catch (NoSuchMethodException e) {
@@ -97,14 +148,22 @@ public class RemoteObjectSet implements Serializable, Observer {
     public RemoteObjectSet(RemoteRemoteObject defaultRRO, Collection<RemoteRemoteObject> rros)
             throws IOException {
         this.rros = new LinkedHashMap<URI, RemoteRemoteObject>();
-        this.unreliables = new HashSet<RemoteRemoteObject>();
-        for (RemoteRemoteObject rro : rros) {
-            this.add(rro);
-        }
+
         try {
             this.defaultRO = defaultRRO;
             this.remoteRuntimeName = getPARuntimeName(defaultRO);
-            this.defaultURI = getURI(defaultRRO);
+            this.defaultURI = getURI(defaultRO);
+            this.rros.put(defaultURI, defaultRO);
+            this.sortedrros = new ArrayList<URI>();
+            this.sortedrros.add(defaultURI);
+            this.initialorder = new ArrayList<URI>();
+            this.initialorder.add(defaultURI);
+            this.lastBenchmarkResults = new ConcurrentHashMap<URI, Integer>();
+            for (RemoteRemoteObject rro : rros) {
+                this.add(rro);
+            }
+            sortProtocolsInternal();
+
         } catch (RemoteRemoteObjectException e) {
             throw new IOException("Cannot access the remoteObject " + defaultRRO + " : " + e.getMessage());
         }
@@ -120,48 +179,76 @@ public class RemoteObjectSet implements Serializable, Observer {
             return forcedProtocol.receiveMessage(message);
         }
         RemoteRemoteObject rro = null;
+        // the order is cloned to allow asynchronous updates by the benchmark threads
+        ReentrantReadWriteLock.ReadLock rl = rwlock.readLock();
+
+        rl.lock();
+        ArrayList<URI> cloned = (ArrayList<URI>) sortedrros.clone();
+        rl.unlock();
         // For each protocol already selected and sorted
-        for (String protocol : order) {
-            // * Find the corresponding RemoteRemoteObject
-            // * Selection order is store for runtime so, the uri could not be used
-            // * Use Iterator for removing during iteration
-            for (Iterator<Entry<URI, RemoteRemoteObject>> it = rros.entrySet().iterator(); it.hasNext();) {
-                try {
-                    Entry<URI, RemoteRemoteObject> entry = it.next();
-                    if (entry.getKey().getScheme().equalsIgnoreCase(protocol)) {
-                        rro = entry.getValue();
-                        Reply rep = rro.receiveMessage(message);
-                        // The Exception is thrown on server side
-                        // So it is encapsulate to be delivered on client side
-                        Throwable t = rep.getResult().getException();
-                        if (t != null) {
-                            it.remove();
-                            this.unreliables.add(rro);
-                            continue;
-                        }
-                        return rep;
+
+        Throwable defaultProtocolException = null;
+        Reply defaultProtocolReply = null;
+
+        for (URI uri : cloned) {
+            rro = rros.get(uri);
+            if (LOGGER_RO.isDebugEnabled()) {
+                LOGGER_RO.debug("[ROAdapter] Sending message " + message + " to " + uri);
+            }
+            try {
+                Reply rep = rro.receiveMessage(message);
+                // The Exception is thrown on server side
+                // So it is encapsulated to be delivered on client side
+                Throwable t = rep.getResult().getException();
+                if (t != null) {
+                    handleProtocolException(t, uri, cloned.size() > 1);
+                    if (uri.equals(defaultURI)) {
+                        defaultProtocolReply = rep;
                     }
-                    // These Exceptions happened on client side
-                    // RMI doesn't act as others protocols and Exceptions aren't
-                    // encapsulate, so they are catched here.
-                } catch (ProActiveException pae) {
-                    it.remove();
-                    this.unreliables.add(rro);
-                    continue;
-                } catch (IOException io) {
-                    it.remove();
-                    this.unreliables.add(rro);
-                    continue;
-                } catch (RenegotiateSessionException rse) {
-                    it.remove();
-                    this.unreliables.add(rro);
                     continue;
                 }
-
+                return rep;
+                // These Exceptions happened on client side
+                // RMI doesn't act as others protocols and Exceptions aren't
+                // encapsulated, so they are caught here.
+            } catch (ProActiveException pae) {
+                defaultProtocolException = handleProtocolException(pae, uri, cloned.size() > 1);
+            } catch (IOException io) {
+                defaultProtocolException = handleProtocolException(io, uri, cloned.size() > 1);
+            } catch (RenegotiateSessionException rse) {
+                defaultProtocolException = handleProtocolException(rse, uri, cloned.size() > 1);
             }
         }
-        // All RemoteRemoteObject lead to Exception, try with the default one
-        return defaultRO.receiveMessage(message);
+
+        // In case all protocols led to Exception, simply throw the Exception sent by the default protocol
+        if (defaultProtocolException != null) {
+            if (defaultProtocolException instanceof ProActiveException) {
+                throw (ProActiveException) defaultProtocolException;
+            } else if (defaultProtocolException instanceof IOException) {
+                throw (IOException) defaultProtocolException;
+            } else if (defaultProtocolException instanceof RenegotiateSessionException) {
+                throw (RenegotiateSessionException) defaultProtocolException;
+            }
+        }
+        // if the default protocol didn't throw an exception, then it is a reply containing an exception
+        return defaultProtocolReply;
+    }
+
+    // Handles the Exceptions received in the receiveMessage method, doing a special treatment for the default protocol
+    private Throwable handleProtocolException(Throwable e, URI uri, boolean multiProtocol) {
+        if (!uri.equals(defaultURI)) {
+            LOGGER_RO.warn("[ROAdapter] Disabling protocol " + uri.getScheme() +
+                " because of received exception", e);
+            lastBenchmarkResults.put(uri, UNREACHABLE_VALUE);
+            return null;
+        } else {
+            if (multiProtocol) {
+                LOGGER_RO.warn("[ROAdapter] Skipping default protocol " + uri.getScheme() +
+                    " because of received exception", e);
+            }
+            lastBenchmarkResults.put(uri, UNREACHABLE_VALUE);
+            return e;
+        }
     }
 
     /**
@@ -210,15 +297,97 @@ public class RemoteObjectSet implements Serializable, Observer {
     }
 
     /**
+     * Sort the list of rro uris, using locks to prevent concurrent modification
+     */
+    private void sortProtocolsInternal() {
+        ReentrantReadWriteLock.WriteLock wl = rwlock.writeLock();
+        wl.lock();
+        sortedrros = sortProtocols(rros.keySet(), defaultProtocolOrder, lastBenchmarkResults, defaultURI);
+        wl.unlock();
+    }
+
+    /**
+     * Helper method used to sort the list of protocols
+     * @param input
+     * @param defOrder
+     * @param benchmarkRes
+     * @param defUri
+     * @return
+     */
+    public static ArrayList<URI> sortProtocols(Collection<URI> input, final List<String> defOrder,
+            final ConcurrentHashMap<URI, Integer> benchmarkRes, final URI defUri) {
+
+        ArrayList<URI> output = new ArrayList<URI>();
+        output.addAll(input);
+
+        Collections.sort(output, new Comparator<URI>() {
+            @Override
+            public int compare(URI o1, URI o2) {
+
+                // unreachable uri, they are put at the end of the list
+                if (benchmarkRes.containsKey(o1) && benchmarkRes.get(o1) == UNREACHABLE_VALUE) {
+                    return 1;
+                }
+                if (benchmarkRes.containsKey(o2) && benchmarkRes.get(o2) == UNREACHABLE_VALUE) {
+                    return -1;
+                }
+
+                // sort accordingly to fixed order
+                if (defOrder.contains(o1.getScheme()) && defOrder.contains(o2.getScheme())) {
+                    return defOrder.indexOf(o1.getScheme()) - defOrder.indexOf(o2.getScheme());
+                }
+                // the following code means that any protocol present in the default order
+                // is preferred to any other protocol, currently this behavior is deactivated
+
+                if (defOrder.contains(o1.getScheme())) {
+                    return -1;
+                }
+                if (defOrder.contains(o2.getScheme())) {
+                    return 1;
+                }
+                if (benchmarkRes.containsKey(o1) && benchmarkRes.containsKey(o2)) {
+                    // sort accordingly to benchmark results
+                    if (benchmarkRes.get(o1) > benchmarkRes.get(o2)) {
+                        return -1;
+                    } else if (benchmarkRes.get(o2) > benchmarkRes.get(o1)) {
+                        return 1;
+                    }
+                    return 0;
+                }
+
+                // undetermined, we have no info
+                return 0;
+            }
+        });
+
+        // finally remove unreachable protocols
+        for (ListIterator<URI> it = output.listIterator(output.size()); it.hasPrevious();) {
+            URI reachableOrNot = it.previous();
+            if (benchmarkRes.containsKey(reachableOrNot) &&
+                benchmarkRes.get(reachableOrNot) == UNREACHABLE_VALUE) {
+                if (!reachableOrNot.equals(defUri)) {
+                    it.remove();
+                }
+            } else {
+                // we exit the loop at the first reachable protocol
+                break;
+            }
+        }
+        return output;
+    }
+
+    /**
      * Add a RemoteRemoteObject (protocol specific) to the RemoteObjectSet
      * If it is unreliable, keep it aside for later possible use
      */
     public void add(RemoteRemoteObject rro) {
         try {
-            this.rros.put(getURI(rro), rro);
+            URI uri = getURI(rro);
+            this.rros.put(uri, rro);
+            this.sortedrros.add(uri);
+            this.initialorder.add(uri);
         } catch (RemoteRemoteObjectException e) {
-            LOGGER_RO.debug(e);
-            this.unreliables.add(rro);
+            LOGGER_RO.warn(e);
         }
     }
 
@@ -252,7 +421,7 @@ public class RemoteObjectSet implements Serializable, Observer {
             throw new RemoteRemoteObjectException(
                 "RemoteObjectSet: can't access RemoteObject through " + rro, e);
         } catch (RenegotiateSessionException e) {
-            e.printStackTrace();
+            LOGGER_RO.error("", e);
             throw new RemoteRemoteObjectException(e);
         }
     }
@@ -272,7 +441,7 @@ public class RemoteObjectSet implements Serializable, Observer {
             throw new RemoteRemoteObjectException("RemoteObjectSet: can't get ProActiveRuntime urls from " +
                 rro, e);
         } catch (RenegotiateSessionException e) {
-            e.printStackTrace();
+            LOGGER_RO.error("", e);
             throw new RemoteRemoteObjectException(e);
         }
     }
@@ -316,90 +485,54 @@ public class RemoteObjectSet implements Serializable, Observer {
     }
 
     /**
+     * Network topology could have change, change the order
+     */
+    private void startBenchmark() {
+        // The update of the order is done asynchronously
+        if (CentralPAPropertyRepository.PA_BENCHMARK_ACTIVATE.isTrue()) {
+            if (rros.size() > 1)
+                RemoteObjectBenchmark.getInstance().subscribeAsObserver(this, rros, this.remoteRuntimeName,
+                        lastBenchmarkResults);
+        }
+    }
+
+    /**
      * Update the protocol order from the new ProActive Runtime
      * when the remote remote object is reified
      */
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         int size = in.readInt();
+        ReentrantReadWriteLock.WriteLock wl = rwlock.writeLock();
+        wl.lock();
         this.rros = new LinkedHashMap<URI, RemoteRemoteObject>(size);
-        ObjectInputStream ois = null;
-        byte[] buf = null;
+        this.sortedrros = new ArrayList<URI>();
+        this.lastBenchmarkResults = new ConcurrentHashMap<URI, Integer>();
 
+        // read protocols
         for (int i = 0; i < size; i++) {
-            try {
-                // Read the data before calling any method throwing an exception to avoid stream corruption
-                URI uri = (URI) in.readObject();
-                buf = (byte[]) in.readObject();
-
-                if (buf != null) {
-                    RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri
-                            .getScheme());
-                    ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
-                    RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
-                    this.rros.put(uri, rro);
-                } else {
-                    LOGGER_RO.debug("Sender was unable to serialize RemoteRemoteObject for " + uri);
+            Map.Entry<URI, RemoteRemoteObject> entry = readProtocol(in);
+            if (entry != null) {
+                URI uri = entry.getKey();
+                RemoteRemoteObject rro = entry.getValue();
+                if (i == 0) {
+                    // default protocol is the first one
+                    this.defaultURI = uri;
+                    this.defaultRO = rro;
                 }
-            } catch (UnknownProtocolException e) {
-                LOGGER_RO.debug("Failed to instanciate a ROF when receiving a RemoteObjectset", e);
-            } finally {
-                if (ois != null)
-                    ois.close();
+                this.rros.put(uri, rro);
+                sortedrros.add(uri);
+                lastBenchmarkResults.put(uri, size);
             }
         }
-
-        try {
-            // Read the data before calling any method throwing an exception to avoid stream corruption
-            this.defaultURI = (URI) in.readObject();
-            buf = (byte[]) in.readObject();
-
-            if (buf != null) {
-                RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI
-                        .getScheme());
-                ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
-                RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
-                this.defaultRO = rro;
-            } else {
-                LOGGER_RO.debug("Sender was unable to serialize RemoteRemoteObject for " + this.defaultURI);
-            }
-        } catch (UnknownProtocolException e) {
-            LOGGER_RO.debug("Failed to instanciate a ROF when receiving a RemoteObjectset", e);
-        } finally {
-            if (ois != null)
-                ois.close();
-        }
+        wl.unlock();
+        sortProtocolsInternal();
 
         VMID testLocal = ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getVMID();
         if (!vmid.equals(testLocal)) {
             this.vmid = testLocal;
-            this.updateUnreliable();
-            this.updateOrder();
+            this.startBenchmark();
         }
-    }
-
-    /**
-     * Check if now some RemoteRemoteObject becomes accessible
-     */
-    private void updateUnreliable() {
-        if (unreliables.size() != 0) {
-            HashSet<RemoteRemoteObject> copy = new HashSet<RemoteRemoteObject>(this.unreliables);
-            for (RemoteRemoteObject rro : copy) {
-                this.unreliables.remove(rro);
-                this.add(rro);
-            }
-        }
-    }
-
-    /**
-     * Network topology could have change, change the order
-     */
-    private void updateOrder() {
-        // The update of the order is done asynchronously, so we need to erase previous values
-        // It's not a good idea to set order as transient, because of the local serialization case
-        this.order = new String[0];
-        if (rros.size() > 1)
-            RemoteObjectBenchmark.getInstance().subscribeAsObserver(this, rros, this.remoteRuntimeName);
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {
@@ -408,57 +541,81 @@ public class RemoteObjectSet implements Serializable, Observer {
         out.defaultWriteObject();
         out.writeInt(rros.size());
 
-        for (URI uri : rros.keySet()) {
-            byte[] buf = null;
+        // write the default protocol
+        writeProtocol(out, defaultURI, defaultRO);
 
-            ObjectOutputStream oos = null;
-            try {
-                RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri.getScheme());
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                oos = rof.getProtocolObjectOutputStream(baos);
-                oos.writeObject(rros.get(uri));
-                oos.flush();
-                buf = baos.toByteArray();
-            } catch (UnknownProtocolException e) {
-                LOGGER_RO.debug("Failed to serialize additional RemoteRemoteObject for " + uri);
-            } finally {
-                if (oos != null)
-                    oos.close();
+        // write all other protocols
+        for (URI uri : initialorder) {
+            if (!uri.equals(defaultURI)) {
+                writeProtocol(out, uri, rros.get(uri));
             }
-            out.writeObject(uri);
-            out.writeObject(buf); // null if serialization failed
         }
+    }
 
+    private Map.Entry<URI, RemoteRemoteObject> readProtocol(java.io.ObjectInputStream in) throws IOException,
+            ClassNotFoundException {
+        ObjectInputStream ois = null;
+
+        URI uri;
+        RemoteRemoteObject rro;
+        try {
+            // Read the data before calling any method throwing an exception to avoid stream corruption
+            uri = (URI) in.readObject();
+            byte[] buf = (byte[]) in.readObject();
+            if (buf != null) {
+                RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri.getScheme());
+                ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
+                rro = (RemoteRemoteObject) ois.readObject();
+            } else {
+                LOGGER_RO.debug("Sender was unable to serialize RemoteRemoteObject for " + uri);
+                return null;
+            }
+        } catch (UnknownProtocolException e) {
+            LOGGER_RO.debug("Failed to instanciate a ROF when receiving a RemoteObjectset", e);
+            return null;
+        } finally {
+            if (ois != null)
+                ois.close();
+        }
+        return new AbstractMap.SimpleEntry<URI, RemoteRemoteObject>(uri, rro);
+    }
+
+    private void writeProtocol(ObjectOutputStream out, URI uri, RemoteRemoteObject rro) throws IOException {
+        String scheme = uri.getScheme();
         byte[] buf = null;
         ObjectOutputStream oos = null;
         try {
-            String scheme = this.defaultURI.getScheme();
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(scheme);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             oos = rof.getProtocolObjectOutputStream(baos);
-            oos.writeObject(this.defaultRO);
+            oos.writeObject(rro);
             oos.flush();
             buf = baos.toByteArray();
-
         } catch (UnknownProtocolException e) {
-            LOGGER_RO.debug("Failed to serialize the default RemoteRemoteObject for " + this.defaultURI);
+            LOGGER_RO.warn("[ROAdapter] Failed to serialize the RemoteRemoteObject for " + uri);
         } finally {
             if (oos != null)
                 oos.close();
         }
-        out.writeObject(this.defaultURI);
+        out.writeObject(uri);
         out.writeObject(buf); // null if serialization failed
-
     }
 
     /**
      * Notification from a BenchmarkMonitorThread Object
      */
     public void update(Observable o, Object arg) {
-        order = (String[]) arg;
-        if (LOGGER_RO.isDebugEnabled())
+        ReentrantReadWriteLock.WriteLock wl = rwlock.writeLock();
+        wl.lock();
+
+        lastBenchmarkResults.putAll((Map<URI, Integer>) arg);
+        sortProtocolsInternal();
+
+        if (LOGGER_RO.isDebugEnabled()) {
             LOGGER_RO.debug("[Multi-Protocol] " + URIBuilder.getNameFromURI(defaultURI) +
-                " received protocol order: " + Arrays.toString(order));
+                " received protocol order: " + sortedrros);
+        }
+        wl.unlock();
     }
 
     public String toString() {

@@ -40,20 +40,19 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Observable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectSet;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -85,218 +84,166 @@ public class BenchmarkMonitorThread extends Observable {
         }
     }
 
-    private Map<URI, RemoteRemoteObject> remainingBenchmark;
-    private ArrayList<Pair> orderedProtocols;
-    private ArrayList<String> unaccessibles;
+    private ConcurrentHashMap<URI, RemoteRemoteObject> remainingBenchmark;
+    private ConcurrentHashMap<URI, RemoteRemoteObject> receivedRROS;
+    private ConcurrentHashMap<URI, Integer> benchmarkDone;
+    private ConcurrentHashMap<URI, Integer> previousBenchmarkResults;
 
     private boolean finished = false;
     private Thread thread;
 
     public BenchmarkMonitorThread(Map<URI, RemoteRemoteObject> remoteObjectUrls, String benchmarkObjectclazz) {
         LOGGER_RO.debug("[Multi-protocol] Benchmark choose : " + benchmarkObjectclazz);
-        this.remainingBenchmark = new LinkedHashMap<URI, RemoteRemoteObject>();
-        ArrayList<String> uniq = new ArrayList<String>();
+        this.remainingBenchmark = new ConcurrentHashMap<URI, RemoteRemoteObject>();
+        this.receivedRROS = new ConcurrentHashMap<URI, RemoteRemoteObject>();
+        HashSet<String> uniq = new HashSet<String>();
         for (URI uri : remoteObjectUrls.keySet()) {
             if (!uniq.contains(uri.getScheme())) {
                 this.remainingBenchmark.put(uri, remoteObjectUrls.get(uri));
                 uniq.add(uri.getScheme());
             }
         }
-        this.orderedProtocols = new ArrayList<Pair>();
-        this.unaccessibles = new ArrayList<String>();
+        this.benchmarkDone = new ConcurrentHashMap<URI, Integer>();
+        this.previousBenchmarkResults = new ConcurrentHashMap<URI, Integer>();
         this.clazz = benchmarkObjectclazz;
     }
 
     /**
-     * Add a new list of RemoteRemoteObject to test and launch the benchmark if there are new protocol (based on URI scheme)
+     * Add a new list of RemoteRemoteObject to the test, for uris who are not already processing
+     * The addition is done on-the-fly, i.e. the benchmark thread will be updated right away with new benchmarks to do
      */
-    public boolean addAndRestartIfNecessary(Map<URI, RemoteRemoteObject> remoteObjects) {
-        boolean add = false, restart = false;
-        synchronized (remainingBenchmark) {
-            for (URI uri1 : remoteObjects.keySet()) {
-                add = true;
-
-                if (!unaccessibles.contains(uri1.getScheme())) {
-                    // Protocol already waiting for a benchmark
-                    for (URI uri2 : remainingBenchmark.keySet()) {
-                        if (uri1.getScheme().equalsIgnoreCase(uri2.getScheme())) {
-                            add = false;
-                            break;
-                        }
-                    }
-                    if (add)
-                        // Benchmark is already done for this protocol
-                        for (Pair p : orderedProtocols) {
-                            if (uri1.getScheme().equalsIgnoreCase(p.protocol)) {
-                                add = false;
-                                break;
-                            }
-                        }
-                    // No information found for this protocol, can be added to the "remaining" list.
-                    if (add) {
-                        remainingBenchmark.put(uri1, remoteObjects.get(uri1));
-                        restart = true;
-                    }
-                }
-                if (restart) {
-                    this.launchBenchmark();
-                } else {
-                    // If benchmark are already done, simply return results to the Observers
-                    this.notifyAdd();
-                }
+    public boolean addOnTheFly(Map<URI, RemoteRemoteObject> remoteObjects,
+            Map<URI, Integer> lastBenchmarkResults) {
+        boolean restart = false;
+        previousBenchmarkResults.putAll(lastBenchmarkResults);
+        for (URI uri1 : remoteObjects.keySet()) {
+            // it is not necessary to synchronize the following sequence of instructions are the other thread first put, then remove
+            if (remainingBenchmark.containsKey(uri1) || benchmarkDone.containsKey(uri1)) {
+                // Benchmark is already done for this protocol
+            } else {
+                remainingBenchmark.put(uri1, remoteObjects.get(uri1));
+                receivedRROS.put(uri1, remoteObjects.get(uri1));
             }
+        }
+
+        if (restart) {
+            this.launchBenchmark();
+        } else {
+            // If benchmark needs not to be restarted, simply return results to the Observers
+            this.notifyAdd();
         }
         return restart;
-    }
-
-    /**
-     * Use Collections.sort
-     */
-    private void addAndSort(Pair pair) {
-        this.orderedProtocols.add(pair);
-        Collections.sort(orderedProtocols);
-    }
-
-    /**
-     * Return an array containing the protocol scheme by extracting the value from the Pair object
-     */
-    private String[] getOrder() {
-        String[] copy = new String[orderedProtocols.size()];
-        for (int i = 0; i < orderedProtocols.size(); i++) {
-            copy[i] = orderedProtocols.get(i).protocol;
-        }
-        // ordered := [a, b, c]
-        // fixed := [d, b]
-        // should return [b, a, c]
-        // Return all protocols from orderedProtocols' array
-        // but reordered them in accordance with the property
-        if (CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.isSet()) {
-            List<String> fixedOrder = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.getValue();
-            String[] ret = new String[copy.length];
-            boolean braek = false;
-            // For each box to fill in the array
-            for (int i = 0; i < ret.length; i++) {
-                // Try to keep the 'fixed order'
-                for (int j = 0; j < fixedOrder.size(); j++) {
-                    braek = false;
-                    // But check if it works
-                    for (int k = 0; k < copy.length; k++) {
-                        if (fixedOrder.get(j) != null && copy[k] != null &&
-                            fixedOrder.get(j).equalsIgnoreCase(copy[k])) {
-                            ret[i] = copy[k];
-                            copy[k] = null;
-                            fixedOrder.set(j, null);
-                            braek = true;
-                            break;
-                        }
-                    }
-                    if (braek)
-                        break;
-                }
-                // Fill the blank boxes with protocol that works
-                // but which are not in PA_COMMUNICATION_PROTOCOLS_ORDER
-                // property
-                if (ret[i] == null) {
-                    for (int j = 0; j < copy.length; j++) {
-                        if (copy[j] != null) {
-                            ret[i] = copy[j];
-                            copy[j] = null;
-                            break;
-                        }
-                    }
-                }
-            }
-            return ret;
-        } else
-            // Property isn't set
-            return copy;
     }
 
     public class BenchmarkThread implements Runnable {
         public void run() {
             finished = false;
-            while (!remainingBenchmark.isEmpty()) {
-                URI uri = null;
-                // Use iterator for being able to remove RemoteRemoteObject from the Collection remainingBenchmark when done
-                for (Iterator<Entry<URI, RemoteRemoteObject>> iter = remainingBenchmark.entrySet().iterator(); iter
-                        .hasNext();) {
+            try {
+                while (true) {
+                    LOGGER_RO.debug("[Multi-protocol] Starting benchmark");
+                    while (!remainingBenchmark.isEmpty()) {
+                        URI uri = null;
+                        // Use iterator for being able to remove RemoteRemoteObject from the Collection remainingBenchmark when done
+                        for (Iterator<Entry<URI, RemoteRemoteObject>> iter = remainingBenchmark.entrySet()
+                                .iterator(); iter.hasNext();) {
 
-                    Class<BenchmarkObject> benchmarkClass = null;
-                    try {
-                        benchmarkClass = (Class<BenchmarkObject>) Class.forName(clazz);
-                    } catch (ClassNotFoundException e1) {
-                        throw new ProActiveRuntimeException("The class \"" + clazz +
-                            "\" hasn't been found or don't implement the BenchmarkObject interface.");
-                    }
-                    Object benchmark = null;
-                    try {
-                        benchmark = benchmarkClass.newInstance();
-                    } catch (InstantiationException e1) {
-                        e1.printStackTrace();
-                    } catch (IllegalAccessException e1) {
-                        e1.printStackTrace();
-                    }
+                            Class<BenchmarkObject> benchmarkClass = null;
+                            try {
+                                benchmarkClass = (Class<BenchmarkObject>) Class.forName(clazz);
+                            } catch (ClassNotFoundException e1) {
+                                throw new ProActiveRuntimeException("[Multi-Protocol] The class \"" + clazz +
+                                    "\" hasn't been found or don't implement the BenchmarkObject interface.");
+                            }
+                            Object benchmark = null;
+                            try {
+                                benchmark = benchmarkClass.newInstance();
+                            } catch (InstantiationException e1) {
+                                e1.printStackTrace();
+                            } catch (IllegalAccessException e1) {
+                                e1.printStackTrace();
+                            }
 
-                    try {
-                        Entry<URI, RemoteRemoteObject> entry = iter.next();
-                        RemoteRemoteObject rro = entry.getValue();
-                        uri = entry.getKey();
-                        //benchmark.setParameter(int) : pass a parameter to the benchmark
-                        if (CentralPAPropertyRepository.PA_BENCHMARK_PARAMETER.isSet()) {
-                            methods[4].invoke(benchmark, CentralPAPropertyRepository.PA_BENCHMARK_PARAMETER
-                                    .getValue());
+                            try {
+                                Entry<URI, RemoteRemoteObject> entry = iter.next();
+                                RemoteRemoteObject rro = entry.getValue();
+                                uri = entry.getKey();
+                                //benchmark.setParameter(int) : pass a parameter to the benchmark
+                                if (CentralPAPropertyRepository.PA_BENCHMARK_PARAMETER.isSet()) {
+                                    methods[4].invoke(benchmark,
+                                            CentralPAPropertyRepository.PA_BENCHMARK_PARAMETER.getValue());
+                                }
+                                //benchmark.init() : Initialize the benchmark
+                                methods[0].invoke(benchmark, new Object[0]);
+                                // benchmark.getRequest() : get the request to send to the RemoteObject
+                                RemoteObjectRequest request = (RemoteObjectRequest) methods[5].invoke(
+                                        benchmark, new Object[0]);
+                                // while ( benchmark.doTest() )
+                                while ((Boolean) methods[2].invoke(benchmark, new Object[0])) {
+                                    Object res = rro.receiveMessage(request).getResult().getResult();
+                                    // benchmark.receiveResponse(Object res) : send the returned value to the benchmark object
+                                    methods[3].invoke(benchmark, res);
+                                }
+                                // benchmark.getResult() : return the benchmark's result
+                                Integer result = (Integer) methods[1].invoke(benchmark, new Object[0]);
+                                if (LOGGER_RO.isDebugEnabled()) {
+                                    LOGGER_RO.debug("[Multi-protocol] Benchmark result for " +
+                                        uri +
+                                        " is " +
+                                        (result.intValue() == RemoteObjectSet.NOCHANGE_VALUE ? "OK" : result
+                                                .intValue()));
+                                }
+                                if (result.intValue() == RemoteObjectSet.NOCHANGE_VALUE &&
+                                    previousBenchmarkResults.containsKey(uri) &&
+                                    previousBenchmarkResults.get(uri) != RemoteObjectSet.UNREACHABLE_VALUE) {
+                                    // in case the value is 0, we keep the previous bench value, unless it is -infinity
+                                    benchmarkDone.put(uri, previousBenchmarkResults.get(uri));
+                                } else {
+                                    benchmarkDone.put(uri, result.intValue());
+                                }
+                                iter.remove();
+                            } catch (NullPointerException npe) {
+                                handleProtocolException(npe, uri, iter);
+                            } catch (ProActiveException pae) {
+                                handleProtocolException(pae, uri, iter);
+                            } catch (IOException ioe) {
+                                handleProtocolException(ioe, uri, iter);
+                            } catch (ProActiveRuntimeException e) {
+                                handleProtocolException(e, uri, iter);
+                            } catch (RenegotiateSessionException e) {
+                                e.printStackTrace();
+                                // Reflection part
+                            } catch (IllegalArgumentException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        //benchmark.init() : Initialize the benchmark
-                        methods[0].invoke(benchmark, new Object[0]);
-                        // benchmark.getRequest() : get the request to send to the RemoteObject
-                        RemoteObjectRequest request = (RemoteObjectRequest) methods[5].invoke(benchmark,
-                                new Object[0]);
-                        // while ( benchmark.doTest() )
-                        while ((Boolean) methods[2].invoke(benchmark, new Object[0])) {
-                            Object res = rro.receiveMessage(request).getResult().getResult();
-                            // benchmark.receiveResponse(Object res) : send the returned value to the benchmark object
-                            methods[3].invoke(benchmark, res);
-                        }
-                        // benchmark.getResult() : return the benchmark's result
-                        Integer result = (Integer) methods[1].invoke(benchmark, new Object[0]);
-                        if (LOGGER_RO.isDebugEnabled()) {
-                            LOGGER_RO.debug("[Multi-protocol] Benchmark result for " + uri + " is " +
-                                (result.intValue() == 0 ? "OK" : result.intValue()));
-                        }
-                        Pair pair = new Pair(uri.getScheme(), result.intValue());
-                        addAndSort(pair);
-                        iter.remove();
-                    } catch (NullPointerException npe) {
-                        LOGGER_RO.warn("Protocol " + uri.getScheme() + " is unaccessible during benchmark.");
-                        iter.remove();
-                        unaccessibles.add(uri.getScheme());
-                        continue;
-                    } catch (ProActiveException pae) {
-                        LOGGER_RO.warn("Protocol " + uri.getScheme() + " is unaccessible during benchmark.");
-                        iter.remove();
-                        unaccessibles.add(uri.getScheme());
-                        continue;
-                    } catch (IOException ioe) {
-                        LOGGER_RO.warn("Protocol " + uri.getScheme() + " is unaccessible during benchmark.");
-                        iter.remove();
-                        unaccessibles.add(uri.getScheme());
-                        continue;
-                    } catch (RenegotiateSessionException e) {
-                        e.printStackTrace();
-                        // Reflection part
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
                     }
+                    setChanged();
+                    notifyObservers(benchmarkDone);
+
+                    // Wait the time specified by the period and restart
+                    Thread.sleep(CentralPAPropertyRepository.PA_BENCHMARK_PERIOD.getValue());
+                    benchmarkDone.clear();
+                    remainingBenchmark.clear();
+                    remainingBenchmark.putAll(receivedRROS);
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            setChanged();
-            notifyObservers(getOrder());
             deleteObservers();
             finished = true;
+        }
+
+        private void handleProtocolException(Exception e, URI uri,
+                Iterator<Entry<URI, RemoteRemoteObject>> iter) {
+            LOGGER_RO.warn("[Multi-Protocol] Benchmark result for " + uri + " is : UNACCESSIBLE");
+            LOGGER_RO.debug("", e);
+            // the order, first put, then remove should be kept to avoid the need of synchronizing the addOnTheFly thread
+            benchmarkDone.put(uri, RemoteObjectSet.UNREACHABLE_VALUE);
+            iter.remove();
         }
     }
 
@@ -310,7 +257,7 @@ public class BenchmarkMonitorThread extends Observable {
     public void notifyAdd() {
         if (finished) {
             this.setChanged();
-            this.notifyObservers(getOrder());
+            this.notifyObservers(benchmarkDone);
             deleteObservers();
         }
     }
