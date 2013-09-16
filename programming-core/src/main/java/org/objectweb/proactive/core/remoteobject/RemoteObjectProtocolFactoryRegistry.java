@@ -42,13 +42,13 @@ import java.util.Iterator;
 
 import javax.imageio.spi.ServiceRegistry;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.remoteobject.http.HTTPRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmissh.RmiSshRemoteObjectFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 
 
 public class RemoteObjectProtocolFactoryRegistry {
@@ -71,7 +71,7 @@ public class RemoteObjectProtocolFactoryRegistry {
                 Class<? extends RemoteObjectFactory> cl = remoteObjectFactorySPI.getFactoryClass();
 
                 if (!remoteObjectFactories.contains(protoId)) {
-                    logger.info("Remote Object Factory provider <" + protoId + ", " + cl + "> found");
+                    logger.debug("Remote Object Factory provider <" + protoId + ", " + cl + "> found");
                     remoteObjectFactories.put(protoId, cl);
                 }
             } catch (Throwable err) {
