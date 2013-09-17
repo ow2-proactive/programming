@@ -36,8 +36,6 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,19 +49,21 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.StartPARuntime;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
-import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
-import org.objectweb.proactive.extensions.gcmdeployment.PathElement.PathBase;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tools;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement.PathBase;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
+
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class CommandBuilderProActive implements CommandBuilder {
 
-    final static String PROACTIVE_JAR = "ProActive.jar";
+    final static String PROACTIVE_JARS = "*";
 
     final static String TOKEN = "___TOKEN___";
 
@@ -244,9 +244,6 @@ public class CommandBuilderProActive implements CommandBuilder {
         StringBuilder sb = new StringBuilder();
 
         if (!overwriteClasspath) {
-            // ProActive.jar contains a JAR index
-            // see: http://java.sun.com/j2se/1.3/docs/guide/jar/jar.html#JAR%20Index
-
             char fs = hostInfo.getOS().fileSeparator();
             sb.append(this.getPath(hostInfo));
             sb.append(fs);
@@ -254,7 +251,7 @@ public class CommandBuilderProActive implements CommandBuilder {
             sb.append(fs);
             sb.append("lib");
             sb.append(fs);
-            sb.append(PROACTIVE_JAR);
+            sb.append(PROACTIVE_JARS);
             sb.append(hostInfo.getOS().pathSeparator());
         }
 
