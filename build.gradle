@@ -26,11 +26,8 @@ subprojects {
 
     sourceCompatibility = 1.6
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        mavenRepo url: 'http://repo.activeeon.com/content/repositories/snapshots/'
-        mavenRepo url: 'http://repo.activeeon.com/content/repositories/releases/'
+    rootProject.buildscript.repositories.each {
+        repositories.add(it)
     }
 
     uploadArchives {
