@@ -160,7 +160,7 @@
     RunActive interface has to be implemented: it specifies the AO behavior in
     the method named <literal>runActivity()</literal>:</para>
 
-    <programlisting language="java"><textobject><textdata fileref="../../../src/Core/org/objectweb/proactive/RunActive.java"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="../../../../../programming-core/src/main/java/org/objectweb/proactive/RunActive.java"/></textobject></programlisting>
 	<para>Example:</para>
 
    <programlisting language="java"><textobject><textdata fileref="code_snippets/referencecard/RunActive_example.txt"/></textobject></programlisting>
@@ -171,13 +171,13 @@
     <para> The method <literal> initActivity(Body body) </literal> initializes the activity of
 	    the active object. It is called once before the <literal>runActivity(Body body)</literal> method.</para>
 
-    <programlisting language="java"><textobject><textdata fileref="../../../src/Core/org/objectweb/proactive/InitActive.java"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="../../../../../programming-core/src/main/java/org/objectweb/proactive/InitActive.java"/></textobject></programlisting>
 
 	<para>The method <literal> endActivity(Body body) </literal> finalizes the activity of
 	the active object. It is called once after the execution of the <literal>runActivity(Body body)</literal> method.
     </para>
 
-    <programlisting language="java"><textobject><textdata fileref="../../../src/Core/org/objectweb/proactive/EndActive.java"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="../../../../../programming-core/src/main/java/org/objectweb/proactive/EndActive.java"/></textobject></programlisting>
 
   </section>
 	<!--

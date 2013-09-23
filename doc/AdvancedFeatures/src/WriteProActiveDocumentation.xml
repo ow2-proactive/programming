@@ -287,7 +287,7 @@
 			<info>
 				<title>JAVA program listing with file inclusion</title>
 			</info>
-			<programlisting language="java"><textobject><textdata fileref="../../../src/Core/org/objectweb/proactive/api/PAVersion.java"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="../../../../../programming-core/src/main/java/org/objectweb/proactive/api/PAVersion.java"/></textobject></programlisting>
 		</example>
 
 		<example xml:id="DSC_JAVAprogramlistingwithfileinclusion_42">
@@ -298,7 +298,7 @@
 	<info>
 		<title>JAVA program listing with file inclusion</title>
 	</info>
-	<programlisting language="java"><textobject><textdata fileref="../../../src/Core/org/objectweb/proactive/api/PAVersion.java"/></textobject></programlisting>
+	<programlisting language="java"><textobject><textdata fileref="../../../../../programming-core/src/main/java/org/objectweb/proactive/api/PAVersion.java"/></textobject></programlisting>
 </example>]]></programlisting>
 		</example>
 
@@ -371,7 +371,7 @@
 			<info>
 				<title>File from which the snippet will be extracted</title>
 			</info>
-			<programlisting language="java"><textobject><textdata fileref="../../../src/Core/org/objectweb/proactive/api/PAVersion.java"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="../../../../../programming-core/src/main/java/org/objectweb/proactive/api/PAVersion.java"/></textobject></programlisting>
 		</example>
 
 		<example xml:id="snippet_42">
