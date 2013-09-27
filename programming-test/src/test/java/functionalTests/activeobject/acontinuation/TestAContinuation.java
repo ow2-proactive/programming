@@ -36,14 +36,14 @@
  */
 package functionalTests.activeobject.acontinuation;
 
-import static junit.framework.Assert.assertTrue;
-
 import java.util.Vector;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import functionalTests.FunctionalTest;
+
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -59,6 +59,10 @@ public class TestAContinuation extends FunctionalTest {
     Id idPrincipal;
     Id idDeleguate;
     boolean futureByResult;
+    private String finalResult;
+    private String lastAResult;
+    private String t1IdName;
+    private String t2IdName;
 
     @org.junit.Test
     public void action() throws Exception {
@@ -72,10 +76,12 @@ public class TestAContinuation extends FunctionalTest {
         CentralPAPropertyRepository.PA_FUTURE_AC.setValue(initial_ca_setting);
 
         assertTrue(futureByResult && a.isSuccessful());
-        assertTrue(a.getFinalResult().equals("dummy"));
-        assertTrue(lastA.getIdName().equals("e"));
-        assertTrue(t1.getIdName().equals("d"));
-        assertTrue(t2.getIdName().equals("d"));
+
+        assertTrue(finalResult.equals("dummy"));
+        assertTrue(lastAResult.equals("e"));
+
+        assertTrue(t1IdName.equals("d"));
+        assertTrue(t2IdName.equals("d"));
     }
 
     private class ACThread extends Thread {
@@ -100,6 +106,8 @@ public class TestAContinuation extends FunctionalTest {
                 b = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "dummy" });
                 idPrincipal = b.getIdforFuture();
                 a.forwardID(idPrincipal);
+                finalResult = a.getFinalResult();
+
                 //Test non-blocking when future passed as parameter
                 AOAContinuation c = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "c" });
                 AOAContinuation d = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "d" });
@@ -108,6 +116,7 @@ public class TestAContinuation extends FunctionalTest {
                 AOAContinuation de = d.getA(e);
                 AOAContinuation cde = c.getA(de);
                 lastA = e.getA(cde);
+                lastAResult = lastA.getIdName();
 
                 //test multiple wrapped futures with multiples AC destinations
                 AOAContinuation f = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "f" });
@@ -115,6 +124,9 @@ public class TestAContinuation extends FunctionalTest {
                 AOAContinuation t = c.delegatedGetA(d);
                 t1 = e.getA(t);
                 t2 = f.getA(t);
+
+                t1IdName = t1.getIdName();
+                t2IdName = t2.getIdName();
             } catch (Exception e) {
                 e.printStackTrace();
             }
