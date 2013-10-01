@@ -51,15 +51,14 @@ import org.objectweb.proactive.core.body.message.MessageImpl;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.body.tags.MessageTags;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityContext;
 import org.objectweb.proactive.core.security.SecurityEntity;
 import org.objectweb.proactive.core.security.TypedCertificate;
-import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.crypto.Session.ActAs;
+import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableException;
@@ -88,8 +87,6 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
     private byte[][] methodCallCiphered;
     public long sessionID;
     protected String codebase;
-    private static Boolean enableStackTrace;
-    private StackTraceElement[] stackTrace;
 
     //Non Functional requests
     protected boolean isNFRequest = false;
@@ -138,14 +135,6 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
             this.senderNodeURI = "";
         }
 
-        if (enableStackTrace == null) {
-            /* First time */
-            enableStackTrace = CentralPAPropertyRepository.PA_STACKTRACE.isTrue();
-        }
-        if (enableStackTrace.booleanValue()) {
-            this.stackTrace = new Exception().getStackTrace();
-        }
-
     }
 
     public RequestImpl(MethodCall methodCall, UniversalBody sender, boolean isOneWay, long nextSequenceID,
@@ -158,13 +147,6 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
         super(null, 0, isOneWay, methodCall.getName(), tags);
         this.methodCall = methodCall;
         this.senderNodeURI = "";
-        if (enableStackTrace == null) {
-            /* First time */
-            enableStackTrace = CentralPAPropertyRepository.PA_STACKTRACE.isTrue();
-        }
-        if (enableStackTrace.booleanValue()) {
-            this.stackTrace = new Exception().getStackTrace();
-        }
     }
 
     public RequestImpl(MethodCall methodCall, boolean isOneWay) {
@@ -209,8 +191,6 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
             }
             return null;
         }
-        result.augmentException(this.stackTrace);
-        this.stackTrace = null;
         return createReply(targetBody, result);
     }
 

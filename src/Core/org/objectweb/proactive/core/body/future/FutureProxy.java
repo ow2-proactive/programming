@@ -38,6 +38,7 @@ package org.objectweb.proactive.core.body.future;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
@@ -51,6 +52,7 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.proxy.AbstractProxy;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 import org.objectweb.proactive.core.exceptions.ExceptionMaskLevel;
 import org.objectweb.proactive.core.group.DispatchMonitor;
@@ -137,6 +139,22 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
     // returns future update info used during dynamic dispatch for groups
     private transient DispatchMonitor dispatchMonitor;
+
+    // the context stack when this future was created, the context stack is only filled when the property
+    // proactive.stack_trace is set
+    protected StackTraceElement[] callerContext;
+
+    // the "light" version of the above stack trace, it contains only one line with the server main method call
+    // e.g. future = ao.foo() , the main line will be the line in the server stack containing the call foo()
+    // it is set even if the property proactive.stack_trace is not set
+    protected StackTraceElement currentMainStackElement;
+
+    // In automatic continuations, (i.e. a future1 containing a future2, containing a future3, etc), the originalMainStackElement contains the original
+    // main call (top-level future). It is stored in the Thread as a ThreadLocal variable. This makes the originalMainStackElement
+    // accessible by sub-futures (future2, future3, etc)
+    private static transient ThreadLocal<StackTraceElement> originalMainStackElement = new ThreadLocal<StackTraceElement>();
+
+    protected static boolean enableStack = CentralPAPropertyRepository.PA_STACKTRACE.getValue();
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
@@ -249,7 +267,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
     }
 
     /**
-     * Returns a MethodCallResult containing the awaited result, or the exception that occured if any.
+     * Returns a MethodCallResult containing the awaited result, or the exception that occurred if any.
      * The method blocks until the future is available
      * @return the result of this future object once available.
      */
@@ -264,6 +282,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      */
     public synchronized Object getResult() {
         waitFor();
+        updateContext();
         return target.getResult();
     }
 
@@ -274,6 +293,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      */
     public synchronized Object getResult(long timeout) throws ProActiveTimeoutException {
         waitFor(timeout);
+        updateContext();
         return target.getResult();
     }
 
@@ -375,6 +395,12 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         id.setCreatorID(creatorID);
     }
 
+    public void setCreatorStackTraceElement(final StackTraceElement stackElement) {
+        this.currentMainStackElement = stackElement;
+        // the top-level future main stack element in an automatic continuation
+        this.originalMainStackElement.set(stackElement);
+    }
+
     public UniqueID getCreatorID() {
         return id.getCreatorID();
     }
@@ -388,6 +414,25 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
     public UniversalBody getUpdater() {
         return this.updater;
+    }
+
+    public void setCallerContext(StackTraceElement[] context) {
+        this.callerContext = context;
+    }
+
+    /**
+     * This method transforms the received method call result by adding the stack trace context
+     * the level on information contained in the stack depends on the property proactive.stack_trace
+     */
+    public void updateContext() {
+        if (target != null) {
+            target = new ContextAwareMethodCallResult(target.getResultObjet(), target.getException(),
+                callerContext);
+        }
+    }
+
+    public StackTraceElement[] getCallerContext() {
+        return this.callerContext;
     }
 
     public void setSenderID(UniqueID i) {
@@ -437,6 +482,35 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         }
 
         return result;
+    }
+
+    /**
+     * This method updates the given total stack trace using the current stack found in the future proxy
+     * @param totalContext the total stack trace computed so far
+     * @param proxy the proxy on which the context will be updated
+     * @param origin if we are at the origin (bottom of the total stack)
+     */
+    public static void updateStackTraceContext(ArrayList<StackTraceElement> totalContext, FutureProxy proxy,
+            boolean origin) {
+        StackTraceElement[] currentContext = proxy.getCallerContext();
+        StackTraceElement emptyline = new StackTraceElement("(..", ")", null, -1);
+
+        if (origin) {
+            // if we are at the origin (bottom) of the stack, we add the original main call element, received by the original FutureProxy
+            // via the ThreadLocal context
+            totalContext.add(0, proxy.originalMainStackElement.get());
+            totalContext.add(1, emptyline);
+        }
+        // if the current full stack trace is available we add it
+        if (currentContext != null) {
+            totalContext.addAll(0, Arrays.asList(currentContext));
+        }
+        // in any case we add the current main call element
+        totalContext.add(0, proxy.currentMainStackElement);
+        totalContext.add(1, emptyline);
+
+        // we update the caller context in the proxy
+        proxy.setCallerContext(totalContext.toArray(new StackTraceElement[0]));
     }
 
     // -- PROTECTED METHODS -----------------------------------------------
@@ -502,6 +576,14 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         out.writeObject(id);
         // Pass a reference to the updater
         out.writeObject(writtenUpdater.getRemoteAdapter());
+
+        // serialize the stack context or null
+        if (enableStack) {
+            out.writeObject(callerContext);
+        } else {
+            out.writeObject(null);
+        }
+        out.writeObject(currentMainStackElement);
     }
 
     /**
@@ -514,6 +596,8 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         target = (MethodCallResult) in.readObject();
         id = (FutureID) in.readObject();
         updater = (UniversalBody) in.readObject();
+        callerContext = (StackTraceElement[]) in.readObject();
+        currentMainStackElement = (StackTraceElement) in.readObject();
         // register all incoming futures, even for migration or checkpointing
         if (this.isAwaited()) {
             FuturePool.registerIncomingFuture(this);

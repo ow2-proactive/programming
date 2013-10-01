@@ -187,9 +187,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
         "proactive.futuremonitoring.ttm", false);
 
     /**
-     * Include client side calls in stack traces
+     * When this property is set to true, at each proactive call, the stack trace context of the call is embedded in the future.
+     * It is specially useful when debugging automatic continuations. If an exception is thrown consecutively to a proactive call,
+     * all methods traversed during this call will be displayed, even if the call recursively called other active objects.
+     * If the property is set to false (which is the default), the itinerary will still be followed but only the main call
+     * in the stack will be kept and forwarded
      */
-    static public PAPropertyBoolean PA_STACKTRACE = new PAPropertyBoolean("proactive.stack_trace", false);
+    static public PAPropertyBoolean PA_STACKTRACE = new PAPropertyBoolean("proactive.stack_trace", false,
+        false);
 
     /**
      * Activates the legacy SAX ProActive Descriptor parser
