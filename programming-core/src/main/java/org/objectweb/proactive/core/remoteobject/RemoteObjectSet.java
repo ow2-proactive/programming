@@ -176,6 +176,7 @@ public class RemoteObjectSet implements Serializable, Observer {
      * Select the best suited RemoteRemoteObject (protocol related), and send it the Request
      * Fallback to default (according to the PA_COMMUNICATION_PROTOCOL property) if necessary
      */
+    @SuppressWarnings("unchecked")
     public Reply receiveMessage(Request message) throws ProActiveException, IOException {
         if (forcedProtocol != null) {
             return forcedProtocol.receiveMessage(message);
@@ -613,6 +614,7 @@ public class RemoteObjectSet implements Serializable, Observer {
     /**
      * Notification from a BenchmarkMonitorThread Object
      */
+    @SuppressWarnings("unchecked")
     public void update(Observable o, Object arg) {
         ReentrantReadWriteLock.WriteLock wl = rwlock.writeLock();
         wl.lock();

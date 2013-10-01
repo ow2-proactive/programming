@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.remoteobject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 
 import org.objectweb.proactive.core.ProActiveException;
@@ -49,9 +50,13 @@ import org.objectweb.proactive.core.body.request.Request;
  *
  * Remote interface for a remote object.
  *
+ * It is declared Serializable as the stub to this RemoteObject will be transferred via the network.
+ * On the contrary the RemoteObject interface -  which should exist only on the client side - is not Serializable.
+ * It is similar to RMI Remote(Not Serializable) and Remote Object (Serializable)
+ *
  *
  */
-public interface RemoteRemoteObject {
+public interface RemoteRemoteObject extends Serializable {
 
     /**
      * Send a message containing a reified method call to a remote object. the target of the message

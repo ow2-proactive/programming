@@ -21,8 +21,8 @@
 				<jvmarg value="-Dproactive.communication.protocol=${communication.protocol}"/>
 				<jvmarg value="-Dproactive.communication.additional_protocols=${additional.protocols}"/>
 				<proactiveClasspath type="append">
-					<pathElement base="proactive" relpath="classes/Tests"/>
-					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
+					<pathElement base="proactive" relpath="build/classes/test/"/>
+					<pathElement base="proactive" relpath="build/dist/lib/*"/>
                 </proactiveClasspath>
                 <log4jProperties base="proactive" relpath="compile/proactive-log4j"/> 
 			</configuration>
