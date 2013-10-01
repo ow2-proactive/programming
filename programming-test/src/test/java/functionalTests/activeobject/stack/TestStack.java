@@ -1,0 +1,101 @@
+/*
+ *  *
+ * ProActive Parallel Suite(TM): The Java(TM) library for
+ *    Parallel, Distributed, Multi-Core Computing for
+ *    Enterprise Grids & Clouds
+ *
+ * Copyright (C) 1997-2013 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
+ * Contact: proactive@ow2.org or contact@activeeon.com
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; version 3 of
+ * the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
+ *
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
+ *  Contributor(s):
+ *
+ *  * $$PROACTIVE_INITIAL_DEV$$
+ */
+package functionalTests.activeobject.stack;
+
+import java.util.BitSet;
+
+import junit.framework.Assert;
+import org.junit.Test;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+
+
+/**
+ * TestStack this tests the proactive.stack_trace mechanism, @see org.objectweb.proactive.core.config.CentralPAPropertyRepository.PA_STACKTRACE
+ *
+ * It makes a sequence of recursive calls (each creating a new active object of the same class), both on asynchronous and synchronous methods
+ *
+ * It tests then that each of the calls are found in the received stack trace.
+ *
+ * @author The ProActive Team
+ */
+public class TestStack {
+
+    @Test
+    public void testStack() throws Exception {
+
+        CentralPAPropertyRepository.PA_STACKTRACE.setValue(true);
+
+        AOStack ao = PAActiveObject.newActive(AOStack.class, new Object[0]);
+
+        System.out.println("**************** Testing with Asynchronous calls ****************");
+        try {
+            BooleanWrapper bv = ao.throwExceptionAsync4();
+            bv.getBooleanValue();
+        } catch (Exception e) {
+            handleException(e, "throwExceptionAsync");
+        }
+
+        System.out.println("**************** Testing with Synchronous calls ****************");
+        try {
+            boolean bv = ao.throwExceptionSync4();
+        } catch (Exception e) {
+            handleException(e, "throwExceptionSync");
+        }
+    }
+
+    private void handleException(Exception e, String mname) {
+        System.out.println("Received Exception:");
+        e.printStackTrace();
+        BitSet bset = new BitSet(4);
+        boolean testStackFound = false;
+        // checks that every method throwExceptionX is found in the stack
+        for (StackTraceElement elem : e.getStackTrace()) {
+            if (elem.getMethodName().contains(mname) && !elem.getClassName().contains("_Stub")) {
+                int length = elem.getMethodName().length();
+                int found = Integer.parseInt(elem.getMethodName().substring(length - 1, length));
+                bset.set(found, true);
+            }
+            // checks that the test method is found in the stack
+            if (elem.getMethodName().contains("testStack")) {
+                testStackFound = true;
+            }
+        }
+        System.out.println("Found calls : " + bset);
+        Assert.assertTrue("All " + mname + " methods have been found in the stack", bset.cardinality() == 4);
+        Assert.assertTrue("Context testStack has been found", testStackFound);
+    }
+}

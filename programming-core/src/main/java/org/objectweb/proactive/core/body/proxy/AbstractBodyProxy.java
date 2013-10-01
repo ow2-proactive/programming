@@ -36,8 +36,10 @@
  */
 package org.objectweb.proactive.core.body.proxy;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -74,6 +76,8 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
     private static String UNKNOWN = "[unknown]";
 
     private static Logger logger = ProActiveLogger.getLogger(Loggers.PAPROXY);
+
+    private static boolean enableStack = CentralPAPropertyRepository.PA_STACKTRACE.getValue();
 
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
@@ -288,8 +292,14 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         fp.setCreatorID(this.getBodyID());
         fp.setUpdater(this.getBody());
         fp.setOriginatingProxy(this);
+        Method m = methodCall.getReifiedMethod();
+        fp.setCreatorStackTraceElement(new StackTraceElement(m.getDeclaringClass().getName(), m.getName(),
+            targetBodyUrl, -1));
 
         try {
+            if (enableStack) {
+                fp.setCallerContext(new Exception().getStackTrace());
+            }
             sendRequest(methodCall, fp);
         } catch (java.io.IOException e) {
             throw new SendRequestCommunicationException(
@@ -306,6 +316,9 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         FutureProxy fp = FutureProxy.getFutureProxy();
         fp.setCreatorID(this.getBodyID());
         fp.setUpdater(this.getBody());
+        Method m = methodCall.getReifiedMethod();
+        fp.setCreatorStackTraceElement(new StackTraceElement(m.getDeclaringClass().getName(), m.getName(),
+            targetBodyUrl, -1));
 
         logger.debug("[Proxy] reify " + methodCall.getName() + "() as synchronous from " + sourceBodyUrl +
             " to " + targetBodyUrl);
@@ -327,10 +340,14 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
 
         // Returns the result or throws the exception
         if (fp.getRaisedException() != null) {
+            // if there is an exception to be thrown, we add the local context to this exception
+            ArrayList<StackTraceElement> totalContext = new ArrayList<StackTraceElement>();
+            totalContext.addAll(Arrays.asList(new Exception().getStackTrace()));
+            FutureProxy.updateStackTraceContext(totalContext, fp, false);
+            fp.updateContext();
             throw fp.getRaisedException();
-        } else {
-            return fp.getResult();
         }
+        return fp.getResult();
     }
 
     protected abstract void sendRequest(MethodCall methodCall, Future future) throws java.io.IOException;

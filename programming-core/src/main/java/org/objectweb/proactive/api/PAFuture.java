@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.api;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -96,6 +98,8 @@ public class PAFuture {
     @SuppressWarnings("unchecked")
     public static <T> T getFutureValue(T future, long timeout) throws ProActiveTimeoutException {
         TimeoutAccounter ta = TimeoutAccounter.getAccounter(timeout);
+
+        ArrayList<StackTraceElement> totalContext = null;
         while (true) {
             // If the object is not reified, it cannot be a future
             if ((MOP.isReifiedObject(future)) == false) {
@@ -107,6 +111,16 @@ public class PAFuture {
                 if (!(theProxy instanceof Future)) {
                     return future;
                 } else {
+                    // The total context is the global stack trace created by each recursive future
+                    if (totalContext == null) {
+                        totalContext = new ArrayList<StackTraceElement>();
+                        // we initialize the context with the stack to this point
+                        totalContext.addAll(Arrays.asList(new Exception().getStackTrace()));
+                        // we update it by inspecting each future proxy received
+                        FutureProxy.updateStackTraceContext(totalContext, ((FutureProxy) theProxy), true);
+                    } else {
+                        FutureProxy.updateStackTraceContext(totalContext, ((FutureProxy) theProxy), false);
+                    }
                     future = (T) ((Future) theProxy).getResult(ta.getRemainingTimeout());
                 }
             }

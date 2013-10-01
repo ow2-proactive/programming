@@ -39,6 +39,7 @@ package org.objectweb.proactive.utils;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Arrays;
 
 
 /**
@@ -83,6 +84,39 @@ public final class StackTraceUtil {
         }
         return equalsStackTraces(a.getCause(), b.getCause());
 
+    }
+
+    public static <T> T[] concatAll(T[] first, T[]... rest) {
+
+        if (first == null) {
+            throw new IllegalArgumentException("Unexpected array : " + first);
+        }
+        int totalLength = first.length;
+        if (rest != null) {
+            for (T[] array : rest) {
+                if (array != null) {
+                    totalLength += array.length;
+                }
+            }
+        }
+        T[] result = Arrays.copyOf(first, totalLength);
+        int offset = first.length;
+        if (rest != null) {
+            for (T[] array : rest) {
+                if (array != null) {
+                    System.arraycopy(array, 0, result, offset, array.length);
+                    offset += array.length;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.asList(concatAll(new Integer[] {1,2,3}, new Integer[] {4,5,6})));
+        System.out.println(Arrays.asList(concatAll(new Integer[]{1,2,3}, null, new Integer[]{4,5,6})));
+        System.out.println(Arrays.asList(concatAll(new Integer[]{1,2,3}, null, new Integer[]{4,5,6}, null)));
+        System.out.println(Arrays.asList(concatAll(new Integer[]{1,2,3}, null)));
     }
 
 }
