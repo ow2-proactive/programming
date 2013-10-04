@@ -50,6 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.ProtocolException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet;
@@ -203,21 +204,26 @@ public class BenchmarkMonitorThread extends Observable {
                                 iter.remove();
                             } catch (NullPointerException npe) {
                                 handleProtocolException(npe, uri, iter);
-                            } catch (ProActiveException pae) {
-                                handleProtocolException(pae, uri, iter);
+                            } catch (ProtocolException pe) {
+                                handleProtocolException(pe, uri, iter);
                             } catch (IOException ioe) {
                                 handleProtocolException(ioe, uri, iter);
                             } catch (ProActiveRuntimeException e) {
                                 handleProtocolException(e, uri, iter);
+                            } catch (ProActiveException e) {
+                                handleProtocolException(e, uri, iter);
                             } catch (RenegotiateSessionException e) {
-                                e.printStackTrace();
-                                // Reflection part
+                                handleProtocolException(e, uri, iter);
+                                // Reflection part, abort the process
                             } catch (IllegalArgumentException e) {
                                 e.printStackTrace();
+                                return;
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
+                                return;
                             } catch (InvocationTargetException e) {
                                 e.printStackTrace();
+                                return;
                             }
                         }
                     }

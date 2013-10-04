@@ -36,14 +36,14 @@
  */
 package org.objectweb.proactive.extensions.pnp.exception;
 
-import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProtocolException;
 
 
 /** Generic PNP Exception root of all non runtime in PNP
  *
  * @since ProActive 4.3.0
  */
-public class PNPException extends ProActiveException {
+public class PNPException extends ProtocolException {
     public PNPException() {
         super();
     }
