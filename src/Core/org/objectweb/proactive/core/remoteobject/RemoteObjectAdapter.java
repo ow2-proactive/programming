@@ -194,8 +194,14 @@ public class RemoteObjectAdapter implements RemoteObject {
                 e);
         } catch (IOException e) {
             // Log for keeping a trace
-            LOGGER_RO.warn(displayCaller + " : unable to contact remote object " + displayROURI +
-                " when calling method " + message.getMethodName(), e);
+            String methodName = message.getMethodName();
+            if (!methodName.equals("killRT")) {
+                LOGGER_RO.warn(displayCaller + " : unable to contact remote object " + displayROURI +
+                    " when calling method " + message.getMethodName(), e);
+            } else if (LOGGER_RO.isDebugEnabled()) {
+                LOGGER_RO.debug(displayCaller + " : unable to contact remote object " + displayROURI +
+                    " when calling method " + message.getMethodName(), e);
+            }
             return new SynchronousReplyImpl(new MethodCallResult(null, e));
         }
     }
