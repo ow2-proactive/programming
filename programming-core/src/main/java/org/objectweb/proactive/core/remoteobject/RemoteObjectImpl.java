@@ -70,15 +70,11 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
     protected RemoteObjectExposer<T> roe;
     protected String name;
 
-    public RemoteObjectImpl(String name, String className, T target) throws IllegalArgumentException,
-            SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException,
-            NoSuchMethodException {
+    public RemoteObjectImpl(String name, String className, T target) {
         this(name, className, target, null);
     }
 
-    public RemoteObjectImpl(String name, String className, T target, Class<Adapter<T>> adapter)
-            throws IllegalArgumentException, SecurityException, InstantiationException,
-            IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public RemoteObjectImpl(String name, String className, T target, Class<Adapter<T>> adapter) {
         this.target = target;
         this.name = name;
         this.className = className;
@@ -112,7 +108,7 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
         try {
             T reifiedObjectStub = (T) createStubObject();
             if (adapterClass != null) {
-                Constructor<Adapter<T>> myConstructor = adapterClass.getConstructor(new Class[] {});// Class                        .forName(this.className)  });
+                Constructor<Adapter<T>> myConstructor = adapterClass.getConstructor(new Class[] { });// Class                        .forName(this.className)  });
                 Adapter<T> ad = myConstructor.newInstance();
                 ad.setTargetAndCallConstruct((T) target);
                 ad.setTarget(reifiedObjectStub);
@@ -209,7 +205,7 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
 
                 T reifiedObjectStub = (T) createStubObject();
                 myConstructor = adapterClass.getClass().getConstructor(
-                        new Class[] { Class.forName(this.className) });
+                  new Class[] { Class.forName(this.className) });
                 Adapter<T> ad = (Adapter<T>) myConstructor.newInstance(reifiedObjectStub);
                 //            adapter.setAdapterAndCallConstruct(reifiedObjectStub);
                 return ad;
@@ -224,7 +220,7 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
     protected Object createStubObject() throws ClassNotFoundException {
         try {
             return MOP.turnReified(this.className, SynchronousProxy.class.getName(), new Object[] { null,
-                    new Object[] { this } }, target, new Class[] {});
+              new Object[] { this } }, target, new Class[] { });
 
         } catch (MOPException e) {
             // TODO Auto-generated catch block
