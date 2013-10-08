@@ -47,7 +47,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.HeartbeatResponse;
-import org.objectweb.proactive.core.util.Pair;
+import org.objectweb.proactive.core.util.ActiveObjectLocationInfo;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -185,7 +185,7 @@ public class FutureMonitoring implements Runnable {
         return body.getID();
     }
 
-    private static Pair<UniqueID, String> getUpdaterBodyIdAndNodeUrl(FutureProxy fp) {
+    private static ActiveObjectLocationInfo getUpdaterLocationInfo(FutureProxy fp) {
         UniversalBody body = fp.getUpdater();
         if (body == null) {
             new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
@@ -198,7 +198,7 @@ public class FutureMonitoring implements Runnable {
         } catch (Throwable e) {
 
         }
-        return new Pair<UniqueID, String>(id, nodeUrl);
+        return new ActiveObjectLocationInfo(id, nodeUrl);
     }
 
     public static void removeFuture(FutureProxy fp) {
@@ -225,12 +225,12 @@ public class FutureMonitoring implements Runnable {
         if (fp.isAvailable()) {
             return;
         }
-        Pair<UniqueID, String> pair = getUpdaterBodyIdAndNodeUrl(fp);
-        UniqueID updaterId = pair.getFirst();
+        ActiveObjectLocationInfo info = getUpdaterLocationInfo(fp);
+        UniqueID updaterId = info.getBodyId();
         if (updaterId == null) {
             return;
         }
-        String nodeUrl = pair.getSecond();
+        String nodeUrl = info.getNodeUrl();
         synchronized (futuresToMonitor) {
             /*
              * Avoid a race with the suppression in the ConcurrentHashMap when the
