@@ -36,7 +36,7 @@
  */
 package org.objectweb.proactive.extensions.pnpssl;
 
-import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProtocolException;
 
 
 /**
@@ -44,7 +44,7 @@ import org.objectweb.proactive.core.ProActiveException;
  *
  * @since ProActive 5.0.0
  */
-public class PNPSslException extends ProActiveException {
+public class PNPSslException extends ProtocolException {
 
     public PNPSslException() {
     }

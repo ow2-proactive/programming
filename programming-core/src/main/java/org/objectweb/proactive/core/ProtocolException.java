@@ -1,11 +1,10 @@
 /*
- * ################################################################
- *
+ *  *
  * ProActive Parallel Suite(TM): The Java(TM) library for
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2012 INRIA/University of
+ * Copyright (C) 1997-2013 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -27,42 +26,36 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
+ *  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pamr.exceptions;
+package org.objectweb.proactive.core;
 
-import org.objectweb.proactive.core.ProtocolException;
-
-
-/** Signals that an error of some sort has occurred.
+/**
+ * ProtocolException
  *
- * This class is the general class of exceptions produced by failed message sending.
- * 
- * @since ProActive 4.1.0
+ * All protocol-related ProActiveExceptions
+ *
+ * @author The ProActive Team
  */
-
-public class PAMRException extends ProtocolException {
-
-    public PAMRException() {
+public abstract class ProtocolException extends ProActiveException {
+    public ProtocolException() {
         super();
     }
 
-    public PAMRException(String message) {
+    public ProtocolException(String message) {
         super(message);
     }
 
-    public PAMRException(Throwable cause) {
+    public ProtocolException(Throwable cause) {
         super(cause);
     }
 
-    public PAMRException(String msg, Throwable cause) {
+    public ProtocolException(String msg, Throwable cause) {
         super(msg);
         this.initCause(cause);
     }
-
 }

@@ -64,6 +64,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.ProtocolException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -162,6 +163,9 @@ public class RemoteObjectSet implements Serializable, Observer {
                 this.add(rro);
             }
             sortProtocolsInternal();
+            if (LOGGER_RO.isDebugEnabled()) {
+                LOGGER_RO.debug("[ROAdapter] created RemoteObjectSet : " + sortedrros);
+            }
 
         } catch (RemoteRemoteObjectException e) {
             throw new IOException("Cannot access the remoteObject " + defaultRRO + " : " + e.getMessage());
@@ -186,46 +190,59 @@ public class RemoteObjectSet implements Serializable, Observer {
         // For each protocol already selected and sorted
 
         Throwable defaultProtocolException = null;
-        Reply defaultProtocolReply = null;
 
+        boolean anyException = false;
+
+        Reply reply = null;
         for (URI uri : cloned) {
             rro = rros.get(uri);
             if (LOGGER_RO.isDebugEnabled()) {
                 LOGGER_RO.debug("[ROAdapter] Sending message " + message + " to " + uri);
             }
             try {
-                Reply rep = rro.receiveMessage(message);
-                // The Exception is thrown on server side
-                // So it is encapsulated to be delivered on client side
-                Throwable t = rep.getResult().getException();
-                if (t != null) {
-                    handleProtocolException(t, uri, cloned.size() > 1);
-                    if (uri.equals(defaultURI)) {
-                        defaultProtocolReply = rep;
-                    }
-                    continue;
-                }
-                return rep;
+                reply = rro.receiveMessage(message);
                 // These Exceptions happened on client side
                 // RMI doesn't act as others protocols and Exceptions aren't
                 // encapsulated, so they are caught here.
-            } catch (ProActiveException pae) {
+            } catch (ProtocolException pae) {
+                anyException = true;
                 defaultProtocolException = handleProtocolException(pae, uri, cloned.size() > 1);
             } catch (IOException io) {
+                anyException = true;
                 defaultProtocolException = handleProtocolException(io, uri, cloned.size() > 1);
+            }
+
+            if (reply != null) {
+                // The Exception is thrown on server side
+                // So it is encapsulated to be delivered on client side
+                Throwable t = reply.getResult().getException();
+                if (t != null &&
+                    (t instanceof ProtocolException || t instanceof IOException)) {
+                    anyException = true;
+                    defaultProtocolException = handleProtocolException(t, uri, cloned.size() > 1);
+                    continue;
+                }
+                break;
             }
         }
 
+        // if we arrive to this point either a reply has been received or all protocols sent exceptions
+
+        // if there has been any exception we sort the uri list before sending back the result
+        if (anyException) {
+            sortProtocolsInternal();
+        }
+
         // In case all protocols led to Exception, simply throw the Exception sent by the default protocol
-        if (defaultProtocolException != null) {
-            if (defaultProtocolException instanceof ProActiveException) {
-                throw (ProActiveException) defaultProtocolException;
+        if (reply == null && defaultProtocolException != null) {
+            if (defaultProtocolException instanceof ProtocolException) {
+                throw (ProtocolException) defaultProtocolException;
             } else if (defaultProtocolException instanceof IOException) {
                 throw (IOException) defaultProtocolException;
             }
         }
-        // if the default protocol didn't throw an exception, then it is a reply containing an exception
-        return defaultProtocolReply;
+        // otherwise, we received a reply
+        return reply;
     }
 
     // Handles the Exceptions received in the receiveMessage method, doing a special treatment for the default protocol
@@ -510,11 +527,15 @@ public class RemoteObjectSet implements Serializable, Observer {
                 }
                 this.rros.put(uri, rro);
                 sortedrros.add(uri);
-                lastBenchmarkResults.put(uri, size);
+                lastBenchmarkResults.put(uri, size - i);
             }
         }
         wl.unlock();
         sortProtocolsInternal();
+
+        if (LOGGER_RO.isDebugEnabled()) {
+            LOGGER_RO.debug("[ROAdapter] read RemoteObjectSet " + sortedrros);
+        }
 
         VMID testLocal = ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getVMID();
         if (!vmid.equals(testLocal)) {
