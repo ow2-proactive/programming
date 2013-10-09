@@ -49,8 +49,8 @@ public final class NamingServiceDeployer {
 
     private static final String NAMING_SERVICE_DEFAULT_NAME = "defaultNamingService";
 
-    /** URL of the remote object */
-    final private String url;
+    /** URLs of the remote object, one url for each protocol in use*/
+    final private String[] urls;
 
     final private NamingService namingService;
 
@@ -98,7 +98,7 @@ public final class NamingServiceDeployer {
 
         roe = PARemoteObject.newRemoteObject(NamingService.class.getName(), this.namingService);
         roe.createRemoteObject(name, rebind);
-        url = roe.getURL();
+        urls = roe.getURLs();
     }
 
     public NamingService getLocalNamingService() {
@@ -109,8 +109,21 @@ public final class NamingServiceDeployer {
         return (NamingService) RemoteObjectHelper.generatedObjectStub(this.roe.getRemoteObject());
     }
 
+    /**
+     * Return the main url of this NamingService, in case of multi-protocol, this is the url of the default protocol
+     * @return default NamingService url
+     */
     public String getNamingServiceURL() {
-        return this.url;
+        // the main url of the naming service is stored at index 0, it is the url corresponding to the default protocol
+        return this.urls[0];
+    }
+
+    /**
+     * Return all the urls of this NamingService, one for each protocol used
+     * @return all NamingService urls
+     */
+    public String[] getNamingServiceURLs() {
+        return urls;
     }
 
     /**

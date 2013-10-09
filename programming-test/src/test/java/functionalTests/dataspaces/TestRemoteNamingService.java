@@ -46,10 +46,14 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Level;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
 import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
 import org.objectweb.proactive.extensions.dataspaces.core.ScratchSpaceConfiguration;
@@ -101,6 +105,16 @@ public class TestRemoteNamingService extends FunctionalTest {
     public TestRemoteNamingService() throws ConfigurationException {
         // super(1, 1);
 
+        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
+        ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
+
+        // We set one additional protocol, making sure we don't add the main one
+        if (CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue().equals("pnp")) {
+            CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.setValue("rmi");
+        } else {
+            CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.setValue("pnp");
+        }
+
         InputOutputSpaceConfiguration configInput1 = InputOutputSpaceConfiguration
                 .createInputSpaceConfiguration("http://hostA", "/tmp", "h1", "input1");
         InputOutputSpaceConfiguration configInput2 = InputOutputSpaceConfiguration
@@ -128,8 +142,10 @@ public class TestRemoteNamingService extends FunctionalTest {
     public void before() throws ProActiveException, URISyntaxException {
         remoteObjectDeployer = new NamingServiceDeployer();
 
-        final String url = remoteObjectDeployer.getNamingServiceURL();
-        stub = NamingService.createNamingServiceStub(url);
+        final String[] urls = remoteObjectDeployer.getNamingServiceURLs();
+        // PROACTIVE-1303 : we replace the default url to test that it can switch to the second
+        urls[0] = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue() + "://foo";
+        stub = NamingService.createNamingServiceStub(urls);
     }
 
     @Test
@@ -146,37 +162,45 @@ public class TestRemoteNamingService extends FunctionalTest {
 
         assertFalse(stub.isApplicationIdRegistered(MAIN_APPID));
         // TEST REGISTER APP
+        logger.info("Test register application");
         stub.registerApplication(MAIN_APPID, spaces);
 
         // check if everything has been registered
+        logger.info("Checking that application has been registered");
         assertTrue(stub.isApplicationIdRegistered(MAIN_APPID));
         appsRegistered = stub.getRegisteredApplications();
         appsRegistered.contains(MAIN_APPID);
 
         // TEST LOOKUP FIRST
+        logger.info("Test Lookup First");
         assertIsSpaceRegistered(spaceInstanceInput1);
         assertIsSpaceRegistered(spaceInstanceInput2);
         assertIsSpaceRegistered(spaceInstanceOutput1);
         assertIsSpaceRegistered(spaceInstanceOutput2);
 
         // TEST LOOKUP ALL
+        logger.info("Test Lookup All");
         final DataSpacesURI query = DataSpacesURI.createURI(MAIN_APPID);
         final Set<SpaceInstanceInfo> actual = stub.lookupMany(query);
         assertEquals(spaces, actual);
 
         // TEST UNREGISTER
+        logger.info("Test unregister");
         assertTrue(stub.unregister(spaceInstanceInput1.getMountingPoint()));
         assertTrue(stub.unregister(spaceInstanceOutput1.getMountingPoint()));
 
         // TEST LOOKUP FIRST WITH NULL ANSWER
+        logger.info("Test looup first with null answer");
         assertIsSpaceUnregistered(spaceInstanceInput1);
         assertIsSpaceUnregistered(spaceInstanceOutput1);
 
         // TEST REGISTER
+        logger.info("Test register");
         stub.register(spaceInstanceInput1);
         stub.register(spaceInstanceOutput1);
 
         // TEST EXCEPTION WHEN SPACE ALREADY REGISTERED
+        logger.info("Test Exception when space already registered");
         try {
             stub.register(spaceInstanceInput1);
             fail("Exception expected");
@@ -186,6 +210,7 @@ public class TestRemoteNamingService extends FunctionalTest {
         }
 
         // TEST EXCEPTION WHEN APP NOT REGISTERED
+        logger.info("Test Exception when app not registered");
         try {
             stub.register(spaceInstanceInput1b);
             fail("Exception expected");
@@ -195,6 +220,7 @@ public class TestRemoteNamingService extends FunctionalTest {
         }
 
         // TEST EXCEPTION WHEN APP ALREADY REGISTERED
+        logger.info("Test Exception when app already registered");
         try {
             stub.registerApplication(MAIN_APPID, null);
             fail("Exception expected");
@@ -204,6 +230,7 @@ public class TestRemoteNamingService extends FunctionalTest {
         }
 
         // TEST UNREGISTER APP
+        logger.info("Test unregister");
         stub.unregisterApplication(MAIN_APPID);
     }
 

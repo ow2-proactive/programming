@@ -38,6 +38,7 @@ package org.objectweb.proactive.extensions.dataspaces.core.naming;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -93,6 +94,27 @@ public class NamingService implements SpacesDirectory {
             return (NamingService) stub;
         else
             throw new ProActiveException("No valid NamingService instance can be found under specified URL");
+    }
+
+    public static NamingService createNamingServiceStub(String[] urls) throws ProActiveException,
+            URISyntaxException {
+        for (String url : urls) {
+            Object stub = null;
+            try {
+                stub = PARemoteObject.lookup(new URI(url));
+            } catch (ProActiveException e) {
+                logger.debug("could not find NamingService at " + url + ", skipping...");
+                continue;
+            }
+
+            if (stub instanceof NamingService)
+                return (NamingService) stub;
+            else
+                throw new ProActiveException(
+                    "No valid NamingService instance can be found under specified URL : " + url);
+        }
+        throw new ProActiveException(
+            "No accessible NamingService instance can be found under specified URLs : " + Arrays.asList(urls));
     }
 
     private static void checkApplicationSpaces(long appId, Set<SpaceInstanceInfo> inSet)
