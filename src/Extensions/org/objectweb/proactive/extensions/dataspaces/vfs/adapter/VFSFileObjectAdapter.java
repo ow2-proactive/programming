@@ -36,7 +36,11 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs.adapter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -523,11 +527,45 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     public String getRealURI() {
         try {
-            return currentFileObject.getURL().toExternalForm();
+            URL url = currentFileObject.getURL();
+            return convertToEncodedURIString(url.toString());
         } catch (org.apache.commons.vfs.FileSystemException e) {
             //null of unknown
             return null;
         }
+    }
+
+    /**
+     * This method replace non-URI-valid characters with their replacement code counterpart
+     * (issue PROACTIVE-1314)
+     * @param input
+     * @return a string without main illegal characters
+     */
+    public static String convertToEncodedURIString(String input) {
+        StringBuilder answer = new StringBuilder();
+        // the input must be first decoded as it may contain %XX characters and % is illegal
+        try {
+            input = URLDecoder.decode(input, "UTF8");
+        } catch (UnsupportedEncodingException e) {
+            // it should never happen
+            logger.fatal("Unexpected encoding exception", e);
+            return null;
+        }
+        // chars which must be replaced
+        char[] inputChars = new char[] { ' ', '\"', '%', '<', '>', '#', '[', '\\', ']', '^', '`', '{', '|',
+                '}' };
+        // the replacement code
+        String[] replacements = new String[] { "%20", "%22", "%25", "%3C", "%3E", "%23", "%5B", "%5C", "%5D",
+                "%5E", "%60", "%7B", "%7C", "%7D" };
+        for (char c : input.toCharArray()) {
+            int pos;
+            if ((pos = Arrays.binarySearch(inputChars, c)) >= 0) {
+                answer.append(replacements[pos]);
+            } else {
+                answer.append(c);
+            }
+        }
+        return answer.toString();
     }
 
     public List<String> getAllRealURIs() {
@@ -535,9 +573,9 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         ArrayList<String> answer = new ArrayList<String>();
         for (String root : rootFOUriSet) {
             if ((relativePath != null) && !(relativePath.equals("."))) {
-                answer.add(root + relativePath);
+                answer.add(convertToEncodedURIString(root + relativePath));
             } else {
-                answer.add(root);
+                answer.add(convertToEncodedURIString(root));
             }
         }
         return answer;
@@ -545,7 +583,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     @Override
     public String getSpaceRootURI() {
-        return currentRootFOUri;
+        return convertToEncodedURIString(currentRootFOUri);
     }
 
     @Override
@@ -568,7 +606,11 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     public List<String> getAllSpaceRootURIs() {
-        return new ArrayList<String>(rootFOUriSet);
+        ArrayList<String> answer = new ArrayList<String>(rootFOUriSet.size());
+        for (String uri : rootFOUriSet) {
+            answer.add(convertToEncodedURIString(uri));
+        }
+        return answer;
     }
 
     public DataSpacesFileObject switchToSpaceRoot(String spaceRootUri) throws FileSystemException,
