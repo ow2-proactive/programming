@@ -36,20 +36,16 @@
  */
 package dataspaces;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
-import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
-import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
-import org.objectweb.proactive.extensions.dataspaces.exceptions.MalformedURIException;
-import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
-import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
-import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
-import org.objectweb.proactive.utils.OperatingSystem;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
@@ -58,9 +54,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
+import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.MalformedURIException;
+import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
+import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
+import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 // TODO: some adapted functionality smoke tests - an abstract test for DataSpacesFileObject?
@@ -106,7 +107,7 @@ public class VFSFileObjectAdapterTest {
 
         testDir = new File(System.getProperty("java.io.tmpdir"), "ProActive-VFSFileObjectAdapterTest");
         final File differentDir = new File(testDir, "different");
-        final File rootDir = new File(testDir, "root");
+        final File rootDir = new File(testDir, "root space");
         final File aoDir = new File(rootDir, "ao1");
         final File someDir = new File(aoDir, "dir");
         final File someFile = new File(someDir, "file.txt");
@@ -165,9 +166,22 @@ public class VFSFileObjectAdapterTest {
     }
 
     @Test
-    public void testGetURI3() throws Exception {
-        assertEquals(adaptee.getURL().toString(), dsFileObject.getRealURI());
+    public void testGetRealURI_WithSpecialChars() throws Exception {
+        // because of PROACTIVE-1314, uri string returned by getRealURI() can escape characters and thus be different than the original URL
+        assertEquals(VFSFileObjectAdapter.convertToEncodedURIString(adaptee.getURL().toString()),
+                dsFileObject.getRealURI());
         assertEquals(rootUris, dsFileObject.getAllSpaceRootURIs());
+
+        // testing that all are valid uris
+        new URI(dsFileObject.getRealURI());
+        new URI(dsFileObject.getSpaceRootURI());
+        for (String uri : dsFileObject.getAllSpaceRootURIs()) {
+            new URI(uri);
+        }
+        for (String uri : dsFileObject.getAllRealURIs()) {
+            new URI(uri);
+        }
+
     }
 
     @Test
