@@ -42,6 +42,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class VFSFileObjectAdapterTest {
 
         testDir = new File(System.getProperty("java.io.tmpdir"), "ProActive-VFSFileObjectAdapterTest");
         final File differentDir = new File(testDir, "different");
-        final File rootDir = new File(testDir, "root");
+        final File rootDir = new File(testDir, "root space");
         final File aoDir = new File(rootDir, "ao1");
         final File someDir = new File(aoDir, "dir");
         final File someFile = new File(someDir, "file.txt");
@@ -166,9 +167,22 @@ public class VFSFileObjectAdapterTest {
     }
 
     @Test
-    public void testGetURI3() throws Exception {
-        assertEquals(adaptee.getURL().toString(), dsFileObject.getRealURI());
+    public void testGetRealURI_WithSpecialChars() throws Exception {
+        // because of PROACTIVE-1314, uri string returned by getRealURI() can escape characters and thus be different than the original URL
+        assertEquals(VFSFileObjectAdapter.convertToEncodedURIString(adaptee.getURL().toString()),
+                dsFileObject.getRealURI());
         assertEquals(rootUris, dsFileObject.getAllSpaceRootURIs());
+
+        // testing that all are valid uris
+        new URI(dsFileObject.getRealURI());
+        new URI(dsFileObject.getSpaceRootURI());
+        for (String uri : dsFileObject.getAllSpaceRootURIs()) {
+            new URI(uri);
+        }
+        for (String uri : dsFileObject.getAllRealURIs()) {
+            new URI(uri);
+        }
+
     }
 
     @Test
