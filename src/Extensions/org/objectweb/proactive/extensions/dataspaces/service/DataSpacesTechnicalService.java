@@ -57,6 +57,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.dataspaces.api.PADataSpaces;
 import org.objectweb.proactive.extensions.dataspaces.core.BaseScratchSpaceConfiguration;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesNodes;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.AlreadyConfiguredException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
@@ -155,7 +156,8 @@ public class DataSpacesTechnicalService implements TechnicalService {
         }
 
         try {
-            DataSpacesNodes.configureApplication(node, appId, namingServiceURL);
+            NamingService stub = NamingService.createNamingServiceStub(namingServiceURL);
+            DataSpacesNodes.configureApplication(node, appId, stub);
         } catch (NotConfiguredException e) {
             // it should not happen as we configure it above
             ProActiveLogger.logImpossibleException(logger, e);

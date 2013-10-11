@@ -36,12 +36,16 @@
  */
 package functionalTests.multiprotocol;
 
+import java.net.URISyntaxException;
+
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingServiceDeployer;
 
 
 /**
@@ -97,6 +101,11 @@ public class AOMultiProtocolSwitch {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public NamingService createNamingService() throws ProActiveException, URISyntaxException {
+        NamingServiceDeployer namingServiceDeployer = new NamingServiceDeployer(true);
+        return NamingService.createNamingServiceStub(namingServiceDeployer.getNamingServiceURLs());
     }
 
     public boolean disableProtocol(String protocol) throws ProActiveException {

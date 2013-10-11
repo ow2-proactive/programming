@@ -54,6 +54,7 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
 import org.objectweb.proactive.extensions.dataspaces.api.PADataSpaces;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesNodes;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
 import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingServiceDeployer;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.NotConfiguredException;
@@ -93,20 +94,20 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
 
         Node node = super.getANode();
         ao = PAActiveObject.newActive(AO.class, new Object[] { fsDeployer.getVFSRootURL(),
-                namingServiceDeployer.getNamingServiceURL(), applicationId }, node);
+                namingServiceDeployer.getRemoteNamingService(), applicationId }, node);
     }
 
     public static class AO implements Serializable, InitActive {
         String vfsRootUrl;
-        String namingServiceUrl;
+        NamingService namingService;
         long appId;
 
         public AO() {
         }
 
-        public AO(String vfsRootUrl, String namingServiceUrl, long appId) {
+        public AO(String vfsRootUrl, NamingService namingService, long appId) {
             this.vfsRootUrl = vfsRootUrl;
-            this.namingServiceUrl = namingServiceUrl;
+            this.namingService = namingService;
             this.appId = appId;
         }
 
@@ -115,7 +116,7 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
                 // node is configured without scratch
                 Node node = PAActiveObject.getNode();
                 DataSpacesNodes.configureNode(node, null);
-                DataSpacesNodes.configureApplication(node, appId, namingServiceUrl);
+                DataSpacesNodes.configureApplication(node, appId, namingService);
 
                 PADataSpaces.addDefaultInput(vfsRootUrl, null);
 

@@ -169,7 +169,62 @@ public class NodeConfigurator {
      *
      * @param appId
      *            id of application running on this node
-     * @param namingServiceURL
+     * @param namingService
+     *            naming Service stub
+     * @throws IllegalStateException
+     *             when node has not been configured yet in terms of node-specific configuration
+     * @throws URISyntaxException
+     *             when exception occurred on namingService parsing
+     * @throws ProActiveException
+     *             when exception occurred during contacting with NamingService
+     * @throws ConfigurationException
+     *             when space appears to be already registered or application is not registered in
+     *             Naming Service
+     * @throws FileSystemException
+     *             VFS related exception during scratch data space creation
+     */
+    synchronized public void configureApplication(long appId, NamingService namingService)
+            throws IllegalStateException, FileSystemException, ProActiveException, ConfigurationException,
+            URISyntaxException {
+        logger.debug("Configuring node for Data Spaces application");
+        checkConfigured();
+
+        tryCloseAppConfigurator();
+        appConfigurator = new NodeApplicationConfigurator();
+        boolean appConfigured = false;
+        try {
+
+            appConfigurator.configure(appId, namingService);
+
+            appConfigured = true;
+        } finally {
+            if (!appConfigured)
+                appConfigurator = null;
+        }
+        logger.debug("Node configured for Data Spaces application");
+    }
+
+    /**
+     * @deprecated this method uses a single url to lookup the naming service. In case of multi-protocol,
+     * it won't be able to react to multiple configurations. Use the method which takes a NamingService stub instead
+     *
+     * Configures node for a specific application with its identifier, resulting in creation of
+     * configured {@link DataSpacesImpl}.
+     * <p>
+     * Configuration of a node for an application involves association to provided NamingService and
+     * registration of application scratch space for this node, if it exists.
+     * <p>
+     * This method may be called several times for different applications, after node has been
+     * configured through {@link #configureNode(Node, BaseScratchSpaceConfiguration)}. Subsequent
+     * calls will close existing application-specific configuration and create a new one.
+     * <p>
+     * If configuration fails, instance of this class remains not configured for an application, any
+     * subsequent {@link #getDataSpacesImpl()} call will throw {@link IllegalStateException} until
+     * successful configuration.
+     *
+     * @param appId
+     *            id of application running on this node
+     * @param namingServiceUrl
      *            URL of naming service remote object for that application
      * @throws IllegalStateException
      *             when node has not been configured yet in terms of node-specific configuration
@@ -183,23 +238,13 @@ public class NodeConfigurator {
      * @throws FileSystemException
      *             VFS related exception during scratch data space creation
      */
-    synchronized public void configureApplication(long appId, String namingServiceURL)
+    @Deprecated
+    synchronized public void configureApplication(long appId, String namingServiceUrl)
             throws IllegalStateException, FileSystemException, ProActiveException, ConfigurationException,
             URISyntaxException {
-        logger.debug("Configuring node for Data Spaces application");
-        checkConfigured();
+        NamingService namingService = NamingService.createNamingServiceStub(namingServiceUrl);
 
-        tryCloseAppConfigurator();
-        appConfigurator = new NodeApplicationConfigurator();
-        boolean appConfigured = false;
-        try {
-            appConfigurator.configure(appId, namingServiceURL);
-            appConfigured = true;
-        } finally {
-            if (!appConfigured)
-                appConfigurator = null;
-        }
-        logger.debug("Node configured for Data Spaces application");
+        configureApplication(appId, namingService);
     }
 
     /**
@@ -319,21 +364,9 @@ public class NodeConfigurator {
 
         private DataSpacesImpl impl;
 
-        private void configure(final long appId, final String namingServiceURL) throws FileSystemException,
-                URISyntaxException, ProActiveException, ConfigurationException {
+        private void configure(final long appId, final NamingService namingService)
+                throws FileSystemException, URISyntaxException, ProActiveException, ConfigurationException {
 
-            // create naming service stub with URL and decorate it with local cache
-            // use local variables so GC can collect them if something fails
-            final NamingService namingService;
-            try {
-                namingService = NamingService.createNamingServiceStub(namingServiceURL);
-            } catch (ProActiveException x) {
-                logger.error("Could not access Naming Service", x);
-                throw x;
-            } catch (URISyntaxException x) {
-                logger.error("Wrong Naming Service URI", x);
-                throw x;
-            }
             final CachingSpacesDirectory cachingDir = new CachingSpacesDirectory(namingService);
 
             // create scratch data space for this application and register it

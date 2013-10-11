@@ -47,6 +47,7 @@ import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.AlreadyConfiguredException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
@@ -136,6 +137,9 @@ public class DataSpacesNodes {
     }
 
     /**
+     * @deprecated this method uses a single url to lookup the naming service. In case of multi-protocol,
+     * it won't be able to react to multiple configurations. Use the method which takes a NamingService stub instead
+     *
      * Configures Data Spaces node for a specific application and stores that configuration together
      * with Data Spaces implementation instance, so they can be later accessed by
      * {@link #getDataSpacesImpl(Node)} or closed through
@@ -163,11 +167,52 @@ public class DataSpacesNodes {
      *             VFS related exception during scratch data space creation
      * @see NodeConfigurator#configureApplication(long, String)
      */
+    @Deprecated
     public static void configureApplication(Node node, long appId, String namingServiceURL)
             throws ProActiveException, NotConfiguredException, URISyntaxException, FileSystemException {
         final NodeConfigurator nodeConfig = getOrFailNodeConfigurator(node);
         try {
             nodeConfig.configureApplication(appId, namingServiceURL);
+        } catch (IllegalStateException x) {
+            logger.debug("Requested Data Spaces node application configuration for not configured node");
+            // it can occur only in case of concurrent configuration, let's wrap it
+            throw new NotConfiguredException(x.getMessage(), x);
+        }
+    }
+
+    /**
+     * Configures Data Spaces node for a specific application and stores that configuration together
+     * with Data Spaces implementation instance, so they can be later accessed by
+     * {@link #getDataSpacesImpl(Node)} or closed through
+     * {@link #tryCloseNodeApplicationConfig(Node)} or subsequent
+     * {@link #configureApplication(Node, long, String)}.
+     *
+     * This method can be called on an already configured node (see
+     * {@link #configureNode(Node, BaseScratchSpaceConfiguration)}) or even already
+     * application-configured node - in that case previous application configuration is closed
+     * before applying a new one.
+     *
+     * @param node
+     *            node to be configured for Data Spaces application
+     * @param appId
+     *            identifier of application running on that node
+     * @param namingServiceStub
+     *            stub of a Naming Service to connect to
+     * @throws URISyntaxException
+     *             when exception occurred on namingServiceURL parsing
+     * @throws ProActiveException
+     *             occurred during contacting with NamingService
+     * @throws NotConfiguredException
+     *             when node is not configured for Data Spaces
+     * @throws FileSystemException
+     *             VFS related exception during scratch data space creation
+     * @see NodeConfigurator#configureApplication(long, String)
+     */
+    public static void configureApplication(Node node, long appId, NamingService namingServiceStub)
+            throws ProActiveException, NotConfiguredException, URISyntaxException, FileSystemException {
+        final NodeConfigurator nodeConfig = getOrFailNodeConfigurator(node);
+        try {
+            nodeConfig.configureApplication(appId, namingServiceStub);
         } catch (IllegalStateException x) {
             logger.debug("Requested Data Spaces node application configuration for not configured node");
             // it can occur only in case of concurrent configuration, let's wrap it

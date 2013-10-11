@@ -105,7 +105,7 @@ public class ManualConfigurationExample {
 
         // @snippet-start DataSpacesManualConfig_ConfigureNodeForApp
         // configure node for application
-        DataSpacesNodes.configureApplication(node, applicationId, namingServiceURL);
+        DataSpacesNodes.configureApplication(node, applicationId, namingService);
         // @snippet-end DataSpacesManualConfig_ConfigureNodeForApp
 
         // now we can use PADataSpaces from AO/bodies on that node.
