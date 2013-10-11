@@ -52,14 +52,29 @@ public class PAPropertyList extends PAPropertyImpl {
 
     private List<String> computedValue;
 
+    private PropertyListValidator validator;
+
     public PAPropertyList(String name, String separator, boolean isSystemProp) {
         super(name, PropertyType.LIST, isSystemProp, null);
         this.separator = separator;
     }
 
+    public PAPropertyList(String name, String separator, boolean isSystemProp, PropertyListValidator validator) {
+        super(name, PropertyType.LIST, isSystemProp, null);
+        this.separator = separator;
+        this.validator = validator;
+    }
+
     public PAPropertyList(String name, String separator, boolean isSystemProp, String defaultValue) {
         super(name, PropertyType.LIST, isSystemProp, defaultValue);
         this.separator = separator;
+    }
+
+    public PAPropertyList(String name, String separator, boolean isSystemProp,
+            PropertyListValidator validator, String defaultValue) {
+        super(name, PropertyType.LIST, isSystemProp, defaultValue);
+        this.separator = separator;
+        this.validator = validator;
     }
 
     final public List<String> getValue() {
@@ -72,13 +87,17 @@ public class PAPropertyList extends PAPropertyImpl {
     private void computeStringToList() {
         String value = super.getValueAsString();
         if (value != null) {
-            computedValue = new ArrayList<String>();
+            ArrayList<String> tmplist = new ArrayList<String>();
             for (String val : value.split(Pattern.quote(separator))) {
                 val = val.trim();
                 if (val.length() > 0) {
-                    computedValue.add(val);
+                    tmplist.add(val);
                 }
             }
+            if (validator != null) {
+                validator.accept(tmplist);
+            }
+            computedValue = tmplist;
         } else {
             computedValue = null;
         }
@@ -106,7 +125,11 @@ public class PAPropertyList extends PAPropertyImpl {
     }
 
     final public void setValue(List<String> value) {
+        if (validator != null) {
+            validator.accept(new ArrayList(value));
+        }
         computedValue = value;
+
         computeListToString();
     }
 
