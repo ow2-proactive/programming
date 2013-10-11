@@ -268,21 +268,23 @@ project(':programming-test') {
         )
     }
 
-    def testConfiguration = {
-        forkEvery 1
+    def testConfiguration = { Test task ->
+        task.with {
+            forkEvery 1
 
-        testLogging {
-            exceptionFormat = 'full'
-        }
-        beforeTest { descriptor ->
-            logger.lifecycle("Running: " + descriptor)
-        }
+            testLogging {
+                exceptionFormat = 'full'
+            }
+            beforeTest { descriptor ->
+                logger.lifecycle("Running: " + descriptor)
+            }
 
-        systemProperties << ['proactive.home': rootDir.absolutePath]
-        systemProperties << ['proactive.runtime.ping': false]
-        systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
-        dependsOn 'copyToLib'
-        dependsOn 'ProActiveJar'
+            systemProperties << ['proactive.home': rootDir.absolutePath]
+            systemProperties << ['proactive.runtime.ping': false]
+            systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
+            dependsOn 'copyToLib'
+            dependsOn '::ProActiveJar'
+        }
     }
 
     task functionalTest(type: Test, group: 'ProActive')
