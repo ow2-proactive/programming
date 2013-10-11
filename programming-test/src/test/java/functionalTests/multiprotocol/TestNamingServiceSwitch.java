@@ -1,0 +1,164 @@
+/*
+ * ################################################################
+ *
+ * ProActive Parallel Suite(TM): The Java(TM) library for
+ *    Parallel, Distributed, Multi-Core Computing for
+ *    Enterprise Grids & Clouds
+ *
+ * Copyright (C) 1997-2013 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
+ * Contact: proactive@ow2.org or contact@activeeon.com
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; version 3 of
+ * the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
+ *
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
+ *  Contributor(s):
+ *
+ * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
+ */
+package functionalTests.multiprotocol;
+
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.log4j.Level;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PAFuture;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
+import org.objectweb.proactive.extensions.dataspaces.core.SpaceInstanceInfo;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.router.Router;
+import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
+
+import functionalTests.FunctionalTest;
+
+
+/**
+ * TestMultiProtocolSwitch tests the automatic switching between protocols in the RemoteObjectSet. The switching is triggered by disabling a given protocol
+ * on the remote remote object.
+ *
+ * The test is designed to test all possible switching from a given set of protocols. This is mainly to test robustness
+ * of the switching
+ *
+ * @author The ProActive Team
+ */
+public class TestNamingServiceSwitch extends FunctionalTest {
+
+    URL gcma = TestNamingServiceSwitch.class.getResource("TestMultiProtocol.xml");
+
+    // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmissl", "pnp",
+            "pamr" }));
+
+    // pamr router
+    static Router router;
+
+    static {
+        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
+        ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
+        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
+        PAMRConfig.PA_NET_ROUTER_PORT.setValue(9997);
+
+    }
+
+    public TestNamingServiceSwitch() {
+    }
+
+    @BeforeClass
+    public static void prepare() throws Exception {
+        RouterConfig config = new RouterConfig();
+        config.setPort(PAMRConfig.PA_NET_ROUTER_PORT.getValue());
+        router = Router.createAndStart(config);
+    }
+
+    /**
+     * Testing the multi-protocol switching for naming service
+     * @throws Exception
+     */
+    @Test
+    public void testNamingServiceSwitch() throws Exception {
+
+        System.out.println("**************** Testing Switching with protocol list : " + protocolsToTest);
+
+        // we use the facility of the FuntionalTest class to deploy the remote jvm :
+
+        // Here we need to clone the variable contract received from the super class in order to be able to use a new
+        // VC at each loop iteration
+        VariableContractImpl variableContract = (VariableContractImpl) super.getVariableContract().clone();
+
+        // we remove the value of the proactive.communication.protocol set by the FuntionalTest
+        List<String> jvmParameters = super.getJvmParameters();
+
+        Node node = MultiProtocolHelper.deployANodeWithProtocols(protocolsToTest, gcma, variableContract,
+                jvmParameters);
+
+        AOMultiProtocolSwitch ao = PAActiveObject.newActive(AOMultiProtocolSwitch.class, new Object[0], node);
+        String[] aouris = PAActiveObject.getUrls(ao);
+
+        // Ensure that the remote active object is deployed using the correct protocols
+        Assert.assertEquals("Number of uris match protocol list size", protocolsToTest.size(), aouris.length);
+        for (int i = 0; i < aouris.length; i++) {
+            Assert.assertEquals(aouris[i] + " is protocol " + protocolsToTest.get(i), protocolsToTest.get(i),
+                    (new URI(aouris[i])).getScheme());
+        }
+
+        NamingService namingService = ao.createNamingService();
+
+        PAFuture.waitFor(namingService);
+
+        Set<SpaceInstanceInfo> predefinedSpaces = new HashSet<SpaceInstanceInfo>();
+        // for each protocol except the last one, we try to register an empty applications
+        for (int i = 0; i < protocolsToTest.size() - 1; i++) {
+
+            namingService.registerApplication(protocolsToTest.get(i).hashCode(), predefinedSpaces);
+            System.out.println("******** Disabling protocol " + protocolsToTest.get(i));
+            // switch protocol
+            ao.disableProtocol(protocolsToTest.get(i));
+
+        }
+        namingService.registerApplication(protocolsToTest.get(protocolsToTest.size() - 1).hashCode(),
+                predefinedSpaces);
+
+        Set<Long> registeredApps = namingService.getRegisteredApplications();
+        Assert.assertEquals("Number of application registered should match the number of protocols",
+                protocolsToTest.size(), registeredApps.size());
+
+    }
+
+    @AfterClass
+    public static void clean() throws Exception {
+        router.stop();
+    }
+
+}

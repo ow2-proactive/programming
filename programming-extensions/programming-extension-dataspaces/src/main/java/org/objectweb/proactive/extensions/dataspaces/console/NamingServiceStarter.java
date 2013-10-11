@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.console;
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -97,7 +99,7 @@ public class NamingServiceStarter {
         else
             namingServiceDeployer = new NamingServiceDeployer();
         System.out.println("Naming Service successfully started on: " +
-            namingServiceDeployer.getNamingServiceURL());
+            Arrays.asList(namingServiceDeployer.getNamingServiceURLs()));
     }
 
     private static void stopNamingService() {

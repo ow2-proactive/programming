@@ -123,7 +123,7 @@ public abstract class AbstractPAProviderLocalBenchmark extends FunctionalTest {
         // node is configured without scratch
         DataSpacesNodes.configureNode(halfBodiesNode, null);
         DataSpacesNodes.configureApplication(halfBodiesNode, applicationId, namingServiceDeployer
-                .getNamingServiceURL());
+                .getRemoteNamingService());
 
         PADataSpaces.addDefaultInput(fsDeployer.getVFSRootURL(), null);
     }

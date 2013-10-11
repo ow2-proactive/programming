@@ -36,14 +36,11 @@
  */
 package functionalTests.multiprotocol;
 
-import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Level;
@@ -52,7 +49,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.remoteobject.benchmark.ThroughputBenchmark;
@@ -60,12 +56,9 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 import functionalTests.FunctionalTest;
 
@@ -145,13 +138,24 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
 
     private void genericTestSwitch() throws Exception {
 
-        permute((ArrayList<String>) protocolsToTest.clone(), 0);
+        MultiProtocolHelper.permute(permutations, (ArrayList<String>) protocolsToTest.clone(), 0);
 
         for (List<String> proto : permutations) {
 
             System.out.println("**************** Testing Switching with protocol list : " + proto);
 
-            Node node = deployANodeWithProtocols(proto);
+            // we use the facility of the FuntionalTest class to deploy the remote jvm :
+
+            // Here we need to clone the variable contract received from the super class in order to be able to use a new
+            // VC at each loop iteration
+            VariableContractImpl variableContract = (VariableContractImpl) super.getVariableContract()
+                    .clone();
+
+            // we remove the value of the proactive.communication.protocol set by the FuntionalTest
+            List<String> jvmParameters = super.getJvmParameters();
+
+            Node node = MultiProtocolHelper.deployANodeWithProtocols(proto, gcma, variableContract,
+                    jvmParameters);
 
             AOMultiProtocolSwitch ao = PAActiveObject.newActive(AOMultiProtocolSwitch.class, new Object[0],
                     node);
@@ -208,93 +212,5 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
             }
         }
         // the test pass if there are no exceptions
-    }
-
-    /**
-     * Deploys a separate JVM with the given set of protocols, the first element of the set
-     * will be the default protocol, and other ones will be additional protocols
-     * @param proto
-     * @return
-     * @throws CloneNotSupportedException
-     */
-    private Node deployANodeWithProtocols(List<String> proto) throws CloneNotSupportedException,
-            URISyntaxException, ProActiveException {
-
-        // we use the facility of the FuntionalTest class to deploy the remote jvm :
-
-        // Here we need to clone the variable contract received from the super class in order to be able to use a new
-        // VC at each loop iteration
-        VariableContractImpl vc = (VariableContractImpl) super.getVariableContract().clone();
-
-        // we remove the value of the proactive.communication.protocol set by the FuntionalTest
-        List<String> jvmParameters = super.getJvmParameters();
-        for (Iterator<String> it = jvmParameters.iterator(); it.hasNext();) {
-            if (it.next().contains(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getName())) {
-                it.remove();
-            }
-        }
-        // we add the router config properties in the jvm parameter
-        jvmParameters.add(PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine() +
-            PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue());
-        jvmParameters.add(PAMRConfig.PA_NET_ROUTER_PORT.getCmdLine() +
-            PAMRConfig.PA_NET_ROUTER_PORT.getValue());
-
-        // we update the variable contract with the new value of the jvm params
-        StringBuilder sb = new StringBuilder();
-        for (String param : jvmParameters) {
-            sb.append(param).append(" ");
-        }
-
-        String finalJVMparams = sb.toString().trim();
-        vc.setVariableFromProgram("JVM_PARAMETERS", finalJVMparams, VariableContractType.ProgramVariable);
-
-        // we add in the variable contract the protocols
-        vc.setVariableFromProgram("communication.protocol", proto.get(0),
-                VariableContractType.ProgramVariable);
-
-        String apstring = proto.get(1);
-        for (int i = 2; i < proto.size(); i++) {
-            apstring += "," + proto.get(i);
-        }
-        vc.setVariableFromProgram("additional.protocols", apstring, VariableContractType.ProgramVariable);
-
-        GCMApplication gcmad = PAGCMDeployment.loadApplicationDescriptor(new File(gcma.toURI()), vc);
-        gcmad.startDeployment();
-
-        Node node = gcmad.getVirtualNode("VN").getANode();
-        return node;
-    }
-
-    /**
-     * This method returns a list of permutation from the input list of protocols
-     *
-     * @param l
-     * @param fixed
-     */
-    private void permute(ArrayList<String> l, int fixed) {
-        if (fixed >= l.size() - 1) {
-            // nothing left to permute --
-            permutations.add((List<String>) l.clone());
-        } else {
-            // put each element from fixed+1...EOL in location fixed in turn
-
-            // special case (no swaps) for leaving item in loc fixed as is
-            permute(l, fixed + 1);
-
-            // now try all the other elements in turn
-            String x = l.get(fixed);
-            for (int i = fixed + 1; i < l.size(); i++) {
-                // swap elements at locations fixed and i
-                l.set(fixed, l.get(i));
-                l.set(i, x);
-
-                // find all permutations of the elements after fixed
-                permute(l, fixed + 1);
-
-                // put things back the way they were
-                l.set(i, l.get(fixed));
-                l.set(fixed, x);
-            }
-        }
     }
 }
