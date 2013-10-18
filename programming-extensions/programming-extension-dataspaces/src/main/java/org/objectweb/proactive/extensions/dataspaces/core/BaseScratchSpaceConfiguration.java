@@ -40,9 +40,15 @@ import java.io.File;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
+import org.objectweb.proactive.extensions.vfsprovider.util.URIHelper;
 
 
 /**
@@ -59,15 +65,23 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
  * @see ScratchSpaceConfiguration
  */
 public class BaseScratchSpaceConfiguration implements Serializable {
-    /**
-     *
-     */
 
-    public static final String HOSTNAME_VARIABLE_KEYWORD = "#{hostname}";
+    protected final static Logger logger = ProActiveLogger.getLogger(Loggers.DATASPACES);
 
-    private String url;
+    public static final String HOSTNAME_VARIABLE_KEYWORD = "$(hostname)";
+
+    private List<String> urlList;
 
     private String path;
+
+    /**
+     * utility constructor same as BaseScratchSpaceConfiguration(new String[] {url}, path);
+     * @param url remote access url of the scratch space
+     * @param path scratch space path
+     */
+    public BaseScratchSpaceConfiguration(final String url, final String path) throws ConfigurationException {
+        this(url == null ? null : new String[] { url }, path);
+    }
 
     /**
      * Creates base for a scratch space configuration.
@@ -78,15 +92,15 @@ public class BaseScratchSpaceConfiguration implements Serializable {
      * Remote access URL may contain special metavariable {@value #HOSTNAME_VARIABLE_KEYWORD} that
      * is later filled by localhost hostname.
      *
-     * @param url
-     *            Base access URL to scratch space, where subdirectories will be created. Used for
-     *            accessing from remote nodes. URL defines which protocol is used to access the data
+     * @param urls
+     *            Base access URLs to scratch space, where subdirectories will be created. Used for
+     *            accessing from remote nodes. URLs defines which protocols are used to access the data
      *            from remote node, and some additional information for protocol like path,
-     *            sometimes user name and password. This URL may contain special variable
+     *            sometimes user name and password. These URLs may contain special variable
      *            {@value #HOSTNAME_VARIABLE_KEYWORD} that is later filled with actual host name for
      *            caller, so scratch configuration definition may be more generic — sufficient to
      *            use in context of generic host configuration. May be <code>null</code> if remote
-     *            access URL is not yet specified.
+     *            access URLs are not yet specified.
      * @param path
      *            Base of local path for scratch data space. This path is local to host where this
      *            base scratch configuration will be used. May be <code>null</code> if there is no
@@ -94,11 +108,30 @@ public class BaseScratchSpaceConfiguration implements Serializable {
      * @throws ConfigurationException
      *             When no access was specified.
      */
-    public BaseScratchSpaceConfiguration(final String url, final String path) throws ConfigurationException {
-        this.url = url;
+    public BaseScratchSpaceConfiguration(final String[] urls, final String path)
+            throws ConfigurationException {
         this.path = path;
 
-        if (url == null && path == null)
+        if (urls != null && urls.length > 0) {
+            this.urlList = new ArrayList<String>(urls.length);
+
+            // we convert the urlList received to valid uri strings and search in the list if there is any file: url
+            String[] encoded = URIHelper.convertAllToURIString(urls);
+
+            // we check if there is a file url
+            boolean fileSchemeFound = URIHelper.findFileUrl(encoded);
+
+            this.urlList.addAll(Arrays.asList(encoded));
+
+            if (path != null) {
+                // if there was no file url in the url list then we add one using the path
+                if (!fileSchemeFound) {
+                    this.urlList.add(0, (new File(path)).toURI().toString());
+                }
+            }
+        }
+
+        if (urls == null && path == null)
             throw new ConfigurationException("No access specified (neither local, nor remote)");
     }
 
@@ -109,36 +142,42 @@ public class BaseScratchSpaceConfiguration implements Serializable {
      * Remote access URL may contain special metavariable {@value #HOSTNAME_VARIABLE_KEYWORD} that
      * is later filled by localhost hostname.
      *
-     * @param url
-     *            Base access URL to scratch space, where subdirectories will be created. Used for
-     *            accessing from remote nodes. URL defines which protocol is used to access the data
+     * @param urls
+     *            Base access URLs to scratch space, where subdirectories will be created. Used for
+     *            accessing from remote nodes. URLs defines which protocol are used to access the data
      *            from remote node, and some additional information for protocol like path,
-     *            sometimes user name and password. This URL may contain special variable
+     *            sometimes user name and password. These URL may contain special variable
      *            {@value #HOSTNAME_VARIABLE_KEYWORD} that is later filled with actual host name for
      *            caller, so scratch configuration definition may be more generic — sufficient to
      *            use in context of generic host configuration. Cannot be <code>null</code>.
      * @return an instance of BaseScratchSpaceConfiguration with defined remote access
      * @throws ConfigurationException
      *             when remote access has been already specified or given URL is <code>null</code>
-     * @see #BaseScratchSpaceConfiguration(String, String)
+     * @see #BaseScratchSpaceConfiguration(String[], String)
      */
-    public BaseScratchSpaceConfiguration getWithRemoteAccess(final String url) throws ConfigurationException {
-        if (this.url != null)
+    public BaseScratchSpaceConfiguration getWithRemoteAccess(final String[] urls)
+            throws ConfigurationException {
+        if (this.urlList != null)
             throw new ConfigurationException(
                 "Remote access has been already specified and cannot be redefined");
-        if (url == null)
+        if (urls == null)
             throw new ConfigurationException("Cannot set remote access as an empty url");
-        return new BaseScratchSpaceConfiguration(url, this.path);
+        return new BaseScratchSpaceConfiguration(urls, this.path);
     }
 
     /**
      * @return remote access URL with hostname metavariable filled with actual localhost hostname.
      *         May be <code>null</code>
      */
-    public String getUrl() {
-        if (url == null)
+    public String[] getUrls() {
+        if (urlList == null) {
             return null;
-        return url.replace(HOSTNAME_VARIABLE_KEYWORD, Utils.getHostname());
+        }
+        String[] answer = new String[urlList.size()];
+        for (int i = 0; i < urlList.size(); i++) {
+            answer[i] = urlList.get(i).replace(HOSTNAME_VARIABLE_KEYWORD, Utils.getHostname());
+        }
+        return answer;
     }
 
     /**
@@ -166,7 +205,6 @@ public class BaseScratchSpaceConfiguration implements Serializable {
     public ScratchSpaceConfiguration createScratchSpaceConfiguration(final String... subDirs)
             throws ConfigurationException {
         ArrayList<String> urls = new ArrayList<String>();
-        final String newUrl = Utils.appendSubDirs(getUrl(), subDirs);
         final String newPath = Utils.appendSubDirs(getPath(), subDirs);
         String localPathUrl = null;
         try {
@@ -174,10 +212,16 @@ public class BaseScratchSpaceConfiguration implements Serializable {
         } catch (MalformedURLException e) {
             throw new ConfigurationException(e);
         }
-        if (!newUrl.equals(localPathUrl)) {
-            urls.add(localPathUrl);
+        urls.add(localPathUrl);
+        String[] receivedurls = getUrls();
+        if (receivedurls != null) {
+            for (String url : receivedurls) {
+                final String newUrl = Utils.appendSubDirs(url, subDirs);
+                if (!newUrl.equals(localPathUrl)) {
+                    urls.add(newUrl);
+                }
+            }
         }
-        urls.add(newUrl);
         return new ScratchSpaceConfiguration(urls, newPath, Utils.getHostname());
     }
 }

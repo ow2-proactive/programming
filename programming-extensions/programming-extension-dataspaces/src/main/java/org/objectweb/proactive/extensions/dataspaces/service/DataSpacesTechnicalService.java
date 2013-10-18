@@ -38,6 +38,7 @@ package org.objectweb.proactive.extensions.dataspaces.service;
 
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.management.Notification;
@@ -71,8 +72,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.Technical
  * Configuration is read from two sources:
  * <ul>
  * <li>Node level configuration of scratch space is read from local runtime ProActive's properties (
- * {@link PAProperties#PA_DATASPACES_SCRATCH_URL} and
- * {@link PAProperties#PA_DATASPACES_SCRATCH_PATH})</li>
+ * {@link CentralPAPropertyRepository#PA_DATASPACES_SCRATCH_URLS} and
+ * {@link CentralPAPropertyRepository#PA_DATASPACES_SCRATCH_PATH})</li>
  * <li>Application level configuration is read from technical service properties (
  * {@link #PROPERTY_APPLICATION_ID} abd {@link #PROPERTY_NAMING_SERVICE_URL}).</li>
  * </ul>
@@ -232,14 +233,19 @@ public class DataSpacesTechnicalService implements TechnicalService {
 
     private BaseScratchSpaceConfiguration readScratchConfiguration() {
         final String scratchPath = CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_PATH.getValue();
-        final String scratchURL = CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URL.getValue();
+        final List<String> scratchURLlist = CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URLS.getValue();
 
-        if (scratchURL == null && scratchPath == null) {
+        if (scratchURLlist == null && scratchPath == null) {
             logger.warn("No scratch space configuration specified for this node.");
             return null;
         }
+        String[] scratchURLs = null;
+        if (scratchURLlist != null) {
+            scratchURLs = scratchURLlist.toArray(new String[0]);
+        }
+
         try {
-            return new BaseScratchSpaceConfiguration(scratchURL, scratchPath);
+            return new BaseScratchSpaceConfiguration(scratchURLs, scratchPath);
         } catch (ConfigurationException e) {
             // it should not happen as we check it above
             ProActiveLogger.logImpossibleException(logger, e);

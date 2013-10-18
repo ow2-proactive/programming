@@ -491,15 +491,15 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     // -------------- DATA SPACES
 
     /**
-     * This property indicates an access URL to the scratch data space. If scratch is going to be
+     * This property indicates the access URLs to the scratch data space. If the scratch space is going to be
      * used on host, this property and/or {@link #PA_DATASPACES_SCRATCH_PATH} should be set.
      */
-    static public PAPropertyString PA_DATASPACES_SCRATCH_URL = new PAPropertyString(
-        "proactive.dataspaces.scratch_url", false);
+    static public PAPropertyList PA_DATASPACES_SCRATCH_URLS = new PAPropertyList(
+        "proactive.dataspaces.scratch_urls", ",", false);
 
     /**
      * This property indicates a location of the scratch data space. If scratch is going to be used
-     * on host, this property and/or {@link #PA_DATASPACES_SCRATCH_URL} should be set.
+     * on host, this property and/or {@link #PA_DATASPACES_SCRATCH_URLS} should be set.
      */
     static public PAPropertyString PA_DATASPACES_SCRATCH_PATH = new PAPropertyString(
         "proactive.dataspaces.scratch_path", false);

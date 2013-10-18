@@ -134,7 +134,7 @@ public class NodeConfigurator {
         this.node = node;
         try {
             if (baseScratchConfiguration != null) {
-                if (baseScratchConfiguration.getUrl() == null) {
+                if (baseScratchConfiguration.getUrls() == null) {
                     baseScratchConfiguration = startProActiveProviderServer(baseScratchConfiguration);
                 }
 
@@ -337,7 +337,7 @@ public class NodeConfigurator {
             throw new FileSystemException(e);
         }
         final String vfsRootURL = providerServerDeployer.getVFSRootURL();
-        return baseScratchConfiguration.getWithRemoteAccess(vfsRootURL);
+        return baseScratchConfiguration.getWithRemoteAccess(new String[]{vfsRootURL});
     }
 
     private void checkConfigured() throws IllegalStateException {

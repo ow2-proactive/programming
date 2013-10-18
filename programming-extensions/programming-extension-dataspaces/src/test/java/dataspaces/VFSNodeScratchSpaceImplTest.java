@@ -105,7 +105,7 @@ public class VFSNodeScratchSpaceImplTest {
 
     @Before
     public void setUp() throws ConfigurationException, IOException {
-        testDir = new File(System.getProperty("java.io.tmpdir"), "ProActive-VFSNodeScratchSpaceImplTest");
+        testDir = new File(System.getProperty("java.io.tmpdir"), "ProActive VFSNodeScratchSpaceImplTest");
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();
         localAccessConfig = new BaseScratchSpaceConfiguration(SCRATCH_URL, testDirPath);
@@ -268,7 +268,7 @@ public class VFSNodeScratchSpaceImplTest {
     @Test(expected = ConfigurationException.class)
     public void testInitConfigurationException() throws Exception {
 
-        BaseScratchSpaceConfiguration conf = new BaseScratchSpaceConfiguration(null, testDirPath);
+        BaseScratchSpaceConfiguration conf = new BaseScratchSpaceConfiguration((String) null, testDirPath);
         nodeScratchSpace = new VFSNodeScratchSpaceImpl();
         nodeScratchSpace.init(node, conf);
     }
