@@ -144,7 +144,8 @@ public class ProActiveFileNameParserTest extends FunctionalTest {
     public void testServiceURLInteractionWithProActiveFileName() throws UnknownProtocolException,
             URISyntaxException, FileSystemException {
         final String serverURL = "rmi://hostname.com:3232/service";
-        final String vfsURL = ProActiveFileName.getServerVFSRootURL(serverURL);
+        String[] vfsURLs = ProActiveFileName.getServerVFSRootURLs(new String[] { serverURL });
+        final String vfsURL = vfsURLs[0];
         assertEquals(serverURL, parseURI(vfsURL).getServerURL());
     }
 

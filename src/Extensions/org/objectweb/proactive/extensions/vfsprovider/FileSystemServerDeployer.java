@@ -39,11 +39,12 @@ package org.objectweb.proactive.extensions.vfsprovider;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
@@ -63,11 +64,11 @@ public final class FileSystemServerDeployer {
 
     private static final String FILE_SERVER_DEFAULT_NAME = "defaultFileSystemServer";
 
-    /** URL of the remote object */
-    final private String url;
+    /** URLs of the remote object */
+    final private String[] urls;
 
-    /** URL of root file exposed through that server */
-    private String vfsRootURL;
+    /** URLs of the root file exposed through that server */
+    private ArrayList<String> vfsRootURLs = new ArrayList<String>();
 
     private FileSystemServerImpl fileSystemServer;
 
@@ -111,6 +112,8 @@ public final class FileSystemServerDeployer {
     /**
      * Deploys locally a FileSystemServer as a RemoteObject with a given name.
      *
+     * It will use all protocols defined in ProActiveConfiguration
+     *
      * @param name of deployed RemoteObject
      * @param rootPath the real path on which to bind the server
      * @param autoclosing
@@ -119,12 +122,11 @@ public final class FileSystemServerDeployer {
      */
     public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing, boolean rebind)
             throws IOException {
-        this(name, rootPath, autoclosing, rebind, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
-                .getValue());
+        this(name, rootPath, autoclosing, rebind, null);
     }
 
     /**
-     * Deploys locally a FileSystemServer as a RemoteObject with a given name.
+     * Deploys locally a FileSystemServer as a RemoteObject with a given name using the provided protocol.
      *
      * @param name of deployed RemoteObject
      * @param rootPath the real path on which to bind the server
@@ -139,15 +141,24 @@ public final class FileSystemServerDeployer {
         fileSystemServer = new FileSystemServerImpl(rootPath);
         try {
             roe = PARemoteObject.newRemoteObject(FileSystemServer.class.getName(), this.fileSystemServer);
-            roe.createRemoteObject(name, rebind, protocol);
-            url = roe.getURL(protocol);
+            if (protocol != null) {
+                // if no specific protocol is specified we use the local configuration, maybe with multi-protocols
+                roe.createRemoteObject(name, rebind, protocol);
+            } else {
+                roe.createRemoteObject(name, rebind);
+            }
+            urls = roe.getURLs();
         } catch (ProActiveException e) {
             // Ugly but createRemoteObject interface changed
             throw new IOException6("", e);
         }
 
+        // Add the rootPath as a file url
+        vfsRootURLs.add(new File(rootPath).toURI().toString());
+
         try {
-            vfsRootURL = ProActiveFileName.getServerVFSRootURL(url);
+            String[] rootUrls = ProActiveFileName.getServerVFSRootURLs(urls);
+            vfsRootURLs.addAll(Arrays.asList(rootUrls));
         } catch (URISyntaxException e) {
             ProActiveLogger.logImpossibleException(ProActiveLogger.getLogger(Loggers.VFS_PROVIDER_SERVER), e);
             throw new ProActiveRuntimeException(e);
@@ -155,6 +166,7 @@ public final class FileSystemServerDeployer {
             ProActiveLogger.logImpossibleException(ProActiveLogger.getLogger(Loggers.VFS_PROVIDER_SERVER), e);
             throw new ProActiveRuntimeException(e);
         }
+
         if (autoclosing)
             fileSystemServer.startAutoClosing();
     }
@@ -185,15 +197,25 @@ public final class FileSystemServerDeployer {
     /**
      * <strong>internal use only!</strong>
      */
-    public String getRemoteFileSystemServerURL() {
-        return this.url;
+    public String[] getRemoteFileSystemServerURLs() {
+        return this.urls;
     }
 
     /**
-     * @return URL pointing to root file exposed by this provider server; suitable for VFS provider
+     * @return the main URL (suitable for VFS provider) of the server; In case of several protocols used, this is the URL of the default protocol.
      */
     public String getVFSRootURL() {
-        return vfsRootURL;
+        // the url at index 0 is a file url pointing to the root
+        // the url at index 1 is the url corresponding to the default protocol used by this server
+        // all greater indexes correspond to additional protocols used
+        return vfsRootURLs.get(1);
+    }
+
+    /**
+     * @return an array of URLs (suitable for VFS provider) all pointing to the root file exposed by this provider server. One url per protocol used; suitable for VFS provider
+     */
+    public String[] getVFSRootURLs() {
+        return vfsRootURLs.toArray(new String[0]);
     }
 
     /**

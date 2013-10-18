@@ -50,6 +50,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectProtocolFactoryRegistry;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
+import org.objectweb.proactive.extensions.vfsprovider.util.URIHelper;
 
 
 /**
@@ -103,8 +104,8 @@ public class ProActiveFileName extends GenericFileName {
     /**
      * Creates VFS URL of a root file for given {@link FileSystemServer} URL.
      *
-     * @param serverURL
-     *            {@link FileSystemServer} URL
+     * @param serverURLs
+     *            {@link FileSystemServer} array of URLs
      * @return VFS URL of root of remote file system exposed by provided server
      * @throws URISyntaxException
      *             when given URL does not conform to expected URL syntax (no scheme defined)
@@ -114,7 +115,17 @@ public class ProActiveFileName extends GenericFileName {
      *             when scheme of given URL is not supported, i.e. is not one of ProActive Remote
      *             Object protocols
      */
-    public static String getServerVFSRootURL(String serverURL) throws URISyntaxException,
+    public static String[] getServerVFSRootURLs(String[] serverURLs) throws URISyntaxException,
+            UnknownProtocolException {
+
+        String[] answer = new String[serverURLs.length];
+        for (int i = 0; i < serverURLs.length; i++) {
+            answer[i] = getServerVFSRootURL(serverURLs[i]);
+        }
+        return answer;
+    }
+
+    private static String getServerVFSRootURL(String serverURL) throws URISyntaxException,
             UnknownProtocolException {
         final int dotIndex = serverURL.indexOf(':');
         if (dotIndex == -1) {
@@ -123,8 +134,8 @@ public class ProActiveFileName extends GenericFileName {
         final String schemeString = serverURL.substring(0, dotIndex);
         final String remainingPart = serverURL.substring(dotIndex);
         checkServerScheme(schemeString);
-        return getVFSSchemeForServerScheme(schemeString) + remainingPart + SERVICE_AND_FILE_PATH_SEPARATOR +
-            SEPARATOR_CHAR;
+        return URIHelper.convertToEncodedURIString(getVFSSchemeForServerScheme(schemeString) + remainingPart +
+            SERVICE_AND_FILE_PATH_SEPARATOR + SEPARATOR_CHAR);
     }
 
     private static String getVFSSchemeForServerScheme(String serverScheme) {

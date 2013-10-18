@@ -37,6 +37,7 @@
 package org.objectweb.proactive.extensions.vfsprovider.console;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -106,8 +107,9 @@ public class PADataserverStarter {
         else
             deployer = new FileSystemServerDeployer(providerName, rootDirectory, true);
 
-        final String url = deployer.getVFSRootURL();
-        System.out.println("ProActive dataserver successfully started.\nVFS URL of this provider: " + url);
+        final String[] urls = deployer.getVFSRootURLs();
+        System.out.println("ProActive dataserver successfully started.\nVFS URLs of this provider: " +
+            Arrays.asList(urls));
     }
 
     private static void stopServer() throws ProActiveException {
