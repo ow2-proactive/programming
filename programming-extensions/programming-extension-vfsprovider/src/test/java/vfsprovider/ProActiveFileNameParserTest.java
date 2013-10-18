@@ -36,16 +36,16 @@
  */
 package vfsprovider;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.net.URISyntaxException;
 
+import org.apache.commons.vfs2.FileSystemException;
+import org.junit.Test;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileNameParser;
-import org.apache.commons.vfs2.FileSystemException;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 
 /**
@@ -142,7 +142,8 @@ public class ProActiveFileNameParserTest {
     public void testServiceURLInteractionWithProActiveFileName() throws UnknownProtocolException,
             URISyntaxException, FileSystemException {
         final String serverURL = "rmi://hostname.com:3232/service";
-        final String vfsURL = ProActiveFileName.getServerVFSRootURL(serverURL);
+        String[] vfsURLs = ProActiveFileName.getServerVFSRootURLs(new String[] { serverURL });
+        final String vfsURL = vfsURLs[0];
         assertEquals(serverURL, parseURI(vfsURL).getServerURL());
     }
 

@@ -496,8 +496,9 @@ public class ServerBrowser implements ActionListener, WindowListener, KeyEventDi
         Server srv = model.getValueAt(row);
         if (!srv.isStarted())
             return;
-        String url = srv.getUrl();
-        StringSelection str = new StringSelection(url);
+        List<String> urls = srv.getUrls();
+        String urlsstring = urls.toString();
+        StringSelection str = new StringSelection(urlsstring.substring(1, urlsstring.length() - 1));
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(str, this);
     }
 

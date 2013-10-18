@@ -39,7 +39,7 @@ package org.objectweb.proactive.extensions.vfsprovider.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
@@ -119,7 +119,7 @@ class ServerTableModel implements TableModel {
             case 3:
                 return new String("" + srv.isStarted());
             case 4:
-                return srv.getUrl();
+                return srv.getUrls() != null ? srv.getUrls().toString() : null;
         }
         return "";
     }

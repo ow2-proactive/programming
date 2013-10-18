@@ -37,7 +37,9 @@
 package org.objectweb.proactive.extensions.vfsprovider.gui;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.proactive.core.ProActiveException;
@@ -65,7 +67,7 @@ class DataServer {
      */
     class Server {
         private FileSystemServerDeployer deployer = null;
-        private String url = null;
+        private List<String> urls = null;
         private String rootDir = null;
         private String name = null;
         private String proto = null;
@@ -74,7 +76,7 @@ class DataServer {
         public String toString() {
             String str = proto + ":" + name + "@" + rootDir;
             if (started)
-                str += " on " + url;
+                str += " on " + urls;
             else
                 str += " off";
             return str;
@@ -84,8 +86,8 @@ class DataServer {
             return deployer;
         }
 
-        public String getUrl() {
-            return url;
+        public List<String> getUrls() {
+            return urls;
         }
 
         public String getRootDir() {
@@ -114,7 +116,7 @@ class DataServer {
          */
         public void start(boolean rebind) throws DataSpacesException {
             if (this.isStarted())
-                throw new DataSpacesException("Server " + name + " is already running at " + url);
+                throw new DataSpacesException("Server " + name + " is already running at " + urls);
 
             try {
                 if (this.proto == null) {
@@ -140,7 +142,7 @@ class DataServer {
                     e);
             }
 
-            this.url = this.deployer.getVFSRootURL();
+            this.urls = Arrays.asList(this.deployer.getVFSRootURLs());
             this.started = true;
         }
 
@@ -157,10 +159,10 @@ class DataServer {
             try {
                 this.deployer.terminate();
             } catch (ProActiveException e) {
-                throw new DataSpacesException("Failed to terminate DataServer " + name + " at " + url, e);
+                throw new DataSpacesException("Failed to terminate DataServer " + name + " at " + urls, e);
             }
             this.started = false;
-            this.url = null;
+            this.urls = null;
             this.deployer = null;
         }
 

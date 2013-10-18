@@ -336,8 +336,8 @@ public class NodeConfigurator {
         } catch (IOException e) {
             throw new FileSystemException(e);
         }
-        final String vfsRootURL = providerServerDeployer.getVFSRootURL();
-        return baseScratchConfiguration.getWithRemoteAccess(new String[]{vfsRootURL});
+        final String[] vfsRootURLs = providerServerDeployer.getVFSRootURLs();
+        return baseScratchConfiguration.getWithRemoteAccess(vfsRootURLs);
     }
 
     private void checkConfigured() throws IllegalStateException {
