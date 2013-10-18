@@ -99,7 +99,8 @@ public class ManualConfigurationExample {
         // with null url - exposed through automatically started ProActive provider server
         final String tmpPath = System.getProperty("java.io.tmpdir") + File.separator + "scratch";
         // configure node for Data Spaces
-        final BaseScratchSpaceConfiguration scratchConf = new BaseScratchSpaceConfiguration(null, tmpPath);
+        final BaseScratchSpaceConfiguration scratchConf = new BaseScratchSpaceConfiguration((String) null,
+            tmpPath);
         DataSpacesNodes.configureNode(node, scratchConf);
         // @snippet-end DataSpacesManualConfig_ConfigureNode
 

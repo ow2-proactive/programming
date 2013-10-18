@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -176,7 +179,7 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
             throw new IllegalStateException("Instance already configured");
         }
 
-        if (conf.getUrl() == null) {
+        if (conf.getUrls() == null) {
             throw new ConfigurationException("No remote access URL defined in base scratch configuration");
         }
 
@@ -193,8 +196,33 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
         try {
             final String nodeId = Utils.getNodeId(node);
             final String runtimeId = Utils.getRuntimeId(node);
-            final String localAccessUrl = Utils.getLocalAccessURL(baseScratchConfiguration.getUrl(),
-                    baseScratchConfiguration.getPath(), Utils.getHostname());
+            final String[] originalUrls = baseScratchConfiguration.getUrls();
+            // find the file url in the list (it should be the first one)
+            URI fileUri = null;
+            for (String url : originalUrls) {
+                try {
+                    URI uri = new URI(url);
+                    if (uri.getScheme().equals("file")) {
+                        fileUri = uri;
+                        break;
+                    }
+                } catch (URISyntaxException e) {
+                    logger.error("Could not initialize scratch space");
+                    throw new FileSystemException(e);
+                }
+            }
+
+            String localAccessUrl;
+            if (fileUri != null) {
+                // if a file url was among the list use it
+                localAccessUrl = Utils.getLocalAccessURL((new File(fileUri)).getAbsolutePath(),
+                        baseScratchConfiguration.getPath(), Utils.getHostname());
+            } else {
+                // otherwise compute a new url using the configuration root path
+                localAccessUrl = Utils.getLocalAccessURL(originalUrls[0], baseScratchConfiguration.getPath(),
+                        Utils.getHostname());
+            }
+
             final String partialSpacePath = Utils.appendSubDirs(localAccessUrl, runtimeId, nodeId);
 
             logger.debug("Accessing scratch space location: " + partialSpacePath);

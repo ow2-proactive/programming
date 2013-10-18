@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,9 +60,6 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement.PathBase;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
-
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class CommandBuilderProActive implements CommandBuilder {
@@ -432,7 +432,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         }
 
         if (hostInfo.getDataSpacesScratchURL() != null) {
-            command.append(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URL.getCmdLine());
+            command.append(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URLS.getCmdLine());
             command.append("\"");
             command.append(hostInfo.getDataSpacesScratchURL());
             command.append("\"");
@@ -607,7 +607,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         }
 
         if (hostInfo.getDataSpacesScratchURL() != null) {
-            command.add(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URL.getCmdLine() +
+            command.add(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URLS.getCmdLine() +
                 hostInfo.getDataSpacesScratchURL());
         }
 

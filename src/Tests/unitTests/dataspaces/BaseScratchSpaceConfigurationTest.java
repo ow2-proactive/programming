@@ -40,6 +40,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 import org.objectweb.proactive.extensions.dataspaces.core.BaseScratchSpaceConfiguration;
@@ -55,27 +58,47 @@ public class BaseScratchSpaceConfigurationTest {
     @Test
     public void testCreateBaseConfigurationWithStraightUrlNoPath() throws ConfigurationException {
         config = new BaseScratchSpaceConfiguration("http://test.com/", null);
-        assertEquals("http://test.com/", config.getUrl());
+        assertEquals("http://test.com/", config.getUrls()[0]);
         assertNull(config.getPath());
     }
 
     @Test
     public void testCreateBaseConfigurationWithTemplatedUrlNoPath() throws ConfigurationException {
-        config = new BaseScratchSpaceConfiguration("http://#{hostname}/", null);
-        assertEquals("http://" + Utils.getHostname() + "/", config.getUrl());
+        config = new BaseScratchSpaceConfiguration("http://" +
+            BaseScratchSpaceConfiguration.HOSTNAME_VARIABLE_KEYWORD + "/", null);
+        assertEquals("http://" + Utils.getHostname() + "/", config.getUrls()[0]);
         assertNull(config.getPath());
     }
 
     @Test
     public void testCreateBaseConfigurationWithPathNoUrl() throws ConfigurationException {
-        config = new BaseScratchSpaceConfiguration(null, "/abc");
-        assertNull(config.getUrl());
+        config = new BaseScratchSpaceConfiguration((String) null, "/abc");
+        assertNull(config.getUrls());
+        assertEquals("/abc", config.getPath());
+    }
+
+    @Test
+    public void testCreateBaseConfigurationWithMultiUrlsIncludingFile() throws ConfigurationException {
+        config = new BaseScratchSpaceConfiguration(new String[] { "file:///abc", "http://test.com/",
+                "http://" + BaseScratchSpaceConfiguration.HOSTNAME_VARIABLE_KEYWORD + "/" }, "/abc");
+        Assert.assertArrayEquals(new String[] { "file:///abc", "http://test.com/",
+                "http://" + Utils.getHostname() + "/" }, config.getUrls());
+        assertEquals("/abc", config.getPath());
+    }
+
+    @Test
+    public void testCreateBaseConfigurationWithMultiUrlsNotIncludingFile() throws ConfigurationException {
+        config = new BaseScratchSpaceConfiguration(new String[] { "http://test.com/",
+                "http://" + BaseScratchSpaceConfiguration.HOSTNAME_VARIABLE_KEYWORD + "/" }, "/abc");
+        Assert.assertArrayEquals(new String[] { new File("/abc").toURI().toString(), "http://test.com/",
+                "http://" + Utils.getHostname() + "/" }, config.getUrls());
         assertEquals("/abc", config.getPath());
     }
 
     @Test
     public void testDeriveScratchSpaceConfiguration() throws ConfigurationException {
-        config = new BaseScratchSpaceConfiguration("http://#{hostname}/", "/abc");
+        config = new BaseScratchSpaceConfiguration("http://" +
+            BaseScratchSpaceConfiguration.HOSTNAME_VARIABLE_KEYWORD + "/", "/abc");
         final ScratchSpaceConfiguration derivedConfig = config.createScratchSpaceConfiguration("subdir");
         assertEquals("http://" + Utils.getHostname() + "/subdir", derivedConfig.getUrls().get(
                 derivedConfig.getUrls().size() - 1));
@@ -87,7 +110,7 @@ public class BaseScratchSpaceConfigurationTest {
     @Test
     public void testTryCreateBaseConfigurationNoUrlNoPath() throws ConfigurationException {
         try {
-            config = new BaseScratchSpaceConfiguration(null, null);
+            config = new BaseScratchSpaceConfiguration((String) null, null);
             fail("exception expected");
         } catch (ConfigurationException x) {
         }

@@ -61,6 +61,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.MalformedURIExce
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+import org.objectweb.proactive.extensions.vfsprovider.util.URIHelper;
 import org.objectweb.proactive.utils.OperatingSystem;
 
 import unitTests.vfsprovider.AbstractIOOperationsBase;
@@ -169,8 +170,8 @@ public class VFSFileObjectAdapterTest {
     @Test
     public void testGetRealURI_WithSpecialChars() throws Exception {
         // because of PROACTIVE-1314, uri string returned by getRealURI() can escape characters and thus be different than the original URL
-        assertEquals(VFSFileObjectAdapter.convertToEncodedURIString(adaptee.getURL().toString()),
-                dsFileObject.getRealURI());
+        assertEquals(URIHelper.convertToEncodedURIString(adaptee.getURL().toString()), dsFileObject
+                .getRealURI());
         assertEquals(rootUris, dsFileObject.getAllSpaceRootURIs());
 
         // testing that all are valid uris
