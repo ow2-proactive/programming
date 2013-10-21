@@ -65,7 +65,7 @@ import functionalTests.FunctionalTest;
 
 
 /**
- * TestMultiProtocolSwitch tests the automatic switching between protocols in the RemoteObjectSet. The switching is triggered by disabling a given protocol
+ * TestNamingServiceSwitch tests the automatic switching between protocols when using the NamingService. The switching is triggered by disabling a given protocol
  * on the remote remote object.
  *
  * The test is designed to test all possible switching from a given set of protocols. This is mainly to test robustness
@@ -123,7 +123,7 @@ public class TestNamingServiceSwitch extends FunctionalTest {
         Node node = MultiProtocolHelper.deployANodeWithProtocols(protocolsToTest, gcma, variableContract,
                 jvmParameters);
 
-        AOMultiProtocolSwitch ao = PAActiveObject.newActive(AOMultiProtocolSwitch.class, new Object[0], node);
+        AONamingServiceSwitch ao = PAActiveObject.newActive(AONamingServiceSwitch.class, new Object[0], node);
         String[] aouris = PAActiveObject.getUrls(ao);
 
         // Ensure that the remote active object is deployed using the correct protocols
