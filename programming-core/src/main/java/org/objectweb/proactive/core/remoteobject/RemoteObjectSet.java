@@ -168,7 +168,8 @@ public class RemoteObjectSet implements Serializable, Observer {
             }
 
         } catch (RemoteRemoteObjectException e) {
-            throw new IOException("Cannot access the remoteObject " + defaultRRO + " : " + e.getMessage());
+            throw new IOException("[ROAdapter] Cannot access the remoteObject " + defaultRRO + " : " +
+                e.getMessage());
         }
     }
 

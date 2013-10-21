@@ -94,7 +94,7 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         try {
             return new HttpRemoteObjectImpl(target, null);
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new HttpException(e);
         }
     }
 
@@ -158,7 +158,7 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         try {
             message.send();
         } catch (HTTPRemoteException e) {
-            throw new ProActiveException(e);
+            throw new HttpException(e);
         }
         RemoteRemoteObject result = message.getReturnedObject();
 

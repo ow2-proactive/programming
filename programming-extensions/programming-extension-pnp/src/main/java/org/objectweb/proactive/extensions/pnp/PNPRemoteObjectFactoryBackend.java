@@ -179,7 +179,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
                 return new RemoteObjectAdapter(result);
             }
         } catch (IOException e) {
-            throw new ProActiveException("Lookup of " + uri + "failed due to network error", e);
+            throw new PNPException("Lookup of " + uri + "failed due to network error", e);
         }
     }
 
@@ -216,7 +216,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
 
             return uris;
         } catch (IOException e) {
-            throw new ProActiveException("Listing registered remote objects on " + uri +
+            throw new PNPException("Listing registered remote objects on " + uri +
                 " failed due to network error", e);
         }
     }
@@ -249,7 +249,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
 
             return irro;
         } catch (URISyntaxException e) {
-            throw new ProActiveException("Failed to create remote object " + name, e);
+            throw new PNPException("Failed to create remote object " + name, e);
         }
     }
 

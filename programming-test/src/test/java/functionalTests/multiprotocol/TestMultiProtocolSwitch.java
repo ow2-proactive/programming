@@ -200,8 +200,11 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
                 BooleanWrapper autocont2 = ao.autocont2();
 
                 System.out.println("******** Disabling protocol " + proto.get(i));
-                // switch protocol
+                // we force the usage of the last protocol in the list, to avoid switching during the disabling process
+                PAActiveObject.forceProtocol(ao, proto.get(proto.size() - 1));
                 ao.disableProtocol(proto.get(i));
+                PAActiveObject.unforceProtocol(ao);
+                // switch protocol
 
                 // get the future after switch
                 System.out.println("Future 1 already arrived before switch: " + future1.getBooleanValue());

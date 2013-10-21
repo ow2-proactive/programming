@@ -43,10 +43,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.ProtocolException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
@@ -54,7 +57,6 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -158,6 +160,10 @@ public class RemoteObjectExposer<T> {
         // Must be created before additionals one in order to avoid an AlreadyBoundException
         RemoteRemoteObject ret = createRemoteObject(name, rebind,
           CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+        if (LOGGER_RO.isDebugEnabled()) {
+            LOGGER_RO.debug("[ROExposer] Object \"" + name + "\" exposed with default protocol : " +
+                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+        }
         multiExposeRemoteObject(name, rebind);
         return ret;
     }
@@ -185,6 +191,8 @@ public class RemoteObjectExposer<T> {
                 // Expose the remote object using all specified communication protocol
             }
             return irro.getRemoteRemoteObject();
+        } catch (ProtocolException e) {
+            throw new ProtocolException("Failed to create remote object (name=" + name + ")", e);
         } catch (ProActiveException e) {
             throw new ProActiveException("Failed to create remote object (name=" + name + ")", e);
         } catch (IOException e) {
@@ -197,7 +205,7 @@ public class RemoteObjectExposer<T> {
      *
      * If some Exception are thrown during this additionnal exposure step, there are ignored.
      */
-    private synchronized void multiExposeRemoteObject(String name, boolean rebind) {
+    private synchronized void multiExposeRemoteObject(String name, boolean rebind) throws ProActiveException {
         // Expose the remote object using all specified communication protocol
         if (CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.isSet()) {
             List<String> protocols = CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
@@ -210,18 +218,18 @@ public class RemoteObjectExposer<T> {
                         // Create and store RRO in hashtable
                         createRemoteObject(name, true, protocol);
                         if (LOGGER_RO.isDebugEnabled()) {
-                            LOGGER_RO.debug("[Multi-Protocol] Object " + name +
-                              " exposed with additionnal protocol : " + protocol);
+                            LOGGER_RO.debug("[ROExposer] Object \"" + name +
+                                "\" exposed with additionnal protocol : " + protocol);
                         }
                     } catch (ProActiveRuntimeException pare) {
                         // Not so beautiful
                         if (protocol.equalsIgnoreCase("pamr")) {
-                            LOGGER_RO.warn("The PAMR router seems to be down", pare);
+                            LOGGER_RO.warn("[ROExposer] The PAMR router seems to be down", pare);
                         } else {
-                            LOGGER_RO.warn("The exposition of " + name + ", through the protocol " +
-                              protocol + " didn't succeed", pare);
+                            LOGGER_RO.warn("[ROExposer] The exposition of " + name +
+                                ", through the protocol " + protocol + " didn't succeed", pare);
                         }
-                    } catch (ProActiveException pae) {
+                    } catch (ProtocolException pae) {
                         if (pae.getCause() instanceof AlreadyBoundException) {
                             // Do nothing, here, we try to expose the object with extra protocol,
                             // error here won't cause trouble
@@ -229,10 +237,10 @@ public class RemoteObjectExposer<T> {
                         }
                         // this protocol throw exception, so we remove it from the candidate list for multi exposure
                         LOGGER_RO
-                          .warn("Protocol " +
-                            protocol +
-                            " seems invalid for this runtime, this is not a critical error, the protocol will be disabled." +
-                            pae);
+                                .warn(
+                                        "[ROExposer] Protocol " + protocol +
+                                            " seems invalid for this runtime, this is not a critical error, the protocol will be disabled.",
+                                        pae);
 
                         // Remove the protocol
                         it.remove();
@@ -275,7 +283,7 @@ public class RemoteObjectExposer<T> {
     public void disableProtocol(String protocol) throws ProActiveException {
         ArrayList<URI> toBeCleaned = new ArrayList<URI>();
         for (URI uri : this.activeRemoteRemoteObjects.keySet()) {
-            if (uri.getScheme().equals(protocol)) {
+            if (protocol.equals(uri.getScheme())) {
                 toBeCleaned.add(uri);
             }
         }
@@ -304,9 +312,8 @@ public class RemoteObjectExposer<T> {
 
     public RemoteObjectSet getRemoteObjectSet(RemoteRemoteObject ro) throws IOException {
         ArrayList<RemoteRemoteObject> al = new ArrayList<RemoteRemoteObject>();
-        for (Iterator<InternalRemoteRemoteObject> it = activeRemoteRemoteObjects.values().iterator(); it
-          .hasNext(); ) {
-            RemoteRemoteObject rro = it.next().getRemoteRemoteObject();
+        for (Map.Entry<URI, InternalRemoteRemoteObject> entry : activeRemoteRemoteObjects.entrySet()) {
+            RemoteRemoteObject rro = entry.getValue().getRemoteRemoteObject();
             al.add(rro);
         }
         return new RemoteObjectSet(ro, al);
@@ -344,15 +351,13 @@ public class RemoteObjectExposer<T> {
      */
     public void unregisterAll() throws ProActiveException {
         // Keep a reference for debug
-        URI uri = null;
-        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext(); ) {
-            uri = it.next();
-            // RemoteRemoteObject rro = this.activatedProtocols.get(uri);
+        LinkedHashMap<URI, InternalRemoteRemoteObject> cloned = (LinkedHashMap<URI, InternalRemoteRemoteObject>) this.activeRemoteRemoteObjects
+                .clone();
+        for (URI uri : cloned.keySet()) {
             try {
                 PARemoteObject.unregister(uri);
             } catch (ProActiveException e) {
-                LOGGER_RO.info("Could not unregister " + uri + ". Error message: " + e.getMessage());
-                throw e;
+                LOGGER_RO.debug("Error when trying to unregister " + uri, e);
             }
         }
     }
@@ -372,11 +377,15 @@ public class RemoteObjectExposer<T> {
 
     public void unexportAll() throws ProActiveException {
         URI uri = null;
-        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext(); ) {
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
             uri = it.next();
             RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(uri).getRemoteRemoteObject();
             RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(uri.getScheme());
-            rof.unexport(rro);
+            try {
+                rof.unexport(rro);
+            } catch (Exception e) {
+                LOGGER_RO.debug("", e);
+            }
         }
     }
 }

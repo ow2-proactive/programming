@@ -62,6 +62,7 @@ import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalInputS
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalOutputStream;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
+import org.objectweb.proactive.extensions.amqp.remoteobject.AMQPException;
 import org.objectweb.proactive.extensions.amqp.remoteobject.AMQPUtils;
 import org.objectweb.proactive.extensions.amqp.remoteobject.ReusableChannel;
 
@@ -94,7 +95,7 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
         try {
             return new AMQPFederationRemoteObject(target.getURI());
         } catch (IOException e) {
-            throw new ProActiveException(String.format("AMQP unable to create the RemoteRemoteObject for %s",
+            throw new AMQPException(String.format("AMQP unable to create the RemoteRemoteObject for %s",
                     target.toString()), e);
         }
     }
@@ -114,8 +115,8 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
             amqpROS.connect(replacePrevious);
             return new AMQPFederationRemoteObject(uri);
         } catch (IOException e) {
-            throw new ProActiveException(String.format("AMQP unable to register the object at %s", uri
-                    .toString()), e);
+            throw new AMQPException(
+                String.format("AMQP unable to register the object at %s", uri.toString()), e);
         }
     }
 
@@ -141,7 +142,7 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
             if (channel != null) {
                 channel.close();
             }
-            throw new ProActiveException("Failed to delete object's queue", e);
+            throw new AMQPException("Failed to delete object's queue", e);
         }
     }
 
@@ -158,7 +159,7 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
         try {
             String queueName = AMQPUtils.computeQueueNameFromURI(uri);
             if (!AMQPFederationUtils.pingRemoteObject(queueName, uri)) {
-                throw new ProActiveException("Failed to find queue for the object with URI " + uri);
+                throw new AMQPException("Failed to find queue for the object with URI " + uri);
             }
             return new RemoteObjectAdapter(new AMQPFederationRemoteObject(uri));
         } catch (IOException e) {
@@ -204,8 +205,8 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
             }
             return result;
         } catch (Exception e) {
-            throw new ProActiveException(String.format("unable to list the AMQP registry at %s", uri
-                    .toString()), e);
+            throw new AMQPException(String.format("unable to list the AMQP registry at %s", uri.toString()),
+                e);
         }
 
     }
@@ -242,7 +243,7 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
 
             return irro;
         } catch (URISyntaxException e) {
-            throw new ProActiveException(String.format("Failed to create remote object %s", name), e);
+            throw new AMQPException(String.format("Failed to create remote object %s", name), e);
         }
     }
 

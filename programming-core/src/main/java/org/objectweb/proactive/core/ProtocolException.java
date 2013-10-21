@@ -41,7 +41,7 @@ package org.objectweb.proactive.core;
  *
  * @author The ProActive Team
  */
-public abstract class ProtocolException extends ProActiveException {
+public class ProtocolException extends ProActiveException {
     public ProtocolException() {
         super();
     }

@@ -258,7 +258,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
                 return new RemoteObjectAdapter(result);
             }
         } catch (IOException e) {
-            throw new ProActiveException("Lookup of " + uri + "failed due to network error", e);
+            throw new PAMRException("Lookup of " + uri + "failed due to network error", e);
         }
     }
 
@@ -288,7 +288,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             message.send();
             return message.getReturnedObject();
         } catch (IOException e) {
-            throw new ProActiveException("Listing registered remote objects on " + uri +
+            throw new PAMRException("Listing registered remote objects on " + uri +
                 " failed due to network error", e);
         }
     }
@@ -314,7 +314,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         checkConfig();
 
         if (this.agent.getAgentID() == null) {
-            throw new ProActiveException(
+            throw new PAMRException(
                 "PAMR agent has not yet been able to connect to the router. Remote object cannot be created");
         }
 
@@ -334,7 +334,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
             return irro;
         } catch (URISyntaxException e) {
-            throw new ProActiveException("Failed to create remote object " + name, e);
+            throw new PAMRException("Failed to create remote object " + name, e);
         }
     }
 
@@ -346,7 +346,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         this.checkConfig();
         AgentID id = this.agent.getAgentID();
         if (id == null) {
-            throw new ProActiveException("PAMR Agent is not connected to router");
+            throw new PAMRException("PAMR Agent is not connected to router");
         }
         return URI.create(this.getProtocolId() + "://" + id.toString() + "/");
     }
