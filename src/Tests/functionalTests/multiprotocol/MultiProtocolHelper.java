@@ -74,15 +74,22 @@ public class MultiProtocolHelper {
             ProActiveException {
 
         for (Iterator<String> it = jvmParameters.iterator(); it.hasNext();) {
-            if (it.next().contains(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getName())) {
+            String param = it.next();
+            if (param.contains(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getName()) ||
+                param.contains(PAMRConfig.PA_NET_ROUTER_ADDRESS.getName()) ||
+                param.contains(PAMRConfig.PA_NET_ROUTER_PORT.getName())) {
                 it.remove();
             }
         }
         // we add the router config properties in the jvm parameter
-        jvmParameters.add(PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine() +
-            PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue());
-        jvmParameters.add(PAMRConfig.PA_NET_ROUTER_PORT.getCmdLine() +
-            PAMRConfig.PA_NET_ROUTER_PORT.getValue());
+        if (PAMRConfig.PA_NET_ROUTER_ADDRESS.isSet()) {
+            jvmParameters.add(PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine() +
+                PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue());
+        }
+        if (PAMRConfig.PA_NET_ROUTER_PORT.isSet()) {
+            jvmParameters.add(PAMRConfig.PA_NET_ROUTER_PORT.getCmdLine() +
+                PAMRConfig.PA_NET_ROUTER_PORT.getValue());
+        }
 
         // we update the variable contract with the new value of the jvm params
         StringBuilder sb = new StringBuilder();

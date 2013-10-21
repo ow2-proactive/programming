@@ -1754,4 +1754,8 @@ public class PAActiveObject {
         forceProtocol(obj, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
     }
 
+    public static void unforceProtocol(Object obj) throws UnknownProtocolException, NotYetExposedException {
+        forceProtocol(obj, null);
+    }
+
 }

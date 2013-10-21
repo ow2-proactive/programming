@@ -93,7 +93,7 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             ensureExchangesExist(target.getURI());
             return new AMQPRemoteObject(target.getURI());
         } catch (IOException e) {
-            throw new ProActiveException(String.format("AMQP unable to create the RemoteRemoteObject for %s",
+            throw new AMQPException(String.format("AMQP unable to create the RemoteRemoteObject for %s",
                     target.toString()), e);
         }
     }
@@ -115,8 +115,8 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             amqpROS.connect(replacePrevious);
             return new AMQPRemoteObject(uri);
         } catch (IOException e) {
-            throw new ProActiveException(String.format("AMQP unable to register the object at %s", uri
-                    .toString()), e);
+            throw new AMQPException(
+                String.format("AMQP unable to register the object at %s", uri.toString()), e);
         }
     }
 
@@ -135,7 +135,7 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             channel.returnChannel();
         } catch (IOException e) {
             channel.close();
-            throw new ProActiveException(e);
+            throw new AMQPException(e);
         }
     }
 
@@ -158,7 +158,7 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
                 queueCheckChannel.getChannel().queueDeclarePassive(queueName);
                 queueCheckChannel.returnChannel();
             } catch (IOException e) {
-                throw new ProActiveException("Lookup failed to get response while sending request to the " +
+                throw new AMQPException("Lookup failed to get response while sending request to the " +
                     queueName, e);
             }
             return new RemoteObjectAdapter(new AMQPRemoteObject(uri));
@@ -205,8 +205,8 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             }
             return result;
         } catch (Exception e) {
-            throw new ProActiveException(String.format("unable to list the AMQP registry at %s", uri
-                    .toString()), e);
+            throw new AMQPException(String.format("unable to list the AMQP registry at %s", uri.toString()),
+                e);
         }
 
     }
@@ -243,7 +243,7 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
             return irro;
         } catch (URISyntaxException e) {
-            throw new ProActiveException(String.format("Failed to create remote object %s", name), e);
+            throw new AMQPException(String.format("Failed to create remote object %s", name), e);
         }
     }
 

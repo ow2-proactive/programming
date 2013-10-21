@@ -110,7 +110,7 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         try {
             return new IbisRemoteObjectImpl(target);
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new IbisException(e);
         }
     }
 
@@ -130,7 +130,7 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
                 return uris;
             }
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new IbisException(e);
         }
         return null;
     }
@@ -159,9 +159,9 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
                     .debug(" successfully bound in registry at " + url);
         } catch (ibis.rmi.AlreadyBoundException e) {
             ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).warn(url + " already bound in registry", e);
-            throw new ProActiveException(e);
+            throw new IbisException(e);
         } catch (java.net.MalformedURLException e) {
-            throw new ProActiveException("cannot bind in registry at " + url, e);
+            throw new IbisException("cannot bind in registry at " + url, e);
         } catch (RemoteException e) {
             ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).debug(" cannot bind object at " + url);
             e.printStackTrace();
@@ -184,7 +184,7 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             //No need to throw an exception if an object is already unregistered
             ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).warn(url + " is not bound in the registry ");
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new IbisException(e);
         }
     }
 
@@ -210,16 +210,16 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             // there are one rmiregistry on target computer but nothing bound to this url isn t bound
             throw new NotBoundException("The url " + modifiedURI + " is not bound to any known object", e);
         } catch (MalformedURLException e) {
-            throw new ProActiveException(e);
+            throw new IbisException(e);
         } catch (RemoteException e) {
-            throw new ProActiveException("Registry could not be contacted, " + modifiedURI, e);
+            throw new IbisException("Registry could not be contacted, " + modifiedURI, e);
         }
 
         if (o instanceof IbisRemoteObject) {
             return new RemoteObjectAdapter((IbisRemoteObject) o);
         }
 
-        throw new ProActiveException("The given url does exist but doesn't point to a remote object  url=" +
+        throw new IbisException("The given url does exist but doesn't point to a remote object  url=" +
             modifiedURI + " class found is " + o.getClass().getName());
     }
 
@@ -239,7 +239,7 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             // unexport does not exist under ibis 1.4
             // just silently fails
         } else {
-            throw new ProActiveException("the remote object is not an ibis remote object");
+            throw new IbisException("the remote object is not an ibis remote object");
         }
 
     }

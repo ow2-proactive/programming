@@ -27,44 +27,37 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.remoteobject.exception;
+package org.objectweb.proactive.extensions.amqp.remoteobject;
 
-import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProtocolException;
 
 
-/**
- * This exception is thrown when the protocol is unknown by the remote
- * object framework.
- * @author The ProActive Team
+/** Generic AMQP Exception root of all non runtime in AMQP
+ *
+ * @since ProActive 6.0.0
  */
-
-@PublicAPI
-public class UnknownProtocolException extends ProtocolException {
-
-    /**
-     *
-     */
-    public UnknownProtocolException() {
+public class AMQPException extends ProtocolException {
+    public AMQPException() {
         super();
     }
 
-    public UnknownProtocolException(String message) {
+    public AMQPException(String message) {
         super(message);
     }
 
-    public UnknownProtocolException(String message, Throwable cause) {
-        super(message, cause);
+    public AMQPException(Throwable cause) {
+        super(cause);
     }
 
-    public UnknownProtocolException(Throwable cause) {
-        super(cause);
+    public AMQPException(String msg, Throwable cause) {
+        super(msg);
+        this.initCause(cause);
     }
 }

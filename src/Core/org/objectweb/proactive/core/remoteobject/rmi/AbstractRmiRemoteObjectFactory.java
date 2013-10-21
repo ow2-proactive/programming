@@ -147,7 +147,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
                     .getConstructor(InternalRemoteRemoteObject.class);
             return c.newInstance(target);
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new RMIException(e);
         }
     }
 
@@ -168,7 +168,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
                 return uris;
             }
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new RMIException(e);
         }
         return null;
     }
@@ -184,7 +184,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
                     .getConstructor(InternalRemoteRemoteObject.class);
             rro = c.newInstance(target);
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new RMIException(e);
         }
 
         Registry reg = null;
@@ -196,7 +196,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
                 LocateRegistry.createRegistry(URIBuilder.getPortNumber(url));
             } catch (RemoteException e1) {
                 LOGGER_RO.warn("damn cannot start a rmiregistry on port " + url.getPort());
-                throw new ProActiveException(e1);
+                throw new RMIException(e1);
             }
         }
 
@@ -215,7 +215,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             throw new AlreadyBoundException(e);
         } catch (RemoteException e) {
             LOGGER_RO.debug(" cannot bind object at " + url);
-            throw new ProActiveException(e);
+            throw new RMIException(e);
         }
         return rro;
     }
@@ -232,7 +232,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             //No need to throw an exception if an object is already unregistered
             LOGGER_RO.warn(url + " is not bound in the registry ");
         } catch (Exception e) {
-            throw new ProActiveException(e);
+            throw new RMIException(e);
         }
     }
 
@@ -259,14 +259,14 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             // there are one rmiregistry on target computer but nothing bound to this url is not bound
             throw new NotBoundException("The url " + modifiedURI + " is not bound to any known object", e);
         } catch (RemoteException e) {
-            throw new ProActiveException("Registry could not be contacted, " + modifiedURI, e);
+            throw new RMIException("Registry could not be contacted, " + modifiedURI, e);
         }
 
         if (o instanceof RmiRemoteObject) {
             return new RemoteObjectAdapter((RmiRemoteObject) o);
         }
 
-        throw new ProActiveException("The given url does exist but doesn't point to a remote object  url=" +
+        throw new RMIException("The given url does exist but doesn't point to a remote object  url=" +
             modifiedURI + " class found is " + o.getClass().getName());
     }
 
@@ -286,10 +286,10 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             try {
                 UnicastRemoteObject.unexportObject((RmiRemoteObject) rro, true);
             } catch (NoSuchObjectException e) {
-                throw new ProActiveException(e);
+                throw new RMIException(e);
             }
         } else {
-            throw new ProActiveException("the remote object is not a rmi remote object");
+            throw new RMIException("the remote object is not a rmi remote object");
         }
 
     }

@@ -80,6 +80,10 @@ public class RemoteObjectProtocolFactoryRegistry {
                 logger.error("Failed to load remote object factory: " + err);
             }
         }
+        if (logger.isDebugEnabled()) {
+            logger.debug("[RemoteObjectProtocolFactory] Protocols registered : " +
+                remoteObjectFactories.keySet());
+        }
     }
 
     public static void put(String protocol, Class<? extends RemoteObjectFactory> factory) {

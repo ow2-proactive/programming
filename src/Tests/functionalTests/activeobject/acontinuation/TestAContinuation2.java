@@ -37,12 +37,15 @@
 package functionalTests.activeobject.acontinuation;
 
 import junit.framework.Assert;
-
+import org.apache.log4j.Level;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
+import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 import functionalTests.GCMFunctionalTest;
@@ -57,6 +60,11 @@ import functionalTests.GCMFunctionalTest;
  *
  */
 public class TestAContinuation2 extends GCMFunctionalTest {
+
+    static {
+        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
+        ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
+    }
 
     public TestAContinuation2() throws Exception {
         super(1, 1);
@@ -82,12 +90,16 @@ public class TestAContinuation2 extends GCMFunctionalTest {
 
         private StringWrapper result;
 
+        private UniqueID id;
+
         TestThread1(TestAO ao) {
             this.ao = ao;
         }
 
         public void run() {
             result = ao.asyncCall();
+
+            id = PAActiveObject.getBodyOnThis().getID();
         }
 
     }
@@ -108,6 +120,7 @@ public class TestAContinuation2 extends GCMFunctionalTest {
                 Assert.assertTrue("Result should be awaited", PAFuture.isAwaited(stringFuture));
                 Assert.assertEquals("futureResult", stringFuture.getStringValue());
             } catch (Exception e) {
+                e.printStackTrace();
                 Assert.fail("Unexpected error: " + e);
             }
         }
@@ -115,10 +128,13 @@ public class TestAContinuation2 extends GCMFunctionalTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testLocalAO() throws Exception {
         // test with local active object
         doTest(true);
+    }
 
+    @Test
+    public void testRemoteAO() throws Exception {
         // test with remote active object
         doTest(false);
     }
@@ -139,12 +155,16 @@ public class TestAContinuation2 extends GCMFunctionalTest {
         thread1.join();
 
         Assert.assertNotNull(thread1.result);
+        Assert.assertNotNull(thread1.id);
 
         // thread2 tries to get future result
         TestThread2 thread2 = new TestThread2(thread1.result);
         thread2.setName("TestThread2");
         thread2.start();
         thread2.join();
+
+        // make sure that the body store doesn't contain the half body of thread1
+        Assert.assertNull(LocalBodyStore.getInstance().getLocalHalfBodies().getBody(thread1.id));
     }
 
 }
