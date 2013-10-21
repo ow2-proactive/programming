@@ -36,81 +36,67 @@
  */
 package functionalTests.multiprotocol;
 
-import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.body.AbstractBody;
-import org.objectweb.proactive.core.body.UniversalBody;
+import java.lang.reflect.Field;
+import java.net.URISyntaxException;
+
+import org.objectweb.proactive.api.PARemoteObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingServiceDeployer;
 
 
 /**
- * AOMultiProtocolSwitch
+ * AONamingServiceSwitch
  *
  * @author The ProActive Team
  */
-public class AOMultiProtocolSwitch {
+public class AONamingServiceSwitch {
 
-    public AOMultiProtocolSwitch() {
+    NamingServiceDeployer namingServiceDeployer;
+
+    NamingService namingService;
+
+    public AONamingServiceSwitch() {
 
     }
 
-    public BooleanWrapper foo() {
-        return new BooleanWrapper(true);
-    }
-
-    public BooleanWrapper foo2() {
-        longWait();
-        return new BooleanWrapper(true);
-    }
-
-    public BooleanWrapper autocont() {
-        return ((AOMultiProtocolSwitch) PAActiveObject.getStubOnThis()).foo();
-    }
-
-    public BooleanWrapper autocont2() {
-        longWait();
-        return ((AOMultiProtocolSwitch) PAActiveObject.getStubOnThis()).foo2();
-    }
-
-    public boolean bar() {
-        return true;
-    }
-
-    public boolean waitPlease() {
-        longWait();
-        return true;
-    }
-
-    public BooleanWrapper waitPlease2() {
-        longWait();
-        return new BooleanWrapper(true);
-    }
-
-    public boolean throwException() {
-        throw new RuntimeException("Expected Exception");
-    }
-
-    private void longWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    /**
+     * Creates a namign service
+     * @return
+     * @throws ProActiveException
+     * @throws URISyntaxException
+     */
+    public NamingService createNamingService() throws ProActiveException, URISyntaxException {
+        if (namingServiceDeployer == null) {
+            namingServiceDeployer = new NamingServiceDeployer(true);
         }
+        namingService = NamingService.createNamingServiceStub(namingServiceDeployer.getNamingServiceURLs());
+        return namingService;
     }
 
-    public boolean disableProtocol(String protocol) {
-        AbstractBody myBody = (AbstractBody) PAActiveObject.getBodyOnThis();
+    /**
+     * Disable protocol in naming service
+     * @param protocol
+     * @return
+     * @throws Exception
+     */
+    public boolean disableProtocol(String protocol) throws Exception {
 
-        RemoteObjectExposer<UniversalBody> roe = ((AbstractBody) myBody).getRemoteObjectExposer();
+        Field roeField = NamingServiceDeployer.class.getDeclaredField("roe");
+
+        roeField.setAccessible(true);
+
+        RemoteObjectExposer roe = (RemoteObjectExposer) roeField.get(namingServiceDeployer);
 
         System.out.println("trying to disable " + protocol);
 
         try {
-            roe.disableProtocol(protocol);
+            PARemoteObject.disableProtocol(roe, protocol);
         } catch (Exception e) {
 
         }
+
         return true;
     }
-
 }
