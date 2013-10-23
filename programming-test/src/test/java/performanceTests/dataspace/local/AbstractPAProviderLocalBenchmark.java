@@ -36,6 +36,7 @@
  */
 package performanceTests.dataspace.local;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -68,6 +69,8 @@ public abstract class AbstractPAProviderLocalBenchmark extends FunctionalTest {
 
     FileSystemServerDeployer fsDeployer;
     NamingServiceDeployer namingServiceDeployer;
+
+    String spaceServerDir = (new File(System.getProperty("java.io.tmpDir"), "serverspace")).getAbsolutePath();
 
     public AbstractPAProviderLocalBenchmark(Class<? extends AbstractPAProviderLocalBenchmark> cl) {
         this.cl = cl;
@@ -113,7 +116,7 @@ public abstract class AbstractPAProviderLocalBenchmark extends FunctionalTest {
     }
 
     private void startDataSpace() throws IOException, ProActiveException, URISyntaxException {
-        fsDeployer = new FileSystemServerDeployer("/dev/", true);
+        fsDeployer = new FileSystemServerDeployer(spaceServerDir, true);
         namingServiceDeployer = new NamingServiceDeployer();
 
         final long applicationId = 0xcafe;

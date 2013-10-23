@@ -190,9 +190,15 @@ project('programming-extensions:programming-extension-dataspaces') {
                 vfs2CompileDependencies,
                 project(':programming-extensions:programming-extension-vfsprovider')
         )
+        testCompile(
+                project(':programming-extensions:programming-extension-vfsprovider').sourceSets.test.output,
+                project(':programming-extensions:programming-extension-pamr'),
+                'commons-io:commons-io:2.4'
+        )
         runtime vfs2RuntimeDependencies
     }
     test {
+        forkEvery 1
         systemProperties << ['proactive.classloading.useHTTP': false]
     }
     task stub(type: StubTask) {

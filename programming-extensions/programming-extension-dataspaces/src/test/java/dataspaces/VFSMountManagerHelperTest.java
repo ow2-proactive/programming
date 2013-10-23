@@ -1,0 +1,233 @@
+/*
+ *  *
+ * ProActive Parallel Suite(TM): The Java(TM) library for
+ *    Parallel, Distributed, Multi-Core Computing for
+ *    Enterprise Grids & Clouds
+ *
+ * Copyright (C) 1997-2013 INRIA/University of
+ *                 Nice-Sophia Antipolis/ActiveEon
+ * Contact: proactive@ow2.org or contact@activeeon.com
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation; version 3 of
+ * the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
+ *
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
+ *  Contributor(s):
+ *
+ *  * $$ACTIVEEON_INITIAL_DEV$$
+ */
+package dataspaces;
+
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.concurrent.ConcurrentHashMap;
+
+import junit.framework.Assert;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.dataspaces.vfs.VFSMountManagerHelper;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.router.Router;
+import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
+import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+
+import vfsprovider.AbstractIOOperationsBase;
+
+
+/**
+ * VFSMountManagerHelperTest
+ *
+ * This tests various scenario usage of the VFSMountManagerHelper
+ *
+ * @author The ProActive Team
+ **/
+public class VFSMountManagerHelperTest {
+
+    static final public Logger logger = Logger.getLogger("testsuite");
+
+    private static File spacesDir;
+
+    private static FileSystemServerDeployer server;
+
+    // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
+    static LinkedHashSet<String> protocolsToTest = new LinkedHashSet<String>(Arrays.asList("rmi", "pnp",
+            "pamr"));
+
+    // a list of fake urls, for file urls, use the opposite operating system file type of url to launch FileSystemExceptions
+    private ArrayList<String> fakeUrls = new ArrayList<String>(Arrays.asList("ftp://a/b",
+            "pappnp://welcome.to.proactive:5461/inputserver?proactive_vfs_provider_path=/",
+            "sftp://itmysite/fake"));
+
+    private ArrayList<String> fakeFileUrls = new ArrayList<String>(Arrays.asList("file:///",
+            "file:///Z:/not/a/path"));
+
+    // pamr router
+    static Router router;
+
+    static {
+        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
+        PAMRConfig.PA_NET_ROUTER_PORT.setValue(9997);
+        ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
+
+    }
+
+    /**
+     * Start a PAMR router and a file system server
+     * @throws Exception
+     */
+    @BeforeClass
+    public static void setUp() throws Exception {
+
+        RouterConfig config = new RouterConfig();
+        config.setPort(PAMRConfig.PA_NET_ROUTER_PORT.getValue());
+        router = Router.createAndStart(config);
+
+        protocolsToTest.remove(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+
+        StringBuilder apstring = new StringBuilder();
+        for (String p : protocolsToTest) {
+            apstring.append(p + ",");
+        }
+        apstring.deleteCharAt(apstring.length() - 1);
+
+        CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.setValue(apstring.toString());
+
+        spacesDir = new File(System.getProperty("java.io.tmpdir"), "ProActive SpaceMountManagerTest");
+
+        if (server == null) {
+            server = new FileSystemServerDeployer("inputserver", spacesDir.toString(), true, true);
+            System.out.println("Started File Server at " + Arrays.toString(server.getVFSRootURLs()));
+        }
+    }
+
+    /**
+     * - Insert a valid vfs root in the list of fake uri
+     * - verifies that mountAny returns the file system corresponding to the valid uri
+     * - do that for all valid uris of the file system server
+     * @throws Exception
+     */
+    @Test
+    public void testMountAnyOk() throws Exception {
+        String[] validUrls = server.getVFSRootURLs();
+        ConcurrentHashMap<String, FileObject> fileSystems = new ConcurrentHashMap<String, FileObject>();
+        for (String validUrl : validUrls) {
+            ArrayList<String> urlsToMount = new ArrayList<String>(fakeFileUrls);
+            urlsToMount.addAll(fakeUrls);
+            urlsToMount.add((int) Math.floor(Math.random() * urlsToMount.size()), validUrl);
+            VFSMountManagerHelper.mountAny(urlsToMount, fileSystems);
+            logger.info("Content of map : " + fileSystems.toString());
+            Assert.assertTrue("map contains valid Url", fileSystems.containsKey(validUrl));
+        }
+    }
+
+    /**
+     * when only fake uris are provided to mountAny, verify that an exception is received
+     * @throws Exception
+     */
+    @Test(expected = FileSystemException.class)
+    public void testMountAnyKo() throws Exception {
+        ArrayList<String> urlsToMount = new ArrayList<String>(fakeFileUrls);
+        urlsToMount.addAll(fakeUrls);
+        ConcurrentHashMap<String, FileObject> fileSystems = new ConcurrentHashMap<String, FileObject>();
+        VFSMountManagerHelper.mountAny(urlsToMount, fileSystems);
+    }
+
+    /**
+     * Tests mounting only one valid FileSystem
+     * @throws Exception
+     */
+    @Test
+    public void testMountOk() throws Exception {
+        String[] validUrls = server.getVFSRootURLs();
+        for (String validUrl : validUrls) {
+            FileObject mounted = VFSMountManagerHelper.mount(validUrl);
+            Assert.assertTrue(mounted.exists());
+        }
+    }
+
+    /**
+     * Tests mounting only one invalid FileSystem
+     * @throws Exception
+     */
+    @Test(expected = FileSystemException.class)
+    public void testMountKo() throws Exception {
+        for (String fakeUrl : fakeUrls) {
+            FileObject mounted = VFSMountManagerHelper.mount(fakeUrl);
+        }
+    }
+
+    /**
+     * Tests closing all FileSystems
+     * @throws Exception
+     */
+    @Ignore("vfs close file system doesn't seem to work properly")
+    @Test
+    public void testCloseFileSystems() throws Exception {
+        String[] validUrls = server.getVFSRootURLs();
+        ArrayList<FileObject> fos = new ArrayList<FileObject>();
+        for (String validUrl : validUrls) {
+            FileObject mounted = VFSMountManagerHelper.mount(validUrl);
+            Assert.assertTrue(mounted.exists());
+            fos.add(mounted);
+        }
+
+        VFSMountManagerHelper.closeFileSystems(Arrays.asList(validUrls));
+
+        boolean onlyExceptions = true;
+        for (FileObject closedFo : fos) {
+            try {
+                FileObject toto = closedFo.resolveFile("toto");
+                toto.createFile();
+                onlyExceptions = false;
+                logger.error(toto.getURL() + " exists : " + toto.exists());
+            } catch (FileSystemException e) {
+                // this should occur
+            }
+        }
+        Assert.assertTrue("Only Exceptions received", onlyExceptions);
+    }
+
+    @AfterClass
+    public static void tearDown() throws ProActiveException {
+        server.terminate();
+
+        router.stop();
+
+        VFSMountManagerHelper.terminate();
+
+        if (spacesDir != null && spacesDir.exists()) {
+            assertTrue(AbstractIOOperationsBase.deleteRecursively(spacesDir));
+            spacesDir = null;
+        }
+    }
+}
