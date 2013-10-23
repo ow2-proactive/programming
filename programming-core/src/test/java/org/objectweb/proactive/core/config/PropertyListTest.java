@@ -48,31 +48,72 @@ import org.junit.Test;
 public class PropertyListTest {
 
     @Test
-    public void run() {
+    public void testParseListProperty() {
         PAPropertyList myProperty = new PAPropertyList("my.property", ",", false);
         myProperty.setValue("test,a,value");
 
-        Assert.assertEquals(Arrays.asList(new String[] { "test", "a", "value" }), myProperty.getValue());
+        Assert.assertEquals(Arrays.asList("test", "a", "value"), myProperty.getValue());
 
-        myProperty.setValue(Arrays.asList(new String[] { "test", "b", "value" }));
+        myProperty.setValue(Arrays.asList("test", "b", "value"));
         Assert.assertEquals("test,b,value", myProperty.getValueAsString());
 
         myProperty.setValue("test , , a");
-        Assert.assertEquals(Arrays.asList(new String[] { "test", "a" }), myProperty.getValue());
+        Assert.assertEquals(Arrays.asList("test", "a"), myProperty.getValue());
 
         myProperty.setValue("test,,a");
-        Assert.assertEquals(Arrays.asList(new String[] { "test", "a" }), myProperty.getValue());
+        Assert.assertEquals(Arrays.asList("test", "a"), myProperty.getValue());
 
         myProperty.setValue(",");
-        Assert.assertEquals(Arrays.asList(new String[] {}), myProperty.getValue());
+        Assert.assertEquals(Arrays.asList(), myProperty.getValue());
 
         myProperty.setValue(",,,,");
-        Assert.assertEquals(Arrays.asList(new String[] {}), myProperty.getValue());
+        Assert.assertEquals(Arrays.asList(), myProperty.getValue());
 
         myProperty.setValue(",a");
-        Assert.assertEquals(Arrays.asList(new String[] { "a" }), myProperty.getValue());
+        Assert.assertEquals(Arrays.asList("a"), myProperty.getValue());
 
         myProperty.setValue("a,");
-        Assert.assertEquals(Arrays.asList(new String[] { "a" }), myProperty.getValue());
+        Assert.assertEquals(Arrays.asList("a"), myProperty.getValue());
+    }
+
+    @Test
+    public void testValidateListUniqueElementsPropertyOk() {
+
+        PAPropertyList myPropertyToValidate1 = new PAPropertyList("my.property", ",", false,
+            CentralPAPropertyRepositoryUtils.IS_SET);
+        // should be valid
+        myPropertyToValidate1.setValue("a,b,c");
+        Assert.assertEquals(Arrays.asList("a", "b", "c"), myPropertyToValidate1.getValue());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testValidateListUniqueElementsPropertyKo() {
+
+        PAPropertyList myPropertyToValidate1 = new PAPropertyList("my.property", ",", false,
+            CentralPAPropertyRepositoryUtils.IS_SET);
+        // should be not valid
+        myPropertyToValidate1.setValue("a,b,a");
+    }
+
+    @Test
+    public void testValidateAdditionalProtocolsPropertyOk() {
+        PAPropertyString myPropertyString = new PAPropertyString("my.string", false);
+        myPropertyString.setValue("k");
+        PAPropertyList myPropertyToValidate2 = new PAPropertyList("my.property", ",", false,
+            new CentralPAPropertyRepositoryUtils.AdditionalProtocolsValidator(myPropertyString));
+        // should be valid
+        myPropertyToValidate2.setValue("a,b,c");
+        Assert.assertEquals(Arrays.asList(new String[] { "a", "b", "c" }), myPropertyToValidate2.getValue());
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testValidateAdditionalProtocolsPropertyKo() {
+        PAPropertyString myPropertyString = new PAPropertyString("my.string", false);
+        myPropertyString.setValue("k");
+        PAPropertyList myPropertyToValidate2 = new PAPropertyList("my.property", ",", false,
+            new CentralPAPropertyRepositoryUtils.AdditionalProtocolsValidator(myPropertyString));
+        // should be not valid
+        myPropertyToValidate2.setValue("a,b,k");
     }
 }
