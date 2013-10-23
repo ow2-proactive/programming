@@ -64,8 +64,8 @@ public class AONamingServiceSwitch {
     /**
      * Creates a namign service
      * @return
-     * @throws ProActiveException
-     * @throws URISyntaxException
+     * @throws org.objectweb.proactive.core.ProActiveException
+     * @throws java.net.URISyntaxException
      */
     public NamingService createNamingService() throws ProActiveException, URISyntaxException {
         if (namingServiceDeployer == null) {
