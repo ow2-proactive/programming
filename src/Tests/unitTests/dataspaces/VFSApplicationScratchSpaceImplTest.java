@@ -45,6 +45,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.FileType;
@@ -113,6 +114,7 @@ public class VFSApplicationScratchSpaceImplTest {
         // we use a path with a whitespace to test possible errors
         testDir = new File(System.getProperty("java.io.tmpdir"),
             "ProActive-VFSApplicationScratch SpaceImplTest");
+        FileUtils.deleteDirectory(testDir);
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();
         scratchDataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID, APP_ID);

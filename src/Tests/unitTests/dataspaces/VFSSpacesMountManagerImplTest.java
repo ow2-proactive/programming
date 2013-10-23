@@ -101,6 +101,8 @@ public class VFSSpacesMountManagerImplTest {
 
     private static final String SCRATCH_ACTIVE_OBJECT_ID = "777";
 
+    private static final String WRONG_DS_SERVER_URL = "pappnp://welcome.to.proactive:5461/inputserver?proactive_vfs_provider_path=/";
+
     private static final DataSpacesURI NONEXISTING_SPACE = DataSpacesURI.createInOutSpaceURI(123,
             SpaceType.OUTPUT, "dummy");
 
@@ -128,8 +130,6 @@ public class VFSSpacesMountManagerImplTest {
     private static FileSystemServerDeployer serverOutput;
     private static FileSystemServerDeployer serverScratch;
 
-    private String fakeUri = "ftp://fake";
-
     private static DefaultFileSystemManager fileSystemManager;
 
     @BeforeClass
@@ -146,14 +146,14 @@ public class VFSSpacesMountManagerImplTest {
     public void setUp() throws Exception {
 
         ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
-        spacesDir = new File(System.getProperty("java.io.tmpdir"), "ProActive-SpaceMountManagerTest");
+        spacesDir = new File(System.getProperty("java.io.tmpdir"), "ProActive SpaceMountManagerTest");
 
         // input space
         final File inputSpaceDir = new File(spacesDir, "input");
         assertTrue(inputSpaceDir.mkdirs());
         if (serverInput == null) {
             serverInput = new FileSystemServerDeployer("inputserver", inputSpaceDir.toString(), true, true);
-            System.out.println("Started File Server at " + serverInput.getVFSRootURL());
+            System.out.println("Started Input File Server at " + serverInput.getVFSRootURLs());
         }
 
         final File inputSpaceFile = new File(inputSpaceDir, INPUT_FILE);
@@ -163,7 +163,6 @@ public class VFSSpacesMountManagerImplTest {
         inputSpaceFileUrl = inputSpaceDir.toURI().toURL().toString();
         ArrayList<String> rootinputuris = new ArrayList<String>();
         rootinputuris.add(inputSpaceFileUrl);
-        rootinputuris.add(fakeUri);
         rootinputuris.add(serverInput.getVFSRootURL());
 
         final InputOutputSpaceConfiguration inputSpaceConf = InputOutputSpaceConfiguration
@@ -177,13 +176,12 @@ public class VFSSpacesMountManagerImplTest {
 
         if (serverOutput == null) {
             serverOutput = new FileSystemServerDeployer("outputserver", outputSpaceDir.toString(), true, true);
-            System.out.println("Started File Server at " + serverOutput.getVFSRootURL());
+            System.out.println("Started Output File Server at " + serverOutput.getVFSRootURLs());
         }
 
         outputSpaceFileUrl = outputSpaceDir.toURI().toURL().toString();
         ArrayList<String> rootoutputuris = new ArrayList<String>();
         rootoutputuris.add(outputSpaceFileUrl);
-        rootoutputuris.add(fakeUri);
         rootoutputuris.add(serverOutput.getVFSRootURL());
 
         final InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration
@@ -198,7 +196,7 @@ public class VFSSpacesMountManagerImplTest {
         if (serverScratch == null) {
             serverScratch = new FileSystemServerDeployer("scratchserver", scratchSpaceDir.toString(), true,
                 true);
-            System.out.println("Started File Server at " + serverScratch.getVFSRootURL());
+            System.out.println("Started Scratch File Server at " + serverScratch.getVFSRootURLs());
         }
 
         final File scratchSpaceSubdir = new File(scratchSpaceDir, SCRATCH_ACTIVE_OBJECT_ID);
@@ -207,7 +205,6 @@ public class VFSSpacesMountManagerImplTest {
         scratchSpaceFileUrl = scratchSpaceDir.toURI().toURL().toString();
         ArrayList<String> rootscratchuris = new ArrayList<String>();
         rootscratchuris.add(scratchSpaceFileUrl);
-        rootscratchuris.add(fakeUri);
         rootscratchuris.add(serverScratch.getVFSRootURL());
 
         final ScratchSpaceConfiguration scratchSpaceConf = new ScratchSpaceConfiguration(rootscratchuris,
@@ -360,6 +357,8 @@ public class VFSSpacesMountManagerImplTest {
         outputSpaceFileUrl = outputSpaceDir.toURI().toURL().toString();
         ArrayList<String> rootoutputuris = new ArrayList<String>();
         rootoutputuris.add(wrongpath);
+        // add as well wrong server uri
+        rootoutputuris.add(WRONG_DS_SERVER_URL);
         rootoutputuris.add(serverOutput.getVFSRootURL());
 
         InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration

@@ -51,6 +51,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Level;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
@@ -61,6 +62,8 @@ import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
@@ -74,6 +77,10 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundExc
 
 
 public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
+    static {
+        ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
+    }
+
     private static final String ADDED_INPUT_NAME = "another_input";
     private static final String OUTPUT_FILE_NAME = "some_file.txt";
     private static final String OUTPUT_FILE_CONTENT1 = "didum";
