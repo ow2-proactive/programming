@@ -156,10 +156,10 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
     public DataSpacesFileObject resolveFile(final DataSpacesURI queryUri, final String ownerActiveObjectId,
             String spaceRootFOUri) throws FileSystemException, SpaceNotFoundException {
         if (logger.isDebugEnabled())
-            logger.debug("File access request: " + queryUri);
+            logger.debug("[VFSMountManager] File access request: " + queryUri);
 
         if (!queryUri.isSuitableForUserPath()) {
-            logger.error("Requested URI " + queryUri + " is not suitable for user path");
+            logger.error("[VFSMountManager] Requested URI " + queryUri + " is not suitable for user path");
             throw new IllegalArgumentException("Requested URI " + queryUri + " is not suitable for user path");
         }
 
@@ -188,14 +188,15 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
 
         final Map<DataSpacesURI, DataSpacesFileObject> result = new HashMap<DataSpacesURI, DataSpacesFileObject>();
         if (logger.isDebugEnabled())
-            logger.debug("Spaces access request: " + queryUri);
+            logger.debug("[VFSMountManager] Spaces access request: " + queryUri);
 
         final Set<SpaceInstanceInfo> spaces = directory.lookupMany(queryUri);
         if (spaces != null) {
             for (final SpaceInstanceInfo space : spaces) {
                 final DataSpacesURI spaceUri = space.getMountingPoint();
                 if (!spaceUri.isSuitableForUserPath()) {
-                    logger.error("Resolved space is not suitable for user path: " + spaceUri);
+                    logger.error("[VFSMountManager] Resolved space is not suitable for user path: " +
+                        spaceUri);
                     throw new IllegalArgumentException("Resolved space is not suitable for user path: " +
                         spaceUri);
                 }
@@ -215,7 +216,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
      * Closes all virtual spaces mounted by this mount manager
      */
     public void close() {
-        logger.debug("Closing mount manager");
+        logger.debug("[VFSMountManager] Closing mount manager");
         try {
             writeLock.lock();
             for (final DataSpacesURI spaceUri : new ArrayList<DataSpacesURI>(mountedSpaces.keySet())) {
@@ -225,7 +226,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         } finally {
             writeLock.unlock();
         }
-        logger.debug("Mount manager closed");
+        logger.debug("[VFSMountManager] Mount manager closed");
     }
 
     /**
@@ -253,7 +254,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 info = directory.lookupOne(spaceURI);
             }
             if (info == null) {
-                logger.warn("Could not find data space in spaces directory: " + spacePart);
+                logger.warn("[VFSMountManager] Could not find data space in spaces directory: " + spacePart);
                 throw new SpaceNotFoundException(
                     "Requested data space is not registered in spaces directory.");
             }
@@ -297,7 +298,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                         .getLocalAccessURL(urls.get(0), spaceInfo.getPath(), spaceInfo.getHostname()));
             }
 
-            logger.debug("trying to mount = " + urls);
+            logger.debug("[VFSMountManager] Request mounting VFS root list : " + urls);
 
             try {
                 VFSMountManagerHelper.mountAny(urls, fileSystems);
@@ -321,7 +322,8 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 accessibleFileObjectUris.put(mountingPoint, srl);
 
                 if (logger.isDebugEnabled())
-                    logger.debug(String.format("Mounted space: %s (access URL: %s)", spacePart, srl));
+                    logger.debug(String.format("[VFSMountManager] Mounted space: %s (access URL: %s)",
+                            spacePart, srl));
 
                 mountedSpaces.put(mountingPoint, fileSystems);
 
@@ -346,7 +348,6 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             throws FileSystemException {
         ConcurrentHashMap<String, FileObject> fileSystems = null;
         DataSpacesURI spacePart = mountingPoint.getSpacePartOnly();
-        logger.debug("trying to mount = " + spaceRootFOUri);
         try {
             readLock.lock();
             fileSystems = mountedSpaces.get(spacePart);
@@ -357,6 +358,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         } finally {
             readLock.unlock();
         }
+        logger.debug("[VFSMountManager] Request mounting VFS root = " + spaceRootFOUri);
         FileObject mountedRoot;
         try {
             mountedRoot = VFSMountManagerHelper.mount(spaceRootFOUri);
@@ -370,11 +372,13 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 writeLock.unlock();
             }
             if (logger.isDebugEnabled())
-                logger.debug(String.format("Mounted space: %s (access URL: %s)", spacePart, spaceRootFOUri));
+                logger.debug(String.format("[VFSMountManager] Mounted space: %s (access URL: %s)", spacePart,
+                        spaceRootFOUri));
             return true;
 
         } catch (org.apache.commons.vfs.FileSystemException x) {
-            String err = String.format("Could not access URL %s to mount %s", spaceRootFOUri, spacePart);
+            String err = String.format("[VFSMountManager] Could not access URL %s to mount %s",
+                    spaceRootFOUri, spacePart);
             logger.info(err);
             removeSpaceRootUri(spacePart, spaceRootFOUri);
             throw new FileSystemException(err, x);
@@ -464,7 +468,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                     new ArrayList<String>(accessibleFileObjectUris.get(spacePart)), spaceRootFOUri, this,
                     ownerActiveObjectId);
             } catch (org.apache.commons.vfs.FileSystemException x) {
-                logger.error("Could not access file within a space: " + uri);
+                logger.error("[VFSMountManager] Could not access file within a space: " + uri);
 
                 throw new FileSystemException(x);
             } catch (FileSystemException e) {

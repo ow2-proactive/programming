@@ -370,8 +370,7 @@ public class VFSMountManagerHelper {
                 return fo;
             } else {
                 // start new mounting
-                logger.debug("[" + VFSMountManagerHelper.class.getSimpleName() + "] Trying to mount " +
-                    uriToMount);
+                logger.debug("[" + VFSMountManagerHelper.class.getSimpleName() + "] Mounting " + uriToMount);
                 FileObject mounted = null;
                 try {
                     mounted = vfsManager.resolveFile(uriToMount);
