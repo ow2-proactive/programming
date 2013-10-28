@@ -88,8 +88,7 @@ public class VFSMountManagerHelperTest {
             "pappnp://welcome.to.proactive:5461/inputserver?proactive_vfs_provider_path=/",
             "sftp://itmysite/fake"));
 
-    private ArrayList<String> fakeFileUrls = new ArrayList<String>(Arrays.asList("file:///",
-            "file:///Z:/not/a/path"));
+    private ArrayList<String> fakeFileUrls = new ArrayList<String>(Arrays.asList(""));
 
     // pamr router
     static Router router;
@@ -98,7 +97,6 @@ public class VFSMountManagerHelperTest {
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
         PAMRConfig.PA_NET_ROUTER_PORT.setValue(9997);
         ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
-
     }
 
     /**
@@ -131,20 +129,23 @@ public class VFSMountManagerHelperTest {
     }
 
     /**
-     * - Insert a valid vfs root in the list of fake uri
+     * - Insert a valid file vfs root and a valid proactive vfs root in the list of fake uris
      * - verifies that mountAny returns the file system corresponding to the valid uri
      * - do that for all valid uris of the file system server
      * @throws Exception
      */
     @Test
     public void testMountAnyOk() throws Exception {
-        String[] validUrls = server.getVFSRootURLs();
-        ConcurrentHashMap<String, FileObject> fileSystems = new ConcurrentHashMap<String, FileObject>();
-        for (String validUrl : validUrls) {
-            ArrayList<String> urlsToMount = new ArrayList<String>(fakeFileUrls);
-            urlsToMount.addAll(fakeUrls);
-            urlsToMount.add((int) Math.floor(Math.random() * urlsToMount.size()), validUrl);
-            VFSMountManagerHelper.mountAny(urlsToMount, fileSystems);
+        logger.info("*************** testMountAnyOk");
+        String[] validUris = server.getVFSRootURLs();
+
+        for (String validUrl : validUris) {
+            ConcurrentHashMap<String, FileObject> fileSystems = new ConcurrentHashMap<String, FileObject>();
+            ArrayList<String> uriToMount = new ArrayList<String>(fakeFileUrls);
+            uriToMount.add(spacesDir.toURI().toString()); // adds a valid file uri
+            uriToMount.addAll(fakeUrls);
+            uriToMount.add((int) Math.floor(Math.random() * uriToMount.size()), validUrl);
+            VFSMountManagerHelper.mountAny(uriToMount, fileSystems);
             logger.info("Content of map : " + fileSystems.toString());
             Assert.assertTrue("map contains valid Url", fileSystems.containsKey(validUrl));
         }
@@ -156,6 +157,7 @@ public class VFSMountManagerHelperTest {
      */
     @Test(expected = FileSystemException.class)
     public void testMountAnyKo() throws Exception {
+        logger.info("*************** testMountAnyKo");
         ArrayList<String> urlsToMount = new ArrayList<String>(fakeFileUrls);
         urlsToMount.addAll(fakeUrls);
         ConcurrentHashMap<String, FileObject> fileSystems = new ConcurrentHashMap<String, FileObject>();
@@ -168,6 +170,7 @@ public class VFSMountManagerHelperTest {
      */
     @Test
     public void testMountOk() throws Exception {
+        logger.info("*************** testMountOk");
         String[] validUrls = server.getVFSRootURLs();
         for (String validUrl : validUrls) {
             FileObject mounted = VFSMountManagerHelper.mount(validUrl);
@@ -181,6 +184,7 @@ public class VFSMountManagerHelperTest {
      */
     @Test(expected = FileSystemException.class)
     public void testMountKo() throws Exception {
+        logger.info("*************** testMountKo");
         for (String fakeUrl : fakeUrls) {
             FileObject mounted = VFSMountManagerHelper.mount(fakeUrl);
         }
@@ -193,6 +197,7 @@ public class VFSMountManagerHelperTest {
     @Ignore("vfs close file system doesn't seem to work properly")
     @Test
     public void testCloseFileSystems() throws Exception {
+        logger.info("*************** testCloseFileSystems");
         String[] validUrls = server.getVFSRootURLs();
         ArrayList<FileObject> fos = new ArrayList<FileObject>();
         for (String validUrl : validUrls) {
