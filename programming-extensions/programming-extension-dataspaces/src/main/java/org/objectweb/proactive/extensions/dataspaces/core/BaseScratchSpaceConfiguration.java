@@ -204,24 +204,32 @@ public class BaseScratchSpaceConfiguration implements Serializable {
      */
     public ScratchSpaceConfiguration createScratchSpaceConfiguration(final String... subDirs)
             throws ConfigurationException {
-        ArrayList<String> urls = new ArrayList<String>();
-        final String newPath = Utils.appendSubDirs(getPath(), subDirs);
-        String localPathUrl = null;
-        try {
-            localPathUrl = (new File(newPath)).toURI().toURL().toString();
-        } catch (MalformedURLException e) {
-            throw new ConfigurationException(e);
-        }
-        urls.add(localPathUrl);
+
         String[] receivedurls = getUrls();
+        boolean fileUrlFound = URIHelper.findFileUrl(receivedurls);
+        ArrayList<String> outputurls = new ArrayList<String>();
+
+        // if there was no file url in the url list received, add it with the local path,
+        // otherwise only compute the new local path of the configuration
+
+        final String newPath = Utils.appendSubDirs(getPath(), subDirs);
+        if (!fileUrlFound) {
+            String localPathUrl = null;
+            try {
+                localPathUrl = (new File(newPath)).toURI().toURL().toString();
+            } catch (MalformedURLException e) {
+                throw new ConfigurationException(e);
+            }
+            outputurls.add(localPathUrl);
+        }
+
+        // compute all other urls
         if (receivedurls != null) {
             for (String url : receivedurls) {
                 final String newUrl = Utils.appendSubDirs(url, subDirs);
-                if (!newUrl.equals(localPathUrl)) {
-                    urls.add(newUrl);
-                }
+                outputurls.add(newUrl);
             }
         }
-        return new ScratchSpaceConfiguration(urls, newPath, Utils.getHostname());
+        return new ScratchSpaceConfiguration(outputurls, newPath, Utils.getHostname());
     }
 }
