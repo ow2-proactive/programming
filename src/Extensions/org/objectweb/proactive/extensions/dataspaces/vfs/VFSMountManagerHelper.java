@@ -200,13 +200,13 @@ public class VFSMountManagerHelper {
         try {
             FileObject successful = executor.invokeAny(otherMounters);
             // at this stage there will be in the map alreadyMountedSpaces a mix of failures and at least one valid result
-            scanMapForResults(urisfiltered, exceptionMessage, exceptionCount, nl);
+            scanMapForResults(otherUris, exceptionMessage, exceptionCount, nl);
 
         } catch (InterruptedException e) {
             throw new FileSystemException("Interruption occurred when trying to mount " + urisfiltered, e);
         } catch (ExecutionException e) {
             // no other protocol was deployed successfully
-            scanMapForResults(urisfiltered, exceptionMessage, exceptionCount, nl);
+            scanMapForResults(otherUris, exceptionMessage, exceptionCount, nl);
 
             // if at least one file uri was deployed successfully, but no other protocols, display a warning
             if (exceptionCount.getValue() < urisfiltered.size() && atLeastOneFileDeployed) {
@@ -220,7 +220,7 @@ public class VFSMountManagerHelper {
         // if the total number of exceptions match the uri list size then it is a failure
         if (exceptionCount.getValue() == urisfiltered.size()) {
             throw new FileSystemException("Only Exceptions occurred when trying to mount " + urisfiltered +
-                " : " + nl + exceptionMessage.toString());
+                " : " + nl + nl + exceptionMessage.toString());
         }
 
     }
@@ -273,7 +273,7 @@ public class VFSMountManagerHelper {
             } catch (InterruptedException e) {
                 throw new FileSystemException("Interruption occurred when trying to mount " + uris, e);
             } catch (ExecutionException e) {
-                exceptionMessage.append(StackTraceUtil.getStackTrace(e) + nl);
+                exceptionMessage.append(StackTraceUtil.getStackTrace(e) + nl + nl);
                 exceptionCount.add(1);
 
             }
