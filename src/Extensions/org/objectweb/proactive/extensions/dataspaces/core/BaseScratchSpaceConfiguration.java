@@ -118,6 +118,12 @@ public class BaseScratchSpaceConfiguration implements Serializable {
             // we convert the urlList received to valid uri strings and search in the list if there is any file: url
             String[] encoded = URIHelper.convertAllToURIString(urls);
 
+            for (int i = 0; i < encoded.length; i++) {
+                if (!encoded[i].endsWith("/")) {
+                    encoded[i] = encoded[i] + "/";
+                }
+            }
+
             // we check if there is a file url
             boolean fileSchemeFound = URIHelper.findFileUrl(encoded);
 
@@ -226,7 +232,7 @@ public class BaseScratchSpaceConfiguration implements Serializable {
         // compute all other urls
         if (receivedurls != null) {
             for (String url : receivedurls) {
-                final String newUrl = Utils.appendSubDirs(url, subDirs);
+                final String newUrl = Utils.appendSubDirs(url, true, subDirs);
                 outputurls.add(newUrl);
             }
         }
