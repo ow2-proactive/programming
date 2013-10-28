@@ -43,7 +43,6 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
@@ -163,6 +162,7 @@ public class Utils {
      * @param baseLocation
      *            Base location (path or URL) which is the root for appended subdirectories. Can be
      *            <code>null</code>.
+     *            @param trailingSlash if we want a trailing slash to be added at the end
      * @param subDirs
      *            Any number of subdirectories to be appended to provided location. Order of
      *            subdirectories corresponds to directories hierarchy and result path. None of it
@@ -170,7 +170,8 @@ public class Utils {
      * @return location with appended subdirectories with appropriate slashes (separators).
      *         <code>null</code> if <code>basePath</code> is <code>null</code>.
      */
-    public static String appendSubDirs(final String baseLocation, final String... subDirs) {
+    public static String appendSubDirs(final String baseLocation, boolean trailingSlash,
+            final String... subDirs) {
         if (baseLocation == null)
             return null;
 
@@ -181,15 +182,21 @@ public class Utils {
             separator = '/';
 
         final StringBuilder sb = new StringBuilder(baseLocation);
-        boolean skipFirst = baseLocation.endsWith(Character.toString(separator));
+        if (!baseLocation.endsWith(Character.toString(separator))) {
+            sb.append(separator);
+        }
         for (final String subDir : subDirs) {
-            if (skipFirst)
-                skipFirst = false;
-            else
-                sb.append(separator);
             sb.append(subDir);
+            sb.append(separator);
+        }
+        if (!trailingSlash) {
+            sb.deleteCharAt(sb.length() - 1);
         }
         return sb.toString();
+    }
+
+    public static String appendSubDirs(final String baseLocation, final String... subDirs) {
+        return appendSubDirs(baseLocation, false, subDirs);
     }
 
     /**
