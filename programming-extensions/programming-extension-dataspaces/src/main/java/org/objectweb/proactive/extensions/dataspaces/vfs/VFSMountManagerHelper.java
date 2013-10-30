@@ -156,6 +156,10 @@ public class VFSMountManagerHelper {
             throw new IllegalArgumentException("file systems map must be initialized, received null");
         }
 
+        if (urisfiltered.isEmpty()) {
+            throw new IllegalArgumentException("Invalid file system uri list : received empty list");
+        }
+
         ArrayList<String> fileUris = new ArrayList<String>();
         ArrayList<String> otherUris = new ArrayList<String>();
 
@@ -184,35 +188,42 @@ public class VFSMountManagerHelper {
 
         boolean atLeastOneFileDeployed = false;
 
-        try {
-            List<Future<FileObject>> fileMounterFutures = executor.invokeAll(fileMounters);
-            for (Future<FileObject> future : fileMounterFutures) {
-                handleFuture(future, urisfiltered, exceptionMessage, exceptionCount, nl);
-            }
-            if (exceptionCount.getValue() < fileUris.size()) {
-                atLeastOneFileDeployed = true;
-            }
+        if (!fileMounters.isEmpty()) {
+            try {
+                List<Future<FileObject>> fileMounterFutures = executor.invokeAll(fileMounters);
+                for (Future<FileObject> future : fileMounterFutures) {
+                    handleFuture(future, urisfiltered, exceptionMessage, exceptionCount, nl);
+                }
+                if (exceptionCount.getValue() < fileUris.size()) {
+                    atLeastOneFileDeployed = true;
+                }
 
-        } catch (InterruptedException e) {
-            throw new FileSystemException("Interruption occurred when trying to mount " + urisfiltered, e);
+            } catch (InterruptedException e) {
+                throw new FileSystemException("Interruption occurred when trying to mount " + urisfiltered, e);
+            }
         }
 
-        try {
-            FileObject successful = executor.invokeAny(otherMounters);
-            // at this stage there will be in the map alreadyMountedSpaces a mix of failures and at least one valid result
-            scanMapForResults(otherUris, exceptionMessage, exceptionCount, nl);
+        if (!otherMounters.isEmpty()) {
+            try {
+                FileObject successful = executor.invokeAny(otherMounters);
+                // at this stage there will be in the map alreadyMountedSpaces a mix of failures and at least one valid result
+                scanMapForResults(otherUris, exceptionMessage, exceptionCount, nl);
 
-        } catch (InterruptedException e) {
-            throw new FileSystemException("Interruption occurred when trying to mount " + urisfiltered, e);
-        } catch (ExecutionException e) {
-            // no other protocol was deployed successfully
-            scanMapForResults(otherUris, exceptionMessage, exceptionCount, nl);
+            } catch (InterruptedException e) {
+                throw new FileSystemException("Interruption occurred when trying to mount " + urisfiltered, e);
+            } catch (ExecutionException e) {
+                // no other protocol was deployed successfully
+                scanMapForResults(otherUris, exceptionMessage, exceptionCount, nl);
 
-            // if at least one file uri was deployed successfully, but no other protocols, display a warning
-            if (exceptionCount.getValue() < urisfiltered.size() && atLeastOneFileDeployed) {
-                logger
-                        .warn("[VFSMountManager] Only file protocol file systems were accessible when trying to mount " +
-                            urisfiltered + ". Here are all the exception received : " + nl + exceptionMessage);
+                // if at least one file uri was deployed successfully, but no other protocols, display a warning
+                if (exceptionCount.getValue() < urisfiltered.size() && atLeastOneFileDeployed) {
+                    logger
+                            .warn("[VFSMountManager] Only file protocol file systems were accessible when trying to mount " +
+                                urisfiltered +
+                                ". Here are all the exception received : " +
+                                nl +
+                                exceptionMessage);
+                }
             }
         }
 
