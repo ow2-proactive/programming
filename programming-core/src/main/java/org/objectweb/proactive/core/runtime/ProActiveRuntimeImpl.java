@@ -1288,49 +1288,62 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         if (CentralPAPropertyRepository.PA_HOME.isSet()) {
             return CentralPAPropertyRepository.PA_HOME.getValue();
         } else {
-            // Guess the location by using the classloader
             final URL url = this.getClass().getResource(this.getClass().getSimpleName() + ".class");
-            final String path = url.getPath();
-            if ("jar".equals(url.getProtocol())) {
+            return guessProActiveHomeFromClassloader(url);
+        }
+    }
 
-                int begin = path.indexOf("file:");
-                int end = path.indexOf(".jar!");
-                if (begin != 0 || end < 0) {
-                    throw new ProActiveException("Unable to find ProActive home. Bad jar url: " + url);
-                }
+    private String guessProActiveHomeFromClassloader(URL url) throws ProActiveException {
+        final String path = url.getPath();
+        if ("jar".equals(url.getProtocol())) {
+            return guessProActiveHomeFromJarClassloader(path);
+        } else if ("file".equals(url.getProtocol())) {
+            return guessProActiveHomeFromClassesFolder(path);
+        } else {
+            throw new ProActiveException("Unable to find ProActive home. Unspported protocol: " + url);
+        }
+    }
 
-                end = path.indexOf("dist/lib/ProActive.jar!");
-                if (end < 0) {
-                    throw new ProActiveException("Unable to find ProActive home. Unexpected jar name: " + url);
-                }
+    String guessProActiveHomeFromJarClassloader(String path) throws ProActiveException {
+        int begin = path.indexOf("file:");
+        int end = path.indexOf(".jar!");
+        if (begin != 0 || end < 0) {
+            throw new ProActiveException("Unable to find ProActive home. Bad jar url: " + path);
+        }
 
-                try {
-                    File padir = new File(new URI(path.substring(begin, end)));
-                    return padir.getCanonicalPath();
-                } catch (URISyntaxException e) {
-                    throw new ProActiveException(e);
-                } catch (IOException e) {
-                    throw new ProActiveException(e);
-                }
-            } else if ("file".equals(url.getProtocol())) {
-                int index = path.indexOf("classes/Core/" + this.getClass().getName().replace('.', '/') +
-                    ".class");
-                if (index > 0) {
-
-                    try {
-                        return new File(new URI("file:" + path.substring(0, index))).getCanonicalPath();
-                    } catch (URISyntaxException e) {
-                        throw new ProActiveException(e);
-                    } catch (IOException e) {
-                        throw new ProActiveException(e);
-                    }
-                } else {
-                    throw new ProActiveException(
-                        "Unable to find ProActive home. Running from class files but non standard repository layout");
-                }
-            } else {
-                throw new ProActiveException("Unable to find ProActive home. Unspported protocol: " + url);
+        end = path.indexOf("dist/lib/ProActive.jar!");
+        if (end < 0) {
+            end = path.indexOf("dist/lib/programming-core");
+            if (end < 0) {
+                throw new ProActiveException("Unable to find ProActive home. Unexpected jar name: " + path);
             }
+        }
+
+        try {
+            File padir = new File(new URI(path.substring(begin, end)));
+            return padir.getCanonicalPath();
+        } catch (URISyntaxException e) {
+            throw new ProActiveException(e);
+        } catch (IOException e) {
+            throw new ProActiveException(e);
+        }
+    }
+
+    private String guessProActiveHomeFromClassesFolder(String path) throws ProActiveException {
+        int index = path.indexOf("classes/Core/" + this.getClass().getName().replace('.', '/') +
+          ".class");
+        if (index > 0) {
+
+            try {
+                return new File(new URI("file:" + path.substring(0, index))).getCanonicalPath();
+            } catch (URISyntaxException e) {
+                throw new ProActiveException(e);
+            } catch (IOException e) {
+                throw new ProActiveException(e);
+            }
+        } else {
+            throw new ProActiveException(
+              "Unable to find ProActive home. Running from class files but non standard repository layout");
         }
     }
 }
