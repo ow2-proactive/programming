@@ -34,6 +34,7 @@
  */
 package org.objectweb.proactive.core.runtime;
 
+import java.io.File;
 import java.net.URL;
 
 import org.junit.Test;
@@ -58,7 +59,7 @@ public class ProActiveRuntimeImplTest {
         String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(
           new URL("jar:file:/tmp/dist/lib/ProActive.jar!/MyClass.class").getPath());
 
-        assertEquals("/tmp", proActiveHome);
+        assertEquals(new File("/tmp").getAbsolutePath(), proActiveHome);
     }
 
     @Test
@@ -66,6 +67,6 @@ public class ProActiveRuntimeImplTest {
         String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(
           new URL("jar:file:/tmp/dist/lib/programming-core-2.4.2.jar!/MyClass.class").getPath());
 
-        assertEquals("/tmp", proActiveHome);
+        assertEquals(new File("/tmp").getAbsolutePath(), proActiveHome);
     }
 }
