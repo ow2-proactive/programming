@@ -120,9 +120,9 @@ public class PARTPinger extends Thread {
     private static void checkVersion(String latestVersion) {
         String version = Main.getProActiveVersion();
         if (latestVersion.isEmpty() || latestVersion.length() > 20) {
-            logger.warn("Got malformed response from remote server; unable to determine the latest version");
-        } else if (version.equals(latestVersion)) {
-            logger.warn("You are running the latest version of ProActive");
+            logger.debug("Got malformed response from remote server; unable to determine the latest version");
+        } else if (version.equals(latestVersion) || isDevelopmentVersion(version)) {
+            logger.debug("You are running the latest version of ProActive");
         } else {
             logger.warn("You don't seem to be running the latest released version of ProActive");
             logger.warn(String
@@ -130,8 +130,12 @@ public class PARTPinger extends Thread {
             logger
                     .warn("To download the latest release, please visit http://www.activeeon.com/community-downloads");
         }
-        logger.warn(String.format("To disable this check, set the %s property to false",
+        logger.debug(String.format("To disable this check, set the %s property to false",
                 CentralPAPropertyRepository.PA_RUNTIME_PING.getName()));
+    }
+
+    private static boolean isDevelopmentVersion(String version) {
+        return version.contains("-") || version.contains("$"); // it is a date like "2013-01-01" or "$Id$"
     }
 
     public static void main(String[] args) {

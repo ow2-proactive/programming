@@ -36,17 +36,21 @@
  */
 package org.objectweb.proactive;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
 import org.objectweb.proactive.api.PAVersion;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.PAProperty;
 import org.objectweb.proactive.core.util.ProActiveInet;
 
-import java.util.*;
-
 
 public class Main {
-    static final private String PA_VERSION = "2013-07-04";
+    static final private String PA_VERSION = "$Id$";
 
     /**
      * Returns the version number
