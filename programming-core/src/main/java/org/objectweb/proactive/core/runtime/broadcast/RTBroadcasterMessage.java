@@ -44,7 +44,7 @@ public interface RTBroadcasterMessage {
     public void sendCreation() throws IOException;
 
     //
-    // -- On veut savoir quels sont les runtimes sur le r�seau
+    // -- On veut savoir quels sont les runtimes sur le reseau
     // -----------------------------------------------
     //
     public void sendDiscover() throws IOException;

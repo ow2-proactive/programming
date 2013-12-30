@@ -227,7 +227,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     }
 
     //
-    // -- On signale notre pr�sence � tout le monde
+    // -- On signale notre presence a tout le monde
     // -----------------------------------------------
     //
     public void sendCreation() throws IOException {
