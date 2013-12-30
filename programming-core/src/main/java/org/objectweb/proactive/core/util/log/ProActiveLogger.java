@@ -100,7 +100,7 @@ public class ProActiveLogger extends Logger {
                         success = true;
                     } catch (Exception e) {
                         System.err.println("the user's log4j configuration file (" + f.getAbsolutePath() +
-                            ") exits but is not accessible, fallbacking on the default configuration");
+                            ") exists but is not accessible, fallbacking on the default configuration");
                     }
                 }
             }

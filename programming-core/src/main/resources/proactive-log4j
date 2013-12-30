@@ -83,7 +83,7 @@ log4j.logger.proactive.pnp = INFO
 # CONSOLE appender is used by default
 log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
 log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
-log4j.appender.CONSOLE.layout.ConversionPattern=%X{shortid@hostname} - [%d %p %20.20c{2}] %m%n
+log4j.appender.CONSOLE.layout.ConversionPattern=[%d{ISO8601} %-5p] [NODE.%C{1}.%M] %m%n
 
 # Appender FILE writes to the file "tests.log".
 # This file is recreated a file for each run
