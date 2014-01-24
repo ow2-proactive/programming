@@ -131,6 +131,15 @@ public class JavassistByteCodeStubBuilder {
                 superCtClass = pool.get(className);
             }
 
+            // Fix for PROACTIVE-1163: serialVersionUIDs, when defined, should be reported on generated Stubs
+            // The stub class must have the same serialVersionUID as the reified class
+            // Using CtClass#getDeclaredFields() instead of CtClass#getDeclaredField() to avoid NotFoundException
+            for (CtField declaredField : superCtClass.getDeclaredFields()) {
+                if ("serialVersionUID".equals(declaredField.getName())) {
+                    generatedCtClass.addField(new CtField(declaredField, generatedCtClass));
+                }
+            }
+
             CtField outsideOfConstructorField = new CtField(pool.get(CtClass.booleanType.getName()),
                 "outsideOfConstructor", generatedCtClass);
 

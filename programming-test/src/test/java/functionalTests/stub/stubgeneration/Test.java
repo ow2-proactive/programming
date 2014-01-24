@@ -36,19 +36,19 @@
  */
 package functionalTests.stub.stubgeneration;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-
+import functionalTests.FunctionalTest;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.Utils;
 
-import functionalTests.FunctionalTest;
+import java.io.ObjectStreamClass;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -77,6 +77,12 @@ public class Test extends FunctionalTest {
         assertNotNull(data);
         Class<?> stubClass = Test.defineClass("pa.stub.functionalTests.stub.stubgeneration._StubA", data);
         assertTrue("A isn't parent of its Stub!", A.class.isAssignableFrom(stubClass));
+
+        // Test for PROACTIVE-1163: serialVersionUIDs, when defined, should be reported on generated Stubs
+        ObjectStreamClass reifiedClassOsc = ObjectStreamClass.lookup(A.class);
+        ObjectStreamClass stubOsc = ObjectStreamClass.lookup(stubClass);
+        assertEquals("The stub has not the same serialVersionUID" , stubOsc.getSerialVersionUID(), reifiedClassOsc.getSerialVersionUID());
+
         stubClassName = Utils.convertClassNameToStubClassName(baseclassName, null);
         assertEquals(stubClassName + " not equals pa.stub.functionalTests.stub.stubgeneration._StubA",
                 stubClassName, "pa.stub.functionalTests.stub.stubgeneration._StubA");
