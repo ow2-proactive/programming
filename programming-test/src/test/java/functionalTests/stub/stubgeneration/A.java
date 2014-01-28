@@ -36,7 +36,9 @@
  */
 package functionalTests.stub.stubgeneration;
 
-public class A {
+import java.io.Serializable;
+
+public class A implements Serializable {
     private static final long serialVersionUID = 42L;
     public static final String RESULT = "a serializable result";
     String name;
