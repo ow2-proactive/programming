@@ -61,9 +61,9 @@ public class NonFunctionalServices {
     static {
         try {
             nonFunctionalServicesClass = java.lang.Class
-                    .forName("org.objectweb.proactive.core.util.NonFunctionalServices");
+                    .forName(NonFunctionalServices.class.getName());
             paramTypes = new Class<?>[1];
-            paramTypes[0] = java.lang.Class.forName("org.objectweb.proactive.core.mop.Proxy");
+            paramTypes[0] = java.lang.Class.forName(Proxy.class.getName());
             terminateAOMethod = nonFunctionalServicesClass.getMethod("_terminateAO", paramTypes);
             terminateAOImmediatelyMethod = nonFunctionalServicesClass.getMethod("_terminateAOImmediately",
                     paramTypes);

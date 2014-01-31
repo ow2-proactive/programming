@@ -92,14 +92,18 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
     public void runActivity(Body body) {
         Service service = new Service(body);
 
-        while (true) {
-            String allowedMethodNames = "putFTS";
+        try {
+            while (true) {
+                String allowedMethodNames = "putFTS";
 
-            if ((ftsPool.size() > 0) || (maxFTS > 0)) {
-                allowedMethodNames += "getFTS|getFTS";
+                if ((ftsPool.size() > 0) || (maxFTS > 0)) {
+                    allowedMethodNames += "getFTS|getFTS";
+                }
+
+                service.blockingServeOldest(new RequestFilterOnAllowedMethods(allowedMethodNames));
             }
-
-            service.blockingServeOldest(new RequestFilterOnAllowedMethods(allowedMethodNames));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

@@ -61,7 +61,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * @param requestFilter the request filter that select the request to be returned
      * @return the oldest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveOldest(RequestFilter requestFilter);
+    public Request blockingRemoveOldest(RequestFilter requestFilter) throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request of name methodName
@@ -70,7 +70,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * @param methodName the name of the method to wait for
      * @return the oldest request of name methodName found in the queue.
      */
-    public Request blockingRemoveOldest(String methodName);
+    public Request blockingRemoveOldest(String methodName) throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request available
@@ -78,7 +78,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * null unless the thread has been asked not to wait anymore.
      * @return the oldest request found in the queue.
      */
-    public Request blockingRemoveOldest();
+    public Request blockingRemoveOldest() throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request available but try
@@ -87,7 +87,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * null if a request has been found during the given time.
      * @return the oldest request found in the queue or null.
      */
-    public Request blockingRemoveOldest(long timeout);
+    public Request blockingRemoveOldest(long timeout) throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request that can be accepted
@@ -97,7 +97,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * null if a request has been found during the given time.
      * @return the oldest request found in the queue or null.
      */
-    public Request blockingRemoveOldest(RequestFilter requestFilter, long timeout);
+    public Request blockingRemoveOldest(RequestFilter requestFilter, long timeout) throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request that can be accepted
@@ -107,7 +107,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * @param requestFilter the request filter that select the request to be returned
      * @return the youngest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveYoungest(RequestFilter requestFilter);
+    public Request blockingRemoveYoungest(RequestFilter requestFilter) throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request that can be accepted
@@ -118,7 +118,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * @param requestFilter the request filter that select the request to be returned
      * @return the youngest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout);
+    public Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout) throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request of name methodName
@@ -127,7 +127,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * @param methodName the name of the method to wait for
      * @return the youngest request of name methodName found in the queue.
      */
-    public Request blockingRemoveYoungest(String methodName);
+    public Request blockingRemoveYoungest(String methodName) throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request available
@@ -135,7 +135,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * null unless the thread has been asked not to wait anymore.
      * @return the youngest request found in the queue.
      */
-    public Request blockingRemoveYoungest();
+    public Request blockingRemoveYoungest() throws InterruptedException;
 
     /**
      * Blocks the calling thread until there is a request available but try
@@ -144,7 +144,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * null if a request has been found during the given time.
      * @return the youngest request found in the queue or null.
      */
-    public Request blockingRemoveYoungest(long timeout);
+    public Request blockingRemoveYoungest(long timeout) throws InterruptedException;
 
     /**
      * Check if the thread is currently waiting for a request
@@ -157,7 +157,7 @@ public interface BlockingRequestQueue extends RequestQueue {
      * is not removed from the queue.
      * Returns immediately if there is already one or the timeout is reached.
      */
-    public void waitForRequest(long timeout);
+    public void waitForRequest(long timeout) throws InterruptedException;
 
     /**
      * Blocks the service of requests.

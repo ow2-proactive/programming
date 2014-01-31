@@ -1041,6 +1041,21 @@ public class PAActiveObject {
     }
 
     /**
+     * Tries to interrupt the current service on the specified ActiveObject.
+     * This call must not done from within an active object method, as it would interrupt itself.
+     *
+     * Depending on how the runActivity is implemented, it may or may not terminate the ActiveObject.
+     *
+     * In standard fifo or lifo serving, it will not terminate the AO
+     *
+     * @throws IllegalStateException if the body is inactive
+     */
+    public static void interruptService(Object obj) throws IllegalStateException {
+        UniversalBody body = getRemoteBody(obj);
+        body.interruptService();
+    }
+
+    /**
      * Looks-up all Active Objects registered on a host, using a registry(RMI or HTTP) The
      * registry where to look for is fully determined with the protocol included in the url.
      *

@@ -109,11 +109,15 @@ public class TestProActive359 extends FunctionalTest {
 
         public void runActivity(Body body) {
             Service service = new Service(body);
-            service.blockingServeOldest("foo");
+            try {
+                service.blockingServeOldest("foo");
 
-            rqueue.suspend();
-            service.blockingServeOldest("bar");
+                rqueue.suspend();
 
+                service.blockingServeOldest("bar");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         public void resume() {

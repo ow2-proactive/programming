@@ -99,7 +99,11 @@ public class TestGCMRemoteObjectsSubscribeFromAO extends GCMFunctionalTest {
                 e.printStackTrace();
             }
 
-            service.blockingServeOldest("isSuccess");
+            try {
+                service.blockingServeOldest("isSuccess");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         public BooleanWrapper isSuccess() {

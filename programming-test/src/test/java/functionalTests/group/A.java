@@ -110,9 +110,13 @@ public class A implements InitActive, RunActive, EndActive, java.io.Serializable
 
     public void runActivity(Body body) {
         org.objectweb.proactive.Service service = new org.objectweb.proactive.Service(body);
-        while (body.isActive()) {
-            // The synchro policy is FIFO
-            service.blockingServeOldest();
+        try {
+            while (body.isActive()) {
+                // The synchro policy is FIFO
+                service.blockingServeOldest();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

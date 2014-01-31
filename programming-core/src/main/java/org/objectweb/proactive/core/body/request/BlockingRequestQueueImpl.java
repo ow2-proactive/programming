@@ -131,44 +131,44 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
         this.notifyAll();
     }
 
-    public synchronized Request blockingRemoveOldest(RequestFilter requestFilter) {
+    public synchronized Request blockingRemoveOldest(RequestFilter requestFilter) throws InterruptedException {
         return blockingRemove(requestFilter, true, 0);
     }
 
-    public synchronized Request blockingRemoveOldest(RequestFilter requestFilter, long timeout) {
+    public synchronized Request blockingRemoveOldest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         return blockingRemove(requestFilter, true, timeout);
     }
 
-    public synchronized Request blockingRemoveOldest(String methodName) {
+    public synchronized Request blockingRemoveOldest(String methodName) throws InterruptedException {
         requestFilterOnMethodName.setMethodName(methodName);
         return blockingRemove(requestFilterOnMethodName, true, 0);
     }
 
-    public synchronized Request blockingRemoveOldest() {
+    public synchronized Request blockingRemoveOldest() throws InterruptedException {
         return blockingRemove(null, true, 0);
     }
 
-    public synchronized Request blockingRemoveOldest(long timeout) {
+    public synchronized Request blockingRemoveOldest(long timeout) throws InterruptedException {
         return blockingRemove(null, true, timeout);
     }
 
-    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter) {
+    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter) throws InterruptedException {
         return blockingRemove(requestFilter, false);
     }
 
-    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout) {
+    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         return blockingRemove(requestFilter, false, timeout);
     }
 
-    public synchronized Request blockingRemoveYoungest(String methodName) {
+    public synchronized Request blockingRemoveYoungest(String methodName) throws InterruptedException {
         return blockingRemove(methodName, false);
     }
 
-    public synchronized Request blockingRemoveYoungest() {
+    public synchronized Request blockingRemoveYoungest() throws InterruptedException {
         return blockingRemove(false);
     }
 
-    public synchronized Request blockingRemoveYoungest(long timeout) {
+    public synchronized Request blockingRemoveYoungest(long timeout) throws InterruptedException {
         return blockingRemove(timeout, false);
     }
 
@@ -181,7 +181,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      *
      * Does not check for pending requests before waiting
      */
-    private synchronized void internalWait(long timeout) {
+    private synchronized void internalWait(long timeout) throws InterruptedException {
         // JMX Notification
         Body body = LocalBodyStore.getInstance().getLocalBody(ownerID);
         if (body != null) {
@@ -192,17 +192,14 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
         }
         // END JMX Notification
 
-        try {
-            this.wait(timeout);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        this.wait(timeout);
     }
 
     /**
      * User API: checks for pending requests before waiting
      */
-    public synchronized void waitForRequest(long timeout) {
+    public synchronized void waitForRequest(long timeout) throws InterruptedException {
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
 
         try {
@@ -244,11 +241,11 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
         return suspended != true;
     }
 
-    protected Request blockingRemove(RequestFilter requestFilter, boolean oldest) {
+    protected Request blockingRemove(RequestFilter requestFilter, boolean oldest) throws InterruptedException {
         return blockingRemove(requestFilter, oldest, 0);
     }
 
-    protected Request blockingRemove(RequestFilter requestFilter, boolean oldest, long timeout) {
+    protected Request blockingRemove(RequestFilter requestFilter, boolean oldest, long timeout) throws InterruptedException {
 
         if (oldest && (requestFilter == null) && (timeout == 0)) {
             if (this.spmdManager == null) {
@@ -298,7 +295,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      *            true if the request to remove is the oldest, false for the youngest
      * @return the request of name methodName found in the queue.
      */
-    protected Request blockingRemove(String methodName, boolean oldest) {
+    protected Request blockingRemove(String methodName, boolean oldest) throws InterruptedException {
         requestFilterOnMethodName.setMethodName(methodName);
         return blockingRemove(requestFilterOnMethodName, oldest, 0);
     }
@@ -312,7 +309,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      *            true if the request to remove is the oldest, false for the youngest
      * @return the request found in the queue.
      */
-    protected Request blockingRemove(boolean oldest) {
+    protected Request blockingRemove(boolean oldest) throws InterruptedException {
         return blockingRemove(null, oldest, 0);
     }
 
@@ -327,7 +324,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      *            true if the request to remove is the oldest, false for the youngest
      * @return the request found in the queue or null.
      */
-    protected Request blockingRemove(long timeout, boolean oldest) {
+    protected Request blockingRemove(long timeout, boolean oldest) throws InterruptedException {
         return blockingRemove(null, oldest, timeout);
     }
 
@@ -338,7 +335,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      *
      * @return the request found in the queue.
      */
-    protected Request barrierBlockingRemoveOldest(long timeout) {
+    protected Request barrierBlockingRemoveOldest(long timeout) throws InterruptedException {
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
         while (((this.isEmpty() && this.shouldWait) || this.suspended || (this.indexOfRequestToServe() == -1)) &&
             !this.specialExecution) {
@@ -373,7 +370,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      *
      * @return the request found in the queue.
      */
-    protected Request barrierBlockingRemove() {
+    protected Request barrierBlockingRemove() throws InterruptedException {
         while (((this.isEmpty() && this.shouldWait) || this.suspended || (this.indexOfRequestToServe() == -1)) &&
             !this.specialExecution) {
             internalWait(0);

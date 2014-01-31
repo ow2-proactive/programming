@@ -145,6 +145,17 @@ public interface UniversalBody extends Serializable {
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException;
 
     /**
+     * Tries to interrupt the current service on this body
+     * This call must not done from within an active object method, as it would interrupt itself.
+     *
+     * Depending on how the runActivity is implemented, it may or may not terminate the ActiveObject.
+     *
+     * In standard fifo or lifo serving, it will not terminate the AO
+     * @throws IllegalStateException if the body is inactive
+     */
+    public void interruptService() throws IllegalStateException;
+
+    /**
      * @return The URL of this body (using the default remote object factory)
      */
     public String getUrl();

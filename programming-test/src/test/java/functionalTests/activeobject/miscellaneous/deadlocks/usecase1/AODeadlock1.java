@@ -70,10 +70,16 @@ public class AODeadlock1 implements Serializable, InitActive, RunActive {
 
     public void runActivity(Body body) {
         Service service = new Service(body);
-        while (true) {
-            service.waitForRequest();
-            service.serveAll("foo");
-            service.serveAll("callback");
+        try {
+            while (true) {
+
+                service.waitForRequest();
+
+                service.serveAll("foo");
+                service.serveAll("callback");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }

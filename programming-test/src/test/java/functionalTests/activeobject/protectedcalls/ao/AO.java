@@ -53,7 +53,12 @@ public class AO implements RunActive {
 
     public void runActivity(Body body) {
         Service service = new Service(body);
-        service.waitForRequest();
-        service.serveAll("foo");
+        try {
+            service.waitForRequest();
+            service.serveAll("foo");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }

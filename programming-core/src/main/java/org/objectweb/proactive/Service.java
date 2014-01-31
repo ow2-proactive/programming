@@ -36,11 +36,14 @@
  */
 package org.objectweb.proactive;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
 import org.objectweb.proactive.core.body.request.RequestProcessor;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -89,6 +92,7 @@ public class Service {
     //
     protected Body body;
     protected BlockingRequestQueue requestQueue;
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
     //protected RequestFilterOnMethodName requestFilterOnMethodName = null;
 
@@ -138,7 +142,13 @@ public class Service {
      */
     public void fifoServing() {
         while (body.isActive()) {
-            blockingServeOldest();
+            try {
+                blockingServeOldest();
+            } catch (InterruptedException e) {
+                if (body.isActive()) {
+                    logger.warn("Interruption message received",e);
+                }
+            }
         }
 
     }
@@ -150,7 +160,13 @@ public class Service {
      */
     public void lifoServing() {
         while (body.isActive()) {
-            blockingServeYoungest();
+            try {
+                blockingServeYoungest();
+            } catch (InterruptedException e) {
+                if (body.isActive()) {
+                    logger.warn("Interruption message received",e);
+                }
+            }
         }
     }
 
@@ -161,7 +177,7 @@ public class Service {
      * The method blocks if there is no request until one request is
      * received or until the body terminates.
      */
-    public void blockingServeOldest() {
+    public void blockingServeOldest() throws InterruptedException {
         blockingServeOldest(null, 0);
     }
 
@@ -172,7 +188,7 @@ public class Service {
      * more than the given timeout.
      * @param timeout how long the thread can be blocked for.
      */
-    public void blockingServeOldest(long timeout) {
+    public void blockingServeOldest(long timeout) throws InterruptedException {
         blockingServeOldest(null, timeout);
     }
 
@@ -184,7 +200,7 @@ public class Service {
      * @param requestFilter The request filter accepting the request
      * @param timeout the timeout in ms
      */
-    public void blockingServeOldest(RequestFilter requestFilter, long timeout) {
+    public void blockingServeOldest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         Request r = requestQueue.blockingRemoveOldest(requestFilter, timeout);
         if (r != null) {
             body.serve(r);
@@ -198,7 +214,7 @@ public class Service {
      * @param methodName The name of the request to serve
      * @throws NoSuchMethodError if methodName is not a public method of the reified object.
      */
-    public void blockingServeOldest(String methodName) {
+    public void blockingServeOldest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
@@ -212,7 +228,7 @@ public class Service {
      * matching request is received or until the body terminates.
      * @param requestFilter The request filter accepting the request
      */
-    public void blockingServeOldest(RequestFilter requestFilter) {
+    public void blockingServeOldest(RequestFilter requestFilter) throws InterruptedException {
         blockingServeOldest(requestFilter, 0);
     }
 
@@ -221,7 +237,7 @@ public class Service {
      * The method blocks if there is no request until one request is
      * received or until the body terminates.
      */
-    public void blockingServeOldestWithException(Throwable ex) {
+    public void blockingServeOldestWithException(Throwable ex) throws InterruptedException {
         blockingServeOldestWithException(null, 0, ex);
     }
 
@@ -232,7 +248,7 @@ public class Service {
      * more than the given timeout.
      * @param timeout how long the thread can be blocked for.
      */
-    public void blockingServeOldestWithException(long timeout, Throwable ex) {
+    public void blockingServeOldestWithException(long timeout, Throwable ex) throws InterruptedException {
         blockingServeOldestWithException(null, timeout, ex);
     }
 
@@ -246,7 +262,7 @@ public class Service {
      * @param timeout the timeout in ms
      * @param ex The exception to send to the caller
      */
-    public void blockingServeOldestWithException(RequestFilter requestFilter, long timeout, Throwable ex) {
+    public void blockingServeOldestWithException(RequestFilter requestFilter, long timeout, Throwable ex) throws InterruptedException {
         Request r = requestQueue.blockingRemoveOldest(requestFilter, timeout);
         if (r != null) {
             body.serveWithException(r, ex);
@@ -262,7 +278,7 @@ public class Service {
      * @param ex The exception to send to the caller     *
      * @throws NoSuchMethodError if methodName is not a public method of the reified object.
      */
-    public void blockingServeOldestWithException(String methodName, Throwable ex) {
+    public void blockingServeOldestWithException(String methodName, Throwable ex) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
@@ -278,7 +294,7 @@ public class Service {
      * @param requestFilter The request filter accepting the request
      * @param ex The exception to send to the caller
      */
-    public void blockingServeOldestWithException(RequestFilter requestFilter, Throwable ex) {
+    public void blockingServeOldestWithException(RequestFilter requestFilter, Throwable ex) throws InterruptedException {
         blockingServeOldestWithException(requestFilter, 0, ex);
     }
 
@@ -357,7 +373,7 @@ public class Service {
      * The method blocks if there is no request until one request is
      * received or until the body terminates.
      */
-    public void blockingServeYoungest() {
+    public void blockingServeYoungest() throws InterruptedException {
         blockingServeYoungest(null, 0);
     }
 
@@ -368,7 +384,7 @@ public class Service {
      * more than the given timeout.
      * @param timeout : for how long the thread can be blocked.
      */
-    public void blockingServeYoungest(long timeout) {
+    public void blockingServeYoungest(long timeout) throws InterruptedException {
         blockingServeYoungest(null, timeout);
     }
 
@@ -379,7 +395,7 @@ public class Service {
      * @param methodName The name of the request to serve
      * @throws NoSuchMethodError if methodName is not a public method of the reified object.
      */
-    public void blockingServeYoungest(String methodName) {
+    public void blockingServeYoungest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
@@ -393,7 +409,7 @@ public class Service {
      * matching request is received or until the body terminates.
      * @param requestFilter The request filter accepting the request
      */
-    public void blockingServeYoungest(RequestFilter requestFilter) {
+    public void blockingServeYoungest(RequestFilter requestFilter) throws InterruptedException {
         blockingServeYoungest(requestFilter, 0);
     }
 
@@ -405,7 +421,7 @@ public class Service {
      * @param requestFilter The request filter accepting the request
      * @param timeout : for how long the thread can be blocked.
      */
-    public void blockingServeYoungest(RequestFilter requestFilter, long timeout) {
+    public void blockingServeYoungest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         body.serve(requestQueue.blockingRemoveYoungest(requestFilter, timeout));
     }
 
@@ -416,7 +432,7 @@ public class Service {
      * The request will not actually be served, the exception will be sent to the caller instead
      * @param ex The exception to send to the caller
      */
-    public void blockingServeYoungestWithException(Throwable ex) {
+    public void blockingServeYoungestWithException(Throwable ex) throws InterruptedException {
         blockingServeYoungestWithException(null, 0, ex);
     }
 
@@ -429,7 +445,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @param ex The exception to send to the caller
      */
-    public void blockingServeYoungestWithException(long timeout, Throwable ex) {
+    public void blockingServeYoungestWithException(long timeout, Throwable ex) throws InterruptedException {
         blockingServeYoungestWithException(null, timeout, ex);
     }
 
@@ -442,7 +458,7 @@ public class Service {
      * @param ex The exception to send to the caller
      * @throws NoSuchMethodError if methodName is not a public method of the reified object.
      */
-    public void blockingServeYoungestWithException(String methodName, Throwable ex) {
+    public void blockingServeYoungestWithException(String methodName, Throwable ex) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
@@ -458,7 +474,7 @@ public class Service {
      * @param requestFilter The request filter accepting the request
      * @param ex The exception to send to the caller
      */
-    public void blockingServeYoungestWithException(RequestFilter requestFilter, Throwable ex) {
+    public void blockingServeYoungestWithException(RequestFilter requestFilter, Throwable ex) throws InterruptedException {
         blockingServeYoungestWithException(requestFilter, 0, ex);
     }
 
@@ -472,7 +488,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @param ex The exception to send to the caller
      */
-    public void blockingServeYoungestWithException(RequestFilter requestFilter, long timeout, Throwable ex) {
+    public void blockingServeYoungestWithException(RequestFilter requestFilter, long timeout, Throwable ex) throws InterruptedException {
         body.serveWithException(requestQueue.blockingRemoveYoungest(requestFilter, timeout), ex);
     }
 
@@ -807,7 +823,7 @@ public class Service {
     /**
      * blocks until a request is available or until the body terminate
      */
-    public void waitForRequest() {
+    public void waitForRequest() throws InterruptedException {
         requestQueue.waitForRequest(0);
     }
 
@@ -900,7 +916,7 @@ public class Service {
      * The request queue is unchanged by this call
      * @return the oldest request or null
      */
-    public Request blockingGetOldest() {
+    public Request blockingGetOldest() throws InterruptedException {
         Request request = null;
         while ((request == null) && !requestQueue.isDestroyed()) {
             waitForRequest();
@@ -953,7 +969,7 @@ public class Service {
      * The request queue is unchanged by this call
      * @return the oldest request or null
      */
-    public Request blockingGetYoungest() {
+    public Request blockingGetYoungest() throws InterruptedException {
         Request request = null;
         while ((request == null) && !requestQueue.isDestroyed()) {
             waitForRequest();
@@ -974,7 +990,7 @@ public class Service {
      * @param requestFilter the request filter that select the request to be returned
      * @return the oldest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveOldest(RequestFilter requestFilter) {
+    public Request blockingRemoveOldest(RequestFilter requestFilter) throws InterruptedException {
         return blockingRemoveOldest(requestFilter, 0);
     }
 
@@ -987,7 +1003,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @return the oldest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveOldest(RequestFilter requestFilter, long timeout) {
+    public Request blockingRemoveOldest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         return requestQueue.blockingRemoveOldest(requestFilter, timeout);
     }
 
@@ -999,7 +1015,7 @@ public class Service {
      * @return the oldest request of name methodName found in the queue.
      * @throws NoSuchMethodError if methodName is not a public method of the reified object.
      */
-    public Request blockingRemoveOldest(String methodName) {
+    public Request blockingRemoveOldest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
@@ -1013,7 +1029,7 @@ public class Service {
      * null unless the thread has been asked not to wait anymore.
      * @return the oldest request found in the queue.
      */
-    public Request blockingRemoveOldest() {
+    public Request blockingRemoveOldest() throws InterruptedException {
         return blockingRemoveOldest(null, 0);
     }
 
@@ -1025,7 +1041,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @return the oldest request found in the queue or null.
      */
-    public Request blockingRemoveOldest(long timeout) {
+    public Request blockingRemoveOldest(long timeout) throws InterruptedException {
         return blockingRemoveOldest(null, timeout);
     }
 
@@ -1041,7 +1057,7 @@ public class Service {
      * @param requestFilter the request filter that select the request to be returned
      * @return the youngest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveYoungest(RequestFilter requestFilter) {
+    public Request blockingRemoveYoungest(RequestFilter requestFilter) throws InterruptedException {
         return blockingRemoveYoungest(requestFilter, 0);
     }
 
@@ -1055,7 +1071,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @return the youngest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout) {
+    public Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         return requestQueue.blockingRemoveYoungest(requestFilter, timeout);
     }
 
@@ -1067,7 +1083,7 @@ public class Service {
      * @return the youngest request of name methodName found in the queue.
      * @throws NoSuchMethodError if methodName is not a public method of the reified object.
      */
-    public Request blockingRemoveYoungest(String methodName) {
+    public Request blockingRemoveYoungest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
@@ -1081,7 +1097,7 @@ public class Service {
      * null unless the thread has been asked not to wait anymore.
      * @return the youngest request found in the queue.
      */
-    public Request blockingRemoveYoungest() {
+    public Request blockingRemoveYoungest() throws InterruptedException {
         return blockingRemoveYoungest(null, 0);
     }
 
@@ -1093,7 +1109,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @return the youngest request found in the queue or null.
      */
-    public Request blockingRemoveYoungest(long timeout) {
+    public Request blockingRemoveYoungest(long timeout) throws InterruptedException {
         return blockingRemoveYoungest(null, timeout);
     }
 

@@ -227,6 +227,11 @@ public class MOCKBody implements Body {
         return null;
     }
 
+    @Override
+    public void interruptService() throws IllegalStateException {
+
+    }
+
     public String registerByName(String name, boolean rebind, String protocol) throws IOException {
 
         return null;

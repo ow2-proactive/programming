@@ -118,9 +118,13 @@ public class A implements RunActive, Serializable {
 
     public void runActivity(Body body) {
         Service service = new Service(body);
-        while (body.isActive()) {
-            service.blockingServeOldest("terminate");
-            return;
+        try {
+            while (body.isActive()) {
+                service.blockingServeOldest("terminate");
+                return;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

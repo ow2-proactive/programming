@@ -132,13 +132,18 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
     //
 
     /** whether the body has an activity done with a active thread */
-    private transient boolean isActive;
+    private transient volatile boolean isActive;
 
     /**
      * whether the body has been killed. A killed body has no more activity although stopping the
      * activity thread is not immediate
      */
-    private transient boolean isDead;
+    private transient volatile boolean isDead;
+
+    /**
+     * Activity thread of this body
+     */
+    private transient volatile Thread activityThread;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
@@ -361,6 +366,16 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         return this.isActive;
     }
 
+    /**
+     * interrupts the current request serving, this will not terminate the body
+     */
+    public void interruptService() {
+        if (activityThread == null) {
+            throw new IllegalStateException("Body is inactive");
+        }
+        activityThread.interrupt();
+    }
+
     public UniversalBody checkNewLocation(UniqueID bodyID) {
         // we look in the location table of the current JVM
         Body body = LocalBodyStore.getInstance().getLocalBody(bodyID);
@@ -477,6 +492,11 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         }
         this.isActive = false;
 
+        // tries to interrupt the current request, or unblock any wait
+        interruptService();
+
+        this.activityThread = null;
+
         // We are no longer an active body
         LocalBodyStore.getInstance().unregisterBody(this);
 
@@ -511,6 +531,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             return;
         }
         isActive = true;
+        activityThread = Thread.currentThread();
         // Set the initial context : we associated this body to the thread running it
         LocalBodyStore.getInstance().pushContext(new Context(this, null));
 
