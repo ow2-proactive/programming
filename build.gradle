@@ -317,7 +317,7 @@ project(':programming-test') {
     }
     task "functionalTest-all"(dependsOn: protocols.collect { "functionalTest-$it" })
 
-    task pamrHearbeatTest(type: Test, group: 'ProActive') {
+    task pamrHeartbeatTest(type: Test, group: 'ProActive') {
         include '**/TestHeartbeat*'
 
         systemProperties << ['-Djdwp.port': 5550]
@@ -331,7 +331,7 @@ project(':programming-test') {
     }
 
     // disable test, use allTest to run the tests
-    task(allTest).dependsOn pamrHearbeatTest, functionalTest, performanceTest
+    task(allTest).dependsOn pamrHeartbeatTest, functionalTest, performanceTest
     test.enabled = false
 
     // for the test nodes to have the ProActive jars
