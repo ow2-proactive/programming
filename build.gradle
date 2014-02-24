@@ -276,8 +276,8 @@ project(':programming-test') {
 
     def testConfiguration = { Test task ->
         task.with {
+            ignoreFailures = project.hasProperty('ignoreTestFailures') ? project.property('ignoreTestFailures').toBoolean() : false
             forkEvery 1
-
             testLogging {
                 exceptionFormat = 'full'
             }
