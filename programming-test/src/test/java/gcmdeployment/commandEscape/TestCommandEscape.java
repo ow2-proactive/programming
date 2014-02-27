@@ -50,7 +50,7 @@ public class TestCommandEscape {
     final static String sshLocalhost = "ssh localhost";
     final static String cTrue = "true *";
     final static int vTrue = 0;
-    final static String cFalse = "/bin/false \"plop\"";
+    final static String cFalse = "false \"plop\"";
     final static int vFalse = 1;
 
     @Before

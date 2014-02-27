@@ -59,7 +59,7 @@ public class ProActiveRuntimeImplTest {
         String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(
           new URL("jar:file:/tmp/dist/lib/ProActive.jar!/MyClass.class").getPath());
 
-        assertEquals(new File("/tmp").getAbsolutePath(), proActiveHome);
+        assertEquals(new File("/tmp").getCanonicalPath(), proActiveHome);
     }
 
     @Test
@@ -67,6 +67,6 @@ public class ProActiveRuntimeImplTest {
         String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(
           new URL("jar:file:/tmp/dist/lib/programming-core-2.4.2.jar!/MyClass.class").getPath());
 
-        assertEquals(new File("/tmp").getAbsolutePath(), proActiveHome);
+        assertEquals(new File("/tmp").getCanonicalPath(), proActiveHome);
     }
 }

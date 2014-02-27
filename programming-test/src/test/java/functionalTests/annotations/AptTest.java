@@ -44,12 +44,9 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.objectweb.proactive.extensions.annotation.common.ProActiveAnnotationProcessorFactory;
 import org.objectweb.proactive.utils.OperatingSystem;
-
-import functionalTests.FunctionalTest;
+import org.junit.Ignore;
 
 
 /**
@@ -89,15 +86,20 @@ public abstract class AptTest extends AnnotationTest {
         String relPath = null;
         switch (OperatingSystem.getOperatingSystem()) {
             case unix:
-                relPath = "../bin/apt";
+                relPath = "bin/apt";
                 break;
             case windows:
-                relPath = "../bin/apt.exe";
+                relPath = "bin/apt.exe";
                 break;
             default:
                 throw new IllegalStateException("Unsupported operating system");
         }
-        return new File(System.getProperty("java.home"), relPath).getAbsolutePath();
+        File aptExecutable = new File(System.getProperty("java.home"), relPath);
+        if (!aptExecutable.exists()) {
+            // JAVA_HOME points to JRE in JDK
+            aptExecutable = new File(System.getProperty("java.home"), "../" + relPath);
+        }
+        return aptExecutable.getAbsolutePath();
     }
 
     @Override
