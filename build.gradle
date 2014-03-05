@@ -10,6 +10,7 @@ buildscript {
         mavenCentral()
         maven { url 'http://repo.activeeon.com/content/repositories/snapshots/' }
         maven { url 'http://repo.activeeon.com/content/repositories/releases/' }
+        maven { url 'http://spoon.gforge.inria.fr/repositories/releases/' }
     }
 
     dependencies {
@@ -130,6 +131,7 @@ project(':programming-build-utils') {
         compile 'commons-cli:commons-cli:1.2'
         compile "log4j:log4j:1.2.14"
         compile 'org.jvnet.winp:winp:1.14'
+        compile 'fr.inria.gforge.spoon:spoon-core:1.5'
     }
 }
 
