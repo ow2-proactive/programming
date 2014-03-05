@@ -395,7 +395,7 @@ class InsertSerialVersionUIDTask extends JavaExec {
 apply plugin: 'release'
 
 release {
-    requireBranch = 'proactive-light'
+    requireBranch = 'test-release'
     failOnCommitNeeded = false
     failOnUnversionedFiles = false
     failOnUpdateNeeded = false
