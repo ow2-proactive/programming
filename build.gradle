@@ -2,6 +2,8 @@ apply plugin: 'build-dashboard'
 
 allprojects {
     apply plugin: 'eclipse'
+    group = 'org.objectweb.proactive'
+    version = '5.5.0-SNAPSHOT'
 }
 
 buildscript {
@@ -11,19 +13,20 @@ buildscript {
         maven { url 'http://repo.activeeon.com/content/repositories/snapshots/' }
         maven { url 'http://repo.activeeon.com/content/repositories/releases/' }
         maven { url 'http://spoon.gforge.inria.fr/repositories/releases/' }
+        maven { url "https://oss.sonatype.org/content/groups/public"}
+
     }
 
     dependencies {
         classpath 'org.ow2.proactive:documentation:1.0.0-SNAPSHOT'
+        classpath 'com.github.townsfolk:gradle-release:1.2'
+
     }
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
-
-    group = 'org.objectweb.proactive'
-    version = '5.5.0-SNAPSHOT'
 
     sourceCompatibility = 1.6
 
@@ -121,6 +124,10 @@ project(':programming-core') {
     compileJava.options.useAnt = true
     compileJava.options.compilerArgs << '-XDignore.symbol.file'
     compileJava.options.compilerArgs << '-Xlint:unchecked'
+
+    task serialver(type: InsertSerialVersionUIDTask) {
+        serialver = '55L';
+    }
 }
 
 project(':programming-build-utils') {
@@ -131,6 +138,12 @@ project(':programming-build-utils') {
         compile 'commons-cli:commons-cli:1.2'
         compile "log4j:log4j:1.2.14"
         compile 'org.jvnet.winp:winp:1.14'
+        //compile 'fr.inria.gforge.spoon:spoon-core:1.5'
+    }
+}
+
+project(':programming-build-utils-2') {
+    dependencies {
         compile 'fr.inria.gforge.spoon:spoon-core:1.5'
     }
 }
@@ -151,6 +164,9 @@ project('programming-extensions:programming-extension-amqp') {
         compile(
                 'com.rabbitmq:amqp-client:3.0.2',
         )
+    }
+    task serialver(type: InsertSerialVersionUIDTask) {
+        serialver = '55L';
     }
 }
 
@@ -353,3 +369,35 @@ project(':doc').subprojects {
 }
 
 apply from: 'dist.gradle'
+
+class InsertSerialVersionUIDTask extends JavaExec {
+    def input = project.sourceSets.main.java.srcDirs
+
+    def InsertSerialVersionUIDTask() {
+        project.configurations { serialverClasspath }
+        project.dependencies {
+            serialverClasspath project.project(':programming-build-utils-2')
+        }
+        setMain('spoon.Launcher')
+        setClasspath(project.configurations.serialverClasspath + project.sourceSets.main.runtimeClasspath)
+        setArgs(['--compliance', '6', '--fragments',
+                '-p', 'serialver.InsertSerialVersionUIDProcessor',
+                '-i', input.toArray()[0],
+                '--output', input.toArray()[0]])
+        logging.captureStandardOutput LogLevel.INFO
+    }
+
+    def setSerialver(serialver) {
+        systemProperties('serialver.insert.serialVersionUID': serialver)
+    }
+}
+
+apply plugin: 'release'
+
+release {
+    requireBranch = 'proactive-light'
+    failOnCommitNeeded = false
+    failOnUnversionedFiles = false
+    failOnUpdateNeeded = false
+    failOnPublishNeeded = false
+}
