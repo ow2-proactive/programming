@@ -3,7 +3,6 @@ apply plugin: 'build-dashboard'
 allprojects {
     apply plugin: 'eclipse'
     group = 'org.objectweb.proactive'
-    version = '5.5.0-SNAPSHOT'
 }
 
 buildscript {
