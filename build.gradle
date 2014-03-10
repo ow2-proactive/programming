@@ -19,14 +19,14 @@ buildscript {
     }
 }
 
-ext.serialver = "55L"
+ext.serialver = programmingSerialver
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
 
     group = 'org.objectweb.proactive'
-    version = '5.5.0-SNAPSHOT'
+    version = programmingVersion
 
     sourceCompatibility = 1.6
 
