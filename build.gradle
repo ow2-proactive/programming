@@ -10,12 +10,16 @@ buildscript {
         mavenCentral()
         maven { url 'http://repo.activeeon.com/content/repositories/snapshots/' }
         maven { url 'http://repo.activeeon.com/content/repositories/releases/' }
+        maven { url 'http://spoon.gforge.inria.fr/repositories/releases/' }
     }
 
     dependencies {
         classpath 'org.ow2.proactive:documentation:1.0.0-SNAPSHOT'
+        classpath 'org.ow2.proactive:serialver-gradle:1.0-SNAPSHOT'
     }
 }
+
+ext.serialver = "55L"
 
 subprojects {
     apply plugin: 'java'
@@ -46,6 +50,11 @@ subprojects {
         testCompile 'org.slf4j:slf4j-log4j12:1.5.3'
         testCompile 'junit:junit:4.11'
     }
+
+    task serialver(type: InsertSerialVersionUIDTask) {
+        serialver = rootProject.serialver
+    }
+
 }
 
 ext.hasGcc = {
