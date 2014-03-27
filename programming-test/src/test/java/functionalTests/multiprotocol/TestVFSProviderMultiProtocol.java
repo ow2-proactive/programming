@@ -41,14 +41,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.Selectors;
-import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
-import org.apache.log4j.Level;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -57,8 +49,15 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
-
 import functionalTests.FunctionalTest;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.Selectors;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.log4j.Level;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 
 /**
@@ -83,7 +82,7 @@ public class TestVFSProviderMultiProtocol extends FunctionalTest {
         ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
         ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
-        PAMRConfig.PA_NET_ROUTER_PORT.setValue(9997);
+        PAMRConfig.PA_NET_ROUTER_PORT.setValue(0);
 
     }
 

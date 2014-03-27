@@ -43,11 +43,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.Node;
@@ -59,8 +54,12 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
-
 import functionalTests.FunctionalTest;
+import org.apache.log4j.Level;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 
 /**
@@ -89,7 +88,7 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
         ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
         ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
-        PAMRConfig.PA_NET_ROUTER_PORT.setValue(9997);
+        PAMRConfig.PA_NET_ROUTER_PORT.setValue(0);
 
     }
 
