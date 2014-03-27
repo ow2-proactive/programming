@@ -34,23 +34,12 @@
  */
 package dataspaces;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
-import junit.framework.Assert;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -60,8 +49,18 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
-
+import junit.framework.Assert;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import vfsprovider.AbstractIOOperationsBase;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -94,8 +93,9 @@ public class VFSMountManagerHelperTest {
     static Router router;
 
     static {
+        CentralPAPropertyRepository.PA_CLASSLOADING_USEHTTP.setValue(false);
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
-        PAMRConfig.PA_NET_ROUTER_PORT.setValue(9997);
+        PAMRConfig.PA_NET_ROUTER_PORT.setValue(0);
         ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
     }
 
