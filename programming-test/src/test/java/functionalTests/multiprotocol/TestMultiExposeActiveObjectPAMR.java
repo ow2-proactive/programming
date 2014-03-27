@@ -77,11 +77,6 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     public TestMultiExposeActiveObjectPAMR() {
     }
 
-    private static void setPAMRConfig() {
-        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
-        PAMRConfig.PA_NET_ROUTER_PORT.setValue(0);
-    }
-
     private static void unsetPAMRConfig() {
         if (PAMRConfig.PA_NET_ROUTER_ADDRESS.isSet()) {
             PAMRConfig.PA_NET_ROUTER_ADDRESS.unset();
@@ -93,8 +88,10 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
 
     private static void startPAMRRouter() throws Exception {
         RouterConfig config = new RouterConfig();
-        config.setPort(PAMRConfig.PA_NET_ROUTER_PORT.getValue());
+        config.setPort(0); // let him find a free port
         router = Router.createAndStart(config);
+        PAMRConfig.PA_NET_ROUTER_PORT.setValue(router.getPort());
+        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
     }
 
     @After
@@ -115,7 +112,6 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     @Test
     public void testMultiExposeOK() throws Exception {
         logger.info("************ Multiple Exposure");
-        setPAMRConfig();
         startPAMRRouter();
         Node node = deployANode();
         AOMultiProtocolSwitch ao = genericMultiExpose(node);
@@ -161,7 +157,6 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     @Test
     public void testMultiExposePAMRRouterUnreacheableFromServerAO() throws Exception {
         logger.info("************ Multiple Exposure with Router unreachable for server Active Object");
-        setPAMRConfig();
         Node node = deployANode();
         AOMultiProtocolSwitch ao = genericMultiExpose(node);
         String[] aouris = PAActiveObject.getUrls(ao);
@@ -183,7 +178,6 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     public void testMultiExposeBadPAMRConfigOnAOClient() throws Exception {
         logger.info("*********** Multiple Exposure with Bad PAMRConfig occurring on client Active Object");
         // we first need to set the config and start the router so the remote ao can start properly
-        setPAMRConfig();
         startPAMRRouter();
         Node node = deployANode();
         AOMultiProtocolSwitch ao = genericMultiExpose(node);
@@ -206,7 +200,6 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     @Test
     public void testMultiExposePAMRRouterUnreacheableOnAOClient() throws Exception {
         logger.info("************ Multiple Exposure with Router unreachable for client Active Object");
-        setPAMRConfig();
         startPAMRRouter();
         Node node = deployANode();
         AOMultiProtocolSwitch ao = genericMultiExpose(node);

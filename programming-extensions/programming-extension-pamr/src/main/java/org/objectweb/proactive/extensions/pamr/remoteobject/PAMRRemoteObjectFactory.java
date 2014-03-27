@@ -46,7 +46,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
@@ -75,6 +74,7 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.P
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySelector;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSshSocketFactory;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -107,7 +107,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         int routerPort;
         if (PAMRConfig.PA_NET_ROUTER_PORT.isSet()) {
             routerPort = PAMRConfig.PA_NET_ROUTER_PORT.getValue();
-            if (routerPort <= 0 || routerPort > 65535) {
+            if (routerPort < 0 || routerPort > 65535) {
                 errMsg += "Invalid  router port value: " + routerPort + ". ";
             }
         } else {
