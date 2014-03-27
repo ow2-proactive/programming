@@ -10,12 +10,14 @@ buildscript {
         mavenCentral()
         maven { url 'http://repo.activeeon.com/content/repositories/snapshots/' }
         maven { url 'http://repo.activeeon.com/content/repositories/releases/' }
+        maven { url 'http://repo.activeeon.com/content/repositories/thirdparty/' }
         maven { url 'http://spoon.gforge.inria.fr/repositories/releases/' }
     }
 
     dependencies {
         classpath 'org.ow2.proactive:documentation:1.0.0-SNAPSHOT'
         classpath 'org.ow2.proactive:serialver-gradle:1.0-SNAPSHOT'
+        classpath 'org.gradle.api.plugins:gradle-format-plugin:1.1'
     }
 }
 
@@ -23,7 +25,13 @@ ext.serialver = programmingSerialver
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'format'
     apply plugin: 'maven'
+
+    format {
+        configurationFile = file("$rootDir/compile/eclipse_formatter_config.xml")
+    }
+    build.dependsOn format
 
     group = 'org.objectweb.proactive'
     version = programmingVersion
