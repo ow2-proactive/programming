@@ -81,7 +81,7 @@ public class RemoteObjectExposer<T> {
     }
 
     public RemoteObjectExposer(String className, Object target,
-      Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
+            Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         this(new UniqueID(className + "_").shortString(), className, target, targetRemoteObjectAdapter);
     }
 
@@ -97,7 +97,7 @@ public class RemoteObjectExposer<T> {
      */
     @SuppressWarnings("unchecked")
     public RemoteObjectExposer(String name, String className, Object target,
-      Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
+            Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         this.className = className;
         this.remoteObject = new RemoteObjectImpl(name, className, target, targetRemoteObjectAdapter);
         this.remoteObject.setRemoteObjectExposer(this);
@@ -132,7 +132,7 @@ public class RemoteObjectExposer<T> {
             if (port == -1) {
                 try {
                     url = new URI(url.getScheme(), url.getUserInfo(), url.getHost(), rof.getPort(), url
-                      .getPath(), url.getQuery(), url.getFragment());
+                            .getPath(), url.getQuery(), url.getFragment());
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -156,10 +156,10 @@ public class RemoteObjectExposer<T> {
      * PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
      */
     public synchronized RemoteRemoteObject createRemoteObject(String name, boolean rebind)
-      throws ProActiveException {
+            throws ProActiveException {
         // Must be created before additionals one in order to avoid an AlreadyBoundException
         RemoteRemoteObject ret = createRemoteObject(name, rebind,
-          CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
         if (LOGGER_RO.isDebugEnabled()) {
             LOGGER_RO.debug("[ROExposer] Object \"" + name + "\" exposed with default protocol : " +
                 CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
@@ -177,13 +177,13 @@ public class RemoteObjectExposer<T> {
      * @throws ProActiveException
      */
     public synchronized RemoteRemoteObject createRemoteObject(String name, boolean rebind, String protocol)
-      throws ProActiveException {
+            throws ProActiveException {
         try {
             // select the factory matching the required protocol
             // here is an implicit check for protocol validity
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
             URI uri = URIBuilder.buildURI(rof.getBaseURI().getHost(), name, rof.getProtocolId(), rof
-              .getPort());
+                    .getPort());
             InternalRemoteRemoteObject irro = activeRemoteRemoteObjects.get(uri);
             if (irro == null) {
                 irro = rof.createRemoteObject(this.remoteObject, name, rebind);
@@ -209,7 +209,7 @@ public class RemoteObjectExposer<T> {
         // Expose the remote object using all specified communication protocol
         if (CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.isSet()) {
             List<String> protocols = CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-              .getValue();
+                    .getValue();
             Iterator<String> it = protocols.iterator();
             while (it.hasNext()) {
                 String protocol = it.next();
@@ -300,11 +300,11 @@ public class RemoteObjectExposer<T> {
      */
     @SuppressWarnings("unchecked")
     public RemoteObject<T> getRemoteObject(String protocol) throws ProActiveException {
-        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext(); ) {
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
             URI url = it.next();
             if (protocol.equals(url.getScheme())) {
                 return new RemoteObjectAdapter(this.activeRemoteRemoteObjects.get(url)
-                  .getRemoteRemoteObject());
+                        .getRemoteRemoteObject());
             }
         }
         return null;
@@ -325,14 +325,14 @@ public class RemoteObjectExposer<T> {
     public String[] getURLs() {
         String[] urls = new String[this.activeRemoteRemoteObjects.size()];
         int i = 0;
-        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext(); ) {
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
             urls[i++] = it.next().toString();
         }
         return urls;
     }
 
     public String getURL(String protocol) {
-        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext(); ) {
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
             URI url = it.next();
             if (protocol.equalsIgnoreCase(url.getScheme())) {
                 return url.toString();

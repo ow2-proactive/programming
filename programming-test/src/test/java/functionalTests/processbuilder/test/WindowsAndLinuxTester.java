@@ -63,7 +63,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-@Ignore // require suer
+
+@Ignore
+// require suer
 public class WindowsAndLinuxTester extends FunctionalTest {
     final static boolean isLinux = System.getProperty("os.name").toLowerCase().startsWith("linux");
     final static boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");

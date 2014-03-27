@@ -95,7 +95,7 @@ public class TestSweetCountDownLatch {
         Thread latchThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                   b[0] = latch.await(10000, TimeUnit.MILLISECONDS);
+                b[0] = latch.await(10000, TimeUnit.MILLISECONDS);
             }
         });
         T t = new T(latch, latchThread, 0);

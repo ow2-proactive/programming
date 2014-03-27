@@ -122,9 +122,8 @@ public class TestApplicationDescriptorParser extends FunctionalTest {
             }
             System.out.println(file);
 
-            URL userSchema = getClass()
-                    .getResource(
-                            "/gcmdeployment/descriptorParser/testfiles/application/SampleApplicationExtension.xsd");
+            URL userSchema = getClass().getResource(
+                    "/gcmdeployment/descriptorParser/testfiles/application/SampleApplicationExtension.xsd");
 
             ArrayList<String> schemas = new ArrayList<String>();
             schemas.add(userSchema.toString());

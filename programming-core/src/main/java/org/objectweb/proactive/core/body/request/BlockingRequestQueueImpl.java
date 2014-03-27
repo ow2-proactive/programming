@@ -135,7 +135,8 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
         return blockingRemove(requestFilter, true, 0);
     }
 
-    public synchronized Request blockingRemoveOldest(RequestFilter requestFilter, long timeout) throws InterruptedException {
+    public synchronized Request blockingRemoveOldest(RequestFilter requestFilter, long timeout)
+            throws InterruptedException {
         return blockingRemove(requestFilter, true, timeout);
     }
 
@@ -152,11 +153,13 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
         return blockingRemove(null, true, timeout);
     }
 
-    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter) throws InterruptedException {
+    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter)
+            throws InterruptedException {
         return blockingRemove(requestFilter, false);
     }
 
-    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout) throws InterruptedException {
+    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout)
+            throws InterruptedException {
         return blockingRemove(requestFilter, false, timeout);
     }
 
@@ -191,7 +194,6 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
             }
         }
         // END JMX Notification
-
 
         this.wait(timeout);
     }
@@ -245,7 +247,8 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
         return blockingRemove(requestFilter, oldest, 0);
     }
 
-    protected Request blockingRemove(RequestFilter requestFilter, boolean oldest, long timeout) throws InterruptedException {
+    protected Request blockingRemove(RequestFilter requestFilter, boolean oldest, long timeout)
+            throws InterruptedException {
 
         if (oldest && (requestFilter == null) && (timeout == 0)) {
             if (this.spmdManager == null) {

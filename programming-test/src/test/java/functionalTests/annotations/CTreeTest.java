@@ -171,8 +171,8 @@ public abstract class CTreeTest extends AnnotationTest {
             if (diagnistic.getKind().equals(Diagnostic.Kind.ERROR)) {
                 errors++;
             }
-            if (diagnistic.getKind().equals(Diagnostic.Kind.WARNING)
-                    && !diagnistic.getCode().equals("compiler.warn.proc.processor.incompatible.source.version")) {
+            if (diagnistic.getKind().equals(Diagnostic.Kind.WARNING) &&
+                !diagnistic.getCode().equals("compiler.warn.proc.processor.incompatible.source.version")) {
                 warnings++;
             }
         }

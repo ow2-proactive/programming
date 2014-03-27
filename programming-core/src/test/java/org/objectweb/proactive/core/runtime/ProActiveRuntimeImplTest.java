@@ -56,16 +56,16 @@ public class ProActiveRuntimeImplTest {
 
     @Test
     public void testGetProActiveHome_Undefined_PAHOME_ProActiveJar() throws Exception {
-        String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(
-          new URL("jar:file:/tmp/dist/lib/ProActive.jar!/MyClass.class").getPath());
+        String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(new URL(
+            "jar:file:/tmp/dist/lib/ProActive.jar!/MyClass.class").getPath());
 
         assertEquals(new File("/tmp").getCanonicalPath(), proActiveHome);
     }
 
     @Test
     public void testGetProActiveHome_Undefined_PAHOME_GradleJars() throws Exception {
-        String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(
-          new URL("jar:file:/tmp/dist/lib/programming-core-2.4.2.jar!/MyClass.class").getPath());
+        String proActiveHome = new ProActiveRuntimeImpl().guessProActiveHomeFromJarClassloader(new URL(
+            "jar:file:/tmp/dist/lib/programming-core-2.4.2.jar!/MyClass.class").getPath());
 
         assertEquals(new File("/tmp").getCanonicalPath(), proActiveHome);
     }

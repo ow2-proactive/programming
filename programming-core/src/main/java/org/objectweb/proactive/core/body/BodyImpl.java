@@ -529,7 +529,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                         // if the exception is a checked exception, the method must declare in its throws statement, otherwise
                         // the future sent to the user will be invalid
                         boolean thrownFound = false;
-                        for (Class<?> exptype : request.getMethodCall().getReifiedMethod().getExceptionTypes()) {
+                        for (Class<?> exptype : request.getMethodCall().getReifiedMethod()
+                                .getExceptionTypes()) {
                             thrownFound = thrownFound || exptype.isAssignableFrom(exception.getClass());
                         }
                         if (!thrownFound) {

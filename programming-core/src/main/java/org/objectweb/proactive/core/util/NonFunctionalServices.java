@@ -60,8 +60,7 @@ public class NonFunctionalServices {
 
     static {
         try {
-            nonFunctionalServicesClass = java.lang.Class
-                    .forName(NonFunctionalServices.class.getName());
+            nonFunctionalServicesClass = java.lang.Class.forName(NonFunctionalServices.class.getName());
             paramTypes = new Class<?>[1];
             paramTypes[0] = java.lang.Class.forName(Proxy.class.getName());
             terminateAOMethod = nonFunctionalServicesClass.getMethod("_terminateAO", paramTypes);

@@ -65,7 +65,7 @@ public class TestSleeper {
         // -1 is here because System.nanoTime() is more accurate
         // than System.currentTimeMillis(). Rouding errors can leads to
         // after - before == SLEEP_TIME - 1
-        Assert.assertTrue(times[1]- times[0] >= SLEEP_TIME - 1);
+        Assert.assertTrue(times[1] - times[0] >= SLEEP_TIME - 1);
         thread.interrupt();
     }
 

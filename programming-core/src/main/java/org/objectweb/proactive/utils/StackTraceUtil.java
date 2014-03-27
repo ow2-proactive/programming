@@ -114,10 +114,12 @@ public final class StackTraceUtil {
 
     @SuppressWarnings("all")
     public static void main(String[] args) {
-        System.out.println(Arrays.asList(concatAll(new Integer[] {1,2,3}, new Integer[] {4,5,6})));
-        System.out.println(Arrays.asList(concatAll(new Integer[]{1,2,3}, null, new Integer[]{4,5,6})));
-        System.out.println(Arrays.asList(concatAll(new Integer[]{1,2,3}, null, new Integer[]{4,5,6}, null)));
-        System.out.println(Arrays.asList(concatAll(new Integer[]{1,2,3}, null)));
+        System.out.println(Arrays.asList(concatAll(new Integer[] { 1, 2, 3 }, new Integer[] { 4, 5, 6 })));
+        System.out.println(Arrays
+                .asList(concatAll(new Integer[] { 1, 2, 3 }, null, new Integer[] { 4, 5, 6 })));
+        System.out.println(Arrays.asList(concatAll(new Integer[] { 1, 2, 3 }, null,
+                new Integer[] { 4, 5, 6 }, null)));
+        System.out.println(Arrays.asList(concatAll(new Integer[] { 1, 2, 3 }, null)));
     }
 
 }

@@ -81,7 +81,8 @@ public class Test extends FunctionalTest {
         // Test for PROACTIVE-1163: serialVersionUIDs, when defined, should be reported on generated Stubs
         ObjectStreamClass reifiedClassOsc = ObjectStreamClass.lookup(A.class);
         ObjectStreamClass stubOsc = ObjectStreamClass.lookup(stubClass);
-        assertEquals("The stub has not the same serialVersionUID" , stubOsc.getSerialVersionUID(), reifiedClassOsc.getSerialVersionUID());
+        assertEquals("The stub has not the same serialVersionUID", stubOsc.getSerialVersionUID(),
+                reifiedClassOsc.getSerialVersionUID());
 
         stubClassName = Utils.convertClassNameToStubClassName(baseclassName, null);
         assertEquals(stubClassName + " not equals pa.stub.functionalTests.stub.stubgeneration._StubA",

@@ -49,7 +49,8 @@ import org.junit.Test;
 /**
  * Test default runtime creation
  */
-@Ignore // coupled to project structure
+@Ignore
+// coupled to project structure
 public class TestGetProActiveHome extends FunctionalTest {
 
     @Test

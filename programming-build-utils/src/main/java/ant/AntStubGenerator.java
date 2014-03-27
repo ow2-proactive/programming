@@ -142,7 +142,7 @@ public class AntStubGenerator extends Java {
         private void quiet() {
             // Do not use standard ProActive logger classes. Utils must not depends on the core
             Logger logger = Logger.getLogger("proactive.configuration");
-//            logger.setLevel(Level.ERROR);
+            //            logger.setLevel(Level.ERROR);
         }
 
         private void checkConfig() throws BuildException {

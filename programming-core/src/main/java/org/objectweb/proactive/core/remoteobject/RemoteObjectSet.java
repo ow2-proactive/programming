@@ -218,8 +218,7 @@ public class RemoteObjectSet implements Serializable, Observer {
                 // The Exception is thrown on server side
                 // So it is encapsulated to be delivered on client side
                 Throwable t = reply.getResult().getException();
-                if (t != null &&
-                    (t instanceof ProtocolException || t instanceof IOException)) {
+                if (t != null && (t instanceof ProtocolException || t instanceof IOException)) {
                     anyException = true;
                     defaultProtocolException = handleProtocolException(t, uri, cloned.size() > 1);
                     continue;

@@ -113,7 +113,7 @@ public class VFSApplicationScratchSpaceImplTest {
     public void setUp() throws ConfigurationException, IOException {
         // we use a path with a whitespace to test possible errors
         testDir = new File(System.getProperty("java.io.tmpdir"),
-                "ProActive-VFSApplicationScratch SpaceImplTest");
+            "ProActive-VFSApplicationScratch SpaceImplTest");
         FileUtils.deleteDirectory(testDir);
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();

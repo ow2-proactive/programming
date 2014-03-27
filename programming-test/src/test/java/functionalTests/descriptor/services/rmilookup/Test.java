@@ -93,7 +93,7 @@ public class Test extends FunctionalTest {
 
     @After
     public void endTest() throws Exception {
-        if (pad != null){
+        if (pad != null) {
             pad.killall(false);
         }
         if (pad1 != null) {

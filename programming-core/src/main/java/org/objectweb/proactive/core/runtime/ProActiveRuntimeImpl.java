@@ -1330,8 +1330,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     }
 
     private String guessProActiveHomeFromClassesFolder(String path) throws ProActiveException {
-        int index = path.indexOf("classes/Core/" + this.getClass().getName().replace('.', '/') +
-          ".class");
+        int index = path.indexOf("classes/Core/" + this.getClass().getName().replace('.', '/') + ".class");
         if (index > 0) {
 
             try {
@@ -1343,7 +1342,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             }
         } else {
             throw new ProActiveException(
-              "Unable to find ProActive home. Running from class files but non standard repository layout");
+                "Unable to find ProActive home. Running from class files but non standard repository layout");
         }
     }
 }

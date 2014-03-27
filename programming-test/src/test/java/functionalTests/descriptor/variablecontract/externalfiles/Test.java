@@ -68,7 +68,8 @@ public class Test extends FunctionalTest {
     @org.junit.Test
     public void action() throws Exception {
         VariableContractImpl variableContract = new VariableContractImpl();
-        URL url = Test.class.getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.properties");
+        URL url = Test.class
+                .getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.properties");
         String path = new File(url.toURI()).getAbsolutePath();
         variableContract.setVariableFromProgram("RPATH", path, VariableContractType.ProgramVariable);
 

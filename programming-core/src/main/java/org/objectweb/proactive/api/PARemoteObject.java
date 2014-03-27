@@ -88,7 +88,7 @@ public class PARemoteObject {
     }
 
     public static <T> RemoteObjectExposer<T> newRemoteObject(String className, T target,
-      Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
+            Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         return new RemoteObjectExposer<T>(className, target, targetRemoteObjectAdapter);
     }
 
@@ -127,7 +127,7 @@ public class PARemoteObject {
     public static Object lookup(URI url) throws ProActiveException {
         logger.debug("Trying to lookup " + url);
         return RemoteObjectHelper.getFactoryFromURL(url).lookup(RemoteObjectHelper.expandURI(url))
-          .getObjectProxy();
+                .getObjectProxy();
     }
 
     /**
@@ -192,7 +192,7 @@ public class PARemoteObject {
      *          If obj isn't an RemoteObject
      */
     public static void forceProtocol(Object obj, String protocol) throws UnknownProtocolException,
-      NotYetExposedException {
+            NotYetExposedException {
         if (obj instanceof StubObject) {
             Proxy proxy = ((StubObject) obj).getProxy();
             if (proxy instanceof SynchronousProxy) {
@@ -203,7 +203,7 @@ public class PARemoteObject {
                     return;
                 } else {
                     throw new IllegalArgumentException(
-                      "Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
+                        "Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
                 }
             } else {
                 throw new IllegalArgumentException("The object " + obj + " isn't a RemoteObject");
@@ -220,7 +220,7 @@ public class PARemoteObject {
      * @throws NotYetExposedException
      */
     public static void forceToDefault(Object aRemoteObject) throws UnknownProtocolException,
-      NotYetExposedException {
+            NotYetExposedException {
         forceProtocol(aRemoteObject, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
     }
 
@@ -231,7 +231,7 @@ public class PARemoteObject {
      * @throws NotYetExposedException
      */
     public static void unforceProtocol(Object aRemoteObject) throws UnknownProtocolException,
-      NotYetExposedException {
+            NotYetExposedException {
         forceProtocol(aRemoteObject, null);
     }
 
@@ -242,9 +242,9 @@ public class PARemoteObject {
      * @throws ProActiveException
      */
     public static void addProtocol(RemoteObjectExposer<?> aRemoteObjectExposer, String protocolToActivate)
-      throws ProActiveException {
+            throws ProActiveException {
         aRemoteObjectExposer.createRemoteObject(ADD_PROTOCOL_PREFIX + counter.incrementAndGet(), false,
-          protocolToActivate);
+                protocolToActivate);
     }
 
     /**
@@ -254,7 +254,7 @@ public class PARemoteObject {
      * @throws ProActiveException
      */
     public static void disableProtocol(RemoteObjectExposer<?> aRemoteObjectExposer, String protocolToDisable)
-      throws ProActiveException {
+            throws ProActiveException {
         aRemoteObjectExposer.disableProtocol(protocolToDisable);
     }
 

@@ -193,7 +193,7 @@ public class VFSSpacesMountManagerImplTest {
 
         if (serverScratch == null) {
             serverScratch = new FileSystemServerDeployer("scratchserver", scratchSpaceDir.toString(), true,
-                    true);
+                true);
             System.out.println("Started Scratch File Server at " + serverScratch.getVFSRootURLs());
         }
 
@@ -206,9 +206,9 @@ public class VFSSpacesMountManagerImplTest {
         rootscratchuris.add(serverScratch.getVFSRootURL());
 
         final ScratchSpaceConfiguration scratchSpaceConf = new ScratchSpaceConfiguration(rootscratchuris,
-                null, null);
+            null, null);
         final SpaceInstanceInfo scratchSpaceInfo = new SpaceInstanceInfo(123, "runtimeA", "nodeB",
-                scratchSpaceConf);
+            scratchSpaceConf);
         scratchUri = scratchSpaceInfo.getMountingPoint();
 
         // directory and finally manager
@@ -329,8 +329,8 @@ public class VFSSpacesMountManagerImplTest {
 
         // create Adapter
         DataSpacesFileObject dsFileObjectWithWrongFileUri = new VFSFileObjectAdapter(
-                fileObjectWithWrongFileUri, outputUri, fileObjectWithWrongFileUri.getName(),
-                rootUrisWithWrongFileUri, wrongpath, manager2);
+            fileObjectWithWrongFileUri, outputUri, fileObjectWithWrongFileUri.getName(),
+            rootUrisWithWrongFileUri, wrongpath, manager2);
 
         // switch to existing
         DataSpacesFileObject newfo = dsFileObjectWithWrongFileUri.ensureExistingOrSwitch();

@@ -158,7 +158,8 @@ public class VFSContentAdapter implements FileContent {
         return randomAccessContent == null ? null : new VFSRandomAccessContentAdapter(randomAccessContent);
     }
 
-    private static org.apache.commons.vfs2.util.RandomAccessMode buildVFSRandomAccessMode(RandomAccessMode mode) {
+    private static org.apache.commons.vfs2.util.RandomAccessMode buildVFSRandomAccessMode(
+            RandomAccessMode mode) {
         switch (mode) {
             case READ_ONLY:
                 return org.apache.commons.vfs2.util.RandomAccessMode.READ;
