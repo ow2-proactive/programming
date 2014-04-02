@@ -239,7 +239,7 @@ project('programming-extensions:programming-extension-gcmdeployment') {
 project('programming-extensions:programming-extension-pnp') {
     dependencies {
         compile(
-                'org.jboss.netty:netty:3.2.2.Final'
+                'io.netty:netty:3.3.0.Final'
         )
     }
 }
@@ -248,7 +248,7 @@ project('programming-extensions:programming-extension-pnpssl') {
     dependencies {
         compile(
                 'bouncycastle:bcprov-jdk15:136',
-                'org.jboss.netty:netty:3.2.2.Final',
+                'io.netty:netty:3.3.0.Final',
 
                 project(':programming-extensions:programming-extension-pnp')
         )
