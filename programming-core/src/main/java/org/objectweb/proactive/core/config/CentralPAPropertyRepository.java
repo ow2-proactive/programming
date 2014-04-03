@@ -134,7 +134,8 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * Qualified name of the flushing provider to use
      */
     static public PAPropertyString PA_LOG4J_APPENDER_PROVIDER = new PAPropertyString(
-        "proactive.log4j.appender.provider", false);
+        "proactive.log4j.appender.provider", false,
+        "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider");
 
     /**
      * Specifies the name of the ProActive Runtime
@@ -150,19 +151,20 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * this property should be used when one wants to start only a runtime without an additional main class
      */
     static public PAPropertyBoolean PA_RUNTIME_STAYALIVE = new PAPropertyBoolean(
-        "proactive.runtime.stayalive", false);
+        "proactive.runtime.stayalive", false, true);
 
     /**
      * Terminates the Runtime when the Runtime becomes empty
      *
      * If true, when all bodies have been terminated the ProActive Runtime will exit
      */
-    static public PAPropertyBoolean PA_EXIT_ON_EMPTY = new PAPropertyBoolean("proactive.exit_on_empty", false);
+    static public PAPropertyBoolean PA_EXIT_ON_EMPTY = new PAPropertyBoolean("proactive.exit_on_empty",
+        false, false);
 
     /**
      * Boolean to activate automatic continuations for this runtime.
      */
-    static public PAPropertyBoolean PA_FUTURE_AC = new PAPropertyBoolean("proactive.future.ac", false);
+    static public PAPropertyBoolean PA_FUTURE_AC = new PAPropertyBoolean("proactive.future.ac", false, true);
 
     /**
      * Timeout value for future in synchronous requests.
@@ -207,7 +209,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * Suppported values are: rmi, rmissh, http
      */
     static public PAPropertyString PA_COMMUNICATION_PROTOCOL = new PAPropertyString(
-        "proactive.communication.protocol", false);
+        "proactive.communication.protocol", false, "rmi");
 
     /**
      * ProActive Runtime Hostname (or IP Address)
@@ -233,7 +235,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      *
      */
     static public PAPropertyBoolean PA_NET_DISABLE_IPv6 = new PAPropertyBoolean("proactive.net.disableIPv6",
-        false);
+        false, true);
 
     /**
      * Toggle loopback IP address usage
@@ -244,7 +246,8 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      *
      * If only a loopback address exists, it is used.
      */
-    static public PAPropertyBoolean PA_NET_NOLOOPBACK = new PAPropertyBoolean("proactive.net.nolocal", false);
+    static public PAPropertyBoolean PA_NET_NOLOOPBACK = new PAPropertyBoolean("proactive.net.nolocal", false,
+        true);
 
     /**
      * Toggle Private IP address usage
@@ -275,7 +278,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_NET_SECONDARYNAMES = new PAPropertyString(
         "proactive.net.secondaryNames", false);
 
-    static public PAPropertyBoolean SCHEMA_VALIDATION = new PAPropertyBoolean("schema.validation", true);
+    static public PAPropertyBoolean SCHEMA_VALIDATION = new PAPropertyBoolean("schema.validation", true, true);
 
     /** SSL cipher suites used for RMISSL communications.
      * List of cipher suites used for RMISSL, separated by commas.
@@ -288,7 +291,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      *
      * */
     static public PAPropertyString PA_SSL_CIPHER_SUITES = new PAPropertyString("proactive.ssl.cipher.suites",
-        false);
+        false, "SSL_DH_anon_WITH_RC4_128_MD5");
 
     /* ------------------------------------
      *  RMI
@@ -299,7 +302,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      *
      * this property identifies the default port used by the RMI communication protocol
      */
-    static public PAPropertyInteger PA_RMI_PORT = new PAPropertyInteger("proactive.rmi.port", false);
+    static public PAPropertyInteger PA_RMI_PORT = new PAPropertyInteger("proactive.rmi.port", false, 1099);
 
     static public PAPropertyString JAVA_RMI_SERVER_CODEBASE = new PAPropertyString(
         "java.rmi.server.codebase", true);
@@ -318,7 +321,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_CODEBASE = new PAPropertyString("proactive.codebase", true);
 
     static public PAPropertyBoolean PA_CLASSLOADING_USEHTTP = new PAPropertyBoolean(
-        "proactive.classloading.useHTTP", false);
+        "proactive.classloading.useHTTP", false, true);
     /* ------------------------------------
      *  HTTP
      */
@@ -375,7 +378,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
 
     /** this property identifies that when using SSH tunneling, a normal connection should be tried before tunneling */
     static public PAPropertyBoolean PA_RMISSH_TRY_NORMAL_FIRST = new PAPropertyBoolean(
-        "proactive.communication.rmissh.try_normal_first", false);
+        "proactive.communication.rmissh.try_normal_first", false, false);
 
     /** this property identifies the SSH garbage collector period
      *
@@ -449,14 +452,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      */
     /** Set the max period for LocalMemoryTag lease time */
     static public PAPropertyInteger PA_MAX_MEMORY_TAG_LEASE = new PAPropertyInteger(
-        "proactive.tagmemory.lease.max", false);
+        "proactive.tagmemory.lease.max", false, 60);
 
     /** Set the Period of the running thread for tag memory leasing check */
     static public PAPropertyInteger PA_MEMORY_TAG_LEASE_PERIOD = new PAPropertyInteger(
-        "proactive.tagmemory.lease.period", false);
+        "proactive.tagmemory.lease.period", false, 21);
 
     /** Enable or disable the Distributed Service ID Tag */
-    static public PAPropertyBoolean PA_TAG_DSF = new PAPropertyBoolean("proactive.tag.dsf", false);
+    static public PAPropertyBoolean PA_TAG_DSF = new PAPropertyBoolean("proactive.tag.dsf", false, false);
 
     /* ------------------------------------
      *  FILE TRANSFER
@@ -467,26 +470,26 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * on a Node to handle file transfer requests in parallel.
      */
     static public PAPropertyInteger PA_FILETRANSFER_MAX_SERVICES = new PAPropertyInteger(
-        "proactive.filetransfer.services_number", false);
+        "proactive.filetransfer.services_number", false, 16);
 
     /**
      * When sending a file, the maximum number of file blocks (parts) that can
      * be sent asynchronously before blocking for their arrival.
      */
     static public PAPropertyInteger PA_FILETRANSFER_MAX_SIMULTANEOUS_BLOCKS = new PAPropertyInteger(
-        "proactive.filetransfer.blocks_number", false);
+        "proactive.filetransfer.blocks_number", false, 8);
 
     /**
      * The size, in [KB], of file blocks (parts) used to send files.
      */
     static public PAPropertyInteger PA_FILETRANSFER_MAX_BLOCK_SIZE = new PAPropertyInteger(
-        "proactive.filetransfer.blocks_size_kb", false);
+        "proactive.filetransfer.blocks_size_kb", false, 512);
 
     /**
      * The size, in [KB], of the buffers to use when reading and writing a file.
      */
     static public PAPropertyInteger PA_FILETRANSFER_MAX_BUFFER_SIZE = new PAPropertyInteger(
-        "proactive.filetransfer.buffer_size_kb", false);
+        "proactive.filetransfer.buffer_size_kb", false, 256);
 
     // -------------- DATA SPACES
 
@@ -533,7 +536,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
 
     /** Duration of each performance test in ms */
     static public PAPropertyInteger PA_TEST_PERF_DURATION = new PAPropertyInteger(
-        "proactive.test.perf.duration", false);
+        "proactive.test.perf.duration", false, 30000);
 
     /**
      * Functional test timeout in ms
@@ -555,20 +558,20 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * by the reference on the active object using <code>PAActiveObject.getStubOnThis()</code>
      */
     static public PAPropertyBoolean PA_IMPLICITGETSTUBONTHIS = new PAPropertyBoolean(
-        "proactive.implicitgetstubonthis", false);
+        "proactive.implicitgetstubonthis", false, false);
 
     /**
      * on unix system, define the shell that the GCM deployment invokes when creating new runtimes.
      */
     static public PAPropertyString PA_GCMD_UNIX_SHELL = new PAPropertyString("proactive.gcmd.unix.shell",
-        false);
+        false, "/bin/sh");
 
     /**
      * if true, write the bytecode of the generated stub on the disk
      *
      */
     static public PAPropertyBoolean PA_MOP_WRITESTUBONDISK = new PAPropertyBoolean(
-        "proactive.mop.writestubondisk", false);
+        "proactive.mop.writestubondisk", false, false);
 
     /**
       * Specifies the location where to write the classes generated

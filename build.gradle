@@ -130,6 +130,7 @@ project(':programming-core') {
                 'org.objectweb.proactive.core.jmx.server.ProActiveServerImpl']
     }
     test {
+        forkEvery 1
         systemProperties << ['proactive.classloading.useHTTP': false]
     }
 

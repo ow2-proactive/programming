@@ -37,18 +37,19 @@
 package org.objectweb.proactive.core.config;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.xml.ProActiveConfigurationParser;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.OperatingSystem;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -59,7 +60,7 @@ import org.objectweb.proactive.utils.OperatingSystem;
  * <ol>
  * <li>System Java Properties</li>
  * <li>Custom configuration file</li>
- * <li>Default configuration file</li>
+ * <li>Default configuration values</li>
  * </ol>
  *
  */
@@ -71,9 +72,7 @@ public class ProActiveConfiguration {
     protected final CustomProperties properties;
 
     /**
-     * Default configuration file
-     *
-     * Must be in the same package than this class
+     * Default configuration file name
      */
     protected static final String PROACTIVE_CONFIG_FILENAME = "ProActiveConfiguration.xml";
 
@@ -115,14 +114,14 @@ public class ProActiveConfiguration {
             }
         }
 
-        Properties sysProperties = this.getsystemProperties();
-        // 1- Default config file
-        this.properties.putAllFromConfigFile(this.getDefaultProperties());
+        Properties sysProperties = this.getSystemProperties();
+        this.properties.put("java.protocol.handler.pkgs",
+                "org.objectweb.proactive.core.ssh|org.objectweb.proactive.core.classloading.protocols", true);
 
-        // 2- User config file
+        // 1- User config file
         this.properties.putAllFromConfigFile(this.getUserProperties());
 
-        // 3- System java properties
+        // 2- System java properties
         this.properties.putAllFromSystem(sysProperties);
 
         // Can't use setValue in this constructor
@@ -133,14 +132,14 @@ public class ProActiveConfiguration {
     class CustomProperties extends Properties {
         HashMap<String, String> exportedKeys = new HashMap<String, String>();
 
-        public synchronized void putAllFromSystem(Map<? extends Object, ? extends Object> t) {
-            for (Map.Entry<? extends Object, ? extends Object> entry : t.entrySet()) {
+        public synchronized void putAllFromSystem(Map<?, ?> t) {
+            for (Map.Entry<?, ?> entry : t.entrySet()) {
                 put(entry.getKey(), entry.getValue(), false);
             }
         }
 
-        public synchronized void putAllFromConfigFile(Map<? extends Object, ? extends Object> t) {
-            for (Map.Entry<? extends Object, ? extends Object> entry : t.entrySet()) {
+        public synchronized void putAllFromConfigFile(Map<?, ?> t) {
+            for (Map.Entry<?, ?> entry : t.entrySet()) {
                 put(entry.getKey(), entry.getValue(), true);
             }
         }
@@ -173,19 +172,24 @@ public class ProActiveConfiguration {
                     logger.warn("Property " + key + " is not declared inside " +
                         PAProperties.class.getSimpleName() + " , ignoring");
                 } else {
-                    logger.debug("System property " + key + " is not a ProActive property");
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("System property " + key + " is not a ProActive property");
+                    }
                     if (exportAsSystem) {
                         // it's not a proactive property and it was defined in a config file, so it need to be exported
-                        logger.debug("Exported <" + key + ", " + value + "> as System property");
-
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Exported <" + key + ", " + value + "> as System property");
+                        }
                         exportedKeys.put(key, System.getProperty(key));
                         System.setProperty(key, value);
                     }
                 }
             }
 
-            logger.debug("key:" + key + " --> value:" + value + (this.get(key) == null ? "" : " (OVERRIDE)"));
-
+            if (logger.isDebugEnabled()) {
+                logger.debug("key:" + key + " --> value:" + value +
+                    (this.get(key) == null ? "" : " (OVERRIDE)"));
+            }
             return this.put(keyO, valueO);
         }
 
@@ -248,15 +252,6 @@ public class ProActiveConfiguration {
         this.properties.put(key, value, exportAsSystem);
     }
 
-    private Properties getDefaultProperties() {
-        String defaultConfigFile = ProActiveConfiguration.class.getResource(PROACTIVE_CONFIG_FILENAME)
-                .toString();
-        logger.debug("Default Config File is: " + defaultConfigFile);
-
-        return ProActiveConfigurationParser.parse(defaultConfigFile, null);
-
-    }
-
     private Properties getUserProperties() {
         boolean defaultFile = false;
         Properties userProps = new Properties();
@@ -277,11 +272,17 @@ public class ProActiveConfiguration {
         URL u = null;
         try {
             u = new URL(fname);
-            u.openStream();
+            InputStream userConfigStream = u.openStream();
             logger.debug("User Config File is: " + u.toExternalForm());
-            userProps = ProActiveConfigurationParser.parse(u.toString(), userProps);
+            if (fname.endsWith(".properties")) {
+                Properties props = new Properties();
+                props.load(userConfigStream);
+                userProps.putAll(props);
+            } else {
+                userProps = ProActiveConfigurationParser.parse(u.toString(), userProps);
+            }
         } catch (Exception e) {
-            if (!defaultFile) {
+            if (!defaultFile && u != null) {
                 logger.warn("Configuration file " + u.toExternalForm() + " not found");
             }
         }
@@ -289,7 +290,7 @@ public class ProActiveConfiguration {
         return userProps;
     }
 
-    private Properties getsystemProperties() {
+    private Properties getSystemProperties() {
         return System.getProperties();
     }
 
