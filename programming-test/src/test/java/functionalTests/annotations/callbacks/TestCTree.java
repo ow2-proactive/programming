@@ -44,7 +44,9 @@ public class TestCTree extends CTreeTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        Assert.assertEquals(new Result(4, 0), checkFile("IsReady"));
-        Assert.assertEquals(new Result(4, 0), checkFile("NodeAttachment"));
+        Assert.assertEquals(new Result(1, 0), checkFile("IsReady"));
+        Assert.assertEquals(new Result(3, 0), checkFile("IsReadyOnMethod"));
+        Assert.assertEquals(new Result(1, 0), checkFile("NodeAttachment"));
+        Assert.assertEquals(new Result(3, 0), checkFile("NodeAttachmentOnMethod"));
     }
 }

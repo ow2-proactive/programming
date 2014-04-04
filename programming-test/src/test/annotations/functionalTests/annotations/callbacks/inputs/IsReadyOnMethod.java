@@ -34,34 +34,33 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.annotations.remoteobject;
+package functionalTests.annotations.callbacks.inputs;
 
-import junit.framework.Assert;
-import functionalTests.annotations.AptTest;
+import org.objectweb.proactive.extensions.annotation.VirtualNodeIsReadyCallback;
 
 
-public class TestApt extends AptTest {
+// correct signature "void method(String virtualNodeName)"
 
-    @org.junit.Test
-    public void action() throws Exception {
-        // misplaced annotation
-        Assert.assertEquals(ERROR, checkFile("MisplacedAnnotation"));
+public class IsReadyOnMethod {
 
-        // basic checks
-        Assert.assertEquals(new Result(0, 6), checkFile("WarningGettersSetters"));
-        Assert.assertEquals(ERROR, checkFile("ErrorFinalClass"));
-        Assert.assertEquals(new Result(2, 0), checkFile("ErrorFinalMethods"));
-        Assert.assertEquals(ERROR, checkFile("ErrorNoArgConstructor"));
-        Assert.assertEquals(ERROR, checkFile("ErrorClassNotPublic"));
-        Assert.assertEquals(ERROR, checkFile("PrivateEmptyConstructor"));
-        Assert.assertEquals(OK, checkFile("EmptyConstructor"));
+    // ok
+    @VirtualNodeIsReadyCallback
+    public void a(String p) {
+    }
 
-        // more complicated scenarios
-        Assert.assertEquals(WARNING, checkFile("ErrorReturnTypes")); // because of getter/setter
-        Assert.assertEquals(new Result(1, 1), checkFile("Reject"));
-        Assert.assertEquals(OK, checkFile("CorrectedReject"));
+    // error
+    @VirtualNodeIsReadyCallback
+    public void a2(String p, String p2) {
+    }
 
-        Assert.assertEquals(ERROR, checkFile("ErrorEmptyConstructor"));
+    // error
+    @VirtualNodeIsReadyCallback
+    public String a3(String p) {
+        return null;
+    }
 
+    // error
+    @VirtualNodeIsReadyCallback
+    public void a4() {
     }
 }

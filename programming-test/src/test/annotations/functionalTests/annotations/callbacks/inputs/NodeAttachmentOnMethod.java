@@ -34,38 +34,33 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.annotations.activeobject;
+package functionalTests.annotations.callbacks.inputs;
 
-import junit.framework.Assert;
-import functionalTests.annotations.AptTest;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.extensions.annotation.NodeAttachmentCallback;
 
 
-/**
- * @author fabratu
- * @version %G%, %I%
- * @since ProActive 4.10
- */
-public class TestApt extends AptTest {
+// correct signature "void method(Node, String virtualNodeName)"
 
-    @org.junit.Test
-    public void action() throws Exception {
-        // misplaced annotation
-        Assert.assertEquals(ERROR, checkFile("MisplacedAnnotation"));
+public class NodeAttachmentOnMethod {
 
-        // basic checks
-        Assert.assertEquals(new Result(0, 6), checkFile("WarningGettersSetters"));
-        Assert.assertEquals(ERROR, checkFile("ErrorFinalClass"));
-        Assert.assertEquals(new Result(2, 0), checkFile("ErrorFinalMethods"));
-        Assert.assertEquals(ERROR, checkFile("ErrorNoArgConstructor"));
-        Assert.assertEquals(ERROR, checkFile("ErrorClassNotPublic"));
-        Assert.assertEquals(ERROR, checkFile("PrivateEmptyConstructor"));
-        Assert.assertEquals(OK, checkFile("EmptyConstructor"));
-        Assert.assertEquals(ERROR, checkFile("InnerClasses"));
+    // ok
+    @NodeAttachmentCallback
+    public void a(Node node, String p) {
+    }
 
-        // more complicated scenarios
-        Assert.assertEquals(WARNING, checkFile("ErrorReturnTypes")); // because of getter/setter
-        Assert.assertEquals(new Result(1, 1), checkFile("Reject"));
-        Assert.assertEquals(OK, checkFile("CorrectedReject"));
+    // error
+    @NodeAttachmentCallback
+    public void a2(String p, String p2) {
+    }
 
+    // error
+    @NodeAttachmentCallback
+    public void a3(Node p) {
+    }
+
+    // error
+    @NodeAttachmentCallback
+    public void a4() {
     }
 }
