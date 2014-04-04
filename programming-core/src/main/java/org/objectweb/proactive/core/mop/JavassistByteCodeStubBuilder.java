@@ -46,22 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javassist.CannotCompileException;
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMember;
-import javassist.CtMethod;
-import javassist.CtNewMethod;
-import javassist.LoaderClassPath;
-import javassist.Modifier;
-import javassist.NotFoundException;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.Cache;
 import org.objectweb.proactive.annotation.NoReify;
 import org.objectweb.proactive.annotation.Self;
@@ -74,6 +58,22 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import javassist.CannotCompileException;
+import javassist.ClassClassPath;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtField;
+import javassist.CtMember;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
+import javassist.LoaderClassPath;
+import javassist.Modifier;
+import javassist.NotFoundException;
+import javassist.bytecode.ClassFile;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -119,6 +119,7 @@ public class JavassistByteCodeStubBuilder {
             ClassPool pool = getClassPool();
             generatedCtClass = pool.makeClass(Utils.convertClassNameToStubClassName(className,
                     genericParameters));
+            generatedCtClass.getClassFile().setMajorVersion(ClassFile.JAVA_6);
 
             CtClass superCtClass = null;
             try {
