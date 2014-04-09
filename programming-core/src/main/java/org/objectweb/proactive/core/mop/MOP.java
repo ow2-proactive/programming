@@ -44,10 +44,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javassist.NotFoundException;
@@ -119,7 +121,7 @@ public abstract class MOP {
      *        As this class is center to the API, its static initializer is
      *        a good place to initialize general stuff.
      */
-    protected static HashMap<String, Class<?>> loadedClass = new HashMap<String, Class<?>>();
+    protected static Map<String, Class<?>> loadedClass = Collections.synchronizedMap(new HashMap<String, Class<?>>());
 
     static {
         PROXY_CONSTRUCTOR_PARAMETERS_TYPES_ARRAY = new Class<?>[] {
