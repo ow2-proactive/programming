@@ -34,9 +34,9 @@
  */
 package org.objectweb.proactive.core.config;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 
 public class ProActiveConfigurationTest {

@@ -43,7 +43,7 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
-public class MakeDeepCopy {
+public class ProActiveMakeDeepCopy {
     public static Logger logger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     protected enum ConversionMode {
@@ -56,7 +56,7 @@ public class MakeDeepCopy {
          * Perform a deep copy of an object using a marshall stream.
          * @param o The object to be deep copied
          * @return the copy.
-         * @throws IOException
+         * @throws java.io.IOException
          * @throws ClassNotFoundException
          */
         public static Object makeDeepCopy(Object o) throws IOException, ClassNotFoundException {
@@ -71,7 +71,7 @@ public class MakeDeepCopy {
          * Perform a deep copy of an object using a regular object stream.
          * @param o The object to be deep copied
          * @return the copy.
-         * @throws IOException
+         * @throws java.io.IOException
          * @throws ClassNotFoundException
          */
         public static Object makeDeepCopy(Object o) throws IOException, ClassNotFoundException {
@@ -86,12 +86,12 @@ public class MakeDeepCopy {
          * Perform a deep copy of an object using a proactive object stream.
          * @param o The object to be deep copied
          * @return the copy.
-         * @throws IOException
+         * @throws java.io.IOException
          * @throws ClassNotFoundException
          */
         public static Object makeDeepCopy(Object o) throws IOException, ClassNotFoundException {
-            byte[] array = ObjectToByteConverter.ProActiveObjectStream.convert(o);
-            return ByteToObjectConverter.ProActiveObjectStream.convert(array);
+            byte[] array = ProActiveObjectToByteConverter.ProActiveObjectStream.convert(o);
+            return ProActiveByteToObjectConverter.ProActiveObjectStream.convert(array);
         }
     }
 }

@@ -39,8 +39,6 @@ package org.objectweb.proactive.core.config;
 import java.net.Socket;
 
 import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
-import org.objectweb.proactive.core.filetransfer.FileTransferService;
-import org.objectweb.proactive.core.runtime.broadcast.BTCallbackDefaultImpl;
 import org.objectweb.proactive.utils.OperatingSystem;
 
 
@@ -441,7 +439,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /** The class to use for doing remoteObject Benchmark, must implement BenchmarkObject */
     public static PAPropertyString PA_BENCHMARK_CLASS = new PAPropertyString(
         "proactive.communication.benchmark.class", false,
-        org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly.class.getName());
+        "org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly");
 
     /** time waited before two benchmarks */
     public static PAPropertyLong PA_BENCHMARK_PERIOD = new PAPropertyLong(
@@ -466,7 +464,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      */
 
     /**
-     * The maximum number of {@link FileTransferService} objects that can be spawned
+     * The maximum number of FileTransferService objects that can be spawned
      * on a Node to handle file transfer requests in parallel.
      */
     static public PAPropertyInteger PA_FILETRANSFER_MAX_SERVICES = new PAPropertyInteger(
@@ -613,6 +611,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * the address to use by the broadcast sockets
      */
     static public PAPropertyString PA_RUNTIME_BROADCAST_CALLBACK_CLASS = new PAPropertyString(
-        "proactive.runtime.broadcast.callback.class", false, BTCallbackDefaultImpl.class.getName());
+        "proactive.runtime.broadcast.callback.class", false,
+        "org.objectweb.proactive.core.runtime.broadcast.BTCallbackDefaultImpl");
 
 }

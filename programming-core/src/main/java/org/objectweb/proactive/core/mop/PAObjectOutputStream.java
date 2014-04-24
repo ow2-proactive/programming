@@ -39,6 +39,8 @@ package org.objectweb.proactive.core.mop;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.objectweb.proactive.core.util.converter.SunMarshalOutputStream;
+
 
 public class PAObjectOutputStream extends SunMarshalOutputStream {
     public PAObjectOutputStream(OutputStream out) throws IOException {

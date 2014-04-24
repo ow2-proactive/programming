@@ -34,18 +34,44 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.mop;
+package org.objectweb.proactive.core.util.converter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 
-public class SunMarshalOutputStream extends sun.rmi.server.MarshalOutputStream {
-    public SunMarshalOutputStream(OutputStream out) throws IOException {
-        super(out);
+public class MakeDeepCopy {
+
+    protected enum ConversionMode {
+        MARSHALL, OBJECT, PAOBJECT;
     }
 
-    //    protected void annotateClass(Class<?> cl) throws IOException {
-    //        writeObject(System.getProperty("java.rmi.server.codebase"));
-    //    }
+    public static class WithMarshallStream {
+
+        /**
+         * Perform a deep copy of an object using a marshall stream.
+         * @param o The object to be deep copied
+         * @return the copy.
+         * @throws IOException
+         * @throws ClassNotFoundException
+         */
+        public static Object makeDeepCopy(Object o) throws IOException, ClassNotFoundException {
+            byte[] array = ObjectToByteConverter.MarshallStream.convert(o);
+            return ByteToObjectConverter.MarshallStream.convert(array);
+        }
+    }
+
+    public static class WithObjectStream {
+
+        /**
+         * Perform a deep copy of an object using a regular object stream.
+         * @param o The object to be deep copied
+         * @return the copy.
+         * @throws IOException
+         * @throws ClassNotFoundException
+         */
+        public static Object makeDeepCopy(Object o) throws IOException, ClassNotFoundException {
+            byte[] array = ObjectToByteConverter.ObjectStream.convert(o);
+            return ByteToObjectConverter.ObjectStream.convert(array);
+        }
+    }
 }

@@ -55,7 +55,7 @@ import org.jboss.netty.util.TimerTask;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
+import org.objectweb.proactive.core.util.converter.ProActiveObjectToByteConverter;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pnp.exception.PNPException;
@@ -263,7 +263,7 @@ class PNPServerHandler extends SimpleChannelHandler {
                     // Sends a response call
                     PNPException e = new PNPException("Failed to unmarshall incoming message", t);
                     SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, e));
-                    byte[] b = ObjectToByteConverter.ProActiveObjectStream.convert(sr);
+                    byte[] b = ProActiveObjectToByteConverter.ProActiveObjectStream.convert(sr);
                     PNPFrameCallResponse msgResp = new PNPFrameCallResponse(req.getCallId(), b);
                     ChannelFuture cf = this.channel.write(msgResp);
                     cf.addListener(new ChannelFutureListener() {
@@ -286,7 +286,7 @@ class PNPServerHandler extends SimpleChannelHandler {
                     // Sends a response call
                     PNPException e = new PNPException("Failed to marshall the result bytes", t);
                     SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, e));
-                    byte[] b = ObjectToByteConverter.ProActiveObjectStream.convert(sr);
+                    byte[] b = ProActiveObjectToByteConverter.ProActiveObjectStream.convert(sr);
                     PNPFrameCallResponse msgResp = new PNPFrameCallResponse(req.getCallId(), b);
                     ChannelFuture cf = this.channel.write(msgResp);
                     cf.addListener(new ChannelFutureListener() {

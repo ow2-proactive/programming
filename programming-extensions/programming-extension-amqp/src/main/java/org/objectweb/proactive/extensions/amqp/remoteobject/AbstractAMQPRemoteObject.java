@@ -36,6 +36,10 @@
  */
 package org.objectweb.proactive.extensions.amqp.remoteobject;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
+
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.QueueingConsumer.Delivery;
 import org.apache.log4j.Logger;
@@ -43,14 +47,10 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
-import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
-import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
+import org.objectweb.proactive.core.util.converter.ProActiveByteToObjectConverter;
+import org.objectweb.proactive.core.util.converter.ProActiveObjectToByteConverter;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
 
 
 /**
@@ -122,15 +122,15 @@ public abstract class AbstractAMQPRemoteObject implements RemoteRemoteObject, Se
             }
 
             String replyQueue = channel.getReplyQueue();
-            byte[] messageBody = ObjectToByteConverter.ProActiveObjectStream.convert(message);
+            byte[] messageBody = ProActiveObjectToByteConverter.ProActiveObjectStream.convert(message);
             channel.getChannel().basicPublish(rpcExchangeName, queueName,
                     new BasicProperties.Builder().replyTo(replyQueue).build(), messageBody);
 
             while (true) {
                 Delivery delivery = channel.getReplyQueueConsumer().nextDelivery(replyTimeout);
                 if (delivery != null) {
-                    Reply reply = (Reply) ByteToObjectConverter.ProActiveObjectStream.convert(delivery
-                            .getBody());
+                    Reply reply = (Reply) ProActiveByteToObjectConverter.ProActiveObjectStream
+                            .convert(delivery.getBody());
                     if (logger.isDebugEnabled()) {
                         logger.debug(String.format(
                                 "AMQP RO received response of message %s to %s, on exchange %s, queue %s",

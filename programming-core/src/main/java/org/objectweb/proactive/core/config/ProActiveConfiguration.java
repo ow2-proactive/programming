@@ -44,12 +44,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.objectweb.proactive.core.Constants;
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.xml.ProActiveConfigurationParser;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.OperatingSystem;
-import org.apache.log4j.Logger;
 
 
 /**

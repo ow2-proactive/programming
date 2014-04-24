@@ -38,8 +38,8 @@ package org.objectweb.proactive.core.remoteobject.http.util;
 
 import java.io.IOException;
 
-import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
-import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
+import org.objectweb.proactive.core.util.converter.ProActiveByteToObjectConverter;
+import org.objectweb.proactive.core.util.converter.ProActiveObjectToByteConverter;
 
 
 /**
@@ -59,7 +59,7 @@ public class HttpMarshaller {
         byte[] buffer = null;
 
         try {
-            buffer = ObjectToByteConverter.ProActiveObjectStream.convert(o);
+            buffer = ProActiveObjectToByteConverter.ProActiveObjectStream.convert(o);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class HttpMarshaller {
     public static Object unmarshallObject(byte[] bytes) {
         Object o = null;
         try {
-            o = ByteToObjectConverter.ProActiveObjectStream.convert(bytes);
+            o = ProActiveByteToObjectConverter.ProActiveObjectStream.convert(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

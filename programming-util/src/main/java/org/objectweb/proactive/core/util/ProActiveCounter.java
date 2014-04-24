@@ -34,44 +34,26 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.config;
+package org.objectweb.proactive.core.util;
 
 /**
- * An long ProActive property
+ * Provide an incremental per VM unique ID
  *
- * @since ProActive 5.2.0
+ * unique id starts from zero and is incremented each time getUniqID is called.
+ * If Long.MAX_VALUE is reached then then IllegalStateArgument exception is thrown
+ *
+ * @See {@link ProActiveRandom}
+ *
  */
-public class PAPropertyLong extends PAPropertyImpl {
+public class ProActiveCounter {
+    static long counter = 0;
 
-    public PAPropertyLong(String name, boolean isSystemProp) {
-        super(name, PropertyType.LONG, isSystemProp, null);
-    }
-
-    public PAPropertyLong(String name, boolean isSystemProp, long defaultValue) {
-        super(name, PropertyType.LONG, isSystemProp, Long.toString(defaultValue));
-    }
-
-    final public long getValue() {
-        String str = super.getValueAsString();
-        try {
-            return Long.parseLong(str);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Invalid value for ProActive property " + super.getAliasedName() +
-                " must be a long", e);
-        }
-    }
-
-    final public void setValue(long value) {
-        super.internalSetValue(new Long(value).toString());
-    }
-
-    @Override
-    final public boolean isValid(String value) {
-        try {
-            Long.parseLong(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+    synchronized static public long getUniqID() {
+        if (counter == Long.MAX_VALUE) {
+            throw new IllegalStateException(ProActiveCounter.class.getSimpleName() +
+                " counter reached max value");
+        } else {
+            return counter++;
         }
     }
 }

@@ -34,32 +34,23 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.util;
+package org.objectweb.proactive.core.config;
 
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import java.io.File;
 
 
 /**
- * Provide an incremental per VM unique ID
+ * Defines many constants useful across ProActive
  *
- * unique id starts from zero and is incremented each time getUniqID is called.
- * If Long.MAX_VALUE is reached then then IllegalStateArgument exception is thrown
- *
- * @See {@link ProActiveRandom}
+ * @author The ProActive Team
+ * @version 1.0,  2002/03/21
+ * @since   ProActive 0.9
  *
  */
-public class ProActiveCounter {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
-    static long counter = 0;
+public interface Constants {
 
-    synchronized static public long getUniqID() {
-        if (counter == Long.MAX_VALUE) {
-            throw new IllegalStateException(ProActiveCounter.class.getSimpleName() +
-                " counter reached max value");
-        } else {
-            return counter++;
-        }
-    }
+    /** User configuration directory */
+    public static final String USER_CONFIG_DIR = System.getProperty("user.home") + File.separator +
+        ".proactive";
+
 }

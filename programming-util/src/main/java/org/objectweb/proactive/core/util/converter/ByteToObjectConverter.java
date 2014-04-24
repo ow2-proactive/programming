@@ -41,9 +41,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
-import org.objectweb.proactive.core.mop.PAObjectInputStream;
-import org.objectweb.proactive.core.mop.SunMarshalInputStream;
-
 
 /**
  * This class acts as a wrapper to enable the use of different serialization code
@@ -137,35 +134,6 @@ public class ByteToObjectConverter {
         }
     }
 
-    public static class ProActiveObjectStream {
-
-        /**
-         * Convert to an object using a proactive object stream;
-         * @param byteArray the byte array to convert
-         * @return the unserialized object
-         * @throws IOException
-         * @throws ClassNotFoundException
-         */
-        public static Object convert(byte[] byteArray) throws IOException, ClassNotFoundException {
-            InputStream bais = new ByteArrayInputStream(byteArray);
-            return convert(bais, null);
-        }
-
-        /**
-         * Convert to an object using a proactive object stream;
-         *
-         * @param is the input stream to convert
-         * @param cl the classloader where to load the classes
-         * @return the unserialized object
-         * @throws IOException
-         * @throws ClassNotFoundException
-         */
-        public static Object convert(InputStream is, ClassLoader cl) throws IOException,
-                ClassNotFoundException {
-            return ByteToObjectConverter.convert(is, MakeDeepCopy.ConversionMode.PAOBJECT, cl);
-        }
-    }
-
     private static Object convert(InputStream is, MakeDeepCopy.ConversionMode conversionMode, ClassLoader cl)
             throws IOException, ClassNotFoundException {
         return standardConvert(is, conversionMode, cl);
@@ -185,7 +153,8 @@ public class ByteToObjectConverter {
             if (conversionMode == MakeDeepCopy.ConversionMode.MARSHALL) {
                 objectInputStream = new SunMarshalInputStream(is);
             } else if (conversionMode == MakeDeepCopy.ConversionMode.PAOBJECT) {
-                objectInputStream = new PAObjectInputStream(is);
+                throw new UnsupportedOperationException(MakeDeepCopy.ConversionMode.PAOBJECT +
+                    " is not supported");
             } else /*(conversionMode == ObjectToByteConverter.ConversionMode.OBJECT)*/
             {
                 // if a classloader is specified, use it !

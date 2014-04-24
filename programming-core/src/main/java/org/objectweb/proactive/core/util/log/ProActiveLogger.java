@@ -45,7 +45,7 @@ import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.config.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.apache.log4j.Appender;

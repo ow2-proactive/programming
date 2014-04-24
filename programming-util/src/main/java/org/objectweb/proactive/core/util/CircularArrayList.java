@@ -36,11 +36,6 @@
  */
 package org.objectweb.proactive.core.util;
 
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.apache.log4j.Logger;
-
-
 /**
  * <p>
  * Originally written by Dr. Heinz Kabutz in the very excellent
@@ -57,7 +52,6 @@ import org.apache.log4j.Logger;
 
 public class CircularArrayList<E> extends java.util.AbstractList<E> implements java.util.List<E>,
         java.io.Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.UTIL);
     private static final int DEFAULT_SIZE = 5;
     protected E[] array;
 

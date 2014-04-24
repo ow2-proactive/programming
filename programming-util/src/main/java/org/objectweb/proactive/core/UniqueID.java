@@ -36,10 +36,7 @@
  */
 package org.objectweb.proactive.core;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -63,7 +60,6 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
 
     //the Unique ID of the JVM
     private static java.rmi.dgc.VMID uniqueVMID = new java.rmi.dgc.VMID();
-    final protected static Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
 
     // Optim
     private transient String cachedShortString;
@@ -182,6 +178,6 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
      * for debug purpose
      */
     public void echo() {
-        logger.info("UniqueID The Id is " + this.id + " and the address is " + this.vmID);
+        System.out.println("UniqueID The Id is " + this.id + " and the address is " + this.vmID);
     }
 }

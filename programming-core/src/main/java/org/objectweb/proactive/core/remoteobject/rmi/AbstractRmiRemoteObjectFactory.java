@@ -55,8 +55,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.mop.SunMarshalInputStream;
-import org.objectweb.proactive.core.mop.SunMarshalOutputStream;
+import org.objectweb.proactive.core.util.converter.SunMarshalInputStream;
+import org.objectweb.proactive.core.util.converter.SunMarshalOutputStream;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;

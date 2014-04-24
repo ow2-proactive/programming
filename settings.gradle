@@ -1,4 +1,5 @@
 include 'programming-annotation'
+include 'programming-util'
 include 'programming-core'
 include 'programming-extensions'
 include 'programming-extensions:programming-extension-amqp'

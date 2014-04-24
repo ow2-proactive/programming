@@ -94,6 +94,13 @@ class StubTask extends JavaExec {
     }
 }
 
+project(':programming-util') {
+    dependencies {
+        compile(
+             project(':programming-annotation')
+        )
+    }
+}
 project(':programming-core') {
     dependencies {
         compile(
@@ -103,7 +110,8 @@ project(':programming-core') {
                 'org.javassist:javassist:3.18.1-GA',
                 'xerces:xercesImpl:2.8.1',
 
-                project(':programming-annotation')
+                project(':programming-annotation'),
+                project(':programming-util')
         )
     }
 

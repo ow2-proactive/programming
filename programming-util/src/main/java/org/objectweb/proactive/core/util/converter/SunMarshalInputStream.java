@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.mop;
+package org.objectweb.proactive.core.util.converter;
 
 import java.io.IOException;
 import java.io.InputStream;

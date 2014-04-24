@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectStreamClass;
 
+import org.objectweb.proactive.core.util.converter.SunMarshalInputStream;
+
 
 public class PAObjectInputStream extends SunMarshalInputStream {
     public PAObjectInputStream(InputStream in) throws IOException {

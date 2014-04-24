@@ -36,9 +36,6 @@
  */
 package org.objectweb.proactive.core.config;
 
-import org.objectweb.proactive.core.ProActiveRuntimeException;
-
-
 /**
  * An integer ProActive property
  *
@@ -59,8 +56,8 @@ public class PAPropertyInteger extends PAPropertyImpl {
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
-            throw new ProActiveRuntimeException("Invalid value for ProActive property " +
-                super.getAliasedName() + " must be an integer", e);
+            throw new RuntimeException("Invalid value for ProActive property " + super.getAliasedName() +
+                " must be an integer", e);
         }
     }
 

@@ -121,7 +121,8 @@ public abstract class MOP {
      *        As this class is center to the API, its static initializer is
      *        a good place to initialize general stuff.
      */
-    protected static Map<String, Class<?>> loadedClass = Collections.synchronizedMap(new HashMap<String, Class<?>>());
+    protected static Map<String, Class<?>> loadedClass = Collections
+            .synchronizedMap(new HashMap<String, Class<?>>());
 
     static {
         PROXY_CONSTRUCTOR_PARAMETERS_TYPES_ARRAY = new Class<?>[] {

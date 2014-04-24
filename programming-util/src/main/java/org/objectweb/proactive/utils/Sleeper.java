@@ -36,58 +36,41 @@
  */
 package org.objectweb.proactive.utils;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-
-/** A helper class for CountDownLatch
+/** A helper class to sleep a given amount of time in one line
+ *
+ * Calling Thread.sleep() requires a few lines of code to handle InterruptedException.
+ * This code is duplicated everywhere (or missing). This helper should reduce the number 
+ * of poorly handled InterruptedException and duplicated code.
  * 
- * CountDownLatch can throw an InterruptedException. Usually we are just waiting until
- * the latch has counted down to zero. This helper provide a default try/catch around the
- * wait() method.
- * 
+ * If an InterruptionException is thrown while sleeping, it is logged (debug level)
  */
-public class SweetCountDownLatch extends CountDownLatch {
-    static final private Logger logger = ProActiveLogger.getLogger(Loggers.WAITER);
+public class Sleeper {
+    private long duration;
 
-    public SweetCountDownLatch(int count) {
-        super(count);
+    /**
+     * @param duration the amount of milliseconds to sleep. If 0, {@link #sleep()} returns immediately.
+     */
+    public Sleeper(long duration) {
+        this.duration = duration;
     }
 
-    @Override
-    public void await() {
-        boolean wait = true;
-        while (wait == true) {
+    /** Sleep the predefined amount of time.
+     * 
+     * It is safe to call this method several times and from different threads.
+     */
+    public void sleep() {
+        if (this.duration == 0) {
+            // Avoid to sleep forever
+            return;
+        }
+
+        TimeoutAccounter timeoutAccounter = TimeoutAccounter.getAccounter(this.duration);
+        while (!timeoutAccounter.isTimeoutElapsed()) {
             try {
-                super.await();
-                wait = false;
+                Thread.sleep(timeoutAccounter.getRemainingTimeout());
             } catch (InterruptedException e) {
-                // Miam Miam Miam
-                ProActiveLogger.logEatedException(logger, e);
+                e.printStackTrace();
             }
         }
     }
-
-    @Override
-    public boolean await(long timeout, TimeUnit unit) {
-
-        boolean b = false;
-        boolean anotherLoop;
-        do {
-            try {
-                anotherLoop = false;
-                b = super.await(timeout, unit);
-            } catch (InterruptedException e) {
-                // Miam miam miam, don't care we are looping
-                anotherLoop = true;
-            }
-        } while (anotherLoop);
-
-        return b;
-    }
-
 }

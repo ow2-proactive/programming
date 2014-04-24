@@ -40,22 +40,21 @@ import java.io.IOException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
-import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
-import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
+import org.objectweb.proactive.core.util.converter.ProActiveByteToObjectConverter;
+import org.objectweb.proactive.core.util.converter.ProActiveObjectToByteConverter;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.amqp.AMQPConfig;
 import org.objectweb.proactive.utils.NamedThreadFactory;
 import org.objectweb.proactive.utils.ThreadPools;
-
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
 
 
 /**
@@ -157,9 +156,9 @@ public abstract class AbstractAMQPRemoteObjectServer {
     }
 
     private byte[] handleMethodCall(byte[] body) throws Exception {
-        Request req = (Request) ByteToObjectConverter.ProActiveObjectStream.convert(body);
+        Request req = (Request) ProActiveByteToObjectConverter.ProActiveObjectStream.convert(body);
         Reply reply = rro.receiveMessage(req);
-        return ObjectToByteConverter.ProActiveObjectStream.convert(reply);
+        return ProActiveObjectToByteConverter.ProActiveObjectStream.convert(reply);
     }
 
     private byte[] handleDiscoverQueueMessage() throws Exception {

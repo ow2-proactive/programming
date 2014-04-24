@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.objectweb.proactive.core.util.converter.MakeDeepCopy;
+import org.objectweb.proactive.core.util.converter.ProActiveMakeDeepCopy;
 
 
 /**
@@ -512,7 +512,7 @@ public abstract class Utils extends Object {
             return null;
         }
         try {
-            return MakeDeepCopy.WithProActiveObjectStream.makeDeepCopy(source);
+            return ProActiveMakeDeepCopy.WithProActiveObjectStream.makeDeepCopy(source);
         } catch (ClassNotFoundException e) {
             throw (IOException) new IOException("Failed to make deep copy of " + source, e);
         }

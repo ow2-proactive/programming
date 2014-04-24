@@ -34,44 +34,18 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.config;
+package org.objectweb.proactive.core.util.converter;
 
-/**
- * An long ProActive property
- *
- * @since ProActive 5.2.0
- */
-public class PAPropertyLong extends PAPropertyImpl {
+import java.io.IOException;
+import java.io.OutputStream;
 
-    public PAPropertyLong(String name, boolean isSystemProp) {
-        super(name, PropertyType.LONG, isSystemProp, null);
+
+public class SunMarshalOutputStream extends sun.rmi.server.MarshalOutputStream {
+    public SunMarshalOutputStream(OutputStream out) throws IOException {
+        super(out);
     }
 
-    public PAPropertyLong(String name, boolean isSystemProp, long defaultValue) {
-        super(name, PropertyType.LONG, isSystemProp, Long.toString(defaultValue));
-    }
-
-    final public long getValue() {
-        String str = super.getValueAsString();
-        try {
-            return Long.parseLong(str);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Invalid value for ProActive property " + super.getAliasedName() +
-                " must be a long", e);
-        }
-    }
-
-    final public void setValue(long value) {
-        super.internalSetValue(new Long(value).toString());
-    }
-
-    @Override
-    final public boolean isValid(String value) {
-        try {
-            Long.parseLong(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+    //    protected void annotateClass(Class<?> cl) throws IOException {
+    //        writeObject(System.getProperty("java.rmi.server.codebase"));
+    //    }
 }

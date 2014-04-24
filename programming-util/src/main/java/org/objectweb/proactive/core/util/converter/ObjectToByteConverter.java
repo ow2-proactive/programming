@@ -40,9 +40,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import org.objectweb.proactive.core.mop.PAObjectOutputStream;
-import org.objectweb.proactive.core.mop.SunMarshalOutputStream;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.MakeDeepCopy.ConversionMode;
 
 
@@ -52,11 +49,6 @@ import org.objectweb.proactive.core.util.converter.MakeDeepCopy.ConversionMode;
  *
  */
 public class ObjectToByteConverter {
-
-    static {
-        // resolve PROACTIVE-742
-        ProActiveRuntimeImpl.getProActiveRuntime();
-    }
 
     public static class MarshallStream {
 
@@ -92,19 +84,6 @@ public class ObjectToByteConverter {
         }
     }
 
-    public static class ProActiveObjectStream {
-
-        /**
-         * Convert an object to a byte array using a proactive object stream
-         * @param o The object to convert.
-         * @return The object converted to a byte array
-         * @throws IOException
-         */
-        public static byte[] convert(Object o) throws IOException {
-            return ObjectToByteConverter.convert(o, ConversionMode.PAOBJECT);
-        }
-    }
-
     private static byte[] convert(Object o, ConversionMode conversionMode) throws IOException {
         return standardConvert(o, conversionMode);
     }
@@ -125,7 +104,7 @@ public class ObjectToByteConverter {
             } else if (conversionMode == ConversionMode.OBJECT) {
                 objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             } else if (conversionMode == ConversionMode.PAOBJECT) {
-                objectOutputStream = new PAObjectOutputStream(byteArrayOutputStream);
+                throw new UnsupportedOperationException(ConversionMode.PAOBJECT + " is not supported");
             }
 
             ObjectToByteConverter.writeToStream(objectOutputStream, o);
