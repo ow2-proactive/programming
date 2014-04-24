@@ -94,6 +94,22 @@ public interface DataSpacesFileObject {
     public abstract String getRealURI();
 
     /**
+     * Returns the base name of this file. The base name is the last element of the file name. For example the base name of /somefolder/somefile is somefile.
+     * @return The base name. Never returns null.
+     */
+    public abstract String getBaseName();
+
+    /**
+     * Returns the absolute path of this file, within its file system.
+     * This path is normalized, so that . and .. elements have been removed.
+     * Also, the path only contains / as its separator character.
+     * The path always starts with /
+     * The root of a file system has / as its absolute path.
+     * @return The path. Never returns null.
+     */
+    public abstract String getPath();
+
+    /**
      * In case the dataspace is backed up by several Apache VFS. Returns all URIs referring to this FileObject. If there
      * is only one VFS, then a list containing a single element will be returned.
      * Any of these URI can be used externally or for example via the Apache VFS FileObject API

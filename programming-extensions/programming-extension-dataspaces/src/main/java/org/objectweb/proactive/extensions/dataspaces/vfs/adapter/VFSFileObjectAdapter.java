@@ -533,6 +533,16 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         }
     }
 
+    @Override
+    public String getBaseName() {
+        return currentFileObject.getName().getBaseName();
+    }
+
+    @Override
+    public String getPath() {
+        return currentFileObject.getName().getPath();
+    }
+
     public List<String> getAllRealURIs() {
         String relativePath = computeRelativePath();
         ArrayList<String> answer = new ArrayList<String>();
