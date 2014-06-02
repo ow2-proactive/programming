@@ -41,13 +41,13 @@ import java.net.URL;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
-import org.mortbay.jetty.servlet.ServletMapping;
-import org.mortbay.xml.XmlConfiguration;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlet.ServletMapping;
+import org.eclipse.jetty.xml.XmlConfiguration;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -69,7 +69,7 @@ public class HTTPServer {
     final private Server server;
 
     /* The context for ProActive */
-    final private Context context;
+    final private ServletContextHandler context;
 
     static synchronized public HTTPServer get() {
         if (httpServer == null) {
@@ -136,7 +136,8 @@ public class HTTPServer {
             logger.error("Failed to load jetty configuration file: " + configUrl, e);
         }
 
-        this.context = new Context(server, HTTPServer.SERVER_CONTEXT, Context.SESSIONS);
+        this.context = new ServletContextHandler(server, HTTPServer.SERVER_CONTEXT,
+            ServletContextHandler.SESSIONS);
 
         this.server.start();
         // If a random port is used we have to set it
