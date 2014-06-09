@@ -98,18 +98,6 @@ public class FunctionalTest {
         paSetup.start();
     }
 
-    static private void threadDumpPoccesses() {
-        try {
-            int[] pids = cleaner.getAliveProcesses();
-            for (int pid : pids) {
-                System.err.println("Alive proccess: " + pid);
-                System.err.println(cleaner.getThreadDump(pid));
-            }
-        } catch (Exception e) {
-            logger.error("Failed to generate thread dump of remaining processes", e);
-        }
-    }
-
     @AfterClass
     final static public void afterClass() throws Exception {
         // Disable timer and shutdown hook

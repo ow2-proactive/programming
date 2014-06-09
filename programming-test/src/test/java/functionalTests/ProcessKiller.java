@@ -129,7 +129,12 @@ public abstract class ProcessKiller {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
             }
 
-            p.waitFor();
+            // SCHEDULING-1527: using tskill as fallback
+            int exitValue = p.waitFor();
+            if (exitValue != 0) {
+                p = Runtime.getRuntime().exec(new String[] { "tskill", Integer.toString(pid) });
+                p.waitFor();
+            }
         }
     }
 }

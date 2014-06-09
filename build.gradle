@@ -310,8 +310,11 @@ project(':programming-test') {
 
                 project(':programming-annotation'),
                 project(':programming-core'),
-                project(':programming-extensions').subprojects
+                project(':programming-extensions').subprojects,
+
+                files("${rootDir}/lib/node/sigar/sigar.jar")
         )
+        testRuntime fileTree(dir: "${rootDir}/lib/node/sigar/", exclude: "*.jar")
     }
 
     def testConfiguration = { Test task ->
