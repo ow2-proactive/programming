@@ -59,8 +59,6 @@ subprojects {
 
     dependencies {
         compile 'log4j:log4j:1.2.14'
-        testCompile 'org.slf4j:slf4j-log4j12:1.6.1'
-        testCompile 'org.slf4j:slf4j-simple:1.6.1'
         testCompile 'junit:junit:4.11'
     }
 
@@ -97,6 +95,10 @@ class StubTask extends JavaExec {
     def setClasses(List classes) {
         setArgs(getArgs() + classes)
     }
+}
+
+task clean << {
+	delete "$rootDir/dist"
 }
 
 project(':programming-util') {
@@ -201,7 +203,8 @@ def vfs2RuntimeDependencies = [
         'commons-net:commons-net:2.2',
         'commons-httpclient:commons-httpclient:3.1',
         'com.jcraft:jsch:0.1.42',
-        'org.apache.jackrabbit:jackrabbit-webdav:1.5.2']
+        'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
+        'org.slf4j:slf4j-api:1.6.1']
 
 project('programming-extensions:programming-extension-vfsprovider') {
     dependencies {
@@ -300,6 +303,10 @@ project('programming-extensions:programming-extension-processbuilder') {
 }
 
 project(':programming-test') {
+    configurations {
+        slf4jJars 
+    }
+
     dependencies {
         testCompile(
                 'commons-io:commons-io:2.4',
@@ -309,6 +316,7 @@ project(':programming-test') {
                 project(':programming-core'),
                 project(':programming-extensions').subprojects
         )
+        slf4jJars('org.slf4j:slf4j-log4j12:1.6.1')
     }
 
     def testConfiguration = { Test task ->
@@ -327,6 +335,7 @@ project(':programming-test') {
             systemProperties << ['java.security.policy': file('src/test/resources/proactive.java.policy').absolutePath]
             dependsOn 'copyToLib'
             dependsOn '::ProActiveJar'
+            dependsOn 'copySLF4JLibs'
         }
     }
 
@@ -375,6 +384,11 @@ project(':programming-test') {
     task copyToLib(type: Copy) {
         from configurations.testCompile
         into "$buildDir/dist/lib"
+    }
+
+    task copySLF4JLibs(type: Copy) {
+        from configurations.slf4jJars
+        into "$rootDir/dist/lib"
     }
 
 }
