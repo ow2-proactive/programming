@@ -34,6 +34,7 @@ subprojects {
     version = programmingVersion
 
     sourceCompatibility = 1.6
+    compileJava.options.compilerArgs << '-Xlint:-options' // remove warning about bootstrap class path
 
     rootProject.buildscript.repositories.each {
         repositories.add(it)
@@ -153,7 +154,6 @@ project(':programming-core') {
     }
 
     // to get rid of warning about sun internal api usage
-    compileJava.options.useAnt = true
     compileJava.options.compilerArgs << '-XDignore.symbol.file'
     compileJava.options.compilerArgs << '-Xlint:unchecked'
 }
