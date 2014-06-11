@@ -64,6 +64,15 @@ subprojects {
         serialver = rootProject.serialver
     }
 
+    jar {
+        manifest {
+            attributes("Implementation-Title": "ProActive",
+                    "Implementation-Version": version,
+                    "Implementation-Vendor": "Activeeon - OASIS - INRIA Sophia Antipolis",
+                    "Implementation-URL": "http://proactive.inria.fr"
+            )
+        }
+    }
 }
 
 ext.hasGcc = {
