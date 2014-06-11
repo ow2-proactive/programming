@@ -53,7 +53,8 @@ import org.junit.Ignore;
 
 
 @Ignore
-public class FunctionalTest {
+public class FunctionalTest extends ProActiveTest {
+
     static final protected Logger logger = Logger.getLogger("testsuite");
     /** Timeout before the test gets killed. */
     static final private long timeout = CentralPAPropertyRepository.PA_TEST_TIMEOUT.getValue();
@@ -75,7 +76,7 @@ public class FunctionalTest {
     }
 
     @BeforeClass
-    final static public void prepareForTest() throws Exception {
+    static public void prepareForTest() throws Exception {
         CentralPAPropertyRepository.PA_TEST.setValue(true);
 
         // Ensure that the host is clean
@@ -99,7 +100,7 @@ public class FunctionalTest {
     }
 
     @AfterClass
-    final static public void afterClass() throws Exception {
+    static public void afterClass() throws Exception {
         // Disable timer and shutdown hook
         TimerTask tt = timerTask.getAndSet(null);
         if (tt != null) {
@@ -127,7 +128,7 @@ public class FunctionalTest {
                 System.err.println("Killing current JVM");
                 System.exit(-42);
             } catch (Exception e) {
-                logger.error("Failed to kill remaining proccesses", e);
+                logger.error("Failed to kill remaining processes", e);
             }
         }
     }
@@ -139,7 +140,7 @@ public class FunctionalTest {
             try {
                 cleaner.killAliveProcesses();
             } catch (Exception e) {
-                logger.error("Failed to kill remaining proccesses", e);
+                logger.error("Failed to kill remaining processes", e);
             }
         }
     }

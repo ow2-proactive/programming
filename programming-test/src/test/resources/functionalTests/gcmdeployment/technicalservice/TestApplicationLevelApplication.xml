@@ -20,7 +20,7 @@
 				<jvmarg value="${JVM_PARAMETERS}"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="programming-test/build/classes/test/"/>
-					<pathElement base="proactive" relpath="build/dist/lib/*"/>
+					<pathElement base="proactive" relpath="programming-test/build/dist/lib/*"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
 				</proactiveClasspath>		
 				

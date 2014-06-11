@@ -17,7 +17,7 @@
 				<jvmarg value="-Dproactive.test=true"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="build/classes/test/"/>
-					<pathElement base="proactive" relpath="build/dist/lib/*"/>
+					<pathElement base="proactive" relpath="programming-test/build/dist/lib/*"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
 				</proactiveClasspath>
 			</configuration>

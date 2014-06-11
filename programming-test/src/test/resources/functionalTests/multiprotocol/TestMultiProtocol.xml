@@ -23,7 +23,7 @@
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="programming-test/build/classes/test/"/>
 					<pathElement base="proactive" relpath="programming-test/build/resources/test/"/>
-					<pathElement base="proactive" relpath="build/dist/lib/*"/>
+					<pathElement base="proactive" relpath="programming-test/build/dist/lib/*"/>
                 </proactiveClasspath>
                 <log4jProperties base="proactive" relpath="compile/proactive-log4j"/> 
 			</configuration>

@@ -34,5 +34,21 @@
  */
 package functionalTests;
 
+import java.security.Policy;
+
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.junit.BeforeClass;
+
+
 public class ProActiveTest {
+    @BeforeClass
+    static public void setupSecurityManager() {
+        if (System.getProperty("java.security.policy") == null) {
+            System.setProperty("java.security.policy",
+              System.getProperty(
+                CentralPAPropertyRepository.PA_HOME.getName()) + "/programming-test/src/test/resources/proactive.java.policy");
+
+            Policy.getPolicy().refresh();
+        }
+    }
 }

@@ -31,7 +31,7 @@
 				<jvmarg value="-Dclover.initstring=&quot;${proactive.home}/compile/ProActiveCoverage.db&quot;"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="build/classes/test/"/>
-					<pathElement base="proactive" relpath="build/dist/lib/*"/>
+					<pathElement base="proactive" relpath="programming-test/build/dist/lib/*"/>
 				</proactiveClasspath>	
 <!--				<log4jProperties base="proactive" relpath="compile/proactive-log4j"/> -->
 		      <!--   <proactiveSecurity>
