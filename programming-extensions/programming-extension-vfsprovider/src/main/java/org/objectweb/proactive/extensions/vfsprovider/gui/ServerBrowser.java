@@ -70,27 +70,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import org.objectweb.proactive.extensions.dataspaces.exceptions.DataSpacesException;
 import org.objectweb.proactive.extensions.vfsprovider.gui.DataServer.Server;
 import org.objectweb.proactive.utils.JVMPropertiesPreloader;
+import org.objectweb.proactive.utils.SecurityManagerConfigurator;
 
 
 /**
@@ -124,6 +111,9 @@ public class ServerBrowser implements ActionListener, WindowListener, KeyEventDi
      */
     public static void main(String[] args) {
         args = JVMPropertiesPreloader.overrideJVMProperties(args);
+
+        SecurityManagerConfigurator.configureSecurityManager(
+          ServerBrowser.class.getResource("/all-permissions.security.policy").toString());
 
         setLF();
 

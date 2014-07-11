@@ -43,6 +43,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.utils.JVMPropertiesPreloader;
+import org.objectweb.proactive.utils.SecurityManagerConfigurator;
 
 
 /**
@@ -72,6 +73,8 @@ public class PADataserverStarter {
             return;
         }
 
+        SecurityManagerConfigurator.configureSecurityManager(
+          PADataserverStarter.class.getResource("/all-permissions.security.policy").toString());
         setupHook();
         startServer();
     }
