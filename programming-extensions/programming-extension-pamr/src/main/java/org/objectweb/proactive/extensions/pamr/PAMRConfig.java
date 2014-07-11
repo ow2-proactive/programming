@@ -51,7 +51,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
     * Can be FQDN or an IP address
     */
     static public PAPropertyString PA_NET_ROUTER_ADDRESS = new PAPropertyString(
-        "proactive.pamr.router.address", false, null);
+        "proactive.pamr.router.address", false, "localhost");
 
     /** The port of the router to use. Must be set if message routing is enabled
      *

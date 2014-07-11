@@ -36,7 +36,10 @@
  */
 package org.objectweb.proactive.core.config.xml;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
@@ -51,11 +54,11 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.PAProperty;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -84,9 +87,43 @@ public class ProActiveConfigurationParser {
             properties = new Properties();
         }
 
+        if (filename.toLowerCase().endsWith(".xml")) {
+            return parseXml(filename, properties);
+        } else {
+            return parseProperties(filename, properties);
+        }
+    }
+
+    private static Properties parseProperties(String filename, Properties properties) {
+        InputStream propertiesStream = null;
+        try {
+            propertiesStream = resolveStream(filename);
+            properties.load(propertiesStream);
+            return properties;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (propertiesStream != null) {
+                try {
+                    propertiesStream.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+    }
+
+    private static InputStream resolveStream(String filename) throws IOException {
+        try {
+            return new URL(filename).openStream();
+        } catch (MalformedURLException e) {
+            return new FileInputStream(filename);
+        }
+    }
+
+    private static Properties parseXml(String filename, Properties properties) {
         InputSource source = null;
         try {
-            source = new org.xml.sax.InputSource(filename);
+            source = new InputSource(filename);
 
             DocumentBuilderFactory domFactory;
             DocumentBuilder builder;
@@ -207,14 +244,14 @@ public class ProActiveConfigurationParser {
 
         @Override
         public void error(SAXParseException e) throws SAXParseException {
-            String errMessage = new String("Error Line " + e.getLineNumber() + ": " + e.getMessage() + "\n");
+            String errMessage = "Error Line " + e.getLineNumber() + ": " + e.getMessage() + "\n";
             logger.error(errMessage);
             throw e;
         }
 
         @Override
         public void fatalError(SAXParseException e) throws SAXParseException {
-            String errMessage = new String("Error Line " + e.getLineNumber() + ": " + e.getMessage() + "\n");
+            String errMessage = "Error Line " + e.getLineNumber() + ": " + e.getMessage() + "\n";
             logger.fatal(errMessage);
             throw e;
         }

@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -44,11 +45,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.xml.ProActiveConfigurationParser;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.OperatingSystem;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -269,20 +270,22 @@ public class ProActiveConfiguration {
         }
 
         URL u = null;
+        InputStream userConfigStream = null;
         try {
             u = new URL(fname);
-            InputStream userConfigStream = u.openStream();
+            userConfigStream = u.openStream();
             logger.debug("User Config File is: " + u.toExternalForm());
-            if (fname.endsWith(".properties")) {
-                Properties props = new Properties();
-                props.load(userConfigStream);
-                userProps.putAll(props);
-            } else {
-                userProps = ProActiveConfigurationParser.parse(u.toString(), userProps);
-            }
+            userProps = ProActiveConfigurationParser.parse(u.toString(), userProps);
         } catch (Exception e) {
             if (!defaultFile && u != null) {
                 logger.warn("Configuration file " + u.toExternalForm() + " not found");
+            }
+        } finally {
+            if (userConfigStream != null) {
+                try {
+                    userConfigStream.close();
+                } catch (IOException ignored) {
+                }
             }
         }
 
