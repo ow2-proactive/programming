@@ -421,7 +421,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     // The list of additional protocols must not contain duplicates nor the main protocol
     public static PAPropertyList PA_COMMUNICATION_ADDITIONAL_PROTOCOLS = new PAPropertyList(
         "proactive.communication.additional_protocols", ",", false,
-        CentralPAPropertyRepositoryUtils.ADDITIONAL_PROTOCOLS_VALIDATOR);
+        CentralPAPropertyRepositoryUtils.ADDITIONAL_PROTOCOLS_VALIDATOR, "");
 
     /** Impose a static order for protocols selection, this order will supersede the benchmark order, if benchmark is
      * activated (The list of protocols must not contain duplicate elements) */
