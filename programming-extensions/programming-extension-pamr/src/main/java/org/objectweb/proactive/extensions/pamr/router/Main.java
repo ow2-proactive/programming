@@ -42,6 +42,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;
+import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurationMessage;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -52,18 +57,13 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.pamr.PAMRConfig;
-import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;
-import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
-import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurationMessage;
 
 
 /** Start a router.
  * 
  * @since ProActive 4.1.0
  */
-class Main {
+public class Main {
     static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
     private Options options;
