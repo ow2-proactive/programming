@@ -4,7 +4,7 @@
 # The default logging level is INFO
 # The root logger logs in the test.log file
 
-log4j.rootLogger=INFO,CONSOLE
+log4j.rootLogger=WARN,CONSOLE
  
 # If INFO is enabled Jetty is too verbose at startup
 log4j.logger.org.mortbay = WARN
