@@ -73,7 +73,7 @@ public class PARuntime {
 
             rtBroadcaster.sendDiscover();
 
-            new Sleeper(1500).sleep();
+            new Sleeper(1500, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
 
             URI[] uris = (URI[]) lbtc.getKnowRuntimes().toArray(new URI[] {}).clone();
 

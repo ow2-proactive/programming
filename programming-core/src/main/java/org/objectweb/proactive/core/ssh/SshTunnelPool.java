@@ -36,8 +36,6 @@
  */
 package org.objectweb.proactive.core.ssh;
 
-import static org.objectweb.proactive.core.ssh.SSH.logger;
-
 import java.io.IOException;
 import java.net.BindException;
 import java.net.InetAddress;
@@ -57,7 +55,11 @@ import org.objectweb.proactive.core.ssh.proxycommand.SshProxyConnection;
 import org.objectweb.proactive.core.ssh.proxycommand.SshProxySession;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.Sleeper;
+
+import static org.objectweb.proactive.core.ssh.SSH.logger;
 
 
 public class SshTunnelPool {
@@ -399,7 +401,7 @@ public class SshTunnelPool {
         private Sleeper sleeper;
 
         public GCThread() {
-            this.sleeper = new Sleeper(config.getGcInterval());
+            this.sleeper = new Sleeper(config.getGcInterval(), ProActiveLogger.getLogger(Loggers.SLEEPER));
         }
 
         public void run() {

@@ -46,6 +46,8 @@ import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationSnapshot;
@@ -105,7 +107,7 @@ public class TestSnapshot extends GCMFunctionalTest {
             while (retry-- > 0) {
                 try {
                     RuntimeFactory.getRuntime(node.getProActiveRuntime().getURL());
-                    new Sleeper(500).sleep();
+                    new Sleeper(500, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
                 } catch (ProActiveException e) {
                     break;
                 }
@@ -141,7 +143,7 @@ public class TestSnapshot extends GCMFunctionalTest {
             GCMVirtualNode vn = app.getVirtualNode(VN_NAME);
 
             while (vn.getNbCurrentNodes() != NB_VMS) {
-                new Sleeper(500).sleep();
+                new Sleeper(500, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
             }
 
             System.out.println("I'm ready");

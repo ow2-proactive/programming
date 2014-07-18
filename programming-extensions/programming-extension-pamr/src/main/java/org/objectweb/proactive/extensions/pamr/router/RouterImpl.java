@@ -69,9 +69,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
@@ -87,6 +87,7 @@ import org.objectweb.proactive.utils.SafeTimerTask;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
 import org.objectweb.proactive.utils.ThreadPools;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -107,7 +108,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
     /** True is the router must stop or is stopped*/
     private final AtomicBoolean stopped = new AtomicBoolean(false);
     /** Can pass when the router has been successfully shutdown */
-    private final SweetCountDownLatch isStopped = new SweetCountDownLatch(1);
+    private final SweetCountDownLatch isStopped = new SweetCountDownLatch(1, logger);
     /** The thread running the select loop */
     private final AtomicReference<Thread> selectThread = new AtomicReference<Thread>();
 
@@ -267,7 +268,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
             // Waiting until maxTime (we could be more aggressive)
             long rtime = (this.maxTime) - (System.currentTimeMillis() - begin);
             if (rtime > 0) {
-                new Sleeper(rtime).sleep();
+                new Sleeper(rtime, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
             } else {
                 admin_logger.warn("Tooks more than " + this.maxTime +
                     " ms to submit send tasks and check received heartbeats (" + (this.maxTime - rtime) +

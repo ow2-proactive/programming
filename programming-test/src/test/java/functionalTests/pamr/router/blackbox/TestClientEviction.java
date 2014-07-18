@@ -40,12 +40,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import junit.framework.Assert;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.client.Tunnel;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
@@ -58,8 +55,11 @@ import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 import org.objectweb.proactive.utils.Sleeper;
-
 import functionalTests.FunctionalTest;
+import junit.framework.Assert;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -107,12 +107,12 @@ public class TestClientEviction extends FunctionalTest {
         AgentID firstID = reply.getAgentID();
         magicCookie = reply.getMagicCookie();
 
-        new Sleeper(HEARTBEAT_TIMEOUT / 2).sleep();
+        new Sleeper(HEARTBEAT_TIMEOUT / 2, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
 
         Client client = router.getClient(firstID);
         Assert.assertNotNull("Client is not added to the map", client);
 
-        new Sleeper(2 * EVICTION_TIMEOUT).sleep();
+        new Sleeper(2 * EVICTION_TIMEOUT, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
 
         client = router.getClient(firstID);
         Assert.assertNull("Client is not evicted after timeout", client);

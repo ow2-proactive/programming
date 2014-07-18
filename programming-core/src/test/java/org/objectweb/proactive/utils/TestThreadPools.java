@@ -40,7 +40,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -49,6 +54,13 @@ import org.junit.Test;
  * @since  5.1.0
  */
 public class TestThreadPools {
+
+    static final private Logger logger = Logger.getLogger(TestThreadPools.class.getName());
+
+    @Before
+    public void setUp() throws Exception {
+        logger.setLevel(Level.DEBUG);
+    }
 
     @Test
     public void testMaxJobsThanWorkers() {
@@ -59,7 +71,7 @@ public class TestThreadPools {
             tpe.execute(new Runnable() {
 
                 public void run() {
-                    new Sleeper(10).sleep();
+                    new Sleeper(10, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
                 }
             });
         }
@@ -71,7 +83,7 @@ public class TestThreadPools {
     public void testConcurrency() {
         final int taskLength = 500;
         final int maxThreads = 10;
-        final SweetCountDownLatch latch = new SweetCountDownLatch(maxThreads);
+        final SweetCountDownLatch latch = new SweetCountDownLatch(maxThreads, logger);
         ThreadFactory tf = new NamedThreadFactory("pool");
         ExecutorService tpe = ThreadPools.newBoundedThreadPool(maxThreads, 10L, TimeUnit.MILLISECONDS, tf);
         for (int i = 0; i < maxThreads; i++) {
@@ -79,7 +91,7 @@ public class TestThreadPools {
 
                 public void run() {
                     latch.countDown();
-                    new Sleeper(taskLength).sleep();
+                    new Sleeper(taskLength, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
                 }
             });
         }

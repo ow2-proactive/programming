@@ -46,6 +46,8 @@ import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.http.util.HTTPRegistry;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.Sleeper;
 
 
@@ -79,7 +81,7 @@ public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable
                 // this case happens when a method call has been performed while the
                 // registration in the registry has not yet been completed.
                 // this mostly appears in multithreaded code.
-                Sleeper sleeper = new Sleeper(1000);
+                Sleeper sleeper = new Sleeper(1000, ProActiveLogger.getLogger(Loggers.SLEEPER));
                 while ((ro == null) && (max_retry > 0)) {
                     sleeper.sleep();
                     ro = HTTPRegistry.getInstance().lookup(URIBuilder.getNameFromURI(url));

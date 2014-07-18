@@ -51,6 +51,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.util.ProActiveInet;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.pnp.exception.PNPException;
+import org.objectweb.proactive.extensions.pnp.exception.PNPHeartbeatTimeoutException;
+import org.objectweb.proactive.extensions.pnp.exception.PNPIOException;
+import org.objectweb.proactive.extensions.pnp.exception.PNPTimeoutException;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.SweetCountDownLatch;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.bootstrap.ServerBootstrap;
@@ -66,15 +75,6 @@ import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timeout;
 import org.jboss.netty.util.Timer;
 import org.jboss.netty.util.TimerTask;
-import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.util.ProActiveInet;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.pnp.exception.PNPException;
-import org.objectweb.proactive.extensions.pnp.exception.PNPHeartbeatTimeoutException;
-import org.objectweb.proactive.extensions.pnp.exception.PNPIOException;
-import org.objectweb.proactive.extensions.pnp.exception.PNPTimeoutException;
-import org.objectweb.proactive.utils.NamedThreadFactory;
-import org.objectweb.proactive.utils.SweetCountDownLatch;
 
 
 /**
@@ -659,7 +659,7 @@ public class PNPAgent {
 
         private ParkingSlot(Parking parking, long msgId) {
             this.parking = parking;
-            this.latch = new SweetCountDownLatch(1);
+            this.latch = new SweetCountDownLatch(1, logger);
             this.callId = msgId;
         }
 

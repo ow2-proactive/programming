@@ -39,15 +39,27 @@ package org.objectweb.proactive.utils;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import junit.framework.Assert;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class TestSweetCountDownLatch {
 
+    static final private Logger logger = Logger.getLogger(TestSweetCountDownLatch.class.getName());
+
+    @Before
+    public void setUp() throws Exception {
+        logger.setLevel(Level.DEBUG);
+    }
+
     @Test
     public void test() throws InterruptedException {
-        final CountDownLatch latch = new SweetCountDownLatch(1);
+        final CountDownLatch latch = new SweetCountDownLatch(1, logger);
 
         Thread latchThread = new Thread(new Runnable() {
             @Override
@@ -70,7 +82,7 @@ public class TestSweetCountDownLatch {
 
     @Test
     public void testTimeoutExpired() throws InterruptedException {
-        final SweetCountDownLatch latch = new SweetCountDownLatch(1);
+        final SweetCountDownLatch latch = new SweetCountDownLatch(1, logger);
 
         final boolean[] b = new boolean[1];
         Thread latchThread = new Thread(new Runnable() {
@@ -90,7 +102,7 @@ public class TestSweetCountDownLatch {
 
     @Test
     public void testTimeout() throws InterruptedException {
-        final SweetCountDownLatch latch = new SweetCountDownLatch(1);
+        final SweetCountDownLatch latch = new SweetCountDownLatch(1, logger);
         final boolean[] b = new boolean[1];
         Thread latchThread = new Thread(new Runnable() {
             @Override
@@ -119,7 +131,7 @@ public class TestSweetCountDownLatch {
         }
 
         public void run() {
-            new Sleeper(this.sleepms).sleep();
+            new Sleeper(this.sleepms, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
 
             this.waiter.interrupt();
             Thread.yield();

@@ -39,6 +39,8 @@ package org.objectweb.proactive.utils;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
+
 
 /** A helper class for CountDownLatch
  * 
@@ -49,19 +51,23 @@ import java.util.concurrent.TimeUnit;
  */
 public class SweetCountDownLatch extends CountDownLatch {
 
-    public SweetCountDownLatch(int count) {
+
+    private Logger logger;
+
+    public SweetCountDownLatch(int count, Logger logger) {
         super(count);
+        this.logger = logger;
     }
 
     @Override
     public void await() {
         boolean wait = true;
-        while (wait == true) {
+        while (wait) {
             try {
                 super.await();
                 wait = false;
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.debug("Interrupted in SweetCountDownLatch", e);
             }
         }
     }

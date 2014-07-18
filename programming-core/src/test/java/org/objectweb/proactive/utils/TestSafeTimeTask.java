@@ -40,8 +40,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -50,6 +52,13 @@ import org.junit.Test;
  * @since  ProActive 5.1.0
  */
 public class TestSafeTimeTask {
+
+    static final private Logger logger = Logger.getLogger(TestSafeTimeTask.class.getName());
+
+    @Before
+    public void setUp() throws Exception {
+        logger.setLevel(Level.DEBUG);
+    }
 
     @Test
     public void testThreadIsNotKilled() {
@@ -67,7 +76,7 @@ public class TestSafeTimeTask {
             }
         }
 
-        SweetCountDownLatch latch = new SweetCountDownLatch(2);
+        SweetCountDownLatch latch = new SweetCountDownLatch(2, logger);
         TimerTask tt = new Task(latch);
         Timer timer = new Timer();
         timer.schedule(tt, 0, 10);

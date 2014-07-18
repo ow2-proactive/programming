@@ -38,19 +38,19 @@ package functionalTests.activeobject;
 
 import java.io.Serializable;
 
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.Sleeper;
-
 import functionalTests.FunctionalTest;
 import functionalTests.TestDisabler;
+import junit.framework.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -87,11 +87,11 @@ public class TestDelayedInitActive extends FunctionalTest {
         }
 
         private void raceConditionHelper() {
-            new Sleeper(100).sleep();
+            new Sleeper(100, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
         }
 
         public void is() {
-            new Sleeper(SLEEP).sleep();
+            new Sleeper(SLEEP, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
         }
     }
 }

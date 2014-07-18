@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.utils;
 
+import org.apache.log4j.Logger;
+
+
 /** A helper class to sleep a given amount of time in one line
  *
  * Calling Thread.sleep() requires a few lines of code to handle InterruptedException.
@@ -49,8 +52,9 @@ public class Sleeper {
 
     /**
      * @param duration the amount of milliseconds to sleep. If 0, {@link #sleep()} returns immediately.
+     * @param logger
      */
-    public Sleeper(long duration) {
+    public Sleeper(long duration, Logger logger) {
         this.duration = duration;
     }
 

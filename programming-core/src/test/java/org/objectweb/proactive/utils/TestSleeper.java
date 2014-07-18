@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.utils;
 
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -45,7 +47,7 @@ public class TestSleeper {
 
     @Test
     public void test() throws InterruptedException {
-        final Sleeper sleeper = new Sleeper(SLEEP_TIME);
+        final Sleeper sleeper = new Sleeper(SLEEP_TIME, ProActiveLogger.getLogger(Loggers.SLEEPER));
         final long[] times = { 0, 0 };
         Thread sleepyThread = new Thread() {
             @Override

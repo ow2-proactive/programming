@@ -47,9 +47,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -59,8 +56,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
@@ -70,7 +67,6 @@ import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataReplyMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
-import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatClientMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
@@ -81,9 +77,9 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequ
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySPI;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
-import org.objectweb.proactive.utils.SafeTimerTask;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -270,7 +266,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 // To have the full stack trace in case something goes really wrong
                 logger.debug("Failed to connect to the PAMR router", e);
                 e.printStackTrace();
-                new Sleeper(delay).sleep();
+                new Sleeper(delay, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
             }
         }
 
@@ -688,7 +684,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         final private AgentID recipient;
 
         private Patient(AgentID agentId, long recipient) {
-            this.latch = new SweetCountDownLatch(1);
+            this.latch = new SweetCountDownLatch(1, logger);
 
             this.requestID = recipient;
             this.recipient = agentId;

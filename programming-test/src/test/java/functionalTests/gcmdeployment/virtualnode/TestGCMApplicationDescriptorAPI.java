@@ -39,18 +39,19 @@ package functionalTests.gcmdeployment.virtualnode;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyImpl;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.gcmdeployment.Topology;
 import org.objectweb.proactive.utils.Sleeper;
-
 import functionalTests.GCMFunctionalTest;
 import functionalTests.gcmdeployment.LocalHelpers;
+import org.junit.Assert;
+import org.junit.Test;
 
 
 public class TestGCMApplicationDescriptorAPI extends GCMFunctionalTest {
@@ -74,7 +75,7 @@ public class TestGCMApplicationDescriptorAPI extends GCMFunctionalTest {
         GCMVirtualNode vn1 = super.gcmad.getVirtualNode("vn1");
         Assert.assertNotNull(vn1);
         while (vn1.getNbCurrentNodes() != 5) {
-            new Sleeper(500).sleep();
+            new Sleeper(500, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
         }
         List<Node> nodes = vn1.getCurrentNodes();
 

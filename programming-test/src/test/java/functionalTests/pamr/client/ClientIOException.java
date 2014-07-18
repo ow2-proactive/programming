@@ -41,6 +41,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
 import org.objectweb.proactive.extensions.pamr.client.MessageHandler;
 import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
@@ -79,11 +81,11 @@ public class ClientIOException extends BlackBox {
         message = new DebugMessage(agentId, 1, DebugType.DEB_DISCONNECT);
         agent.sendMsg(message);
 
-        new Sleeper(1000).sleep();
+        new Sleeper(1000, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
         message = new DebugMessage(agentId, 1, DebugType.DEB_NOOP);
         agent.sendMsg(message);
 
-        new Sleeper(500000).sleep();
+        new Sleeper(500000, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
         System.out.println("toto");
     }
 
