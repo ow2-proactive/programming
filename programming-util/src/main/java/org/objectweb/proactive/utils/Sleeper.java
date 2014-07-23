@@ -49,6 +49,7 @@ import org.apache.log4j.Logger;
  */
 public class Sleeper {
     private long duration;
+    private Logger logger;
 
     /**
      * @param duration the amount of milliseconds to sleep. If 0, {@link #sleep()} returns immediately.
@@ -56,10 +57,11 @@ public class Sleeper {
      */
     public Sleeper(long duration, Logger logger) {
         this.duration = duration;
+        this.logger = logger;
     }
 
     /** Sleep the predefined amount of time.
-     * 
+     *
      * It is safe to call this method several times and from different threads.
      */
     public void sleep() {
@@ -73,7 +75,7 @@ public class Sleeper {
             try {
                 Thread.sleep(timeoutAccounter.getRemainingTimeout());
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.debug("Interrupted while sleeping", e);
             }
         }
     }
