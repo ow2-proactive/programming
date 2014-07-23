@@ -39,8 +39,6 @@ package org.objectweb.proactive.utils;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import junit.framework.Assert;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -131,7 +129,7 @@ public class TestSweetCountDownLatch {
         }
 
         public void run() {
-            new Sleeper(this.sleepms, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
+            new Sleeper(this.sleepms, Logger.getLogger(Sleeper.class.getName())).sleep();
 
             this.waiter.interrupt();
             Thread.yield();

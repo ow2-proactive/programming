@@ -73,8 +73,8 @@ public class PADataserverStarter {
             return;
         }
 
-        SecurityManagerConfigurator.configureSecurityManager(
-          PADataserverStarter.class.getResource("/all-permissions.security.policy").toString());
+        SecurityManagerConfigurator.configureSecurityManager(PADataserverStarter.class.getResource(
+                "/all-permissions.security.policy").toString());
         setupHook();
         startServer();
     }

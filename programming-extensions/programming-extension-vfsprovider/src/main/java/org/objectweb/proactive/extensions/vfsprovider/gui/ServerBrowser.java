@@ -112,8 +112,8 @@ public class ServerBrowser implements ActionListener, WindowListener, KeyEventDi
     public static void main(String[] args) {
         args = JVMPropertiesPreloader.overrideJVMProperties(args);
 
-        SecurityManagerConfigurator.configureSecurityManager(
-          ServerBrowser.class.getResource("/all-permissions.security.policy").toString());
+        SecurityManagerConfigurator.configureSecurityManager(ServerBrowser.class.getResource(
+                "/all-permissions.security.policy").toString());
 
         setLF();
 

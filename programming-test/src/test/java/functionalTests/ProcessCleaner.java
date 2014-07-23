@@ -149,14 +149,14 @@ public class ProcessCleaner {
                 if (osName.contains("mac")) {
                     // Mac OS / Mac Os X
                     pb = new ProcessBuilder(
-                      "/bin/sh",
-                      "-c",
-                      "for PID in $(ps axc|awk \"{if (\\$5==\\\"java\\\") print \\$1}\") ; do ps $PID | grep -q -- '" +
-                        this.pattern.toString() + "' && echo $PID ; done");
+                        "/bin/sh",
+                        "-c",
+                        "for PID in $(ps axc|awk \"{if (\\$5==\\\"java\\\") print \\$1}\") ; do ps $PID | grep -q -- '" +
+                            this.pattern.toString() + "' && echo $PID ; done");
                 } else {
                     // Linux / Unix
                     pb = new ProcessBuilder("/bin/sh", "-c", "for PID in $(pidof java) ; do grep -q -- '" +
-                      this.pattern.toString() + "' /proc/$PID/cmdline && echo $PID ; done");
+                        this.pattern.toString() + "' /proc/$PID/cmdline && echo $PID ; done");
                 }
 
                 pb.redirectErrorStream(true);
@@ -258,7 +258,7 @@ public class ProcessCleaner {
      */
     static private File getJavaBinDir() {
         return new File(System.getProperty("java.home") + File.separatorChar + ".." + File.separatorChar +
-          "bin" + File.separatorChar);
+            "bin" + File.separatorChar);
     }
 
     public static void main(String[] args) throws IOException {

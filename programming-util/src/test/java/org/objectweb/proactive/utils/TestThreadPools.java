@@ -40,8 +40,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -71,7 +69,7 @@ public class TestThreadPools {
             tpe.execute(new Runnable() {
 
                 public void run() {
-                    new Sleeper(10, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
+                    new Sleeper(10, Logger.getLogger(Sleeper.class.getName())).sleep();
                 }
             });
         }
@@ -91,7 +89,7 @@ public class TestThreadPools {
 
                 public void run() {
                     latch.countDown();
-                    new Sleeper(taskLength, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
+                    new Sleeper(taskLength, Logger.getLogger(Sleeper.class.getName())).sleep();
                 }
             });
         }

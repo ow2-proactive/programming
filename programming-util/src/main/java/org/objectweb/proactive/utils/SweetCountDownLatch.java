@@ -51,7 +51,6 @@ import org.apache.log4j.Logger;
  */
 public class SweetCountDownLatch extends CountDownLatch {
 
-
     private Logger logger;
 
     public SweetCountDownLatch(int count, Logger logger) {

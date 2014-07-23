@@ -4,7 +4,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2014 INRIA/University of
+ * Copyright (C) 1997-2013 INRIA/University of
  *                 Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -30,25 +30,43 @@
  *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
- *  * $$PROACTIVE_INITIAL_DEV$$
+ *  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests;
+package org.objectweb.proactive.utils;
 
-import java.security.Policy;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.junit.BeforeClass;
+import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 
-public class ProActiveTest {
-    @BeforeClass
-    static public void setupSecurityManager() {
-        if (System.getProperty("java.security.policy") == null) {
-            System.setProperty("java.security.policy", System.getProperty(CentralPAPropertyRepository.PA_HOME
-                    .getName()) +
-                "/programming-test/src/test/resources/proactive.java.policy");
+/**
+ * TestPrefixPrintWriter
+ *
+ * @author The ProActive Team
+ **/
+public class TestPrefixPrintStream {
 
-            Policy.getPolicy().refresh();
+    @Test
+    public void testPrefixPrintStream() throws IOException {
+        File file = File.createTempFile("TestPrefixPrintStream", "txt");
+        FileOutputStream fos = new FileOutputStream(file);
+        String nl = System.getProperty("line.separator");
+        String expectedResult = "AAABBB1234" + nl + "AAABBB1234" + nl + "AAABBB1234" + nl;
+        PrefixPrintStream pps = new PrefixPrintStream(new PrefixPrintStream(fos, "AAA"), "BBB");
+        for (int i = 0; i < 3; i++) {
+            pps.print("1");
+            pps.print("2");
+            pps.print("3");
+            pps.println("4");
         }
+        pps.flush();
+        pps.close();
+        String output = FileUtils.readFileToString(file);
+        System.out.println(output);
+        Assert.assertEquals(expectedResult, output);
     }
 }
