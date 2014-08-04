@@ -70,7 +70,7 @@ if [ -e "$cmd_path" ]; then
     echo $confirm 1>&2;
 
     # execute it!
-    (exec -a "Kill me $token" "$@")
+    (exec -a "$token" "$@")
 	
 	
     # write return value to the temp file

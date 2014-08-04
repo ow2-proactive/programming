@@ -43,6 +43,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -593,11 +594,24 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         final private Process process;
         final private OSUser user;
         final private String token;
+        final private int pid;
 
         public OSLinuxProcess(Process p, OSUser user, String token) {
             this.process = p;
+            this.pid = getProcessPid(p);
             this.user = user;
             this.token = token;
+        }
+
+        private int getProcessPid(Process process) {
+            try {
+                Field field = process.getClass().getDeclaredField("pid");
+                field.setAccessible(true);
+                return field.getInt(process);
+            } catch (Exception e) { // should not happen, p should be a UNIXProcess
+                logger.error("Could find pid on underlying UNIX process, process tree killing might fail", e);
+                return -1;
+            }
         }
 
         @Override
@@ -606,7 +620,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, ProActiveRuntimeImpl
                         .getProActiveRuntime().getProActiveHome());
                 lpb.command("sh", "-c", "ps h -u " + this.user.getUserName() + " -o pid --sid $(pgrep -f " +
-                    this.token + ") ; ps h -o pid --sid $(pgrep -f Kill\\ me\\ " + this.token +
+                    this.token + ") ; ps h -u " + this.user.getUserName() + " -o pid --sid $(pgrep -f " + this.token +
                     " | xargs ps h -o sid --pid ) | xargs kill -9 ");
                 Process p = lpb.start();
                 p.waitFor();
