@@ -208,7 +208,7 @@ def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.0']
 def vfs2RuntimeDependencies = [
         'commons-net:commons-net:2.2',
         'commons-httpclient:commons-httpclient:3.1',
-        'com.jcraft:jsch:0.1.42',
+        'com.jcraft:jsch:0.1.51',
         'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
         'org.slf4j:slf4j-api:1.6.1']
 
