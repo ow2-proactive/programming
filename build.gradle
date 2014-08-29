@@ -92,9 +92,13 @@ class StubTask extends JavaExec {
     def StubTask() {
         project.configurations { stubClasspath }
         project.dependencies { stubClasspath project.project(':programming-build-utils') }
+        this.dependsOn project.project(':programming-build-utils').jar
+        this.dependsOn project.classes
         project.jar.dependsOn this
+
+        def stubClasspath = (project.configurations.stubClasspath + project.sourceSets.main.runtimeClasspath).files
+        environment  << [CLASSPATH: stubClasspath.join(File.pathSeparator) ]
         setMain('ant.AntStubGenerator$Main')
-        setClasspath((project.configurations.stubClasspath + project.sourceSets.main.runtimeClasspath))
         setArgs([input.toArray()[0], project.sourceSets.main.output.classesDir])
         logging.captureStandardOutput LogLevel.INFO
     }
@@ -115,6 +119,17 @@ project(':programming-util') {
         )
     }
 }
+
+project(':programming-build-utils') {
+    apply plugin: 'groovy'
+    dependencies {
+        compile gradleApi()
+        compile 'commons-cli:commons-cli:1.2'
+        compile "log4j:log4j:1.2.14"
+        compile 'org.jvnet.winp:winp:1.14'
+    }
+}
+
 project(':programming-core') {
 
 
@@ -165,17 +180,6 @@ project(':programming-core') {
     // to get rid of warning about sun internal api usage
     compileJava.options.compilerArgs << '-XDignore.symbol.file'
     compileJava.options.compilerArgs << '-Xlint:unchecked'
-}
-
-project(':programming-build-utils') {
-    apply plugin: 'groovy'
-    dependencies {
-        compile gradleApi()
-        compile 'ant:ant:1.7.0'
-        compile 'commons-cli:commons-cli:1.2'
-        compile "log4j:log4j:1.2.14"
-        compile 'org.jvnet.winp:winp:1.14'
-    }
 }
 
 project('programming-extensions') {

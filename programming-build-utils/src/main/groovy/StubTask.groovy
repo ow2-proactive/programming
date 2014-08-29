@@ -10,9 +10,10 @@ class StubTask extends JavaExec {
     def output = project.fileTree(project.sourceSets.main.output.classesDir.parent)
 
     def StubTask() {
+        this.dependsOn project.classes
         project.jar.dependsOn this
         setMain('ant.AntStubGenerator$Main')
-        setClasspath((project.rootProject.buildscript.configurations.classpath + project.sourceSets.main.runtimeClasspath))
+        environment << [CLASSPATH: (project.rootProject.buildscript.configurations.classpath + project.sourceSets.main.runtimeClasspath).files.join(File.pathSeparator)]
         setArgs([ input.toArray()[0], project.sourceSets.main.output.classesDir])
         logging.captureStandardOutput LogLevel.INFO
     }
