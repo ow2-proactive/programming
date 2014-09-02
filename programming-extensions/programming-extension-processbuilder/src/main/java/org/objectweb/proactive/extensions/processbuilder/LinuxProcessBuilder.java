@@ -620,8 +620,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, ProActiveRuntimeImpl
                         .getProActiveRuntime().getProActiveHome());
                 lpb.command("sh", "-c", "ps h -u " + this.user.getUserName() + " -o pid --sid $(pgrep -f " +
-                    this.token + ") ; ps h -u " + this.user.getUserName() + " -o pid --sid $(pgrep -f " + this.token +
-                    " | xargs ps h -o sid --pid ) | xargs kill -9 ");
+                    this.token + ") ; ps h -u " + this.user.getUserName() + " -o pid --sid $(pgrep -f " +
+                    this.token + " | xargs ps h -o sid --pid ) | xargs kill -9 ");
                 Process p = lpb.start();
                 p.waitFor();
 
