@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs.adapter;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,6 +59,7 @@ import org.objectweb.proactive.extensions.dataspaces.api.FileContent;
 import org.objectweb.proactive.extensions.dataspaces.api.FileSelector;
 import org.objectweb.proactive.extensions.dataspaces.api.FileType;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.DataSpacesException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerImpl;
@@ -562,22 +566,53 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     @Override
-    public DataSpacesFileObject ensureExistingOrSwitch() throws FileSystemException, SpaceNotFoundException {
-        if (this.exists()) {
+    public DataSpacesFileObject ensureExistingOrSwitch(boolean checkWriteProtected)
+            throws FileSystemException, SpaceNotFoundException {
+        if (this.exists() && (!checkWriteProtected || checkIfFileWritable(this))) {
             return this;
         }
-        logger.debug(getRealURI() + " does not exist");
+        logger
+                .debug(getRealURI() + " does not exist" +
+                    (checkWriteProtected ? " or is write protected" : ""));
         for (String newUri : rootFOUriSet) {
             if (!newUri.equals(currentRootFOUri)) {
                 DataSpacesFileObject newdsfo = switchToSpaceRoot(newUri);
-                if (newdsfo.exists()) {
+                if (newdsfo.exists() && (!checkWriteProtected || checkIfFileWritable(newdsfo))) {
                     return newdsfo;
                 }
-                logger.debug(newdsfo.getRealURI() + " does not exist");
+                logger.debug(newdsfo.getRealURI() + " does not exist" +
+                    (checkWriteProtected ? " or is write protected" : ""));
             }
         }
-
         return null;
+    }
+
+    private static boolean checkIfFileWritable(DataSpacesFileObject dsfo) throws FileSystemException {
+        if (!dsfo.isWritable()) {
+            return false;
+        }
+        File file = null;
+        try {
+            file = convertDataSpaceToFileIfPossible(dsfo);
+        } catch (URISyntaxException e) {
+            throw new FileSystemException(e);
+        } catch (DataSpacesException e) {
+            throw new FileSystemException(e);
+        }
+        if (file != null) {
+            return file.canWrite();
+        }
+        return true;
+    }
+
+    private static File convertDataSpaceToFileIfPossible(DataSpacesFileObject fo) throws URISyntaxException,
+            DataSpacesException {
+        URI foUri = new URI(fo.getRealURI());
+        if (foUri.getScheme() == null || foUri.getScheme().equals("file")) {
+            return new File(foUri);
+        } else {
+            return null;
+        }
     }
 
     public List<String> getAllSpaceRootURIs() {

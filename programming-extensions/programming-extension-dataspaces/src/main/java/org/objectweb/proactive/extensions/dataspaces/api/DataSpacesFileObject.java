@@ -146,16 +146,18 @@ public interface DataSpacesFileObject {
     public String getSpaceRootURI();
 
     /**
-     * Ensures that this FileObject exists in the remote DataSpace. If the FileObject doesn't exist then the method will
+     * Ensures that this FileObject exists and is not write-protected in the remote DataSpace. If the FileObject doesn't exist then the method will
      * try to switch to a different space root, until one is found where the FileObject exists. In practice, this method is
      * preferably used when the current space root is under the protocol "file" (which could be declared as accessible even
-     * if the file path doesn't exist)
+     * if the file path doesn't exist or is write protected)
      *
+     * @param checkWriteProtected true if this method must check that the FO is not write-protected
      * @return the current DSFO or a new DSFO with a different space root or null if no root was found where this DSFO exists
      * @throws FileSystemException
      * @throws SpaceNotFoundException
      */
-    public DataSpacesFileObject ensureExistingOrSwitch() throws FileSystemException, SpaceNotFoundException;
+    public DataSpacesFileObject ensureExistingOrSwitch(boolean checkWriteProtected)
+            throws FileSystemException, SpaceNotFoundException;
 
     /**
      * Determines if this file exists.

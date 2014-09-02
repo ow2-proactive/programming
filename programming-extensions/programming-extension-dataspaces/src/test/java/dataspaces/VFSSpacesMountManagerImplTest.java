@@ -117,6 +117,8 @@ public class VFSSpacesMountManagerImplTest {
     private SpacesMountManager manager;
     private SpacesDirectory directory;
     private File spacesDir;
+    private File inputSpaceDir;
+    private File outputSpaceDir;
     private DataSpacesURI inputUri;
     private DataSpacesURI outputUri;
     private DataSpacesURI scratchUri;
@@ -147,7 +149,7 @@ public class VFSSpacesMountManagerImplTest {
         spacesDir = new File(System.getProperty("java.io.tmpdir"), "ProActive SpaceMountManagerTest");
 
         // input space
-        final File inputSpaceDir = new File(spacesDir, "input");
+        inputSpaceDir = new File(spacesDir, "input");
         assertTrue(inputSpaceDir.mkdirs());
         if (serverInput == null) {
             serverInput = new FileSystemServerDeployer("inputserver", inputSpaceDir.toString(), true, true);
@@ -169,7 +171,7 @@ public class VFSSpacesMountManagerImplTest {
         inputUri = inputSpaceInfo.getMountingPoint();
 
         // output space
-        final File outputSpaceDir = new File(spacesDir, "output");
+        outputSpaceDir = new File(spacesDir, "output");
         assertTrue(outputSpaceDir.mkdirs());
 
         if (serverOutput == null) {
@@ -318,9 +320,11 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testEnsureExistingOrSwitch() throws Exception {
         String wrongpath = createWrongFileUri();
+        String writeProtected = createWriteProtectedFile();
 
         ArrayList<String> rootUrisWithWrongFileUri = new ArrayList<String>();
         rootUrisWithWrongFileUri.add(wrongpath);
+        rootUrisWithWrongFileUri.add(writeProtected);
         rootUrisWithWrongFileUri.add(serverOutput.getVFSRootURL());
 
         VFSSpacesMountManagerImpl manager2 = createManagerForEnsureExistingTest(wrongpath);
@@ -333,8 +337,10 @@ public class VFSSpacesMountManagerImplTest {
             rootUrisWithWrongFileUri, wrongpath, manager2);
 
         // switch to existing
-        DataSpacesFileObject newfo = dsFileObjectWithWrongFileUri.ensureExistingOrSwitch();
+        DataSpacesFileObject newfo = dsFileObjectWithWrongFileUri.ensureExistingOrSwitch(true);
+        new File(writeProtected).setWritable(true);
         assertEquals(serverOutput.getVFSRootURL(), newfo.getSpaceRootURI());
+
     }
 
     private String createWrongFileUri() throws org.apache.commons.vfs2.FileSystemException {
@@ -346,6 +352,18 @@ public class VFSSpacesMountManagerImplTest {
             wrongpath = "file:/path/which/does/not/exist";
         }
         return wrongpath;
+    }
+
+    private String createWriteProtectedFile() throws IOException {
+        File write_p = new File(outputSpaceDir, "write_p.txt");
+
+        // we create a file instead of a directory (as setWritable fails on windows for directories)
+        write_p.createNewFile();
+        assertTrue(write_p.setWritable(false));
+
+        assertFalse(write_p.canWrite());
+
+        return write_p.toURI().toURL().toString();
     }
 
     private VFSSpacesMountManagerImpl createManagerForEnsureExistingTest(String wrongpath) throws Exception {
