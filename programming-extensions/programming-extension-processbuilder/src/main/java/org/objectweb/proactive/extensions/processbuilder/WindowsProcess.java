@@ -451,7 +451,8 @@ final class WindowsProcess extends Process {
 
             if (!success) {
                 final String mess = Kernel32Util.formatMessageFromLastErrorCode(createProcessAsUserError);
-                throw new IOException("CreateProcessAsUser error=" + createProcessAsUserError + ", " + mess);
+                throw new IOException("CreateProcessAsUser error=" + createProcessAsUserError + ", " + mess +
+                    " [lpPath=" + lpPath + ", lpCommandLine=" + lpCommandLine + "]");
             }
 
             Kernel32.INSTANCE.CloseHandle(pi.hThread);
