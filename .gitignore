@@ -37,3 +37,4 @@ build/
 
 # /src/Tests/functionalTests/component/conform/membranes/
 /src/Tests/functionalTests/component/conform/membranes/julia.cfg
+/.nb-gradle/private/

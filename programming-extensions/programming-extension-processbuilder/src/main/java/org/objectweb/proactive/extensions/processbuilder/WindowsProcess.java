@@ -369,7 +369,7 @@ final class WindowsProcess extends Process {
             // Fill the security attributes
             final WinBase.SECURITY_ATTRIBUTES sa = new WinBase.SECURITY_ATTRIBUTES();
             sa.lpSecurityDescriptor = null;
-            sa.bInheritHandle = true;// true otherwise streams are not piped		
+            sa.bInheritHandle = true;// true otherwise streams are not piped
             sa.write();
 
             // Create pipes
@@ -495,7 +495,7 @@ final class WindowsProcess extends Process {
             // Fill the security attributes
             final WinBase.SECURITY_ATTRIBUTES sa = new WinBase.SECURITY_ATTRIBUTES();
             sa.lpSecurityDescriptor = null;
-            sa.bInheritHandle = true;// true otherwise streams are not piped		
+            sa.bInheritHandle = true;// true otherwise streams are not piped
             sa.write();
 
             // Create pipes
@@ -649,14 +649,16 @@ final class WindowsProcess extends Process {
                 }
             }
 
-            // Use reflection to invoke "toEnvironmentBlock" method
+            // Use reflection to invoke the static method 
+            // java.lang.ProcessEnvironment.toEnvironmentBlock(Map<String,String> map)
+            // that returns a String
             String block = null;
             try {
                 Class<?> cl = Class.forName("java.lang.ProcessEnvironment");
                 for (final Method method : cl.getDeclaredMethods()) {
                     if ("toEnvironmentBlock".equals(method.getName())) {
                         method.setAccessible(true);
-                        block = (String) method.invoke(overrideEnv);
+                        block = (String) method.invoke(null, overrideEnv);
                         break;
                     }
                 }
@@ -1247,14 +1249,9 @@ final class WindowsProcess extends Process {
 
     public static void testProcessStderr() throws Exception {
         final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        final String location = new File(WindowsProcess.class.getProtectionDomain().getCodeSource()
-                .getLocation().getPath()).getAbsolutePath();
         String s = "test";
         try {
-            p
-                    .start("java.exe -cp " + location + Test2.class.getPackage().getName() +
-                        ".WindowsProcess$Test2");
-
+            p.start("cmd.exe /c echo test 2>&1");
             Thread.sleep(1000);
             final InputStreamReader isr = new InputStreamReader(p.getErrorStream());
             final BufferedReader br = new BufferedReader(isr);
@@ -1407,15 +1404,8 @@ final class WindowsProcess extends Process {
         }
     }
 
-    /** Used by testProcessStderr() */
-    public static class Test2 {
-        public static void main(String[] args) throws Exception {
-            System.err.println("test");
-        }
-    }
-
-    public static final String usr = "toto";
-    public static final String pwd = "toto";
+    public static final String usr = "proactive";
+    public static final String pwd = "Community1.";
 
     public static void main(String[] args) throws Exception {
         try {
