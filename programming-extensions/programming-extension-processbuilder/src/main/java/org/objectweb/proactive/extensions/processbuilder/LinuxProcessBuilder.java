@@ -63,7 +63,7 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 /**
  * Class that extends the {@link OSProcessBuilder} for machines running Linux.<br>
  * It relies on scritps for custom launching of the user command.
- * 
+ *
  * @author The ProActive Team
  * @since ProActive 5.0.0
  */
@@ -107,6 +107,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#command()
      */
+    @Override
     public List<String> command() {
         return this.delegatedPB.command();
     }
@@ -114,6 +115,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#command(java.lang.String[])
      */
+    @Override
     public OSProcessBuilder command(String... command) {
         this.delegatedPB.command(command);
         return this;
@@ -122,6 +124,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#user()
      */
+    @Override
     public OSUser user() {
         return this.user;
     }
@@ -129,6 +132,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#canExecuteAsUser(org.objectweb.proactive.extensions.processbuilder.OSUser)
      */
+    @Override
     public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
         try {
             String[] args = { this.scriptLocation + CHECK_SUDO, user.getUserName(),
@@ -199,6 +203,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#cores()
      */
+    @Override
     public CoreBindingDescriptor cores() {
         return cores;
     }
@@ -206,6 +211,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#isCoreBindingSupported()
      */
+    @Override
     public boolean isCoreBindingSupported() {
         return false;
     }
@@ -213,6 +219,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#getAvaliableCoresDescriptor()
      */
+    @Override
     public CoreBindingDescriptor getAvaliableCoresDescriptor() {
         if (this.cores != null) {
             throw new NotImplementedException("The cores mapping is not yet implemented");
@@ -223,6 +230,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#directory()
      */
+    @Override
     public File directory() {
         return delegatedPB.directory();
     }
@@ -230,6 +238,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#directory(java.io.File)
      */
+    @Override
     public OSProcessBuilder directory(File directory) {
         delegatedPB.directory(directory);
         return this;
@@ -238,6 +247,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#environment()
      */
+    @Override
     public Map<String, String> environment() {
         if (this.user != null) {
             throw new NotImplementedException(
@@ -249,6 +259,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#redirectErrorStream()
      */
+    @Override
     public boolean redirectErrorStream() {
         return delegatedPB.redirectErrorStream();
     }
@@ -256,6 +267,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#redirectErrorStream(booleann)
      */
+    @Override
     public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream) {
         delegatedPB.redirectErrorStream(redirectErrorStream);
         return this;
@@ -264,6 +276,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#start()
      */
+    @Override
     public Process start() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {
         Process p = null;
@@ -295,7 +308,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      * user-setting and resource-setting has been done with success.<br>
      * </p>
      * For further information: {@link ProcessOutputInterpreter} <br>
-     * 
+     *
      * @return Process
      * @throws IOException
      * @throws FatalProcessBuilderException
@@ -395,9 +408,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      * For detailed description of the java-script interface please refer to
      * {@link #waitForUserCommandStart(Process)} method's
      * javadoc.
-     * 
+     *
      * @author The ProActive Team
-     * 
+     *
      */
     private class ProcessOutputInterpreter {
         final static String ERROR_PREFIX = "_OS_PROCESS_LAUNCH_ERROR_";
@@ -513,7 +526,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
          * "full_name_of_exception_class_to_be_raised" {@value #ERROR_CAUSE}
          * "error_message" <br>
          * It is possible to add also a list of trace messages.
-         * 
+         *
          * @param eline The error message which gets interpreted and an exception is created from it
          * @param trace A list of debug messages, which will be added to the exception's description
          * @throws IOException
@@ -591,6 +604,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     }
 
     static class OSLinuxProcess extends Process {
+
+        private static final String PROCESS_TREE_KILLER_LOCATION = "dist/scripts/processbuilder/linux/kill_process_tree.sh";
+
         final private Process process;
         final private OSUser user;
         final private String token;
@@ -617,11 +633,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         @Override
         public void destroy() {
             try {
-                LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, ProActiveRuntimeImpl
-                        .getProActiveRuntime().getProActiveHome());
-                lpb.command("sh", "-c", "ps h -u " + this.user.getUserName() + " -o pid --sid $(pgrep -f " +
-                    this.token + ") ; ps h -u " + this.user.getUserName() + " -o pid --sid $(pgrep -f " +
-                    this.token + " | xargs ps h -o sid --pid ) | xargs kill -9 ");
+                String proActiveHome = ProActiveRuntimeImpl.getProActiveRuntime().getProActiveHome();
+                LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, proActiveHome);
+                String killProcessTreeScript = new File(proActiveHome, PROCESS_TREE_KILLER_LOCATION)
+                        .getAbsolutePath();
+                lpb.command(killProcessTreeScript, this.token);
                 Process p = lpb.start();
                 p.waitFor();
 
