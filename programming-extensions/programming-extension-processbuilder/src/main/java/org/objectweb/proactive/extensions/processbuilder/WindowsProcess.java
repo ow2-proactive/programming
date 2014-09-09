@@ -36,6 +36,23 @@
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
+import com.sun.jna.Library;
+import com.sun.jna.Memory;
+import com.sun.jna.Native;
+import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+import com.sun.jna.platform.win32.Advapi32;
+import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
+import com.sun.jna.platform.win32.Kernel32;
+import com.sun.jna.platform.win32.Kernel32Util;
+import com.sun.jna.platform.win32.WinBase;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinNT.HANDLE;
+import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.win32.W32APIFunctionMapper;
+import com.sun.jna.win32.W32APITypeMapper;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -57,25 +74,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeoutException;
-
-import com.sun.jna.Library;
-import com.sun.jna.Memory;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLong;
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.platform.win32.Advapi32;
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.Kernel32Util;
-import com.sun.jna.platform.win32.WinBase;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
-import com.sun.jna.platform.win32.WinNT.HANDLE;
-import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.win32.W32APIFunctionMapper;
-import com.sun.jna.win32.W32APITypeMapper;
-
 import org.objectweb.proactive.extensions.processbuilder.WindowsProcess.MyKernel32.PROCESSENTRY32;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 
@@ -379,7 +377,12 @@ public final class WindowsProcess extends Process {
             si.hStdInput = this.inRead.getValue();
             si.hStdOutput = this.outWrite.getValue();
             si.hStdError = this.errWrite.getValue();
-            si.lpDesktop = "\0"; // the system tries to create the window station and a default desktop
+            // From doc: If the system is initialized with the empty string, "",
+            // it will either create a new window station and desktop
+            // that you cannot see, or if one has been created by means
+            // of a prior call by using the same access token, the existing
+            // window station and desktop will be used.            
+            si.lpDesktop = "";
             si.wShowWindow = new WinDef.WORD(0); // SW_HIDE
             si.write();
 
@@ -904,7 +907,7 @@ public final class WindowsProcess extends Process {
     public OutputStream getOutputStream() {
         return this.outputStream;
     }
- 
+
     /**
      * Gets the process tree.
      *

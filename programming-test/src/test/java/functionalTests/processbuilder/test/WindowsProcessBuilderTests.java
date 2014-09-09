@@ -70,8 +70,8 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
 
     final static boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");
 
-    static PAOSProcessBuilderFactory factory;
-    static OSUser osUser;
+    private static PAOSProcessBuilderFactory factory;
+    private static OSUser osUser;
 
     @BeforeClass
     static public void setOSRuntime() throws ProActiveException {
@@ -81,30 +81,35 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         assumeNotNull(user, "process builder not tested because OSPB_TEST_USER is not set");
 
         String pass = System.getenv("OSPB_TEST_PASS");
-        Assume.assumeNotNull(pass, "process builder not tested because OSPB_TEST_PASS is not set");
+        assumeNotNull(pass, "process builder not tested because OSPB_TEST_PASS is not set");
 
+        String domain = System.getenv("USERDOMAIN");
         osUser = new OSUser(user, pass);
-        osUser.setDomain(".");
+        osUser.setDomain(domain);
 
         factory = new PAOSProcessBuilderFactory();
+    }
+
+    private void checkIsRunningOrFail(Process p) {
+        try {
+            int exitValue = p.exitValue();
+            fail("When a process is running the exitValue() must throw an exception but it returns " +
+                exitValue);
+        } catch (IllegalThreadStateException e) {
+            //ok the process is still running
+        }
     }
 
     @org.junit.Test
     public void testProcessWaitForInterrupt() throws Exception {
         OSProcessBuilder builder = factory.getBuilder(osUser);
-        builder.command("notepad.exe");
+        builder.command("cmd.exe");
 
         final ExecutorService exec = Executors.newSingleThreadExecutor();
         final Process p = builder.start();
         try {
-            // Let the worker thread start the process            
-            try {
-                int exitValue = p.exitValue();
-                fail("When a process is running the exitValue() must throw an exception but it returns " +
-                    exitValue);
-            } catch (IllegalThreadStateException e) {
-                //ok the process is still running
-            }
+            checkIsRunningOrFail(p);
+            // Let the worker thread start the process   
             final AtomicReference<Thread> waitingThreadRef = new AtomicReference<Thread>();
             Future<Boolean> f = exec.submit(new Callable<Boolean>() {
                 @Override
@@ -152,20 +157,13 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
     @org.junit.Test
     public void testProcessWaitFor() throws Exception {
         OSProcessBuilder builder = factory.getBuilder(osUser);
-        builder.command("notepad.exe");
+        builder.command("cmd.exe");
 
         final ExecutorService exec = Executors.newSingleThreadExecutor();
         final Process p = builder.start();
         try {
-            // Let the worker thread start the process            
-            try {
-                int exitValue = p.exitValue();
-                fail("When a process is running the exitValue() must throw an exception but it returns " +
-                    exitValue);
-            } catch (IllegalThreadStateException e) {
-                //ok the process is still running
-            }
-
+            checkIsRunningOrFail(p);
+            // Let the worker thread start the process
             final Future<Integer> f = exec.submit(new Callable<Integer>() {
                 @Override
                 public Integer call() throws Exception {
@@ -193,11 +191,11 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
     @org.junit.Test
     public void testProcessKillChildren() throws Exception {
         OSProcessBuilder builder = factory.getBuilder(osUser);
-        builder.command("cmd.exe", "/c", "notepad.exe");
+        builder.command("cmd.exe", "/c", "cmd.exe");
         final Process p = builder.start();
         List<Integer> li;
         try {
-            Thread.sleep(1000);
+            checkIsRunningOrFail(p);
             li = WindowsProcess.getProcessTree(((WindowsProcess) p));
             if (li.size() != 2) {
                 fail("PROBLEM: could not perform test, the process tree is incomplete, tree size is " +
@@ -237,6 +235,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         builder.command("cmd.exe", "/c", "echo " + s);
         Process p = builder.start();
         try {
+            checkIsRunningOrFail(p);
             InputStreamReader isr = new InputStreamReader(p.getInputStream());
             BufferedReader br = new BufferedReader(isr);
             String line;
@@ -259,6 +258,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         String s = "test";
         Process p = builder.start();
         try {
+            checkIsRunningOrFail(p);
             final InputStreamReader isr = new InputStreamReader(p.getErrorStream());
             final BufferedReader br = new BufferedReader(isr);
             String line;
@@ -284,7 +284,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
     @Test(expected = OSUserException.class)
     public void testProcessLogonError() throws Exception {
         OSUser u = new OSUser("badlogin", "badpass");
-        u.setDomain(".");
+        u.setDomain(System.getenv("USERDOMAIN"));
         OSProcessBuilder builder = factory.getBuilder(u);
         builder.command("notepad.exe");
         builder.start();
@@ -296,6 +296,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         builder.command("cmd.exe", "/c", "echo %USERNAME%");
         Process p = builder.start();
         try {
+            checkIsRunningOrFail(p);
             InputStreamReader isr = new InputStreamReader(p.getInputStream());
             BufferedReader br = new BufferedReader(isr);
             String line;
@@ -320,6 +321,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         builder.command("cmd.exe", "/c", "echo %TEST_ENV_VAR%");
         Process p = builder.start();
         try {
+            checkIsRunningOrFail(p);
             final InputStreamReader isr = new InputStreamReader(p.getInputStream());
             final BufferedReader br = new BufferedReader(isr);
             String line;
@@ -341,6 +343,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         builder.command("cmd.exe", "/c", "IF \"%CD%\"==\"%USERPROFILE%\" (echo ok) ELSE (echo %CD%)");
         Process p = builder.start();
         try {
+            checkIsRunningOrFail(p);
             final InputStreamReader isr = new InputStreamReader(p.getInputStream());
             final BufferedReader br = new BufferedReader(isr);
             String line;
@@ -368,6 +371,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         builder.command("cmd.exe", "/c", "IF \"%CD%\"==\"" + currentTemp + "\" (echo ok) ELSE (echo %CD%)");
         Process p = builder.start();
         try {
+            checkIsRunningOrFail(p);
             final InputStreamReader isr = new InputStreamReader(p.getInputStream());
             final BufferedReader br = new BufferedReader(isr);
             String line;
