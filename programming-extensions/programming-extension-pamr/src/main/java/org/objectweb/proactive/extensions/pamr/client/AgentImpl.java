@@ -265,7 +265,6 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
                 // To have the full stack trace in case something goes really wrong
                 logger.debug("Failed to connect to the PAMR router", e);
-                e.printStackTrace();
                 new Sleeper(delay, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
             }
         }
