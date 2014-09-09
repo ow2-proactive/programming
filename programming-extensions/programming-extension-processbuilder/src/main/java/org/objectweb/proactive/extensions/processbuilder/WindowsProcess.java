@@ -56,11 +56,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
 import com.sun.jna.Library;
@@ -105,7 +100,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * For more information see http://support.microsoft.com/default.aspx?scid=kb;en-us;824422
  * and http://blogs.msdn.com/b/ntdebugging/archive/2007/01/04/desktop-heap-overview.aspx
  */
-final class WindowsProcess extends Process {
+public final class WindowsProcess extends Process {
 
     static interface Options {
         final Map<String, Object> UNICODE_OPTIONS = new HashMap<String, Object>() {
@@ -685,6 +680,7 @@ final class WindowsProcess extends Process {
      *             thread while it is waiting, then the wait is ended and
      *             an {@link InterruptedException} is thrown.
      */
+    @Override
     public int waitFor() throws InterruptedException {
         while (true) {
             this.internalWaitFor(1000);
@@ -752,6 +748,7 @@ final class WindowsProcess extends Process {
      * @exception  IllegalThreadStateException  if the subprocess represented 
      *             by this <code>WindowsProcess</code> object has not yet terminated.
      */
+    @Override
     public int exitValue() {
         final IntByReference exitCodeRef = new IntByReference();
         // Retrieves the termination status of the specified process		
@@ -789,6 +786,7 @@ final class WindowsProcess extends Process {
      * Kills the subprocess. The subprocess represented by this object is
      * forcibly terminated.
      */
+    @Override
     public void destroy() {
         if (this.destroyed) {
             return;
@@ -892,16 +890,29 @@ final class WindowsProcess extends Process {
         }
     }
 
+    @Override
     public InputStream getInputStream() {
         return this.inputStream;
     }
 
+    @Override
     public InputStream getErrorStream() {
         return this.errorStream;
     }
 
+    @Override
     public OutputStream getOutputStream() {
         return this.outputStream;
+    }
+ 
+    /**
+     * Gets the process tree.
+     *
+     * @param process the process to get the tree
+     * @return the process tree
+     */
+    public static List<Integer> getProcessTree(final WindowsProcess process) {
+        return getProcessTree(process.pid);
     }
 
     /**
@@ -1022,415 +1033,12 @@ final class WindowsProcess extends Process {
 
     /**
      * Safely closes a handle.
-     * @param ref handle by reference
+     * @param ref handle by referencef
      */
     private static void closeSafely(final HANDLEByReference ref) {
         final HANDLE handle = ref.getValue();
         if (handle != null) {
             Kernel32.INSTANCE.CloseHandle(handle);
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static void testProcessWaitForInterrupt() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-
-        final Thread[] arr = new Thread[1];
-
-        final ExecutorService exec = Executors.newFixedThreadPool(1);
-        try {
-            final Future<Integer> f = exec.submit(new Callable<Integer>() {
-                public Integer call() throws Exception {
-                    arr[0] = Thread.currentThread();
-                    p.start("notepad.exe");
-
-                    return p.waitFor();
-                }
-            });
-
-            // Let the worker thread start the process
-            Thread.sleep(1000);
-            if (!p.isRunning()) {
-                throw new RuntimeException("Problem the process has bee killed from outside");
-            }
-            // Then interrupt the thread and make sur an interrupted exception has been thrown
-            arr[0].interrupt();
-            // Let the thread interrupt the waitFor
-            Thread.sleep(1000);
-            try {
-                System.out.println("WindowsProcess.testProcessWaitForInterrupt()" + f.get());
-            } catch (ExecutionException e) {
-                if (e.getCause() instanceof InterruptedException) {
-                    // ok
-                    System.out.println("testProcessWaitForInterrupt() - ok");
-                } else {
-                    throw new RuntimeException("Unexpected exception");
-                }
-            }
-        } finally {
-            exec.shutdown();
-            p.destroy();
-            p.close();
-        }
-    }
-
-    /** Start notepad.exe as subprocess in a separate thread then kills it
-     *  the waitFor method */
-    public static void testProcessWaitFor() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        final ExecutorService exec = Executors.newFixedThreadPool(1);
-        try {
-            final Future<Integer> f = exec.submit(new Callable<Integer>() {
-                public Integer call() throws Exception {
-                    p.start("notepad.exe");
-
-                    return p.waitFor();
-                }
-            });
-
-            // Let the worker thread start the process
-            Thread.sleep(1000);
-            if (!p.isRunning()) {
-                throw new RuntimeException("Problem the process has bee killed from outside exitValue=" +
-                    p.exitValue());
-            }
-            // Then destroy the process and make sure the exit value is 1
-            p.destroy();
-            if (f.get() != 1) {
-                throw new RuntimeException("Problem the exit code is incorrect (must be 1)");
-            }
-            System.out.println("testProcessWaitFor() - ok");
-        } finally {
-            exec.shutdown();
-            p.close();
-        }
-    }
-
-    public static void testProcessWaitForTimeout() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        try {
-            p.start("cmd.exe /k \"set > c:\\Temp\\test.txt\"");
-
-            if (!p.isRunning()) {
-                throw new RuntimeException(
-                    "PROBLEM: Unable to run test: the sub-process has been killed just after its creation exitValue=" +
-                        p.exitValue());
-            }
-
-            long timeout = 1000;
-            long s = System.currentTimeMillis();
-
-            try {
-                p.waitFor(timeout);
-            } catch (TimeoutException e) {
-                // OK ...
-            }
-
-            long res = (System.currentTimeMillis() - s);
-
-            if (res < timeout) {
-                if (p.isRunning()) {
-                    throw new RuntimeException("PROBLEM: WindowsProcess.waitFor(timeout) failed");
-                } else {
-                    throw new RuntimeException(
-                        "PROBLEM: Unable to run test: the proces has been killed, process exitCode=" +
-                            p.exitValue());
-                }
-            }
-            System.out.println("testProcessWaitForTimeout() - ok");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (p.isRunning()) {
-                    p.destroy();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            p.close();
-        }
-    }
-
-    public static void testProcessNotExited() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        try {
-            p.start("notepad.exe");
-
-            p.exitValue();
-        } catch (IllegalThreadStateException e) {
-            System.out.println("testProcessNotExited() - ok");
-        } catch (Exception e) {
-            throw new RuntimeException("PROBLEM: cannot get the exit value of process");
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    /** 
-     * This test creates a cmd.exe process (father) then the father creates a child
-     * java process that waits 15 seconds.
-     * The father is destroyed (it must kill also the child) then if the child pid appears
-     * in the list of java processes listed by jps tool then the test fails.  
-     */
-    public static void testProcessKillChildren() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        final String location = new File(WindowsProcess.class.getProtectionDomain().getCodeSource()
-                .getLocation().getPath()).getAbsolutePath();
-        List<Integer> li;
-        try {
-            p.start("cmd.exe /c java.exe -cp " + location + " " + Test.class.getPackage().getName() +
-                ".WindowsProcess$Test");
-
-            Thread.sleep(1000);
-
-            li = getProcessTree(p.pid);
-
-            if (li.size() != 2) {
-                throw new RuntimeException(
-                    "PROBLEM: could not perform test, the process tree is incomplete, tree size is " +
-                        li.size());
-            }
-            if (li.get(1) != p.pid) {
-                throw new RuntimeException("PROBLEM: getProcessTree() seems broken");
-            }
-
-        } finally {
-            p.destroy();
-            p.close();
-        }
-
-        // Now the first process (father) is terminated then we need to be sure that the child is alse
-        // dead, for this we run the jps tool to be sure the child pid does not appear
-
-        final Process pp = Runtime.getRuntime().exec("jps.exe");
-        final String childPid = "" + li.get(0);
-
-        // Use jps tool to list the java processes
-        try {
-            final InputStreamReader isr = new InputStreamReader(pp.getInputStream());
-            final BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (childPid.equals(line)) {
-                    throw new RuntimeException(
-                        "PROBLEM: The child process was not killed, tree kill seems broken");
-                }
-            }
-
-            System.out.println("testProcessKillChildren() - ok");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void testProcessStdout() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        final String s = "test";
-        try {
-            p.start("cmd.exe /c echo " + s);
-
-            Thread.sleep(1000);
-            final InputStreamReader isr = new InputStreamReader(p.getInputStream());
-            final BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!s.equals(line)) {
-                    throw new RuntimeException("PROBLEM: not same echo value = " + line);
-                }
-            }
-            System.out.println("testProcessStdout() - ok");
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    public static void testProcessStderr() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        String s = "test";
-        try {
-            p.start("cmd.exe /c echo test 2>&1");
-            Thread.sleep(1000);
-            final InputStreamReader isr = new InputStreamReader(p.getErrorStream());
-            final BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!s.equals(line)) {
-                    throw new RuntimeException("PROBLEM: not same echo value = " + line);
-                }
-            }
-            System.out.println("testProcessStderr() - ok");
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    public static void testProcessFileNotFound() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        try {
-            p.start("notepadd.exe");
-        } catch (IOException e) {
-            System.out.println("testProcessFileNotFound() - ok");
-        } catch (Exception e) {
-            throw new RuntimeException("PROBLEM: Unexpected exception " + e, e);
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    public static void testProcessLogonError() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", "null", "null");
-        try {
-            p.start("notepad.exe");
-        } catch (OSUserException e) {
-            System.out.println("testProcessLogonError() - ok");
-        } catch (Exception e) {
-            throw new RuntimeException("PROBLEM: Unexpected exception " + e, e);
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    public static void testProcessEnv() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        try {
-            p.start("cmd.exe /c echo %USERNAME%");
-            Thread.sleep(1000);
-            final InputStreamReader isr = new InputStreamReader(p.getInputStream());
-            final BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!usr.equals(line)) {
-                    throw new RuntimeException(
-                        "PROBLEM: Unable to load the user env, the  WindowsProcess.internalGetUserEnv() seems broken");
-                }
-            }
-            System.out.println("testProcessEnv() - ok");
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    public static void testProcessOverrideEnv() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        try {
-            ProcessBuilder builder = new ProcessBuilder();
-            Map<String, String> overrideEnv = builder.environment();
-            overrideEnv.clear();
-
-            final String valueToCheck = "tralalaasdf";
-
-            // Try to override USERNAME
-            overrideEnv.put("USERNAME", valueToCheck);
-
-            p.start(new String[] { "cmd.exe", "/c", "echo", "%USERNAME%" }, overrideEnv, null);
-            Thread.sleep(1000);
-            final InputStreamReader isr = new InputStreamReader(p.getInputStream());
-            final BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!valueToCheck.equals(line)) {
-                    throw new RuntimeException(
-                        "PROBLEM: Unable to override the process env, the WindowsProcess.internalGetUserEnv() seems broken");
-                }
-            }
-            System.out.println("testProcessOverrideEnv() - ok");
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    public static void testProcessDefaultWorkingDir() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-        try {
-            p.start("cmd.exe /c IF \"%CD%\"==\"%USERPROFILE%\" (echo ok) ELSE (echo %CD%)");
-            Thread.sleep(1000);
-            final InputStreamReader isr = new InputStreamReader(p.getInputStream());
-            final BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!"ok".equals(line)) {
-                    throw new RuntimeException(
-                        "PROBLEM: The default working dir is not the user profile dir, %CD% is " + line);
-                }
-            }
-            System.out.println("testProcessDefaultWorkingDir() - ok");
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    public static void testProcessOverrideWorkingDir() throws Exception {
-        final WindowsProcess p = new WindowsProcess(".", usr, pwd);
-
-        final String currentTemp = System.getenv("ALLUSERSPROFILE");
-        if (currentTemp == null) {
-            // cannot execute the test
-            return;
-        }
-
-        try {
-            p.start("cmd.exe /c IF \"%CD%\"==\"" + currentTemp + "\" (echo ok) ELSE (echo %CD%)", null,
-                    currentTemp);
-            Thread.sleep(1000);
-            final InputStreamReader isr = new InputStreamReader(p.getInputStream());
-            final BufferedReader br = new BufferedReader(isr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!"ok".equals(line)) {
-                    throw new RuntimeException(
-                        "PROBLEM: The default working dir is not the specified dir, %CD% is " + line);
-                }
-            }
-            System.out.println("testProcessOverrideWorkingDir() - ok");
-        } finally {
-            p.destroy();
-            p.close();
-        }
-    }
-
-    /** Used by testProcessKillChildren() */
-    public static class Test {
-        public static void main(String[] args) throws Exception {
-            Thread.sleep(15000);
-        }
-    }
-
-    public static final String usr = "proactive";
-    public static final String pwd = "Community1.";
-
-    public static void main(String[] args) throws Exception {
-        try {
-            int i = 0;
-            while (i++ < 3) {
-                testProcessLogonError();
-                testProcessFileNotFound();
-                testProcessEnv();
-                testProcessOverrideEnv();
-                testProcessDefaultWorkingDir();
-                testProcessOverrideWorkingDir();
-                testProcessWaitFor();
-                testProcessWaitForInterrupt();
-                testProcessWaitForTimeout();
-                testProcessNotExited();
-                testProcessKillChildren();
-                testProcessStdout();
-                testProcessStderr();
-                System.out.println("WindowsProcess.main() -->  finished " + i);
-                // Thread.sleep(2000);
-            }
-        } catch (Exception e) {
-            System.out.println("WindowsProcess.main() ---> problem");
-            e.printStackTrace();
         }
     }
 }
