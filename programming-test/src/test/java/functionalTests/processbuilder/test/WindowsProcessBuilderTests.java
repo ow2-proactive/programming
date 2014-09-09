@@ -77,10 +77,10 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
     static public void setOSRuntime() throws ProActiveException {
         assumeTrue(isWindows); // run only on windows
 
-        String user = "Administrator";//System.getenv("OSPB_TEST_USER");
+        String user = System.getenv("OSPB_TEST_USER");
         assumeNotNull(user, "process builder not tested because OSPB_TEST_USER is not set");
 
-        String pass = "actvbn;3";//System.getenv("OSPB_TEST_PASS");
+        String pass = System.getenv("OSPB_TEST_PASS");
         Assume.assumeNotNull(pass, "process builder not tested because OSPB_TEST_PASS is not set");
 
         osUser = new OSUser(user, pass);
