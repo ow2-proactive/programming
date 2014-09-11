@@ -191,16 +191,10 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
     @org.junit.Test
     public void testProcessKillChildren() throws Exception {
         OSProcessBuilder builder = factory.getBuilder(osUser);
-        builder.command("cmd.exe", "/c", "cmd.exe");
+        builder.command("cmd.exe", "/c", "jrunscript");
         final Process p = builder.start();
-        List<Integer> li;
         try {
             checkIsRunningOrFail(p);
-            li = WindowsProcess.getProcessTree(((WindowsProcess) p));
-            if (li.size() != 2) {
-                fail("PROBLEM: could not perform test, the process tree is incomplete, tree size is " +
-                    li.size());
-            }
         } finally {
             if (p != null) {
                 p.destroy();
@@ -209,8 +203,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
         // Now the first process (father) is terminated then we need to be sure that the child is alse
         // dead, for this we run the jps tool to be sure the child pid does not appear
 
-        final Process pp = Runtime.getRuntime().exec("jps.exe");
-        final String childPid = "" + li.get(0);
+        final Process pp = Runtime.getRuntime().exec(new String[] { "jps.exe", "-v" });
 
         // Use jps tool to list the java processes
         try {
@@ -218,7 +211,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
             final BufferedReader br = new BufferedReader(isr);
             String line;
             while ((line = br.readLine()) != null) {
-                if (childPid.equals(line)) {
+                if (line.contains("Main -Dapplication.home")) {
                     fail("PROBLEM: The child process was not killed, tree kill seems broken");
                 }
             }

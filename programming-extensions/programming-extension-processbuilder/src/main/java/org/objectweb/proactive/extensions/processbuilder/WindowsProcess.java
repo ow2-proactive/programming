@@ -910,21 +910,12 @@ public final class WindowsProcess extends Process {
 
     /**
      * Gets the process tree.
-     *
-     * @param process the process to get the tree
-     * @return the process tree
-     */
-    public static List<Integer> getProcessTree(final WindowsProcess process) {
-        return getProcessTree(process.pid);
-    }
-
-    /**
-     * Gets the process tree.
+     * !! This method cannot work without impersonation !!
      * 
      * @param pid the pid
      * @return the process tree
      */
-    public static List<Integer> getProcessTree(final int pid) {
+    private static List<Integer> getProcessTree(final int pid) {
 
         final List<Integer> pids = new ArrayList<Integer>();
         pids.add(new Integer(pid));
