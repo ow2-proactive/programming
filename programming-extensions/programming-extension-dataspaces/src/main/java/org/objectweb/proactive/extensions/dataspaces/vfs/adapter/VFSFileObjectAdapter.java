@@ -37,6 +37,7 @@
 package org.objectweb.proactive.extensions.dataspaces.vfs.adapter;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -600,7 +601,19 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
             throw new FileSystemException(e);
         }
         if (file != null) {
-            return file.canWrite();
+            boolean answer = file.canWrite();
+            if (!answer) {
+                return false;
+            }
+            // in some cases the canWrite method is not accurate, we try to create a file to check real write permission
+            File tryFile = new File(file, "testWrite.ack");
+            try {
+                tryFile.createNewFile();
+            } catch (IOException e) {
+                return false;
+            }
+            tryFile.delete();
+            return true;
         }
         return true;
     }
