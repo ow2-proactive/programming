@@ -477,14 +477,14 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
             String iline;
 
             while ((eline = bereader.readLine()) != null &&
-                !(eline.trim().startsWith(OK_MESSAGE) || eline.trim().startsWith(ERROR_PREFIX))) {
+                !(eline.trim().indexOf(OK_MESSAGE) != -1 || eline.trim().startsWith(ERROR_PREFIX))) {
                 // read it so we do not pollute output of user
                 if (logger.isDebugEnabled()) {
                     logger.debug("Token:" + token + " script stderr: " + eline);
                 }
             }
-            if (eline != null && eline.trim().startsWith(OK_MESSAGE)) {
-                while ((iline = bireader.readLine()) != null && !iline.trim().startsWith(OK_MESSAGE)) {
+            if (eline != null && eline.trim().indexOf(OK_MESSAGE) != -1) {
+                while ((iline = bireader.readLine()) != null && iline.trim().indexOf(OK_MESSAGE) == -1) {
                     // read this also - so user will not get any output of our
                     // scripts
 
