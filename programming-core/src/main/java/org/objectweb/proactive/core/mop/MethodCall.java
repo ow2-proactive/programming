@@ -46,7 +46,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 import org.objectweb.proactive.core.mop.MethodCallInfo.SynchronousReason;
@@ -54,6 +53,7 @@ import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
 import org.objectweb.proactive.core.util.converter.ProActiveByteToObjectConverter;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -354,7 +354,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
         } catch (IllegalAccessException e) {
             throw new MethodCallExecutionFailedException("Access rights to the method denied: " + e);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             throw new MethodCallExecutionFailedException("Arguments for the method " + this.getName() +
                 " are invalids: " + e + "for the object " + targetObject + "(" +
                 targetObject.getClass().getName() + ")", e);
