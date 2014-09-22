@@ -46,6 +46,8 @@ import org.objectweb.proactive.core.ProActiveException;
  */
 public class NotBoundException extends ProActiveException {
 
+    private static final long serialVersionUID = 60L;
+
     public NotBoundException() {
         super();
     }

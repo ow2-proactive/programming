@@ -41,6 +41,8 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 
 public class RuntimeRegistrationEventProducerImpl extends AbstractEventProducer implements
         RuntimeRegistrationEventProducer {
+
+    private static final long serialVersionUID = 60L;
     //
     //-------------------implements RuntimeRegistrationEventProducer------------------
     //

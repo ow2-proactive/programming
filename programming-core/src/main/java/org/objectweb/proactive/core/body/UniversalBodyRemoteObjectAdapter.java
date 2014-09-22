@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 
 public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> implements UniversalBody {
 
+    private static final long serialVersionUID = 60L;
+
     /**
      * Cache the ID of the Body locally for speed
      */

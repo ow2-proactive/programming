@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.node.Node;
  *
  */
 public class NodeCreationEvent extends ProActiveEvent {
+
+    private static final long serialVersionUID = 60L;
     public static final int NODE_CREATED = 10;
     protected Node node;
     protected VirtualNodeInternal vn;

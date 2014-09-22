@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.body.tags.MessageTags;
 
 
 public class SynchronousReplyImpl implements Reply, Serializable {
+
+    private static final long serialVersionUID = 60L;
     protected MethodCallResult reply;
 
     public SynchronousReplyImpl() {

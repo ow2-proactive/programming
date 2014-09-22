@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.jmx.naming.FactoryName;
  */
 public class RuntimeNotificationData implements Serializable {
 
+    private static final long serialVersionUID = 60L;
+
     /** The name of the creator of the registered ProActiveRuntime */
     private String creatorID;
 

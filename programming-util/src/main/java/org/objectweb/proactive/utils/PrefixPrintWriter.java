@@ -240,6 +240,8 @@ public class PrefixPrintWriter extends PrintWriter {
 
     private class LineBeginBoolean extends MutableBoolean {
 
+    private static final long serialVersionUID = 60L;
+
         public LineBeginBoolean() {
             super(true);
         }

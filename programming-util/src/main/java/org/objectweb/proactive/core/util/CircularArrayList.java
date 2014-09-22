@@ -52,6 +52,8 @@ package org.objectweb.proactive.core.util;
 
 public class CircularArrayList<E> extends java.util.AbstractList<E> implements java.util.List<E>,
         java.io.Serializable {
+
+    private static final long serialVersionUID = 60L;
     private static final int DEFAULT_SIZE = 5;
     protected E[] array;
 

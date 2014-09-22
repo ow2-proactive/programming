@@ -56,6 +56,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @XmlRootElement
 public class IntWrapper implements Serializable {
 
+    private static final long serialVersionUID = 60L;
+
     /**
      * The primitive value.
      */

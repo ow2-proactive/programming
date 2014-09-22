@@ -79,6 +79,8 @@ import org.objectweb.proactive.extensions.amqp.AMQPConfig;
  *
  */
 public abstract class AbstractAMQPRemoteObject implements RemoteRemoteObject, Serializable {
+
+    private static final long serialVersionUID = 60L;
     final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT);
 
     private final String rpcExchangeName;
