@@ -44,9 +44,6 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Locale;
 
-import org.apache.commons.lang3.mutable.MutableBoolean;
-
-
 /**
  * PrefixPrintWriter this PrintWriter adds a prefix to every line printed.
  * PrefixPrintWriters can be chained to have for example several levels of indentation
@@ -55,9 +52,9 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
  **/
 public class PrefixPrintWriter extends PrintWriter {
 
-    String prefix;
+    private final String prefix;
 
-    LineBeginBoolean lineBegin = new LineBeginBoolean();
+    private final LinePosition linePosition = new LinePosition();
 
     String lineSeparator = System.getProperty("line.separator");
 
@@ -87,7 +84,7 @@ public class PrefixPrintWriter extends PrintWriter {
     }
 
     public PrefixPrintWriter(String fileName, String prefix, String csn) throws FileNotFoundException,
-            UnsupportedEncodingException {
+    UnsupportedEncodingException {
         super(fileName, csn);
         this.prefix = prefix;
     }
@@ -106,61 +103,61 @@ public class PrefixPrintWriter extends PrintWriter {
     @Override
     public void println() {
         super.println();
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(boolean x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(char x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(int x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(long x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(float x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(double x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(char[] x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(String x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(Object x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
@@ -192,7 +189,7 @@ public class PrefixPrintWriter extends PrintWriter {
         maybePrintPrefix();
         super.write(s);
         if (s.contains(lineSeparator)) {
-            lineBegin.reset();
+            linePosition.reset();
         }
     }
 
@@ -223,7 +220,7 @@ public class PrefixPrintWriter extends PrintWriter {
     }
 
     private void maybePrintPrefix() {
-        if (lineBegin.booleanValue()) {
+        if (linePosition.atStart()) {
             try {
                 synchronized (lock) {
                     ensureOpen();
@@ -234,22 +231,7 @@ public class PrefixPrintWriter extends PrintWriter {
             } catch (IOException e) {
                 setError();
             }
-            lineBegin.update();
-        }
-    }
-
-    private class LineBeginBoolean extends MutableBoolean {
-
-        public LineBeginBoolean() {
-            super(true);
-        }
-
-        public void update() {
-            setValue(false);
-        }
-
-        public void reset() {
-            setValue(true);
+            linePosition.update();
         }
     }
 }

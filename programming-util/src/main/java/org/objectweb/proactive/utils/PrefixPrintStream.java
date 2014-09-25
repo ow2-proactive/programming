@@ -40,9 +40,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Locale;
 
-import org.apache.commons.lang3.mutable.MutableBoolean;
-
-
 /**
  * PrefixPrintStream this PrintStream adds a prefix to every line printed.
  * PrefixPrintStreams can be chained to have for example several levels of indentation
@@ -52,11 +49,9 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
  **/
 public class PrefixPrintStream extends PrintStream {
 
-    String prefix;
+    private final String prefix;
 
-    LineBeginBoolean lineBegin = new LineBeginBoolean();
-
-    boolean isPrintln = false;
+    private final LinePosition linePosition = new LinePosition();
 
     String lineSeparator = System.getProperty("line.separator");
 
@@ -68,61 +63,61 @@ public class PrefixPrintStream extends PrintStream {
     @Override
     public void println() {
         super.println();
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(boolean x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(char x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(int x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(long x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(float x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(double x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(char[] x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(String x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
     public void println(Object x) {
         super.println(x);
-        lineBegin.reset();
+        linePosition.reset();
     }
 
     @Override
@@ -137,12 +132,13 @@ public class PrefixPrintStream extends PrintStream {
             boolean isNewLine = false;
             for (StackTraceElement elem : Thread.currentThread().getStackTrace()) {
                 if (elem.getClassName().equals(PrintStream.class.getName()) &&
-                    elem.getMethodName().equals("newLine")) {
+                        elem.getMethodName().equals("newLine")) {
                     isNewLine = true;
+                    break;
                 }
             }
             if (isNewLine) {
-                lineBegin.reset();
+                linePosition.reset();
             }
         }
 
@@ -170,7 +166,7 @@ public class PrefixPrintStream extends PrintStream {
         maybePrintPrefix();
         write(s.getBytes());
         if (s.contains(lineSeparator)) {
-            lineBegin.reset();
+            linePosition.reset();
         }
     }
 
@@ -201,7 +197,7 @@ public class PrefixPrintStream extends PrintStream {
     }
 
     private void maybePrintPrefix() {
-        if (lineBegin.booleanValue()) {
+        if (linePosition.atStart()) {
             try {
                 synchronized (this) {
                     ensureOpen();
@@ -212,22 +208,7 @@ public class PrefixPrintStream extends PrintStream {
             } catch (IOException e) {
                 setError();
             }
-            lineBegin.update();
-        }
-    }
-
-    private class LineBeginBoolean extends MutableBoolean {
-
-        public LineBeginBoolean() {
-            super(true);
-        }
-
-        public void update() {
-            setValue(false);
-        }
-
-        public void reset() {
-            setValue(true);
+            linePosition.update();
         }
     }
 }
