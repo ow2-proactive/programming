@@ -38,7 +38,6 @@ package org.objectweb.proactive.core.body;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.net.UnknownHostException;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.ProActiveException;
@@ -93,19 +92,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
      * class name of the reified object associated with this body
      */
     protected String reifiedObjectClassName;
-
-    /**
-     * host who stores this universal body
-     */
-    protected static String HOSTNAME = "localhost";
-
-    static {
-        try {
-            HOSTNAME = java.net.InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
 
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
