@@ -78,12 +78,13 @@ public class TestVFSProviderMultiProtocol extends FunctionalTest {
 
     static File SERVER_PATH = new File(System.getProperty("java.io.tmpdir"), "data server");
 
-    static {
+    @BeforeClass
+    static public void prepareForTest() throws Exception {
         ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
         ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
         PAMRConfig.PA_NET_ROUTER_PORT.setValue(0);
-
+        FunctionalTest.prepareForTest();
     }
 
     private static DefaultFileSystemManager fileSystemManager;

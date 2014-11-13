@@ -43,14 +43,18 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import functionalTests.FunctionalTest;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 
 public class TestPamrWithHttp extends AbstractProtoInterop {
 
-    static {
+    @BeforeClass
+    static public void prepareForTest() throws Exception {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
+        FunctionalTest.prepareForTest();
     }
 
     public TestPamrWithHttp() throws ProActiveException {

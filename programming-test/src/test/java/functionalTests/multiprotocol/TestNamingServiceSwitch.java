@@ -83,15 +83,16 @@ public class TestNamingServiceSwitch extends FunctionalTest {
     // pamr router
     static Router router;
 
-    static {
+    public TestNamingServiceSwitch() {
+    }
+
+    @BeforeClass
+    static public void prepareForTest() throws Exception {
         ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).setLevel(Level.DEBUG);
         ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
         PAMRConfig.PA_NET_ROUTER_PORT.setValue(0);
-
-    }
-
-    public TestNamingServiceSwitch() {
+        FunctionalTest.prepareForTest();
     }
 
     @BeforeClass
