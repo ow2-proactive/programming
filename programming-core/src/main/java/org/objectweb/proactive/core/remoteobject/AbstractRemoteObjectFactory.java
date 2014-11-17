@@ -114,7 +114,7 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
      * @return return the remote object factory associated to the given protocol
      * @throws UnknownProtocolException
      */
-    public static RemoteObjectFactory getRemoteObjectFactory(String protocol) throws UnknownProtocolException {
+    public static synchronized RemoteObjectFactory getRemoteObjectFactory(String protocol) throws UnknownProtocolException {
         if (protocol == null) {
             protocol = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
         }
