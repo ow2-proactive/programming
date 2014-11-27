@@ -87,8 +87,13 @@ defaultTasks 'build'
 
 if (hasGcc) {
     task ProcessBuilderExec(type: Copy) {
-        from project('programming-extensions:programming-extension-processbuilder').suer32.outputs
-        from project('programming-extensions:programming-extension-processbuilder').suer64.outputs
+        if (isLinux) {
+            from project('programming-extensions:programming-extension-processbuilder').suer32.outputs
+            from project('programming-extensions:programming-extension-processbuilder').suer64.outputs
+        }
+        if (isMac) {
+            from project('programming-extensions:programming-extension-processbuilder').suermac64.outputs
+        }
         into file('dist/scripts/processbuilder/linux')
     }
     build.dependsOn(ProcessBuilderExec)

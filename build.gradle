@@ -83,6 +83,9 @@ ext.hasGcc = {
     }
 }()
 
+ext.isLinux = System.getProperty("os.name").toLowerCase().contains("linux")
+ext.isMac = System.getProperty("os.name").toLowerCase().contains("mac")
+
 class StubTask extends JavaExec {
     @InputFiles
     def input = project.sourceSets.main.java.srcDirs
@@ -97,7 +100,7 @@ class StubTask extends JavaExec {
         project.jar.dependsOn this
 
         def stubClasspath = (project.configurations.stubClasspath + project.sourceSets.main.runtimeClasspath).files
-        environment  << [CLASSPATH: stubClasspath.join(File.pathSeparator) ]
+        environment << [CLASSPATH: stubClasspath.join(File.pathSeparator)]
         setMain('ant.AntStubGenerator$Main')
         setArgs([input.toArray()[0], project.sourceSets.main.output.classesDir])
         logging.captureStandardOutput LogLevel.INFO
@@ -109,13 +112,13 @@ class StubTask extends JavaExec {
 }
 
 task clean << {
-	delete "$rootDir/dist"
+    delete "$rootDir/dist"
 }
 
 project(':programming-util') {
     dependencies {
         compile(
-             project(':programming-annotation'),
+                project(':programming-annotation'),
                 'org.apache.commons:commons-lang3:3.1'
         )
         testCompile(
@@ -142,8 +145,8 @@ project(':programming-core') {
     dependencies {
         compile(
                 'org.eclipse.jetty:jetty-server:8.1.15.v20140411',
-		'org.eclipse.jetty:jetty-servlet:8.1.15.v20140411',
-		'org.eclipse.jetty:jetty-xml:8.1.15.v20140411',
+                'org.eclipse.jetty:jetty-servlet:8.1.15.v20140411',
+                'org.eclipse.jetty:jetty-xml:8.1.15.v20140411',
 
                 'org.tmatesoft.svnkit:trilead-ssh2:build213-svnkit-1.3-patch',
                 'commons-cli:commons-cli:1.1',
@@ -158,25 +161,25 @@ project(':programming-core') {
 
     task stub(type: StubTask) {
         classes = ['org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper',
-                'org.objectweb.proactive.core.util.wrapper.BooleanWrapper',
-                'org.objectweb.proactive.core.util.wrapper.DoubleMutableWrapper',
-                'org.objectweb.proactive.core.util.wrapper.DoubleWrapper',
-                'org.objectweb.proactive.core.util.wrapper.FloatMutableWrapper',
-                'org.objectweb.proactive.core.util.wrapper.FloatWrapper',
-                'org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper',
-                'org.objectweb.proactive.core.util.wrapper.IntMutableWrapper',
-                'org.objectweb.proactive.core.util.wrapper.IntWrapper',
-                'org.objectweb.proactive.core.util.wrapper.LongMutableWrapper',
-                'org.objectweb.proactive.core.util.wrapper.LongWrapper',
-                'org.objectweb.proactive.core.util.wrapper.StringMutableWrapper',
-                'org.objectweb.proactive.core.util.wrapper.StringWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.BooleanWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.DoubleMutableWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.DoubleWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.FloatMutableWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.FloatWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.IntMutableWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.IntWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.LongMutableWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.LongWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.StringMutableWrapper',
+                   'org.objectweb.proactive.core.util.wrapper.StringWrapper',
 
-                'org.objectweb.proactive.core.runtime.ProActiveRuntime',
-                'org.objectweb.proactive.core.body.UniversalBody',
-                'org.objectweb.proactive.core.jmx.util.JMXNotificationListener',
-                'org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector',
-                'org.objectweb.proactive.core.jmx.ProActiveConnection',
-                'org.objectweb.proactive.core.jmx.server.ProActiveServerImpl']
+                   'org.objectweb.proactive.core.runtime.ProActiveRuntime',
+                   'org.objectweb.proactive.core.body.UniversalBody',
+                   'org.objectweb.proactive.core.jmx.util.JMXNotificationListener',
+                   'org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector',
+                   'org.objectweb.proactive.core.jmx.ProActiveConnection',
+                   'org.objectweb.proactive.core.jmx.server.ProActiveServerImpl']
     }
     test {
         forkEvery 1
@@ -236,7 +239,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
     }
     task stub(type: StubTask) {
         classes = ['org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer',
-                'org.objectweb.proactive.extensions.vfsprovider.server.FileSystemServerImpl']
+                   'org.objectweb.proactive.extensions.vfsprovider.server.FileSystemServerImpl']
     }
 }
 
@@ -271,7 +274,7 @@ project('programming-extensions:programming-extension-gcmdeployment') {
     }
     task stub(type: StubTask) {
         classes = ['org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationImpl',
-                'org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl']
+                   'org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl']
     }
 }
 
@@ -300,21 +303,36 @@ project('programming-extensions:programming-extension-processbuilder') {
                 'net.java.dev.jna:jna:3.4.0',
                 'net.java.dev.jna:platform:3.4.0'
         )
+        testCompile 'commons-io:commons-io:2.4'
     }
 
     if (hasGcc) {
-        def configureSuer = { task, arch ->
-            buildDir.mkdirs()
-            task.ignoreExitValue = true
-            task.inputs.file "${projectDir}/src/main/c/suer.c"
-            task.outputs.file "${buildDir}/suer$arch"
-            task.commandLine 'gcc'
-            task.args "-m$arch", '-o', "${buildDir}/suer$arch", "${projectDir}/src/main/c/suer.c", '-lutil', '-lpthread'
-        }
-        task(suer64, type: Exec) { task -> configureSuer(task, '64') }
-        task(suer32, type: Exec) { task -> configureSuer(task, '32') }
-        task(suer).dependsOn suer64, suer32
+        task suer
         build.dependsOn suer
+        if (isLinux) {
+            def configureSuer = { task, arch ->
+                buildDir.mkdirs()
+                task.ignoreExitValue = true
+                task.inputs.file "${projectDir}/src/main/c/suer.c"
+                task.outputs.file "${buildDir}/suer$arch"
+                task.commandLine 'gcc'
+                task.args "-m$arch", '-o', "${buildDir}/suer$arch", "${projectDir}/src/main/c/suer.c", '-lutil', '-lpthread'
+            }
+            task(suer64, type: Exec) { task -> configureSuer(task, '64') }
+            task(suer32, type: Exec) { task -> configureSuer(task, '32') }
+            suer.dependsOn suer64, suer32
+        }
+        if (isMac) {
+            task(suermac64, type: Exec) {
+                buildDir.mkdirs()
+                ignoreExitValue = true
+                inputs.file "${projectDir}/src/main/c/suermac.c"
+                outputs.file "${buildDir}/suermac64"
+                commandLine 'gcc'
+                args "-m64", '-o', "${buildDir}/suermac64", "${projectDir}/src/main/c/suermac.c"
+            }
+            suer.dependsOn suermac64
+        }
     }
 }
 

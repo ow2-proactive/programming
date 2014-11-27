@@ -69,6 +69,7 @@ if [ -e "$cmd_path" ]; then
     echo $confirm;
     echo $confirm 1>&2;
 
+    export token=$token
     # execute it!
     (exec -a "$token" "$@")
 	
