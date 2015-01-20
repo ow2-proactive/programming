@@ -52,7 +52,7 @@ if [ "$passw" == "" ]; then
     # PROACTIVE-970 : default env is used
     # Note that tmp is still used fo return value
     # export >> $tmp;
-    
+
     OLD_UMASK=`umask`
     umask 0177
     keyfile=`mktemp  2>/dev/null || mktemp  -t 'mytmpkeyfile'`
@@ -63,7 +63,7 @@ if [ "$passw" == "" ]; then
       do
       args="${args} ""'"${i//\'/\'\"\'\"\'}"'"
     done
-    ssh -n -o PasswordAuthentication=no -i $keyfile $usr@localhost `pwd`/command_step.sh $token $tmp "$workdir" $args
+    ssh -n -o PasswordAuthentication=no -o StrictHostKeyChecking=no -i $keyfile $usr@localhost `pwd`/command_step.sh $token $tmp "$workdir" $args
     exitc=$?
     rm $keyfile
   fi;
