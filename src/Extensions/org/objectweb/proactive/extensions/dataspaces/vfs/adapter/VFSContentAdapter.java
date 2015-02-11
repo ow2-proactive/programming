@@ -52,10 +52,10 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
 
 public class VFSContentAdapter implements FileContent {
 
-    final private org.apache.commons.vfs.FileContent adaptee;
+    final private org.apache.commons.vfs2.FileContent adaptee;
     final private DataSpacesFileObject owningFile;
 
-    public VFSContentAdapter(org.apache.commons.vfs.FileContent content, DataSpacesFileObject dsFileObject) {
+    public VFSContentAdapter(org.apache.commons.vfs2.FileContent content, DataSpacesFileObject dsFileObject) {
         adaptee = content;
         owningFile = dsFileObject;
     }
@@ -63,7 +63,7 @@ public class VFSContentAdapter implements FileContent {
     public void close() throws FileSystemException {
         try {
             adaptee.close();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -72,7 +72,7 @@ public class VFSContentAdapter implements FileContent {
         try {
             final Certificate[] vfsCerts = adaptee.getCertificates();
             return asList(vfsCerts);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -80,7 +80,7 @@ public class VFSContentAdapter implements FileContent {
     public String getContentEncoding() {
         try {
             return adaptee.getContentInfo().getContentEncoding();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             // parsing errors, a file server fault or not supported meta information
             return null;
         }
@@ -89,7 +89,7 @@ public class VFSContentAdapter implements FileContent {
     public String getContentMIMEType() {
         try {
             return adaptee.getContentInfo().getContentType();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             // parsing errors, a file server fault or not supported meta information
             return null;
         }
@@ -102,7 +102,7 @@ public class VFSContentAdapter implements FileContent {
     public InputStream getInputStream() throws FileSystemException {
         try {
             return adaptee.getInputStream();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -110,7 +110,7 @@ public class VFSContentAdapter implements FileContent {
     public long getLastModifiedTime() throws FileSystemException {
         try {
             return adaptee.getLastModifiedTime();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -118,7 +118,7 @@ public class VFSContentAdapter implements FileContent {
     public OutputStream getOutputStream() throws FileSystemException {
         try {
             return adaptee.getOutputStream();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -126,17 +126,17 @@ public class VFSContentAdapter implements FileContent {
     public OutputStream getOutputStream(boolean append) throws FileSystemException {
         try {
             return adaptee.getOutputStream(append);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
 
     public RandomAccessContent getRandomAccessContent(RandomAccessMode mode) throws FileSystemException {
-        final org.apache.commons.vfs.util.RandomAccessMode vfsMode = buildVFSRandomAccessMode(mode);
+        final org.apache.commons.vfs2.util.RandomAccessMode vfsMode = buildVFSRandomAccessMode(mode);
         try {
             // according to this VFS build it cannot be null but check it in adaptVFSResult method
             return adaptVFSResult(adaptee.getRandomAccessContent(vfsMode));
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -144,7 +144,7 @@ public class VFSContentAdapter implements FileContent {
     public long getSize() throws FileSystemException {
         try {
             return adaptee.getSize();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -154,16 +154,16 @@ public class VFSContentAdapter implements FileContent {
     }
 
     private static RandomAccessContent adaptVFSResult(
-            org.apache.commons.vfs.RandomAccessContent randomAccessContent) {
+            org.apache.commons.vfs2.RandomAccessContent randomAccessContent) {
         return randomAccessContent == null ? null : new VFSRandomAccessContentAdapter(randomAccessContent);
     }
 
-    private static org.apache.commons.vfs.util.RandomAccessMode buildVFSRandomAccessMode(RandomAccessMode mode) {
+    private static org.apache.commons.vfs2.util.RandomAccessMode buildVFSRandomAccessMode(RandomAccessMode mode) {
         switch (mode) {
             case READ_ONLY:
-                return org.apache.commons.vfs.util.RandomAccessMode.READ;
+                return org.apache.commons.vfs2.util.RandomAccessMode.READ;
             case READ_WRITE:
-                return org.apache.commons.vfs.util.RandomAccessMode.READWRITE;
+                return org.apache.commons.vfs2.util.RandomAccessMode.READWRITE;
             default:
                 return null;
         }

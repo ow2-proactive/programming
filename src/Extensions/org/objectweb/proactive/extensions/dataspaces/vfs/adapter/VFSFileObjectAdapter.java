@@ -40,10 +40,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.vfs.FileName;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.NameScope;
-import org.apache.commons.vfs.Selectors;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.NameScope;
+import org.apache.commons.vfs2.Selectors;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -101,7 +101,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         String relativePath;
         try {
             relativePath = dataSpaceVFSFileName.getRelativeName(adaptee.getName());
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             ProActiveLogger.logImpossibleException(logger, e);
             throw new ProActiveRuntimeException(e);
         }
@@ -114,18 +114,18 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public void close() throws FileSystemException {
         try {
             adaptee.close();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
 
     public void copyFrom(DataSpacesFileObject srcFile, FileSelector selector) throws FileSystemException {
         final FileObject srcAdaptee = getVFSAdapteeOrWound(srcFile);
-        final org.apache.commons.vfs.FileSelector vfsSelector = buildFVSSelector(selector);
+        final org.apache.commons.vfs2.FileSelector vfsSelector = buildFVSSelector(selector);
 
         try {
             adaptee.copyFrom(srcAdaptee, vfsSelector);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -133,7 +133,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public void createFile() throws FileSystemException {
         try {
             adaptee.createFile();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -141,7 +141,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public void createFolder() throws FileSystemException {
         try {
             adaptee.createFolder();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -149,17 +149,17 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public boolean delete() throws FileSystemException {
         try {
             return adaptee.delete();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
 
     public int delete(FileSelector selector) throws FileSystemException {
-        final org.apache.commons.vfs.FileSelector vfsSelector = buildFVSSelector(selector);
+        final org.apache.commons.vfs2.FileSelector vfsSelector = buildFVSSelector(selector);
 
         try {
             return adaptee.delete(vfsSelector);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -167,20 +167,20 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public boolean exists() throws FileSystemException {
         try {
             return adaptee.exists();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
 
     public List<DataSpacesFileObject> findFiles(FileSelector selector) throws FileSystemException {
-        final org.apache.commons.vfs.FileSelector vfsSelector = buildFVSSelector(selector);
+        final org.apache.commons.vfs2.FileSelector vfsSelector = buildFVSSelector(selector);
         final List<DataSpacesFileObject> result = new ArrayList<DataSpacesFileObject>();
 
         try {
             final FileObject[] vfsResult = adaptee.findFiles(vfsSelector);
 
             adaptVFSResult(vfsResult, result);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
         return result;
@@ -189,14 +189,14 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public void findFiles(FileSelector selector, boolean depthwise, List<DataSpacesFileObject> selected)
             throws FileSystemException {
 
-        final org.apache.commons.vfs.FileSelector vfsSelector = buildFVSSelector(selector);
+        final org.apache.commons.vfs2.FileSelector vfsSelector = buildFVSSelector(selector);
 
         try {
             final List<FileObject> vfsResult = new ArrayList<FileObject>();
             adaptee.findFiles(vfsSelector, depthwise, vfsResult);
 
             adaptVFSResult(vfsResult, selected);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -204,7 +204,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public DataSpacesFileObject getChild(String name) throws FileSystemException {
         try {
             return adaptVFSResult(adaptee.getChild(name));
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -214,7 +214,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
         try {
             adaptVFSResult(adaptee.getChildren(), adapted);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
         return adapted;
@@ -224,7 +224,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
         try {
             return new VFSContentAdapter(adaptee.getContent(), this);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -233,7 +233,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         final FileObject vfsParent;
         try {
             vfsParent = adaptee.getParent();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
 
@@ -245,7 +245,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public FileType getType() throws FileSystemException {
         try {
             return adaptVFSResult(adaptee.getType());
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -257,7 +257,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public boolean isHidden() throws FileSystemException {
         try {
             return adaptee.isHidden();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -265,7 +265,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public boolean isReadable() throws FileSystemException {
         try {
             return adaptee.isReadable();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -273,7 +273,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public boolean isWritable() throws FileSystemException {
         try {
             return adaptee.isWriteable();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -283,7 +283,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
         try {
             adaptee.moveTo(destAdaptee);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -291,7 +291,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public void refresh() throws FileSystemException {
         try {
             adaptee.refresh();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -301,7 +301,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
             throw new FileSystemException("Cannot resolve an absolute path");
         try {
             return adaptVFSResult(adaptee.resolveFile(path));
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             throw new FileSystemException(e);
         }
     }
@@ -311,8 +311,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     public boolean hasSpaceCapability(Capability capability) {
-        final org.apache.commons.vfs.Capability vfsCapability = buildVFSCapability(capability);
-        final org.apache.commons.vfs.FileSystem vfsFileSystem = adaptee.getFileSystem();
+        final org.apache.commons.vfs2.Capability vfsCapability = buildVFSCapability(capability);
+        final org.apache.commons.vfs2.FileSystem vfsFileSystem = adaptee.getFileSystem();
 
         return vfsFileSystem.hasCapability(vfsCapability);
     }
@@ -358,14 +358,14 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         return vfsFileObject == null ? null : new VFSFileObjectAdapter(vfsFileObject, this);
     }
 
-    private static FileType adaptVFSResult(org.apache.commons.vfs.FileType vfsResult) {
-        if (vfsResult == org.apache.commons.vfs.FileType.FILE)
+    private static FileType adaptVFSResult(org.apache.commons.vfs2.FileType vfsResult) {
+        if (vfsResult == org.apache.commons.vfs2.FileType.FILE)
             return FileType.FILE;
 
-        if (vfsResult == org.apache.commons.vfs.FileType.FOLDER)
+        if (vfsResult == org.apache.commons.vfs2.FileType.FOLDER)
             return FileType.FOLDER;
 
-        if (vfsResult == org.apache.commons.vfs.FileType.IMAGINARY)
+        if (vfsResult == org.apache.commons.vfs2.FileType.IMAGINARY)
             return FileType.ABSTRACT;
 
         return null;
@@ -375,7 +375,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
      * @param selector
      *            may be null
      */
-    private static org.apache.commons.vfs.FileSelector buildFVSSelector(FileSelector selector) {
+    private static org.apache.commons.vfs2.FileSelector buildFVSSelector(FileSelector selector) {
         switch (selector) {
             case EXCLUDE_SELF:
                 return Selectors.EXCLUDE_SELF;
@@ -400,52 +400,52 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
      * @param capability
      *            may be null
      */
-    private static org.apache.commons.vfs.Capability buildVFSCapability(Capability capability) {
+    private static org.apache.commons.vfs2.Capability buildVFSCapability(Capability capability) {
         switch (capability) {
             case APPEND_CONTENT:
-                return org.apache.commons.vfs.Capability.APPEND_CONTENT;
+                return org.apache.commons.vfs2.Capability.APPEND_CONTENT;
             case ATTRIBUTES:
-                return org.apache.commons.vfs.Capability.ATTRIBUTES;
+                return org.apache.commons.vfs2.Capability.ATTRIBUTES;
             case COMPRESS:
-                return org.apache.commons.vfs.Capability.COMPRESS;
+                return org.apache.commons.vfs2.Capability.COMPRESS;
             case CREATE:
-                return org.apache.commons.vfs.Capability.CREATE;
+                return org.apache.commons.vfs2.Capability.CREATE;
             case DELETE:
-                return org.apache.commons.vfs.Capability.DELETE;
+                return org.apache.commons.vfs2.Capability.DELETE;
             case DIRECTORY_READ_CONTENT:
-                return org.apache.commons.vfs.Capability.DIRECTORY_READ_CONTENT;
+                return org.apache.commons.vfs2.Capability.DIRECTORY_READ_CONTENT;
             case FS_ATTRIBUTES:
-                return org.apache.commons.vfs.Capability.FS_ATTRIBUTES;
+                return org.apache.commons.vfs2.Capability.FS_ATTRIBUTES;
             case GET_LAST_MODIFIED:
-                return org.apache.commons.vfs.Capability.GET_LAST_MODIFIED;
+                return org.apache.commons.vfs2.Capability.GET_LAST_MODIFIED;
             case GET_TYPE:
-                return org.apache.commons.vfs.Capability.GET_TYPE;
+                return org.apache.commons.vfs2.Capability.GET_TYPE;
             case LAST_MODIFIED:
-                return org.apache.commons.vfs.Capability.LAST_MODIFIED;
+                return org.apache.commons.vfs2.Capability.LAST_MODIFIED;
             case LIST_CHILDREN:
-                return org.apache.commons.vfs.Capability.LIST_CHILDREN;
+                return org.apache.commons.vfs2.Capability.LIST_CHILDREN;
             case MANIFEST_ATTRIBUTES:
-                return org.apache.commons.vfs.Capability.MANIFEST_ATTRIBUTES;
+                return org.apache.commons.vfs2.Capability.MANIFEST_ATTRIBUTES;
             case RANDOM_ACCESS_READ:
-                return org.apache.commons.vfs.Capability.RANDOM_ACCESS_READ;
+                return org.apache.commons.vfs2.Capability.RANDOM_ACCESS_READ;
             case RANDOM_ACCESS_WRITE:
-                return org.apache.commons.vfs.Capability.RANDOM_ACCESS_WRITE;
+                return org.apache.commons.vfs2.Capability.RANDOM_ACCESS_WRITE;
             case READ_CONTENT:
-                return org.apache.commons.vfs.Capability.READ_CONTENT;
+                return org.apache.commons.vfs2.Capability.READ_CONTENT;
             case RENAME:
-                return org.apache.commons.vfs.Capability.RENAME;
+                return org.apache.commons.vfs2.Capability.RENAME;
             case SET_LAST_MODIFIED_FILE:
-                return org.apache.commons.vfs.Capability.SET_LAST_MODIFIED_FILE;
+                return org.apache.commons.vfs2.Capability.SET_LAST_MODIFIED_FILE;
             case SET_LAST_MODIFIED_FOLDER:
-                return org.apache.commons.vfs.Capability.SET_LAST_MODIFIED_FOLDER;
+                return org.apache.commons.vfs2.Capability.SET_LAST_MODIFIED_FOLDER;
             case SIGNING:
-                return org.apache.commons.vfs.Capability.SIGNING;
+                return org.apache.commons.vfs2.Capability.SIGNING;
             case URI:
-                return org.apache.commons.vfs.Capability.URI;
+                return org.apache.commons.vfs2.Capability.URI;
             case VIRTUAL:
-                return org.apache.commons.vfs.Capability.VIRTUAL;
+                return org.apache.commons.vfs2.Capability.VIRTUAL;
             case WRITE_CONTENT:
-                return org.apache.commons.vfs.Capability.WRITE_CONTENT;
+                return org.apache.commons.vfs2.Capability.WRITE_CONTENT;
             default:
                 return null;
         }
@@ -469,7 +469,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     public String getRealURI() {
         try {
             return adaptee.getURL().toExternalForm();
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             //null of unknown
             return null;
         }

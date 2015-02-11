@@ -36,12 +36,12 @@
  */
 package org.objectweb.proactive.extensions.vfsprovider.client;
 
-import org.apache.commons.vfs.FileName;
-import org.apache.commons.vfs.FileSystemException;
-import org.apache.commons.vfs.FileType;
-import org.apache.commons.vfs.provider.HostFileNameParser;
-import org.apache.commons.vfs.provider.UriParser;
-import org.apache.commons.vfs.provider.VfsComponentContext;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.provider.HostFileNameParser;
+import org.apache.commons.vfs2.provider.UriParser;
+import org.apache.commons.vfs2.provider.VfsComponentContext;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 
 
@@ -58,7 +58,7 @@ public class ProActiveFileNameParser extends HostFileNameParser {
         return INSTANCE;
     }
 
-    private static String extractServicePath(StringBuffer path) throws FileSystemException {
+    private static String extractServicePath(StringBuilder path) throws FileSystemException {
         if (path.length() > 0 && path.charAt(0) != FileName.SEPARATOR_CHAR) {
             throw new FileSystemException(
                 "Invalid path in URI: service path after host name does not begin with slash");
@@ -84,7 +84,7 @@ public class ProActiveFileNameParser extends HostFileNameParser {
     @Override
     public FileName parseUri(VfsComponentContext context, FileName base, String filename)
             throws FileSystemException {
-        final StringBuffer name = new StringBuffer();
+        final StringBuilder name = new StringBuilder();
 
         // Extract the scheme and authority parts
         final Authority auth = extractToPath(filename, name);
@@ -101,7 +101,7 @@ public class ProActiveFileNameParser extends HostFileNameParser {
         final String path = name.toString();
 
         try {
-            return new ProActiveFileName(auth.scheme, auth.hostName, auth.port, auth.userName, auth.password,
+            return new ProActiveFileName(auth.getScheme(), auth.getHostName(), auth.getPort(), auth.getUserName(), auth.getPassword(),
                 servicePath, path, fileType);
         } catch (UnknownProtocolException e) {
             throw new FileSystemException("Unknown protocol scheme of URL", e);

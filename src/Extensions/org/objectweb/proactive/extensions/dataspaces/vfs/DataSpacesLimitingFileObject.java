@@ -36,9 +36,9 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
-import org.apache.commons.vfs.FileName;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.NameScope;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.NameScope;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -128,7 +128,7 @@ public class DataSpacesLimitingFileObject extends AbstractLimitingFileObject<Dat
         String relativePath;
         try {
             relativePath = spaceRootFileName.getRelativeName(name);
-        } catch (org.apache.commons.vfs.FileSystemException e) {
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
             ProActiveLogger.logImpossibleException(logger, e);
             throw new ProActiveRuntimeException(e);
         }

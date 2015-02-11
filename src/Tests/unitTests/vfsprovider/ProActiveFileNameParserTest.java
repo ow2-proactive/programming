@@ -41,7 +41,7 @@ import static org.junit.Assert.assertNull;
 
 import java.net.URISyntaxException;
 
-import org.apache.commons.vfs.FileSystemException;
+import org.apache.commons.vfs2.FileSystemException;
 import org.junit.Test;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;

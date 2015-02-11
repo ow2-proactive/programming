@@ -51,13 +51,13 @@ import junit.framework.Assert;
 import junit.framework.Test;
 
 import org.apache.commons.AbstractVfsTestCase;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemManager;
-import org.apache.commons.vfs.FilesCache;
-import org.apache.commons.vfs.cache.SoftRefFilesCache;
-import org.apache.commons.vfs.impl.DefaultFileSystemManager;
-import org.apache.commons.vfs.test.ProviderTestConfig;
-import org.apache.commons.vfs.test.ProviderTestSuite;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.commons.vfs2.FilesCache;
+import org.apache.commons.vfs2.cache.SoftRefFilesCache;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.test.ProviderTestConfig;
+import org.apache.commons.vfs2.test.ProviderTestSuite;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
@@ -118,6 +118,11 @@ public class TestProActiveProvider extends FunctionalTest implements ProviderTes
 
     private FileSystemServerDeployer deployer;
     private FilesCache cache;
+
+    @Override
+    public DefaultFileSystemManager getDefaultFileSystemManager() {
+        return new DefaultFileSystemManager();
+    }
 
     public void prepare(final DefaultFileSystemManager manager) throws Exception {
         final ProActiveFileProvider provider = new ProActiveFileProvider();

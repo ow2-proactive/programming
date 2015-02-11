@@ -41,7 +41,7 @@ import java.io.OutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.vfs.FileSystemException;
+import org.apache.commons.vfs2.FileSystemException;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.StreamNotFoundException;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.WrongStreamTypeException;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;

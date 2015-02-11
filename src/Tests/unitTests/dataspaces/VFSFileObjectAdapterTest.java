@@ -43,9 +43,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.vfs.FileName;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -82,7 +82,7 @@ public class VFSFileObjectAdapterTest {
     private String rootDirPath;
 
     @BeforeClass
-    static public void init() throws org.apache.commons.vfs.FileSystemException {
+    static public void init() throws org.apache.commons.vfs2.FileSystemException {
         fileSystemManager = VFSFactory.createDefaultFileSystemManager();
     }
 
@@ -126,7 +126,7 @@ public class VFSFileObjectAdapterTest {
     }
 
     @Test
-    public void testGetURI1() throws org.apache.commons.vfs.FileSystemException, MalformedURIException,
+    public void testGetURI1() throws org.apache.commons.vfs2.FileSystemException, MalformedURIException,
             FileSystemException {
         final FileObject rootFileObject = fileSystemManager.resolveFile("file://" + rootDirPath);
         final FileName mountintPointFileName = rootFileObject.getName();
@@ -165,7 +165,7 @@ public class VFSFileObjectAdapterTest {
     }
 
     @Test(expected = FileSystemException.class)
-    public void testGetParentOnFilesystemRoot() throws org.apache.commons.vfs.FileSystemException,
+    public void testGetParentOnFilesystemRoot() throws org.apache.commons.vfs2.FileSystemException,
             FileSystemException {
         final FileObject rootFileObject = fileSystemManager.resolveFile("file:///");
         final FileName mountintPointFileName = rootFileObject.getName();
@@ -180,7 +180,7 @@ public class VFSFileObjectAdapterTest {
     }
 
     @Test(expected = FileSystemException.class)
-    public void testMismatchedRoot() throws FileSystemException, org.apache.commons.vfs.FileSystemException {
+    public void testMismatchedRoot() throws FileSystemException, org.apache.commons.vfs2.FileSystemException {
         final FileName diffName;
         diffName = fileSystemManager.resolveFile(differentDirPath).getName();
         new VFSFileObjectAdapter(adaptee, spaceURI, diffName);

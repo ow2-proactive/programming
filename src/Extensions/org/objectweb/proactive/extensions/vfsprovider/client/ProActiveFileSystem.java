@@ -40,11 +40,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import org.apache.commons.vfs.FileName;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemException;
-import org.apache.commons.vfs.FileSystemOptions;
-import org.apache.commons.vfs.provider.AbstractFileSystem;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemOptions;
+import org.apache.commons.vfs2.provider.AbstractFileName;
+import org.apache.commons.vfs2.provider.AbstractFileSystem;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
@@ -72,7 +73,7 @@ public class ProActiveFileSystem extends AbstractFileSystem {
     }
 
     @Override
-    protected FileObject createFile(FileName name) throws Exception {
+    protected FileObject createFile(AbstractFileName name) throws Exception {
         return new ProActiveFileObject(name, this);
     }
 

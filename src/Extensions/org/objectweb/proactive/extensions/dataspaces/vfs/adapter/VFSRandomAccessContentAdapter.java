@@ -44,9 +44,9 @@ import org.objectweb.proactive.extensions.dataspaces.api.RandomAccessContent;
 
 public class VFSRandomAccessContentAdapter implements RandomAccessContent {
 
-    final private org.apache.commons.vfs.RandomAccessContent adaptee;
+    final private org.apache.commons.vfs2.RandomAccessContent adaptee;
 
-    public VFSRandomAccessContentAdapter(org.apache.commons.vfs.RandomAccessContent randomAccessContent) {
+    public VFSRandomAccessContentAdapter(org.apache.commons.vfs2.RandomAccessContent randomAccessContent) {
         adaptee = randomAccessContent;
     }
 

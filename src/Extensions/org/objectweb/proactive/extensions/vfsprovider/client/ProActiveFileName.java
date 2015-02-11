@@ -41,9 +41,9 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.vfs.FileName;
-import org.apache.commons.vfs.FileType;
-import org.apache.commons.vfs.provider.GenericFileName;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.provider.GenericFileName;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
@@ -177,7 +177,7 @@ public class ProActiveFileName extends GenericFileName {
     }
 
     @Override
-    protected void appendRootUri(StringBuffer buffer, boolean addPassword) {
+    protected void appendRootUri(StringBuilder buffer, boolean addPassword) {
         super.appendRootUri(buffer, addPassword);
         buffer.append(servicePath);
         buffer.append(SERVICE_AND_FILE_PATH_SEPARATOR);
@@ -216,7 +216,7 @@ public class ProActiveFileName extends GenericFileName {
     }
 
     private String createServerURL() {
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         buffer.append(getServerSchemeForVFSScheme(getScheme()));
         buffer.append("://");
         appendCredentials(buffer, true);

@@ -37,21 +37,21 @@
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
 import org.apache.commons.logging.impl.Log4JLogger;
-import org.apache.commons.vfs.FileSystemException;
-import org.apache.commons.vfs.FileSystemOptions;
-import org.apache.commons.vfs.auth.StaticUserAuthenticator;
-import org.apache.commons.vfs.cache.NullFilesCache;
-import org.apache.commons.vfs.impl.DefaultFileReplicator;
-import org.apache.commons.vfs.impl.DefaultFileSystemConfigBuilder;
-import org.apache.commons.vfs.impl.DefaultFileSystemManager;
-import org.apache.commons.vfs.impl.PrivilegedFileReplicator;
-import org.apache.commons.vfs.provider.ftp.FtpFileProvider;
-import org.apache.commons.vfs.provider.http.HttpFileProvider;
-import org.apache.commons.vfs.provider.https.HttpsFileProvider;
-import org.apache.commons.vfs.provider.local.DefaultLocalFileProvider;
-import org.apache.commons.vfs.provider.sftp.SftpFileProvider;
-import org.apache.commons.vfs.provider.sftp.SftpFileSystemConfigBuilder;
-import org.apache.commons.vfs.provider.url.UrlFileProvider;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemOptions;
+import org.apache.commons.vfs2.auth.StaticUserAuthenticator;
+import org.apache.commons.vfs2.cache.NullFilesCache;
+import org.apache.commons.vfs2.impl.DefaultFileReplicator;
+import org.apache.commons.vfs2.impl.DefaultFileSystemConfigBuilder;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.impl.PrivilegedFileReplicator;
+import org.apache.commons.vfs2.provider.ftp.FtpFileProvider;
+import org.apache.commons.vfs2.provider.http.HttpFileProvider;
+import org.apache.commons.vfs2.provider.https.HttpsFileProvider;
+import org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider;
+import org.apache.commons.vfs2.provider.sftp.SftpFileProvider;
+import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
+import org.apache.commons.vfs2.provider.url.UrlFileProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -149,9 +149,6 @@ public class VFSFactory {
         for (final String scheme : ProActiveFileName.getAllVFSSchemes()) {
             manager.addProvider(scheme, proactiveProvider);
         }
-
-        manager.addProvider("s3", new S3FileProvider());
-        manager.addOperationProvider("s3", new AclOperationsProvider());
 
         manager.setDefaultProvider(new UrlFileProvider());
 

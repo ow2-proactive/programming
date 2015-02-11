@@ -46,16 +46,18 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.vfs.FileName;
-import org.apache.commons.vfs.FileSystemException;
-import org.apache.commons.vfs.FileType;
-import org.apache.commons.vfs.RandomAccessContent;
-import org.apache.commons.vfs.provider.AbstractFileObject;
-import org.apache.commons.vfs.provider.AbstractRandomAccessStreamContent;
-import org.apache.commons.vfs.provider.UriParser;
-import org.apache.commons.vfs.util.MonitorInputStream;
-import org.apache.commons.vfs.util.MonitorOutputStream;
-import org.apache.commons.vfs.util.RandomAccessMode;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.RandomAccessContent;
+import org.apache.commons.vfs2.provider.AbstractFileName;
+import org.apache.commons.vfs2.provider.AbstractFileObject;
+import org.apache.commons.vfs2.provider.AbstractRandomAccessStreamContent;
+import org.apache.commons.vfs2.provider.UriParser;
+import org.apache.commons.vfs2.util.MonitorInputStream;
+import org.apache.commons.vfs2.util.MonitorOutputStream;
+import org.apache.commons.vfs2.util.RandomAccessMode;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.StreamNotFoundException;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.WrongStreamTypeException;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileInfo;
@@ -102,7 +104,7 @@ public class ProActiveFileObject extends AbstractFileObject {
     private FileInfo fileInfo;
     private ProActiveFileSystem proactiveFS;
 
-    protected ProActiveFileObject(FileName name, ProActiveFileSystem fs) {
+    protected ProActiveFileObject(AbstractFileName name, ProActiveFileSystem fs) {
         super(name, fs);
         this.proactiveFS = fs;
     }
@@ -226,12 +228,12 @@ public class ProActiveFileObject extends AbstractFileObject {
     }
 
     @Override
-    protected void doRename(AbstractFileObject newfile) throws Exception {
+    protected void doRename(FileObject newfile) throws Exception {
         getServer().fileRename(getPath(), ((ProActiveFileObject) newfile).getPath());
     }
 
     @Override
-    protected boolean doSetLastModTime(long modtime) throws Exception {
+    protected boolean doSetLastModifiedTime(long modtime) throws Exception {
         final boolean result = getServer().fileSetLastModifiedTime(getPath(), modtime);
         if (result) {
             onChange();

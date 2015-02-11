@@ -41,9 +41,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystem;
-import org.apache.commons.vfs.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystem;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -119,7 +119,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             // delete(FileSelector) method. Anyway, it is rather better to do it this way, than returning
             // shared FileObjects with broken concurrency
             this.vfsManager = VFSFactory.createDefaultFileSystemManager(false);
-        } catch (org.apache.commons.vfs.FileSystemException x) {
+        } catch (org.apache.commons.vfs2.FileSystemException x) {
             logger.error("Could not create and configure VFS manager", x);
             throw new FileSystemException(x);
         }
@@ -229,7 +229,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         final FileObject mountedRoot;
         try {
             mountedRoot = vfsManager.resolveFile(accessUrl);
-        } catch (org.apache.commons.vfs.FileSystemException x) {
+        } catch (org.apache.commons.vfs2.FileSystemException x) {
             logger.warn(String.format("Could not access URL %s to mount %s", accessUrl, mountingPoint));
             throw new FileSystemException(x);
         }
@@ -255,7 +255,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         // we may not need to close FileObject, but with VFS you never know...
         try {
             spaceRoot.close();
-        } catch (org.apache.commons.vfs.FileSystemException x) {
+        } catch (org.apache.commons.vfs2.FileSystemException x) {
             ProActiveLogger.logEatedException(logger, String.format(
                     "Could not close data space %s root file object", spaceUri), x);
         }
@@ -286,7 +286,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 final DataSpacesLimitingFileObject limitingFile = new DataSpacesLimitingFileObject(file,
                     spacePart, spaceRoot.getName(), ownerActiveObjectId);
                 return new VFSFileObjectAdapter(limitingFile, spacePart, spaceRoot.getName());
-            } catch (org.apache.commons.vfs.FileSystemException x) {
+            } catch (org.apache.commons.vfs2.FileSystemException x) {
                 logger.warn("Could not access file within a space: " + uri);
                 throw new FileSystemException(x);
             } catch (FileSystemException e) {
