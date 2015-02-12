@@ -49,11 +49,16 @@ import org.objectweb.proactive.utils.OperatingSystem;
  */
 final public class PAOSProcessBuilderFactory implements OSProcessBuilderFactory {
     final private OperatingSystem os;
-    final private String paHome;
+    final private String nativeScriptPath;
 
     public PAOSProcessBuilderFactory() throws ProActiveException {
         this.os = OperatingSystem.getOperatingSystem();
-        this.paHome = ProActiveRuntimeImpl.getProActiveRuntime().getProActiveHome();
+        this.nativeScriptPath = ProActiveRuntimeImpl.getProActiveRuntime().getProActiveHome();
+    }
+
+    public PAOSProcessBuilderFactory(String nativeScriptPath) {
+        this.os = OperatingSystem.getOperatingSystem();
+        this.nativeScriptPath = nativeScriptPath;
     }
 
     public OSProcessBuilder getBuilder() {
@@ -74,9 +79,9 @@ final public class PAOSProcessBuilderFactory implements OSProcessBuilderFactory 
         }
         switch (os) {
             case unix:
-                return new LinuxProcessBuilder(user, cores, this.paHome);
+                return new LinuxProcessBuilder(user, cores, this.nativeScriptPath);
             case windows:
-                return new WindowsProcessBuilder(user, cores, this.paHome);
+                return new WindowsProcessBuilder(user, cores, this.nativeScriptPath);
             default:
                 throw new NotImplementedException("The process builder is not yet implemented on " + os);
         }
