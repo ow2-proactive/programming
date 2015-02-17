@@ -46,70 +46,74 @@ import java.security.SecureRandom;
  *
  * @see SecureRandom
  */
-public class ProActiveRandom {
-    final static private SecureRandom prng = new SecureRandom();
+public final class ProActiveRandom {
 
-    static private char[] symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    // public for testing purposes, the content should never be altered
+    public static final char[] SYMBOLS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
 
     /** Returns the next pseudorandom, uniformly distributed boolean value from this random number generator's sequence. */
-    synchronized static public boolean nextBoolean() {
-        return prng.nextBoolean();
+    public static boolean nextBoolean() {
+        return SECURE_RANDOM.nextBoolean();
     }
 
     /** Generates random bytes and places them into a user-supplied byte array. */
-    synchronized static public void nextBytes(byte[] bytes) {
-        prng.nextBytes(bytes);
+    public static void nextBytes(byte[] bytes) {
+        SECURE_RANDOM.nextBytes(bytes);
     }
 
     /** Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0 from this random number generator's sequence. */
-    synchronized static public double nextDouble() {
-        return prng.nextDouble();
+    public static double nextDouble() {
+        return SECURE_RANDOM.nextDouble();
     }
 
     /**  Returns the next pseudorandom, uniformly distributed float  value between 0.0 and 1.0 from this random number generator's sequence. */
-    synchronized static public float nextFloat() {
-        return prng.nextFloat();
+    public static float nextFloat() {
+        return SECURE_RANDOM.nextFloat();
     }
 
     /** Returns the next pseudorandom, uniformly distributed int  value from this random number generator's sequence.*/
-    synchronized static public int nextInt() {
-        return prng.nextInt();
+    public static int nextInt() {
+        return SECURE_RANDOM.nextInt();
     }
 
     /** Returns the next pseudorandom, uniformly distributed positive int  value from this random number generator's sequence.*/
-    synchronized static public int nextPosInt() {
-        return prng.nextInt(Integer.MAX_VALUE);
+    public static int nextPosInt() {
+        return SECURE_RANDOM.nextInt(Integer.MAX_VALUE);
     }
 
     /** Returns a pseudorandom, uniformly distributed int value between 0 (inclusive) and the specified value (exclusive), drawn from this random number generator's sequence. */
-    synchronized static public int nextInt(int n) {
-        return prng.nextInt(n);
+    public static int nextInt(int n) {
+        return SECURE_RANDOM.nextInt(n);
     }
 
     /** Returns the next pseudorandom, uniformly distributed long  value from this random number generator's sequence. */
-    synchronized static public long nextLong() {
-        return prng.nextLong();
+    public static long nextLong() {
+        return SECURE_RANDOM.nextLong();
     }
 
-    synchronized static public long nextPosLong() {
+    public static long nextPosLong() {
         return Math.abs(nextLong());
     }
 
     /**
      * Returns a random string of fixed length
      * 
-     * The string will only characters from {@link ProActiveRandom#symbols} 
-     * (upper case alphanumeric ASCII symbols). 
+     * The string will only characters from {@link ProActiveRandom#SYMBOLS}
+     * (upper case alphanumeric ASCII SYMBOLS).
      * 
      * @param size the length of the random string 
      * @return A random string
      */
-    synchronized static public String nextString(int size) {
+    public static String nextString(int size) {
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < size; i++) {
-            sb.append(symbols[nextInt(symbols.length)]);
+            sb.append(SYMBOLS[nextInt(SYMBOLS.length)]);
         }
 
         return sb.toString();
     }
+
 }
