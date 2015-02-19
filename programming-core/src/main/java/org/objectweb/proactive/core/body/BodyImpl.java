@@ -39,11 +39,7 @@ package org.objectweb.proactive.core.body;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanRegistrationException;
@@ -64,12 +60,7 @@ import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.body.reply.ReplyReceiver;
-import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
-import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.body.request.RequestFactory;
-import org.objectweb.proactive.core.body.request.RequestQueue;
-import org.objectweb.proactive.core.body.request.RequestReceiver;
-import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
+import org.objectweb.proactive.core.body.request.*;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.Tag;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
@@ -257,6 +248,17 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     protected void activityStopped(boolean completeACs) {
         super.activityStopped(completeACs);
 
+        // Copies the requests to the remaining request queue of inactive body
+        // because they are removed once the localBodyStrategy is changed
+        RequestQueue queue = new RequestQueueImpl(getID());
+        Iterator<Request> it = localBodyStrategy.getRequestQueue().iterator();
+        while (it.hasNext()) {
+            queue.add(it.next());
+        }
+
+        InactiveLocalBodyStrategy inactiveLocalBodyStrategy = new InactiveLocalBodyStrategy();
+        inactiveLocalBodyStrategy.setRemainingRequests(queue);
+
         try {
             this.localBodyStrategy.getRequestQueue().destroy();
         } catch (ProActiveRuntimeException e) {
@@ -269,10 +271,11 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         this.getFuturePool().terminateAC(completeACs);
 
         if (!completeACs) {
-            setLocalBodyImpl(new InactiveLocalBodyStrategy());
+            setLocalBodyImpl(inactiveLocalBodyStrategy);
         } else {
             // the futurepool is still needed for remaining ACs
-            setLocalBodyImpl(new InactiveLocalBodyStrategy(this.getFuturePool()));
+            inactiveLocalBodyStrategy.setFuturePool(this.getFuturePool());
+            setLocalBodyImpl(inactiveLocalBodyStrategy);
         }
 
         // terminate request receiver
@@ -773,10 +776,14 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     }
 
     // end inner class LocalBodyImpl
-    private class InactiveLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
+    protected class InactiveLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
         // An inactive body strategy can have a futurepool if some ACs to do
         // remain after the termination of the active object
         private FuturePool futures;
+
+        // Used to keep track of old requests that were still in the request queue
+        // before to apply this new inactive local body strategy
+        private RequestQueue remainingRequests;
 
         //
         // -- CONSTRUCTORS -----------------------------------------------
@@ -835,6 +842,19 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         public long getNextSequenceID() {
             return 0;
         }
+
+        public RequestQueue getRemainingRequests() {
+            return remainingRequests;
+        }
+
+        public void setFuturePool(FuturePool pool) {
+            futures = pool;
+        }
+
+        public void setRemainingRequests(RequestQueue requestQueue) {
+            remainingRequests = requestQueue;
+        }
+
     }
 
     // end inner class InactiveBodyException

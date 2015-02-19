@@ -43,24 +43,27 @@ package org.objectweb.proactive.core.body;
  *
  * @author The ProActive Team
  * @version 1.0,  2001/10/23
- * @since   ProActive 0.9
+ * @since ProActive 0.9
  * @see org.objectweb.proactive.Body
- * @see AbstractBody 
+ * @see AbstractBody
  */
+
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.Active;
-import org.objectweb.proactive.ActiveObjectCreationException;
-import org.objectweb.proactive.Body;
-import org.objectweb.proactive.EndActive;
-import org.objectweb.proactive.InitActive;
-import org.objectweb.proactive.RunActive;
-import org.objectweb.proactive.Service;
+import org.objectweb.proactive.*;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.body.future.MethodCallResult;
+import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
+import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializable {
@@ -78,6 +81,9 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
     private transient InitActive initActive; // used only once when active object is started first time
     private RunActive runActive;
     private EndActive endActive;
+
+    private boolean initActiveExecutionFailed = false;
+    private Throwable lastErrorCaught = null;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
@@ -151,10 +157,15 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
 
         // run the activity of the body
         try {
-
             // execute the initialization if needed. Only once
             if (this.initActive != null) {
-                this.initActive.initActivity(this);
+                try {
+                    this.initActive.initActivity(this);
+                } catch (Throwable t) {
+                    initActiveExecutionFailed = true;
+                    throw t;
+                }
+
                 this.initActive = null; // we won't do it again
             }
 
@@ -178,19 +189,21 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
                     } catch (ProActiveRuntimeException pre) {
                         break;
                     }
+
                     serve(queue.removeOldest());
                 }
             }
-        } catch (Exception e) {
-            logger.error("Exception occured in runActivity method of body " + toString() +
-                ". Now terminating the body", e);
+        } catch (Throwable t) {
+            lastErrorCaught = t;
             callTerminate = true;
-
+            logger.error("Exception occurred in runActivity method of body " + toString() +
+                ". Now terminating the body", t);
         } finally {
             // execute the end of activity
             if (this.endActive != null) {
                 this.endActive.endActivity(this);
             }
+
             if (callTerminate) {
                 terminate();
             } else if (isActive()) {
@@ -199,9 +212,62 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
         }
     }
 
+    @Override
+    public void terminate() {
+        // Calls terminate for stopping the activity of the current active object
+        // Once the method has been executed, we have the guarantee that
+        // no more request can be served because the body strategy is replaced by
+        // an InactiveLocalBodyStrategy
+        super.terminate();
+
+        // for fixing PALIGHT-73
+        notifyPendingCallers(lastErrorCaught);
+    }
+
+    private void notifyPendingCallers(Throwable localErrorCatched) {
+        if (initActiveExecutionFailed) {
+            String errorMessage = "Exception thrown while executing InitActive on " + shortString();
+            Exception exceptionSentToCaller = new ProActiveRuntimeException(errorMessage, localErrorCatched);
+            final MethodCallResult methodCallResult = new MethodCallResult(null, exceptionSentToCaller);
+
+            // At this step localBodyStrategy is an instance of InactiveLocalBodyStrategy
+            // since terminate has been called just before
+            Iterator<Request> it = ((InactiveLocalBodyStrategy) localBodyStrategy).getRemainingRequests()
+                    .iterator();
+
+            ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime()
+                    .availableProcessors());
+
+            // Notifies the callers of the method calls received that an issue has occurred with initActive
+            // It is used to prevent callers to wait forever for a future or an acknowledgement
+            while (it.hasNext()) {
+                final Request request = it.next();
+
+                threadPool.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!request.getMethodCall().isOneWayCall()) {
+                            try {
+                                request.getSender().receiveReply(
+                                        new ReplyImpl(getID(), request.getSequenceNumber(), request
+                                                .getMethodName(), methodCallResult));
+                            } catch (IOException e) {
+                                sendReplyExceptionsLogger.error(shortString() +
+                                    " : Failed to send reply to method:" + request.getMethodName() +
+                                    " sequence: " + request.getSequenceNumber() + " by " +
+                                    request.getSenderNodeURL() + "/" + request.getSender(), e);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     //
     // -- PROTECTED METHODS -----------------------------------------------
     //
+
     /**
      * Creates the active thread and start it using this runnable body.
      */
@@ -226,8 +292,9 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
 
     /**
      * Signals that the activity of this body, managed by the active thread has just stopped.
+     *
      * @param completeACs if true, and if there are remaining AC in the futurepool, the AC thread
-     * is not killed now; it will be killed after the sending of the last remaining AC.
+     *                    is not killed now; it will be killed after the sending of the last remaining AC.
      */
     @Override
     protected void activityStopped(boolean completeACs) {
@@ -277,4 +344,5 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
     public long getNextSequenceID() {
         return localBodyStrategy.getNextSequenceID();
     }
+
 }
