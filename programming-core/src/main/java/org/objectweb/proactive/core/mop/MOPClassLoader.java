@@ -36,6 +36,10 @@
  */
 package org.objectweb.proactive.core.mop;
 
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -43,62 +47,64 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Hashtable;
-
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MOPClassLoader extends URLClassLoader {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
 
-    // retreives the optionnal byteCodeManipulator JVM arg
-    // javassist is used by default
-    public static Hashtable<String, byte[]> classDataCache = new Hashtable<String, byte[]>();
-    protected static MOPClassLoader mopCl = null;
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
+
+    public Map<String, byte[]> classDataCache = new HashMap<String, byte[]>();
+
+    // lazy-loaded singleton
+    private static class LazyHolder {
+
+        private static final MOPClassLoader INSTANCE = createMOPClassLoader();
+
+    }
 
     /**
-     * Return the unique MOPClassLoader for the current JVM
-     * Create it if it does not exist
+     * Return the unique MOPClassLoader for the current JVM.
+     * Create it if it does not exist.
      */
-    public static synchronized MOPClassLoader getMOPClassLoader() {
-        if (MOPClassLoader.mopCl == null) {
-            MOPClassLoader.mopCl = MOPClassLoader.createMOPClassLoader();
-        }
-        return MOPClassLoader.mopCl;
+    public static MOPClassLoader getMOPClassLoader() {
+        return LazyHolder.INSTANCE;
     }
 
     public MOPClassLoader() {
         super(new URL[] {});
     }
 
+    private MOPClassLoader(ClassLoader parent, URL[] urls) {
+        super(urls, parent);
+    }
+
     /**
      * Get the bytecode of a stub given its name. If the stub can not be found
      * in the cache, the MOPClassLoader tries to generate it.
+     *
      * @param classname The name of the stub class
      * @return An array representing the bytecode of the stub, null if the
-     *  stub could not be found or created
+     * stub could not be found or created
      */
-    public byte[] getClassData(String classname) {
-        byte[] cb = null;
-        cb = classDataCache.get(classname);
+    public synchronized byte[] getClassData(String classname) {
+        byte[] cb = classDataCache.get(classname);
+
         if (cb == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("MOPClassLoader: class " + classname + " not found, trying to generate it");
             }
+
             try {
                 this.loadClass(classname);
             } catch (ClassNotFoundException e) {
                 logger.debug(e);
             }
+
             cb = classDataCache.get(classname);
         }
         return cb;
-    }
-
-    private MOPClassLoader(ClassLoader parent, URL[] urls) {
-        super(urls, parent);
     }
 
     public void launchMain(String[] args) throws Throwable {
@@ -124,6 +130,7 @@ public class MOPClassLoader extends URLClassLoader {
         } catch (InvocationTargetException e) {
             throw e.getTargetException();
         }
+
         return;
     }
 
@@ -131,12 +138,16 @@ public class MOPClassLoader extends URLClassLoader {
         // Gets the current classloader
         ClassLoader currentClassLoader = null;
 
+        // TODO(lpellegr): I think the following block of code could be replaced
+        // by a simple currentClassLoader = MOPClassLoader.class.getClassLoader()
+        // but more investigations would be necessary to check that anything is broken
         try {
             Class<?> c = Class.forName("org.objectweb.proactive.core.mop.MOPClassLoader");
             currentClassLoader = c.getClassLoader();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         URL[] urls = null;
 
         // Checks if the current classloader is actually an instance of
@@ -159,20 +170,15 @@ public class MOPClassLoader extends URLClassLoader {
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        return this.loadClass(name, null, null, false);
+        return this.loadClass(name, null, null);
     }
 
     public Class<?> loadClass(String name, Class<?>[] genericParameters) throws ClassNotFoundException {
-        return this.loadClass(name, genericParameters, null, false);
+        return this.loadClass(name, genericParameters, null);
     }
 
-    public Class<?> loadClass(String name, Class<?>[] genericParameters, ClassLoader cl)
+    protected synchronized Class<?> loadClass(String name, Class<?>[] genericParameters, ClassLoader cl)
             throws ClassNotFoundException {
-        return this.loadClass(name, genericParameters, cl, false);
-    }
-
-    protected synchronized Class<?> loadClass(String name, Class<?>[] genericParameters, ClassLoader cl,
-            boolean resolve) throws ClassNotFoundException {
         if (this.getParent() != null) {
             try {
                 return this.getParent().loadClass(name);
@@ -200,7 +206,7 @@ public class MOPClassLoader extends URLClassLoader {
                 try {
                     byte[] data = PAProxyBuilder.generatePAProxy(PAProxyBuilder
                             .getBaseClassNameFromPAProxyName(name));
-                    MOPClassLoader.classDataCache.put(name, data);
+                    classDataCache.put(name, data);
 
                     Class<?> baseCl = Class.forName(PAProxyBuilder.getBaseClassNameFromPAProxyName(name));
 
@@ -241,7 +247,7 @@ public class MOPClassLoader extends URLClassLoader {
                 byte[] data = null;
 
                 data = JavassistByteCodeStubBuilder.create(classname, genericParameters);
-                MOPClassLoader.classDataCache.put(name, data);
+                classDataCache.put(name, data);
 
                 // We use introspection to invoke the defineClass method to avoid the normal 
                 // class Access checking. This method is supposed to be protected which means 
@@ -263,7 +269,7 @@ public class MOPClassLoader extends URLClassLoader {
         }
     }
 
-    protected Class<?> callDefineClassUsingReflection(String name, byte[] data, ClassLoader delegateCl)
+    private Class<?> callDefineClassUsingReflection(String name, byte[] data, ClassLoader delegateCl)
             throws ClassNotFoundException, SecurityException, NoSuchMethodException,
             IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Class<?> clc = Class.forName("java.lang.ClassLoader");
@@ -333,4 +339,5 @@ public class MOPClassLoader extends URLClassLoader {
         s = s.replace("/", ".");
         return s;
     }
+
 }

@@ -36,57 +36,35 @@
  */
 package org.objectweb.proactive.core.mop;
 
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.GenericDeclaration;
-import java.lang.reflect.TypeVariable;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import org.objectweb.proactive.annotation.Cache;
-import org.objectweb.proactive.annotation.NoReify;
-import org.objectweb.proactive.annotation.Self;
-import org.objectweb.proactive.annotation.TurnActive;
-import org.objectweb.proactive.annotation.TurnActiveParam;
-import org.objectweb.proactive.annotation.TurnRemote;
-import org.objectweb.proactive.annotation.TurnRemoteParam;
-import org.objectweb.proactive.annotation.UnwrapFuture;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import javassist.CannotCompileException;
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMember;
-import javassist.CtMethod;
-import javassist.CtNewMethod;
-import javassist.LoaderClassPath;
-import javassist.Modifier;
-import javassist.NotFoundException;
+import javassist.*;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.annotation.*;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.runtime.ProActiveRuntime;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.TypeVariable;
+import java.util.*;
 
 
 /**
  * This class generates the bytecode for proactive stubs using Javassist.
  *
  * @author The ProActive Team
- *
  */
 public class JavassistByteCodeStubBuilder {
+
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.STUB_GENERATION);
-    private static CtMethod proxyGetter;
-    private static CtMethod proxySetter;
-    private static volatile boolean classPoolInitialized = false;
+
+    private static boolean classPoolInitialized = false;
+
     private static ClassPool pool = ClassPool.getDefault();
 
     public synchronized static ClassPool getClassPool() {
@@ -102,161 +80,163 @@ public class JavassistByteCodeStubBuilder {
      * <p>Creates the bytecode for a stub on the given class</p>
      * <p>This method should be accessed by one thread only for a given class name, otherwise
      * it may lead to unsupported concurrent class generation, resulting in a "frozen class" javassist runtime exception </p>
-     * @param className the name of the class on which a stub class is created
+     *
+     * @param className         the name of the class on which a stub class is created
      * @param genericParameters TODO
      * @return the bytecode for the corresponding stub class
      * @throws NoClassDefFoundError if the specified classname does not correspond to a class in the classpath
      */
     @SuppressWarnings("unchecked")
     public static byte[] create(String className, Class<?>[] genericParameters) throws NoClassDefFoundError {
-        CtClass generatedCtClass = null;
+        synchronized (MOPClassLoader.getMOPClassLoader()) {
+            CtClass generatedCtClass = null;
 
-        if (genericParameters == null) {
-            genericParameters = new Class<?>[0];
-        }
-        Method[] reifiedMethodsWithoutGenerics;
-        try {
-            ClassPool pool = getClassPool();
-            generatedCtClass = pool.makeClass(Utils.convertClassNameToStubClassName(className,
-                    genericParameters));
-            generatedCtClass.getClassFile().setMajorVersion(ClassFile.JAVA_6);
-
-            CtClass superCtClass = null;
+            if (genericParameters == null) {
+                genericParameters = new Class<?>[0];
+            }
+            Method[] reifiedMethodsWithoutGenerics;
             try {
-                superCtClass = pool.get(className);
-            } catch (NotFoundException e) {
-                // may happen in environments with multiple classloaders: className is not available
-                // in the initial classpath of javassist's class pool
-                // ==> try to append classpath of the class corresponding to className
-                pool.appendClassPath(new LoaderClassPath(Class.forName(className).getClassLoader()));
-                superCtClass = pool.get(className);
-            }
+                ClassPool pool = getClassPool();
+                generatedCtClass = pool.makeClass(Utils.convertClassNameToStubClassName(className,
+                        genericParameters));
+                generatedCtClass.getClassFile().setMajorVersion(ClassFile.JAVA_6);
 
-            // Fix for PROACTIVE-1163: serialVersionUIDs, when defined, should be reported on generated Stubs
-            // The stub class must have the same serialVersionUID as the reified class
-            // Using CtClass#getDeclaredFields() instead of CtClass#getDeclaredField() to avoid NotFoundException
-            for (CtField declaredField : superCtClass.getDeclaredFields()) {
-                if ("serialVersionUID".equals(declaredField.getName())) {
-                    generatedCtClass.addField(new CtField(declaredField, generatedCtClass));
+                CtClass superCtClass = null;
+                try {
+                    superCtClass = pool.get(className);
+                } catch (NotFoundException e) {
+                    // may happen in environments with multiple classloaders: className is not available
+                    // in the initial classpath of javassist's class pool
+                    // ==> try to append classpath of the class corresponding to className
+                    pool.appendClassPath(new LoaderClassPath(Class.forName(className).getClassLoader()));
+                    superCtClass = pool.get(className);
                 }
-            }
 
-            CtField outsideOfConstructorField = new CtField(pool.get(CtClass.booleanType.getName()),
-                "outsideOfConstructor", generatedCtClass);
-
-            generatedCtClass.addField(outsideOfConstructorField, (superCtClass.isInterface() ? " false"
-                    : "true"));
-
-            if (superCtClass.isInterface()) {
-                generatedCtClass.addInterface(superCtClass);
-                generatedCtClass.setSuperclass(pool.get(Object.class.getName()));
-            } else {
-                generatedCtClass.setSuperclass(superCtClass);
-            }
-
-            if (!generatedCtClass.subtypeOf(pool.get(Serializable.class.getName()))) {
-                generatedCtClass.addInterface(pool.get(Serializable.class.getName()));
-            }
-
-            CtClass ctStubO = null;
-            try {
-                ctStubO = pool.get(StubObject.class.getName());
-            } catch (NotFoundException e) {
-                // may happen in environments with multiple classloaders: StubObject is not available
-                // in the initial classpath of javassist's class pool
-                // ==> try to append classpath of the class corresponding to StubObject
-                pool.appendClassPath(new ClassClassPath(Class.forName(StubObject.class.getName())));
-                ctStubO = pool.get(StubObject.class.getName());
-            }
-
-            if (!generatedCtClass.subtypeOf(ctStubO)) {
-                generatedCtClass.addInterface(ctStubO);
-            }
-
-            createStubObjectMethods(generatedCtClass);
-
-            CtField methodsField = new CtField(pool.get("java.lang.reflect.Method[]"), "overridenMethods",
-                generatedCtClass);
-
-            methodsField.setModifiers(Modifier.STATIC);
-            generatedCtClass.addField(methodsField);
-
-            CtField genericTypesMappingField = new CtField(pool.get("java.util.Map"), "genericTypesMapping",
-                generatedCtClass);
-
-            genericTypesMappingField.setModifiers(Modifier.STATIC);
-            generatedCtClass.addField(genericTypesMappingField);
-
-            //   This map is used for keeping track of the method signatures / methods that are to be reified
-            java.util.Map<String, Method> temp = new HashMap<String, Method>();
-            List<String> classesIndexer = new Vector<String>();
-
-            temp = methodsIndexer(superCtClass, classesIndexer);
-
-            reifiedMethodsWithoutGenerics = (temp.values().toArray(new Method[temp.size()]));
-
-            // Determines which reifiedMethods are valid for reification
-            // It is the responsibility of method checkMethod
-            // to decide if a method is valid for reification or not
-            Vector<Method> v = new Vector<Method>();
-            int initialNumberOfMethods = reifiedMethodsWithoutGenerics.length;
-
-            for (int i = 0; i < initialNumberOfMethods; i++) {
-                if (checkMethod(reifiedMethodsWithoutGenerics[i].getCtMethod())) {
-                    v.addElement(reifiedMethodsWithoutGenerics[i]);
+                // Fix for PROACTIVE-1163: serialVersionUIDs, when defined, should be reported on generated Stubs
+                // The stub class must have the same serialVersionUID as the reified class
+                // Using CtClass#getDeclaredFields() instead of CtClass#getDeclaredField() to avoid NotFoundException
+                for (CtField declaredField : superCtClass.getDeclaredFields()) {
+                    if ("serialVersionUID".equals(declaredField.getName())) {
+                        generatedCtClass.addField(new CtField(declaredField, generatedCtClass));
+                    }
                 }
-            }
-            Method[] validMethods = new Method[v.size()];
-            CtMethod[] validCtMethods = new CtMethod[v.size()];
-            //            v.copyInto(validMethods);
 
-            // Installs the list of valid reifiedMethods as an instance variable of this object
-            for (int i = 0; i < validMethods.length; i++) {
-                validMethods[i] = v.get(i);
-                validCtMethods[i] = v.get(i).getCtMethod();
-            }
+                CtField outsideOfConstructorField = new CtField(pool.get(CtClass.booleanType.getName()),
+                    "outsideOfConstructor", generatedCtClass);
 
-            Class realSuperClass = Class.forName(className);
-            TypeVariable<GenericDeclaration>[] tv = realSuperClass.getTypeParameters();
-            Map<TypeVariable, Class<?>> genericTypesMapping = new HashMap<TypeVariable, Class<?>>();
-            if (genericParameters.length != 0) {
-                // only deal with cases where parameters have been specified
-                for (int i = 0; i < tv.length; i++) {
-                    genericTypesMapping.put(tv[i], genericParameters[i]);
+                generatedCtClass.addField(outsideOfConstructorField, (superCtClass.isInterface() ? " false"
+                        : "true"));
+
+                if (superCtClass.isInterface()) {
+                    generatedCtClass.addInterface(superCtClass);
+                    generatedCtClass.setSuperclass(pool.get(Object.class.getName()));
+                } else {
+                    generatedCtClass.setSuperclass(superCtClass);
                 }
+
+                if (!generatedCtClass.subtypeOf(pool.get(Serializable.class.getName()))) {
+                    generatedCtClass.addInterface(pool.get(Serializable.class.getName()));
+                }
+
+                CtClass ctStubO = null;
+                try {
+                    ctStubO = pool.get(StubObject.class.getName());
+                } catch (NotFoundException e) {
+                    // may happen in environments with multiple classloaders: StubObject is not available
+                    // in the initial classpath of javassist's class pool
+                    // ==> try to append classpath of the class corresponding to StubObject
+                    pool.appendClassPath(new ClassClassPath(Class.forName(StubObject.class.getName())));
+                    ctStubO = pool.get(StubObject.class.getName());
+                }
+
+                if (!generatedCtClass.subtypeOf(ctStubO)) {
+                    generatedCtClass.addInterface(ctStubO);
+                }
+
+                CtMethod[] proxyMethods = createStubObjectMethods(generatedCtClass);
+
+                CtField methodsField = new CtField(pool.get("java.lang.reflect.Method[]"),
+                    "overridenMethods", generatedCtClass);
+
+                methodsField.setModifiers(Modifier.STATIC);
+                generatedCtClass.addField(methodsField);
+
+                CtField genericTypesMappingField = new CtField(pool.get("java.util.Map"),
+                    "genericTypesMapping", generatedCtClass);
+
+                genericTypesMappingField.setModifiers(Modifier.STATIC);
+                generatedCtClass.addField(genericTypesMappingField);
+
+                //   This map is used for keeping track of the method signatures / methods that are to be reified
+                java.util.Map<String, Method> temp = new HashMap<String, Method>();
+                List<String> classesIndexer = new Vector<String>();
+
+                temp = methodsIndexer(superCtClass, classesIndexer);
+
+                reifiedMethodsWithoutGenerics = (temp.values().toArray(new Method[temp.size()]));
+
+                // Determines which reifiedMethods are valid for reification
+                // It is the responsibility of method checkMethod
+                // to decide if a method is valid for reification or not
+                Vector<Method> v = new Vector<Method>();
+                int initialNumberOfMethods = reifiedMethodsWithoutGenerics.length;
+
+                for (int i = 0; i < initialNumberOfMethods; i++) {
+                    if (checkMethod(reifiedMethodsWithoutGenerics[i].getCtMethod(), proxyMethods)) {
+                        v.addElement(reifiedMethodsWithoutGenerics[i]);
+                    }
+                }
+                Method[] validMethods = new Method[v.size()];
+                CtMethod[] validCtMethods = new CtMethod[v.size()];
+                //            v.copyInto(validMethods);
+
+                // Installs the list of valid reifiedMethods as an instance variable of this object
+                for (int i = 0; i < validMethods.length; i++) {
+                    validMethods[i] = v.get(i);
+                    validCtMethods[i] = v.get(i).getCtMethod();
+                }
+
+                Class realSuperClass = Class.forName(className);
+                TypeVariable<GenericDeclaration>[] tv = realSuperClass.getTypeParameters();
+                Map<TypeVariable, Class<?>> genericTypesMapping = new HashMap<TypeVariable, Class<?>>();
+                if (genericParameters.length != 0) {
+                    // only deal with cases where parameters have been specified
+                    for (int i = 0; i < tv.length; i++) {
+                        genericTypesMapping.put(tv[i], genericParameters[i]);
+                    }
+                }
+
+                // create static block with method initializations
+                createStaticInitializer(generatedCtClass, validCtMethods, classesIndexer, className,
+                        genericParameters);
+
+                createReifiedMethods(generatedCtClass, validMethods, superCtClass.isInterface());
+
+                if (logger.isTraceEnabled()) {
+                    logger.debug("generated class : " + generatedCtClass.getName() + "loaded into " +
+                        generatedCtClass.getClass().getClassLoader().toString() +
+                        ", initial class' classloader " + superCtClass.getClass().getClassLoader() +
+                        ", url " + superCtClass.getURL());
+                } else if (logger.isDebugEnabled()) {
+                    logger.debug("generated class : " + generatedCtClass.getName());
+                }
+
+                // detach to fix "frozen class" errors encountered in some large scale deployments
+                byte[] bytecode = generatedCtClass.toBytecode();
+
+                if (CentralPAPropertyRepository.PA_MOP_WRITESTUBONDISK.isTrue()) {
+                    generatedCtClass.debugWriteFile(CentralPAPropertyRepository.PA_MOP_GENERATEDCLASSES_DIR
+                            .getValue());
+                }
+
+                generatedCtClass.detach();
+
+                return bytecode;
+            } catch (Exception e) {
+                // generatedCtClass.debugWriteFile();
+                throw new RuntimeException("Failed to generate stub for class " + className +
+                    " with javassist : " + e.getMessage(), e);
             }
-
-            // create static block with method initializations
-            createStaticInitializer(generatedCtClass, validCtMethods, classesIndexer, className,
-                    genericParameters);
-
-            createReifiedMethods(generatedCtClass, validMethods, superCtClass.isInterface());
-
-            if (logger.isTraceEnabled()) {
-                logger.debug("generated class : " + generatedCtClass.getName() + "loaded into " +
-                    generatedCtClass.getClass().getClassLoader().toString() +
-                    ", initial class' classloader " + superCtClass.getClass().getClassLoader() + ", url " +
-                    superCtClass.getURL());
-            } else if (logger.isDebugEnabled()) {
-                logger.debug("generated class : " + generatedCtClass.getName());
-            }
-
-            // detach to fix  "frozen class" errors encountered in some large scale deployments
-            byte[] bytecode = generatedCtClass.toBytecode();
-
-            if (CentralPAPropertyRepository.PA_MOP_WRITESTUBONDISK.isTrue()) {
-
-                generatedCtClass.debugWriteFile(CentralPAPropertyRepository.PA_MOP_GENERATEDCLASSES_DIR
-                        .getValue());
-            }
-
-            generatedCtClass.detach();
-
-            return bytecode;
-        } catch (Exception e) {
-            //                generatedCtClass.debugWriteFile();
-            throw new RuntimeException("Failed to generate stub for class " + className +
-                " with javassist : " + e.getMessage(), e);
         }
     }
 
@@ -312,7 +292,7 @@ public class JavassistByteCodeStubBuilder {
                         } else {
                             // If not, adds this method to the Vector that
                             // holds all the reifiedMethods for this class
-                            //                                tempVector.addElement(currentMethod);
+                            // tempVector.addElement(currentMethod);
                             temp.put(key, new Method(currentMethod));
                         }
                     } else {
@@ -354,7 +334,7 @@ public class JavassistByteCodeStubBuilder {
                     m = new Method(currentMethod);
                     temp.put(key.toString(), m);
                 }
-                //                                m.setCtMethod(currentMethod);
+                // m.setCtMethod(currentMethod);
                 m.grabMethodandParameterAnnotation(currentMethod);
 
             }
@@ -517,9 +497,8 @@ public class JavassistByteCodeStubBuilder {
     }
 
     /**
-     * 
-     * @param reifiedMethod a method that has some parameters 
-     * @param parameterName the name of the parameters 
+     * @param reifiedMethod a method that has some parameters
+     * @param parameterName the name of the parameters
      * @return the index of the parameters in the list of parameters (first parameter has index 1)
      */
     private static int parameterNameToIndex(CtMethod reifiedMethod, String parameterName) {
@@ -614,15 +593,17 @@ public class JavassistByteCodeStubBuilder {
      * @throws CannotCompileException
      * @throws NotFoundException
      */
-    public static void createStubObjectMethods(CtClass generatedClass) throws CannotCompileException,
+    public static CtMethod[] createStubObjectMethods(CtClass generatedClass) throws CannotCompileException,
             NotFoundException {
         CtField proxyField = new CtField(getClassPool().getDefault().get(Proxy.class.getName()), "myProxy",
             generatedClass);
         generatedClass.addField(proxyField);
-        proxyGetter = CtNewMethod.getter("getProxy", proxyField);
+        CtMethod proxyGetter = CtNewMethod.getter("getProxy", proxyField);
         generatedClass.addMethod(proxyGetter);
-        proxySetter = CtNewMethod.setter("setProxy", proxyField);
+        CtMethod proxySetter = CtNewMethod.setter("setProxy", proxyField);
         generatedClass.addMethod(proxySetter);
+
+        return new CtMethod[] { proxyGetter, proxySetter };
     }
 
     private static String getClassTypeInitializer(CtClass param, boolean elementInArray)
@@ -682,7 +663,7 @@ public class JavassistByteCodeStubBuilder {
         return null;
     }
 
-    static public boolean checkMethod(CtMethod met) throws NotFoundException {
+    static public boolean checkMethod(CtMethod met, CtMethod[] proxyMethods) throws NotFoundException {
         int modifiers = met.getModifiers();
 
         // Final reifiedMethods cannot be reified since we cannot redefine them
@@ -707,8 +688,8 @@ public class JavassistByteCodeStubBuilder {
             return false;
         }
 
-        if ((met.getSignature().equals(proxyGetter.getSignature()) || met.getSignature().equals(
-                proxySetter.getSignature()))) {
+        if ((met.getSignature().equals(proxyMethods[0].getSignature()) || met.getSignature().equals(
+                proxyMethods[1].getSignature()))) {
             return false;
         }
 
@@ -728,10 +709,11 @@ public class JavassistByteCodeStubBuilder {
     }
 
     /**
-     * return true if the annotation <code>annotation</code> is set on the member (field, constructor, method) 
-     * @param member the member (field, constructor, method) onto check the annotation's presence
+     * return true if the annotation <code>annotation</code> is set on the member (field, constructor, method)
+     *
+     * @param member     the member (field, constructor, method) onto check the annotation's presence
      * @param annotation the annotation to check
-     * @return returns true if the annotation <code>annotation</code> is set on the method 
+     * @return returns true if the annotation <code>annotation</code> is set on the method
      */
     public static boolean hasAnnotation(CtMember member, Class<? extends Annotation> annotation) {
         Object[] o = member.getAvailableAnnotations();
@@ -746,10 +728,11 @@ public class JavassistByteCodeStubBuilder {
     }
 
     /**
-     * return true if the annotation <code>annotation</code> is set on the member (field, constructor, method) 
-     * @param member the member (field, constructor, method) onto check the annotation's presence
+     * return true if the annotation <code>annotation</code> is set on the member (field, constructor, method)
+     *
+     * @param ctClass    the member (field, constructor, method) onto check the annotation's presence
      * @param annotation the annotation to check
-     * @return returns true if the annotation <code>annotation</code> is set on the method 
+     * @return returns true if the annotation <code>annotation</code> is set on the method
      */
     public static boolean hasAnnotation(CtClass ctClass, Class<? extends Annotation> annotation) {
         Object[] o = ctClass.getAvailableAnnotations();
