@@ -51,6 +51,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javassist.NotFoundException;
 
@@ -76,7 +78,9 @@ public abstract class MOP {
      * The name of the interface that characterizes all stub classes
      */
     protected static String STUB_OBJECT_INTERFACE_NAME = "org.objectweb.proactive.core.mop.StubObject";
+
     protected static Class<?> STUB_OBJECT_INTERFACE;
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
 
     /**
@@ -103,26 +107,30 @@ public abstract class MOP {
     /**
      * A Hashtable to cache (reified class, stub class constructor) couples.
      */
-    protected static java.util.Hashtable<GenericStubKey, Constructor<?>> stubTable = new java.util.Hashtable<GenericStubKey, Constructor<?>>();
+    protected static ConcurrentMap<GenericStubKey, Constructor<?>> stubTable =
+            new ConcurrentHashMap<GenericStubKey, Constructor<?>>();
 
     /**
      * A Hashtable to cache (proxy class, proxy class constructor) couples
      */
-    protected static java.util.Hashtable<String, Constructor<?>> proxyTable = new java.util.Hashtable<String, Constructor<?>>();
+    protected static ConcurrentMap<String, Constructor<?>> proxyTable =
+            new ConcurrentHashMap<String, Constructor<?>>();
 
     /**
      * A Hashtable to cache (Class<?> name, proxy class name) couples
      * this is meant for class-based reification
      */
-    protected static java.util.Hashtable<String, Constructor<?>> secondProxyTable = new java.util.Hashtable<String, Constructor<?>>();
-    protected static MOPClassLoader singleton = MOPClassLoader.getMOPClassLoader(); //MOPClassLoader.createMOPClassLoader();
+    protected static ConcurrentMap<String, Constructor<?>> secondProxyTable =
+            new ConcurrentHashMap<String, Constructor<?>>();
+
+    protected static final MOPClassLoader singleton = MOPClassLoader.getMOPClassLoader();
 
     /**
      *        As this class is center to the API, its static initializer is
      *        a good place to initialize general stuff.
      */
-    protected static Map<String, Class<?>> loadedClass = Collections
-            .synchronizedMap(new HashMap<String, Class<?>>());
+    protected static ConcurrentMap<String, Class<?>> loadedClass =
+            new ConcurrentHashMap<String, Class<?>>();
 
     static {
         PROXY_CONSTRUCTOR_PARAMETERS_TYPES_ARRAY = new Class<?>[] {
@@ -521,7 +529,7 @@ public abstract class MOP {
      * </UL>
      * 
      * @author The ProActive Team
-     * @param cl Class<?> to be checked
+     * @param className Class to be checked
      * @return <code>true</code> is the class exists and can be reified,
      *         <code>false</code> otherwise.
      */
@@ -631,14 +639,14 @@ public abstract class MOP {
      * @return The Constructor object.
      */
     private static Constructor<?> findStubConstructor(Class<?> targetClass, Class<?>[] genericParameters) {
-        Constructor<?> stubConstructor;
         String nameOfClass = targetClass.getName();
 
-        // Is it cached in Hashtable ?
-        stubConstructor = stubTable.get(new GenericStubKey(nameOfClass, genericParameters));
+        GenericStubKey key = new GenericStubKey(nameOfClass, genericParameters);
 
-        // System.out.println("xxxxxx targetClass is " + targetClass);
+        Constructor<?> stubConstructor = stubTable.get(key);
+
         // On cache miss, finds the constructor
+        // this test prevents the creation of the constructor for putIfAbsent when there is no contention
         if (stubConstructor == null) {
             Class<?> stubClass;
             try {
@@ -658,12 +666,14 @@ public abstract class MOP {
                 } else {
                     stubConstructor = stubClass.getConstructor(EMPTY_CLASS_ARRAY);
                 }
-                stubTable.put(new GenericStubKey(nameOfClass, genericParameters), stubConstructor);
+
+                stubTable.putIfAbsent(key, stubConstructor);
             } catch (NoSuchMethodException e) {
                 throw new GenerationOfStubClassFailedException("Stub for class " + nameOfClass +
                     "has no noargs constructor. This is a bug in ProActive.");
             }
         }
+
         return stubConstructor;
     }
 
@@ -674,22 +684,19 @@ public abstract class MOP {
      * @throws InvalidProxyClassException If the class is not a valid Proxy
      */
     private static Constructor<?> findProxyConstructor(Class<?> proxyClass) throws InvalidProxyClassException {
-        Constructor<?> proxyConstructor;
+        String proxyClassName = proxyClass.getName();
 
         // Localizes the proxy class constructor
-        proxyConstructor = proxyTable.get(proxyClass.getName());
+        Constructor<?> proxyConstructor = proxyTable.get(proxyClassName);
 
-        // System.out.println("MOP: The class of the proxy is " +
-        // proxyClass.getName());
         // Cache miss
         if (proxyConstructor == null) {
             try {
                 proxyConstructor = proxyClass.getConstructor(PROXY_CONSTRUCTOR_PARAMETERS_TYPES_ARRAY);
-                proxyTable.put(proxyClass.getName(), proxyConstructor);
+                proxyTable.putIfAbsent(proxyClassName, proxyConstructor);
             } catch (NoSuchMethodException e) {
                 throw new InvalidProxyClassException(
-                    "No constructor matching (ConstructorCall, Object[]) found in proxy class " +
-                        proxyClass.getName());
+                    "No constructor matching (ConstructorCall, Object[]) found in proxy class " + proxyClassName);
             }
         }
         return proxyConstructor;
@@ -990,7 +997,7 @@ public abstract class MOP {
     /**
      * Finds the reified constructor
      * @param targetClass The class
-     * @param the effective arguments
+     * @param targetConstructorArgs effective arguments
      * @return The constructor
      * @throws ConstructionOfReifiedObjectFailedException
      */
