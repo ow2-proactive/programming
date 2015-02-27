@@ -59,7 +59,11 @@ public class MOPConcurrencyTest {
 
         // creates new classes that are reifiable and that can be used to create
         // stubs later in the test
-        loadClassesIntoMop(classNames);
+        try {
+            loadClassesIntoMop(classNames);
+        } catch (CannotCompileException e) {
+            // Javassist compilation errors may occur if classes are already generated and loaded
+        }
 
         threadPool = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     }
@@ -173,6 +177,7 @@ public class MOPConcurrencyTest {
         //create new classes
         for (int i = 0; i < classNames.size(); i++) {
             String className = classNames.get(i);
+
             CtClass cc = pool.makeClass(className);
             cc.addInterface(serializableClass);
 
