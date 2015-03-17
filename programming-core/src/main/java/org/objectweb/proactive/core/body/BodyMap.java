@@ -62,6 +62,8 @@ import org.objectweb.proactive.core.UniqueID;
  * @since   ProActive 0.9
  */
 public class BodyMap /* extends AbstractEventProducer */implements Cloneable, java.io.Externalizable {
+
+    private static final long serialVersionUID = 61L;
     //
     // -- PRIVATE MEMBER -----------------------------------------------
     //

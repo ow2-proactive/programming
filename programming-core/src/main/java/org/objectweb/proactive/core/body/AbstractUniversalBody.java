@@ -64,6 +64,8 @@ import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
  */
 
 public abstract class AbstractUniversalBody implements UniversalBody, Serializable {
+
+    private static final long serialVersionUID = 61L;
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //

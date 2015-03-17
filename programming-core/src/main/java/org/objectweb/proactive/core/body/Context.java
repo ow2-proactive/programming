@@ -56,6 +56,8 @@ import org.objectweb.proactive.core.mop.MOPException;
 @PublicAPI
 public class Context implements Serializable {
 
+    private static final long serialVersionUID = 61L;
+
     /** Body associated to this context */
     private final Body body;
 

@@ -44,6 +44,8 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 
 public abstract class AbstractExternalProcessDecorator extends AbstractExternalProcess implements
         ExternalProcessDecorator {
+
+    private static final long serialVersionUID = 61L;
     protected ExternalProcess targetProcess;
     private int compositionType = APPEND_TO_COMMAND_COMPOSITION;
 
@@ -175,6 +177,8 @@ public abstract class AbstractExternalProcessDecorator extends AbstractExternalP
      * Implementation of a RemoteProcessMessageLogger that feeds two MessageLoggers
      */
     public static class CompositeMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         private RemoteProcessMessageLogger messageLogger1;
         private RemoteProcessMessageLogger messageLogger2;
 

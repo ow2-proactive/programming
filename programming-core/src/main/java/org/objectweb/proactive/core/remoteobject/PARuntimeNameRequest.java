@@ -44,6 +44,8 @@ import org.objectweb.proactive.core.util.URIBuilder;
  *  Get the name a remote ProActive Runtime
  */
 public class PARuntimeNameRequest extends RemoteObjectRequest {
+
+    private static final long serialVersionUID = 61L;
     public PARuntimeNameRequest() {
     };
 

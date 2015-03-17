@@ -53,6 +53,8 @@ import java.util.List;
  * @see VirtualMachine
  */
 public class MainDefinition implements Serializable {
+
+    private static final long serialVersionUID = 61L;
     //
     //  ----- PRIVATE MEMBERS -----------------------------------------------------------------------------------
     //

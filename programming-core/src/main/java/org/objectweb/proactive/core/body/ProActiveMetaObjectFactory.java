@@ -103,6 +103,8 @@ import org.objectweb.proactive.core.util.converter.MakeDeepCopy;
 //@snippet-start proactivemetaobjectfactory
 public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Serializable, Cloneable {
 
+    private static final long serialVersionUID = 61L;
+
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -227,6 +229,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     //  // -- INNER CLASSES -----------------------------------------------
     //  //
     protected static class RequestFactoryImpl implements RequestFactory, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                 long sequenceID, MessageTags tags) {
             //########### exemple de code pour les nouvelles factories
@@ -242,6 +246,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class RequestFactoryImpl
     protected static class ReplyReceiverFactoryImpl implements ReplyReceiverFactory, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public ReplyReceiver newReplyReceiver() {
             return new org.objectweb.proactive.core.body.reply.ReplyReceiverImpl();
         }
@@ -249,6 +255,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class ReplyReceiverFactoryImpl
     protected class RequestReceiverFactoryImpl implements RequestReceiverFactory, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public RequestReceiver newRequestReceiver() {
             return new org.objectweb.proactive.core.body.request.RequestReceiverImpl();
         }
@@ -256,6 +264,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class RequestReceiverFactoryImpl
     protected class RequestQueueFactoryImpl implements RequestQueueFactory, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public BlockingRequestQueue newRequestQueue(UniqueID ownerID) {
             return new org.objectweb.proactive.core.body.request.BlockingRequestQueueImpl(ownerID);
         }
@@ -263,6 +273,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class RemoteBodyFactoryImpl
     protected static class ThreadStoreFactoryImpl implements ThreadStoreFactory, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public ThreadStore newThreadStore() {
             return new org.objectweb.proactive.core.util.ThreadStoreImpl();
         }
@@ -271,6 +283,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     // end inner class ThreadStoreFactoryImpl
     protected static class ProActiveSPMDGroupManagerFactoryImpl implements ProActiveSPMDGroupManagerFactory,
             java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public ProActiveSPMDGroupManager newProActiveSPMDGroupManager() {
             return new ProActiveSPMDGroupManager();
         }
@@ -278,6 +292,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // REQUEST-TAGS
     protected static class MessageTagsFactoryImpl implements MessageTagsFactory, Serializable {
+
+    private static final long serialVersionUID = 61L;
 
         /**
          * @see MessageTagsFactory#newMessageTags()

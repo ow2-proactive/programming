@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 
 
 public class BodyRequest extends MessageImpl implements Request, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
     protected MethodCall methodCall;
     protected boolean isPriority;
     protected boolean isNFRequest;

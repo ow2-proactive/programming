@@ -44,6 +44,8 @@ import org.objectweb.proactive.utils.StackTraceUtil;
  */
 public class ContextAwareMethodCallResult extends MethodCallResult {
 
+    private static final long serialVersionUID = 61L;
+
     /** The exception to throw */
     protected Throwable contextException;
 

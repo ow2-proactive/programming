@@ -46,6 +46,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 
 public class GroupLSF extends AbstractGroup {
+
+    private static final long serialVersionUID = 61L;
     private String resources = null;
     private String wallTime;
     private int processorNumber;

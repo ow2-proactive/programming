@@ -66,6 +66,8 @@ import org.objectweb.proactive.core.process.UniversalProcess;
  * @since   ProActive 0.9.4
  */
 public class MapRshProcess extends AbstractExternalProcessDecorator {
+
+    private static final long serialVersionUID = 61L;
     private static final String DEFAULT_SCRIPT_LOCATION = System.getProperty("user.home") + File.separator +
         "ProActive" + File.separator + "scripts" + File.separator + "unix" + File.separator +
         "gridexperiment" + File.separator + "oasis-exp";

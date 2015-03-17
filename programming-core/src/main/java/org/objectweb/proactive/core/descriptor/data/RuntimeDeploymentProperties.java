@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.ProActiveException;
  * @since   ProActive 1.0.2
  */
 public class RuntimeDeploymentProperties implements java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
     protected java.util.ArrayList<String> runtimeProperties;
 
     public RuntimeDeploymentProperties() {

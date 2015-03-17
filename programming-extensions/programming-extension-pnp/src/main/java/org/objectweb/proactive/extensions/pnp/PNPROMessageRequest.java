@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.util.URIBuilder;
 /** Represent a {@link Request} */
 
 class PNPROMessageRequest extends PNPROMessage implements Serializable {
+
+    private static final long serialVersionUID = 61L;
     private Request request;
 
     /** Construct a request message

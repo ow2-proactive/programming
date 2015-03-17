@@ -64,6 +64,8 @@ import org.apache.log4j.Logger;
  * @author The ProActive Team
  */
 public class MethodCall implements java.io.Serializable, Cloneable {
+
+    private static final long serialVersionUID = 61L;
     //
     // --- STATIC MEMBERS -----------------------------------------------------------------------
     //
@@ -659,6 +661,8 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     // --- INNER CLASSES -----------------------------------------------------------------------
     //
     public class FixWrapper implements java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public boolean isPrimitive;
         public Class<?> encapsulated;
 

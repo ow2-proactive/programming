@@ -39,6 +39,8 @@ package org.objectweb.proactive.core.mop;
 /**
  */
 public class MOPException extends Exception {
+
+    private static final long serialVersionUID = 61L;
     public Throwable detail;
 
     /**

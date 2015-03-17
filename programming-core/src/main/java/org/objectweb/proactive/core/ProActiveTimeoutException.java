@@ -50,6 +50,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 public class ProActiveTimeoutException extends ProActiveRuntimeException {
 
+    private static final long serialVersionUID = 61L;
+
     public ProActiveTimeoutException() {
         super();
     }

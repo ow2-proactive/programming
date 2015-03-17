@@ -45,6 +45,8 @@ import org.objectweb.proactive.core.UniqueID;
  * @author The ProActive Team
  */
 public class ActiveObjectLocationInfo implements Serializable {
+
+    private static final long serialVersionUID = 61L;
     private final UniqueID bodyId;
     private final String nodeUrl;
 

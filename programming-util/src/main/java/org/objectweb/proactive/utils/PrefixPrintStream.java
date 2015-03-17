@@ -218,6 +218,8 @@ public class PrefixPrintStream extends PrintStream {
 
     private class LineBeginBoolean extends MutableBoolean {
 
+    private static final long serialVersionUID = 61L;
+
         public LineBeginBoolean() {
             super(true);
         }

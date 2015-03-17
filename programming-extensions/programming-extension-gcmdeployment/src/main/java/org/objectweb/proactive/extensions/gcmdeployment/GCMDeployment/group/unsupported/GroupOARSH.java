@@ -40,6 +40,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Grou
 
 
 public class GroupOARSH extends GroupSSH {
+
+    private static final long serialVersionUID = 61L;
     private String jobId;
 
     public void setJobId(String jobId) {

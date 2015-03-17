@@ -41,6 +41,8 @@ import org.objectweb.proactive.core.ProActiveException;
 
 public class SslException extends ProActiveException {
 
+    private static final long serialVersionUID = 61L;
+
     public SslException() {
     }
 

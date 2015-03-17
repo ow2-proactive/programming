@@ -37,6 +37,8 @@
 package org.objectweb.proactive.core.mop;
 
 public abstract class StructuralException extends MOPException {
+
+    private static final long serialVersionUID = 61L;
     public StructuralException() {
     }
 

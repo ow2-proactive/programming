@@ -41,6 +41,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 
 public class BridgeSSH extends AbstractBridge {
+
+    private static final long serialVersionUID = 61L;
     public final static String DEFAULT_SSHPATH = "ssh";
     private PathElement privateKey;
     private String commandOptions;

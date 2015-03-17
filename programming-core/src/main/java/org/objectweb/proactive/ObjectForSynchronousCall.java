@@ -54,6 +54,8 @@ package org.objectweb.proactive;
  */
 public final class ObjectForSynchronousCall extends Object implements java.io.Serializable {
 
+    private static final long serialVersionUID = 61L;
+
     /**
      * No arg constructor for Serializable
      */

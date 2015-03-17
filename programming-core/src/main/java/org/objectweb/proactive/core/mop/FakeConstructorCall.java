@@ -44,6 +44,8 @@ import java.lang.reflect.InvocationTargetException;
  * it were the result of the reflection of this ConstructorCall object
  */
 class FakeConstructorCall implements ConstructorCall, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
     private Object target;
 
     //

@@ -46,6 +46,8 @@ import org.objectweb.proactive.utils.RefactorWhenDroppingJava5;
 @RefactorWhenDroppingJava5
 public class IOException6 extends IOException {
 
+    private static final long serialVersionUID = 61L;
+
     public IOException6(Throwable t) {
         super("");
         this.initCause(t);

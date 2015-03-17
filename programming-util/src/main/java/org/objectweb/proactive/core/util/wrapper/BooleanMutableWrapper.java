@@ -51,6 +51,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class BooleanMutableWrapper extends BooleanWrapper {
 
+    private static final long serialVersionUID = 61L;
+
     /**
      * The no arguments constructor for ProActive.
      */

@@ -65,6 +65,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class FatalProcessBuilderException extends Exception implements Serializable {
 
+    private static final long serialVersionUID = 61L;
+
     public FatalProcessBuilderException(String descr) {
         super(descr);
     }

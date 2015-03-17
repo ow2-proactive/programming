@@ -45,7 +45,9 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
  *
  * @author The ProActive Team
  */
-public class Ring<E> extends TopologyGroup<E> { // implements Topology1D {
+public class Ring<E> extends TopologyGroup<E> {
+
+    private static final long serialVersionUID = 61L; // implements Topology1D {
 
     /** size of the one-dimensional topology group */
     protected int width;

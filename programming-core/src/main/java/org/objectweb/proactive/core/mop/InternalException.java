@@ -37,6 +37,8 @@
 package org.objectweb.proactive.core.mop;
 
 public class InternalException extends MOPRuntimeException {
+
+    private static final long serialVersionUID = 61L;
     public InternalException() {
     }
 

@@ -42,6 +42,8 @@ package org.objectweb.proactive.core;
  * @author The ProActive Team
  */
 public class ProtocolException extends ProActiveException {
+
+    private static final long serialVersionUID = 61L;
     public ProtocolException() {
         super();
     }

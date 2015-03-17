@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public abstract class AbstractExternalProcess extends AbstractUniversalProcess implements ExternalProcess {
+
+    private static final long serialVersionUID = 61L;
     protected static Logger clogger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_PROCESS);
     protected static Logger fileTransferLogger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
     protected static final boolean IS_WINDOWS_SYSTEM = System.getProperty("os.name").toLowerCase()
@@ -400,6 +402,8 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
     // -- INNER CLASSES -----------------------------------------------
     //
     private static class ThreadActivityMonitor implements java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         private boolean isActive;
 
         public boolean isActive() {
@@ -416,6 +420,8 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
      */
     public static class StandardOutputMessageLogger implements RemoteProcessMessageLogger,
             java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public StandardOutputMessageLogger() {
             //messageLogger.addAppender(new ConsoleAppender(new PatternLayout("%-5p %m %n")));
         }
@@ -440,6 +446,8 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
      * Implementation of a RemoteProcessMessageLogger that discard all output
      */
     public static class NullMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         public NullMessageLogger() {
         }
 
@@ -459,6 +467,8 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
      * Implementation of a MessageSink that can receive one message at a time
      */
     public static class SimpleMessageSink implements MessageSink, java.io.Serializable {
+
+    private static final long serialVersionUID = 61L;
         private String message;
         private boolean isActive = true;
 

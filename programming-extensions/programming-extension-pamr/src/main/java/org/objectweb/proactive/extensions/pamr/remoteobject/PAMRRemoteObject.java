@@ -60,6 +60,8 @@ import java.net.URI;
  */
 
 public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
+
+    private static final long serialVersionUID = 61L;
     final static private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */

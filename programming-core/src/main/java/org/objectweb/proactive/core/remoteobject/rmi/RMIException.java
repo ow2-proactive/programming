@@ -44,6 +44,8 @@ import org.objectweb.proactive.core.ProtocolException;
  * @since ProActive 6.0.0
  */
 public class RMIException extends ProtocolException {
+
+    private static final long serialVersionUID = 61L;
     public RMIException() {
         super();
     }

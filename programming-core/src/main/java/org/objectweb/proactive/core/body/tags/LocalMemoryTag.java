@@ -59,6 +59,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class LocalMemoryTag implements Serializable {
 
+    private static final long serialVersionUID = 61L;
+
     static {
         LocalMemoryLeaseThread.start();
     }

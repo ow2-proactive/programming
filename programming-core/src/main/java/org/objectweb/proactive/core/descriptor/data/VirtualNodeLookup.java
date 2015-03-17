@@ -68,6 +68,8 @@ import org.objectweb.proactive.core.util.URIBuilder;
  */
 
 public class VirtualNodeLookup extends RuntimeDeploymentProperties implements VirtualNodeInternal {
+
+    private static final long serialVersionUID = 61L;
     private VirtualNodeInternal virtualNode;
     private String name;
     private String urlForLookup;

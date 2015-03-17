@@ -53,6 +53,8 @@ import org.objectweb.proactive.core.UniqueID;
  */
 public class FutureEvent extends ProActiveEvent implements java.io.Serializable {
 
+    private static final long serialVersionUID = 61L;
+
     /** Created when a Thread is blocked. */
     public static final int WAIT_BY_NECESSITY = 10;
 

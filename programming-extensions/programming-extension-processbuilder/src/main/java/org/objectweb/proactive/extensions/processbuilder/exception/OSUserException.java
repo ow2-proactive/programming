@@ -56,6 +56,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class OSUserException extends Exception implements Serializable {
 
+    private static final long serialVersionUID = 61L;
+
     public OSUserException(String message) {
         super(message);
     }
