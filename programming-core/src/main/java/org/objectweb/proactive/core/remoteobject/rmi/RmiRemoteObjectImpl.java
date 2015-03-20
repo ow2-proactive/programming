@@ -56,6 +56,8 @@ import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
  */
 
 public class RmiRemoteObjectImpl extends UnicastRemoteObject implements RmiRemoteObject {
+
+    private static final long serialVersionUID = 60L;
     protected InternalRemoteRemoteObject internalrrObject;
 
     public RmiRemoteObjectImpl() throws java.rmi.RemoteException {

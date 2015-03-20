@@ -59,6 +59,8 @@ import org.objectweb.proactive.core.node.NodeFactory;
 
 public class HalfBody extends AbstractBody {
 
+    private static final long serialVersionUID = 60L;
+
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -171,6 +173,8 @@ public class HalfBody extends AbstractBody {
     // -- inner classes -----------------------------------------------
     //
     private class HalfLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
+
+    private static final long serialVersionUID = 60L;
 
         /** A pool future that contains the pending future objects */
         protected FuturePool futures;

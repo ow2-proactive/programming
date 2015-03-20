@@ -101,6 +101,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * 
  */
 public abstract class AbstractBody extends AbstractUniversalBody implements Body, Serializable {
+
+    private static final long serialVersionUID = 60L;
     //
     // -- STATIC MEMBERS -----------------------------------------------
     //

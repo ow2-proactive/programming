@@ -56,6 +56,8 @@ import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
  */
 
 public abstract class PAMRMessage implements Serializable {
+
+    private static final long serialVersionUID = 60L;
     static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
     /** The recipient of this message */

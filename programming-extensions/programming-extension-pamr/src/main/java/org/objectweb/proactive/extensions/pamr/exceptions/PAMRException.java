@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.ProtocolException;
 
 public class PAMRException extends ProtocolException {
 
+    private static final long serialVersionUID = 60L;
+
     public PAMRException() {
         super();
     }

@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.body.tags.Tag;
  */
 public class DsiTag extends Tag {
 
+    private static final long serialVersionUID = 60L;
+
     public static final String IDENTIFIER = "PA_TAG_DSI";
 
     /**

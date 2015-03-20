@@ -47,6 +47,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 public class GroupCCS extends AbstractGroup {
 
+    private static final long serialVersionUID = 60L;
+
     private String runTime = null;
     private int cpus = 0;
     private String stdout = null;

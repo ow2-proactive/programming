@@ -45,6 +45,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public abstract class AbstractUniversalProcess implements UniversalProcess {
+
+    private static final long serialVersionUID = 60L;
     protected static final String LOCALHOST = getLocalHost();
     public final static String DEFAULT_USERNAME = System.getProperty("user.name");
     public final static String DEFAULT_HOSTNAME = LOCALHOST;

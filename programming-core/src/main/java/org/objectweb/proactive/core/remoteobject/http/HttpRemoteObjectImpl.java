@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.remoteobject.http.message.HTTPRemoteObjectRe
 
 
 public class HttpRemoteObjectImpl implements HTTPRemoteObject {
+
+    private static final long serialVersionUID = 60L;
     private boolean isLocal;
     private URI remoteObjectURL;
     protected transient InternalRemoteRemoteObject remoteObject;

@@ -51,6 +51,8 @@ package org.objectweb.proactive.core.event;
  *
  */
 public class ProActiveEvent extends java.util.EventObject implements java.io.Serializable {
+
+    private static final long serialVersionUID = 60L;
     public static final int GENERIC_TYPE = -1;
 
     /** type of the message */

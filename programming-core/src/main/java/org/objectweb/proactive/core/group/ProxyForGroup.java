@@ -75,6 +75,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 @PublicAPI
 public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, java.io.Serializable {
 
+    private static final long serialVersionUID = 60L;
+
     static int i = 0;
 
     /**

@@ -40,6 +40,8 @@ import org.objectweb.proactive.core.UniqueID;
 
 
 public class FutureMonitoringPingFailureException extends RuntimeException {
+
+    private static final long serialVersionUID = 60L;
     public FutureMonitoringPingFailureException(UniqueID bodyId, String nodeUrl, Throwable cause) {
         super("Failure to ping creator body " + bodyId + " on " + nodeUrl, cause);
     }

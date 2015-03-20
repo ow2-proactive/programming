@@ -46,6 +46,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 
 public class GroupGridEngine extends AbstractGroup {
+
+    private static final long serialVersionUID = 60L;
     private String resources = null;
     private String wallTime;
     private String parallelEnvironment;

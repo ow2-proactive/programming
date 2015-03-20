@@ -48,6 +48,8 @@ import java.io.Serializable;
  */
 
 public class AgentID implements Serializable {
+
+    private static final long serialVersionUID = 60L;
     static final public long MIN_DYNAMIC_AGENT_ID = 4096;
 
     final private long id;

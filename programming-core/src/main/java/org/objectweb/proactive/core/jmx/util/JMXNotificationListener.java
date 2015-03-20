@@ -63,6 +63,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class JMXNotificationListener implements NotificationListener, ProActiveInternalObject, Serializable {
+
+    private static final long serialVersionUID = 60L;
     private transient Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
 
     public JMXNotificationListener() {

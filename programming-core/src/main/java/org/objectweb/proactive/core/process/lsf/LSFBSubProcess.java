@@ -68,6 +68,8 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
  * @since   ProActive 0.9.4
  */
 public class LSFBSubProcess extends AbstractExternalProcessDecorator {
+
+    private static final long serialVersionUID = 60L;
     protected static final String DEFAULT_SCRIPT_LOCATION = System.getProperty("user.home") + File.separator +
         "ProActive" + File.separator + "scripts" + File.separator + "unix" + File.separator + "cluster" +
         File.separator + "startRuntime.sh ";
@@ -395,6 +397,8 @@ public class LSFBSubProcess extends AbstractExternalProcessDecorator {
      * Implementation of a RemoteProcessMessageLogger that look for the jobID of the launched job
      */
     public class ParserMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
+
+    private static final long serialVersionUID = 60L;
         private boolean foundJobID;
         private boolean foundHostname;
 
