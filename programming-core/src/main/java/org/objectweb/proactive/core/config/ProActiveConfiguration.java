@@ -169,8 +169,10 @@ public class ProActiveConfiguration {
             } else {
                 // This property is not known by ProActive
                 if (key.startsWith("proactive.")) {
-                    logger.warn("Property " + key + " is not declared inside " +
-                        PAProperties.class.getSimpleName() + " , ignoring");
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Property " + key + " is not declared inside " +
+                          PAProperties.class.getSimpleName() + " , ignoring");
+                    }
                 } else {
                     if (logger.isDebugEnabled()) {
                         logger.debug("System property " + key + " is not a ProActive property");
