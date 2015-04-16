@@ -246,7 +246,8 @@ project('programming-extensions:programming-extension-dataspaces') {
     dependencies {
         compile(
                 vfs2CompileDependencies,
-                project(':programming-extensions:programming-extension-vfsprovider')
+                project(':programming-extensions:programming-extension-vfsprovider'),
+                project(':programming-util')
         )
         testCompile(
                 project(':programming-extensions:programming-extension-vfsprovider').sourceSets.test.output,

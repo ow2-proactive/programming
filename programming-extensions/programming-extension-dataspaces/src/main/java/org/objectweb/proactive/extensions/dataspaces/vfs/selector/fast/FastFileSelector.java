@@ -44,6 +44,7 @@ import java.util.Vector;
 
 import org.objectweb.proactive.extensions.dataspaces.vfs.selector.FileSelectInfo;
 import org.objectweb.proactive.extensions.dataspaces.vfs.selector.FileSelector;
+import org.objectweb.proactive.utils.SelectorUtils;
 
 
 /**

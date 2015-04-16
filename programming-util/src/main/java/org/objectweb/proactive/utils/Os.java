@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.dataspaces.vfs.selector.fast;
+package org.objectweb.proactive.utils;
 
 import java.util.Locale;
 

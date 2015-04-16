@@ -34,24 +34,11 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.dataspaces.vfs.selector.fast;
+package org.objectweb.proactive.utils;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Stack;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 /**
@@ -149,7 +136,7 @@ class FileUtils {
      * @param filename a file name.
      *
      * @return an absolute file.
-     * @throws java.lang.NullPointerException if filename is null.
+     * @throws NullPointerException if filename is null.
      */
     public File resolveFile(File file, String filename) {
         if (!isAbsolutePath(filename)) {
@@ -177,7 +164,7 @@ class FileUtils {
      * (relative to current directory of the specified root).
      * @param filename the filename to evaluate.
      * @return true if the filename is relative to system context.
-     * @throws java.lang.NullPointerException if filename is null.
+     * @throws NullPointerException if filename is null.
      * @since Ant 1.7
      */
     public static boolean isContextRelativePath(String filename) {
@@ -200,7 +187,7 @@ class FileUtils {
      * at minimum match "\\a\b" to be considered an absolute path.
      * @param filename the filename to be checked.
      * @return true if the filename represents an absolute path.
-     * @throws java.lang.NullPointerException if filename is null.
+     * @throws NullPointerException if filename is null.
      * @since Ant 1.6.3
      */
     public static boolean isAbsolutePath(String filename) {
@@ -280,7 +267,7 @@ class FileUtils {
      * @param path the path to be normalized.
      * @return the normalized version of the path.
      *
-     * @throws java.lang.NullPointerException if path is null.
+     * @throws NullPointerException if path is null.
      */
     public File normalize(final String path) {
         Stack s = new Stack();
@@ -319,7 +306,7 @@ class FileUtils {
      * Dissect the specified absolute path.
      * @param path the path to dissect.
      * @return String[] {root, remaining path}.
-     * @throws java.lang.NullPointerException if path is null.
+     * @throws NullPointerException if path is null.
      * @since Ant 1.7
      */
     public String[] dissect(String path) {

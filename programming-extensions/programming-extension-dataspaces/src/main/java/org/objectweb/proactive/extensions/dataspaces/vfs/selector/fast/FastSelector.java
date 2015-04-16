@@ -36,16 +36,12 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs.selector.fast;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.selector.FileSelectInfo;
+import org.objectweb.proactive.utils.SelectorUtils;
+
+import java.util.*;
 
 
 /** An helper class to select a set of files.

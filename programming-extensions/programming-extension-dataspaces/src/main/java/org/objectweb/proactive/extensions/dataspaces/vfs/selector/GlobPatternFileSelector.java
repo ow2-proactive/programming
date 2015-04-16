@@ -4,14 +4,12 @@ import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.extensions.dataspaces.vfs.selector.fast.FastFileSelector;
-import org.objectweb.proactive.extensions.dataspaces.vfs.selector.fast.SelectorUtils;
+import org.objectweb.proactive.utils.SelectorUtils;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 
 /**
