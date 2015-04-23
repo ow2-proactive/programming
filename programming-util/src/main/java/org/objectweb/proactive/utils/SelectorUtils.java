@@ -36,7 +36,10 @@
  */
 package org.objectweb.proactive.utils;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -52,6 +55,8 @@ import java.util.Vector;
  * @since ProActive 4.3.0
  */
 public final class SelectorUtils {
+
+    public static final Logger log = Logger.getLogger(SelectorUtils.class);
 
     private static SelectorUtils instance = new SelectorUtils();
     private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
@@ -166,7 +171,13 @@ public final class SelectorUtils {
      *         or <code>false</code> otherwise.
      */
     public static boolean matchPath(String pattern, String str) {
-        return matchPath(pattern, str, true);
+        boolean result = matchPath(pattern, str, true);
+
+        if (log.isDebugEnabled()) {
+            log.debug("Is '" + str + "' matching '" + pattern + "'? " + result);
+        }
+
+        return result;
     }
 
     /**
@@ -183,8 +194,9 @@ public final class SelectorUtils {
      *         or <code>false</code> otherwise.
      */
     public static boolean matchPath(String pattern, String str, boolean isCaseSensitive) {
-        String[] patDirs = tokenizePathAsArray(pattern);
-        String[] strDirs = tokenizePathAsArray(str);
+        // replaceAll is used to transform Windows relative paths into Unix ones
+        String[] patDirs = tokenizePathAsArray(pattern.replaceAll("\\\\", "/"));
+        String[] strDirs = tokenizePathAsArray(str.replaceAll("\\\\", "/"));
 
         int patIdxStart = 0;
         int patIdxEnd = patDirs.length - 1;
