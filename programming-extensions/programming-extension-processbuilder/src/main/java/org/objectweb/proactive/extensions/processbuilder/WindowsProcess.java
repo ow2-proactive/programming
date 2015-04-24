@@ -102,6 +102,8 @@ public final class WindowsProcess extends Process {
 
     static interface Options {
         final Map<String, Object> UNICODE_OPTIONS = new HashMap<String, Object>() {
+
+    private static final long serialVersionUID = 62L;
             {
                 put(Library.OPTION_TYPE_MAPPER, W32APITypeMapper.UNICODE);
                 put(Library.OPTION_FUNCTION_MAPPER, W32APIFunctionMapper.UNICODE);

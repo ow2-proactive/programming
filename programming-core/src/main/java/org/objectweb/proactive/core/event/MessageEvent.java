@@ -55,6 +55,8 @@ import org.objectweb.proactive.core.body.tags.MessageTags;
  */
 public class MessageEvent extends ProActiveEvent implements Message, java.io.Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     /** constant indicating the encapsulated message has been sent */
     public static final int REQUEST_SENT = 10;
 

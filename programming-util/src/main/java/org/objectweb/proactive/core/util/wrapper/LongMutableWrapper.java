@@ -53,6 +53,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @XmlRootElement
 public class LongMutableWrapper extends LongWrapper {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      * The no arguments constructor for ProActive.
      */

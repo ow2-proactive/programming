@@ -46,6 +46,8 @@ import org.objectweb.proactive.core.ProtocolException;
  */
 public class PNPSslException extends ProtocolException {
 
+    private static final long serialVersionUID = 62L;
+
     public PNPSslException() {
     }
 

@@ -43,6 +43,8 @@ package org.objectweb.proactive.extensions.pnp.exception;
  * @since ProActive 4.3.0
  */
 public class PNPIOException extends PNPException {
+
+    private static final long serialVersionUID = 62L;
     public PNPIOException() {
         super();
     }

@@ -42,6 +42,8 @@ package org.objectweb.proactive.extensions.dataspaces.exceptions;
  */
 public class MalformedURIException extends DataSpacesException {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      *
      */

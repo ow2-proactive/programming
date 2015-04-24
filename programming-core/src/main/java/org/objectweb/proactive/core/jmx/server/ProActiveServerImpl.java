@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.node.NodeException;
  * @author The ProActive Team
  */
 public class ProActiveServerImpl implements Serializable, ProActiveInternalObject {
+
+    private static final long serialVersionUID = 62L;
     private transient MBeanServer mbeanServer;
     private UniqueID id;
 

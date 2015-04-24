@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
  */
 public class LargeByteArrayBenchmark extends RemoteObjectRequest implements BenchmarkObject, Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     // Size in kB
     private int defaultSize = 300;
     // How many time the test is done

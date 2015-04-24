@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.mop.MethodCallInfo;
  */
 public abstract class MethodCallControlForGroup extends MethodCall {
 
+    private static final long serialVersionUID = 62L;
+
     transient Method reifiedMethod = null;
 
     public MethodCallControlForGroup() {

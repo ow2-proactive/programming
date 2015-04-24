@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * it tries 5 different ports before reporting a failure
  */
 public class RandomPortSocketFactory implements RMIServerSocketFactory, RMIClientSocketFactory, Serializable {
+
+    private static final long serialVersionUID = 62L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.RMI);
     static protected final int MAX = 5;
     static protected Random random = new Random();

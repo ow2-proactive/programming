@@ -46,6 +46,8 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
  */
 public class ThroughputBenchmark extends RemoteObjectRequest implements BenchmarkObject, Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     private long beginTime;
     // The duration in ms
     private long duration = 2000;

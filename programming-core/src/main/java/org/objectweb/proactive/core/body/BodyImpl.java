@@ -109,6 +109,8 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
  * @since ProActive 0.9
  */
 public abstract class BodyImpl extends AbstractBody implements java.io.Serializable, BodyImplMBean {
+
+    private static final long serialVersionUID = 62L;
     //
     // -- STATIC MEMBERS -----------------------------------------------
     //
@@ -429,6 +431,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     // -- inner classes -----------------------------------------------
     //
     private class ActiveLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
+
+    private static final long serialVersionUID = 62L;
         /**
          * A pool future that contains the pending future objects
          */
@@ -777,6 +781,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
     // end inner class LocalBodyImpl
     protected class InactiveLocalBodyStrategy implements LocalBodyStrategy, java.io.Serializable {
+
+    private static final long serialVersionUID = 62L;
         // An inactive body strategy can have a futurepool if some ACs to do
         // remain after the termination of the active object
         private FuturePool futures;

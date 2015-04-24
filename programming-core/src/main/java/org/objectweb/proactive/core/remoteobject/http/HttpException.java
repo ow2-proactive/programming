@@ -44,6 +44,8 @@ import org.objectweb.proactive.core.ProtocolException;
  * @since ProActive 6.0.0
  */
 public class HttpException extends ProtocolException {
+
+    private static final long serialVersionUID = 62L;
     public HttpException() {
         super();
     }

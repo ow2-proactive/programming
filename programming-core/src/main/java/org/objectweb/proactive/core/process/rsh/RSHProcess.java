@@ -64,6 +64,8 @@ import org.objectweb.proactive.core.process.UniversalProcess;
  * @since   ProActive 0.9.4
  */
 public class RSHProcess extends AbstractExternalProcessDecorator {
+
+    private static final long serialVersionUID = 62L;
     public final static String DEFAULT_RSHPATH = "/usr/bin/rsh ";
     public final static String DEFAULT_RSH_COPYPROTOCOL = "rcp";
 

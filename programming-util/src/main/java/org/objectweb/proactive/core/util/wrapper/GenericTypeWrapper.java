@@ -53,6 +53,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @XmlRootElement
 public class GenericTypeWrapper<T extends Object> implements Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      *
      */

@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.util.URIBuilder;
  *
  */
 public class ClientConnector implements Serializable {
+
+    private static final long serialVersionUID = 62L;
     private ProActiveConnection connection;
     private JMXConnector connector;
     private String url;

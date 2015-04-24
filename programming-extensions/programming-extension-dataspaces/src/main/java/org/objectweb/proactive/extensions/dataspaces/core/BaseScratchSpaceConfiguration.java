@@ -66,6 +66,8 @@ import org.objectweb.proactive.extensions.vfsprovider.util.URIHelper;
  */
 public class BaseScratchSpaceConfiguration implements Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     protected final static Logger logger = ProActiveLogger.getLogger(Loggers.DATASPACES);
 
     public static final String HOSTNAME_VARIABLE_KEYWORD = "$(hostname)";

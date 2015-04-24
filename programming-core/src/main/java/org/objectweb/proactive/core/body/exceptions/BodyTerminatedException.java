@@ -45,6 +45,8 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
  * @since 3.2.1
  */
 public class BodyTerminatedException extends ProActiveRuntimeException {
+
+    private static final long serialVersionUID = 62L;
     private static final String TERMINATED_BODY_EXCEPTION_MESSAGE = "The body has been Terminated";
 
     public BodyTerminatedException(String objectName, String message) {

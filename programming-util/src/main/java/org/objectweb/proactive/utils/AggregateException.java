@@ -55,6 +55,8 @@ import java.util.Set;
  **/
 public class AggregateException extends Exception {
 
+    private static final long serialVersionUID = 62L;
+
     List<Throwable> causes = new ArrayList<Throwable>();
 
     static final String CAUSE_CAPTION = "Caused by: ";

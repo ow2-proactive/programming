@@ -62,6 +62,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 2.3
  */
 public class NGProcess extends AbstractExternalProcessDecorator {
+
+    private static final long serialVersionUID = 62L;
     private static final String DEFAULT_SCRIPT_LOCATION = System.getProperty("user.home") + File.separator +
         "ProActive" + File.separator + "scripts" + File.separator + "unix" + File.separator + "cluster" +
         File.separator + "ngStartRuntime.sh ";

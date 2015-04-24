@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.exceptions;
 
 public class ProActiveBadConfigurationException extends Exception {
 
+    private static final long serialVersionUID = 62L;
+
     public ProActiveBadConfigurationException() {
         super();
     }

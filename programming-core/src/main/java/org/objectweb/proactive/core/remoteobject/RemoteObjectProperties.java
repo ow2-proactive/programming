@@ -44,6 +44,8 @@ import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 
 public class RemoteObjectProperties implements Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     protected String className;
     protected Class<?> targetClass;
     protected String proxyName;

@@ -37,6 +37,8 @@
 package org.objectweb.proactive.core.mop;
 
 public class GenerationOfStubClassFailedException extends MOPRuntimeException {
+
+    private static final long serialVersionUID = 62L;
     public GenerationOfStubClassFailedException() {
     }
 

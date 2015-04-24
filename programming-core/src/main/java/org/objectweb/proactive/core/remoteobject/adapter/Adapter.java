@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.mop.StubObject;
 
 public abstract class Adapter<T> implements Serializable, StubObject, Cloneable {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      * the generated stub
      */

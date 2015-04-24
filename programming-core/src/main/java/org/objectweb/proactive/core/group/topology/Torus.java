@@ -47,7 +47,9 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
  * @author The ProActive Team
  */
 
-public class Torus<E> extends Ring<E> { // implements Topology2D {
+public class Torus<E> extends Ring<E> {
+
+    private static final long serialVersionUID = 62L; // implements Topology2D {
 
     /** height of the two-dimensional topology group */
     protected int height; //  => Y => number of Rings

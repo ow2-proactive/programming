@@ -42,6 +42,8 @@ import java.io.Serializable;
 /* This class is optimized so that its instances are immutable */
 public class MethodCallExceptionContext implements Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      * If the caller catches some RuntimeException, we have to wait for all calls
      * generated in the block at its end because any of these calls could throw one.

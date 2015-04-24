@@ -50,6 +50,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class NotImplementedException extends RuntimeException implements Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     public NotImplementedException(final String message) {
         super(message);
     }

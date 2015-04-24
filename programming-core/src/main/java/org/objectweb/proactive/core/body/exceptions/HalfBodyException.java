@@ -45,6 +45,8 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
  * @since 3.2.1
  */
 public class HalfBodyException extends ProActiveRuntimeException {
+
+    private static final long serialVersionUID = 62L;
     private static final String HALF_BODY_EXCEPTION_MESSAGE = "This method is not implemented in class HalfBody";
 
     public HalfBodyException() {

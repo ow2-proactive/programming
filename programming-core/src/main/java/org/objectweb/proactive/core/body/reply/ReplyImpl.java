@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.mop.Utils;
 
 public class ReplyImpl extends MessageImpl implements Reply, Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     /** The hypothetic result */
     protected MethodCallResult result;
 

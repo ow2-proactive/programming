@@ -57,6 +57,8 @@ import org.objectweb.proactive.gcmdeployment.Topology;
  * @see GCMApplication
  */
 public class GCMApplicationSnapshot implements Serializable {
+
+    private static final long serialVersionUID = 62L;
     final private boolean isStarted;
     final private Map<String, GCMVirtualNodeSnapshot> vns;
     final private VariableContract variableContract;

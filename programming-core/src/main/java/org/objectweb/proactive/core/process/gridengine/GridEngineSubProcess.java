@@ -67,6 +67,8 @@ import org.objectweb.proactive.core.process.UniversalProcess;
  * @since   ProActive 2.0.1
  */
 public class GridEngineSubProcess extends AbstractExternalProcessDecorator {
+
+    private static final long serialVersionUID = 62L;
     public final static String DEFAULT_QSUBPATH = "/opt/gridengine/bin/glinux/qsub";
     private static final String DEFAULT_SCRIPT_LOCATION = System.getProperty("user.home") + File.separator +
         "ProActive" + File.separator + "scripts" + File.separator + "unix" + File.separator + "cluster" +

@@ -61,6 +61,8 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
 
 public class PAMRRemoteObjectLookupMessage extends PAMRMessage implements Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      * Construct a lookup message
      * 

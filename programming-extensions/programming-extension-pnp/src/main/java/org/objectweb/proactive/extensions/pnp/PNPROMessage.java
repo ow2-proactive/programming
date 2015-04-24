@@ -52,6 +52,8 @@ import org.objectweb.proactive.extensions.pnp.exception.PNPException;
 /** Any kind of PNP message. */
 
 abstract class PNPROMessage implements Serializable {
+
+    private static final long serialVersionUID = 62L;
     static final Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP);
 
     /** The recipient of this message */

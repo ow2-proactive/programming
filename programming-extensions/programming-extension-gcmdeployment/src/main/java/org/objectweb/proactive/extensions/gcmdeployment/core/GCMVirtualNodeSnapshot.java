@@ -50,6 +50,8 @@ import org.objectweb.proactive.gcmdeployment.Topology;
  * @see GCMVirtualNode
  */
 final public class GCMVirtualNodeSnapshot implements Serializable {
+
+    private static final long serialVersionUID = 62L;
     final private String name;
     final private boolean isGreedy;
     final private boolean isReady;

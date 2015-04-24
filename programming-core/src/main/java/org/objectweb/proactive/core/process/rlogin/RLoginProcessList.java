@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.process.ExternalProcessDecorator;
 //@snippet-start rloginprocesslist
 public class RLoginProcessList extends AbstractListProcessDecorator {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      *
      */

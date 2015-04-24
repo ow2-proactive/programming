@@ -41,6 +41,8 @@ package org.objectweb.proactive.core.remoteobject;
  * Identify that the activation of a remote object has failed
  */
 public class ProtocolActivationException extends Exception {
+
+    private static final long serialVersionUID = 62L;
     public ProtocolActivationException() {
     }
 }

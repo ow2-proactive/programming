@@ -67,6 +67,8 @@ import java.util.concurrent.Executors;
 
 
 public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializable {
+
+    private static final long serialVersionUID = 62L;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
     //
@@ -332,6 +334,8 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
     // -- INNER CLASSES -----------------------------------------------
     //
     private class FIFORunActive implements RunActive, java.io.Serializable {
+
+    private static final long serialVersionUID = 62L;
         public void runActivity(Body body) {
             new Service(body).fifoServing();
         }

@@ -178,12 +178,16 @@ public class ServerBrowser implements ActionListener, WindowListener, KeyEventDi
         menu.add(stopServerIt);
 
         table = new JTable(model) {
+
+    private static final long serialVersionUID = 62L;
             private StatusCellRenderer statusRenderer = new StatusCellRenderer();
 
             /*
              * custom cell renderer to display colored icon next to the server status
              */
             final class StatusCellRenderer extends DefaultTableCellRenderer {
+
+    private static final long serialVersionUID = 62L;
 
                 @Override
                 public Component getTableCellRendererComponent(JTable table, Object value,

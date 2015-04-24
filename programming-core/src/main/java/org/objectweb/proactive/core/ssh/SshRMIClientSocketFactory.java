@@ -43,6 +43,8 @@ import java.rmi.server.RMIClientSocketFactory;
 
 
 public class SshRMIClientSocketFactory implements RMIClientSocketFactory, Serializable {
+
+    private static final long serialVersionUID = 62L;
     final static private Object tunnelLock = new Object();
     static SshConfig sshConfig;
     private String specificGatewayRule = "";

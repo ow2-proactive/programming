@@ -41,6 +41,8 @@ import java.lang.reflect.Method;
 
 
 public class SerializableMethod implements Serializable {
+
+    private static final long serialVersionUID = 62L;
     private transient Method m;
 
     public SerializableMethod(Method m) {

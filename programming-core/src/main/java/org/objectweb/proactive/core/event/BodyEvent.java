@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.body.UniversalBody;
  */
 public class BodyEvent extends ProActiveEvent implements java.io.Serializable {
 
+    private static final long serialVersionUID = 62L;
+
     /** constant for the creation of a body */
     public static final int BODY_CREATED = 10;
 

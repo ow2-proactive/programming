@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.ProActiveException;
 @PublicAPI
 public class ActiveObjectCreationException extends ProActiveException {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      * Constructs a <code>ProActiveException</code> with no specified
      * detail message.

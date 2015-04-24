@@ -53,6 +53,8 @@ import org.objectweb.proactive.core.util.CircularArrayList;
 
 
 public class RequestQueueImpl extends AbstractEventProducer implements java.io.Serializable, RequestQueue {
+
+    private static final long serialVersionUID = 62L;
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
@@ -408,6 +410,8 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
     // -- INNER CLASSES -----------------------------------------------
     //
     protected class RequestFilterOnMethodName implements RequestFilter, java.io.Serializable {
+
+    private static final long serialVersionUID = 62L;
         private String methodName;
 
         public RequestFilterOnMethodName() {

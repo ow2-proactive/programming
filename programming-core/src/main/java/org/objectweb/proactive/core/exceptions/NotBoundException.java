@@ -44,6 +44,8 @@ import java.io.IOException;
  */
 public class NotBoundException extends IOException {
 
+    private static final long serialVersionUID = 62L;
+
     public NotBoundException() {
         super();
     }

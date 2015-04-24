@@ -50,6 +50,8 @@ import java.util.Set;
  **/
 public class AggregateRuntimeException extends RuntimeException {
 
+    private static final long serialVersionUID = 62L;
+
     List<Throwable> causes = new ArrayList<Throwable>();
 
     private static final String CAUSE_CAPTION = "Caused by: ";

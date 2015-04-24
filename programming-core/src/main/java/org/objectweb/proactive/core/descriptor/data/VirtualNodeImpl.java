@@ -106,6 +106,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements VirtualNodeInternal,
         Serializable, ServiceUser {
 
+    private static final long serialVersionUID = 62L;
+
     /**
      *
      */
