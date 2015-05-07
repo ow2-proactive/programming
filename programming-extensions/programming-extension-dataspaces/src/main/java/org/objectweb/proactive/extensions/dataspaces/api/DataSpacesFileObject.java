@@ -273,6 +273,19 @@ public interface DataSpacesFileObject {
     public abstract List<DataSpacesFileObject> findFiles(FileSelector selector) throws FileSystemException;
 
     /**
+     * Finds the set of matching descendants of this file, in depth-wise order.
+     *
+     * @param selector
+     *            The selector to use in order to filter files.
+     * @return The matching files. The files are returned in depth-wise order (that is, a child
+     *         appears in the list before its parent). Is never <code>null</code> but may represent
+     *         an empty list in some cases (e.g. the file does not exist).
+     * @throws FileSystemException
+     *             when any kind of error occurred while finding files.
+     */
+    public abstract List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector) throws FileSystemException;
+
+    /**
      * Finds the set of matching descendants of this file.
      *
      * @param selector
