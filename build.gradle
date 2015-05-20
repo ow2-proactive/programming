@@ -134,7 +134,7 @@ project(':programming-build-utils') {
         compile 'ant:ant:1.7.0'
         compile 'commons-cli:commons-cli:1.2'
         compile "log4j:log4j:1.2.14"
-        compile 'org.jvnet.winp:winp:1.14'
+        compile 'org.jvnet.winp:winp:1.23-proactive'
     }
 }
 
