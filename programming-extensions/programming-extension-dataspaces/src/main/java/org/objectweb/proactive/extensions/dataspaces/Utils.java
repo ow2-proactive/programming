@@ -36,9 +36,6 @@
  */
 package org.objectweb.proactive.extensions.dataspaces;
 
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -52,9 +49,15 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.dataspaces.api.Capability;
 import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
+import org.objectweb.proactive.extensions.dataspaces.vfs.selector.FileSelector;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
 import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
+
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 
 /**
@@ -66,6 +69,13 @@ public class Utils {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.DATASPACES);
 
     private Utils() {
+    }
+
+    public static void findFiles(DataSpacesFileObject baseDir,
+                                 FileSelector selector, List<DataSpacesFileObject> results) throws FileSystemException {
+        if (!selector.getIncludes().isEmpty()) {
+            results.addAll(baseDir.findFiles(selector));
+        }
     }
 
     /**

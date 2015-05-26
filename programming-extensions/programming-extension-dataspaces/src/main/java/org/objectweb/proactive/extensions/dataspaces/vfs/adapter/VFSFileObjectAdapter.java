@@ -54,11 +54,8 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.dataspaces.api.Capability;
-import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
-import org.objectweb.proactive.extensions.dataspaces.api.FileContent;
+import org.objectweb.proactive.extensions.dataspaces.api.*;
 import org.objectweb.proactive.extensions.dataspaces.api.FileSelector;
-import org.objectweb.proactive.extensions.dataspaces.api.FileType;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.DataSpacesException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
@@ -216,6 +213,19 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
         try {
             final FileObject[] vfsResult = currentFileObject.findFiles(vfsSelector);
+
+            adaptVFSResult(vfsResult, result);
+        } catch (Exception e) {
+            throw new FileSystemException(e);
+        }
+        return result;
+    }
+
+    public List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector) throws FileSystemException {
+        final List<DataSpacesFileObject> result = new ArrayList<DataSpacesFileObject>();
+
+        try {
+            final FileObject[] vfsResult = currentFileObject.findFiles(selector);
 
             adaptVFSResult(vfsResult, result);
         } catch (Exception e) {
