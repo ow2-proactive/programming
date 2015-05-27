@@ -36,14 +36,9 @@
  */
 package org.objectweb.proactive.core.httpserver;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlet.ServletMapping;
@@ -51,6 +46,10 @@ import org.eclipse.jetty.xml.XmlConfiguration;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Arrays;
 
 
 /** ProActive web server
@@ -84,28 +83,11 @@ public class HTTPServer {
     }
 
     private HTTPServer() throws Exception {
-        this.server = new Server();
+        UnboundedThreadPool utp = new UnboundedThreadPool();
 
-        /*
-         * Let the user decide which HTTP connector to use. Some are more efficient for few busy
-         * connections, some other deals better with a lot of mostly idle connections.
-         * 
-         * A SelectSocketConnector is used by default
-         */
-        final Connector connector;
-        if (CentralPAPropertyRepository.PA_HTTP_JETTY_CONNECTOR.isSet()) {
-            String clName = CentralPAPropertyRepository.PA_HTTP_JETTY_CONNECTOR.getValue();
-            try {
-                final Class<?> cl = Class.forName(clName);
-                final Class<? extends Connector> clConnector = cl.asSubclass(Connector.class);
-                connector = clConnector.newInstance();
-            } catch (ClassNotFoundException e) {
-                logger.error("Failed to load Jetty connector " + clName);
-                throw e;
-            }
-        } else {
-            connector = new SelectChannelConnector();
-        }
+        this.server = new Server(utp);
+
+        final ServerConnector connector = new ServerConnector(server);
 
         /*
          * If PA_XMLHTTP_PORT is set by the user use the value. Otherwise use a random port.
@@ -116,9 +98,6 @@ public class HTTPServer {
         }
         connector.setPort(port);
         this.server.addConnector(connector);
-
-        UnboundedThreadPool utp = new UnboundedThreadPool();
-        this.server.setThreadPool(utp);
 
         /* Lets users customize Jetty if needed */
         final URL configUrl;
@@ -140,6 +119,7 @@ public class HTTPServer {
             ServletContextHandler.SESSIONS);
 
         this.server.start();
+
         // If a random port is used we have to set it
         CentralPAPropertyRepository.PA_XMLHTTP_PORT.setValue(connector.getLocalPort());
 

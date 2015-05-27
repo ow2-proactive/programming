@@ -332,22 +332,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyInteger PA_XMLHTTP_PORT = new PAPropertyInteger("proactive.http.port", false);
 
     /**
-     * Define a Connector to be used by Jetty
-     *
-     * By default a SelectChannelConnector is used. It is well suited to handle a lot
-     * of mainly idle clients workload (like coarse grained master worker). If you have a
-     * few very busy client better performances can be achieved by using a SocketConnect
-     *
-     * You can use a SocketConnect, a BlockingChannelConnector or a SelectChannelConnector
-     * You CANNOT use a SSL connector.
-     * Click
-     * <a  href="http://docs.codehaus.org/display/JETTY/Architecture">here</a> for more
-     * information on the Jetty architecture.
-     */
-    static public PAPropertyString PA_HTTP_JETTY_CONNECTOR = new PAPropertyString(
-        "proactive.http.jetty.connector", false);
-
-    /**
      * Jetty configuration file
      *
      * Jetty can be configured by providing a

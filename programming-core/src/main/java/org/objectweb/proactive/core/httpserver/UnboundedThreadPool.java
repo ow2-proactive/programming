@@ -36,16 +36,17 @@
  */
 package org.objectweb.proactive.core.httpserver;
 
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import org.eclipse.jetty.util.thread.ThreadPool;
 import org.objectweb.proactive.utils.NamedThreadFactory;
 import org.objectweb.proactive.utils.ThreadPools;
 
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-/** An unbounded ThreadPool using Java 5 ThreadPoolExecutor
+
+/**
+ * An unbounded ThreadPool using Java 5 ThreadPoolExecutor
  * 
  * Set the maximum number of worker to a GINORMOUS value to 
  * mimic the RMI behavior of spawning thread without birth control.
@@ -58,30 +59,24 @@ import org.objectweb.proactive.utils.ThreadPools;
  * If all the workers of the thread pool are in use, a deadlock can occur
  * 
  * Reentrant calls is the most obvious case of deadlock.
- * 
  */
-class UnboundedThreadPool implements ThreadPool {
+public class UnboundedThreadPool implements ThreadPool {
 
-    private final ThreadPoolExecutor exec;
+    private final ThreadPoolExecutor threadPool;
 
     public UnboundedThreadPool() {
-        ThreadFactory tf = new NamedThreadFactory("ProActive Http Server Thread", false);
-        exec = ThreadPools.newCachedThreadPool(1L, TimeUnit.SECONDS, tf);
+        ThreadFactory threadFactory = new NamedThreadFactory("ProActive Http Server Thread", false);
+        threadPool = ThreadPools.newCachedThreadPool(1L, TimeUnit.SECONDS, threadFactory);
     }
 
-    public boolean dispatch(Runnable job) {
-        exec.execute(job);
-        return true;
-    }
-
-    /* Never used in Jetty 6.0 */
+    @Override
     public int getIdleThreads() {
-        return exec.getPoolSize() - exec.getActiveCount();
+        return threadPool.getPoolSize() - threadPool.getActiveCount();
     }
 
-    /* Never used in Jetty 6.0 */
+    @Override
     public int getThreads() {
-        return exec.getPoolSize();
+        return threadPool.getPoolSize();
     }
 
     /* Used by Jetty to close idle client when the server is low on resources.
@@ -89,11 +84,19 @@ class UnboundedThreadPool implements ThreadPool {
      * Since maxPoolSize == 2^31 this method will always return false. 
      * A side effect could be that Jetty will never close idle connections.
      */
+    @Override
     public boolean isLowOnThreads() {
-        return exec.getActiveCount() >= exec.getMaximumPoolSize();
+        return threadPool.getActiveCount() >= threadPool.getMaximumPoolSize();
     }
 
+    @Override
     public void join() throws InterruptedException {
-        exec.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+        threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
     }
+
+    @Override
+    public void execute(Runnable command) {
+        threadPool.execute(command);
+    }
+
 }
