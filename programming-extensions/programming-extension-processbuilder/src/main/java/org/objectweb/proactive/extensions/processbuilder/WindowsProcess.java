@@ -211,6 +211,27 @@ public final class WindowsProcess extends Process {
             public int dwFlags;
             /** The sz exe file */
             public char[] szExeFile;
+
+            private static List<String> fields;
+
+            static {
+                fields = new ArrayList<>();
+                fields.add("dwSize");
+                fields.add("cntUsage");
+                fields.add("th32ProcessID");
+                fields.add("th32DefaultHeapID");
+                fields.add("th32ModuleID");
+                fields.add("cntThreads");
+                fields.add("th32ParentProcessID");
+                fields.add("pcPriClassBase");
+                fields.add("dwFlags");
+                fields.add("szExeFile");
+            }
+
+            @Override
+            protected List getFieldOrder() {
+                return fields;
+            }
         }
     }
 
