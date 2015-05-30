@@ -36,20 +36,13 @@
  */
 package org.objectweb.proactive.extensions.pnp;
 
-import java.net.SocketAddress;
-
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBufferFactory;
-import org.jboss.netty.channel.ChannelEvent;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelPipelineCoverage;
-import org.jboss.netty.channel.ChannelState;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ChannelUpstreamHandler;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.frame.CorruptedFrameException;
 import org.jboss.netty.handler.codec.frame.TooLongFrameException;
+
+import java.net.SocketAddress;
 
 
 /** A PNP frame decoder
@@ -61,7 +54,7 @@ import org.jboss.netty.handler.codec.frame.TooLongFrameException;
  * since ProActive 4.3.0
  */
 
-@ChannelPipelineCoverage("one")
+@ChannelHandler.Sharable
 class PNPClientFrameDecoder implements ChannelUpstreamHandler {
 
     private final int maxFrameLength = Integer.MAX_VALUE;

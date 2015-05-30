@@ -37,11 +37,7 @@
 package org.objectweb.proactive.extensions.pnp;
 
 import org.apache.log4j.Logger;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelPipelineCoverage;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.timeout.IdleStateAwareChannelHandler;
 import org.jboss.netty.handler.timeout.IdleStateEvent;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -53,7 +49,7 @@ import org.objectweb.proactive.extensions.pnp.exception.PNPException;
  *
  * @since ProActive 4.3.0
  */
-@ChannelPipelineCoverage("one")
+@ChannelHandler.Sharable
 class PNPClientHandler extends IdleStateAwareChannelHandler {
     final private static Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP_HANDLER_CLIENT);
 

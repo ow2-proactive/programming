@@ -81,7 +81,7 @@ import org.jboss.netty.util.TimerTask;
  * The local PNP Agent.
  *
  * The agent is used by the PNP remote objects to send and receive messages.
- * It opens/closes the connections & blocks calling threads until the reponse
+ * It opens/closes the connections & blocks calling threads until the response
  * is received
  *
  * @since ProActive 4.3.0

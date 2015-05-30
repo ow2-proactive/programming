@@ -39,8 +39,8 @@ package org.objectweb.proactive.extensions.pnp;
 import org.apache.log4j.Logger;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelPipelineCoverage;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -49,7 +49,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  * @since ProActive 4.3.0
  */
-@ChannelPipelineCoverage("one")
+@ChannelHandler.Sharable
 class PNPEncoder extends OneToOneEncoder {
     static final private Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP_CODEC);
 
