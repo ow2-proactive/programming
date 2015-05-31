@@ -296,8 +296,8 @@ project('programming-extensions:programming-extension-pnp') {
 project('programming-extensions:programming-extension-pnpssl') {
     dependencies {
         compile(
-                'bouncycastle:bcprov-jdk15:136',
                 'io.netty:netty:3.10.4.Final',
+                'org.bouncycastle:bcprov-ext-jdk15on:1.52',
 
                 project(':programming-extensions:programming-extension-pnp')
         )
