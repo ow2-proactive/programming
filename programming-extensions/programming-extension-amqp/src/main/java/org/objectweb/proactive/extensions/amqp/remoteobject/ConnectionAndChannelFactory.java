@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import javax.net.SocketFactory;
 
@@ -58,7 +59,6 @@ import com.rabbitmq.client.ConnectionFactory;
  * Connection and Factory to enable connection and channel caching and reuse
  * 
  * @since 5.2.0
- *
  */
 public class ConnectionAndChannelFactory {
 
@@ -160,11 +160,19 @@ public class ConnectionAndChannelFactory {
             factory.setUsername(connectionParameters.getUsername());
             factory.setPassword(connectionParameters.getPassword());
             factory.setVirtualHost(connectionParameters.getVhost());
-            Connection c = factory.newConnection();
-            c.addShutdownListener(new AMQPShutDownListener(c.toString()));
 
-            connection = new CachedConnection(this, c);
-            cachedConnections.put(key, connection);
+            Connection c;
+            try {
+                c = factory.newConnection();
+                c.addShutdownListener(new AMQPShutDownListener(c.toString()));
+
+                connection = new CachedConnection(this, c);
+
+                cachedConnections.put(key, connection);
+            } catch (TimeoutException e) {
+                logger.error("Connection timeout: " + connectionParameters.getHost(), e);
+                throw new IOException(e);
+            }
         }
 
         return connection;

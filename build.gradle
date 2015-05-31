@@ -207,7 +207,7 @@ project('programming-extensions') {
 project('programming-extensions:programming-extension-amqp') {
     dependencies {
         compile(
-                'com.rabbitmq:amqp-client:3.0.2',
+                'com.rabbitmq:amqp-client:3.5.3',
         )
     }
 }
