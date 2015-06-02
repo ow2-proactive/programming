@@ -215,7 +215,7 @@ public final class WindowsProcess extends Process {
             private static List<String> fields;
 
             static {
-                fields = new ArrayList<>();
+                fields = new ArrayList<>(10);
                 fields.add("dwSize");
                 fields.add("cntUsage");
                 fields.add("th32ProcessID");
