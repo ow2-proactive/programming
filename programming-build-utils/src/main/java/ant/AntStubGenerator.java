@@ -205,14 +205,14 @@ public class AntStubGenerator extends Java {
 
         private byte[] createStub(String className) throws Exception {
             // Do not import the class since Utils must not depends on the core
-            Class cl = Class.forName("org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder");
+            Class<?> cl = Class.forName("org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder");
             Method m = cl.getMethod("create", String.class, Class[].class);
             return (byte[]) (m.invoke(null, className, null));
         }
 
         private String getStubClassName(String className) throws Exception {
             // Do not import the class sinceUtils must not depeonds on the core
-            Class cl = Class.forName("org.objectweb.proactive.core.mop.Utils");
+            Class<?> cl = Class.forName("org.objectweb.proactive.core.mop.Utils");
             Method m = cl.getMethod("convertClassNameToStubClassName", String.class, Class[].class);
             return (String) (m.invoke(null, className, null));
         }

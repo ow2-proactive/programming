@@ -279,8 +279,7 @@ public abstract class AbstractLimitingFileObject<T extends FileObject> extends D
             return content.getAttributeNames();
         }
 
-        @SuppressWarnings("unchecked")
-        public Map getAttributes() throws FileSystemException {
+        public Map<String, Object> getAttributes() throws FileSystemException {
             return content.getAttributes();
         }
 

@@ -121,7 +121,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
     /**
      * Registers an remote object into the registry
      *
-     * @param urn
+     * @param uri
      *            The urn of the body (in fact his url + his name)
      * @exception java.io.IOException
      *                if the remote body cannot be registered
@@ -149,7 +149,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
     /**
      * Unregisters an remote object previously registered into the bodies table
      *
-     * @param urn
+     * @param uri
      *            the urn under which the active object has been registered
      */
     public void unregister(URI uri) throws ProActiveException {
@@ -159,12 +159,11 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
     /**
      * Looks-up a remote object previously registered in the bodies table .
      *
-     * @param urn
+     * @param uri
      *            the urn (in fact its url + name) the remote Body is registered
      *            to
      * @return a UniversalBody
      */
-    @SuppressWarnings("unchecked")
     public RemoteObject lookup(URI uri) throws ProActiveException {
         throwIfAgentIsNul("lookup call failed");
 
@@ -186,7 +185,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
     /**
      * List all active object previously registered in the registry
      *
-     * @param url
+     * @param uri
      *            the url of the host to scan, typically //machine_name
      * @return a list of Strings, representing the registered names, and {} if
      *         no registry

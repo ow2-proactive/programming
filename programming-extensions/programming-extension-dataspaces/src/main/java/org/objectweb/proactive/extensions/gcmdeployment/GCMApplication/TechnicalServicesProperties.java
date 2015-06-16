@@ -71,6 +71,7 @@ public class TechnicalServicesProperties implements Iterable<Entry<String, HashM
      */
     public TechnicalServicesProperties getCombinationWith(TechnicalServicesProperties techServ) {
 
+        @SuppressWarnings("unchecked")
         TechnicalServicesProperties res = new TechnicalServicesProperties(
             (HashMap<String, HashMap<String, String>>) data.clone());
 
@@ -81,6 +82,7 @@ public class TechnicalServicesProperties implements Iterable<Entry<String, HashM
                 HashMap<String, String> classProperties = res.data.get(entry.getKey());
 
                 if (classProperties != null) {
+                    @SuppressWarnings("unchecked")
                     HashMap<String, String> cpClone = (HashMap<String, String>) classProperties.clone();
                     cpClone.putAll(entry.getValue());
                     res.data.put(entry.getKey(), cpClone);

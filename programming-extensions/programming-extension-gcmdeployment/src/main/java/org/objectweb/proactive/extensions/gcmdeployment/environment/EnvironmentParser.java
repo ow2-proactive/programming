@@ -144,6 +144,7 @@ class EnvironmentParser {
                     VariableContractType varContractType = VariableContractType
                             .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG);
 
+                    @SuppressWarnings("unchecked")
                     Enumeration<String> propertiesNames = (Enumeration<String>) properties.propertyNames();
                     while (propertiesNames.hasMoreElements()) {
                         String propertyName = propertiesNames.nextElement();

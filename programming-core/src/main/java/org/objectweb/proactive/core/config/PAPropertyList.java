@@ -87,7 +87,7 @@ public class PAPropertyList extends PAPropertyImpl {
     private void computeStringToList() {
         String value = super.getValueAsString();
         if (value != null) {
-            ArrayList<String> tmplist = new ArrayList<String>();
+            ArrayList<String> tmplist = new ArrayList<>();
             for (String val : value.split(Pattern.quote(separator))) {
                 val = val.trim();
                 if (val.length() > 0) {
@@ -126,7 +126,7 @@ public class PAPropertyList extends PAPropertyImpl {
 
     final public void setValue(List<String> value) {
         if (validator != null) {
-            validator.accept(new ArrayList(value));
+            validator.accept(new ArrayList<>(value));
         }
         computedValue = value;
 

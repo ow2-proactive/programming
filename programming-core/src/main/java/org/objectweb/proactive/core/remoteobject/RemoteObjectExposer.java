@@ -351,8 +351,10 @@ public class RemoteObjectExposer<T> {
      */
     public void unregisterAll() throws ProActiveException {
         // Keep a reference for debug
-        LinkedHashMap<URI, InternalRemoteRemoteObject> cloned = (LinkedHashMap<URI, InternalRemoteRemoteObject>) this.activeRemoteRemoteObjects
-                .clone();
+        @SuppressWarnings("unchecked")
+        LinkedHashMap<URI, InternalRemoteRemoteObject> cloned =
+                (LinkedHashMap<URI, InternalRemoteRemoteObject>) this.activeRemoteRemoteObjects.clone();
+
         for (URI uri : cloned.keySet()) {
             try {
                 PARemoteObject.unregister(uri);
