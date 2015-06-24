@@ -9,7 +9,7 @@ ProActive is a Java middleware that provides the programming and runtime facilit
 If you want to recompile all sources and generate all jar files:
 
 ```
-gradlew build -x test
+$> gradlew build -x test
 ``` 
 
 You can also download binaries at http://www.activeeon.com/register/web-download
