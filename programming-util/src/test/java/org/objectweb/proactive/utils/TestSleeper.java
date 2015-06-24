@@ -36,9 +36,10 @@
  */
 package org.objectweb.proactive.utils;
 
-import junit.framework.Assert;
 import org.apache.log4j.Logger;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 
 public class TestSleeper {
@@ -64,9 +65,9 @@ public class TestSleeper {
         sleepyThread.start();
         sleepyThread.join();
         // -1 is here because System.nanoTime() is more accurate
-        // than System.currentTimeMillis(). Rouding errors can leads to
-        // after - before == SLEEP_TIME - 1
-        Assert.assertTrue(times[1] - times[0] >= SLEEP_TIME - 1);
+        // than System.currentTimeMillis(). Rounding errors and multiple interrupts can leads to
+        // after - before >= SLEEP_TIME - 100
+        assertTrue(times[1] - times[0] >= SLEEP_TIME - 100);
         thread.interrupt();
     }
 
