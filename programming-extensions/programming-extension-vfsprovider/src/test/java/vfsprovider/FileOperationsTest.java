@@ -54,6 +54,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 
 
 /**
@@ -366,6 +367,9 @@ public class FileOperationsTest extends AbstractIOOperationsBase {
         assertEquals(fileInfo.getType(), fType);
         assertEquals(fileInfo.isHidden(), hidden);
         assertEquals(fileInfo.isReadable(), readable);
+        if(!writable){
+            assumeFalse("Probably running the test as root as we cannot make the file read only (JDK-6931128)", fileInfo.isWritable());
+        }
         assertEquals(fileInfo.isWritable(), writable);
     }
 }
