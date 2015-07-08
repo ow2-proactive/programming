@@ -61,7 +61,7 @@ public class OSRuntime {
     /**
      * Create an {@link OSRuntime} with the default ProActive configuration.
      * 
-     * A {@link PAOSProcessBuilderIFactory} is used to create {@link OSProcessBuilder}
+     * A {@link PAOSProcessBuilderFactory} is used to create {@link OSProcessBuilder}
      * 
      * @throws ProActiveException If configuration fails 
      */
@@ -70,10 +70,9 @@ public class OSRuntime {
     }
 
     /**
-     * Create an {@link OSRuntime} with a custom {@link OSProcessBuilderIFactory}
+     * Create an {@link OSRuntime} with a custom {@link OSProcessBuilderFactory}
      * 
-     * A custom {@link OSProcessBuilderIFactory} can be used to extend or modify the default behavior 
-     * @param pbFactory
+     * A custom {@link OSProcessBuilderFactory} can be used to extend or modify the default behavior
      */
     public OSRuntime(OSProcessBuilderFactory pbFactory) {
         this.pbFactory = pbFactory;
@@ -119,7 +118,6 @@ public class OSRuntime {
      * @param dir
      *            Folder which will be seen as working directory by the process
      *            launched. (NULL means current directory)
-     * @return
      * @throws IOException
      *             This exception is thrown in case the executable does not
      *             exist or is not accessible
@@ -165,7 +163,6 @@ public class OSRuntime {
      * @param dir
      *            Folder which will be seen as working directory by the process
      *            launched. (NULL means current directory)
-     * @return
      * @throws IOException
      *             This exception is thrown in case the executable does not
      *             exist or is not accessible
@@ -212,7 +209,6 @@ public class OSRuntime {
      * @param dir
      *            Folder which will be seen as working directory by the process
      *            launched. (NULL means current directory)
-     * @return
      * @throws IOException
      *             This exception is thrown in case the executable does not
      *             exist or is not accessible
@@ -258,7 +254,6 @@ public class OSRuntime {
      * @param dir
      *            Folder which will be seen as working directory by the process
      *            launched. (NULL means current directory)
-     * @return
      * @throws IOException
      *             This exception is thrown in case the executable does not
      *             exist or is not accessible
@@ -276,10 +271,7 @@ public class OSRuntime {
         Process p = null;
         try {
             p = ospb.start();
-        } catch (CoreBindingException e) {
-            // this can not happen - because it was not set;
-            e.printStackTrace();
-        } catch (OSUserException e) {
+        } catch (CoreBindingException | OSUserException e) {
             // this can not happen - because it was not set;
             e.printStackTrace();
         }

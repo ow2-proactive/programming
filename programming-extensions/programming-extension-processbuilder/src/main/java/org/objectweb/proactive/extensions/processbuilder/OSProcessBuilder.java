@@ -82,7 +82,7 @@ public interface OSProcessBuilder {
      * 
      * @return command as a list of strings
      */
-    public List<String> command();
+    List<String> command();
 
     /**
      * Sets this process builder's operating system program and arguments. This
@@ -94,7 +94,7 @@ public interface OSProcessBuilder {
      *            A string array containing the program and its arguments
      * @return this OSProcessBuilderI
      */
-    public OSProcessBuilder command(String... command);
+    OSProcessBuilder command(String... command);
 
     /**
      * Returns this process builder's associated user. The launched process will
@@ -103,7 +103,7 @@ public interface OSProcessBuilder {
      * @return the user of this process builder or null is the process will be run under 
      *          the current user account.
      */
-    public OSUser user();
+    OSUser user();
 
     /**
      * Helper method for checking if the launcher can/is allowed to launch a
@@ -116,7 +116,7 @@ public interface OSProcessBuilder {
      * @return Ability to launch a process using the given user descriptor.
      * @throws FatalProcessBuilderException 
      */
-    public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException;
+    boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException;
 
     /**
      * Returns this process builder's associated core binding. The launched
@@ -124,7 +124,7 @@ public interface OSProcessBuilder {
      * 
      * @return the description of core binding
      */
-    public CoreBindingDescriptor cores();
+    CoreBindingDescriptor cores();
 
     /**
      * Helper method for checking the possibility of binding the to-be-created
@@ -132,7 +132,7 @@ public interface OSProcessBuilder {
      * 
      * @return true if the binding is supported and false otherwise
      */
-    public boolean isCoreBindingSupported();
+    boolean isCoreBindingSupported();
 
     /**
      * This method will return an object which implements the
@@ -141,7 +141,7 @@ public interface OSProcessBuilder {
      * 
      * @return the cores mapping
      */
-    public CoreBindingDescriptor getAvaliableCoresDescriptor();
+    CoreBindingDescriptor getAvailableCoresDescriptor();
 
     /**
      * Returns this process builder's working directory. Subprocesses
@@ -153,7 +153,7 @@ public interface OSProcessBuilder {
      * 
      * @return This process builder's working directory
      */
-    public File directory();
+    File directory();
 
     /**
      * Sets this process builder's working directory. Subprocesses subsequently
@@ -166,7 +166,7 @@ public interface OSProcessBuilder {
      *            The new working directory
      * @return This process builder
      */
-    public OSProcessBuilder directory(File directory);
+    OSProcessBuilder directory(File directory);
 
     /**
      * Returns a string map view of this process builder's environment.
@@ -241,7 +241,7 @@ public interface OSProcessBuilder {
      * @see Runtime#exec(String[],String[],java.io.File)
      * @see System#getenv()
      */
-    public Map<String, String> environment();
+    Map<String, String> environment();
 
     /**
      * Tells whether this process builder merges standard error and standard
@@ -258,7 +258,7 @@ public interface OSProcessBuilder {
      * 
      * @return This process builder's <code>redirectErrorStream</code> property
      */
-    public boolean redirectErrorStream();
+    boolean redirectErrorStream();
 
     /**
      * Sets this process builder's <code>redirectErrorStream</code> property.
@@ -276,7 +276,7 @@ public interface OSProcessBuilder {
      *            The new property value
      * @return This process builder
      */
-    public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream);
+    OSProcessBuilder redirectErrorStream(boolean redirectErrorStream);
 
     /**
      * Starts a new process using the attributes of this process builder.
@@ -343,6 +343,6 @@ public interface OSProcessBuilder {
      *             This exception is raised upon internal failures of the
      *             process builder.
      */
-    public Process start() throws IOException, OSUserException, CoreBindingException,
+    Process start() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException;
 }
