@@ -293,10 +293,9 @@ public class OSRuntime {
      * this descriptor, one can limit the core-usage to a subset of all
      * available cores.
      * 
-     * @return
      */
     public CoreBindingDescriptor getAvaliableCoresDescriptor() {
-        return this.pbFactory.getBuilder().getAvaliableCoresDescriptor();
+        return this.pbFactory.getBuilder().getAvailableCoresDescriptor();
     }
 
 }

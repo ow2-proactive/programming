@@ -86,7 +86,7 @@ public class BasicProcessBuilder implements OSProcessBuilder {
         return false;
     }
 
-    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+    public CoreBindingDescriptor getAvailableCoresDescriptor() {
         return null;
     }
 

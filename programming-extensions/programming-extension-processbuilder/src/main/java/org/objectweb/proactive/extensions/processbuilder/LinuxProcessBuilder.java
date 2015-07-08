@@ -220,11 +220,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#getAvaliableCoresDescriptor()
      */
     @Override
-    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+    public CoreBindingDescriptor getAvailableCoresDescriptor() {
         if (this.cores != null) {
             throw new NotImplementedException("The cores mapping is not yet implemented");
         }
-        return this.cores;
+        return null;
     }
 
     /* (non-Javadoc)
