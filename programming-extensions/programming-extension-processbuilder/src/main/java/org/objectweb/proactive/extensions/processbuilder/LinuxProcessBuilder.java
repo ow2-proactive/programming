@@ -43,13 +43,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -58,6 +55,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessB
 import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -70,8 +68,11 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 public class LinuxProcessBuilder implements OSProcessBuilder {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.OSPB);
 
+    private static final String LINUX_SCRIPT_FOLDER_PATH = "dist/scripts/processbuilder/linux/";
     private static final String CHECK_SUDO = "check_sudo.sh";
     private static final String LAUNCH_SCRIPT = "launch.sh";
+    private static final String PROCESS_TREE_KILLER_LOCATION = LINUX_SCRIPT_FOLDER_PATH + "kill_process_tree.sh";
+
     private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
     private static final String ENV_VAR_USER_KEY_CONTENT = "PA_OSPB_USER_KEY_CONTENT";
 
@@ -94,9 +95,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     private final String scriptLocation;
 
     protected final String token;
+    private String scriptBaseFolder;
 
-    protected LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String paHome) {
-        this.scriptLocation = paHome + "/dist/scripts/processbuilder/linux/";
+    protected LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String scriptBaseFolder) {
+        this.scriptBaseFolder = scriptBaseFolder;
+        this.scriptLocation = scriptBaseFolder + "/" + LINUX_SCRIPT_FOLDER_PATH;
         this.delegatedPB = new ProcessBuilder();
         this.user = user;
         this.cores = cores;
@@ -220,11 +223,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#getAvaliableCoresDescriptor()
      */
     @Override
-    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+    public CoreBindingDescriptor getAvailableCoresDescriptor() {
         if (this.cores != null) {
             throw new NotImplementedException("The cores mapping is not yet implemented");
         }
-        return this.cores;
+        return null;
     }
 
     /* (non-Javadoc)
@@ -279,19 +282,14 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     @Override
     public Process start() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {
-        Process p = null;
-
         if (user() != null || cores() != null) {
             // user or core binding is specified - do the fancy stuff
-            p = setupAndStart();
-
+            return setupAndStart();
         } else {
             // no extra service needed, just fall through to the delegated pb
             delegatedPB.environment().putAll(environment());
-            p = delegatedPB.start();
+            return delegatedPB.start();
         }
-
-        return p;
     }
 
     /**
@@ -349,7 +347,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         outputInterpreter.waitForUserCommandStart(p);
         // when we are here, we know that user code is executing!
 
-        return new OSLinuxProcess(p, this.user, this.token);
+        return new OSLinuxProcess(p, this.user, this.token, this.scriptBaseFolder);
     }
 
     private void prepareEnvironment() throws FatalProcessBuilderException {
@@ -381,7 +379,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         String uname = (user() == null) ? "" : user().getUserName();
         String cpart = (cores() == null) ? "" : cores().toString();
         String wpath = (directory() == null) ? "" : directory().getAbsolutePath();
-        ArrayList<String> icmd = new ArrayList<String>();
+        ArrayList<String> icmd = new ArrayList<>();
         // under linux the launcher needs:
         // [script folder] [TOKEN] [ABS_PATH_TO_WORKDIR] [USERNAME] [CORES] [COMMAND...
         icmd.add(this.scriptLocation + LAUNCH_SCRIPT);
@@ -399,7 +397,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 }
         }
 
-        return icmd.toArray(new String[0]);
+        return icmd.toArray(new String[icmd.size()]);
     }
 
     /**
@@ -491,14 +489,14 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
             String iline;
 
             while ((eline = bereader.readLine()) != null &&
-                !(eline.trim().indexOf(OK_MESSAGE) != -1 || eline.trim().indexOf(ERROR_PREFIX) != -1)) {
+                !(eline.trim().contains(OK_MESSAGE) || eline.trim().contains(ERROR_PREFIX))) {
                 // read it so we do not pollute output of user
                 if (logger.isDebugEnabled()) {
                     logger.debug("Token:" + token + " script stderr: " + eline);
                 }
             }
-            if (eline != null && eline.trim().indexOf(OK_MESSAGE) != -1) {
-                while ((iline = bireader.readLine()) != null && iline.trim().indexOf(OK_MESSAGE) == -1) {
+            if (eline != null && eline.trim().contains(OK_MESSAGE)) {
+                while ((iline = bireader.readLine()) != null && !iline.trim().contains(OK_MESSAGE)) {
                     // read this also - so user will not get any output of our
                     // scripts
 
@@ -553,11 +551,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 @SuppressWarnings("unchecked")
                 Class<Exception> exc = (Class<Exception>) Class.forName(type);
                 @SuppressWarnings("rawtypes")
-                Constructor constructor = exc.getConstructor(new Class[] { String.class });
+                Constructor constructor = exc.getConstructor(String.class);
                 if (trace != null) {
                     descr += "\nTrace: " + trace.toString();
                 }
-                obj = (Exception) constructor.newInstance(new Object[] { descr });
+                obj = (Exception) constructor.newInstance(descr);
 
             } catch (ClassNotFoundException e) {
                 // weeeird. Are scripts OK?
@@ -592,12 +590,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 throw new FatalProcessBuilderException(e.getMessage());
 
             } catch (Exception e) {
-                if (e instanceof IOException) {
-                    throw (IOException) e;
-                } else {
-                    // mistyped class names in the scripts?
-                    throw new FatalProcessBuilderException("Cannot launch!", e);
-                }
+                // mistyped class names in the scripts?
+                throw new FatalProcessBuilderException("Cannot launch!", e);
 
             }
         }
@@ -605,37 +599,23 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
 
     static class OSLinuxProcess extends Process {
 
-        private static final String PROCESS_TREE_KILLER_LOCATION = "dist/scripts/processbuilder/linux/kill_process_tree.sh";
-
         final private Process process;
+        private String scriptBaseFolder;
         final private OSUser user;
         final private String token;
-        final private int pid;
 
-        public OSLinuxProcess(Process p, OSUser user, String token) {
+        public OSLinuxProcess(Process p, OSUser user, String token, String scriptBaseFolder) {
             this.process = p;
-            this.pid = getProcessPid(p);
+            this.scriptBaseFolder = scriptBaseFolder;
             this.user = user;
             this.token = token;
-        }
-
-        private int getProcessPid(Process process) {
-            try {
-                Field field = process.getClass().getDeclaredField("pid");
-                field.setAccessible(true);
-                return field.getInt(process);
-            } catch (Exception e) { // should not happen, p should be a UNIXProcess
-                logger.error("Could find pid on underlying UNIX process, process tree killing might fail", e);
-                return -1;
-            }
         }
 
         @Override
         public void destroy() {
             try {
-                String proActiveHome = ProActiveRuntimeImpl.getProActiveRuntime().getProActiveHome();
-                LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, proActiveHome);
-                String killProcessTreeScript = new File(proActiveHome, PROCESS_TREE_KILLER_LOCATION)
+                LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, scriptBaseFolder);
+                String killProcessTreeScript = new File(scriptBaseFolder, PROCESS_TREE_KILLER_LOCATION)
                         .getAbsolutePath();
                 lpb.command(killProcessTreeScript, this.token);
                 Process p = lpb.start();

@@ -142,7 +142,7 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
     /* (non-Javadoc)
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#getAvaliableCoresDescriptor()
      */
-    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+    public CoreBindingDescriptor getAvailableCoresDescriptor() {
         return this.cores;
     }
 
