@@ -36,13 +36,6 @@
  */
 package dataspaces;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,14 +46,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
-import org.apache.log4j.Level;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -81,6 +66,17 @@ import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerIm
 import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.utils.OperatingSystem;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.log4j.Level;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeFalse;
 
 
 /**
@@ -361,7 +357,7 @@ public class VFSSpacesMountManagerImplTest {
         write_p.createNewFile();
         assertTrue(write_p.setWritable(false));
 
-        assertFalse(write_p.canWrite());
+        assumeFalse("Probably running the test as root as we cannot make the file read only (JDK-6931128)", write_p.canWrite());
 
         return write_p.toURI().toURL().toString();
     }
