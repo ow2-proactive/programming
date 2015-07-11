@@ -395,28 +395,28 @@ public class PNPAgent {
             clientHandler.setPnpClientChannel(this);
 
             // Sends the first frame to negociate the heartbeat
-            PNPFrameHeartbeatAdvertisement frame = new PNPFrameHeartbeatAdvertisement(this
-                    .getHeartbeatPeriod());
+            PNPFrameHeartbeatAdvertisement frame = new PNPFrameHeartbeatAdvertisement(
+                this.getHeartbeatPeriod());
             cf = this.channel.write(frame);
             timeout = this.getHeartbeatPeriod() != 0 ? this.getHeartbeatPeriod() : 60 * 1000;
             if (cf.awaitUninterruptibly(timeout)) {
                 if (cf.isSuccess()) {
                     logger.trace("Successfully advertised the heartbeat period to the server");
                 } else {
-                    throw new PNPIOException("Failed to advertise the heartbeat period to the server", cf
-                            .getCause());
+                    throw new PNPIOException("Failed to advertise the heartbeat period to the server",
+                        cf.getCause());
                 }
             } else {
                 if (cf.cancel()) {
                     throw new PNPIOException(
-                        "Failed to advertise the heartbeat period to the server (timeout reached)", cf
-                                .getCause());
+                        "Failed to advertise the heartbeat period to the server (timeout reached)",
+                        cf.getCause());
                 } else {
                     if (cf.isSuccess()) {
                         logger.trace("Successfully advertised the heartbeat period to the server");
                     } else {
-                        throw new PNPIOException("Failed to advertise the heartbeat period to the server", cf
-                                .getCause());
+                        throw new PNPIOException("Failed to advertise the heartbeat period to the server",
+                            cf.getCause());
                     }
                 }
             }

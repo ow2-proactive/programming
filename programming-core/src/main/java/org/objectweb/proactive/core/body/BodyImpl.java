@@ -201,9 +201,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // JMX Notification
         if (!isProActiveInternalObject && (this.mbean != null)) {
             String tagNotification = createTagNotification(request.getTags());
-            RequestNotificationData requestNotificationData = new RequestNotificationData(request
-                    .getSourceBodyID(), request.getSenderNodeURL(), this.bodyID, this.nodeURL, request
-                    .getMethodName(), getRequestQueue().size() + 1, request.getSequenceNumber(),
+            RequestNotificationData requestNotificationData = new RequestNotificationData(
+                request.getSourceBodyID(), request.getSenderNodeURL(), this.bodyID, this.nodeURL,
+                request.getMethodName(), getRequestQueue().size() + 1, request.getSequenceNumber(),
                 tagNotification);
             this.mbean.sendNotification(NotificationType.requestReceived, requestNotificationData);
         }
@@ -513,9 +513,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             // JMX Notification
             if (!isProActiveInternalObject && (mbean != null)) {
                 String tagNotification = createTagNotification(request.getTags());
-                RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(), request
-                        .getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL, request
-                        .getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
+                RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(),
+                    request.getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL,
+                    request.getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
                     tagNotification);
                 mbean.sendNotification(NotificationType.servingStarted, data);
             }
@@ -541,11 +541,11 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                                 ". The method " + request.getMethodCall().getReifiedMethod() +
                                 " don't declare it to be thrown.");
                         }
-                        reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(), request
-                                .getMethodName(), new MethodCallResult(null, exception));
+                        reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(),
+                            request.getMethodName(), new MethodCallResult(null, exception));
                     } else {
-                        reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(), request
-                                .getMethodName(), new MethodCallResult(null, exception));
+                        reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(),
+                            request.getMethodName(), new MethodCallResult(null, exception));
                     }
 
                 } else {
@@ -563,8 +563,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 if (!isProActiveInternalObject && (mbean != null)) {
                     String tagNotification = createTagNotification(request.getTags());
                     RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(),
-                        request.getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL, request
-                                .getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
+                        request.getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL,
+                        request.getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
                         tagNotification);
                     mbean.sendNotification(NotificationType.voidRequestServed, data);
                 }
@@ -576,9 +576,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             // JMX Notification
             if (!isProActiveInternalObject && (mbean != null) && reply.getResult().getException() == null) {
                 String tagNotification = createTagNotification(request.getTags());
-                RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(), request
-                        .getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL, request
-                        .getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
+                RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(),
+                    request.getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL,
+                    request.getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
                     tagNotification);
                 mbean.sendNotification(NotificationType.replySent, data);
             }
@@ -667,8 +667,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             //            if (currentreq != null)
             //                tags = currentreq.getTags();
 
-            Reply exceptionReply = new ReplyImpl(reply.getSourceBodyID(), reply.getSequenceNumber(), reply
-                    .getMethodName(), new MethodCallResult(null, e));
+            Reply exceptionReply = new ReplyImpl(reply.getSourceBodyID(), reply.getSequenceNumber(),
+                reply.getMethodName(), new MethodCallResult(null, e));
             exceptionReply.send(destination);
         }
 
@@ -702,10 +702,11 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                     if (!connectorID.equals(destinationBody.getID())) {
                         String tagNotification = createTagNotification(tags);
 
-                        mbean.sendNotification(NotificationType.requestSent, new RequestNotificationData(
-                            BodyImpl.this.bodyID, BodyImpl.this.getNodeURL(), destinationBody.getID(),
-                            destinationBody.getNodeURL(), methodCall.getName(), -1, request
-                                    .getSequenceNumber(), tagNotification));
+                        mbean.sendNotification(
+                                NotificationType.requestSent,
+                                new RequestNotificationData(BodyImpl.this.bodyID, BodyImpl.this.getNodeURL(),
+                                    destinationBody.getID(), destinationBody.getNodeURL(), methodCall
+                                            .getName(), -1, request.getSequenceNumber(), tagNotification));
                     }
                 }
             }
@@ -832,8 +833,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
         public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
                 throws java.io.IOException {
-            throw new InactiveBodyException(BodyImpl.this, destinationBody.getNodeURL(), destinationBody
-                    .getID(), methodCall.getName());
+            throw new InactiveBodyException(BodyImpl.this, destinationBody.getNodeURL(),
+                destinationBody.getID(), methodCall.getName());
         }
 
         /*

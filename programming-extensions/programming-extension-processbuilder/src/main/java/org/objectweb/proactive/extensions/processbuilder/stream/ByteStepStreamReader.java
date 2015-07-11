@@ -81,8 +81,8 @@ public class ByteStepStreamReader {
     /* CONSTRUCTORS */
 
     protected ByteStepStreamReader(InputStream is, Charset cs) {
-        this(is, cs.newDecoder().onMalformedInput(CodingErrorAction.REPLACE).onUnmappableCharacter(
-                CodingErrorAction.REPLACE));
+        this(is, cs.newDecoder().onMalformedInput(CodingErrorAction.REPLACE)
+                .onUnmappableCharacter(CodingErrorAction.REPLACE));
     }
 
     protected ByteStepStreamReader(InputStream is, CharsetDecoder cd) {

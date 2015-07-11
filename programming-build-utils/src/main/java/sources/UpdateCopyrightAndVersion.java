@@ -59,10 +59,11 @@ public class UpdateCopyrightAndVersion {
     public static void main(String[] arg) throws java.io.IOException {
 
         // load copyrights 
-        ActiveEonGPLcopyright = new String(getBytesFromInputStream(UpdateCopyrightAndVersion.class
-                .getResourceAsStream("activeeon_initialdev.txt")));
-        GPLcopyright = new String(getBytesFromInputStream(UpdateCopyrightAndVersion.class
-                .getResourceAsStream("proactive_gpl.txt")));
+        ActiveEonGPLcopyright = new String(
+            getBytesFromInputStream(UpdateCopyrightAndVersion.class
+                    .getResourceAsStream("activeeon_initialdev.txt")));
+        GPLcopyright = new String(
+            getBytesFromInputStream(UpdateCopyrightAndVersion.class.getResourceAsStream("proactive_gpl.txt")));
         ActiveEonContributorsProActiveInitialGPLcopyright = new String(
             getBytesFromInputStream(UpdateCopyrightAndVersion.class
                     .getResourceAsStream("activeeon_contrib.txt")));

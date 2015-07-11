@@ -283,7 +283,8 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             when any kind of error occurred while finding files.
      */
-    public abstract List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector) throws FileSystemException;
+    public abstract List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector)
+            throws FileSystemException;
 
     /**
      * Finds the set of matching descendants of this file.

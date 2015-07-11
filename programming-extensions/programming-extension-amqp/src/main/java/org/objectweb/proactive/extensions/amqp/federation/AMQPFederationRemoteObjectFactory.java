@@ -196,8 +196,8 @@ public class AMQPFederationRemoteObjectFactory extends AbstractRemoteObjectFacto
 
             List<URI> response;
 
-            response = finder.discover(uri, AMQPFederationConfig.PA_AMQP_FEDERATION_DISCOVER_EXCHANGE_NAME
-                    .getValue(), 5000);
+            response = finder.discover(uri,
+                    AMQPFederationConfig.PA_AMQP_FEDERATION_DISCOVER_EXCHANGE_NAME.getValue(), 5000);
 
             URI[] result = response.toArray(new URI[response.size()]);
             if (logger.isDebugEnabled()) {

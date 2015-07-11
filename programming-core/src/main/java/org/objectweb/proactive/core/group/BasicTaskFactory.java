@@ -93,13 +93,13 @@ public class BasicTaskFactory implements TaskFactory {
                 Object[] individualEffectiveArguments = new Object[mc.getNumberOfParameter()];
                 for (int j = 0; j < mc.getNumberOfParameter(); j++)
                     if (PAGroup.isScatterGroupOn(mc.getParameter(j))) {
-                        individualEffectiveArguments[j] = PAGroup.get(mc.getParameter(j), i %
-                            PAGroup.size(mc.getParameter(j)));
+                        individualEffectiveArguments[j] = PAGroup.get(mc.getParameter(j),
+                                i % PAGroup.size(mc.getParameter(j)));
                     } else {
                         individualEffectiveArguments[j] = mc.getParameter(j);
                     }
-                methodsToDispatch.add(MethodCall.getMethodCall(mc.getReifiedMethod(), mc
-                        .getGenericTypesMapping(), individualEffectiveArguments, mc.getExceptionContext()));
+                methodsToDispatch.add(MethodCall.getMethodCall(mc.getReifiedMethod(),
+                        mc.getGenericTypesMapping(), individualEffectiveArguments, mc.getExceptionContext()));
             }
 
         }

@@ -137,8 +137,9 @@ public class NodeFactory {
         ProActiveRuntime defaultRuntime = ProActiveRuntimeImpl.getProActiveRuntime();
         while (halfBodiesNode == null) {
             try {
-                halfBodiesNode = defaultRuntime.createLocalNode(HALFBODIES_NODE_NAME +
-                    ProActiveRandom.nextPosInt(), false, DEFAULT_VIRTUAL_NODE_NAME);
+                halfBodiesNode = defaultRuntime
+                        .createLocalNode(HALFBODIES_NODE_NAME + ProActiveRandom.nextPosInt(), false,
+                                DEFAULT_VIRTUAL_NODE_NAME);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the halfbodies hosting Node", e);
             } catch (AlreadyBoundException e) {

@@ -123,8 +123,7 @@ public class PathElement implements Cloneable, Serializable {
                         return appendPath(bp, relPath, hostInfo);
                     } else {
                         GCMD_LOGGER
-                                .warn(
-                                        "Full Path cannot be returned since nor the ProActive tool nor the CommandBuilder base path have been specified",
+                                .warn("Full Path cannot be returned since nor the ProActive tool nor the CommandBuilder base path have been specified",
                                         new IllegalStateException());
                         return null;
                     }

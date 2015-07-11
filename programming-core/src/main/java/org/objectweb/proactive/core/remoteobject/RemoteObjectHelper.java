@@ -121,8 +121,8 @@ public class RemoteObjectHelper {
                 uri = URIBuilder.buildURIFromProperties(uri.getHost(), uri.getPath());
             } else {
                 // Set only protocol (using default) 
-                uri = URIBuilder.setProtocol(uri, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
-                        .getValue());
+                uri = URIBuilder.setProtocol(uri,
+                        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
             }
         } else {
             if (port == -1) {

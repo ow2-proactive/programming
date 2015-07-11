@@ -218,8 +218,8 @@ public class ProcessorRegistrationRequest extends Processor {
 
         AgentID agentId = AgentIdGenerator.getId();
         MagicCookie magicCookie = message.getMagicCookie();
-        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(), this.router
-                .getId(), magicCookie, this.router.getHeartbeatTimeout());
+        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
+            this.router.getId(), magicCookie, this.router.getHeartbeatTimeout());
 
         Client client = new Client(attachment, agentId, magicCookie);
         boolean resp = this.sendReply(client, reply);

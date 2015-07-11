@@ -183,8 +183,8 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
 
             KeyStore ks = KeyStore.getInstance("PKCS12");
             ks.load(null, null);
-            ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN, pair.getPrivate(), SslHelpers.DEFAULT_KS_PASSWD
-                    .toCharArray(), new X509Certificate[] { cert });
+            ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN, pair.getPrivate(),
+                    SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), new X509Certificate[] { cert });
             return ks;
         } catch (KeyStoreException e) {
             throw new PNPSslConfigurationException("Failed to create or fill the keystore for " + PROTO_ID, e);

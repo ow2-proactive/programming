@@ -871,8 +871,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     public Object getUniqueAO() throws ProActiveException {
         if (!this.property.equals("unique_singleAO")) {
-            logger
-                    .warn("!!!!!!!!!!WARNING. This VirtualNode is not defined with unique_single_AO property in the XML descriptor. Calling getUniqueAO() on this VirtualNode can lead to unexpected behaviour");
+            logger.warn("!!!!!!!!!!WARNING. This VirtualNode is not defined with unique_single_AO property in the XML descriptor. Calling getUniqueAO() on this VirtualNode can lead to unexpected behaviour");
         }
 
         if (this.uniqueActiveObject == null) {
@@ -880,8 +879,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 Node node = getNode();
 
                 if (node.getActiveObjects().length > 1) {
-                    logger
-                            .warn("!!!!!!!!!!WARNING. More than one active object is created on this VirtualNode.");
+                    logger.warn("!!!!!!!!!!WARNING. More than one active object is created on this VirtualNode.");
                 }
 
                 this.uniqueActiveObject = node.getActiveObjects()[0];
@@ -985,15 +983,15 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                     // co-allocation
                     // in the jvm.
                     try {
-                        Node node = proActiveRuntimeRegistered.createLocalNode(nodeName, false, this
-                                .getName());
+                        Node node = proActiveRuntimeRegistered.createLocalNode(nodeName, false,
+                                this.getName());
 
                         // JMX Notification
                         ProActiveRuntimeWrapperMBean mbean = ProActiveRuntimeImpl.getProActiveRuntime()
                                 .getMBean();
                         if (mbean != null) {
-                            NodeNotificationData notificationData = new NodeNotificationData(node, this
-                                    .getName());
+                            NodeNotificationData notificationData = new NodeNotificationData(node,
+                                this.getName());
                             mbean.sendNotification(NotificationType.nodeCreated, notificationData);
                         }
                         break;

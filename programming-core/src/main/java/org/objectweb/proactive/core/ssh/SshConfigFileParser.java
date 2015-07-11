@@ -173,9 +173,8 @@ public class SshConfigFileParser {
                     break;
 
                 default:
-                    logger
-                            .error("ERROR: malformed gateway declaration. Should be host1.domain1:gateway1:port;*.domain2:host2:port2 \n =>" +
-                                expandTable(gateways));
+                    logger.error("ERROR: malformed gateway declaration. Should be host1.domain1:gateway1:port;*.domain2:host2:port2 \n =>" +
+                        expandTable(gateways));
                     continue;
             }
         }

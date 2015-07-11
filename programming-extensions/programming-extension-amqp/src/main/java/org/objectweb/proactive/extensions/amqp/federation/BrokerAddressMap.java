@@ -148,8 +148,8 @@ public class BrokerAddressMap {
                 }
 
                 String host = properties.getProperty(brokerName + ".host", AMQPConstants.DEFAULT_BROKER_HOST);
-                String port = properties.getProperty(brokerName + ".port", String
-                        .valueOf(AMQPConstants.DEFAULT_BROKER_PORT));
+                String port = properties.getProperty(brokerName + ".port",
+                        String.valueOf(AMQPConstants.DEFAULT_BROKER_PORT));
                 String username = properties.getProperty(brokerName + ".user", AMQPConstants.DEFAULT_USER);
                 String password = properties.getProperty(brokerName + ".password",
                         AMQPConstants.DEFAULT_PASSWORD);

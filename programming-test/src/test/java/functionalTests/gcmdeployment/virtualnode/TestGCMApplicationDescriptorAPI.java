@@ -62,8 +62,8 @@ public class TestGCMApplicationDescriptorAPI extends GCMFunctionalTest {
 
     @Test
     public void test() throws ProActiveException, FileNotFoundException {
-        super.gcmad = PAGCMDeployment.loadApplicationDescriptor(super.applicationDescriptor, super
-                .getFinalVariableContract());
+        super.gcmad = PAGCMDeployment.loadApplicationDescriptor(super.applicationDescriptor,
+                super.getFinalVariableContract());
         Assert.assertFalse(super.gcmad.isStarted());
         Assert.assertEquals(2, super.gcmad.getVirtualNodes().size());
 

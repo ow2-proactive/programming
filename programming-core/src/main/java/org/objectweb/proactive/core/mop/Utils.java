@@ -648,7 +648,7 @@ public abstract class Utils extends Object {
                 } else {
                     i++;
                     switch (stubClassName.charAt(i)) {
-                        // one char Flags : 'STUB_ESCAPE_CHAR''a_char'
+                    // one char Flags : 'STUB_ESCAPE_CHAR''a_char'
                         case STUB_PACKAGE_SEPARATOR_CHAR:
                             sb.append('.');
                             break;

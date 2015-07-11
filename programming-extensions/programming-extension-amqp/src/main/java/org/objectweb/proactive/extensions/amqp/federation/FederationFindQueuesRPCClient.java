@@ -73,8 +73,8 @@ class FederationFindQueuesRPCClient extends AbstractFindQueuesRPCClient {
     protected String createReplyQueue(Channel channel) throws IOException {
         String replyQueueName = AMQPFederationUtils.uniqueQueueName("reply_discover");
         channel.queueDeclare(replyQueueName, false, true, true, null);
-        channel.queueBind(replyQueueName, AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_REPLY_EXCHANGE_NAME
-                .getValue(), replyQueueName);
+        channel.queueBind(replyQueueName,
+                AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_REPLY_EXCHANGE_NAME.getValue(), replyQueueName);
         return replyQueueName;
     }
 

@@ -118,8 +118,9 @@ class EnvironmentParser {
     private void parseEnvironment() throws XPathExpressionException, SAXException, DOMException, IOException {
         alreadyParsed = true;
 
-        NodeList environmentNodes = (NodeList) xpath.evaluate("/*/" +
-            GCMParserHelper.elementInNS(namespace, "environment"), document, XPathConstants.NODESET);
+        NodeList environmentNodes = (NodeList) xpath.evaluate(
+                "/*/" + GCMParserHelper.elementInNS(namespace, "environment"), document,
+                XPathConstants.NODESET);
 
         if (environmentNodes.getLength() == 1) {
 

@@ -40,6 +40,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Locale;
 
+
 /**
  * PrefixPrintStream this PrintStream adds a prefix to every line printed.
  * PrefixPrintStreams can be chained to have for example several levels of indentation
@@ -132,7 +133,7 @@ public class PrefixPrintStream extends PrintStream {
             boolean isNewLine = false;
             for (StackTraceElement elem : Thread.currentThread().getStackTrace()) {
                 if (elem.getClassName().equals(PrintStream.class.getName()) &&
-                        elem.getMethodName().equals("newLine")) {
+                    elem.getMethodName().equals("newLine")) {
                     isNewLine = true;
                     break;
                 }

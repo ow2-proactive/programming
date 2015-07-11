@@ -56,7 +56,7 @@ public class JunitTest {
     @Documented
     @Inherited
     @Retention(RetentionPolicy.RUNTIME)
-    @Target( { ElementType.TYPE })
+    @Target({ ElementType.TYPE })
     public @interface MyAnnotation {
 
         TYPE[] types();

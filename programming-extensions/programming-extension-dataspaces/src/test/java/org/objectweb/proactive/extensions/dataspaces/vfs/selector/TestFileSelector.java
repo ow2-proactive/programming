@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs.selector;
 
-
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.vfs2.FileSystemException;
@@ -61,6 +60,7 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeTrue;
+
 
 public class TestFileSelector {
 
@@ -93,8 +93,7 @@ public class TestFileSelector {
     }
 
     private void testGetFilePathRelativeToBaseURI(String baseURI, String fileURI, String expectedResult) {
-        assertThat(fileSelector.getFilePathRelativeToBaseURI(
-                baseURI, fileURI), equalTo(expectedResult));
+        assertThat(fileSelector.getFilePathRelativeToBaseURI(baseURI, fileURI), equalTo(expectedResult));
     }
 
     @Test
@@ -212,7 +211,8 @@ public class TestFileSelector {
         testWithIncludeAndExcludePattern(path, null, excludePattern, expectedResult);
     }
 
-    private void testWithIncludeAndExcludePattern(String path, String includePattern, String excludePattern, boolean expectedResult) {
+    private void testWithIncludeAndExcludePattern(String path, String includePattern, String excludePattern,
+            boolean expectedResult) {
         Path p = Paths.get(path);
 
         if (includePattern != null) {
@@ -234,8 +234,8 @@ public class TestFileSelector {
 
     @Test
     public void testConstructorWithStringArraysAsInput() {
-        String[] includes = new String[]{"a"};
-        String[] excludes = new String[]{"b", "c"};
+        String[] includes = new String[] { "a" };
+        String[] excludes = new String[] { "b", "c" };
 
         fileSelector = new FileSelector(includes, excludes);
 
@@ -261,7 +261,7 @@ public class TestFileSelector {
 
     @Test
     public void testConstructorWithIncludePatternsOnlyAsStringArray() {
-        String[] includes = new String[]{"a"};
+        String[] includes = new String[] { "a" };
 
         fileSelector = new FileSelector(includes);
 
@@ -277,7 +277,7 @@ public class TestFileSelector {
 
     @Test
     public void testAddIncludesStringArray() {
-        String[] includes = new String[]{"a"};
+        String[] includes = new String[] { "a" };
         fileSelector.addIncludes(includes);
 
         assertThat(fileSelector.getIncludes(), containsInAnyOrder(includes));
@@ -296,7 +296,7 @@ public class TestFileSelector {
 
     @Test
     public void testAddExcludesStringArray() {
-        String[] excludes = new String[]{"a"};
+        String[] excludes = new String[] { "a" };
 
         assertThat(fileSelector.getIncludes(), empty());
 
@@ -340,7 +340,7 @@ public class TestFileSelector {
     public void testSetIncludesStringArray() {
         fileSelector.addIncludes("a");
 
-        String[] includes = new String[]{"b", "c"};
+        String[] includes = new String[] { "b", "c" };
         fileSelector.setIncludes(includes);
 
         assertThat(fileSelector.getIncludes(), not(contains("a")));
@@ -360,7 +360,7 @@ public class TestFileSelector {
     public void testSetExcludesStringArray() {
         fileSelector.addExcludes("a");
 
-        String[] excludes = new String[]{"b", "c"};
+        String[] excludes = new String[] { "b", "c" };
         fileSelector.setExcludes(excludes);
 
         assertThat(fileSelector.getExcludes(), not(contains("a")));
@@ -369,14 +369,12 @@ public class TestFileSelector {
     @Test
     public void testTransformIncludes() {
         fileSelector.addIncludes("a", "b", "c", "d");
-        fileSelector.transformIncludes(
-                new Function<String, String>() {
-                    @Override
-                    public String apply(String input) {
-                        return "prefix" + input;
-                    }
-                }
-        );
+        fileSelector.transformIncludes(new Function<String, String>() {
+            @Override
+            public String apply(String input) {
+                return "prefix" + input;
+            }
+        });
 
         assertThat(fileSelector.getIncludes(), not(empty()));
         for (String pattern : fileSelector.getIncludes()) {
@@ -387,14 +385,12 @@ public class TestFileSelector {
     @Test
     public void testTransformExcludes() {
         fileSelector.addExcludes("a", "b", "c", "d");
-        fileSelector.transformExcludes(
-                new Function<String, String>() {
-                    @Override
-                    public String apply(String input) {
-                        return "prefix" + input;
-                    }
-                }
-        );
+        fileSelector.transformExcludes(new Function<String, String>() {
+            @Override
+            public String apply(String input) {
+                return "prefix" + input;
+            }
+        });
 
         assertThat(fileSelector.getExcludes(), not(empty()));
         for (String pattern : fileSelector.getExcludes()) {

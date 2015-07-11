@@ -81,8 +81,9 @@ public class BaseScratchSpaceConfigurationTest {
     public void testCreateBaseConfigurationWithMultiUrlsIncludingFile() throws ConfigurationException {
         config = new BaseScratchSpaceConfiguration(new String[] { "file:///abc", "http://test.com/",
                 "http://" + BaseScratchSpaceConfiguration.HOSTNAME_VARIABLE_KEYWORD + "/" }, "/abc");
-        Assert.assertArrayEquals(new String[] { "file:///abc/", "http://test.com/",
-                "http://" + Utils.getHostname() + "/" }, config.getUrls());
+        Assert.assertArrayEquals(
+                new String[] { "file:///abc/", "http://test.com/", "http://" + Utils.getHostname() + "/" },
+                config.getUrls());
         assertEquals("/abc", config.getPath());
     }
 
@@ -100,8 +101,8 @@ public class BaseScratchSpaceConfigurationTest {
         config = new BaseScratchSpaceConfiguration("http://" +
             BaseScratchSpaceConfiguration.HOSTNAME_VARIABLE_KEYWORD + "/", "/abc");
         final ScratchSpaceConfiguration derivedConfig = config.createScratchSpaceConfiguration("subdir");
-        assertEquals("http://" + Utils.getHostname() + "/subdir/", derivedConfig.getUrls().get(
-                derivedConfig.getUrls().size() - 1));
+        assertEquals("http://" + Utils.getHostname() + "/subdir/",
+                derivedConfig.getUrls().get(derivedConfig.getUrls().size() - 1));
         assertEquals("/abc/subdir", derivedConfig.getPath());
         assertEquals(Utils.getHostname(), derivedConfig.getHostname());
         assertEquals(SpaceType.SCRATCH, derivedConfig.getType());

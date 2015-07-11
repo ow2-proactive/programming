@@ -118,8 +118,8 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
 
         String[] aouris = PAActiveObject.getUrls(ao);
 
-        Assert.assertEquals("Number of uris should match number of protocols", aouris.length, protocolsToTest
-                .size());
+        Assert.assertEquals("Number of uris should match number of protocols", aouris.length,
+                protocolsToTest.size());
 
         disableProtocol(ao);
 
@@ -220,8 +220,8 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     private void ensureURIListHasNoPAMR(List<String> inputList) throws Exception {
         for (String uriString : inputList) {
             URI uri = new URI(uriString);
-            Assert.assertFalse("PAMR protocol not found in uri : " + uriString, "pamr"
-                    .equals(uri.getScheme()));
+            Assert.assertFalse("PAMR protocol not found in uri : " + uriString,
+                    "pamr".equals(uri.getScheme()));
         }
     }
 

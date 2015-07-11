@@ -77,7 +77,7 @@ import com.sun.source.util.Trees;
  */
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 //cannot use ${Annotation}.class.getName() the value must be a constant expression BLEAH!
-@SupportedAnnotationTypes( { "org.objectweb.proactive.extensions.annotation.*"
+@SupportedAnnotationTypes({ "org.objectweb.proactive.extensions.annotation.*"
 /*"org.objectweb.proactive.extensions.annotation.activeobject.ActiveObject",
  "org.objectweb.proactive.extensions.annotation.remoteobject.RemoteObject",
  "org.objectweb.proactive.extensions.annotation.callbacks.isready.VirtualNodeIsReadyCallback",

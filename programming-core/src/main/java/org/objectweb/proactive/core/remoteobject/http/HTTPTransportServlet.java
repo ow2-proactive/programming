@@ -93,8 +93,8 @@ public class HTTPTransportServlet extends HttpServlet {
     public String getURL() {
         URI uri = URIBuilder
                 .buildURI(URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress()), NS,
-                        Constants.XMLHTTP_PROTOCOL_IDENTIFIER, CentralPAPropertyRepository.PA_XMLHTTP_PORT
-                                .getValue());
+                        Constants.XMLHTTP_PROTOCOL_IDENTIFIER,
+                        CentralPAPropertyRepository.PA_XMLHTTP_PORT.getValue());
 
         return uri.toString();
     }

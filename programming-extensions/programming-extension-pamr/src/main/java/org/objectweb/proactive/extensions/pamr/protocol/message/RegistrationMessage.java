@@ -224,8 +224,8 @@ public abstract class RegistrationMessage extends Message {
         }
 
         TypeHelper.longToByteArray(id, buff, Message.Field.getTotalOffset() + Field.AGENT_ID.getOffset());
-        TypeHelper.longToByteArray(routerID, buff, Message.Field.getTotalOffset() +
-            Field.ROUTER_ID.getOffset());
+        TypeHelper.longToByteArray(routerID, buff,
+                Message.Field.getTotalOffset() + Field.ROUTER_ID.getOffset());
         TypeHelper.intToByteArray(heartbeatPeriod, buff, Message.Field.getTotalOffset() +
             Field.HEARTBEAT_PERIOD.getOffset());
         System.arraycopy(this.magicCookie.getBytes(), 0, buff, Message.Field.getTotalOffset() +

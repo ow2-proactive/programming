@@ -85,11 +85,10 @@ public class PAMRSocketFactorySelector {
             logger.warn("Failed to load a service provider for " + PAMRSocketFactorySPI.class.getName(), e);
         }
 
-        logger
-                .warn(socketFactory +
-                    " is neither an alias for a socket factory provided with ProActive,\n" +
-                    "   nor a class name for a socket factory which could be found using the service provider mechanisms.\n" +
-                    "   Will instantiate the default, plain socket factory.");
+        logger.warn(socketFactory +
+            " is neither an alias for a socket factory provided with ProActive,\n" +
+            "   nor a class name for a socket factory which could be found using the service provider mechanisms.\n" +
+            "   Will instantiate the default, plain socket factory.");
 
         return getDefaultSocketFactory();
     }

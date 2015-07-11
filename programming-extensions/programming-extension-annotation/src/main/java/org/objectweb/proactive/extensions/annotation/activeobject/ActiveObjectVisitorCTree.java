@@ -252,8 +252,8 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
                         hasNonArgsPublicConstructor = true;
 
                         if (constructor.getModifiers().getFlags().contains(Modifier.PRIVATE)) {
-                            reportError(ErrorMessages.NO_NOARG_CONSTRUCTOR_CANNOT_BE_PRIVATE_MESSAGE, trees
-                                    .getElement(getCurrentPath()));
+                            reportError(ErrorMessages.NO_NOARG_CONSTRUCTOR_CANNOT_BE_PRIVATE_MESSAGE,
+                                    trees.getElement(getCurrentPath()));
                             return;
                         }
 
@@ -272,8 +272,8 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
                             }
 
                             if (!onlySuperInside) {
-                                reportWarning(ErrorMessages.EMPTY_CONSTRUCTOR, trees
-                                        .getElement(getCurrentPath()));
+                                reportWarning(ErrorMessages.EMPTY_CONSTRUCTOR,
+                                        trees.getElement(getCurrentPath()));
                             }
                         }
 

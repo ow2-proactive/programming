@@ -85,8 +85,8 @@ public abstract class AbstractFindQueuesRPCClient {
 
             List<URI> response = new ArrayList<URI>();
 
-            BasicProperties props = new BasicProperties.Builder().replyTo(replyQueueName).type(
-                    DISCOVERY_QUEUES_MESSAGE_TYPE).build();
+            BasicProperties props = new BasicProperties.Builder().replyTo(replyQueueName)
+                    .type(DISCOVERY_QUEUES_MESSAGE_TYPE).build();
 
             channel.basicPublish(exchangeName, "", props, null);
 

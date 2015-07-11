@@ -252,10 +252,11 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
                                         new ReplyImpl(getID(), request.getSequenceNumber(), request
                                                 .getMethodName(), methodCallResult));
                             } catch (IOException e) {
-                                sendReplyExceptionsLogger.error(shortString() +
-                                    " : Failed to send reply to method:" + request.getMethodName() +
-                                    " sequence: " + request.getSequenceNumber() + " by " +
-                                    request.getSenderNodeURL() + "/" + request.getSender(), e);
+                                sendReplyExceptionsLogger.error(
+                                        shortString() + " : Failed to send reply to method:" +
+                                            request.getMethodName() + " sequence: " +
+                                            request.getSequenceNumber() + " by " +
+                                            request.getSenderNodeURL() + "/" + request.getSender(), e);
                             }
                         }
                     }

@@ -124,8 +124,8 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
         this.bodyID = new UniqueID(this.name + "_");
         this.location = new BodyMap();
 
-        this.roe = new RemoteObjectExposer<UniversalBody>(this.bodyID.toString(), UniversalBody.class
-                .getName(), this, UniversalBodyRemoteObjectAdapter.class);
+        this.roe = new RemoteObjectExposer<UniversalBody>(this.bodyID.toString(),
+            UniversalBody.class.getName(), this, UniversalBodyRemoteObjectAdapter.class);
 
         try {
             RemoteRemoteObject rro = this.roe.createRemoteObject(this.bodyID.toString(), false);
@@ -194,8 +194,8 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
         }
 
         // remoteBody is transient so we recreate it here
-        this.roe = new RemoteObjectExposer<UniversalBody>(this.bodyID.toString(), UniversalBody.class
-                .getName(), this, UniversalBodyRemoteObjectAdapter.class);
+        this.roe = new RemoteObjectExposer<UniversalBody>(this.bodyID.toString(),
+            UniversalBody.class.getName(), this, UniversalBodyRemoteObjectAdapter.class);
 
         try {
             // rebind must be true: if an object migrates between two JVM on the same machine (same rmi registry)

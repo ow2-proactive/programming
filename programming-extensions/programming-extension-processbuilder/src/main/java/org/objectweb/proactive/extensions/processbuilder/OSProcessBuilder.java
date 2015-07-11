@@ -343,6 +343,5 @@ public interface OSProcessBuilder {
      *             This exception is raised upon internal failures of the
      *             process builder.
      */
-    Process start() throws IOException, OSUserException, CoreBindingException,
-            FatalProcessBuilderException;
+    Process start() throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException;
 }

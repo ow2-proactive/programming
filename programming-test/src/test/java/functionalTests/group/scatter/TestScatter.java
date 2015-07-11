@@ -99,8 +99,8 @@ public class TestScatter extends GCMFunctionalTest {
 
         for (int i = 0; i < group.size(); i++) {
             // is the result of the n-th group member called with the n-th parameter at the n-th position in the result group ?
-            assertEquals(((A) groupResult.get(i)).getName(), (((A) group.get(i))
-                    .asynchronousCall((A) groupParameter.get(i))).getName());
+            assertEquals(((A) groupResult.get(i)).getName(),
+                    (((A) group.get(i)).asynchronousCall((A) groupParameter.get(i))).getName());
         }
 
         // is the result of the n-th group member called with the n-th parameter at the n-th position in the result group ?

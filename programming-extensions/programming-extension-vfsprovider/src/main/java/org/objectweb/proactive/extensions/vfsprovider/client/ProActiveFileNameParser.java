@@ -101,8 +101,8 @@ public class ProActiveFileNameParser extends HostFileNameParser {
         final String path = name.toString();
 
         try {
-            return new ProActiveFileName(auth.getScheme(), auth.getHostName(), auth.getPort(), auth
-                    .getUserName(), auth.getPassword(), servicePath, path, fileType);
+            return new ProActiveFileName(auth.getScheme(), auth.getHostName(), auth.getPort(),
+                auth.getUserName(), auth.getPassword(), servicePath, path, fileType);
         } catch (UnknownProtocolException e) {
             throw new FileSystemException("Unknown protocol scheme of URL", e);
         }

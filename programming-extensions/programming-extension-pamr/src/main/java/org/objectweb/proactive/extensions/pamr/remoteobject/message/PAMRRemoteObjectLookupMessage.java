@@ -105,8 +105,7 @@ public class PAMRRemoteObjectLookupMessage extends PAMRMessage implements Serial
                 logger.info("Someone performed a lookup on " + uri + " but this remote object is not known");
             }
         } else {
-            logger
-                    .warn("Tried to perform a lookup on null. This is probably a bug in the MessageRoutingRemoteObjectFactory");
+            logger.warn("Tried to perform a lookup on null. This is probably a bug in the MessageRoutingRemoteObjectFactory");
         }
 
         return null;

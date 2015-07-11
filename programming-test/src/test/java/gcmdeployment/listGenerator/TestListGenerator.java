@@ -71,8 +71,8 @@ public class TestListGenerator {
                 throw new IllegalArgumentException("Illegal format for a data file: " + question);
             }
 
-            Assert.assertEquals("question=\"" + question + "\"", response, concat(ListGenerator
-                    .generateNames(question)));
+            Assert.assertEquals("question=\"" + question + "\"", response,
+                    concat(ListGenerator.generateNames(question)));
         }
     }
 

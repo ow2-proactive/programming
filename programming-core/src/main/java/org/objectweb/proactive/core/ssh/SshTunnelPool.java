@@ -160,8 +160,7 @@ public class SshTunnelPool {
             !InetAddress.getByName(host).equals(ProActiveInet.getInstance().getInetAddress())) {
             String gateway = config.getGateway(host);
             String outGateway = ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT.isSet() ? ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT
-                    .getValue()
-                    : null;
+                    .getValue() : null;
             // if proxyCommand command mechanism is needed
             if (gateway != null || outGateway != null) {
                 synchronized (this.proxyCommandCache) {
@@ -214,8 +213,8 @@ public class SshTunnelPool {
                 Pair pair = this.cache.get(host);
                 if (pair == null) {
                     // Open a SSH connection
-                    SshConnection cnx = new SshConnection(username, host, sshPort, config
-                            .getPrivateKeyPath(host));
+                    SshConnection cnx = new SshConnection(username, host, sshPort,
+                        config.getPrivateKeyPath(host));
                     pair = new Pair(cnx);
                     this.cache.put(host, pair);
                 }

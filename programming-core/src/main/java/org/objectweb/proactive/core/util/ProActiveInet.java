@@ -150,8 +150,7 @@ public class ProActiveInet {
                         " is set, but no IP address is bound to this hostname");
                 }
             } else {
-                logger
-                        .debug("At least one proactive.net.* property defined. Using the matching algorithm to elect an IP address");
+                logger.debug("At least one proactive.net.* property defined. Using the matching algorithm to elect an IP address");
                 // Use the filter algorithm
                 if (ia == null) {
                     List<InetAddress> l;

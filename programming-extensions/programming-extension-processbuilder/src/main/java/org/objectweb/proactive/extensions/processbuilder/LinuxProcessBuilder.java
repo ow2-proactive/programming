@@ -71,7 +71,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     private static final String LINUX_SCRIPT_FOLDER_PATH = "dist/scripts/processbuilder/linux/";
     private static final String CHECK_SUDO = "check_sudo.sh";
     private static final String LAUNCH_SCRIPT = "launch.sh";
-    private static final String PROCESS_TREE_KILLER_LOCATION = LINUX_SCRIPT_FOLDER_PATH + "kill_process_tree.sh";
+    private static final String PROCESS_TREE_KILLER_LOCATION = LINUX_SCRIPT_FOLDER_PATH +
+        "kill_process_tree.sh";
 
     private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
     private static final String ENV_VAR_USER_KEY_CONTENT = "PA_OSPB_USER_KEY_CONTENT";
@@ -97,7 +98,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     protected final String token;
     private String scriptBaseFolder;
 
-    protected LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String scriptBaseFolder) {
+    protected LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores,
+            final String scriptBaseFolder) {
         this.scriptBaseFolder = scriptBaseFolder;
         this.scriptLocation = scriptBaseFolder + "/" + LINUX_SCRIPT_FOLDER_PATH;
         this.delegatedPB = new ProcessBuilder();
@@ -541,8 +543,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
 
             // let's process the string which is in form:
             // ERROR_PREFIX exception_class ERROR_CAUSE text_description
-            String type = eline.substring(eline.indexOf(ERROR_PREFIX) + ERROR_PREFIX.length(), eline
-                    .indexOf(ProcessOutputInterpreter.ERROR_CAUSE));
+            String type = eline.substring(eline.indexOf(ERROR_PREFIX) + ERROR_PREFIX.length(),
+                    eline.indexOf(ProcessOutputInterpreter.ERROR_CAUSE));
             type = type.replace(" ", "");
             String descr = eline.substring(eline.indexOf(ERROR_CAUSE) + ERROR_CAUSE.length());
             Exception obj;

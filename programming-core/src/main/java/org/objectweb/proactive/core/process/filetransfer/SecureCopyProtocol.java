@@ -126,8 +126,8 @@ public class SecureCopyProtocol extends AbstractCopyProtocol {
         //files
         for (int i = 0; i < files.length; i++) {
             // prefix/filename
-            String fullfilename = FileTransferWorkShop.buildFilePathString(srcInfoParams, files[i]
-                    .getSrcName());
+            String fullfilename = FileTransferWorkShop.buildFilePathString(srcInfoParams,
+                    files[i].getSrcName());
 
             //Skip unreadable file
             if (!FileTransferWorkShop.isLocalReadable(fullfilename)) {
@@ -158,8 +158,8 @@ public class SecureCopyProtocol extends AbstractCopyProtocol {
 
         //Files & Dirs are the same
         for (int i = 0; i < files.length; i++) {
-            String fullfilename = FileTransferWorkShop.buildFilePathString(srcInfoParams, files[i]
-                    .getSrcName());
+            String fullfilename = FileTransferWorkShop.buildFilePathString(srcInfoParams,
+                    files[i].getSrcName());
 
             //Skip unreadable file
             if (!FileTransferWorkShop.isLocalReadable(fullfilename)) {

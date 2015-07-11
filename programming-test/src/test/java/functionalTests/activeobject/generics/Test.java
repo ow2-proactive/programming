@@ -110,9 +110,9 @@ public class Test extends FunctionalTest {
 
         // new active group with reifiable parameter types
         @SuppressWarnings("unchecked")
-        Pair<StringWrapper, IntWrapper> gb = (Pair<StringWrapper, IntWrapper>) PAGroup.newGroup(Pair.class
-                .getName(), new Class[] { StringWrapper.class, IntWrapper.class },
-                new Object[][] { { new StringWrapper("A"), new IntWrapper(1) },
+        Pair<StringWrapper, IntWrapper> gb = (Pair<StringWrapper, IntWrapper>) PAGroup.newGroup(
+                Pair.class.getName(), new Class[] { StringWrapper.class, IntWrapper.class }, new Object[][] {
+                        { new StringWrapper("A"), new IntWrapper(1) },
                         { new StringWrapper("B"), new IntWrapper(2) } });
         assertTrue(StringWrapper.class.isAssignableFrom(gb.getFirst().getClass()));
         assertTrue(IntWrapper.class.isAssignableFrom(gb.getSecond().getClass()));
@@ -141,8 +141,8 @@ public class Test extends FunctionalTest {
         assertTrue(invocationTargetException);
 
         // test name escaping with generics, main test are done in nonregressiontest.stub.stubgeneration
-        assertEquals("pa.stub._StubMy__P__DType", Utils.convertClassNameToStubClassName("My_P_DType",
-                new Class[] {}));
+        assertEquals("pa.stub._StubMy__P__DType",
+                Utils.convertClassNameToStubClassName("My_P_DType", new Class[] {}));
         String escape = Utils.convertClassNameToStubClassName(Pair.class.getName(), new Class[] {
                 My_DType.class, IntWrapper.class });
         assertEquals(

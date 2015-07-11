@@ -355,8 +355,8 @@ public class ProActiveConnection implements Serializable, MBeanServerConnection,
     public GenericTypeWrapper<?> createMBeanAsynchronous(String className, ObjectName name, Object[] params,
             String[] signature) {
         try {
-            return new GenericTypeWrapper<ObjectInstance>(this
-                    .createMBean(className, name, params, signature));
+            return new GenericTypeWrapper<ObjectInstance>(
+                this.createMBean(className, name, params, signature));
         } catch (Exception e) {
             return new GenericTypeWrapper<Exception>(e);
         }

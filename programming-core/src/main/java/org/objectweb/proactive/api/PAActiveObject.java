@@ -310,8 +310,8 @@ public class PAActiveObject {
             Node nullNode = null;
             return newActive(classname, genericParameters, constructorParameters, nullNode, null, null);
         } else {
-            return newActive(classname, genericParameters, constructorParameters, NodeFactory
-                    .getNode(nodeURL), null, null);
+            return newActive(classname, genericParameters, constructorParameters,
+                    NodeFactory.getNode(nodeURL), null, null);
         }
     }
 
@@ -831,8 +831,8 @@ public class PAActiveObject {
         if (nodeURL == null) {
             return turnActive(target, genericParameters, target.getClass().getName(), null, null, null);
         } else {
-            return turnActive(target, genericParameters, target.getClass().getName(), NodeFactory
-                    .getNode(nodeURL), null, null);
+            return turnActive(target, genericParameters, target.getClass().getName(),
+                    NodeFactory.getNode(nodeURL), null, null);
         }
     }
 

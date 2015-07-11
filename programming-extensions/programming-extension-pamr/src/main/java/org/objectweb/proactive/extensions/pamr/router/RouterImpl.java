@@ -598,8 +598,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
                 if (this.disconnectedAgent.equals(client.getAgentId()))
                     continue;
 
-                ErrorMessage error = new ErrorMessage(ErrorType.ERR_DISCONNECTION_BROADCAST, client
-                        .getAgentId(), this.disconnectedAgent, 0);
+                ErrorMessage error = new ErrorMessage(ErrorType.ERR_DISCONNECTION_BROADCAST,
+                    client.getAgentId(), this.disconnectedAgent, 0);
                 try {
                     client.sendMessage(error.toByteArray());
                 } catch (Exception e) {

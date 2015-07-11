@@ -75,7 +75,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  * @author The ProActive Team
  */
-@SuppressWarnings( { "deprecation", "unchecked" })
+@SuppressWarnings({ "deprecation", "unchecked" })
 public class ProActiveGroup {
 
     /** The logger for the Class */
@@ -443,8 +443,8 @@ public class ProActiveGroup {
     @Deprecated
     public static Object turnActiveGroup(Object ogroup, String nodeName) throws ClassNotFoundException,
             ClassNotReifiableException, ActiveObjectCreationException, NodeException {
-        return PAActiveObject.turnActive(ogroup, null, ProActiveGroup.getType(ogroup), NodeFactory
-                .getNode(nodeName), null, null);
+        return PAActiveObject.turnActive(ogroup, null, ProActiveGroup.getType(ogroup),
+                NodeFactory.getNode(nodeName), null, null);
     }
 
     // -------------------------------------------------------------------------

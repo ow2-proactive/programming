@@ -258,10 +258,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 this.t = this.__reconnectToRouter();
                 this.te = null;
             } catch (Exception e) {
-                logger
-                        .warn("PAMR Router " + this.routerAddr + ":" + this.routerPort + " is unreachable (" +
-                            e.getMessage() + "). Will try to estalish a new tunnel in " + (delay / 1000) +
-                            " seconds");
+                logger.warn("PAMR Router " + this.routerAddr + ":" + this.routerPort + " is unreachable (" +
+                    e.getMessage() + "). Will try to estalish a new tunnel in " + (delay / 1000) + " seconds");
 
                 // To have the full stack trace in case something goes really wrong
                 logger.debug("Failed to connect to the PAMR router", e);
@@ -315,8 +313,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
     private void routerHandshake(Tunnel tunnel) throws RouterHandshakeException, IOException {
         try {
             // if call for the first time then agentID is null
-            RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
-                    .getAndIncrement(), routerID, this.magicCookie);
+            RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID,
+                requestIDGenerator.getAndIncrement(), routerID, this.magicCookie);
             tunnel.write(reg.toByteArray());
 
             // Waiting the router response. The router has 10 seconds to respond
@@ -480,8 +478,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
     }
 
     public void sendReply(DataRequestMessage request, byte[] data) throws PAMRException {
-        DataReplyMessage reply = new DataReplyMessage(this.getAgentID(), request.getSender(), request
-                .getMessageID(), data);
+        DataReplyMessage reply = new DataReplyMessage(this.getAgentID(), request.getSender(),
+            request.getMessageID(), data);
 
         internalSendMsg(reply);
     }
@@ -504,9 +502,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         for (Valve valve : this.valves) {
             msg = valve.invokeOutgoing(msg);
             if (logger.isTraceEnabled()) {
-                logger
-                        .trace("Applied valve " + valve.getInfo() + ", resulting message is: " +
-                            msg.toString());
+                logger.trace("Applied valve " + valve.getInfo() + ", resulting message is: " + msg.toString());
             }
         }
 
@@ -812,10 +808,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     // TODO : Send an ERR_ ?
                     logger.error("Dropping the message received from the router, reason:" + e.getMessage());
                 } catch (IOException e) {
-                    logger
-                            .debug(
-                                    "PAMR Connection lost (while waiting for a message). A new connection will be established shortly",
-                                    e);
+                    logger.debug(
+                            "PAMR Connection lost (while waiting for a message). A new connection will be established shortly",
+                            e);
                     PAMRException cause = new PAMRException(
                         "PAMR connection lost (while waiting for a message)", e);
                     reportTunnelFailure(tunnel, cause);
@@ -865,10 +860,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     mailboxes.unlockDueToRemoteAgentDisconnection(error.getSender());
                     break;
                 case ERR_NOT_CONNECTED_RCPT:
-                    /*
-                     * The recipient of a given message is not connected to the
-                     * router Unlock the sender
-                     */
+                /*
+                 * The recipient of a given message is not connected to the
+                 * router Unlock the sender
+                 */
                 {
                     AgentID sender = error.getSender();
 
@@ -888,10 +883,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 }
                     break;
                 case ERR_UNKNOW_RCPT:
-                    /*
-                     * The recipient of a given message is unknown of the router
-                     * Unlock the sender
-                     */
+                /*
+                 * The recipient of a given message is unknown of the router
+                 * Unlock the sender
+                 */
                 {
                     AgentID sender = error.getSender();
 
@@ -920,9 +915,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     }
                     if (patient == null) {
                         if (logger.isTraceEnabled()) {
-                            logger
-                                    .trace("The router got a corrupted version of message with ID " +
-                                        messageId);
+                            logger.trace("The router got a corrupted version of message with ID " + messageId);
                         }
                     } else {
                         if (logger.isTraceEnabled()) {

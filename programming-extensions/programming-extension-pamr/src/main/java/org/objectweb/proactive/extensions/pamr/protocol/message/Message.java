@@ -271,8 +271,8 @@ public abstract class Message {
      */
     public static Message constructMessage(byte[] buf, int offset) throws MalformedMessageException {
         // depending on the type of message, call a different constructor
-        MessageType type = MessageType.getMessageType(TypeHelper.byteArrayToInt(buf, offset +
-            Field.MSG_TYPE.getOffset()));
+        MessageType type = MessageType.getMessageType(TypeHelper.byteArrayToInt(buf,
+                offset + Field.MSG_TYPE.getOffset()));
 
         switch (type) {
             case REGISTRATION_REQUEST:

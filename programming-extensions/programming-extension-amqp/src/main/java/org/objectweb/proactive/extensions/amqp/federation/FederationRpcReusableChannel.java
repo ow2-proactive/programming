@@ -33,8 +33,8 @@ class FederationRpcReusableChannel extends
         boolean autoDelete = true;
         Map<String, Object> arguments = null;
         channel.queueDeclare(queueName, durable, exclusive, autoDelete, arguments);
-        channel.queueBind(queueName, AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_REPLY_EXCHANGE_NAME
-                .getValue(), queueName);
+        channel.queueBind(queueName,
+                AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_REPLY_EXCHANGE_NAME.getValue(), queueName);
         return queueName;
     }
 

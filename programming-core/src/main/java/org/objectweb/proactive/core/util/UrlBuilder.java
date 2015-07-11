@@ -398,8 +398,8 @@ public class UrlBuilder {
         URI u = URI.create(url);
         URI u2;
         try {
-            u2 = new URI(u.getScheme(), u.getUserInfo(), u.getHost(), port, u.getPath(), u.getQuery(), u
-                    .getFragment());
+            u2 = new URI(u.getScheme(), u.getUserInfo(), u.getHost(), port, u.getPath(), u.getQuery(),
+                u.getFragment());
             return u2.toString();
         } catch (URISyntaxException e) {
             e.printStackTrace();

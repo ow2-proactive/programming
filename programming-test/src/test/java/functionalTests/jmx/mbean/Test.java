@@ -57,8 +57,7 @@ public class Test extends GCMFunctionalTest {
 
     public Test() throws ProActiveException {
         super(1, 1);
-        super
-                .setOptionalJvmParamters("-Dcom.sun.management.jmxremote -Dproactive.jmx.mbean=true -Dproactive.jmx.notification=true");
+        super.setOptionalJvmParamters("-Dcom.sun.management.jmxremote -Dproactive.jmx.mbean=true -Dproactive.jmx.notification=true");
         super.startDeployment();
     }
 
@@ -71,7 +70,7 @@ public class Test extends GCMFunctionalTest {
     @org.junit.Test
     public void action() throws Exception {
         assertTrue("The MBean associated to the active object doesn't exist!", ao.existBodyWrapperMBean());
-        assertTrue("The MBean associated to the ProActive Runtime doesn't exist!", ao
-                .existProActiveRuntimeWrapperMBean());
+        assertTrue("The MBean associated to the ProActive Runtime doesn't exist!",
+                ao.existProActiveRuntimeWrapperMBean());
     }
 }

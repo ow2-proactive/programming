@@ -82,8 +82,7 @@ public abstract class CTreeTest extends AnnotationTest {
         // get the compiler
         _compiler = ToolProvider.getSystemJavaCompiler();
         if (_compiler == null) {
-            logger
-                    .error("Cannot detect the system Java compiler. Check for your JDK settings(btw, you DO have a JDK installed, right?)");
+            logger.error("Cannot detect the system Java compiler. Check for your JDK settings(btw, you DO have a JDK installed, right?)");
             // this test can no longer continue...
             throw new NoCompilerDetectedException(
                 "The annotations test will not be run, because a Java compiler was not detected.");

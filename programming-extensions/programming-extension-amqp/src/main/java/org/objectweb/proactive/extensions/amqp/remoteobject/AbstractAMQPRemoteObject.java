@@ -117,8 +117,8 @@ public abstract class AbstractAMQPRemoteObject implements RemoteRemoteObject, Se
         RpcReusableChannel channel = getRpcReusableChannel();
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format("AMQP RO sending %s to %s, on exchange %s, queue %s", message
-                        .getMethodName(), remoteObjectURL, rpcExchangeName, queueName));
+                logger.debug(String.format("AMQP RO sending %s to %s, on exchange %s, queue %s",
+                        message.getMethodName(), remoteObjectURL, rpcExchangeName, queueName));
             }
 
             String replyQueue = channel.getReplyQueue();

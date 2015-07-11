@@ -49,8 +49,7 @@ import org.objectweb.proactive.extensions.vfsprovider.exceptions.WrongStreamType
  */
 class Utils {
     public static IOException generateAndLogIOExceptionWrongStreamType(Log log, WrongStreamTypeException e) {
-        log
-                .error("File server unexpectedly does not allow to perform some type of operation on an opened stream");
+        log.error("File server unexpectedly does not allow to perform some type of operation on an opened stream");
         return new IOException6(
             "File server unexpectedly does not allow to perform some type of operation on an opened stream",
             e);

@@ -304,8 +304,8 @@ public class VFSNodeScratchSpaceImplTest {
     }
 
     private void checkInitForApplication() throws Exception {
-        final String dataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID, Long
-                .toString(APP_ID));
+        final String dataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID,
+                Long.toString(APP_ID));
         final ApplicationScratchSpace app = nodeScratchSpace.initForApplication(APP_ID);
         assertNotNull(app);
         assertIsExistingEmptyDirectory(dataSpacePath);

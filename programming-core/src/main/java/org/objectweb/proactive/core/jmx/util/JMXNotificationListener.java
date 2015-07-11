@@ -108,16 +108,15 @@ public class JMXNotificationListener implements NotificationListener, ProActiveI
             Object handback) {
         if (!PAActiveObject.pingActiveObject(connection)) {
             if (logger.isDebugEnabled()) {
-                logger
-                        .debug("Trying to unregister listener on a connection with terminated body. Ping faild on the connection object: " +
-                            connection.toString());
+                logger.debug("Trying to unregister listener on a connection with terminated body. Ping faild on the connection object: " +
+                    connection.toString());
             }
             return;
         }
         try {
             if (connection.isRegistered(oname)) {
-                connection.removeNotificationListener(oname, (NotificationListener) PAActiveObject
-                        .getStubOnThis(), filter, handback);
+                connection.removeNotificationListener(oname,
+                        (NotificationListener) PAActiveObject.getStubOnThis(), filter, handback);
             }
         } catch (InstanceNotFoundException e) {
             logger.error("Doesn't find the object name " + oname + " during the registration", e);

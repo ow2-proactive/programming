@@ -210,8 +210,7 @@ public class FileSelector implements org.apache.commons.vfs2.FileSelector, Seria
     private PathMatcher asPathMatcher(String pattern) {
         // if the syntax is not specified with the pattern
         // then it is assumed that the pattern is a glob pattern
-        if (!pattern.startsWith(PREFIX_GLOB_PATTERN) &&
-                !pattern.startsWith(PREFIX_REGEX_PATTERN)) {
+        if (!pattern.startsWith(PREFIX_GLOB_PATTERN) && !pattern.startsWith(PREFIX_REGEX_PATTERN)) {
             pattern = PREFIX_GLOB_PATTERN + pattern;
         }
 
@@ -294,10 +293,7 @@ public class FileSelector implements org.apache.commons.vfs2.FileSelector, Seria
      */
     @Override
     public String toString() {
-        return "FileSelector{" +
-                "includes=" + includes +
-                ", excludes=" + excludes +
-                '}';
+        return "FileSelector{" + "includes=" + includes + ", excludes=" + excludes + '}';
     }
 
 }

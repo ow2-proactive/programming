@@ -136,7 +136,8 @@ public class PAGCMDeployment {
         RemoteRemoteObject rro = roe.createRemoteObject(name, false);
 
         @SuppressWarnings("unchecked")
-        GCMApplication gcmApplication = (GCMApplication) RemoteObjectHelper.generatedObjectStub(new RemoteObjectAdapter(rro));
+        GCMApplication gcmApplication = (GCMApplication) RemoteObjectHelper
+                .generatedObjectStub(new RemoteObjectAdapter(rro));
 
         return gcmApplication;
     }

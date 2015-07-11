@@ -294,8 +294,7 @@ public class GridEngineSubProcess extends AbstractExternalProcessDecorator {
             }
         } else {
             if ((this.hostNumber != null) && (this.hostNumber.length() > 0)) {
-                logger
-                        .warn("You specified hostNumber without a parallelEnvironment. Your job will fail. Please update your schema");
+                logger.warn("You specified hostNumber without a parallelEnvironment. Your job will fail. Please update your schema");
             }
         }
 

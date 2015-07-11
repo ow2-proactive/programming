@@ -44,6 +44,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Locale;
 
+
 /**
  * PrefixPrintWriter this PrintWriter adds a prefix to every line printed.
  * PrefixPrintWriters can be chained to have for example several levels of indentation
@@ -84,7 +85,7 @@ public class PrefixPrintWriter extends PrintWriter {
     }
 
     public PrefixPrintWriter(String fileName, String prefix, String csn) throws FileNotFoundException,
-    UnsupportedEncodingException {
+            UnsupportedEncodingException {
         super(fileName, csn);
         this.prefix = prefix;
     }

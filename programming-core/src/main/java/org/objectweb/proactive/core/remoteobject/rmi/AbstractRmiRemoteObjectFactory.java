@@ -105,8 +105,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
                 });
             } catch (IOException e) {
                 LOGGER_RO
-                        .warn(
-                                "Failed to register a RMI socket factory supporting Connect timeout. The default one will be used",
+                        .warn("Failed to register a RMI socket factory supporting Connect timeout. The default one will be used",
                                 e);
                 e.printStackTrace();
             }
@@ -246,8 +245,8 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         URI modifiedURI = uri;
         if (uri.getPort() == -1) {
             LOGGER_RO.debug("No port specified, using the default one");
-            modifiedURI = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(uri), URIBuilder
-                    .getNameFromURI(uri), this.protocolIdentifier);
+            modifiedURI = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(uri),
+                    URIBuilder.getNameFromURI(uri), this.protocolIdentifier);
             modifiedURI = RemoteObjectHelper.expandURI(modifiedURI);
         }
 

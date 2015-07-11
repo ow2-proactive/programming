@@ -75,13 +75,13 @@ public class Test extends FunctionalTest {
         VariableContractImpl variableContract = new VariableContractImpl();
 
         //Setting from Descriptor
-        variableContract.setDescriptorVariable("test_var1", "value1", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+        variableContract.setDescriptorVariable("test_var1", "value1",
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
 
         //Setting bogus from descriptor (this should fail)
         try {
-            variableContract.setDescriptorVariable("test_empty", "", VariableContractType
-                    .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+            variableContract.setDescriptorVariable("test_empty", "",
+                    VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
         } catch (Exception e) {
             bogusFromDescriptor = false;
         }
@@ -89,17 +89,17 @@ public class Test extends FunctionalTest {
         //Setting from Program
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("test_var2", "");
-        variableContract.setVariableFromProgram(map, VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+        variableContract.setVariableFromProgram(map,
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
 
         bogusCheckContract = variableContract.checkContract(); //Contract should fail (return false)
-        variableContract.setDescriptorVariable("test_var2", "value2", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+        variableContract.setDescriptorVariable("test_var2", "value2",
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
 
         //Setting bogus variable from Program (this should fail)
         try {
-            variableContract.setVariableFromProgram("bogus_from_program", "bogus_value", VariableContractType
-                    .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+            variableContract.setVariableFromProgram("bogus_from_program", "bogus_value",
+                    VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
         } catch (Exception e) {
             bogusFromProgram = false;
         }

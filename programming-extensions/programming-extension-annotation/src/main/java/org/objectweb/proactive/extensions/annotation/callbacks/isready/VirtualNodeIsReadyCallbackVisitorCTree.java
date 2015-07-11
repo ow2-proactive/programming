@@ -71,8 +71,8 @@ public class VirtualNodeIsReadyCallbackVisitorCTree extends TreePathScanner<Void
 
         if (!correctSignature) {
             compilerOutput.printMessage(Diagnostic.Kind.ERROR,
-                    ErrorMessages.INCORRECT_METHOD_SIGNATURE_FOR_ISREADY_CALLBACK, trees
-                            .getElement(getCurrentPath()));
+                    ErrorMessages.INCORRECT_METHOD_SIGNATURE_FOR_ISREADY_CALLBACK,
+                    trees.getElement(getCurrentPath()));
         }
 
         return super.visitMethod(methodNode, trees);

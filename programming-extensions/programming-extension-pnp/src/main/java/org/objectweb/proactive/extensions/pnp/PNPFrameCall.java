@@ -288,8 +288,8 @@ class PNPFrameCall extends PNPFrame {
 
         byte[] header = new byte[REQUEST_MESSAGE_HEADER_LENGTH];
         super.writeHeader(header, 0);
-        TypeHelper.longToByteArray(this.callId, header, PNPFrame.Field.getTotalOffset() +
-            Field.CALL_ID.getOffset());
+        TypeHelper.longToByteArray(this.callId, header,
+                PNPFrame.Field.getTotalOffset() + Field.CALL_ID.getOffset());
         TypeHelper.intToByteArray(this.oneWay ? 1 : 0, header, PNPFrame.Field.getTotalOffset() +
             Field.ONE_WAY.getOffset());
         TypeHelper.longToByteArray(this.hearthbeatPeriod, header, PNPFrame.Field.getTotalOffset() +

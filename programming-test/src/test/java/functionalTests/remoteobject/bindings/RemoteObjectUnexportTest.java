@@ -63,8 +63,8 @@ public class RemoteObjectUnexportTest extends FunctionalTest {
         ProActiveRuntime p = ProActiveRuntimeImpl.getProActiveRuntime();
 
         // create a remote object exposer for this object
-        RemoteObjectExposer<ProActiveRuntime> roe = PARemoteObject.newRemoteObject(ProActiveRuntime.class
-                .getName(), p);
+        RemoteObjectExposer<ProActiveRuntime> roe = PARemoteObject.newRemoteObject(
+                ProActiveRuntime.class.getName(), p);
 
         // generate an uri where to rebind the runtime
         URI uri = RemoteObjectHelper.generateUrl("myruntime");

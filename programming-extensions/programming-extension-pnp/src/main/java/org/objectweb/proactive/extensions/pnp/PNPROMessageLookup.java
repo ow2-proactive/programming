@@ -107,8 +107,7 @@ class PNPROMessageLookup extends PNPROMessage implements Serializable {
                 logger.info("Someone performed a lookup on " + uri + " but this remote object is not known");
             }
         } else {
-            logger
-                    .warn("Tried to perform a lookup on null. This is probably a bug in the PNPRemoteObjectFactory");
+            logger.warn("Tried to perform a lookup on null. This is probably a bug in the PNPRemoteObjectFactory");
         }
 
         return null;

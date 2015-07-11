@@ -431,8 +431,8 @@ public abstract class AbstractListProcessDecorator implements ExternalProcessDec
                     excludeArray.add(listexclude[i]);
                 } else {
                     String init = listexclude[i].substring(0, listexclude[i].indexOf("-"));
-                    String end = listexclude[i].substring(listexclude[i].indexOf("-") + 1, listexclude[i]
-                            .length());
+                    String end = listexclude[i].substring(listexclude[i].indexOf("-") + 1,
+                            listexclude[i].length());
                     for (int j = Integer.parseInt(init); j <= Integer.parseInt(end); j++) {
                         excludeArray.add(Integer.valueOf(j).toString());
                     }

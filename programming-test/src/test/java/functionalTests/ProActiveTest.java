@@ -44,9 +44,9 @@ public class ProActiveTest {
     @BeforeClass
     static public void setupSecurityManager() {
         if (System.getProperty("java.security.policy") == null) {
-            System.setProperty("java.security.policy", System.getProperty(CentralPAPropertyRepository.PA_HOME
-                    .getName()) +
-                "/programming-test/src/test/resources/proactive.java.policy");
+            System.setProperty("java.security.policy",
+                    System.getProperty(CentralPAPropertyRepository.PA_HOME.getName()) +
+                        "/programming-test/src/test/resources/proactive.java.policy");
 
             Policy.getPolicy().refresh();
         }

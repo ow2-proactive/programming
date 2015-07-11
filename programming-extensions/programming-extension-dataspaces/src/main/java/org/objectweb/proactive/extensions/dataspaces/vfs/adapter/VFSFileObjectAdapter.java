@@ -221,7 +221,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         return result;
     }
 
-    public List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector) throws FileSystemException {
+    public List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector)
+            throws FileSystemException {
         final List<DataSpacesFileObject> result = new ArrayList<DataSpacesFileObject>();
 
         try {
@@ -582,9 +583,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         if (this.exists() && (!checkWriteProtected || checkIfFileWritable(this))) {
             return this;
         }
-        logger
-                .debug(getRealURI() + " does not exist" +
-                    (checkWriteProtected ? " or is write protected" : ""));
+        logger.debug(getRealURI() + " does not exist" + (checkWriteProtected ? " or is write protected" : ""));
         for (String newUri : rootFOUriSet) {
             if (!newUri.equals(currentRootFOUri)) {
                 DataSpacesFileObject newdsfo = switchToSpaceRoot(newUri);

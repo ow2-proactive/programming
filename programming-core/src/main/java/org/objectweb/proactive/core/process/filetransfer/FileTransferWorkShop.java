@@ -362,13 +362,13 @@ public class FileTransferWorkShop implements Serializable {
      * @return The full path String
      */
     public String getAbsoluteSrcPath(FileDescription fileDesc) {
-        return buildFilePathString(srcInfoParams.getPrefix(), srcInfoParams.getFileSeparator(), fileDesc
-                .getSrcName());
+        return buildFilePathString(srcInfoParams.getPrefix(), srcInfoParams.getFileSeparator(),
+                fileDesc.getSrcName());
     }
 
     public String getAbsoluteDstPath(FileDescription fileDesc) {
-        return buildFilePathString(dstInfoParams.getPrefix(), dstInfoParams.getFileSeparator(), fileDesc
-                .getDestName());
+        return buildFilePathString(dstInfoParams.getPrefix(), dstInfoParams.getFileSeparator(),
+                fileDesc.getDestName());
     }
 
     public static String buildFilePathString(StructureInformation infoParam, String filename) {

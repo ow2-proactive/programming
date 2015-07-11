@@ -70,8 +70,8 @@ public class ProActiveFileNameParserTest {
         assertEquals("hostname.com", fileName.getHostName());
         assertEquals("/service/address", fileName.getServicePath());
         assertEquals("/dir/file.txt", fileName.getPath());
-        assertEquals("paprmi://hostname.com:3232/service/address?proactive_vfs_provider_path=/", fileName
-                .getRootURI());
+        assertEquals("paprmi://hostname.com:3232/service/address?proactive_vfs_provider_path=/",
+                fileName.getRootURI());
         assertEquals("paprmi://hostname.com:3232/service/address?proactive_vfs_provider_path=/dir/file.txt",
                 fileName.getURI());
         assertEquals("rmi://hostname.com:3232/service/address", fileName.getServerURL());
@@ -89,10 +89,10 @@ public class ProActiveFileNameParserTest {
         assertEquals("hostname.com", fileName.getHostName());
         assertEquals("/serviceAddress", fileName.getServicePath());
         assertEquals("/", fileName.getPath());
-        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/", fileName
-                .getRootURI());
-        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/", fileName
-                .getURI());
+        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/",
+                fileName.getRootURI());
+        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/",
+                fileName.getURI());
         assertEquals("rmi://hostname.com:1234/serviceAddress", fileName.getServerURL());
     }
 

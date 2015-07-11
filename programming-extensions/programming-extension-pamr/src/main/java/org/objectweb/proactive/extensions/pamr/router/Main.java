@@ -221,7 +221,7 @@ public class Main {
                 long i = Long.parseLong(arg);
                 if (i == 0 || i < -1) {
                     printHelpAndExit("Invalid client eviction timeout value. Must be either -1 or positive",
-                      options);
+                            options);
                 }
                 config.setClientEvictionTimeout(i);
             } catch (NumberFormatException e) {
@@ -282,8 +282,7 @@ public class Main {
 
         arg = line.getOptionValue("c");
         if (arg == null) {
-            printHelpAndExit("The --cookie option is mandatory when reloading the configuration",
-              options);
+            printHelpAndExit("The --cookie option is mandatory when reloading the configuration", options);
         } else {
             try {
                 magicCookie = new MagicCookie(arg);
@@ -326,8 +325,7 @@ public class Main {
         options.addOption("h", "help", false, "Print help message");
         options.addOption("v", "verbose", false, "Verbose mode. Print clients (dis)connections");
         options.addOption("r", "reload", false, "Reload configuration file");
-        options.addOption("c", "cookie", true,
-                "This admin cookie to provide to reload the configuration");
+        options.addOption("c", "cookie", true, "This admin cookie to provide to reload the configuration");
         return options;
     }
 

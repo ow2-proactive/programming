@@ -151,8 +151,8 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
     public synchronized String toString() {
         String ls = System.getProperty("line.separator");
         StringBuilder sb = new StringBuilder("NFRequests Queue : ");
-        sb.append("--- NonFunctionalRequestQueue n=").append(nfRequestsQueue.size()).append(
-                "   requests --- ->").append(ls);
+        sb.append("--- NonFunctionalRequestQueue n=").append(nfRequestsQueue.size())
+                .append("   requests --- ->").append(ls);
         int count = 0;
         for (Request currentrequest : nfRequestsQueue) {
             sb.append(count).append("--> ").append(currentrequest.getMethodName()).append(ls);

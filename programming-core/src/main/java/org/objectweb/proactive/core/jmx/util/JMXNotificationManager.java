@@ -232,9 +232,8 @@ public class JMXNotificationManager implements NotificationListener {
 
             // The listener didn't be listening this objectName, so we display an error message.
             if (!isRemoved) {
-                logger
-                        .warn("The unsubscribe action has failed : The given listener doesn't listen the objectName=" +
-                            objectName);
+                logger.warn("The unsubscribe action has failed : The given listener doesn't listen the objectName=" +
+                    objectName);
                 return;
             }
 
@@ -291,9 +290,8 @@ public class JMXNotificationManager implements NotificationListener {
             NotificationFilter filter, Object handback) {
         if (!PAActiveObject.pingActiveObject(connection)) {
             if (logger.isDebugEnabled()) {
-                logger
-                        .debug("Trying to unregister listener on a connection with terminated body. Ping faild on the connection object: " +
-                            connection.toString());
+                logger.debug("Trying to unregister listener on a connection with terminated body. Ping faild on the connection object: " +
+                    connection.toString());
             }
             return;
         }
@@ -364,10 +362,9 @@ public class JMXNotificationManager implements NotificationListener {
                 }
 
             } catch (IOException e) {
-                logger
-                        .error(
-                                "Got a migration notification but was not able to contact the new runtime for the following reason : ",
-                                e);
+                logger.error(
+                        "Got a migration notification but was not able to contact the new runtime for the following reason : ",
+                        e);
             }
 
         }
@@ -422,16 +419,15 @@ public class JMXNotificationManager implements NotificationListener {
             proActiveRuntime.startJMXServerConnector();
 
             // Create a new connection
-            ClientConnector cc = new ClientConnector(runtimeURI.toString(), FactoryName
-                    .getJMXServerName(runtimeURI));
+            ClientConnector cc = new ClientConnector(runtimeURI.toString(),
+                FactoryName.getJMXServerName(runtimeURI));
             // Connect to the remote JMX Server Connector
             cc.connect();
 
             ProActiveConnection connection = cc.getConnection();
             return connection;
         } else {
-            logger
-                    .error("Can't create a JMX/ProActive connection: the object is not an instance of ProActiveRuntime");
+            logger.error("Can't create a JMX/ProActive connection: the object is not an instance of ProActiveRuntime");
             return null;
         }
     }

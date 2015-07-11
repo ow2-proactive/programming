@@ -69,8 +69,8 @@ public class ProcessForGroupCreation extends AbstractProcessForGroup implements 
     @SuppressWarnings("unchecked")
     public void run() {
         try {
-            this.proxyGroup.set(this.groupIndex, PAActiveObject.newActive(className, genericParameters,
-                    param, node));
+            this.proxyGroup.set(this.groupIndex,
+                    PAActiveObject.newActive(className, genericParameters, param, node));
         } catch (Exception e) {
             e.printStackTrace();
             // FIXME throw exception (using Callable task)

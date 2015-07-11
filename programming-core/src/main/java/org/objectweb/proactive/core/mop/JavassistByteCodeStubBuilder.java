@@ -378,8 +378,8 @@ public class JavassistByteCodeStubBuilder {
 
                 if (hasAnnotation(reifiedMethod.getCtMethod(), TurnRemoteParam.class)) {
                     TurnRemoteParam trp = getAnnotation(reifiedMethod.getCtMethod(), TurnRemoteParam.class);
-                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp
-                            .parameterName());
+                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(),
+                            trp.parameterName());
                     body.append("$" + parameterIndex +
                         " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" + parameterIndex +
                         "); \n");
@@ -387,8 +387,8 @@ public class JavassistByteCodeStubBuilder {
 
                 if (hasAnnotation(reifiedMethod.getCtMethod(), TurnActiveParam.class)) {
                     TurnActiveParam trp = getAnnotation(reifiedMethod.getCtMethod(), TurnActiveParam.class);
-                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp
-                            .parameterName());
+                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(),
+                            trp.parameterName());
                     body.append("$" + parameterIndex +
                         " = org.objectweb.proactive.api.PAActiveObject.turnActive($" + parameterIndex +
                         "); \n");
@@ -402,8 +402,7 @@ public class JavassistByteCodeStubBuilder {
 
                     cachedField = new CtField(getClassPool().get(
                             reifiedMethod.getCtMethod().getReturnType().getName()), reifiedMethod
-                            .getCtMethod().getName() +
-                        i, generatedClass);
+                            .getCtMethod().getName() + i, generatedClass);
 
                     generatedClass.addField(cachedField);
 
@@ -418,8 +417,7 @@ public class JavassistByteCodeStubBuilder {
                 String preWrap = null;
 
                 if (hasAnnotation(reifiedMethod.getCtMethod(), NoReify.class)) {
-                    body
-                            .append("if (myProxy instanceof org.objectweb.proactive.core.remoteobject.SynchronousProxy) { return ($r) ((org.objectweb.proactive.core.remoteobject.SynchronousProxy) myProxy).receiveMessage($$); }  \n");
+                    body.append("if (myProxy instanceof org.objectweb.proactive.core.remoteobject.SynchronousProxy) { return ($r) ((org.objectweb.proactive.core.remoteobject.SynchronousProxy) myProxy).receiveMessage($$); }  \n");
                 }
 
                 if (returnType != CtClass.voidType) {

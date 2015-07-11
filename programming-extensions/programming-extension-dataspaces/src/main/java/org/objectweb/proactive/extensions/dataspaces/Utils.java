@@ -71,8 +71,8 @@ public class Utils {
     private Utils() {
     }
 
-    public static void findFiles(DataSpacesFileObject baseDir,
-                                 FileSelector selector, List<DataSpacesFileObject> results) throws FileSystemException {
+    public static void findFiles(DataSpacesFileObject baseDir, FileSelector selector,
+            List<DataSpacesFileObject> results) throws FileSystemException {
         if (!selector.getIncludes().isEmpty()) {
             results.addAll(baseDir.findFiles(selector));
         }

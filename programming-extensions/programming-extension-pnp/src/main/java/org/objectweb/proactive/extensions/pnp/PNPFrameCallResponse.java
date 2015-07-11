@@ -226,8 +226,8 @@ class PNPFrameCallResponse extends PNPFrame {
 
         byte[] header = new byte[RESPONSE_MESSAGE_HEADER_LENGTH];
         super.writeHeader(header, 0);
-        TypeHelper.longToByteArray(this.callId, header, PNPFrame.Field.getTotalOffset() +
-            Field.CALL_ID.getOffset());
+        TypeHelper.longToByteArray(this.callId, header,
+                PNPFrame.Field.getTotalOffset() + Field.CALL_ID.getOffset());
 
         return ChannelBuffers.wrappedBuffer(header, this.payload);
     }
