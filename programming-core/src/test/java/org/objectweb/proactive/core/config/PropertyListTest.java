@@ -36,7 +36,7 @@ package org.objectweb.proactive.core.config;
 
 import java.util.Arrays;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 

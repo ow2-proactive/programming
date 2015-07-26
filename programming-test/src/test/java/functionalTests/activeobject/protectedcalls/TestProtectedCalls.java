@@ -36,7 +36,7 @@
  */
 package functionalTests.activeobject.protectedcalls;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;

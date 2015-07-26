@@ -36,8 +36,8 @@
  */
 package functionalTests.activeobject.acontinuation;
 
-import junit.framework.Assert;
 import org.apache.log4j.Level;
+import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;

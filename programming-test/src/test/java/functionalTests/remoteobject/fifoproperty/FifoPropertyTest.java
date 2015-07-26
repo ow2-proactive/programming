@@ -36,7 +36,7 @@
  */
 package functionalTests.remoteobject.fifoproperty;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;

@@ -42,8 +42,9 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import functionalTests.FunctionalTest;
+import org.junit.Test;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -64,7 +65,7 @@ public class TestAContinuation extends FunctionalTest {
     private String t1IdName;
     private String t2IdName;
 
-    @org.junit.Test
+    @Test
     public void action() throws Exception {
         boolean initial_ca_setting = CentralPAPropertyRepository.PA_FUTURE_AC.getValue();
         if (!CentralPAPropertyRepository.PA_FUTURE_AC.isTrue()) {

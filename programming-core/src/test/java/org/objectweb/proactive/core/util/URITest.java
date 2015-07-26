@@ -39,7 +39,9 @@ package org.objectweb.proactive.core.util;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static junit.framework.Assert.assertTrue;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -48,7 +50,7 @@ import static junit.framework.Assert.assertTrue;
  *
  */
 public class URITest {
-    @org.junit.Test
+    @Test
     public void checkURI() throws Exception {
         String protocol = "rmi";
         String host = "localhost.localdomain";

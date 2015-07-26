@@ -36,18 +36,18 @@
  */
 package functionalTests.activeobject.lookupactive;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
-
 import functionalTests.FunctionalTest;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**

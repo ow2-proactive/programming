@@ -37,7 +37,9 @@ package dataspaces;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.proactive.core.ProActiveException;
@@ -49,12 +51,12 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
-import junit.framework.Assert;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -79,15 +81,15 @@ public class VFSMountManagerHelperTest {
     private static FileSystemServerDeployer server;
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    static LinkedHashSet<String> protocolsToTest = new LinkedHashSet<String>(Arrays.asList("rmi", "pnp",
+    static HashSet<String> protocolsToTest = new LinkedHashSet<String>(Arrays.asList("rmi", "pnp",
             "pamr"));
 
     // a list of fake urls, for file urls, use the opposite operating system file type of url to launch FileSystemExceptions
-    private ArrayList<String> fakeUrls = new ArrayList<String>(Arrays.asList("ftp://a/b",
+    private List<String> fakeUrls = Arrays.asList("ftp://a/b",
             "pappnp://welcome.to.proactive:5461/inputserver?proactive_vfs_provider_path=/",
-            "sftp://itmysite/fake"));
+            "sftp://itmysite/fake");
 
-    private ArrayList<String> fakeFileUrls = new ArrayList<String>(Arrays.asList(""));
+    private List<String> fakeFileUrls = Arrays.asList("");
 
     // pamr router
     static Router router;

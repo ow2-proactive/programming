@@ -36,12 +36,12 @@
  */
 package functionalTests.activeobject.creation.local.turnactive;
 
-import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAActiveObject;
-
 import functionalTests.FunctionalTest;
 import functionalTests.activeobject.creation.A;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**

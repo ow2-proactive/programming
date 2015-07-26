@@ -36,7 +36,7 @@
  */
 package functionalTests.group.onewaycall;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 

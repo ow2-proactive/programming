@@ -38,16 +38,14 @@ package functionalTests.gcmdeployment.executable;
 
 import java.io.File;
 
-import junit.framework.Assert;
-
-import org.junit.After;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderExecutable.Instances;
-
 import functionalTests.GCMFunctionalTest;
+import org.junit.After;
+import org.junit.Assert;
 
 
 public class AbstractTExecutable extends GCMFunctionalTest {

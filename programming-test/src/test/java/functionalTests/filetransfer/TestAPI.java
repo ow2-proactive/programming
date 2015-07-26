@@ -44,7 +44,7 @@ import java.security.SecureRandom;
 import java.util.zip.Adler32;
 import java.util.zip.CheckedInputStream;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;

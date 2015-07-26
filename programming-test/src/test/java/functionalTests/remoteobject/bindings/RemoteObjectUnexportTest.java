@@ -36,8 +36,8 @@
  */
 package functionalTests.remoteobject.bindings;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.fail;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.net.URI;
 

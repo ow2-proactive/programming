@@ -36,7 +36,7 @@
  */
 package functionalTests.annotations.activeobject;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import functionalTests.annotations.CTreeTest;
 
 

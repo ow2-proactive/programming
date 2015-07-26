@@ -36,17 +36,10 @@
  */
 package functionalTests.filetransfer;
 
-import static junit.framework.Assert.assertTrue;
-
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
@@ -58,9 +51,15 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.utils.OperatingSystem;
-
 import functionalTests.FunctionalTest;
 import functionalTests.TestDisabler;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**

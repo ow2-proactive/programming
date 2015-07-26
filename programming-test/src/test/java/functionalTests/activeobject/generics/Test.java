@@ -36,8 +36,6 @@
  */
 package functionalTests.activeobject.generics;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 import java.util.Arrays;
 
@@ -47,8 +45,10 @@ import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
-
 import functionalTests.FunctionalTest;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**

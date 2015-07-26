@@ -39,7 +39,7 @@ package org.objectweb.proactive.utils;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;

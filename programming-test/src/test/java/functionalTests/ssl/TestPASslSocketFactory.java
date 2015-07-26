@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.SSLHandshakeException;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

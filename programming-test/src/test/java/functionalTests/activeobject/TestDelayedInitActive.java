@@ -48,7 +48,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.Sleeper;
 import functionalTests.FunctionalTest;
 import functionalTests.TestDisabler;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -75,7 +75,7 @@ public class TestDelayedInitActive extends FunctionalTest {
         ao.is();
         long after = System.currentTimeMillis();
         Assert.assertTrue("Method call seems to be async but should be sync (immediate service)", after -
-            before >= SLEEP);
+                before >= SLEEP);
     }
 
     static public class AO implements Serializable, InitActive {
