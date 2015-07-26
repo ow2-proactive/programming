@@ -89,6 +89,11 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     private static void startPAMRRouter() throws Exception {
         RouterConfig config = new RouterConfig();
         config.setPort(0); // let him find a free port
+
+        // reduce heartbeat timeout value to improve execution time of
+        // test testMultiExposePAMRRouterUnreacheableOnAOClient
+        config.setHeartbeatTimeout(3000);
+
         router = Router.createAndStart(config);
         PAMRConfig.PA_NET_ROUTER_PORT.setValue(router.getPort());
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
