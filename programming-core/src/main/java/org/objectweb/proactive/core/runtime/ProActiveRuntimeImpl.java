@@ -769,26 +769,20 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         }
 
         synchronized (bodyList) {
-            for (int i = 0; i < bodyList.size(); i++) {
-                UniqueID bodyID = bodyList.get(i);
-
+            for (Iterator<UniqueID> iterator = bodyList.iterator(); iterator.hasNext();) {
+                UniqueID bodyID = iterator.next();
                 // check if the body is still on this vm
                 Body body = localBodystore.getLocalBody(bodyID);
 
                 if (body == null) {
-                    // runtimeLogger.warn("body null");
                     // the body with the given ID is not any more on this
                     // ProActiveRuntime
                     // unregister it from this ProActiveRuntime
-                    unregisterBody(nodeName, bodyID);
+                    iterator.remove();
                 } else {
-                    // the body is on this runtime then return adapter and class
-                    // name of the reified
-                    // object to enable the construction of stub-proxy couple.
-                    localBodies.add(0, body.getRemoteAdapter());
+                    localBodies.add(body.getRemoteAdapter());
                 }
             }
-
             return localBodies;
         }
     }
@@ -847,18 +841,17 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         }
 
         synchronized (bodyList) {
-            for (int i = 0; i < bodyList.size(); i++) {
-                UniqueID bodyID = bodyList.get(i);
+            for (Iterator<UniqueID> iterator = bodyList.iterator(); iterator.hasNext();) {
+                UniqueID bodyID = iterator.next();
 
                 // check if the body is still on this vm
                 Body body = localBodystore.getLocalBody(bodyID);
 
                 if (body == null) {
-                    // runtimeLogger.warn("body null");
                     // the body with the given ID is not any more on this
                     // ProActiveRuntime
                     // unregister it from this ProActiveRuntime
-                    unregisterBody(nodeName, bodyID);
+                    iterator.remove();
                 } else {
                     String objectClass = body.getReifiedObject().getClass().getName();
 
@@ -929,29 +922,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                 // bodyID.toString());
                 bodyList.add(bodyID);
             }
-        }
-    }
-
-    /**
-     * Unregisters the specified <code>UniqueID</code> from the node
-     * corresponding to the nodeName key
-     * 
-     * @param nodeName
-     *            The key where to remove the <code>UniqueID</code>
-     * @param bodyID
-     *            The <code>UniqueID</code> to remove
-     */
-    private void unregisterBody(String nodeName, UniqueID bodyID) {
-        // System.out.println("in remove id= "+ bodyID.toString());
-        // System.out.println("array size
-        // "+((ArrayList)hostsMap.get(nodeName)).size());
-        List<UniqueID> bodyList = this.nodeMap.get(nodeName).getActiveObjectsId();
-
-        synchronized (bodyList) {
-            bodyList.remove(bodyID);
-
-            // System.out.println("array size
-            // "+((ArrayList)hostsMap.get(nodeName)).size());
         }
     }
 
