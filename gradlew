@@ -65,7 +65,20 @@ cd "`dirname \"$PRG\"`/" >&-
 APP_HOME="`pwd -P`"
 cd "$SAVED" >&-
 
-CLASSPATH=$APP_HOME/.gradle/wrapper/gradle-wrapper.jar
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+
+################################################################
+# if local JVM exists redefine JAVA_HOME
+if [ -d "$APP_HOME/jre" ]; then
+
+    JAVA_HOME=$APP_HOME/jre
+
+    if [ -d "$APP_HOME/jre/Contents/Home" ]; then
+        # macos
+        JAVA_HOME=$APP_HOME/jre/Contents/Home
+    fi
+fi
+################################################################
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
