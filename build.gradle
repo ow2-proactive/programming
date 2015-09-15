@@ -34,7 +34,9 @@ subprojects {
     group = 'org.objectweb.proactive'
     version = programmingVersion
 
-    sourceCompatibility = 1.7
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+
     compileJava.options.compilerArgs << '-Xlint:-options' // remove warning about bootstrap class path
 
     rootProject.buildscript.repositories.each {
