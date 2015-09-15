@@ -36,7 +36,6 @@
  */
 package functionalTests.activeobject.creation.local.turnactive;
 
-
 import org.objectweb.proactive.api.PAActiveObject;
 import functionalTests.FunctionalTest;
 import functionalTests.activeobject.creation.A;

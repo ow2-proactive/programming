@@ -36,7 +36,6 @@
  */
 package functionalTests.activeobject.generics;
 
-
 import java.util.Arrays;
 
 import org.objectweb.proactive.api.PAActiveObject;

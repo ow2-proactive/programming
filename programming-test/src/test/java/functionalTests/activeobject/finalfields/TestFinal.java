@@ -38,7 +38,6 @@ package functionalTests.activeobject.finalfields;
 
 import java.io.Serializable;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

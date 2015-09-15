@@ -36,7 +36,6 @@
  */
 package functionalTests.activeobject.creation.local.newactive.constructors;
 
-
 import java.util.Vector;
 
 import org.objectweb.proactive.ActiveObjectCreationException;

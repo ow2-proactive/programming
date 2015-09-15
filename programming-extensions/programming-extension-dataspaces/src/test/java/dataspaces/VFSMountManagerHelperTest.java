@@ -81,8 +81,7 @@ public class VFSMountManagerHelperTest {
     private static FileSystemServerDeployer server;
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    static HashSet<String> protocolsToTest = new LinkedHashSet<String>(Arrays.asList("rmi", "pnp",
-            "pamr"));
+    static HashSet<String> protocolsToTest = new LinkedHashSet<String>(Arrays.asList("rmi", "pnp", "pamr"));
 
     // a list of fake urls, for file urls, use the opposite operating system file type of url to launch FileSystemExceptions
     private List<String> fakeUrls = Arrays.asList("ftp://a/b",

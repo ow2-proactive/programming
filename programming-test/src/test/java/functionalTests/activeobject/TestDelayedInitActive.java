@@ -75,7 +75,7 @@ public class TestDelayedInitActive extends FunctionalTest {
         ao.is();
         long after = System.currentTimeMillis();
         Assert.assertTrue("Method call seems to be async but should be sync (immediate service)", after -
-                before >= SLEEP);
+            before >= SLEEP);
     }
 
     static public class AO implements Serializable, InitActive {

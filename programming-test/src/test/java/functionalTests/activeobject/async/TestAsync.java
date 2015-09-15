@@ -96,7 +96,7 @@ public class TestAsync extends FunctionalTest {
 
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-                ESPYLON);
+            ESPYLON);
     }
 
     // sync
