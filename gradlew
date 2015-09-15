@@ -42,11 +42,6 @@ case "`uname`" in
     ;;
 esac
 
-# For Cygwin, ensure paths are in UNIX format before anything is touched.
-if $cygwin ; then
-    [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
-fi
-
 # Attempt to set APP_HOME
 # Resolve links: $0 may be a link
 PRG="$0"
@@ -66,19 +61,6 @@ APP_HOME="`pwd -P`"
 cd "$SAVED" >&-
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
-
-################################################################
-# if local JVM exists redefine JAVA_HOME
-if [ -d "$APP_HOME/jre" ]; then
-
-    JAVA_HOME=$APP_HOME/jre
-
-    if [ -d "$APP_HOME/jre/Contents/Home" ]; then
-        # macos
-        JAVA_HOME=$APP_HOME/jre/Contents/Home
-    fi
-fi
-################################################################
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
@@ -127,6 +109,7 @@ fi
 if $cygwin ; then
     APP_HOME=`cygpath --path --mixed "$APP_HOME"`
     CLASSPATH=`cygpath --path --mixed "$CLASSPATH"`
+    JAVACMD=`cygpath --unix "$JAVACMD"`
 
     # We build the pattern for arguments to be converted via cygpath
     ROOTDIRSRAW=`find -L / -maxdepth 1 -mindepth 1 -type d 2>/dev/null`
