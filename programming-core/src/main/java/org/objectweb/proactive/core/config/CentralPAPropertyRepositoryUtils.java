@@ -90,10 +90,7 @@ public class CentralPAPropertyRepositoryUtils {
                     throw new IllegalArgumentException("Duplicate element found in list : " + mainProtocol +
                         " & " + input);
                 }
-                if (uniqueSet.contains("rmi") && uniqueSet.contains("rmissl")) {
-                    throw new IllegalArgumentException(
-                        "Protocols RMI and RMISSL cannot be both used in the same ProActive Node as they share the same registry");
-                }
+
                 if (uniqueSet.contains("pnp") && uniqueSet.contains("pnpssl")) {
                     throw new IllegalArgumentException(
                         "Protocols PNP and PNPSSL cannot be both used in the same ProActive Node as they share the same registry");

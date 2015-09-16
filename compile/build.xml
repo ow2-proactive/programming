@@ -520,11 +520,6 @@
         <antcall target="junit.summary" />
 	</target>
 
-	<target name="junit.rmissl" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
-		<junitMacro communication.protocol="rmissl" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
-        <antcall target="junit.summary" />
-	</target>
-
 	<target name="junit.amqp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="amqp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
         <antcall target="junit.summary" />

@@ -56,7 +56,6 @@ Main targets:
  junit.pamr                          Run all non regression tests on the current host only
  junit.rmi                           Run all non regression tests on the current host only
  junit.rmissh                        Run all non regression tests on the current host only
- junit.rmissl                        Run all non regression tests on the current host only
  microTimer                          Deprecated, see compile.microTimer
  proActiveJar                        Deprecated, see deploy
  proActiveWar                        Build the proactive.war archive with CXF embedded

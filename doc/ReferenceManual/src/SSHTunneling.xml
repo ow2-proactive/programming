@@ -137,10 +137,6 @@ A    | &lt;----                    ----&gt;  |    B
       </listitem>
 
       <listitem>
-        <para>rmissl (RMI over SSL)</para>
-      </listitem>
-
-      <listitem>
         <para>pamr (plain TCP connection or tunneled over SSH)</para>
       </listitem>
     </itemizedlist>

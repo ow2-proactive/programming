@@ -1549,7 +1549,7 @@ public class PAActiveObject {
      *          Could be remote or local parts of the ActiveObject
      *
      * @param protocol
-     *          Can be rmi, http, pamr, rmissh, rmissl
+     *          Can be rmi, http, pamr, rmissh
      *
      * @throws UnknownProtocolException
      *

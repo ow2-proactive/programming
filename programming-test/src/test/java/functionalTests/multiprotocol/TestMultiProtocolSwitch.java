@@ -78,7 +78,7 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
     URL gcma = TestMultiProtocolSwitch.class.getResource("TestMultiProtocol.xml");
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmissl", "pnp",
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp",
             "pamr" }));
 
     HashSet<List<String>> permutations = new HashSet<List<String>>();
@@ -91,7 +91,6 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
         ProActiveLogger.getLogger(Loggers.PAPROXY).setLevel(Level.DEBUG);
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
         PAMRConfig.PA_NET_ROUTER_PORT.setValue(0);
-
     }
 
     public TestMultiProtocolSwitch() {

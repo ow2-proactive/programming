@@ -175,7 +175,7 @@ class ServerDialog implements ActionListener {
         c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        this.protocolCombo = new JComboBox<>(new String[] { "rmi", "rmissh", "rmissl", "http", "pnp", "pnps",
+        this.protocolCombo = new JComboBox<>(new String[] { "rmi", "rmissh", "http", "pnp", "pnps",
                 "pamr" });
         protocolCombo.setEnabled(false);
         protocolCombo.setEditable(true);
