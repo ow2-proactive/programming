@@ -77,7 +77,7 @@ public class TestNamingServiceSwitch extends FunctionalTest {
     URL gcma = TestNamingServiceSwitch.class.getResource("TestMultiProtocol.xml");
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmissl", "pnp",
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp",
             "pamr" }));
 
     // pamr router

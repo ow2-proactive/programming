@@ -68,7 +68,7 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     URL gcma = TestMultiExposeActiveObjectPAMR.class.getResource("TestMultiProtocol.xml");
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmissl", "pamr",
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pamr",
             "pnp" }));
 
     // pamr router

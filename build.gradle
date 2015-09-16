@@ -385,7 +385,7 @@ project(':programming-test') {
         exclude '**/TestHeartbeat*'
     }
 
-    def protocols = ['rmi', 'pnp', 'pamr', 'pnps', 'rmissl', 'rmissh', 'http']
+    def protocols = ['rmi', 'pnp', 'pamr', 'pnps', 'rmissh', 'http']
     protocols.each { protocol ->
         def testProtocol = task "functionalTest-$protocol"(type: Test)
         testProtocol.configure testConfiguration
