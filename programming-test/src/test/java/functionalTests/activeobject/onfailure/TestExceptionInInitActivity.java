@@ -36,7 +36,7 @@
  */
 package functionalTests.activeobject.onfailure;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.Level;
 import org.junit.Test;

@@ -36,7 +36,7 @@
  */
 package functionalTests.descriptor.variablecontract.javapropertiesDescriptor;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 import java.util.HashMap;

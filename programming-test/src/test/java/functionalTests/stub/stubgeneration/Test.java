@@ -46,9 +46,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -100,8 +100,8 @@ public class Test extends FunctionalTest {
                 .defineClass(
                         "pa.stub.parameterized.functionalTests.stub.stubgeneration._Stub__StubA__PTy__Dpe__Generics_GenericsfunctionalTests_Pstub_Pstubgeneration_PMy__PFirst__PType_DfunctionalTests_Pstub_Pstubgeneration_PMy__DSecond__PType",
                         data);
-        assertTrue("_StubA_PTy_Dpe_Generics isn't parent of its Stub!", _StubA_PTy_Dpe_Generics.class
-                .isAssignableFrom(stubClass));
+        assertTrue("_StubA_PTy_Dpe_Generics isn't parent of its Stub!",
+                _StubA_PTy_Dpe_Generics.class.isAssignableFrom(stubClass));
         stubClassName = Utils.convertClassNameToStubClassName(baseclassName, new Class[] {
                 My_PFirst_PType.class, My_DSecond_PType.class });
         assertEquals(

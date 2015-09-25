@@ -36,8 +36,6 @@
  */
 package functionalTests.activeobject.context;
 
-import static junit.framework.Assert.assertTrue;
-
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
@@ -46,8 +44,9 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.Context;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
-
 import functionalTests.GCMFunctionalTest;
+
+import static org.junit.Assert.assertTrue;
 
 
 public class TestContext extends GCMFunctionalTest {

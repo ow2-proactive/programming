@@ -278,8 +278,7 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
                 if (deleted)
                     logger.debug("Scratch directory for whole runtime was deleted (considered as empty)");
                 else
-                    logger
-                            .debug("Scratch directory for whole runtime was not deleted (not considered as empty)");
+                    logger.debug("Scratch directory for whole runtime was not deleted (not considered as empty)");
             } catch (org.apache.commons.vfs2.FileSystemException x) {
                 logger.debug(
                         "Could not delete scratch directory for whole runtime - perhaps it was not empty", x);

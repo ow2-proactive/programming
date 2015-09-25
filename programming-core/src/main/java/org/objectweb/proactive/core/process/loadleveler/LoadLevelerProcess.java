@@ -236,8 +236,8 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
         builder.append(buildLoadLevelerComment(" ---- Task Repartion ---- "));
 
         if (this.isSimpleTaskRepartition()) {
-            builder.append(buildLoadLevelerProperty(LLTAG_TASK_GEOMETRY, this.buildSimpleTaskAsTaskGeometry(
-                    this.nbTasks, this.tasksPerHosts)));
+            builder.append(buildLoadLevelerProperty(LLTAG_TASK_GEOMETRY,
+                    this.buildSimpleTaskAsTaskGeometry(this.nbTasks, this.tasksPerHosts)));
         } else {
 
             /* Only subsets of these keywords are valid to combine,
@@ -573,8 +573,8 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
             Matcher m = p.matcher(message);
 
             if (m.matches()) {
-                LoadLevelerProcess.this.setJobId(message.substring(message.indexOf("\"") + 1, message
-                        .lastIndexOf("\"")));
+                LoadLevelerProcess.this.setJobId(message.substring(message.indexOf("\"") + 1,
+                        message.lastIndexOf("\"")));
             }
 
             /* Output pattern on error:

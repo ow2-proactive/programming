@@ -38,7 +38,7 @@ package functionalTests.pamr;
 
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.extensions.pamr.protocol.TypeHelper;

@@ -38,14 +38,12 @@ package functionalTests.activeobject.internalclass;
 
 import java.io.Serializable;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
-
 import functionalTests.FunctionalTest;
+import org.junit.Assert;
+import org.junit.Test;
 
 
 /*

@@ -260,8 +260,7 @@ public class DataSpacesNodes {
         synchronized (nodeConfigurators) {
             final NodeConfigurator config = nodeConfigurators.get(name);
             if (config != null) {
-                logger
-                        .debug("Attempted to create Data Spaces node configurator for already being configured node");
+                logger.debug("Attempted to create Data Spaces node configurator for already being configured node");
                 throw new AlreadyConfiguredException("Node is already configured for Data Spaces");
             }
 

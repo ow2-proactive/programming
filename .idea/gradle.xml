@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="/opt/gradle" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/doc" />
+            <option value="$PROJECT_DIR$/doc/AdvancedFeatures" />
+            <option value="$PROJECT_DIR$/doc/ReferenceManual" />
+            <option value="$PROJECT_DIR$/programming-annotation" />
+            <option value="$PROJECT_DIR$/programming-build-utils" />
+            <option value="$PROJECT_DIR$/programming-core" />
+            <option value="$PROJECT_DIR$/programming-extensions" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-amqp" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-annotation" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-dataspaces" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-gcmdeployment" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-pamr" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-pnp" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-pnpssl" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-processbuilder" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-rmissl" />
+            <option value="$PROJECT_DIR$/programming-extensions/programming-extension-vfsprovider" />
+            <option value="$PROJECT_DIR$/programming-test" />
+            <option value="$PROJECT_DIR$/programming-util" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

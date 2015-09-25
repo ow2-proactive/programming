@@ -177,8 +177,8 @@ public class URIBuilder {
 
     public static URI setProtocol(URI uri, String protocol) {
         try {
-            return new URI(protocol, uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath(), uri
-                    .getQuery(), uri.getFragment());
+            return new URI(protocol, uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath(),
+                uri.getQuery(), uri.getFragment());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -388,8 +388,8 @@ public class URIBuilder {
     public static URI setPort(URI u, int port) {
         URI u2;
         try {
-            u2 = new URI(u.getScheme(), u.getUserInfo(), u.getHost(), port, u.getPath(), u.getQuery(), u
-                    .getFragment());
+            u2 = new URI(u.getScheme(), u.getUserInfo(), u.getHost(), port, u.getPath(), u.getQuery(),
+                u.getFragment());
             return u2;
         } catch (URISyntaxException e) {
             e.printStackTrace();

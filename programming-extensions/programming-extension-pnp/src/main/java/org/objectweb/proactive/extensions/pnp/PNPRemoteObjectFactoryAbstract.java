@@ -112,6 +112,7 @@ public abstract class PNPRemoteObjectFactoryAbstract implements RemoteObjectFact
         return this.backendRof.list(url);
     }
 
+    @SuppressWarnings("unchecked")
     final public <T> RemoteObject<T> lookup(URI url) throws ProActiveException {
         return this.backendRof.lookup(url);
     }

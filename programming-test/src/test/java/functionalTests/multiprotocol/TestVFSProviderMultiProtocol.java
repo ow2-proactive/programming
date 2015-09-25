@@ -117,17 +117,16 @@ public class TestVFSProviderMultiProtocol extends FunctionalTest {
         }
         CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.setValue(add_str);
 
-        FileSystemServerDeployer deployer = new FileSystemServerDeployer("space name", SERVER_PATH
-                .getAbsolutePath(), true);
+        FileSystemServerDeployer deployer = new FileSystemServerDeployer("space name",
+            SERVER_PATH.getAbsolutePath(), true);
 
         try {
 
             String[] urls = deployer.getVFSRootURLs();
             logger.info("Received urls :" + Arrays.asList(urls));
-            Assert
-                    .assertEquals(
-                            "Number of urls of the FileSystemServerDeployer should match the number of protocols + the file protocol",
-                            protocolsToTest.size() + 1, urls.length);
+            Assert.assertEquals(
+                    "Number of urls of the FileSystemServerDeployer should match the number of protocols + the file protocol",
+                    protocolsToTest.size() + 1, urls.length);
 
             // check the file server uris
 
@@ -149,8 +148,8 @@ public class TestVFSProviderMultiProtocol extends FunctionalTest {
                 FileObject source = fileSystemManager.resolveFile(f.toURI().toURL().toExternalForm());
                 FileObject dest = fileSystemManager.resolveFile(urls[i] + "/" + f.getName());
                 dest.copyFrom(source, Selectors.SELECT_SELF);
-                Assert.assertTrue("Copy successful of " + source.getURL() + " to " + dest.getURL(), dest
-                        .exists());
+                Assert.assertTrue("Copy successful of " + source.getURL() + " to " + dest.getURL(),
+                        dest.exists());
 
             }
 

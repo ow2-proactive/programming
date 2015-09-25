@@ -182,7 +182,7 @@ public class PARemoteObject {
      *          Should be a RemoteObject
      *
      * @param protocol
-     *          Can be rmi, http, pamr, rmissh, rmissl
+     *          Can be rmi, http, pamr, rmissh
      *
      * @throws UnknownProtocolException
      *

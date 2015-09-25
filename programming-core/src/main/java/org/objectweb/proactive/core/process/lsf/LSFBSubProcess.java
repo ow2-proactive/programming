@@ -117,9 +117,7 @@ public class LSFBSubProcess extends AbstractExternalProcessDecorator {
     //
     @Override
     public void setInputMessageLogger(RemoteProcessMessageLogger inputMessageLogger) {
-        super
-                .setInputMessageLogger(new CompositeMessageLogger(new ParserMessageLogger(),
-                    inputMessageLogger));
+        super.setInputMessageLogger(new CompositeMessageLogger(new ParserMessageLogger(), inputMessageLogger));
     }
 
     @Override

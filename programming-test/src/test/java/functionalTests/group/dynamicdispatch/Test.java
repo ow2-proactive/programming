@@ -42,7 +42,7 @@ import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import functionalTests.FunctionalTest;
 import functionalTests.descriptor.defaultnodes.TestNodes;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 
 // dispatch n tasks between 2 workers with n>2

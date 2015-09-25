@@ -298,15 +298,15 @@ public abstract class DataMessage extends Message {
         if (sender != null) {
             srcId = sender.getId();
         }
-        TypeHelper.longToByteArray(srcId, buf, Message.Field.getTotalOffset() +
-            Field.SRC_AGENT_ID.getOffset());
+        TypeHelper.longToByteArray(srcId, buf,
+                Message.Field.getTotalOffset() + Field.SRC_AGENT_ID.getOffset());
 
         long dstId = UNKNOWN_AGENT_ID;
         if (recipient != null) {
             dstId = recipient.getId();
         }
-        TypeHelper.longToByteArray(dstId, buf, Message.Field.getTotalOffset() +
-            Field.DST_AGENT_ID.getOffset());
+        TypeHelper.longToByteArray(dstId, buf,
+                Message.Field.getTotalOffset() + Field.DST_AGENT_ID.getOffset());
 
         if (data != null) {
             System.arraycopy(data, 0, buf, DATA_MESSAGE_HEADER_LENGTH, data.length);

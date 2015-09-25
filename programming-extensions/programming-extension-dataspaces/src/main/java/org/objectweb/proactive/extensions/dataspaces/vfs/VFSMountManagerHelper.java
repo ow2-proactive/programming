@@ -217,12 +217,8 @@ public class VFSMountManagerHelper {
 
                 // if at least one file uri was deployed successfully, but no other protocols, display a warning
                 if (exceptionCount.getValue() < urisfiltered.size() && atLeastOneFileDeployed) {
-                    logger
-                            .warn("[VFSMountManager] Only file protocol file systems were accessible when trying to mount " +
-                                urisfiltered +
-                                ". Here are all the exception received : " +
-                                nl +
-                                exceptionMessage);
+                    logger.warn("[VFSMountManager] Only file protocol file systems were accessible when trying to mount " +
+                        urisfiltered + ". Here are all the exception received : " + nl + exceptionMessage);
                 }
             }
         }
@@ -313,8 +309,9 @@ public class VFSMountManagerHelper {
                                 fo.close();
                             } catch (org.apache.commons.vfs2.FileSystemException x) {
                                 logger.debug("Could not close data space root file object : " + fo, x);
-                                ProActiveLogger.logEatedException(logger, String.format(
-                                        "Could not close data space %s root file object", fo), x);
+                                ProActiveLogger.logEatedException(logger,
+                                        String.format("Could not close data space %s root file object", fo),
+                                        x);
                             }
                             vfsManager.closeFileSystem(spaceFileSystem);
                             if (logger.isDebugEnabled())

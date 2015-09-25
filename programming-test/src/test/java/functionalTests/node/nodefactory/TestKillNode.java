@@ -38,7 +38,7 @@ package functionalTests.node.nodefactory;
 
 import java.rmi.AlreadyBoundException;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.node.Node;

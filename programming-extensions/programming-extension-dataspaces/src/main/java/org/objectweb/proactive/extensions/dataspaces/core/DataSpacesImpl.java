@@ -467,8 +467,9 @@ public class DataSpacesImpl {
             throw new ProActiveRuntimeException(
                 "This application id is not registered in used naming service", x);
         } catch (SpaceAlreadyRegisteredException x) {
-            logger.debug(String.format("User-added space %s is already registered", spaceInstanceInfo
-                    .getMountingPoint()), x);
+            logger.debug(
+                    String.format("User-added space %s is already registered",
+                            spaceInstanceInfo.getMountingPoint()), x);
             throw x;
         }
 

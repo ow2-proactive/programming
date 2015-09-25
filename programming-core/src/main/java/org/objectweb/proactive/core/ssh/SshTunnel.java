@@ -173,8 +173,8 @@ public class SshTunnel {
      * @throws IOException if the socket cannot be opened (should never happen)
      */
     public Socket getSocket() throws IOException {
-        InetSocketAddress address = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(), this
-                .getPort());
+        InetSocketAddress address = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(),
+            this.getPort());
         Socket socket = new Socket();
         socket.connect(address);
         return socket;

@@ -1105,8 +1105,8 @@ public class PAGroup {
     public static Object turnActiveGroup(Object ogroup, Class<?>[] genericParameters, String nodeName)
             throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
             NodeException {
-        return PAActiveObject.turnActive(ogroup, genericParameters, getType(ogroup), NodeFactory
-                .getNode(nodeName), null, null);
+        return PAActiveObject.turnActive(ogroup, genericParameters, getType(ogroup),
+                NodeFactory.getNode(nodeName), null, null);
     }
 
     /**

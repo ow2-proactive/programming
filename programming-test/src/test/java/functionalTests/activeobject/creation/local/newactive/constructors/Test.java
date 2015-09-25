@@ -36,14 +36,13 @@
  */
 package functionalTests.activeobject.creation.local.newactive.constructors;
 
-import static junit.framework.Assert.assertTrue;
-
 import java.util.Vector;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
-
 import functionalTests.FunctionalTest;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**

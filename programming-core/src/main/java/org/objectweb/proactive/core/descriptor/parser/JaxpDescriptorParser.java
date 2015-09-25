@@ -249,8 +249,8 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
             NodeList fileSubNodes = (NodeList) xpath.evaluate(SECURITY_FILE, securityNode,
                     XPathConstants.NODESET);
             if (fileSubNodes.getLength() == 1) {
-                String securityFile = getNodeExpandedValue(fileSubNodes.item(0).getAttributes().getNamedItem(
-                        SECURITY_FILE_URI));
+                String securityFile = getNodeExpandedValue(fileSubNodes.item(0).getAttributes()
+                        .getNamedItem(SECURITY_FILE_URI));
                 if ((securityFile == null) || (securityFile.length() <= 0)) {
                     throw new SAXException("Empty security file");
                 }

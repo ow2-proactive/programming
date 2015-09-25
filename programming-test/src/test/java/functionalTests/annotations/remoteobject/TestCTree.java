@@ -36,7 +36,7 @@
  */
 package functionalTests.annotations.remoteobject;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import functionalTests.annotations.CTreeTest;
 import functionalTests.annotations.AnnotationTest.Result;
 

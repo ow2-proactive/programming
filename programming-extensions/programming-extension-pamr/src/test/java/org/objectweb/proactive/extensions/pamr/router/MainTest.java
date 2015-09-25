@@ -30,20 +30,17 @@ public class MainTest {
     public void config_file_is_not_defined_as_parameter() throws Exception {
         File defaultConfigFile = tmpFolder.newFile();
 
-        final RouterConfig testedConfig = createRouterConfiguration(
-          new String[] { }, defaultConfigFile);
+        final RouterConfig testedConfig = createRouterConfiguration(new String[] {}, defaultConfigFile);
 
         assertEquals(defaultConfigFile, testedConfig.getReservedAgentConfigFile());
     }
 
     @Test
     public void no_default_config_file() throws Exception {
-        final RouterConfig testedConfig = createRouterConfiguration(
-          new String[] { }, null);
+        final RouterConfig testedConfig = createRouterConfiguration(new String[] {}, null);
 
         assertNull(testedConfig.getReservedAgentConfigFile());
     }
-
 
     private RouterConfig createRouterConfiguration(final String[] args, final File defaultConfigFile)
             throws IOException {

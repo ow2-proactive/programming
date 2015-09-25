@@ -65,8 +65,8 @@ public class TestSubscribeAttachmentFromAO extends GCMFunctionalTest {
     @Test
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {
         TestSubscribeAttachmentFromAODeployer ao = (TestSubscribeAttachmentFromAODeployer) PAActiveObject
-                .newActive(TestSubscribeAttachmentFromAODeployer.class.getName(), new Object[] { super
-                        .getFinalVariableContract() });
+                .newActive(TestSubscribeAttachmentFromAODeployer.class.getName(),
+                        new Object[] { super.getFinalVariableContract() });
         ao.deploy();
         Assert.assertTrue(ao.waitUntilCallbackOccur());
     }

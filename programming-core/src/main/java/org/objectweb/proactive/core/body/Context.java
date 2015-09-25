@@ -113,8 +113,8 @@ public class Context implements Serializable {
         if (this.currentRequest == null) {
             res.append("no current service.");
         } else {
-            res.append("service of ").append(this.currentRequest.getMethodName()).append(" from ").append(
-                    this.currentRequest.getSourceBodyID());
+            res.append("service of ").append(this.currentRequest.getMethodName()).append(" from ")
+                    .append(this.currentRequest.getSourceBodyID());
         }
         return res.toString();
     }

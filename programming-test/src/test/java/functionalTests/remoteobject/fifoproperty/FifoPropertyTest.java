@@ -36,7 +36,7 @@
  */
 package functionalTests.remoteobject.fifoproperty;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -64,8 +64,8 @@ public class FifoPropertyTest extends FunctionalTest {
         ;
 
         // create a remote object exposer for this object
-        RemoteObjectExposer<FifoPropertyObject> roe = PARemoteObject.newRemoteObject(FifoPropertyObject.class
-                .getName(), f);
+        RemoteObjectExposer<FifoPropertyObject> roe = PARemoteObject.newRemoteObject(
+                FifoPropertyObject.class.getName(), f);
 
         // create the remote object 
         RemoteRemoteObject rro = roe.createRemoteObject("fifo-1", true);

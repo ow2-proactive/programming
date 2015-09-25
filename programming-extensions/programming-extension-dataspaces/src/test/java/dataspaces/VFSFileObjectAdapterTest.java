@@ -169,8 +169,8 @@ public class VFSFileObjectAdapterTest {
     @Test
     public void testGetRealURI_WithSpecialChars() throws Exception {
         // because of PROACTIVE-1314, uri string returned by getRealURI() can escape characters and thus be different than the original URL
-        assertEquals(URIHelper.convertToEncodedURIString(adaptee.getURL().toString()), dsFileObject
-                .getRealURI());
+        assertEquals(URIHelper.convertToEncodedURIString(adaptee.getURL().toString()),
+                dsFileObject.getRealURI());
         assertEquals(rootUris, dsFileObject.getAllSpaceRootURIs());
 
         // testing that all are valid uris
@@ -240,8 +240,8 @@ public class VFSFileObjectAdapterTest {
     }
 
     private void assertIsSomeDir(DataSpacesFileObject parent) throws FileSystemException {
-        assertEquals(spaceURI.withActiveObjectId(activeObjectId).withUserPath("dir").toString(), parent
-                .getVirtualURI());
+        assertEquals(spaceURI.withActiveObjectId(activeObjectId).withUserPath("dir").toString(),
+                parent.getVirtualURI());
         final List<DataSpacesFileObject> desc = parent.getChildren();
         assertEquals(1, desc.size());
         assertTrue(desc.contains(dsFileObject));

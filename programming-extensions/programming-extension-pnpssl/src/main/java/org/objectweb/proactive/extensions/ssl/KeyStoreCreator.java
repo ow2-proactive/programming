@@ -285,8 +285,8 @@ public class KeyStoreCreator {
             KeyStore ks = KeyStore.getInstance("PKCS12", SslHelpers.BC_NAME);
             ks.load(null, null);
 
-            ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN, pair.getPrivate(), SslHelpers.DEFAULT_KS_PASSWD
-                    .toCharArray(), new X509Certificate[] { cert });
+            ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN, pair.getPrivate(),
+                    SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), new X509Certificate[] { cert });
 
             // Write the keystore
             FileOutputStream fos = new FileOutputStream(new File(keyStore));

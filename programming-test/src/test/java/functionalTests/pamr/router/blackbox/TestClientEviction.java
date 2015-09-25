@@ -56,7 +56,7 @@ import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 import org.objectweb.proactive.utils.Sleeper;
 import functionalTests.FunctionalTest;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

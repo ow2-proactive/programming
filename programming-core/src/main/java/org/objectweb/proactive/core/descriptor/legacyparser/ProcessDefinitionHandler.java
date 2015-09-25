@@ -873,8 +873,8 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                 jvmProcess.setParameters(Arrays.asList(params));
             } else if (name.equals(EXTENDED_JVM_TAG)) {
                 try {
-                    proActiveDescriptor.mapToExtendedJVM((JVMProcess) targetProcess, (String) activeHandler
-                            .getResultObject());
+                    proActiveDescriptor.mapToExtendedJVM((JVMProcess) targetProcess,
+                            (String) activeHandler.getResultObject());
                 } catch (ProActiveException e) {
                     throw new SAXException(e);
                 }

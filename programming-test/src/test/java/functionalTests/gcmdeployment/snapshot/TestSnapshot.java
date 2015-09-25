@@ -58,7 +58,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.utils.Sleeper;
 import functionalTests.GCMFunctionalTest;
 import functionalTests.ProActiveSetup;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 

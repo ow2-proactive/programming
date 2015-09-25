@@ -36,14 +36,14 @@
  */
 package functionalTests.activeobject.creation.remote.newactive;
 
-import static junit.framework.Assert.assertTrue;
-
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.GCMFunctionalTest;
 import functionalTests.activeobject.creation.A;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**

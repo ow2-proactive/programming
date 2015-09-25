@@ -118,8 +118,9 @@ class EnvironmentParser {
     private void parseEnvironment() throws XPathExpressionException, SAXException, DOMException, IOException {
         alreadyParsed = true;
 
-        NodeList environmentNodes = (NodeList) xpath.evaluate("/*/" +
-            GCMParserHelper.elementInNS(namespace, "environment"), document, XPathConstants.NODESET);
+        NodeList environmentNodes = (NodeList) xpath.evaluate(
+                "/*/" + GCMParserHelper.elementInNS(namespace, "environment"), document,
+                XPathConstants.NODESET);
 
         if (environmentNodes.getLength() == 1) {
 
@@ -144,6 +145,7 @@ class EnvironmentParser {
                     VariableContractType varContractType = VariableContractType
                             .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG);
 
+                    @SuppressWarnings("unchecked")
                     Enumeration<String> propertiesNames = (Enumeration<String>) properties.propertyNames();
                     while (propertiesNames.hasMoreElements()) {
                         String propertyName = propertiesNames.nextElement();

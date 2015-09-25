@@ -39,6 +39,7 @@ package org.objectweb.proactive.extensions.amqp.federation;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 import javax.net.SocketFactory;
 
@@ -139,9 +140,14 @@ class AMQPFederationUtils {
                 return true;
             }
         } catch (IOException e) {
-            channel.close();
-            throw e;
+            try {
+                channel.close();
+            } catch (TimeoutException te) {
+                throw new IOException(te);
+            }
         }
+
+        return false;
     }
 
     /*

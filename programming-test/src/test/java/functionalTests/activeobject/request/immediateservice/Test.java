@@ -36,7 +36,7 @@
  */
 package functionalTests.activeobject.request.immediateservice;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;

@@ -36,19 +36,8 @@
  */
 package org.objectweb.proactive.extensions.pnp;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelPipelineCoverage;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelHandler;
+import org.jboss.netty.channel.*;
 import org.jboss.netty.util.Timeout;
 import org.jboss.netty.util.Timer;
 import org.jboss.netty.util.TimerTask;
@@ -60,9 +49,12 @@ import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pnp.exception.PNPException;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+
 
 /** The server side handler of the PNP protocol*/
-@ChannelPipelineCoverage("one")
+@ChannelHandler.Sharable
 class PNPServerHandler extends SimpleChannelHandler {
     static final private Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP_HANDLER_SERVER);
 
@@ -213,8 +205,8 @@ class PNPServerHandler extends SimpleChannelHandler {
             cf.addListener(new ChannelFutureListener() {
                 public void operationComplete(ChannelFuture future) throws Exception {
                     if (!future.isSuccess() && !canceled) {
-                        logger.info("Failed to send heartbeat " + heartbeatId + " on " + channel, future
-                                .getCause());
+                        logger.info("Failed to send heartbeat " + heartbeatId + " on " + channel,
+                                future.getCause());
                     }
                 }
             });

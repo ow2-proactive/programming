@@ -387,8 +387,8 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         Queue<AbstractProcessForGroup> tasksToDispatch = taskFactory.generateTasks(mc, methodsToDispatch,
                 result, null, doneSignal, this);
         // dispatch
-        dispatcher.dispatchTasks(tasksToDispatch, doneSignal, mc.getReifiedMethod().getAnnotation(
-                Dispatch.class));
+        dispatcher.dispatchTasks(tasksToDispatch, doneSignal,
+                mc.getReifiedMethod().getAnnotation(Dispatch.class));
 
         // TODO rely on API or method call rather than annotation?
         // Reduce reduceAnnotation = mc.getReifiedMethod().getAnnotation(Reduce.class);
@@ -483,8 +483,8 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         CountDownLatch doneSignal = new CountDownLatch(nbExpectedCalls);
         Queue<AbstractProcessForGroup> tasksToDispatch = taskFactory.generateTasks(mc, methodsToDispatch,
                 null, exceptionList, doneSignal, this);
-        dispatcher.dispatchTasks(tasksToDispatch, doneSignal, mc.getReifiedMethod().getAnnotation(
-                Dispatch.class));
+        dispatcher.dispatchTasks(tasksToDispatch, doneSignal,
+                mc.getReifiedMethod().getAnnotation(Dispatch.class));
         // LocalBodyStore.getInstance().setCurrentThreadBody(body);
     }
 

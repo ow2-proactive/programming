@@ -36,7 +36,7 @@ package functionalTests.activeobject.stack;
 
 import java.util.BitSet;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;

@@ -49,11 +49,11 @@ public class ProActiveConfigurationTest {
 
         ProActiveConfiguration configuration = ProActiveConfiguration.getInstance();
 
-        assertEquals("rmi", configuration.getProperty(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
-                .getName()));
-        assertEquals("false", configuration.getProperty(CentralPAPropertyRepository.PA_RUNTIME_STAYALIVE
-                .getName()));
-        assertEquals("true", configuration
-                .getProperty(CentralPAPropertyRepository.PA_EXIT_ON_EMPTY.getName()));
+        assertEquals("rmi",
+                configuration.getProperty(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getName()));
+        assertEquals("false",
+                configuration.getProperty(CentralPAPropertyRepository.PA_RUNTIME_STAYALIVE.getName()));
+        assertEquals("true",
+                configuration.getProperty(CentralPAPropertyRepository.PA_EXIT_ON_EMPTY.getName()));
     }
 }

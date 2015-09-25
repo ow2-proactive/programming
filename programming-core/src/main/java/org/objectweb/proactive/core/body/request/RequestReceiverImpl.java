@@ -146,12 +146,11 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
             final ServiceMode mode = this.getServiceMode(request);
             if (!mode.equals(ServiceMode.NORMAL_SERVICE)) {
                 if (logger.isDebugEnabled()) {
-                    logger
-                            .debug("immediately serving " +
-                                request.getMethodName() +
-                                (mode.equals(ServiceMode.IMMEDIATE_UNIQUE_THREAD) ? " with unique thread for caller " +
-                                    request.getSourceBodyID()
-                                        : ""));
+                    logger.debug("immediately serving " +
+                        request.getMethodName() +
+                        (mode.equals(ServiceMode.IMMEDIATE_UNIQUE_THREAD) ? " with unique thread for caller " +
+                            request.getSourceBodyID()
+                                : ""));
                 }
                 this.inImmediateService.incrementAndGet();
                 try {
@@ -185,8 +184,9 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                 queue.add(request);
             }
         } catch (Exception e) {
-            logger.info("Error while receiving request " +
-                (request == null ? "null" : request.getMethodName()), e);
+            logger.info(
+                    "Error while receiving request " + (request == null ? "null" : request.getMethodName()),
+                    e);
         }
     }
 

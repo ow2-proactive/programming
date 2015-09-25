@@ -1,0 +1,11 @@
+ - [INFO e.ThrottlingProvider] This file has been created to prevent logging event loss when the distributed log4j framework is enabled. If a logging event is created while the provider is sending the buffered logging events to the log collector, it is dumped into this file. It prevents logging events loss and infinite loops. If you see this file, most likely, the log collector became unreachable or some low level ProActive loggers have been activated.
+38262@oops - [INFO    proactive.runtime] Starting a ProActiveRuntime on oops
+38262@oops - [INFO             util.log] Logging initialized @527ms
+38262@oops - [INFO        server.Server] jetty-9.3.3.v20150827
+38262@oops - [INFO ndler.ContextHandler] Started o.e.j.s.ServletContextHandler@543c6f6d{/proactive,null,AVAILABLE}
+38262@oops - [INFO rver.ServerConnector] Started ServerConnector@eb21112{HTTP/1.1,[http/1.1]}{0.0.0.0:37994}
+38262@oops - [INFO        server.Server] Started @736ms
+38262@oops - [INFO    communication.rmi] Detected an existing RMI Registry on port 1099
+38262@oops - [INFO     proactive.events] terminating Runtime PA_JVM787718918
+38262@oops - [INFO rver.ServerConnector] Stopped ServerConnector@eb21112{HTTP/1.1,[http/1.1]}{0.0.0.0:0}
+38262@oops - [INFO ndler.ContextHandler] Stopped o.e.j.s.ServletContextHandler@543c6f6d{/proactive,null,UNAVAILABLE}

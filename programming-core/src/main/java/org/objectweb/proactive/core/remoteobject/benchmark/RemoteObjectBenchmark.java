@@ -78,8 +78,8 @@ public class RemoteObjectBenchmark {
             bmt.addObserver(ros);
             bmt.addOnTheFly(remoteObjects, lastBenchmarkResults);
         } else {
-            bmt = new BenchmarkMonitorThread(remoteObjects, CentralPAPropertyRepository.PA_BENCHMARK_CLASS
-                    .getValue());
+            bmt = new BenchmarkMonitorThread(remoteObjects,
+                CentralPAPropertyRepository.PA_BENCHMARK_CLASS.getValue());
             this.benchmarkMonitors.put(runtimeName, bmt);
             bmt.addObserver(ros);
             bmt.launchBenchmark();

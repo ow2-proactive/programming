@@ -278,19 +278,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
 
     static public PAPropertyBoolean SCHEMA_VALIDATION = new PAPropertyBoolean("schema.validation", true, true);
 
-    /** SSL cipher suites used for RMISSL communications.
-     * List of cipher suites used for RMISSL, separated by commas.
-     * default is SSL_DH_anon_WITH_RC4_128_MD5. This cipher suite is used only
-     * to have encrypted communications, without authentication, and works with default
-     * JVM's keyStore/TrustStore
-     *
-     * Many others can be used. for implementing a certificate authentication...
-     * see http://java.sun.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html
-     *
-     * */
-    static public PAPropertyString PA_SSL_CIPHER_SUITES = new PAPropertyString("proactive.ssl.cipher.suites",
-        false, "SSL_DH_anon_WITH_RC4_128_MD5");
-
     /* ------------------------------------
      *  RMI
      */
@@ -330,22 +317,6 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * this property identifies the default port for the xml-http protocol
      */
     static public PAPropertyInteger PA_XMLHTTP_PORT = new PAPropertyInteger("proactive.http.port", false);
-
-    /**
-     * Define a Connector to be used by Jetty
-     *
-     * By default a SelectChannelConnector is used. It is well suited to handle a lot
-     * of mainly idle clients workload (like coarse grained master worker). If you have a
-     * few very busy client better performances can be achieved by using a SocketConnect
-     *
-     * You can use a SocketConnect, a BlockingChannelConnector or a SelectChannelConnector
-     * You CANNOT use a SSL connector.
-     * Click
-     * <a  href="http://docs.codehaus.org/display/JETTY/Architecture">here</a> for more
-     * information on the Jetty architecture.
-     */
-    static public PAPropertyString PA_HTTP_JETTY_CONNECTOR = new PAPropertyString(
-        "proactive.http.jetty.connector", false);
 
     /**
      * Jetty configuration file

@@ -36,8 +36,8 @@
  */
 package functionalTests.group.creation;
 
-import static junit.framework.Assert.assertTrue;
-import junit.framework.Assert;
+import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveException;

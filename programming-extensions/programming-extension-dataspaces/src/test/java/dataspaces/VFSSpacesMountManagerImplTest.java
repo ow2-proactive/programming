@@ -357,7 +357,8 @@ public class VFSSpacesMountManagerImplTest {
         write_p.createNewFile();
         assertTrue(write_p.setWritable(false));
 
-        assumeFalse("Probably running the test as root as we cannot make the file read only (JDK-6931128)", write_p.canWrite());
+        assumeFalse("Probably running the test as root as we cannot make the file read only (JDK-6931128)",
+                write_p.canWrite());
 
         return write_p.toURI().toURL().toString();
     }
@@ -655,8 +656,8 @@ public class VFSSpacesMountManagerImplTest {
 
     @Test
     public void testResolveSpacesForNotSuitableForUserPath() throws SpaceNotFoundException, IOException {
-        final DataSpacesURI uri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(), scratchUri
-                .getRuntimeId());
+        final DataSpacesURI uri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(),
+                scratchUri.getRuntimeId());
         try {
             manager.resolveSpaces(uri, null);
             fail("Exception expected");

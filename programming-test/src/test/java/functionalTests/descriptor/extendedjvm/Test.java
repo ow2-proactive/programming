@@ -36,7 +36,7 @@
  */
 package functionalTests.descriptor.extendedjvm;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -101,9 +101,9 @@ public class Test extends FunctionalTest {
             proactiveDir = userDir.getPath();
         }
         searchAndReplace(oldFilePath, newFilePath, "proactive.home", proactiveDir);
-        descriptor = PADeployment.getProactiveDescriptor(getClass().getResource(
-                "/functionalTests/descriptor/extendedjvm/" + fileName + "-tmp.xml").getPath(), super
-                .getVariableContract());
+        descriptor = PADeployment.getProactiveDescriptor(
+                getClass().getResource("/functionalTests/descriptor/extendedjvm/" + fileName + "-tmp.xml")
+                        .getPath(), super.getVariableContract());
         descriptor.activateMappings();
     }
 

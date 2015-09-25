@@ -233,8 +233,8 @@ public class AMQPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
                 name = "/" + name;
             }
 
-            URI uri = new URI(this.getProtocolId(), null, AMQPConfig.PA_AMQP_BROKER_ADDRESS.getValue(), this
-                    .getPort(), name, null, null);
+            URI uri = new URI(this.getProtocolId(), null, AMQPConfig.PA_AMQP_BROKER_ADDRESS.getValue(),
+                this.getPort(), name, null, null);
 
             // register the object on the register
             InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);

@@ -16,10 +16,6 @@ if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
 
-@rem================================================
-IF exist "%APP_HOME%/jre" (set JAVA_HOME="%APP_HOME%/jre")
-@rem================================================
-
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
 

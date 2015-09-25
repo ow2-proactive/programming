@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.log4j.Category;
 import org.apache.log4j.Level;

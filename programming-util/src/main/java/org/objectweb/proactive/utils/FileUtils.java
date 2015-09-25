@@ -270,7 +270,7 @@ class FileUtils {
      * @throws NullPointerException if path is null.
      */
     public File normalize(final String path) {
-        Stack s = new Stack();
+        Stack<String> s = new Stack<>();
         String[] dissect = dissect(path);
         s.push(dissect[0]);
 
@@ -855,7 +855,7 @@ class FileUtils {
             // Do nothing
         }
 
-        List relativePathStack = new ArrayList();
+        List<String> relativePathStack = new ArrayList<>();
 
         // if "from" part is longer, fill it up with ".."
         // to reach path which is equal to both paths

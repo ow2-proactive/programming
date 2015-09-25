@@ -171,7 +171,7 @@ public class ProActiveConfiguration {
                 if (key.startsWith("proactive.")) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Property " + key + " is not declared inside " +
-                          PAProperties.class.getSimpleName() + " , ignoring");
+                            PAProperties.class.getSimpleName() + " , ignoring");
                     }
                 } else {
                     if (logger.isDebugEnabled()) {

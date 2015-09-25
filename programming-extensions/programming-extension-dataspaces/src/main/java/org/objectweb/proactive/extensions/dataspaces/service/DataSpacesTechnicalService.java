@@ -189,8 +189,7 @@ public class DataSpacesTechnicalService implements TechnicalService {
     public void init(Map<String, String> argValues) {
         final String appIdString = argValues.get(PROPERTY_APPLICATION_ID);
         if (appIdString == null) {
-            logger
-                    .error("Initialization error - provided TS properties are incomplete, application id is not specified.");
+            logger.error("Initialization error - provided TS properties are incomplete, application id is not specified.");
         } else {
             try {
                 appId = Long.parseLong(appIdString);
@@ -201,8 +200,7 @@ public class DataSpacesTechnicalService implements TechnicalService {
 
         namingServiceURL = argValues.get(PROPERTY_NAMING_SERVICE_URL);
         if (namingServiceURL == null) {
-            logger
-                    .error("Initialization error - provided TS properties are incomplete, NamingService URL is not specified.");
+            logger.error("Initialization error - provided TS properties are incomplete, NamingService URL is not specified.");
         }
     }
 

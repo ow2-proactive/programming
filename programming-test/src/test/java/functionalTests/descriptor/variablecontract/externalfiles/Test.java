@@ -46,7 +46,7 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import functionalTests.FunctionalTest;
 import org.junit.Before;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 
 /**

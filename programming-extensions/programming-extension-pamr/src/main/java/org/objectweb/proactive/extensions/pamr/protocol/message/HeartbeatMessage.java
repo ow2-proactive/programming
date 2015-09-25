@@ -271,8 +271,8 @@ public abstract class HeartbeatMessage extends Message {
         byte[] buf = new byte[length];
 
         super.writeHeader(buf, 0);
-        TypeHelper.longToByteArray(this.heartbeatId, buf, Message.Field.getTotalOffset() +
-            Field.HEARTBEAT_ID.getOffset());
+        TypeHelper.longToByteArray(this.heartbeatId, buf,
+                Message.Field.getTotalOffset() + Field.HEARTBEAT_ID.getOffset());
 
         long id = ROUTER_AGENT_ID;
         if (this.srcAgentId != null) {

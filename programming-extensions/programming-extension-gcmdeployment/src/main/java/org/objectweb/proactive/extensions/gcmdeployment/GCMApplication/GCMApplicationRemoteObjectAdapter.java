@@ -88,12 +88,13 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
         return target.getVariableContract();
     }
 
+    @SuppressWarnings("unchecked")
     public GCMVirtualNode getVirtualNode(String vnName) {
         GCMVirtualNode vn = null;
         long deploymentId = target.getDeploymentId();
         String name = deploymentId + "/VirtualNode/" + vnName;
 
-        // Hack. Dunno how to uri.clone()	
+        // Hack. Dunno how to uri.clone()
         // DO NOT use the three args version of buildURI. It silently replaces the hostname.
         URI uri = URIBuilder.buildURI(baseUri.getHost(), name, baseUri.getScheme(), baseUri.getPort(), false);
 

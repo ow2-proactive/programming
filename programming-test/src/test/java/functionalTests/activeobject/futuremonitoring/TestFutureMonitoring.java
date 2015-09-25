@@ -43,7 +43,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.node.Node;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 
 /**

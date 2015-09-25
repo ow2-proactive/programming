@@ -74,11 +74,10 @@ public class ProActiveRemoteClassLoader {
                 return pamrLoader.loadClass(clazzName);
             } catch (ProActiveException proActiveEx) {
                 if (logger.isDebugEnabled()) {
-                    logger
-                            .debug("Cannot load " +
-                                clazzName +
-                                " using the pamr class loader, reason: cannot look up the runtime where the class data is, at url " +
-                                runtimeURL);
+                    logger.debug("Cannot load " +
+                        clazzName +
+                        " using the pamr class loader, reason: cannot look up the runtime where the class data is, at url " +
+                        runtimeURL);
                 }
                 throw e;
             }

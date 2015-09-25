@@ -36,7 +36,7 @@
  */
 package functionalTests.descriptor.coallocation;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
@@ -60,8 +60,8 @@ public class Test extends FunctionalTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        proActiveDescriptor = PADeployment.getProactiveDescriptor("file:" + AGENT_XML_LOCATION_UNIX, super
-                .getVariableContract());
+        proActiveDescriptor = PADeployment.getProactiveDescriptor("file:" + AGENT_XML_LOCATION_UNIX,
+                super.getVariableContract());
         // We activate the mapping in reverse order
         // when two vns refer to the same vm, the first vn which creates the vm becomes the creator of the vm
         // we want to verify this behavior (in addition to coallocation)

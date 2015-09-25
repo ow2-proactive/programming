@@ -36,7 +36,7 @@
  */
 package functionalTests.activeobject.node.getactiveobject;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;

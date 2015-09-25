@@ -36,7 +36,7 @@
  */
 package functionalTests.descriptor.variablecontract.descriptordefaultvariable;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -73,8 +73,8 @@ public class Test extends FunctionalTest {
         VariableContractImpl variableContract = new VariableContractImpl();
 
         //Setting from Descriptor
-        variableContract.setDescriptorVariable("test_var1", "value1", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_DEFAULT_TAG));
+        variableContract.setDescriptorVariable("test_var1", "value1",
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_DEFAULT_TAG));
 
         //Setting bogus from descriptor (this should fail)
         try {
@@ -87,11 +87,11 @@ public class Test extends FunctionalTest {
         //Setting from Program
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("test_var2", "value2a");
-        variableContract.setVariableFromProgram(map, VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_DEFAULT_TAG));
+        variableContract.setVariableFromProgram(map,
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_DEFAULT_TAG));
         //The following value should not be set, because Descriptor is default and therefore has lower priority
-        variableContract.setDescriptorVariable("test_var2", "value2b", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_DEFAULT_TAG));
+        variableContract.setDescriptorVariable("test_var2", "value2b",
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_DEFAULT_TAG));
 
         //Setting bogus variable from Program (this should fail)
         try {

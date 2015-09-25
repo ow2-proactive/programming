@@ -134,8 +134,8 @@ public class Executor {
 
                 pb.redirectErrorStream(true);
                 Process p = pb.start();
-                InputStreamMonitor<List<String>> streamMonitor = new InputStreamMonitor<List<String>>(p
-                        .getInputStream(), command, "Process" + i, logger);
+                InputStreamMonitor<List<String>> streamMonitor = new InputStreamMonitor<List<String>>(
+                    p.getInputStream(), command, "Process" + i, logger);
                 streamMonitor.start();
                 threads.add(streamMonitor);
             } catch (IOException e) {

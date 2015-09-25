@@ -187,9 +187,9 @@ public class MOPConcurrencyTest {
             Random rn = new Random();
             int randomClassIndex = rn.nextInt(i + 1);
 
-            CtMethod exec1 = CtNewMethod.make(javassist.Modifier.PUBLIC, pool.get(classNames
-                    .get(randomClassIndex)), METHOD_NAME, new CtClass[0], new CtClass[0], "return new " +
-                classNames.get(randomClassIndex) + "();", cc);
+            CtMethod exec1 = CtNewMethod.make(javassist.Modifier.PUBLIC,
+                    pool.get(classNames.get(randomClassIndex)), METHOD_NAME, new CtClass[0], new CtClass[0],
+                    "return new " + classNames.get(randomClassIndex) + "();", cc);
             cc.addMethod(exec1);
 
             classesToLoad.add(new AbstractMap.SimpleEntry(className, pool.toClass(cc)));

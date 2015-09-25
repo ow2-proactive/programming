@@ -653,8 +653,8 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         NodeList toolNodes = (NodeList) xpath.evaluate(XPATH_TOOL, hostNode, XPathConstants.NODESET);
         for (int i = 0; i < toolNodes.getLength(); ++i) {
             Node toolNode = toolNodes.item(i);
-            Tool tool = new Tool(GCMParserHelper.getAttributeValue(toolNode, "id"), GCMParserHelper
-                    .getAttributeValue(toolNode, "path"));
+            Tool tool = new Tool(GCMParserHelper.getAttributeValue(toolNode, "id"),
+                GCMParserHelper.getAttributeValue(toolNode, "path"));
             hostInfo.addTool(tool);
         }
 

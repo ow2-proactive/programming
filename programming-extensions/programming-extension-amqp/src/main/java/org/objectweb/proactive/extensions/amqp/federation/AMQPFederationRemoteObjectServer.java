@@ -93,8 +93,8 @@ public class AMQPFederationRemoteObjectServer extends AbstractAMQPRemoteObjectSe
         Map<String, Object> arguments = null;
 
         channel.queueDeclare(queueName, durable, exclusive, autoDelete, arguments);
-        channel.queueBind(queueName, AMQPFederationConfig.PA_AMQP_FEDERATION_DISCOVER_EXCHANGE_NAME
-                .getValue(), "");
+        channel.queueBind(queueName,
+                AMQPFederationConfig.PA_AMQP_FEDERATION_DISCOVER_EXCHANGE_NAME.getValue(), "");
         channel.queueBind(queueName, AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_EXCHANGE_NAME.getValue(),
                 queueName);
     }

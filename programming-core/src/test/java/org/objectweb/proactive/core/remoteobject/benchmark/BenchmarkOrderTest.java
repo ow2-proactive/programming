@@ -65,52 +65,70 @@ public class BenchmarkOrderTest {
         // a:a b:b c:c ... syntax represent uris, in that case the protocols would be a, b and c
 
         // natural order
-        Assert.assertArrayEquals(new String[] { "a:a", "b:b", "c:c" }, doSort(new String[] { "a:a", "b:b",
-                "c:c" }, new int[] { 3, 2, 1 }, new String[0], "a:a"));
+        Assert.assertArrayEquals(new String[] { "a:a", "b:b", "c:c" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[0], "a:a"));
 
         // natural order + one protocol unreachable + unreachable protocol is different from default protocol
         // => unreachable default protocol is removed from the list
-        Assert.assertArrayEquals(new String[] { "b:b", "c:c" }, doSort(new String[] { "a:a", "b:b", "c:c" },
-                new int[] { Integer.MIN_VALUE, 2, 1 }, new String[0], "b:b"));
+        Assert.assertArrayEquals(
+                new String[] { "b:b", "c:c" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE, 2, 1 },
+                        new String[0], "b:b"));
 
         // natural order + one protocol unreachable + unreachable protocol equals default protocol
         // => unreachable default protocol is put at the end of the list but not removed
-        Assert.assertArrayEquals(new String[] { "b:b", "c:c", "a:a" }, doSort(new String[] { "a:a", "b:b",
-                "c:c" }, new int[] { Integer.MIN_VALUE, 2, 1 }, new String[0], "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "b:b", "c:c", "a:a" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE, 2, 1 },
+                        new String[0], "a:a"));
 
         // natural order + two protocols unreachable (different than default)
-        Assert.assertArrayEquals(new String[] { "c:c" }, doSort(new String[] { "a:a", "b:b", "c:c" },
-                new int[] { Integer.MIN_VALUE, Integer.MIN_VALUE, 1 }, new String[0], "c:c"));
+        Assert.assertArrayEquals(
+                new String[] { "c:c" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE,
+                        Integer.MIN_VALUE, 1 }, new String[0], "c:c"));
 
         // natural order + two protocols unreachable (one is the default)
-        Assert.assertArrayEquals(new String[] { "c:c", "a:a" }, doSort(new String[] { "a:a", "b:b", "c:c" },
-                new int[] { Integer.MIN_VALUE, Integer.MIN_VALUE, 1 }, new String[0], "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "c:c", "a:a" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE,
+                        Integer.MIN_VALUE, 1 }, new String[0], "a:a"));
 
         // natural order + fixed order property (same order)
-        Assert.assertArrayEquals(new String[] { "a:a", "b:b", "c:c" }, doSort(new String[] { "a:a", "b:b",
-                "c:c" }, new int[] { 3, 2, 1 }, new String[] { "a", "b", "c" }, "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "a:a", "b:b", "c:c" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[] { "a", "b",
+                        "c" }, "a:a"));
 
         // natural order + fixed order property (reverse order)
-        Assert.assertArrayEquals(new String[] { "c:c", "b:b", "a:a" }, doSort(new String[] { "a:a", "b:b",
-                "c:c" }, new int[] { 3, 2, 1 }, new String[] { "c", "b", "a" }, "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "c:c", "b:b", "a:a" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[] { "c", "b",
+                        "a" }, "a:a"));
 
         // inverse natural order + fixed order property
-        Assert.assertArrayEquals(new String[] { "c:c", "b:b", "a:a" }, doSort(new String[] { "a:a", "b:b",
-                "c:c" }, new int[] { 1, 2, 3 }, new String[] { "c", "b", "a" }, "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "c:c", "b:b", "a:a" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 1, 2, 3 }, new String[] { "c", "b",
+                        "a" }, "a:a"));
 
         // natural order + fixed order property in only one protocol
-        Assert.assertArrayEquals(new String[] { "c:c", "a:a", "b:b" }, doSort(new String[] { "a:a", "b:b",
-                "c:c" }, new int[] { 3, 2, 1 }, new String[] { "c" }, "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "c:c", "a:a", "b:b" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[] { "c" },
+                        "a:a"));
 
         // natural order + fixed order property + 1 unreachable protocol
-        Assert.assertArrayEquals(new String[] { "b:b", "a:a" }, doSort(new String[] { "a:a", "b:b", "c:c" },
-                new int[] { 3, 2, Integer.MIN_VALUE }, new String[] { "c", "b", "a" }, "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "b:b", "a:a" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, Integer.MIN_VALUE },
+                        new String[] { "c", "b", "a" }, "a:a"));
 
         // natural order + fixed order property + 2 unreachable protocols + 1 is the default
-        Assert
-                .assertArrayEquals(new String[] { "a:a" }, doSort(new String[] { "a:a", "b:b", "c:c" },
-                        new int[] { 3, Integer.MIN_VALUE, Integer.MIN_VALUE },
-                        new String[] { "c", "b", "a" }, "a:a"));
+        Assert.assertArrayEquals(
+                new String[] { "a:a" },
+                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, Integer.MIN_VALUE,
+                        Integer.MIN_VALUE }, new String[] { "c", "b", "a" }, "a:a"));
     }
 
     /**

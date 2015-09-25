@@ -73,24 +73,24 @@ public class Test extends FunctionalTest {
         //Setting from Program
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("user.home", "");
-        variableContract.setVariableFromProgram(map, VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
+        variableContract.setVariableFromProgram(map,
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
 
         //Setting Bogus from program
         try {
-            variableContract.setVariableFromProgram("bogus.property", "value", VariableContractType
-                    .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
+            variableContract.setVariableFromProgram("bogus.property", "value",
+                    VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
         } catch (Exception e) {
             bogusFromProgram = false;
         }
 
         //Setting from Descriptor
-        variableContract.setDescriptorVariable("user.dir", "", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
+        variableContract.setDescriptorVariable("user.dir", "",
+                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
         //Setting bogus from program
         try {
-            variableContract.setDescriptorVariable("bogus.property", "value", VariableContractType
-                    .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
+            variableContract.setDescriptorVariable("bogus.property", "value",
+                    VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_TAG));
         } catch (Exception e) {
             bogusFromDescriptor = false;
         }

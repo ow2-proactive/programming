@@ -294,8 +294,8 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             DataSpacesURI spacePart = mountingPoint.getSpacePartOnly();
             ArrayList<String> urls = new ArrayList<String>(spaceInfo.getUrls());
             if (urls.size() == 1) {
-                urls.add(0, Utils
-                        .getLocalAccessURL(urls.get(0), spaceInfo.getPath(), spaceInfo.getHostname()));
+                urls.add(0,
+                        Utils.getLocalAccessURL(urls.get(0), spaceInfo.getPath(), spaceInfo.getHostname()));
             }
 
             logger.debug("[VFSMountManager] Request mounting VFS root list : " + urls);

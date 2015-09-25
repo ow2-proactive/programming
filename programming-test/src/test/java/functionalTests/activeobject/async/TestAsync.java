@@ -38,18 +38,16 @@ package functionalTests.activeobject.async;
 
 import java.io.Serializable;
 
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.utils.TimeoutAccounter;
-
 import functionalTests.FunctionalTest;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 
 public class TestAsync extends FunctionalTest {

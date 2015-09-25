@@ -36,7 +36,7 @@
  */
 package functionalTests.descriptor.variablecontract.javapropertiesProgram;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -75,8 +75,9 @@ public class Test extends FunctionalTest {
         //Setting from Program
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("user.home", "/home/userprogram");
-        variableContract.setVariableFromProgram(map, VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
+        variableContract
+                .setVariableFromProgram(map, VariableContractType
+                        .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
         assertTrue(variableContract.getValue("user.home").equals(System.getProperty("user.home")));
 
         boolean bogus = false;
@@ -88,13 +89,15 @@ public class Test extends FunctionalTest {
         }
         assertTrue(!bogus);
 
-        variableContract.setVariableFromProgram("bogus.property", "bogus_value", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
+        variableContract
+                .setVariableFromProgram("bogus.property", "bogus_value", VariableContractType
+                        .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
         assertTrue(variableContract.getValue("bogus.property").equals("bogus_value"));
 
         //Setting from Descriptor
-        variableContract.setDescriptorVariable("user.home", "/home/userdesc", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
+        variableContract
+                .setDescriptorVariable("user.home", "/home/userdesc", VariableContractType
+                        .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
         assertTrue(variableContract.getValue("user.home").equals(System.getProperty("user.home")));
 
         try {
@@ -108,8 +111,9 @@ public class Test extends FunctionalTest {
         assertTrue(!bogus);
 
         //Setting bogus from program
-        variableContract.setDescriptorVariable("bogus.property", "", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
+        variableContract
+                .setDescriptorVariable("bogus.property", "", VariableContractType
+                        .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG));
         Assert.assertEquals("bogus_value", variableContract.getValue("bogus.property"));
 
         gcma = PAGCMDeployment.loadApplicationDescriptor(XML_LOCATION, variableContract);

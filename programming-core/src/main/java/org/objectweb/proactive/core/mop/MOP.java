@@ -107,21 +107,18 @@ public abstract class MOP {
     /**
      * A Hashtable to cache (reified class, stub class constructor) couples.
      */
-    protected static ConcurrentMap<GenericStubKey, Constructor<?>> stubTable =
-            new ConcurrentHashMap<GenericStubKey, Constructor<?>>();
+    protected static ConcurrentMap<GenericStubKey, Constructor<?>> stubTable = new ConcurrentHashMap<GenericStubKey, Constructor<?>>();
 
     /**
      * A Hashtable to cache (proxy class, proxy class constructor) couples
      */
-    protected static ConcurrentMap<String, Constructor<?>> proxyTable =
-            new ConcurrentHashMap<String, Constructor<?>>();
+    protected static ConcurrentMap<String, Constructor<?>> proxyTable = new ConcurrentHashMap<String, Constructor<?>>();
 
     /**
      * A Hashtable to cache (Class<?> name, proxy class name) couples
      * this is meant for class-based reification
      */
-    protected static ConcurrentMap<String, Constructor<?>> secondProxyTable =
-            new ConcurrentHashMap<String, Constructor<?>>();
+    protected static ConcurrentMap<String, Constructor<?>> secondProxyTable = new ConcurrentHashMap<String, Constructor<?>>();
 
     protected static final MOPClassLoader singleton = MOPClassLoader.getMOPClassLoader();
 
@@ -129,8 +126,7 @@ public abstract class MOP {
      *        As this class is center to the API, its static initializer is
      *        a good place to initialize general stuff.
      */
-    protected static ConcurrentMap<String, Class<?>> loadedClass =
-            new ConcurrentHashMap<String, Class<?>>();
+    protected static ConcurrentMap<String, Class<?>> loadedClass = new ConcurrentHashMap<String, Class<?>>();
 
     static {
         PROXY_CONSTRUCTOR_PARAMETERS_TYPES_ARRAY = new Class<?>[] {
@@ -696,7 +692,8 @@ public abstract class MOP {
                 proxyTable.putIfAbsent(proxyClassName, proxyConstructor);
             } catch (NoSuchMethodException e) {
                 throw new InvalidProxyClassException(
-                    "No constructor matching (ConstructorCall, Object[]) found in proxy class " + proxyClassName);
+                    "No constructor matching (ConstructorCall, Object[]) found in proxy class " +
+                        proxyClassName);
             }
         }
         return proxyConstructor;

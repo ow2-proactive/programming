@@ -68,13 +68,13 @@ class ServerDialog implements ActionListener {
 
     private JDialog frame;
 
-    private JComboBox rootCombo;
-    private JComboBox nameCombo;
+    private JComboBox<String> rootCombo;
+    private JComboBox<String> nameCombo;
     private JCheckBox rebindBox;
     private JCheckBox startBox;
     private JCheckBox protocolBox;
     private JLabel protocolLabel;
-    private JComboBox protocolCombo;
+    private JComboBox<String> protocolCombo;
     private JTextArea errorArea;
     private JLabel errorLabel;
     private JPanel errorPanel;
@@ -118,7 +118,7 @@ class ServerDialog implements ActionListener {
         c.gridx = 1;
         c.weightx = 1.0;
         c.fill = GridBagConstraints.HORIZONTAL;
-        this.rootCombo = new JComboBox(ServerBrowser.getHistory(ServerBrowser.rootHistoryFile));
+        this.rootCombo = new JComboBox<>(ServerBrowser.getHistory(ServerBrowser.rootHistoryFile));
         rootCombo.setPreferredSize(new Dimension(200, rootCombo.getPreferredSize().height));
         rootCombo.setEditable(true);
         rootCombo.setSelectedItem("");
@@ -139,7 +139,7 @@ class ServerDialog implements ActionListener {
         c.gridwidth = 2;
         c.weightx = 1.0;
         c.fill = GridBagConstraints.HORIZONTAL;
-        this.nameCombo = new JComboBox(ServerBrowser.getHistory(ServerBrowser.nameHistoryFile));
+        this.nameCombo = new JComboBox<>(ServerBrowser.getHistory(ServerBrowser.nameHistoryFile));
         nameCombo.setEditable(true);
         nameCombo.setSelectedItem("");
         form2Pane.add(nameCombo, c);
@@ -175,7 +175,7 @@ class ServerDialog implements ActionListener {
         c.gridwidth = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        this.protocolCombo = new JComboBox(new Object[] { "rmi", "rmissh", "rmissl", "http", "pnp", "pnps",
+        this.protocolCombo = new JComboBox<>(new String[] { "rmi", "rmissh", "http", "pnp", "pnps",
                 "pamr" });
         protocolCombo.setEnabled(false);
         protocolCombo.setEditable(true);

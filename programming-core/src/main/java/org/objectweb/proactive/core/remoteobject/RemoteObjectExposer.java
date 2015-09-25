@@ -131,8 +131,8 @@ public class RemoteObjectExposer<T> {
             int port = url.getPort();
             if (port == -1) {
                 try {
-                    url = new URI(url.getScheme(), url.getUserInfo(), url.getHost(), rof.getPort(), url
-                            .getPath(), url.getQuery(), url.getFragment());
+                    url = new URI(url.getScheme(), url.getUserInfo(), url.getHost(), rof.getPort(),
+                        url.getPath(), url.getQuery(), url.getFragment());
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -182,8 +182,8 @@ public class RemoteObjectExposer<T> {
             // select the factory matching the required protocol
             // here is an implicit check for protocol validity
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
-            URI uri = URIBuilder.buildURI(rof.getBaseURI().getHost(), name, rof.getProtocolId(), rof
-                    .getPort());
+            URI uri = URIBuilder.buildURI(rof.getBaseURI().getHost(), name, rof.getProtocolId(),
+                    rof.getPort());
             InternalRemoteRemoteObject irro = activeRemoteRemoteObjects.get(uri);
             if (irro == null) {
                 irro = rof.createRemoteObject(this.remoteObject, name, rebind);
@@ -237,9 +237,8 @@ public class RemoteObjectExposer<T> {
                         }
                         // this protocol throw exception, so we remove it from the candidate list for multi exposure
                         LOGGER_RO
-                                .warn(
-                                        "[ROExposer] Protocol " + protocol +
-                                            " seems invalid for this runtime, this is not a critical error, the protocol will be disabled.",
+                                .warn("[ROExposer] Protocol " + protocol +
+                                    " seems invalid for this runtime, this is not a critical error, the protocol will be disabled.",
                                         pae);
 
                         // Remove the protocol
@@ -351,8 +350,10 @@ public class RemoteObjectExposer<T> {
      */
     public void unregisterAll() throws ProActiveException {
         // Keep a reference for debug
+        @SuppressWarnings("unchecked")
         LinkedHashMap<URI, InternalRemoteRemoteObject> cloned = (LinkedHashMap<URI, InternalRemoteRemoteObject>) this.activeRemoteRemoteObjects
                 .clone();
+
         for (URI uri : cloned.keySet()) {
             try {
                 PARemoteObject.unregister(uri);

@@ -49,7 +49,7 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 import functionalTests.FunctionalTest;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.After;
 import org.junit.Test;
 
@@ -68,7 +68,7 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     URL gcma = TestMultiExposeActiveObjectPAMR.class.getResource("TestMultiProtocol.xml");
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmissl", "pamr",
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pamr",
             "pnp" }));
 
     // pamr router
@@ -89,6 +89,11 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     private static void startPAMRRouter() throws Exception {
         RouterConfig config = new RouterConfig();
         config.setPort(0); // let him find a free port
+
+        // reduce heartbeat timeout value to improve execution time of
+        // test testMultiExposePAMRRouterUnreacheableOnAOClient
+        config.setHeartbeatTimeout(3000);
+
         router = Router.createAndStart(config);
         PAMRConfig.PA_NET_ROUTER_PORT.setValue(router.getPort());
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
@@ -118,8 +123,8 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
 
         String[] aouris = PAActiveObject.getUrls(ao);
 
-        Assert.assertEquals("Number of uris should match number of protocols", aouris.length, protocolsToTest
-                .size());
+        Assert.assertEquals("Number of uris should match number of protocols", aouris.length,
+                protocolsToTest.size());
 
         disableProtocol(ao);
 
@@ -220,8 +225,8 @@ public class TestMultiExposeActiveObjectPAMR extends FunctionalTest {
     private void ensureURIListHasNoPAMR(List<String> inputList) throws Exception {
         for (String uriString : inputList) {
             URI uri = new URI(uriString);
-            Assert.assertFalse("PAMR protocol not found in uri : " + uriString, "pamr"
-                    .equals(uri.getScheme()));
+            Assert.assertFalse("PAMR protocol not found in uri : " + uriString,
+                    "pamr".equals(uri.getScheme()));
         }
     }
 

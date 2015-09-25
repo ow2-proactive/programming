@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;

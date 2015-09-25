@@ -56,7 +56,7 @@ import java.lang.annotation.Target;
  * @since  ProActive 5.1.0
  */
 @Retention(RetentionPolicy.SOURCE)
-@Target( { ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.LOCAL_VARIABLE, ElementType.METHOD,
+@Target({ ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.LOCAL_VARIABLE, ElementType.METHOD,
         ElementType.PARAMETER, ElementType.TYPE })
 public @interface RefactorWhenDroppingJava5 {
 

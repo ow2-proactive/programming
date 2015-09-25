@@ -133,8 +133,9 @@ public final class ProActiveRandomTest {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
 
-            Assert.assertTrue("Invalid character detected: '" + c + "' is not contained in " +
-                Arrays.toString(ProActiveRandom.SYMBOLS), allowedCharacters.contains(s.charAt(i)));
+            Assert.assertTrue(
+                    "Invalid character detected: '" + c + "' is not contained in " +
+                        Arrays.toString(ProActiveRandom.SYMBOLS), allowedCharacters.contains(s.charAt(i)));
         }
     }
 

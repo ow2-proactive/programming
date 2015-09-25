@@ -223,8 +223,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         try {
             this.enterInThreadStore();
             if (this.isDead) {
-                throw new BodyTerminatedRequestException(shortString(), request != null ? request
-                        .getMethodName() : null);
+                throw new BodyTerminatedRequestException(shortString(),
+                    request != null ? request.getMethodName() : null);
             }
             this.registerIncomingFutures();
             this.internalReceiveRequest(request);
@@ -238,8 +238,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         try {
             enterInThreadStore();
             if (this.isDead && (this.getFuturePool() == null)) {
-                throw new BodyTerminatedReplyException(reifiedObjectClassName, reply != null ? reply
-                        .getMethodName() : null);
+                throw new BodyTerminatedReplyException(reifiedObjectClassName,
+                    reply != null ? reply.getMethodName() : null);
             }
             this.registerIncomingFutures();
             internalReceiveReply(reply);

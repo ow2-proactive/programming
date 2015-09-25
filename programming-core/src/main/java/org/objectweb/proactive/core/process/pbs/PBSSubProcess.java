@@ -341,8 +341,8 @@ public class PBSSubProcess extends AbstractExternalProcessDecorator {
 
         //the parameters for the script are given as an 
         //environment variable
-        qsubCommand.append(" -v ").append("PROACTIVE_COMMAND=\" ").append(targetProcess.getCommand()).append(
-                "\" ");
+        qsubCommand.append(" -v ").append("PROACTIVE_COMMAND=\" ").append(targetProcess.getCommand())
+                .append("\" ");
         qsubCommand.append(scriptLocation);
 
         if (queueName != null) {

@@ -73,7 +73,7 @@ import java.lang.annotation.Target;
  * @since ProActive 3.90
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.TYPE, ElementType.LOCAL_VARIABLE })
+@Target({ ElementType.TYPE, ElementType.LOCAL_VARIABLE })
 public @interface ActiveObject {
 
     String virtualNode() default "";

@@ -49,6 +49,8 @@ import java.util.Vector;
 
 import javax.security.auth.x500.X500Principal;
 
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.DERObjectIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
@@ -102,7 +104,7 @@ public class CertificateGenerator {
         certGen.addExtension(X509Extensions.KeyUsage, true, keyUsage);
 
         // Allow client and server authentication
-        Vector<DERObjectIdentifier> extendedKeyUsageV = new Vector<DERObjectIdentifier>();
+        Vector<ASN1Object> extendedKeyUsageV = new Vector<>();
         extendedKeyUsageV.add(KeyPurposeId.id_kp_serverAuth);
         extendedKeyUsageV.add(KeyPurposeId.id_kp_clientAuth);
         certGen.addExtension(X509Extensions.ExtendedKeyUsage, true, new ExtendedKeyUsage(extendedKeyUsageV));

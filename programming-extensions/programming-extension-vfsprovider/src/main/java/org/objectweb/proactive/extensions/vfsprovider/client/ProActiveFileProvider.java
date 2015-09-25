@@ -77,8 +77,7 @@ public class ProActiveFileProvider extends AbstractOriginatingFileProvider {
         setFileNameParser(ProActiveFileNameParser.getInstance());
     }
 
-    @SuppressWarnings("unchecked")
-    public Collection getCapabilities() {
+    public Collection<Capability> getCapabilities() {
         return CAPABILITIES;
     }
 

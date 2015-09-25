@@ -73,8 +73,8 @@ public class NodeAttachmentCallbackVisitorCTree extends TreePathScanner<Void, Tr
 
         if (!correctSignature) {
             compilerOutput.printMessage(Diagnostic.Kind.ERROR,
-                    ErrorMessages.INCORRECT_METHOD_SIGNATURE_FOR_NODE_ATTACHEMENT_CALLBACK, trees
-                            .getElement(getCurrentPath()));
+                    ErrorMessages.INCORRECT_METHOD_SIGNATURE_FOR_NODE_ATTACHEMENT_CALLBACK,
+                    trees.getElement(getCurrentPath()));
         }
 
         return super.visitMethod(methodNode, trees);
