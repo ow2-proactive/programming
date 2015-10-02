@@ -409,7 +409,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
 
         DataSpacesURI spacePart = spaceUri.getSpacePartOnly();
 
-        final ConcurrentHashMap<String, FileObject> spaceRoots = mountedSpaces.remove(spacePart);
+        final Map<String, FileObject> spaceRoots = mountedSpaces.remove(spacePart);
 
         VFSMountManagerHelper.closeFileSystems(spaceRoots.keySet());
     }

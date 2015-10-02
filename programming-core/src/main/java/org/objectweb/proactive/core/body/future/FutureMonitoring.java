@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.body.future;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -61,7 +62,7 @@ public class FutureMonitoring implements Runnable {
      * For each body, the list of futures to monitor. We ping the updater body,
      * so we should detect a broken automatic continuations chain.
      */
-    private static final ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>> futuresToMonitor = new ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>>();
+    private static final Map<UniqueID, ConcurrentLinkedQueue<FutureProxy>> futuresToMonitor = new ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>>();
     private static final ConcurrentHashMap<UniqueID, String> nodeUrls = new ConcurrentHashMap<UniqueID, String>();
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
