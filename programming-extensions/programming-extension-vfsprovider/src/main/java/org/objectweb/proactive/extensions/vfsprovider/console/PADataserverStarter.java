@@ -63,13 +63,13 @@ public class PADataserverStarter {
         try {
             parseArgs(args);
         } catch (IllegalArgumentException e) {
-            System.out.println("Usage: java " + name + " <root directory> [PAdataserver name]");
-            System.out.println("       java " + name + " --help");
+            System.out.println("Usage: java " + name + " <root directory> [ProActive dataserver name]");
+            System.out.println(" -h,--help\tprints the help screen\n");
             System.out
-                    .println("Starts the ProActive dataserver for <root directory> with default or specified name.");
+                    .println(
+                            "Starts the ProActive dataserver for <root directory> with default or specified name.");
             System.out.println("ProActive system properties can be set using command line too.");
-            System.out.println("\tSyntax is: -Dproperty=value");
-            System.out.println("\t--help\tprints this screen");
+            System.out.println("Syntax is: -Dproperty=value");
             return;
         }
 
@@ -83,7 +83,7 @@ public class PADataserverStarter {
         args = JVMPropertiesPreloader.overrideJVMProperties(args);
         final int len = args.length;
 
-        if (len == 0 || len > 2 || (len == 1 && "--help".equals(args[0])))
+        if (len == 0 || len > 2 || (len == 1 && ("--help".equals(args[0]) || "-h".equals(args[0]))))
             throw new IllegalArgumentException();
 
         rootDirectory = args[0];
