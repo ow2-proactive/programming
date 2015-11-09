@@ -156,10 +156,11 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
             // Log for keeping a trace
             String methodName = message.getMethodName();
             if (!methodName.equals("killRT")) {
-                LOGGER_RO.warn(displayCaller + " : unable to contact remote object " + displayROURI +
-                    " when calling method " + message.getMethodName(), e);
+                LOGGER_RO.warn(displayCaller + ": unable to contact remote object " + displayROURI +
+                    " when calling method " + message.getMethodName());
+                LOGGER_RO.debug(e.getMessage(), e);
             } else if (LOGGER_RO.isDebugEnabled()) {
-                LOGGER_RO.debug(displayCaller + " : unable to contact remote object " + displayROURI +
+                LOGGER_RO.debug(displayCaller + ": unable to contact remote object " + displayROURI +
                     " when calling method " + message.getMethodName(), e);
             }
             return new SynchronousReplyImpl(new MethodCallResult(null, e));
