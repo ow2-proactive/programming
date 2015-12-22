@@ -67,7 +67,7 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      *
      */
     static final public PAPropertyInteger PA_PNP_DEFAULT_HEARTBEAT = new PAPropertyInteger(
-        "proactive.pnp.default_heartbeat", false, 9000);
+        "proactive.pnp.default_heartbeat", false, 60 * 1000);
 
     /**
      * Channel garbage collection timeout (in milliseconds)
@@ -76,7 +76,7 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      * the channel will be garbage collected.
      */
     static final public PAPropertyInteger PA_PNP_IDLE_TIMEOUT = new PAPropertyInteger(
-        "proactive.pnp.idle_timeout", false, 60 * 1000);
+        "proactive.pnp.idle_timeout", false, 600 * 1000);
 
     private int port;
     private int idleTimeout;
