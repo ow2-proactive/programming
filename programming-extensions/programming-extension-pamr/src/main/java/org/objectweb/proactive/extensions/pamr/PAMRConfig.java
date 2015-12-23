@@ -71,7 +71,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      * The connection will then block until established or an error occurs.
      */
     static public PAPropertyInteger PA_PAMR_CONNECT_TIMEOUT = new PAPropertyInteger(
-        "proactive.pamr.connect_timeout", false, 3000);
+            "proactive.pamr.connect_timeout", false, 30000);
 
     /** The agent ID to use.
      *
@@ -149,7 +149,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      * @see Socket
      */
     static public PAPropertyInteger PA_PAMRSSH_CONNECT_TIMEOUT = new PAPropertyInteger(
-        "proactive.pamrssh.connect_timeout", false);
+            "proactive.pamrssh.connect_timeout", false, 60000);
 
     // Not documented, temporary workaround until 4.3.0
     static public PAPropertyString PA_PAMRSSH_REMOTE_USERNAME = new PAPropertyString(
