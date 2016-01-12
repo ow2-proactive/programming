@@ -2,6 +2,9 @@
 .idea/
 *.iml
 
+*.classpath
+*.project
+
 # /
 /.classpath
 /.project
@@ -18,6 +21,9 @@
 /.classpath*
 /generated
 build/
+
+*.settings
+bin/
 
 # /compile/
 /compile/eclipse_formatter_config.properties
