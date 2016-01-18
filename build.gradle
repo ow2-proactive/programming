@@ -254,7 +254,7 @@ project('programming-extensions:programming-extension-dataspaces') {
                 vfs2CompileDependencies,
                 project(':programming-extensions:programming-extension-vfsprovider'),
                 project(':programming-util'),
-                'com.google.guava:guava:18.0'
+                'com.google.guava:guava:19.0'
         )
         testCompile(
                 project(':programming-extensions:programming-extension-vfsprovider').sourceSets.test.output,
