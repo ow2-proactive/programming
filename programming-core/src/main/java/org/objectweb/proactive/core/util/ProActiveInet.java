@@ -426,7 +426,7 @@ public class ProActiveInet {
                         long start = System.currentTimeMillis();
 
                         // try to connect to *somewhere*
-                        socket.connect(new InetSocketAddress(serverToConnectTo
+                        socket.connect(new InetSocketAddress(InetAddress.getByName(serverToConnectTo)
                                 , port
                         ));
                         long end = System.currentTimeMillis();
