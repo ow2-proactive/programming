@@ -218,7 +218,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * Enable or disable IPv6. When IPv6 is disabled, all IPv6 addresses will be ignored.
      */
     static public PAPropertyBoolean PA_NET_DISABLE_IPv6 = new PAPropertyBoolean("proactive.net.disableIPv6",
-            false, false);
+            false, true);
 
     /**
      * IPv6 stack is preferred by default, since on a dual-stack machine IPv6 socket can talk to both IPv4 and IPv6 peers.
@@ -278,7 +278,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * https://en.wikipedia.org/wiki/Link-local_address
      */
     static public PAPropertyBoolean PA_NET_NOLINKLOCAL = new PAPropertyBoolean("proactive.net.nolinklocal",
-            false, true);
+            false, false);
 
     /**
      * Select the network interface
