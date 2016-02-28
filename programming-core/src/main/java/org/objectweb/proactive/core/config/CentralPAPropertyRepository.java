@@ -191,10 +191,10 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /**
      * ProActive Communication protocol
      * <p/>
-     * Suppported values are: rmi, rmissh, http
+     * Suppported values are: rmi, pnp, pamr
      */
     static public PAPropertyString PA_COMMUNICATION_PROTOCOL = new PAPropertyString(
-            "proactive.communication.protocol", false, "rmi");
+            "proactive.communication.protocol", false, "pnp");
 
     /**
      * ProActive Runtime Hostname (or IP Address)
