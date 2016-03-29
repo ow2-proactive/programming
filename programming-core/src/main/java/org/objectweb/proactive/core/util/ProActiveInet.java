@@ -126,7 +126,6 @@ public class ProActiveInet {
 
                 ret.add(sb.toString());
 
-
             }
         } catch (SocketException e) {
             logger.info("Error occurred when listing all InetAddresses", e);
@@ -157,13 +156,13 @@ public class ProActiveInet {
         } else {
             // Force a specific address
             logger.debug(CentralPAPropertyRepository.PA_HOSTNAME.getName() +
-                    " defined. Using getByName() to elected an IP address");
+                " defined. Using getByName() to elected an IP address");
             // return the result of getByName
             try {
                 ia = InetAddress.getByName(CentralPAPropertyRepository.PA_HOSTNAME.getValue());
             } catch (UnknownHostException e) {
                 logger.error(CentralPAPropertyRepository.PA_HOSTNAME.getName() +
-                        " is set, but no IP address is bound to this hostname");
+                    " is set, but no IP address is bound to this hostname");
             }
         }
 
@@ -191,9 +190,9 @@ public class ProActiveInet {
 
         if (ias.size() > 0) {
 
-            if (CentralPAPropertyRepository.PA_NET_FASTEST_CONNECTION.isSet() && CentralPAPropertyRepository.PA_NET_FASTEST_CONNECTION.isTrue()) {
-                logger.debug(
-                        "Property proactive.net.fastest.connection is set to true, compute now Internet connection delay for all interfaces...");
+            if (CentralPAPropertyRepository.PA_NET_FASTEST_CONNECTION.isSet() &&
+                CentralPAPropertyRepository.PA_NET_FASTEST_CONNECTION.isTrue()) {
+                logger.debug("Property proactive.net.fastest.connection is set to true, compute now Internet connection delay for all interfaces...");
                 InetAddress fastest = selectFastestConnectionToServer(ias);
                 if (fastest != null) {
                     return fastest;
@@ -249,7 +248,6 @@ public class ProActiveInet {
 
         return new ArrayList<>(result);
     }
-
 
     /**
      * Returns true if the hostname property is set (force binding).
@@ -309,10 +307,9 @@ public class ProActiveInet {
         return iaspref;
     }
 
-
     private static List<InetAddress> filterPrivate(List<InetAddress> l) {
         if (!CentralPAPropertyRepository.PA_NET_NOPRIVATE.isSet() ||
-                !CentralPAPropertyRepository.PA_NET_NOPRIVATE.isTrue()) {
+            !CentralPAPropertyRepository.PA_NET_NOPRIVATE.isTrue()) {
             // All InetAddress match
             return l;
         }
@@ -349,7 +346,7 @@ public class ProActiveInet {
 
     private static List<InetAddress> filterLoopback(List<InetAddress> l) {
         if (!CentralPAPropertyRepository.PA_NET_NOLOOPBACK.isSet() ||
-                !CentralPAPropertyRepository.PA_NET_NOLOOPBACK.isTrue()) {
+            !CentralPAPropertyRepository.PA_NET_NOLOOPBACK.isTrue()) {
             // All InetAddress match
             return l;
         }
@@ -366,7 +363,6 @@ public class ProActiveInet {
         return ret;
     }
 
-
     /**
      * Sort addresses according to IPv4 / IPv6 preferences
      *
@@ -374,7 +370,8 @@ public class ProActiveInet {
      */
     private static void sortInetAddresses(List<InetAddress> iaList) {
         // By default we prefer IPv4 addresses, unless the prefer_ipv6_address is set
-        final int cmpIp4Ip6 = ((CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES.isSet() && CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES.isTrue())) ? 1 : -1;
+        final int cmpIp4Ip6 = ((CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES.isSet() && CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES
+                .isTrue())) ? 1 : -1;
         Collections.sort(iaList, new Comparator<InetAddress>() {
             @Override
             public int compare(InetAddress o1, InetAddress o2) {
@@ -447,7 +444,6 @@ public class ProActiveInet {
         }
     }
 
-
     private static List<InetAddress> filterIPv6(List<InetAddress> l) {
         if (!CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isSet() ||
                 !CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isTrue()) {
@@ -466,7 +462,6 @@ public class ProActiveInet {
 
         return ret;
     }
-
 
     private static List<InetAddress> filterByNetmask(List<InetAddress> l) {
         if (!CentralPAPropertyRepository.PA_NET_NETMASK.isSet()) {
