@@ -50,6 +50,8 @@ import org.objectweb.proactive.core.node.Node;
  * Created on Jun 15, 2006
  */
 public class TechnicalServiceWrapper implements TechnicalService, Serializable {
+
+    private static final long serialVersionUID = 60L;
     private TechnicalService ts;
 
     public void setTs(TechnicalService ts) {

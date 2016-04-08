@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.process.ExternalProcess;
  */
 
 public class VirtualMachineImpl implements VirtualMachine, java.io.Serializable {
+
+    private static final long serialVersionUID = 60L;
     //
     //  ----- PRIVATE MEMBERS -----------------------------------------------------------------------------------
     //

@@ -37,6 +37,8 @@
 package org.objectweb.proactive.core.mop;
 
 public class MethodCallExecutionFailedException extends BehavioralException {
+
+    private static final long serialVersionUID = 60L;
     public MethodCallExecutionFailedException() {
     }
 

@@ -62,6 +62,8 @@ import org.objectweb.proactive.core.process.lsf.LSFBSubProcess;
  * @since   ProActive 0.9.4
  */
 public class RLoginProcess extends AbstractExternalProcessDecorator {
+
+    private static final long serialVersionUID = 60L;
     public final static String DEFAULT_RLOGINPATH = "/usr/bin/rlogin ";
     private boolean exitAfterCommand;
     private String username;

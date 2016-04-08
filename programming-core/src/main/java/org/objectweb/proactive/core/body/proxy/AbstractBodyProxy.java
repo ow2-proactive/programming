@@ -68,6 +68,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public abstract class AbstractBodyProxy extends AbstractProxy implements BodyProxy, java.io.Serializable {
+
+    private static final long serialVersionUID = 60L;
     //
     // -- STATIC MEMBERS -----------------------------------------------
     //

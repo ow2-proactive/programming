@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.runtime.RuntimeFactory;
  */
 public class RMIRegistryLookupService implements UniversalService {
 
+    private static final long serialVersionUID = 60L;
+
     /** lookup url */
     protected String url;
     protected static String serviceName = "RMIRegistryLookup";

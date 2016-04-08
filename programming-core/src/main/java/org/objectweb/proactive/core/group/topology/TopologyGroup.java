@@ -49,6 +49,8 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
 
 public abstract class TopologyGroup<E> extends ProxyForGroup<E> {
 
+    private static final long serialVersionUID = 60L;
+
     /**
      * Constructor : a Topology is build with a group with the specified size
      * @param g - the group used a base for the new group (topology)

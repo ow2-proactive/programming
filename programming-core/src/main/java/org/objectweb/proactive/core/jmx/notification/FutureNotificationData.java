@@ -47,6 +47,8 @@ import org.objectweb.proactive.core.UniqueID;
  */
 public class FutureNotificationData implements Serializable {
 
+    private static final long serialVersionUID = 60L;
+
     /**
      * UniqueID of the body which wait this future
      */

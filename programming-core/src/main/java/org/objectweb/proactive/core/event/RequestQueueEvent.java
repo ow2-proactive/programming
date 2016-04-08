@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.UniqueID;
  *
  */
 public class RequestQueueEvent extends ProActiveEvent implements java.io.Serializable {
+
+    private static final long serialVersionUID = 60L;
     public static final int ADD_REQUEST = 10;
     public static final int REMOVE_REQUEST = 40;
     public static final int WAIT_FOR_REQUEST = 60;

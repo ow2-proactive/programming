@@ -44,6 +44,8 @@ import java.util.Set;
 
 public class BTCallbackDefaultImpl implements Serializable, LocalBTCallback {
 
+    private static final long serialVersionUID = 60L;
+
     protected volatile Set<URI> knownRuntimes = new HashSet<URI>();
 
     public BTCallbackDefaultImpl() {

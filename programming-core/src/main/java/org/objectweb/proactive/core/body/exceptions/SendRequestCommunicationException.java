@@ -40,6 +40,8 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 
 
 public class SendRequestCommunicationException extends ProActiveRuntimeException {
+
+    private static final long serialVersionUID = 60L;
     public SendRequestCommunicationException(String message, Exception e) {
         super(message, e);
     }

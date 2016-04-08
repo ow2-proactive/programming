@@ -51,6 +51,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.H
 
 
 public abstract class AbstractGroup implements Group {
+
+    private static final long serialVersionUID = 60L;
     protected HostInfo hostInfo;
     private String commandPath;
     private Map<String, String> env;

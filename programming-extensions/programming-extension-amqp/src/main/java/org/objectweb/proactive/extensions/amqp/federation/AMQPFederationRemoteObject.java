@@ -62,6 +62,8 @@ import java.net.URI;
  */
 public class AMQPFederationRemoteObject extends AbstractAMQPRemoteObject {
 
+    private static final long serialVersionUID = 60L;
+
     private static final String RPC_EXCHANGE_NAME = AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_EXCHANGE_NAME
             .getValue();
 

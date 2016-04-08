@@ -43,6 +43,8 @@ package org.objectweb.proactive.extensions.pnpssl;
  */
 public class PNPSslConfigurationException extends PNPSslException {
 
+    private static final long serialVersionUID = 60L;
+
     public PNPSslConfigurationException() {
     }
 
