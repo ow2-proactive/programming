@@ -46,19 +46,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.SSLHandshakeException;
 
-import org.junit.Assert;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.objectweb.proactive.extensions.pnpssl.PNPSslConfig;
 import org.objectweb.proactive.extensions.ssl.PASslServerSocketFactory;
 import org.objectweb.proactive.extensions.ssl.PASslSocketFactory;
 import org.objectweb.proactive.extensions.ssl.SecureMode;
-import org.objectweb.proactive.extensions.ssl.SslHelpers;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 
 /**
- *
- *
  * @since ProActive 5.0.0
  */
 public class TestPASslSocketFactory extends AbstractSSL {
@@ -78,8 +75,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
     /**
      * Check that client and server are able to communicate:
      * <ul>
-     *  <li>Chipering only, no authentication</li>
-     *  <li>Client and Server uses the same keystore  and certificate</li>
+     * <li>Chipering only, no authentication</li>
+     * <li>Client and Server uses the same keystore  and certificate</li>
      * </ul>
      */
     @Test
@@ -87,7 +84,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(), kpAndCerts[0].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[0].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[0].getCertAsCertArray());
         X509Certificate[] clientTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
         KeyStore serverKs = clientKs;
@@ -100,9 +98,9 @@ public class TestPASslSocketFactory extends AbstractSSL {
     /**
      * Check that client and server are able to communicate:
      * <ul>
-     *  <li>Chipering only, no authentication</li>
-     *  <li>Client and Server uses a different keystore  and certificate</li>
-     *  <li>Client and Server does not know each other.</li>
+     * <li>Chipering only, no authentication</li>
+     * <li>Client and Server uses a different keystore  and certificate</li>
+     * <li>Client and Server does not know each other.</li>
      * </ul>
      */
     @Test
@@ -110,13 +108,15 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(), kpAndCerts[0].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[0].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[0].getCertAsCertArray());
         X509Certificate[] clientTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
         KeyStore serverKs = KeyStore.getInstance("PKCS12");
         serverKs.load(null, null);
         serverKs.setKeyEntry(kpAndCerts[1].cert.getSubjectDN().toString(), kpAndCerts[1].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[1].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[1].getCertAsCertArray();
 
         connectAndExchange(SecureMode.CIPHERED_ONLY, clientKs, clientTrustedCerts, serverKs,
@@ -127,8 +127,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
     /**
      * Check that client and server are able to communicate:
      * <ul>
-     *  <li>Chipering and authentication</li>
-     *  <li>Client and Server uses the same keystore  and truststore</li>
+     * <li>Chipering and authentication</li>
+     * <li>Client and Server uses the same keystore  and truststore</li>
      * </ul>
      */
     @Test
@@ -136,7 +136,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(), kpAndCerts[0].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[0].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[0].getCertAsCertArray());
         X509Certificate[] clientTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
         KeyStore serverKs = clientKs;
@@ -149,8 +150,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
     /**
      * Check that client and server are able to communicate:
      * <ul>
-     *  <li>Chipering and authentication</li>
-     *  <li>Client and Server uses cross credential. server has client cert in it's truststore and vice versa</li>
+     * <li>Chipering and authentication</li>
+     * <li>Client and Server uses cross credential. server has client cert in it's truststore and vice versa</li>
      * </ul>
      */
     @Test
@@ -158,13 +159,15 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(), kpAndCerts[0].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[0].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[0].getCertAsCertArray());
         X509Certificate[] clientTrustedCerts = kpAndCerts[1].getCertAsCertArray();
 
         KeyStore serverKs = KeyStore.getInstance("PKCS12");
         serverKs.load(null, null);
         serverKs.setKeyEntry(kpAndCerts[1].cert.getSubjectDN().toString(), kpAndCerts[1].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[1].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
         connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs,
@@ -179,13 +182,15 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(), kpAndCerts[0].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[0].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[0].getCertAsCertArray());
         X509Certificate[] clientTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
         KeyStore serverKs = KeyStore.getInstance("PKCS12");
         serverKs.load(null, null);
         serverKs.setKeyEntry(kpAndCerts[1].cert.getSubjectDN().toString(), kpAndCerts[1].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[1].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[1].getCertAsCertArray();
 
         connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs,
@@ -201,13 +206,15 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(), kpAndCerts[0].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[0].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[0].getCertAsCertArray());
         X509Certificate[] clientTrustedCerts = kpAndCerts[2].getCertAsCertArray();
 
         KeyStore serverKs = KeyStore.getInstance("PKCS12");
         serverKs.load(null, null);
         serverKs.setKeyEntry(kpAndCerts[1].cert.getSubjectDN().toString(), kpAndCerts[1].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[1].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
         connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs,
@@ -223,13 +230,15 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(), kpAndCerts[0].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[0].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[0].getCertAsCertArray());
         X509Certificate[] clientTrustedCerts = kpAndCerts[1].getCertAsCertArray();
 
         KeyStore serverKs = KeyStore.getInstance("PKCS12");
         serverKs.load(null, null);
         serverKs.setKeyEntry(kpAndCerts[1].cert.getSubjectDN().toString(), kpAndCerts[1].getPrivateKey(),
-                SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), kpAndCerts[1].getCertAsCertArray());
+                PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[2].getCertAsCertArray();
 
         connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs,

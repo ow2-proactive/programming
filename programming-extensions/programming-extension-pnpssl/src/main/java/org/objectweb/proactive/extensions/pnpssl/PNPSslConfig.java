@@ -46,9 +46,9 @@ import org.objectweb.proactive.extensions.ssl.SslHelpers;
 
 /**
  * The properties known by the PNP over SSL remote object factory.
- *
- *  Properties all the same than the one known by the standard PNP remote object factory plus
- *  some extra ones.
+ * <p>
+ * Properties all the same than the one known by the standard PNP remote object factory plus
+ * some extra ones.
  *
  * @since ProActive 5.0.0
  */
@@ -56,7 +56,7 @@ import org.objectweb.proactive.extensions.ssl.SslHelpers;
 final public class PNPSslConfig implements PAPropertiesLoaderSPI {
     /**
      * The TCP port to bind to
-     *
+     * <p>
      * PNP binds to a local TCP port to accept incoming connections. By default a free port is randomly chosen
      * (port 0). By setting this property, one can force the TCP port.
      */
@@ -65,20 +65,19 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
 
     /**
      * The default heartbeat period (in milliseconds)
-     *
+     * <p>
      * PNP offers an heartbeat mechanism to detect network failure. If set to 0 hearthbeats are disabled and
      * network failure will not be detected before the TCP timeout which can be quite long.
-     *
+     * <p>
      * Setting this value too low impacts the network performance. It is not recommended to use a value
      * lower than 500 milliseconds.
-     *
      */
     static final public PAPropertyInteger PA_PNPSSL_DEFAULT_HEARTBEAT = new PAPropertyInteger(
         "proactive.pnps.default_heartbeat", false, 9000);
 
     /**
      * Channel garbage collection timeout (in milliseconds)
-     *
+     * <p>
      * Idle channels are garbage collected after a given timeout. If a channel is unused since this value then
      * the channel will be garbage collected.
      */
@@ -87,11 +86,11 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
 
     /**
      * The keystore to be used.
-     *
+     * <p>
      * A keystore contains the private keys and the associated certificate to be used by the SSL layer.
      * The keystore must be in the PKCS12 format, and must contains at least one private keys. The keystore
      * and the keys must be protected by the password defined by {@link SslHelpers#DEFAULT_KS_PASSWD}.
-     *
+     * <p>
      * If the keystore is not defined then a certificate is generated at runtime.
      */
     static final public PAPropertyString PA_PNPSSL_KEYSTORE = new PAPropertyString("proactive.pnps.keystore",
@@ -99,7 +98,7 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
 
     /**
      * Should PNP over SSL authenticate remote peers ?
-     *
+     * <p>
      * SSL can be used both for ciphering and authentication. By default PNP over SSL only ciphers communication
      * between remote runtimes. Anyone can connect to any runtime. By setting this property to true, authentication
      * is also performed. Remote runtimes must be able to offer a certificate which is on the local keystore defined
@@ -107,6 +106,12 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
      */
     static final public PAPropertyBoolean PA_PNPSSL_AUTHENTICATE = new PAPropertyBoolean(
         "proactive.pnps.authenticate", false, false);
+
+    /**
+     * The password associated to the keystore used for ensuring ciphering and authentication.
+     */
+    static public PAPropertyString PA_PNPSSL_KEYSTORE_PASSWORD = new PAPropertyString(
+        "proactive.pnps.keystore.password", false, "pkpass");
 
     public interface Loggers {
         static final public String PNPSSL = org.objectweb.proactive.core.util.log.Loggers.CORE + ".pnpssl";

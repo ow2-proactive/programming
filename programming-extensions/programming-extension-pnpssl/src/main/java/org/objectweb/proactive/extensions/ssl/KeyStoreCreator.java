@@ -59,6 +59,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.extensions.pnpssl.PNPSslConfig;
 import org.objectweb.proactive.utils.PasswordField;
 
 
@@ -162,7 +164,7 @@ public class KeyStoreCreator {
         KeyStore ks = null;
         try {
             ks = KeyStore.getInstance("PKCS12", SslHelpers.BC_NAME);
-            ks.load(fis, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+            ks.load(fis, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
         } catch (Exception e) {
             System.err.println("Failed to open the key store: " + e);
             return false;
@@ -218,7 +220,7 @@ public class KeyStoreCreator {
         KeyStore ks = null;
         try {
             ks = KeyStore.getInstance("PKCS12", SslHelpers.BC_NAME);
-            ks.load(fis, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+            ks.load(fis, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
         } catch (Exception e) {
             System.err.println("Failed to open the key store: " + e);
             return false;
@@ -241,7 +243,7 @@ public class KeyStoreCreator {
             ks.setCertificateEntry(SslHelpers.DEFAULT_SUBJET_DN, cert);
             // Write the keystore
             FileOutputStream fos = new FileOutputStream(new File(keyStore));
-            ks.store(fos, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+            ks.store(fos, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
             fos.close();
             return true;
         } catch (Exception e) {
@@ -286,11 +288,12 @@ public class KeyStoreCreator {
             ks.load(null, null);
 
             ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN, pair.getPrivate(),
-                    SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), new X509Certificate[] { cert });
+                    PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                    new X509Certificate[] { cert });
 
             // Write the keystore
             FileOutputStream fos = new FileOutputStream(new File(keyStore));
-            ks.store(fos, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+            ks.store(fos, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
             fos.close();
             return true;
         } catch (Exception e) {
