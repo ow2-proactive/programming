@@ -78,11 +78,11 @@ public class TestRemoteNamingService extends FunctionalTest {
 
     private NamingService stub;
 
-    protected static final long MAIN_APPID = 1;
+    protected static final String MAIN_APPID = "1";
 
-    protected static final long ANOTHER_APPID1 = 0;
+    protected static final String ANOTHER_APPID1 = "0";
 
-    protected static final long ANOTHER_APPID2 = 2;
+    protected static final String ANOTHER_APPID2 = "2";
 
     protected SpaceInstanceInfo spaceInstanceInput1;
 
@@ -153,7 +153,7 @@ public class TestRemoteNamingService extends FunctionalTest {
             SpaceAlreadyRegisteredException, IllegalArgumentException {
 
         Set<SpaceInstanceInfo> spaces = new HashSet<SpaceInstanceInfo>();
-        Set<Long> appsRegistered;
+        Set<String> appsRegistered;
 
         spaces.add(spaceInstanceInput1);
         spaces.add(spaceInstanceInput2);

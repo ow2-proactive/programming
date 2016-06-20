@@ -78,7 +78,7 @@ public class VFSNodeScratchSpaceImplTest {
     private static final String RUNTIME_ID = "rt_id";
     private static final String SCRATCH_URL = "/";
 
-    private static final long APP_ID = 0;
+    private static final String APP_ID = "0";
     private static final String TEST_FILE_CONTENT = "qwerty";
 
     private static DefaultFileSystemManager fileSystemManager;
@@ -105,7 +105,7 @@ public class VFSNodeScratchSpaceImplTest {
 
     @Before
     public void setUp() throws ConfigurationException, IOException {
-        testDir = new File(System.getProperty("java.io.tmpdir"), "ProActive VFSNodeScratchSpaceImplTest");
+        testDir = new File(System.getProperty("java.io.tmpdir"), "ProActiveVFSNodeScratchSpaceImplTest");
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();
         localAccessConfig = new BaseScratchSpaceConfiguration(SCRATCH_URL, testDirPath);
@@ -304,10 +304,10 @@ public class VFSNodeScratchSpaceImplTest {
     }
 
     private void checkInitForApplication() throws Exception {
-        final String dataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID,
-                Long.toString(APP_ID));
+        final String dataSpacePath = Utils.appendSubDirs(testDirPath, RUNTIME_ID, NODE_ID, APP_ID);
         final ApplicationScratchSpace app = nodeScratchSpace.initForApplication(APP_ID);
         assertNotNull(app);
         assertIsExistingEmptyDirectory(dataSpacePath);
     }
+
 }

@@ -68,7 +68,7 @@ import org.objectweb.proactive.utils.OperatingSystem;
 // TODO: some adapted functionality smoke tests - an abstract test for DataSpacesFileObject?
 public class VFSFileObjectAdapterTest {
 
-    private static final long appId = 1;
+    private static final String appId = "1";
     private static final String runtimeId = "rt1";
     private static final String nodeId = "node1";
     private static final String activeObjectId = "ao1";

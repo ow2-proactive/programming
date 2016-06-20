@@ -222,12 +222,12 @@ project('programming-extensions:programming-extension-annotation') {
     }
 }
 
-def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.0']
+def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.1']
 
 def vfs2RuntimeDependencies = [
-        'commons-net:commons-net:2.2',
+        'commons-net:commons-net:3.5',
         'commons-httpclient:commons-httpclient:3.1',
-        'com.jcraft:jsch:0.1.51',
+        'com.jcraft:jsch:0.1.53',
         'org.apache.jackrabbit:jackrabbit-webdav:1.5.2',
         'org.slf4j:slf4j-api:1.7.12']
 
@@ -237,7 +237,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
                 vfs2CompileDependencies,
                 project(':programming-extensions:programming-extension-annotation')
         )
-        testCompile 'org.apache.commons:commons-vfs2:2.0:tests'
+        testCompile 'org.apache.commons:commons-vfs2:2.1:tests'
         runtime vfs2RuntimeDependencies
     }
     test {
@@ -352,7 +352,7 @@ project(':programming-test') {
     dependencies {
         testCompile(
                 'commons-io:commons-io:2.4',
-                'org.apache.commons:commons-vfs2:2.0',
+                'org.apache.commons:commons-vfs2:2.1',
 
                 project(':programming-annotation'),
                 project(':programming-core'),

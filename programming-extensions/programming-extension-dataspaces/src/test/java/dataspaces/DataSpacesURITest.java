@@ -49,14 +49,15 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.MalformedURIExce
 
 
 public class DataSpacesURITest {
+
     private DataSpacesURI uri;
     private DataSpacesURI uri2;
 
     @Test
     public void testCreateURIApp() {
-        uri = DataSpacesURI.createURI(123);
+        uri = DataSpacesURI.createURI("123");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertNull(uri.getSpaceType());
         assertNull(uri.getName());
         assertNull(uri.getRuntimeId());
@@ -71,9 +72,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateURIAppType() {
-        uri = DataSpacesURI.createURI(123, SpaceType.SCRATCH);
+        uri = DataSpacesURI.createURI("123", SpaceType.SCRATCH);
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertNull(uri.getName());
         assertNull(uri.getRuntimeId());
@@ -88,9 +89,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateScratchSpaceURIAppRuntime() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertNull(uri.getName());
@@ -105,9 +106,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateScratchSpaceURIAppRuntimeNode() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertEquals("nodeB", uri.getNodeId());
@@ -123,7 +124,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppWrongRuntimeNode1() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, "", "nodeB");
+            DataSpacesURI.createScratchSpaceURI("123", "", "nodeB");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -132,7 +133,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppWrongRuntimeNode2() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, "ooops/ooops", "nodeB");
+            DataSpacesURI.createScratchSpaceURI("123", "ooops/ooops", "nodeB");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -141,7 +142,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppRuntimeWrongNode1() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "");
+            DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -150,7 +151,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppRuntimeWrongNode2() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "ooops/ooops");
+            DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "ooops/ooops");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -159,7 +160,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppNoRuntimeNodeNoActiveObject() {
         try {
-            uri = DataSpacesURI.createScratchSpaceURI(123, null, "nodeB");
+            uri = DataSpacesURI.createScratchSpaceURI("123", null, "nodeB");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -167,9 +168,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateScratchSpaceURIAppRuntimeNodeActiveObject() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertEquals("nodeB", uri.getNodeId());
@@ -185,7 +186,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppRuntimeNodeWrongActiveObject1() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "");
+            DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -194,7 +195,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppRuntimeNodeWrongActiveObject2() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "ooops/ooops");
+            DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "ooops/ooops");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -203,7 +204,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppNoRuntimeNodeActiveObject() {
         try {
-            uri = DataSpacesURI.createScratchSpaceURI(123, null, "nodeB", "aoC");
+            uri = DataSpacesURI.createScratchSpaceURI("123", null, "nodeB", "aoC");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -212,7 +213,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppRuntimeNoNodeActiveObject() {
         try {
-            uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", null, "aoC");
+            uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", null, "aoC");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -221,7 +222,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppNoRuntimeNoNodeActiveObject() {
         try {
-            uri = DataSpacesURI.createScratchSpaceURI(123, null, null, "aoC");
+            uri = DataSpacesURI.createScratchSpaceURI("123", null, null, "aoC");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -229,9 +230,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateScratchSpaceURIAppRuntimeNodeActiveObjectPath() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "dir/file.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "dir/file.txt");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertEquals("nodeB", uri.getNodeId());
@@ -247,7 +248,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppRuntimeNodeNoActiveObjectPath1() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "", "dir/file.txt");
+            DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "", "dir/file.txt");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -256,7 +257,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateScratchSpaceURIAppNoRuntimeNoNodeActiveObjectPath1() {
         try {
-            DataSpacesURI.createScratchSpaceURI(123, null, null, "aoC", "dir/file.txt");
+            DataSpacesURI.createScratchSpaceURI("123", null, null, "aoC", "dir/file.txt");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -264,9 +265,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateInOutSpaceURIAppTypeName1() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "stats");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "stats");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.INPUT, uri.getSpaceType());
         assertEquals("stats", uri.getName());
         assertNull(uri.getRuntimeId());
@@ -281,9 +282,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateInOutSpaceURIAppTypeName2() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "stats");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "stats");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.OUTPUT, uri.getSpaceType());
         assertEquals("stats", uri.getName());
         assertNull(uri.getRuntimeId());
@@ -299,7 +300,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateInOutSpaceURIAppTypeWrongName1() {
         try {
-            DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "");
+            DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -308,7 +309,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateInOutSpaceURIAppTypeWrongName2() {
         try {
-            DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "ooops/ooops");
+            DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "ooops/ooops");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -317,7 +318,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateInOutSpaceURIAppWrongTypeName() {
         try {
-            uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.SCRATCH, "stats");
+            uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.SCRATCH, "stats");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -326,7 +327,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateInOutSpaceURIAppNoTypeName() {
         try {
-            uri = DataSpacesURI.createInOutSpaceURI(123, null, "stats");
+            uri = DataSpacesURI.createInOutSpaceURI("123", null, "stats");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -334,9 +335,9 @@ public class DataSpacesURITest {
 
     @Test
     public void testCreateInOutSpaceURIAppTypeNamePath() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "stats", "dir/abc.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "stats", "dir/abc.txt");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.OUTPUT, uri.getSpaceType());
         assertEquals("stats", uri.getName());
         assertEquals("dir/abc.txt", uri.getUserPath());
@@ -351,7 +352,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateInOutSpaceURIAppTypeNoNamePath() {
         try {
-            uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, null, "dir/abc.txt");
+            uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, null, "dir/abc.txt");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -360,7 +361,7 @@ public class DataSpacesURITest {
     @Test
     public void testCreateInOutSpaceURIAppNoTypeNoNamePath() {
         try {
-            uri = DataSpacesURI.createInOutSpaceURI(123, null, null, "dir/abc.txt");
+            uri = DataSpacesURI.createInOutSpaceURI("123", null, null, "dir/abc.txt");
             fail("expected exception");
         } catch (IllegalArgumentException x) {
         }
@@ -375,7 +376,7 @@ public class DataSpacesURITest {
     private void testParseURIApp(boolean slash) throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123" + slash(slash));
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertNull(uri.getSpaceType());
         assertNull(uri.getName());
         assertNull(uri.getRuntimeId());
@@ -394,28 +395,10 @@ public class DataSpacesURITest {
         testParseURIApp(false);
     }
 
-    private void testParseURIBadApp(boolean slash) {
-        try {
-            uri = DataSpacesURI.parseURI("vfs:///abc" + slash(slash));
-            fail("expected exception");
-        } catch (MalformedURIException x) {
-        }
-    }
-
-    @Test
-    public void testParseURIBadAppNoSlash() {
-        testParseURIBadApp(false);
-    }
-
-    @Test
-    public void testParseURIBadAppSlash() {
-        testParseURIBadApp(true);
-    }
-
     private void testParseURIAppType(boolean slash) throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123/input" + slash(slash));
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.INPUT, uri.getSpaceType());
         assertNull(uri.getName());
         assertNull(uri.getRuntimeId());
@@ -437,7 +420,7 @@ public class DataSpacesURITest {
     private void testParseURIAppTypeName(boolean slash) throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123/input/abc" + slash(slash));
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.INPUT, uri.getSpaceType());
         assertEquals("abc", uri.getName());
         assertNull(uri.getRuntimeId());
@@ -460,7 +443,7 @@ public class DataSpacesURITest {
     public void testParseURIAppTypeNamePath() throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123/input/abc/file.txt");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.INPUT, uri.getSpaceType());
         assertEquals("abc", uri.getName());
         assertEquals("file.txt", uri.getUserPath());
@@ -481,7 +464,7 @@ public class DataSpacesURITest {
     private void testParseURIAppTypeRuntime(boolean slash) throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123/scratch/runtimeA" + slash(slash));
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertNull(uri.getName());
@@ -503,7 +486,7 @@ public class DataSpacesURITest {
     private void testParseURIAppTypeRuntimeNode(boolean slash) throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123/scratch/runtimeA/nodeB" + slash(slash));
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertEquals("nodeB", uri.getNodeId());
@@ -525,7 +508,7 @@ public class DataSpacesURITest {
     private void testParseURIAppTypeRuntimeNodeActiveObject(boolean slash) throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123/scratch/runtimeA/nodeB/aoC" + slash(slash));
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertEquals("nodeB", uri.getNodeId());
@@ -548,7 +531,7 @@ public class DataSpacesURITest {
     public void testParseURIAppTypeRuntimeNodePath() throws MalformedURIException {
         uri = DataSpacesURI.parseURI("vfs:///123/scratch/runtimeA/nodeB/aoC/file.txt");
 
-        assertEquals(123, uri.getAppId());
+        assertEquals("123", uri.getAppId());
         assertEquals(SpaceType.SCRATCH, uri.getSpaceType());
         assertEquals("runtimeA", uri.getRuntimeId());
         assertEquals("nodeB", uri.getNodeId());
@@ -595,7 +578,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithPath() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "123", "dir/abc.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "123", "dir/abc.txt");
         uri2 = uri.withUserPath("xyz");
 
         assertEquals("xyz", uri2.getUserPath());
@@ -604,7 +587,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithPathEmpty() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "123", "dir/abc.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "123", "dir/abc.txt");
         uri2 = uri.withUserPath(null);
 
         assertNull(uri2.getUserPath());
@@ -613,7 +596,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithPathIllegal1() {
-        uri = DataSpacesURI.createURI(123, SpaceType.OUTPUT);
+        uri = DataSpacesURI.createURI("123", SpaceType.OUTPUT);
         try {
             uri.withUserPath("xyz");
             fail("expected exception");
@@ -623,7 +606,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithPathIllegal2() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
         try {
             uri.withUserPath("xyz");
             fail("expected exception");
@@ -633,7 +616,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithActiveObjectId() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
         uri2 = uri.withActiveObjectId("aoD");
 
         assertEquals("aoD", uri2.getActiveObjectId());
@@ -642,7 +625,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithActiveObjectIdEmpty1() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
         uri2 = uri.withActiveObjectId(null);
 
         assertNull(uri2.getActiveObjectId());
@@ -651,7 +634,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithActiveObjectIdEmpty2() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         uri2 = uri.withActiveObjectId(null);
 
         assertNull(uri2.getActiveObjectId());
@@ -660,7 +643,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithActiveObjectIdIllegal1() {
-        uri = DataSpacesURI.createURI(123, SpaceType.OUTPUT);
+        uri = DataSpacesURI.createURI("123", SpaceType.OUTPUT);
         try {
             uri.withActiveObjectId("aoId");
             fail("expected exception");
@@ -670,7 +653,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithActiveObjectIdIllegal2() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         try {
             uri.withActiveObjectId("aoId");
             fail("expected exception");
@@ -680,7 +663,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpace() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "file.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "file.txt");
         uri2 = uri.withRelativeToSpace("aoD/dir1");
 
         assertEquals("aoD", uri2.getActiveObjectId());
@@ -691,7 +674,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpaceSubdirs() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "file.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "file.txt");
         uri2 = uri.withRelativeToSpace("aoD/dir1/dir2/file.txt");
 
         assertEquals("aoD", uri2.getActiveObjectId());
@@ -702,7 +685,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpaceActiveObjectIdOnly() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "file.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "file.txt");
         uri2 = uri.withRelativeToSpace("aoD");
 
         assertEquals("aoD", uri2.getActiveObjectId());
@@ -713,7 +696,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpaceUserPathOnly() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "nameA", "file.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "nameA", "file.txt");
         uri2 = uri.withRelativeToSpace("dir1/file.txt");
 
         assertNull(uri2.getActiveObjectId());
@@ -724,7 +707,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpaceEmpty1() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "file.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "file.txt");
         uri2 = uri.withRelativeToSpace(null);
 
         assertNull(uri2.getActiveObjectId());
@@ -735,7 +718,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpaceEmpty2() {
-        uri = DataSpacesURI.createURI(123);
+        uri = DataSpacesURI.createURI("123");
         uri2 = uri.withRelativeToSpace(null);
 
         assertNull(uri2.getActiveObjectId());
@@ -744,7 +727,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpaceIllegal1() {
-        uri = DataSpacesURI.createURI(123, SpaceType.OUTPUT);
+        uri = DataSpacesURI.createURI("123", SpaceType.OUTPUT);
         try {
             uri.withRelativeToSpace("file.txt");
             fail("expected exception");
@@ -754,7 +737,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testWithRelativeToSpaceIllegal2() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         try {
             uri.withRelativeToSpace("aoId");
             fail("expected exception");
@@ -764,7 +747,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testGetSpacePartOnly1() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "dir/file.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "dir/file.txt");
         uri2 = uri.getSpacePartOnly();
 
         assertTrue(uri2.isSpacePartOnly());
@@ -774,7 +757,7 @@ public class DataSpacesURITest {
 
     @Test
     public void testGetSpacePartOnly2() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "stats", "dir/file.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "stats", "dir/file.txt");
         uri2 = uri.getSpacePartOnly();
 
         assertTrue(uri2.isSpacePartOnly());
@@ -783,55 +766,55 @@ public class DataSpacesURITest {
 
     @Test
     public void testToStringFullyDefinedNoPath1() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "abc");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "abc");
         assertEquals("vfs:///123/output/abc", uri.toString());
     }
 
     @Test
     public void testToStringFullyDefinedNoPath2() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
         assertEquals("vfs:///123/scratch/runtimeA/nodeB/aoC", uri.toString());
     }
 
     @Test
     public void testToStringFullyDefinedPath1() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "abc", "dir/abc.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "abc", "dir/abc.txt");
         assertEquals("vfs:///123/output/abc/dir/abc.txt", uri.toString());
     }
 
     @Test
     public void testToStringFullyDefinedPath2() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "dir/abc.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "dir/abc.txt");
         assertEquals("vfs:///123/scratch/runtimeA/nodeB/aoC/dir/abc.txt", uri.toString());
     }
 
     @Test
     public void testToStringNotFullyDefinedApp() {
-        uri = DataSpacesURI.createURI(123);
+        uri = DataSpacesURI.createURI("123");
         assertEquals("vfs:///123", uri.toString());
     }
 
     @Test
     public void testToStringNotFullyDefinedAppType1() {
-        uri = DataSpacesURI.createURI(123, SpaceType.INPUT);
+        uri = DataSpacesURI.createURI("123", SpaceType.INPUT);
         assertEquals("vfs:///123/input", uri.toString());
     }
 
     @Test
     public void testToStringNotFullyDefinedAppType2() {
-        uri = DataSpacesURI.createURI(123, SpaceType.SCRATCH);
+        uri = DataSpacesURI.createURI("123", SpaceType.SCRATCH);
         assertEquals("vfs:///123/scratch", uri.toString());
     }
 
     @Test
     public void testToStringNotFullyDefinedAppTypeRuntime() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         assertEquals("vfs:///123/scratch/runtimeA", uri.toString());
     }
 
     @Test
     public void testToStringNotFullyDefinedAppTypeRuntimeNode() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
         assertEquals("vfs:///123/scratch/runtimeA/nodeB", uri.toString());
     }
 
@@ -847,225 +830,225 @@ public class DataSpacesURITest {
 
     @Test
     public void testCompareToDifferentLevelsPathVsActiveObject() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "abc.txt");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "abc.txt");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToDifferentLevelsActiveObjectVsNode() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToDifferentLevelsNodeVsRuntime() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToDifferentLevelsRuntimeVsType() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
-        uri2 = DataSpacesURI.createURI(123, SpaceType.SCRATCH);
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
+        uri2 = DataSpacesURI.createURI("123", SpaceType.SCRATCH);
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToDifferentLevelsNameVsType() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name");
-        uri2 = DataSpacesURI.createURI(123, SpaceType.INPUT);
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name");
+        uri2 = DataSpacesURI.createURI("123", SpaceType.INPUT);
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToDifferentLevelsTypeVsApp() {
-        uri = DataSpacesURI.createURI(123, SpaceType.SCRATCH);
-        uri2 = DataSpacesURI.createURI(123);
+        uri = DataSpacesURI.createURI("123", SpaceType.SCRATCH);
+        uri2 = DataSpacesURI.createURI("123");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToDifferentLevelsPathVsApp() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "abc.txt");
-        uri2 = DataSpacesURI.createURI(123);
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "abc.txt");
+        uri2 = DataSpacesURI.createURI("123");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffPath1() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name", "abc.txt2");
-        uri2 = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name", "abc.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name", "abc.txt2");
+        uri2 = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name", "abc.txt");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffPath2() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "abc.txt2");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "abc.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "abc.txt2");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "abc.txt");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffActiveObject() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC2", "abc.txt");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "abc.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC2", "abc.txt");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "abc.txt");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffNode() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB2", "aoC", "abc.txt");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "abc.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB2", "aoC", "abc.txt");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "abc.txt");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffRuntime() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA2", "nodeB", "aoC", "abc.txt");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "abc.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA2", "nodeB", "aoC", "abc.txt");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "abc.txt");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffName() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name2");
-        uri2 = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name2");
+        uri2 = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffType() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.OUTPUT, "name", "abc.txt");
-        uri2 = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name", "abc.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.OUTPUT, "name", "abc.txt");
+        uri2 = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name", "abc.txt");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameLevelsDiffApp() {
-        uri = DataSpacesURI.createInOutSpaceURI(124, SpaceType.INPUT, "name", "abc.txt");
-        uri2 = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name", "abc.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("124", SpaceType.INPUT, "name", "abc.txt");
+        uri2 = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name", "abc.txt");
         assertURIGreaterThanURI2();
     }
 
     @Test
     public void testCompareToSameApp() {
-        uri = DataSpacesURI.createURI(123);
-        uri2 = DataSpacesURI.createURI(123);
+        uri = DataSpacesURI.createURI("123");
+        uri2 = DataSpacesURI.createURI("123");
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppType1() {
-        uri = DataSpacesURI.createURI(123, SpaceType.INPUT);
-        uri2 = DataSpacesURI.createURI(123, SpaceType.INPUT);
+        uri = DataSpacesURI.createURI("123", SpaceType.INPUT);
+        uri2 = DataSpacesURI.createURI("123", SpaceType.INPUT);
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppType2() {
-        uri = DataSpacesURI.createURI(123, SpaceType.INPUT);
-        uri2 = DataSpacesURI.createURI(123, SpaceType.INPUT);
+        uri = DataSpacesURI.createURI("123", SpaceType.INPUT);
+        uri2 = DataSpacesURI.createURI("123", SpaceType.INPUT);
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppTypeName() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name");
-        uri2 = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name");
+        uri2 = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name");
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppTypeNamePath() {
-        uri = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name", "file.txt");
-        uri2 = DataSpacesURI.createInOutSpaceURI(123, SpaceType.INPUT, "name", "file.txt");
+        uri = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name", "file.txt");
+        uri2 = DataSpacesURI.createInOutSpaceURI("123", SpaceType.INPUT, "name", "file.txt");
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppTypeRuntime() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppTypeRuntimeNode() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppTypeRuntimeNodeActiveObject() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
         assertURIEqualURI2();
     }
 
     @Test
     public void testCompareToSameAppTypeRuntimeNodeActiveObjectPath() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "file.txt");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC", "file.txt");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "file.txt");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC", "file.txt");
         assertURIEqualURI2();
     }
 
     @Test
     public void testEqualsPositive() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
         assertEquals(uri, uri2);
     }
 
     @Test
     public void testEqualsNegative() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         assertFalse(uri.equals(uri2));
     }
 
     @Test
     public void testHashCode() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
-        uri2 = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB", "aoC");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
+        uri2 = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB", "aoC");
         assertEquals(uri.hashCode(), uri2.hashCode());
     }
 
     @Test
     public void testNextURIApp() {
-        uri = DataSpacesURI.createURI(123);
+        uri = DataSpacesURI.createURI("123");
         uri2 = uri.nextURI();
 
-        assertEquals(124, uri2.getAppId());
+        assertEquals("123\0", uri2.getAppId());
     }
 
     @Test
     public void testNextURIAppType() {
-        uri = DataSpacesURI.createURI(123, SpaceType.INPUT);
+        uri = DataSpacesURI.createURI("123", SpaceType.INPUT);
         uri2 = uri.nextURI();
 
-        assertEquals(123, uri2.getAppId());
+        assertEquals("123", uri2.getAppId());
         assertEquals(SpaceType.OUTPUT, uri2.getSpaceType());
     }
 
     @Test
     public void testNextURIAppTypeLast() {
-        uri = DataSpacesURI.createURI(123, SpaceType.SCRATCH);
+        uri = DataSpacesURI.createURI("123", SpaceType.SCRATCH);
         uri2 = uri.nextURI();
 
-        assertEquals(124, uri2.getAppId());
+        assertEquals("123\0", uri2.getAppId());
         assertNull(uri2.getSpaceType());
     }
 
     @Test
     public void testNextURIAppTypeRuntime() {
-        uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA");
+        uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA");
         uri2 = uri.nextURI();
 
-        assertEquals(123, uri2.getAppId());
+        assertEquals("123", uri2.getAppId());
         assertEquals(SpaceType.SCRATCH, uri2.getSpaceType());
         assertEquals("runtimeA\0", uri2.getRuntimeId());
     }
@@ -1073,7 +1056,7 @@ public class DataSpacesURITest {
     @Test
     public void testNextURISpaceFullyDefined() {
         try {
-            uri = DataSpacesURI.createScratchSpaceURI(123, "runtimeA", "nodeB");
+            uri = DataSpacesURI.createScratchSpaceURI("123", "runtimeA", "nodeB");
             uri.nextURI();
             fail("expected exception");
         } catch (IllegalStateException x) {
