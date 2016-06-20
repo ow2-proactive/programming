@@ -64,7 +64,7 @@ import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerIm
  */
 public class NamingServiceListing {
 
-    private long applicationID;
+    private String applicationID;
 
     private String namingServiceURL;
 
@@ -77,9 +77,9 @@ public class NamingServiceListing {
     private NamingService namingService;
     private SpacesMountManager mountManager;
 
-    private Set<Long> registeredApplications;
+    private Set<String> registeredApplications;
 
-    private void buildLSQuery(long applicationId) {
+    private void buildLSQuery(String applicationId) {
         query = DataSpacesURI.createURI(applicationId);
     }
 
@@ -153,11 +153,7 @@ public class NamingServiceListing {
             throw new IllegalArgumentException();
 
         if (appIdString != null) {
-            try {
-                applicationID = Long.parseLong(appIdString);
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(e.getMessage());
-            }
+            applicationID = appIdString;
         }
     }
 

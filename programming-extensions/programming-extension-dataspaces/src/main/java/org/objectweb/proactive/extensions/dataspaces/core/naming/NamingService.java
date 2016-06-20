@@ -117,17 +117,17 @@ public class NamingService implements SpacesDirectory {
             "No accessible NamingService instance can be found under specified URLs : " + Arrays.asList(urls));
     }
 
-    private static void checkApplicationSpaces(long appId, Set<SpaceInstanceInfo> inSet)
+    private static void checkApplicationSpaces(String appId, Set<SpaceInstanceInfo> inSet)
             throws WrongApplicationIdException {
         for (SpaceInstanceInfo sii : inSet) {
-            if (sii.getAppId() != appId) {
+            if (!sii.getAppId().equals(appId)) {
                 logger.error("Application id does not match one found in its space: " + sii);
                 throw new WrongApplicationIdException("Application id does not match one found in its space");
             }
         }
     }
 
-    private final Set<Long> registeredApplications = new HashSet<Long>();
+    private final Set<String> registeredApplications = new HashSet<String>();
 
     private final SpacesDirectoryImpl directory = new SpacesDirectoryImpl();
 
@@ -145,7 +145,7 @@ public class NamingService implements SpacesDirectory {
      * @throws ApplicationAlreadyRegisteredException
      *             When specified application id is already registered.
      */
-    synchronized public void registerApplication(long appId, Set<SpaceInstanceInfo> spaces)
+    synchronized public void registerApplication(String appId, Set<SpaceInstanceInfo> spaces)
             throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
         logger.debug("Registering application with id " + appId);
 
@@ -177,7 +177,7 @@ public class NamingService implements SpacesDirectory {
      * @throws WrongApplicationIdException
      *             when specified application id is not registered
      */
-    synchronized public void unregisterApplication(long appId) throws WrongApplicationIdException {
+    synchronized public void unregisterApplication(String appId) throws WrongApplicationIdException {
         logger.debug("Unregistering application with id " + appId);
 
         final boolean found = registeredApplications.remove(appId);
@@ -224,11 +224,20 @@ public class NamingService implements SpacesDirectory {
             throws WrongApplicationIdException, SpaceAlreadyRegisteredException {
         logger.debug("Registering space: " + spaceInstanceInfo);
 
-        final long appid = spaceInstanceInfo.getAppId();
+        final String appId = spaceInstanceInfo.getAppId();
 
-        if (!isApplicationIdRegistered(appid))
+        if (!isApplicationIdRegistered(appId)) {
+            if (logger.isTraceEnabled()) {
+                logger.trace("There is no application registered with specified application id " + appId);
+                logger.trace("The registry contains the following appIds:");
+                for (String registeredApplication : registeredApplications) {
+                    logger.trace("  - " + registeredApplication);
+                }
+            }
+
             throw new WrongApplicationIdException(
-                "There is no application registered with specified application id.");
+                "There is no application registered with specified application id " + appId);
+        }
 
         directory.register(spaceInstanceInfo);
         logger.debug("Registered space: " + spaceInstanceInfo);
@@ -252,11 +261,11 @@ public class NamingService implements SpacesDirectory {
         return result;
     }
 
-    synchronized public Set<Long> getRegisteredApplications() {
+    synchronized public Set<String> getRegisteredApplications() {
         return Collections.unmodifiableSet(registeredApplications);
     }
 
-    synchronized public boolean isApplicationIdRegistered(long appid) {
-        return getRegisteredApplications().contains(appid);
+    synchronized public boolean isApplicationIdRegistered(String appid) {
+        return registeredApplications.contains(appid);
     }
 }

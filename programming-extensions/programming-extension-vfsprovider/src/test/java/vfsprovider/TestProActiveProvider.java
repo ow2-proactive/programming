@@ -138,6 +138,11 @@ public class TestProActiveProvider implements ProviderTestConfig {
         return cache;
     }
 
+    @Override
+    public boolean isFileSystemRootAccessible() {
+        return true;
+    }
+
     public void setUp() throws IOException, URISyntaxException {
         cache = new SoftRefFilesCache();
         setUpTestDir();

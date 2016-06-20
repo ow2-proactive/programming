@@ -141,16 +141,17 @@ public class TestNamingServiceSwitch extends FunctionalTest {
         // for each protocol except the last one, we try to register an empty applications
         for (int i = 0; i < protocolsToTest.size() - 1; i++) {
 
-            namingService.registerApplication(protocolsToTest.get(i).hashCode(), predefinedSpaces);
+            namingService.registerApplication(Long.toString(protocolsToTest.get(i).hashCode()),
+                    predefinedSpaces);
             System.out.println("******** Disabling protocol " + protocolsToTest.get(i));
             // switch protocol
             ao.disableProtocol(protocolsToTest.get(i));
 
         }
-        namingService.registerApplication(protocolsToTest.get(protocolsToTest.size() - 1).hashCode(),
-                predefinedSpaces);
+        namingService.registerApplication(
+                Long.toString(protocolsToTest.get(protocolsToTest.size() - 1).hashCode()), predefinedSpaces);
 
-        Set<Long> registeredApps = namingService.getRegisteredApplications();
+        Set<String> registeredApps = namingService.getRegisteredApplications();
         Assert.assertEquals("Number of application registered should match the number of protocols",
                 protocolsToTest.size(), registeredApps.size());
 

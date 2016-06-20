@@ -80,6 +80,8 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
 
     private DefaultFileSystemManager fileSystemManager;
 
+    private boolean closed = false;
+
     /**
      * Inner class to implement {@link ApplicationScratchSpace} interface.
      */
@@ -90,14 +92,13 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
 
         private final SpaceInstanceInfo spaceInstanceInfo;
 
-        private AppScratchSpaceImpl(final long appId) throws FileSystemException {
+        private AppScratchSpaceImpl(final String appId) throws FileSystemException {
             logger.debug("Initializing application node scratch space");
-            final String appIdString = Long.toString(appId);
             final String runtimeId = Utils.getRuntimeId(node);
             final String nodeId = Utils.getNodeId(node);
 
             try {
-                this.spaceFile = createEmptyDirectoryRelative(partialSpaceFile, appIdString);
+                this.spaceFile = createEmptyDirectoryRelative(partialSpaceFile, appId);
                 spaceFile.close();
             } catch (org.apache.commons.vfs2.FileSystemException x) {
                 logger.error("Could not create directory for application scratch space", x);
@@ -105,7 +106,7 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
             }
             try {
                 final ScratchSpaceConfiguration scratchSpaceConf = baseScratchConfiguration
-                        .createScratchSpaceConfiguration(runtimeId, nodeId, appIdString);
+                        .createScratchSpaceConfiguration(runtimeId, nodeId, appId);
                 this.spaceInstanceInfo = new SpaceInstanceInfo(appId, runtimeId, nodeId, scratchSpaceConf);
             } catch (ConfigurationException x) {
                 ProActiveLogger.logImpossibleException(logger, x);
@@ -117,17 +118,21 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
 
         public void close() throws FileSystemException {
             logger.debug("Closing application scratch space");
+
             try {
-                try {
-                    final int filesNumber = spaceFile.delete(Selectors.SELECT_ALL);
-                    logger.debug("Deleted " + filesNumber + " files in scratch application directory");
-                } finally {
-                    // just a hint
-                    spaceFile.close();
-                }
+                final int filesNumber = spaceFile.delete(Selectors.SELECT_ALL);
+                logger.debug("Deleted " + filesNumber + " files in scratch application directory");
             } catch (org.apache.commons.vfs2.FileSystemException e) {
-                throw new FileSystemException(e);
+                logger.warn("Could not delete " + spaceFile, e);
+            } finally {
+                // just a hint
+                try {
+                    spaceFile.close();
+                } catch (org.apache.commons.vfs2.FileSystemException e) {
+                    throw new FileSystemException(e);
+                }
             }
+
             logger.debug("Closed application scratch space");
         }
 
@@ -249,7 +254,7 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
         }
     }
 
-    public synchronized ApplicationScratchSpace initForApplication(final long appId)
+    public synchronized ApplicationScratchSpace initForApplication(final String appId)
             throws FileSystemException, IllegalStateException {
 
         checkIfConfigured();
@@ -257,6 +262,10 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
     }
 
     public synchronized void close() throws IllegalStateException {
+        if (closed) {
+            return;
+        }
+
         logger.debug("Closing node scratch space");
         checkIfConfigured();
 
@@ -293,14 +302,27 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
             this.fileSystemManager.close();
         }
         logger.debug("Closed node scratch space");
+
+        closed = true;
     }
 
     private FileObject createEmptyDirectoryRelative(final FileObject parent, final String path)
             throws org.apache.commons.vfs2.FileSystemException {
 
         FileObject f = parent.resolveFile(path);
-        f.delete(Selectors.EXCLUDE_SELF);
-        f.createFolder();
+
+        try {
+            f.delete(Selectors.EXCLUDE_SELF);
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            logger.warn("Could not delete directory " + f, e);
+        }
+
+        try {
+            f.createFolder();
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            logger.warn("Could not create folder " + f, e);
+        }
+
         return f;
     }
 

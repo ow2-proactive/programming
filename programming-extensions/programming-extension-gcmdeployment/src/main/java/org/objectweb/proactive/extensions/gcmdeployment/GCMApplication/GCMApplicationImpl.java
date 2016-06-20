@@ -617,7 +617,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             spacesInstances = new HashSet<SpaceInstanceInfo>();
             for (final InputOutputSpaceConfiguration config : spacesConfigurations) {
                 try {
-                    spacesInstances.add(new SpaceInstanceInfo(deploymentId, config));
+                    spacesInstances.add(new SpaceInstanceInfo(Long.toString(deploymentId), config));
                 } catch (ConfigurationException e) {
                     ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
                 }
@@ -625,7 +625,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         }
 
         try {
-            namingService.registerApplication(deploymentId, spacesInstances);
+            namingService.registerApplication(Long.toString(deploymentId), spacesInstances);
         } catch (ApplicationAlreadyRegisteredException e) {
             GCMA_LOGGER.error(
                     String.format("Application with id=%d is already registered in specified Naming Serivce",
@@ -638,7 +638,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     private void stopDataSpaces() {
         if (namingService != null) {
             try {
-                namingService.unregisterApplication(deploymentId);
+                namingService.unregisterApplication(Long.toString(deploymentId));
             } catch (WrongApplicationIdException e) {
                 ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
             }

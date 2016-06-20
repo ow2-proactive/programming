@@ -57,29 +57,21 @@ public class NamingServiceOperation {
             return;
         }
 
-        final long applicatiodID;
         final String url = args[0];
         final String appIdString = args[1];
         final String inputName = args[2];
         final String inputURL = args[3];
 
         try {
-            applicatiodID = Long.parseLong(appIdString);
-        } catch (NumberFormatException e) {
-            leave(e.getMessage());
-            return;
-        }
-
-        try {
             final InputOutputSpaceConfiguration conf = InputOutputSpaceConfiguration
                     .createInputSpaceConfiguration(inputURL, null, null, inputName);
-            final SpaceInstanceInfo spaceInstanceInfo = new SpaceInstanceInfo(applicatiodID, conf);
+            final SpaceInstanceInfo spaceInstanceInfo = new SpaceInstanceInfo(appIdString, conf);
             NamingService stub = NamingService.createNamingServiceStub(url);
 
             try {
                 stub.register(spaceInstanceInfo);
             } catch (WrongApplicationIdException e) {
-                stub.registerApplication(applicatiodID, null);
+                stub.registerApplication(appIdString, null);
                 stub.register(spaceInstanceInfo);
             }
         } finally {

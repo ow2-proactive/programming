@@ -57,11 +57,11 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceAlreadyRegi
 @Ignore
 public abstract class SpacesDirectoryAbstractBase {
 
-    protected static final long MAIN_APPID = 1;
+    protected static final String MAIN_APPID = "1";
 
-    protected static final long ANOTHER_APPID1 = 0;
+    protected static final String ANOTHER_APPID1 = "0";
 
-    protected static final long ANOTHER_APPID2 = 2;
+    protected static final String ANOTHER_APPID2 = "2";
 
     private SpacesDirectory dir;
 
@@ -211,7 +211,7 @@ public abstract class SpacesDirectoryAbstractBase {
 
     @Test
     public void testLookupAllIllegalArgumentException() {
-        final DataSpacesURI query = DataSpacesURI.createScratchSpaceURI(1, "runtime1", "node1");
+        final DataSpacesURI query = DataSpacesURI.createScratchSpaceURI("1", "runtime1", "node1");
 
         try {
             dir.lookupMany(query);

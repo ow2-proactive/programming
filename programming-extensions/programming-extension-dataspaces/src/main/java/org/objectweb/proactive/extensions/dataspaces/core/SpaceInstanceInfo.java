@@ -82,7 +82,7 @@ public final class SpaceInstanceInfo implements Serializable {
      *             remote access URL is defined.
      * @see SpaceConfiguration#isComplete()
      */
-    public SpaceInstanceInfo(long appid, String runtimeId, String nodeId, ScratchSpaceConfiguration config)
+    public SpaceInstanceInfo(String appid, String runtimeId, String nodeId, ScratchSpaceConfiguration config)
             throws ConfigurationException {
         this(config, DataSpacesURI.createScratchSpaceURI(appid, runtimeId, nodeId));
     }
@@ -100,7 +100,8 @@ public final class SpaceInstanceInfo implements Serializable {
      *             remote access URL is defined.
      * @see SpaceConfiguration#isComplete()
      */
-    public SpaceInstanceInfo(long appid, InputOutputSpaceConfiguration config) throws ConfigurationException {
+    public SpaceInstanceInfo(String appid, InputOutputSpaceConfiguration config)
+            throws ConfigurationException {
         this(config, DataSpacesURI.createInOutSpaceURI(appid, config.getType(), config.getName()));
     }
 
@@ -182,7 +183,7 @@ public final class SpaceInstanceInfo implements Serializable {
     /**
      * @return application id of data space
      */
-    public long getAppId() {
+    public String getAppId() {
         return mountingPoint.getAppId();
     }
 

@@ -119,7 +119,7 @@ public abstract class AbstractPAProviderLocalBenchmark extends FunctionalTest {
         fsDeployer = new FileSystemServerDeployer(spaceServerDir, true);
         namingServiceDeployer = new NamingServiceDeployer();
 
-        final long applicationId = 0xcafe;
+        final String applicationId = Long.toString(0xcafe);
         namingServiceDeployer.getLocalNamingService().registerApplication(applicationId, null);
         final Node halfBodiesNode = NodeFactory.getHalfBodiesNode();
 

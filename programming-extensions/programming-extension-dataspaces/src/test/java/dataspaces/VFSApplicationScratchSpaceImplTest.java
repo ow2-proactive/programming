@@ -81,7 +81,7 @@ public class VFSApplicationScratchSpaceImplTest {
     private static final String NODE_ID = "node_id";
     private static final String RUNTIME_ID = "rt_id";
     private static String ACCESS_URL = "file:///";
-    private static final long APP_ID_LONG = 0;
+    private static final String APP_ID_LONG = "0";
     private static final String APP_ID = new Long(APP_ID_LONG).toString();
 
     private File testDir;
