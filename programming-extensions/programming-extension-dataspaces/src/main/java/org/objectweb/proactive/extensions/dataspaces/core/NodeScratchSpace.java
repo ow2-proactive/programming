@@ -64,6 +64,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
  * @see ApplicationScratchSpace
  */
 public interface NodeScratchSpace {
+
     /**
      * Initializes instance (and all related configuration objects) on a specified node and performs
      * file system initialization and accessing tests, basing on provided configuration.
@@ -89,7 +90,7 @@ public interface NodeScratchSpace {
      * @throws ConfigurationException
      *             when checking FS capabilities fails
      */
-    public void init(Node node, BaseScratchSpaceConfiguration baseScratchConfiguration)
+    void init(Node node, BaseScratchSpaceConfiguration baseScratchConfiguration)
             throws FileSystemException, ConfigurationException, IllegalStateException;
 
     /**
@@ -110,7 +111,7 @@ public interface NodeScratchSpace {
      * @throws IllegalStateException
      *             when this instance is not initialized
      */
-    public ApplicationScratchSpace initForApplication(String appId) throws FileSystemException,
+     ApplicationScratchSpace initForApplication(String appId) throws FileSystemException,
             IllegalStateException;
 
     /**
@@ -125,6 +126,6 @@ public interface NodeScratchSpace {
      * @throws IllegalStateException
      *             when this instance is not initialized
      */
-    public abstract void close() throws IllegalStateException;
+     void close() throws IllegalStateException;
 
 }

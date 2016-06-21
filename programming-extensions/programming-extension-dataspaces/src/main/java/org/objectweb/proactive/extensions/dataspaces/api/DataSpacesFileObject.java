@@ -82,7 +82,7 @@ public interface DataSpacesFileObject {
      *
      * @return URI of a represented file without the trailing slash
      */
-    public abstract String getVirtualURI();
+     String getVirtualURI();
 
     /**
      * Returns the real file's URI in its current Apache VFS file system.
@@ -91,13 +91,13 @@ public interface DataSpacesFileObject {
      *
      * @return URI of a represented file without the trailing slash
      */
-    public abstract String getRealURI();
+     String getRealURI();
 
     /**
      * Returns the base name of this file. The base name is the last element of the file name. For example the base name of /somefolder/somefile is somefile.
      * @return The base name. Never returns null.
      */
-    public abstract String getBaseName();
+     String getBaseName();
 
     /**
      * Returns the absolute path of this file, within its file system.
@@ -107,7 +107,7 @@ public interface DataSpacesFileObject {
      * The root of a file system has / as its absolute path.
      * @return The path. Never returns null.
      */
-    public abstract String getPath();
+     String getPath();
 
     /**
      * In case the dataspace is backed up by several Apache VFS. Returns all URIs referring to this FileObject. If there
@@ -116,7 +116,7 @@ public interface DataSpacesFileObject {
      *
      * @return List of URI of a represented file
      */
-    public abstract List<String> getAllRealURIs();
+     List<String> getAllRealURIs();
 
     /**
      * In case the dataspace is backed up by several Apache VFS. Returns all space Root URIs to which this FileObject has access.
@@ -124,7 +124,7 @@ public interface DataSpacesFileObject {
      *
      * @return List of URI of accessible space roots
      */
-    public abstract List<String> getAllSpaceRootURIs();
+     List<String> getAllSpaceRootURIs();
 
     /**
      * Switches the DataspaceFileObject to the given Root FileSystem. All subsequent calls on this DFO
@@ -136,14 +136,14 @@ public interface DataSpacesFileObject {
      * @return a new DataSpacesFileObject with the different space root (note that the current DSFO is not modified)
      * @throws IllegalArgumentException if the given uri don't represent a valid uri for this DFO
      */
-    public abstract DataSpacesFileObject switchToSpaceRoot(String uri) throws FileSystemException,
+     DataSpacesFileObject switchToSpaceRoot(String uri) throws FileSystemException,
             SpaceNotFoundException;
 
     /**
      * Returns the uri of the current space root
      * @return current space root uri
      */
-    public String getSpaceRootURI();
+    String getSpaceRootURI();
 
     /**
      * Ensures that this FileObject exists and is not write-protected in the remote DataSpace. If the FileObject doesn't exist then the method will
@@ -156,7 +156,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      * @throws SpaceNotFoundException
      */
-    public DataSpacesFileObject ensureExistingOrSwitch(boolean checkWriteProtected)
+    DataSpacesFileObject ensureExistingOrSwitch(boolean checkWriteProtected)
             throws FileSystemException, SpaceNotFoundException;
 
     /**
@@ -166,7 +166,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error determining if this file exists.
      */
-    public abstract boolean exists() throws FileSystemException;
+     boolean exists() throws FileSystemException;
 
     /**
      * Determines if this file is hidden.
@@ -175,7 +175,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error determining if this file exists.
      */
-    public abstract boolean isHidden() throws FileSystemException;
+     boolean isHidden() throws FileSystemException;
 
     /**
      * Determines if this file can be read.
@@ -184,7 +184,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error determining if this file exists.
      */
-    public abstract boolean isReadable() throws FileSystemException;
+     boolean isReadable() throws FileSystemException;
 
     /**
      * Determines if this file can be written to.
@@ -193,7 +193,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error determining if this file exists.
      */
-    public abstract boolean isWritable() throws FileSystemException;
+     boolean isWritable() throws FileSystemException;
 
     /**
      * Returns this file's type.
@@ -202,7 +202,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error determining the file's type.
      */
-    public abstract FileType getType() throws FileSystemException;
+     FileType getType() throws FileSystemException;
 
     /**
      * Determines if this file's data space has a particular capability.
@@ -211,7 +211,7 @@ public interface DataSpacesFileObject {
      *            The capability to check for.
      * @return true if this file's data space has the requested capability.
      */
-    public abstract boolean hasSpaceCapability(Capability capability);
+     boolean hasSpaceCapability(Capability capability);
 
     /**
      * Returns the folder that contains this file.
@@ -220,7 +220,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error finding the file's parent, e.g. when it does not exist.
      */
-    public abstract DataSpacesFileObject getParent() throws FileSystemException;
+     DataSpacesFileObject getParent() throws FileSystemException;
 
     /**
      * Lists the children of this file.
@@ -232,7 +232,7 @@ public interface DataSpacesFileObject {
      *             If this file does not exist, or is not a folder, or on error listing this file's
      *             children.
      */
-    public abstract List<DataSpacesFileObject> getChildren() throws FileSystemException;
+     List<DataSpacesFileObject> getChildren() throws FileSystemException;
 
     /**
      * Returns a child of this file. Note that this method returns <code>null</code> when the child
@@ -245,7 +245,7 @@ public interface DataSpacesFileObject {
      *             If this file does not exist, or is not a folder, or on error determining this
      *             file's children.
      */
-    public abstract DataSpacesFileObject getChild(String name) throws FileSystemException;
+     DataSpacesFileObject getChild(String name) throws FileSystemException;
 
     /**
      * Finds a file, relative to this file. Equivalent to calling
@@ -257,7 +257,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error parsing the path, or on error finding the file.
      */
-    public abstract DataSpacesFileObject resolveFile(String path) throws FileSystemException;
+     DataSpacesFileObject resolveFile(String path) throws FileSystemException;
 
     /**
      * Finds the set of matching descendants of this file, in depth-wise order.
@@ -270,7 +270,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             when any kind of error occurred while finding files.
      */
-    public abstract List<DataSpacesFileObject> findFiles(FileSelector selector) throws FileSystemException;
+     List<DataSpacesFileObject> findFiles(FileSelector selector) throws FileSystemException;
 
     /**
      * Finds the set of matching descendants of this file, in depth-wise order.
@@ -283,7 +283,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             when any kind of error occurred while finding files.
      */
-    public abstract List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector)
+     List<DataSpacesFileObject> findFiles(org.apache.commons.vfs2.FileSelector selector)
             throws FileSystemException;
 
     /**
@@ -298,7 +298,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             when any kind of error occurred while finding files.
      */
-    public abstract void findFiles(FileSelector selector, boolean depthwise,
+     void findFiles(FileSelector selector, boolean depthwise,
             List<DataSpacesFileObject> selected) throws FileSystemException;
 
     /**
@@ -310,7 +310,7 @@ public interface DataSpacesFileObject {
      *             If this file is a non-empty folder, or if this file is read-only, or on error
      *             deleting this file.
      */
-    public abstract boolean delete() throws FileSystemException;
+     boolean delete() throws FileSystemException;
 
     /**
      * Deletes all descendants of this file that match a selector. Does nothing if this file does
@@ -326,7 +326,7 @@ public interface DataSpacesFileObject {
      *             If this file or one of its descendants is read-only, or on error deleting this
      *             file or one of its descendants.
      */
-    public abstract int delete(FileSelector selector) throws FileSystemException;
+     int delete(FileSelector selector) throws FileSystemException;
 
     /**
      * Creates this folder, if it does not exist. Also creates any ancestor folders which do not
@@ -336,7 +336,7 @@ public interface DataSpacesFileObject {
      *             If the folder already exists with the wrong type, or the parent folder is
      *             read-only, or on error creating this folder or one of its ancestors.
      */
-    public abstract void createFolder() throws FileSystemException;
+     void createFolder() throws FileSystemException;
 
     /**
      * Creates this file, if it does not exist. Also creates any ancestor folders which do not
@@ -346,7 +346,7 @@ public interface DataSpacesFileObject {
      *             If the file already exists with the wrong type, or the parent folder is
      *             read-only, or on error creating this file or one of its ancestors.
      */
-    public abstract void createFile() throws FileSystemException;
+     void createFile() throws FileSystemException;
 
     /**
      * Copies another file, and all its descendants, to this file.
@@ -365,7 +365,7 @@ public interface DataSpacesFileObject {
      *             If this file is read-only, or if the source file does not exist, or on error
      *             copying the file.
      */
-    public abstract void copyFrom(DataSpacesFileObject srcFile, FileSelector selector)
+     void copyFrom(DataSpacesFileObject srcFile, FileSelector selector)
             throws FileSystemException;
 
     /**
@@ -379,7 +379,7 @@ public interface DataSpacesFileObject {
      *             If this file is read-only, or if the source file does not exist, or on error
      *             copying the file.
      */
-    public abstract void moveTo(DataSpacesFileObject destFile) throws FileSystemException;
+     void moveTo(DataSpacesFileObject destFile) throws FileSystemException;
 
     /**
      * Returns this file's content. The {@link FileContent} returned by this method can be used to
@@ -392,7 +392,7 @@ public interface DataSpacesFileObject {
      * @throws FileSystemException
      *             On error getting this file's content.
      */
-    public abstract FileContent getContent() throws FileSystemException;
+     FileContent getContent() throws FileSystemException;
 
     /**
      * Closes this file, and its content. This method is a hint to the implementation that it can
@@ -404,18 +404,19 @@ public interface DataSpacesFileObject {
      *             On error closing the file.
      * @see FileContent#close
      */
-    public abstract void close() throws FileSystemException;
+     void close() throws FileSystemException;
 
     /**
      * This will prepare the fileObject to get resynchronized with the underlying file system if
      * required
      */
-    public abstract void refresh() throws FileSystemException;
+     void refresh() throws FileSystemException;
 
     /**
      * check if someone reads/write to this file
      */
-    public abstract boolean isContentOpen();
+     boolean isContentOpen();
 
-    public abstract boolean equals(Object candidate);
+     boolean equals(Object candidate);
+
 }
