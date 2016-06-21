@@ -41,28 +41,30 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.apache.commons.vfs2.FileName;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.NameScope;
-import org.apache.commons.vfs2.Selectors;
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.dataspaces.api.*;
+import org.objectweb.proactive.extensions.dataspaces.api.Capability;
+import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
+import org.objectweb.proactive.extensions.dataspaces.api.FileContent;
 import org.objectweb.proactive.extensions.dataspaces.api.FileSelector;
+import org.objectweb.proactive.extensions.dataspaces.api.FileType;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.DataSpacesException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerImpl;
 import org.objectweb.proactive.extensions.vfsprovider.util.URIHelper;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.NameScope;
+import org.apache.commons.vfs2.Selectors;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -302,6 +304,24 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     public boolean isContentOpen() {
         return currentFileObject.isContentOpen();
+    }
+
+    @Override
+    public boolean isFile() throws FileSystemException {
+        try {
+            return currentFileObject.isFile();
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    @Override
+    public boolean isFolder() throws FileSystemException {
+        try {
+            return currentFileObject.isFolder();
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
     }
 
     public boolean isHidden() throws FileSystemException {
@@ -667,4 +687,32 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         final DataSpacesFileObject file = (DataSpacesFileObject) candidate;
         return this.getVirtualURI().equals(file.getVirtualURI());
     }
+
+    @Override
+    public boolean setExecutable(boolean executable, boolean ownerOnly) throws FileSystemException {
+        try {
+            return currentFileObject.setExecutable(executable, ownerOnly);
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    @Override
+    public boolean setReadable(boolean readable, boolean ownerOnly) throws FileSystemException {
+        try {
+            return currentFileObject.setReadable(readable, ownerOnly);
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    @Override
+    public boolean setWritable(boolean writable, boolean ownerOnly) throws FileSystemException {
+        try {
+            return currentFileObject.setWritable(writable, ownerOnly);
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
 }
