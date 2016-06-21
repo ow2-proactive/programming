@@ -90,8 +90,8 @@ public interface NodeScratchSpace {
      * @throws ConfigurationException
      *             when checking FS capabilities fails
      */
-    void init(Node node, BaseScratchSpaceConfiguration baseScratchConfiguration)
-            throws FileSystemException, ConfigurationException, IllegalStateException;
+    void init(Node node, BaseScratchSpaceConfiguration baseScratchConfiguration) throws FileSystemException,
+            ConfigurationException, IllegalStateException;
 
     /**
      * Initializes scratch data space for an application that is running on a Node for which
@@ -111,7 +111,7 @@ public interface NodeScratchSpace {
      * @throws IllegalStateException
      *             when this instance is not initialized
      */
-     ApplicationScratchSpace initForApplication(String appId) throws FileSystemException,
+    ApplicationScratchSpace initForApplication(String appId) throws FileSystemException,
             IllegalStateException;
 
     /**
@@ -126,6 +126,6 @@ public interface NodeScratchSpace {
      * @throws IllegalStateException
      *             when this instance is not initialized
      */
-     void close() throws IllegalStateException;
+    void close() throws IllegalStateException;
 
 }
