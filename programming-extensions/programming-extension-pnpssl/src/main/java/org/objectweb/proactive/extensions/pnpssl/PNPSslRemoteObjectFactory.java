@@ -54,6 +54,7 @@ import java.util.List;
 import javax.net.ssl.TrustManager;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryAbstract;
 import org.objectweb.proactive.extensions.pnp.PNPConfig;
@@ -156,7 +157,7 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
             KeyStore ks = KeyStore.getInstance("PKCS12");
             File f = new File(PNPSslConfig.PA_PNPSSL_KEYSTORE.getValue());
             FileInputStream fis = new FileInputStream(f);
-            ks.load(fis, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+            ks.load(fis, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
             return ks;
         } catch (KeyStoreException e) {
             throw new PNPSslConfigurationException("Failed to create keystore", e);
@@ -184,7 +185,8 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
             KeyStore ks = KeyStore.getInstance("PKCS12");
             ks.load(null, null);
             ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN, pair.getPrivate(),
-                    SslHelpers.DEFAULT_KS_PASSWD.toCharArray(), new X509Certificate[] { cert });
+                    PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                    new X509Certificate[] { cert });
             return ks;
         } catch (KeyStoreException e) {
             throw new PNPSslConfigurationException("Failed to create or fill the keystore for " + PROTO_ID, e);

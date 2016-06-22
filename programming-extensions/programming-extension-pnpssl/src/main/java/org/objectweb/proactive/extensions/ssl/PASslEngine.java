@@ -52,10 +52,11 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.extensions.pnpssl.PNPSslConfig;
 
 
 /**
- *
  * This class is implemented as a child of SSLEngine instead of a factory because ProActive
  * is not designed to support class injection. It is easier to replace this PASslEngine by
  * another SSLEngine by using inheritance than using an hard coded factory class.
@@ -76,7 +77,7 @@ public class PASslEngine extends SSLEngine {
     public PASslEngine(boolean client, SecureMode secureMode, KeyStore keystore, TrustManager trustManager) {
         try {
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            kmf.init(keystore, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+            kmf.init(keystore, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
 
             // Initialize the SSLContext to work with our key managers.
             SSLContext ctxt = SSLContext.getInstance(SslHelpers.DEFAULT_PROTOCOL);
@@ -109,13 +110,10 @@ public class PASslEngine extends SSLEngine {
 
     /**
      * Filter out the list of supported cipher to retain only the strong ones.
-     * 
-     * @param supportedCiphers 
-     *    List of ciphers supported by the ssl engine
-     * @param wantedCiphers
-     *    List of cipher considered as strong enough to be used
-     * @return
-     *    List of supported and strong enough ciphers
+     *
+     * @param supportedCiphers List of ciphers supported by the ssl engine
+     * @param wantedCiphers    List of cipher considered as strong enough to be used
+     * @return List of supported and strong enough ciphers
      */
     private String[] getEnabledCiphers(String[] supportedCiphers, String[] wantedCiphers) {
         Set<String> enabled = new HashSet<String>(wantedCiphers.length);

@@ -54,10 +54,11 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.extensions.pnpssl.PNPSslConfig;
+
 
 /**
- *
- *
  * @since ProActive 5.0.0
  */
 public class PASslSocketFactory extends SSLSocketFactory {
@@ -71,7 +72,7 @@ public class PASslSocketFactory extends SSLSocketFactory {
             CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
 
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        kmf.init(clientKs, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+        kmf.init(clientKs, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
 
         // Our custom trust managers are used to authenticate remote peers
         TrustManager[] tms;

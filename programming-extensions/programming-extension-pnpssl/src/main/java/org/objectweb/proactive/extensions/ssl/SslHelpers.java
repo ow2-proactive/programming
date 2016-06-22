@@ -59,10 +59,6 @@ public class SslHelpers {
     static public String DEFAULT_SUBJET_DN = "O=ProActive Parallel Suite, OU=Automatic certificate generator, CN=Certificate for ProActive";
 
     static public String DEFAULT_ALIAS_PATTERN = ".*";
-    /**
-     * The default keystore password
-     */
-    static public String DEFAULT_KS_PASSWD = "pkpass";
 
     static public String DEFAULT_PROTOCOL = "TLSv1";
 

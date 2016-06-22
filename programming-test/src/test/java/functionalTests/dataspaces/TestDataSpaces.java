@@ -232,12 +232,12 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         assertEquals(OUTPUT_FILE_CONTENT2, ao1.readFile(scratchFileUri1));
 
         // The following test is commented out as it fails randomly
-//        try {
-//            ao2.writeFile(scratchFileUri1, OUTPUT_FILE_CONTENT1);
-//            fail("Unexpectedly AO from the same Runtime is able to write other AO's scratch");
-//        } catch (FileSystemException x) {
-//        }
-//        assertEquals(OUTPUT_FILE_CONTENT2, ao1.readFile(scratchFileUri1));
+        //        try {
+        //            ao2.writeFile(scratchFileUri1, OUTPUT_FILE_CONTENT1);
+        //            fail("Unexpectedly AO from the same Runtime is able to write other AO's scratch");
+        //        } catch (FileSystemException x) {
+        //        }
+        //        assertEquals(OUTPUT_FILE_CONTENT2, ao1.readFile(scratchFileUri1));
 
         try {
             ao3.writeFile(scratchFileUri1, OUTPUT_FILE_CONTENT1);

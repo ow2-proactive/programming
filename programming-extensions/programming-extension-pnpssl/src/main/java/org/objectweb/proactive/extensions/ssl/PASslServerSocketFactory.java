@@ -54,10 +54,10 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.TrustManager;
 
+import org.objectweb.proactive.extensions.pnpssl.PNPSslConfig;
+
 
 /**
- *
- *
  * @since ProActive 5.0.0
  */
 public class PASslServerSocketFactory extends SSLServerSocketFactory {
@@ -79,7 +79,7 @@ public class PASslServerSocketFactory extends SSLServerSocketFactory {
         //        }
 
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        kmf.init(clientKs, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
+        kmf.init(clientKs, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
 
         // Our custom trust managers are used to authenticate remote peers
         TrustManager[] tms;

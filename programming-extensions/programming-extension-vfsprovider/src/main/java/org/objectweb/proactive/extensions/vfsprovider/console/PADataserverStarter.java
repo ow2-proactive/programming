@@ -66,8 +66,7 @@ public class PADataserverStarter {
             System.out.println("Usage: java " + name + " <root directory> [ProActive dataserver name]");
             System.out.println(" -h,--help\tprints the help screen\n");
             System.out
-                    .println(
-                            "Starts the ProActive dataserver for <root directory> with default or specified name.");
+                    .println("Starts the ProActive dataserver for <root directory> with default or specified name.");
             System.out.println("ProActive system properties can be set using command line too.");
             System.out.println("Syntax is: -Dproperty=value");
             return;
