@@ -707,19 +707,9 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
             throw new NullPointerException();
         }
 
-        if (appId == null) {
-            if (other.appId != null) {
-                return -1;
-            }
-            return 0;
-        } else {
-            if (other.appId == null) {
-                return 1;
-            }
-            final int cmp = appId.compareTo(other.appId);
-            if (cmp != 0) {
-                return cmp;
-            }
+        Integer compareAppIds = compareAppIds(other);
+        if (compareAppIds != null) {
+            return compareAppIds;
         }
 
         if (spaceType == null) {
@@ -814,6 +804,24 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
             }
             return userPath.compareTo(other.userPath);
         }
+    }
+
+    private Integer compareAppIds(DataSpacesURI other) {
+        if (appId == null) {
+            if (other.appId != null) {
+                return -1;
+            }
+            return 0;
+        } else {
+            if (other.appId == null) {
+                return 1;
+            }
+            final int cmp = appId.compareTo(other.appId);
+            if (cmp != 0) {
+                return cmp;
+            }
+        }
+        return null;
     }
 
     @Override
