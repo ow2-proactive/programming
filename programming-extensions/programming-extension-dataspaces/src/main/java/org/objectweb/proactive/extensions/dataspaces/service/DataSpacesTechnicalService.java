@@ -92,7 +92,7 @@ public class DataSpacesTechnicalService implements TechnicalService {
 
     private String namingServiceURL;
 
-    private Long appId;
+    private String appId;
 
     /**
      * Create technical service properties for given configuration that should initialize properly
@@ -191,11 +191,7 @@ public class DataSpacesTechnicalService implements TechnicalService {
         if (appIdString == null) {
             logger.error("Initialization error - provided TS properties are incomplete, application id is not specified.");
         } else {
-            try {
-                appId = Long.parseLong(appIdString);
-            } catch (NumberFormatException x) {
-                ProActiveLogger.logImpossibleException(logger, x);
-            }
+            appId = appIdString;
         }
 
         namingServiceURL = argValues.get(PROPERTY_NAMING_SERVICE_URL);

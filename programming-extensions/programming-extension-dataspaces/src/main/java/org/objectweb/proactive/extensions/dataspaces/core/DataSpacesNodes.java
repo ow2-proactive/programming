@@ -144,7 +144,7 @@ public class DataSpacesNodes {
      * with Data Spaces implementation instance, so they can be later accessed by
      * {@link #getDataSpacesImpl(Node)} or closed through
      * {@link #tryCloseNodeApplicationConfig(Node)} or subsequent
-     * {@link #configureApplication(Node, long, String)}.
+     * {@link #configureApplication(Node, String, String)}.
      *
      * This method can be called on an already configured node (see
      * {@link #configureNode(Node, BaseScratchSpaceConfiguration)}) or even already
@@ -165,10 +165,10 @@ public class DataSpacesNodes {
      *             when node is not configured for Data Spaces
      * @throws FileSystemException
      *             VFS related exception during scratch data space creation
-     * @see NodeConfigurator#configureApplication(long, String)
+     * @see NodeConfigurator#configureApplication(String, String)
      */
     @Deprecated
-    public static void configureApplication(Node node, long appId, String namingServiceURL)
+    public static void configureApplication(Node node, String appId, String namingServiceURL)
             throws ProActiveException, NotConfiguredException, URISyntaxException, FileSystemException {
         final NodeConfigurator nodeConfig = getOrFailNodeConfigurator(node);
         try {
@@ -185,7 +185,7 @@ public class DataSpacesNodes {
      * with Data Spaces implementation instance, so they can be later accessed by
      * {@link #getDataSpacesImpl(Node)} or closed through
      * {@link #tryCloseNodeApplicationConfig(Node)} or subsequent
-     * {@link #configureApplication(Node, long, String)}.
+     * {@link #configureApplication(Node, String, String)}.
      *
      * This method can be called on an already configured node (see
      * {@link #configureNode(Node, BaseScratchSpaceConfiguration)}) or even already
@@ -206,9 +206,9 @@ public class DataSpacesNodes {
      *             when node is not configured for Data Spaces
      * @throws FileSystemException
      *             VFS related exception during scratch data space creation
-     * @see NodeConfigurator#configureApplication(long, String)
+     * @see NodeConfigurator#configureApplication(String, String)
      */
-    public static void configureApplication(Node node, long appId, NamingService namingServiceStub)
+    public static void configureApplication(Node node, String appId, NamingService namingServiceStub)
             throws ProActiveException, NotConfiguredException, URISyntaxException, FileSystemException {
         final NodeConfigurator nodeConfig = getOrFailNodeConfigurator(node);
         try {

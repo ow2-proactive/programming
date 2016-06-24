@@ -69,18 +69,18 @@ import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
  * <li>Instance initialization by default constructor.</li>
  * <li>{@link #configureNode(Node, BaseScratchSpaceConfiguration)} method call for passing
  * node-specific and immutable settings. This can be called only once for each instance.</li>
- * <li>{@link #configureApplication(long, String)} method call for configuring application on a
+ * <li>{@link #configureApplication(String, String)} method call for configuring application on a
  * node.</li>
  * <li>Obtaining {@link DataSpacesImpl} from application configuration if needed, by
  * {@link #getDataSpacesImpl()}.</li>
- * <li>Possibly subsequent {@link #configureApplication(long, String)} calls reconfiguring node for
+ * <li>Possibly subsequent {@link #configureApplication(String, String)} calls reconfiguring node for
  * given application.</li>
  * <li>Closing all created objects by {@link #close()} method call.</li>
  * </ol>
  * <p>
  * Instances of this class are thread-safe. They can be managed by {@link DataSpacesNodes} static
  * class or in some other way. It is assumed that Node's application will not change between
- * {@link #configureApplication(long, String)} and {@link #tryCloseAppConfigurator()} calls.
+ * {@link #configureApplication(String, String)} and {@link #tryCloseAppConfigurator()} calls.
  *
  * @see DataSpacesImpl
  */
@@ -183,7 +183,7 @@ public class NodeConfigurator {
      * @throws FileSystemException
      *             VFS related exception during scratch data space creation
      */
-    synchronized public void configureApplication(long appId, NamingService namingService)
+    synchronized public void configureApplication(String appId, NamingService namingService)
             throws IllegalStateException, FileSystemException, ProActiveException, ConfigurationException,
             URISyntaxException {
         logger.debug("Configuring node for Data Spaces application");
@@ -239,7 +239,7 @@ public class NodeConfigurator {
      *             VFS related exception during scratch data space creation
      */
     @Deprecated
-    synchronized public void configureApplication(long appId, String namingServiceUrl)
+    synchronized public void configureApplication(String appId, String namingServiceUrl)
             throws IllegalStateException, FileSystemException, ProActiveException, ConfigurationException,
             URISyntaxException {
         NamingService namingService = NamingService.createNamingServiceStub(namingServiceUrl);
@@ -364,7 +364,7 @@ public class NodeConfigurator {
 
         private DataSpacesImpl impl;
 
-        private void configure(final long appId, final NamingService namingService)
+        private void configure(final String appId, final NamingService namingService)
                 throws FileSystemException, URISyntaxException, ProActiveException, ConfigurationException {
 
             final CachingSpacesDirectory cachingDir = new CachingSpacesDirectory(namingService);

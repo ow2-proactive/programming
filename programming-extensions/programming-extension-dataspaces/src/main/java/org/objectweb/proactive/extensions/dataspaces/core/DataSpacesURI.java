@@ -107,7 +107,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      */
 
     private static final Pattern PATTERN = Pattern
-            .compile("^vfs:///(\\d+)(/(((input|output)(/(([^/]+)(/(.+)?)?)?)?)|scratch(/(([^/]+)(/(([^/]+)(/(([^/]+)(/(.+)?)?)?)?)?)?)?)?)?)?$");
+            .compile("^vfs:///([^/]+)(/(((input|output)(/(([^/]+)(/(.+)?)?)?)?)|scratch(/(([^/]+)(/(([^/]+)(/(([^/]+)(/(.+)?)?)?)?)?)?)?)?)?)?$");
 
     private static boolean isValidComponent(String component) {
         return component == null || (component.length() > 0 && component.indexOf('/') == -1);
@@ -116,14 +116,14 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
     /**
      * Creates URI with only application id being specified.
      *
-     * This method is only a shortcut for {@link #createURI(long, SpaceType)} with <code>null</code>
+     * This method is only a shortcut for {@link #createURI(String, SpaceType)} with <code>null</code>
      * spaceType argument.
      *
      * @param appId
      *            application id
      * @return URI for that specification
      */
-    public static DataSpacesURI createURI(long appId) {
+    public static DataSpacesURI createURI(String appId) {
         return createURI(appId, null);
     }
 
@@ -136,7 +136,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      *            space type. May be <code>null</code>.
      * @return URI for that specification
      */
-    public static DataSpacesURI createURI(long appId, SpaceType spaceType) {
+    public static DataSpacesURI createURI(String appId, SpaceType spaceType) {
         return new DataSpacesURI(appId, spaceType, null, null, null, null, null);
     }
 
@@ -144,7 +144,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      * Creates URI of scratch type with only runtimeId specified.
      *
      * This is only a shortcut for
-     * {@link #createScratchSpaceURI(long, String, String, String, String)} with <code>null</code>
+     * {@link #createScratchSpaceURI(String, String, String, String, String)} with <code>null</code>
      * values for nodeId, activeObjectId and userPath.
      *
      * @param appId
@@ -155,7 +155,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      * @throws IllegalArgumentException
      *             when runtimeId is invalid.
      */
-    public static DataSpacesURI createScratchSpaceURI(long appId, String runtimeId) {
+    public static DataSpacesURI createScratchSpaceURI(String appId, String runtimeId) {
         return createScratchSpaceURI(appId, runtimeId, null);
     }
 
@@ -164,7 +164,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      * space part fully defined if arguments are not <code>null</code>.
      *
      * This is only a shortcut for
-     * {@link #createScratchSpaceURI(long, String, String, String, String)} with <code>null</code>
+     * {@link #createScratchSpaceURI(String, String, String, String, String)} with <code>null</code>
      * values for activeObjectId and userPath.
      *
      * @param appId
@@ -180,7 +180,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      *             when <code>null</code> values in arguments do not obey URI components hierarchy
      *             requirements or runtimeId or nodeId are invalid.
      */
-    public static DataSpacesURI createScratchSpaceURI(long appId, String runtimeId, String nodeId) {
+    public static DataSpacesURI createScratchSpaceURI(String appId, String runtimeId, String nodeId) {
         return createScratchSpaceURI(appId, runtimeId, nodeId, null);
     }
 
@@ -206,7 +206,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      *             when <code>null</code> values in arguments do not obey URI components hierarchy
      *             requirements or runtimeId, nodeId, activeObjectId are invalid.
      */
-    public static DataSpacesURI createScratchSpaceURI(long appId, String runtimeId, String nodeId,
+    public static DataSpacesURI createScratchSpaceURI(String appId, String runtimeId, String nodeId,
             String activeObjectId) {
         return createScratchSpaceURI(appId, runtimeId, nodeId, activeObjectId, null);
     }
@@ -234,7 +234,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      *             when <code>null</code> values in arguments do not obey URI components hierarchy
      *             requirements or runtimeId, nodeId, activeObjectId or userPath are invalid.
      */
-    public static DataSpacesURI createScratchSpaceURI(long appId, String runtimeId, String nodeId,
+    public static DataSpacesURI createScratchSpaceURI(String appId, String runtimeId, String nodeId,
             String activeObjectId, String userPath) {
         return new DataSpacesURI(appId, SpaceType.SCRATCH, null, runtimeId, nodeId, activeObjectId, userPath);
     }
@@ -245,7 +245,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      * <code>null</code>.
      *
      * This method is only a shortcut for
-     * {@link #createInOutSpaceURI(long, SpaceType, String, String)} with <code>null</code> value
+     * {@link #createInOutSpaceURI(String, SpaceType, String, String)} with <code>null</code> value
      * for argument userPath.
      *
      * @param appId
@@ -261,7 +261,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      *             when <code>null</code> values in arguments do not obey URI components hierarchy
      *             requirements or name is invalid.
      */
-    public static DataSpacesURI createInOutSpaceURI(long appId, SpaceType spaceType, String name) {
+    public static DataSpacesURI createInOutSpaceURI(String appId, SpaceType spaceType, String name) {
         return createInOutSpaceURI(appId, spaceType, name, null);
     }
 
@@ -284,7 +284,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      *             when <code>null</code> values in arguments do not obey URI components hierarchy
      *             requirements or name or userPath are invalid.
      */
-    public static DataSpacesURI createInOutSpaceURI(long appId, SpaceType spaceType, String name,
+    public static DataSpacesURI createInOutSpaceURI(String appId, SpaceType spaceType, String name,
             String userPath) {
         return new DataSpacesURI(appId, spaceType, name, null, null, null, userPath);
     }
@@ -313,16 +313,10 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
         }
 
         final String appIdString = m.group(1);
-        final long appId;
-        try {
-            appId = Long.parseLong(appIdString);
-        } catch (NumberFormatException x) {
-            throw new MalformedURIException("Wrong application id format", x);
-        }
 
         if (m.group(3) == null) {
             // just vfs:///123/
-            return new DataSpacesURI(appId, null, null, null, null, null, null);
+            return new DataSpacesURI(appIdString, null, null, null, null, null, null);
         }
 
         if (m.group(4) != null) {
@@ -336,7 +330,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
             // but hierarchy is guaranteed by the expression
             final String name = m.group(8);
             final String path = m.group(10);
-            return new DataSpacesURI(appId, spaceType, name, null, null, null, path);
+            return new DataSpacesURI(appIdString, spaceType, name, null, null, null, path);
         } else {
             // vfs://123/scratch/
 
@@ -346,11 +340,11 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
             final String nodeId = m.group(16);
             final String aoId = m.group(19);
             final String path = m.group(21);
-            return new DataSpacesURI(appId, SpaceType.SCRATCH, null, runtimeId, nodeId, aoId, path);
+            return new DataSpacesURI(appIdString, SpaceType.SCRATCH, null, runtimeId, nodeId, aoId, path);
         }
     }
 
-    private final long appId;
+    private final String appId;
 
     private final SpaceType spaceType;
 
@@ -364,7 +358,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
 
     private final String userPath;
 
-    private DataSpacesURI(long appId, SpaceType spaceType, String name, String runtimeId, String nodeId,
+    private DataSpacesURI(String appId, SpaceType spaceType, String name, String runtimeId, String nodeId,
             String activeObjectId, String userPath) {
 
         if ((spaceType == null && (name != null || runtimeId != null)) ||
@@ -404,7 +398,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
     /**
      * @return application id
      */
-    public long getAppId() {
+    public String getAppId() {
         return appId;
     }
 
@@ -615,7 +609,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
      * @see #isSpacePartFullyDefined()
      */
     public DataSpacesURI nextURI() {
-        long newAppId = this.appId;
+        String newAppId = this.appId;
         SpaceType newSpaceType = this.spaceType;
         String newRuntimeId = this.runtimeId;
 
@@ -626,7 +620,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
 
         // case: appid/ - just ++
         if (newSpaceType == null) {
-            newAppId++;
+            newAppId = newAppId + '\0';
             return new DataSpacesURI(newAppId, null, null, null, null, null, null);
         }
 
@@ -641,7 +635,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
 
         // case: appid/last_type/ - there was no next type?
         if (newSpaceType == null) {
-            newAppId++;
+            newAppId = newAppId + '\0';
         }
 
         return new DataSpacesURI(newAppId, newSpaceType, null, null, null, null, null);
@@ -657,7 +651,7 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
     public String toString() {
         final StringBuilder sb = new StringBuilder(SCHEME);
 
-        sb.append(Long.toString(appId));
+        sb.append(appId);
 
         if (spaceType == null) {
             return sb.toString();
@@ -713,11 +707,9 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
             throw new NullPointerException();
         }
 
-        if (appId != other.appId) {
-            if (appId < other.appId) {
-                return -1;
-            }
-            return 1;
+        Integer compareAppIds = compareAppIds(other);
+        if (compareAppIds != null) {
+            return compareAppIds;
         }
 
         if (spaceType == null) {
@@ -814,6 +806,24 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
         }
     }
 
+    private Integer compareAppIds(DataSpacesURI other) {
+        if (appId == null) {
+            if (other.appId != null) {
+                return -1;
+            }
+            return 0;
+        } else {
+            if (other.appId == null) {
+                return 1;
+            }
+            final int cmp = appId.compareTo(other.appId);
+            if (cmp != 0) {
+                return cmp;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof DataSpacesURI)) {
@@ -826,15 +836,14 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (appId ^ (appId >>> 32));
-        result = prime * result + ((spaceType == null) ? 0 : spaceType.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((runtimeId == null) ? 0 : runtimeId.hashCode());
-        result = prime * result + ((nodeId == null) ? 0 : nodeId.hashCode());
-        result = prime * result + ((activeObjectId == null) ? 0 : activeObjectId.hashCode());
-        result = prime * result + ((userPath == null) ? 0 : userPath.hashCode());
+        int result = appId != null ? appId.hashCode() : 0;
+        result = 31 * result + (spaceType != null ? spaceType.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (runtimeId != null ? runtimeId.hashCode() : 0);
+        result = 31 * result + (nodeId != null ? nodeId.hashCode() : 0);
+        result = 31 * result + (activeObjectId != null ? activeObjectId.hashCode() : 0);
+        result = 31 * result + (userPath != null ? userPath.hashCode() : 0);
         return result;
     }
+
 }

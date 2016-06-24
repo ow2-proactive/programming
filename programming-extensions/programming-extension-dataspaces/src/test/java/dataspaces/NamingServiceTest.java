@@ -116,7 +116,7 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     public void testRegisteredApplicationId1() throws ApplicationAlreadyRegisteredException,
             WrongApplicationIdException {
 
-        Set<Long> apps;
+        Set<String> apps;
 
         apps = ns.getRegisteredApplications();
         assertTrue(apps.isEmpty());
@@ -134,7 +134,7 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     public void testRegisteredApplicationId2() throws ApplicationAlreadyRegisteredException,
             WrongApplicationIdException {
 
-        Set<Long> apps;
+        Set<String> apps;
         ns.registerApplication(MAIN_APPID, null);
         apps = ns.getRegisteredApplications();
         apps.remove(MAIN_APPID);

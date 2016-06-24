@@ -131,7 +131,7 @@ public class DataSpacesImpl {
 
     private final ApplicationScratchSpace appScratchSpace;
 
-    private final long appId;
+    private final String appId;
 
     /**
      * Create Data Spaces implementation instance. It remains valid as provided services remain
@@ -147,7 +147,8 @@ public class DataSpacesImpl {
      *            application scratch space for this application; may be <code>null</code> if not
      *            available
      */
-    public DataSpacesImpl(long appId, SpacesMountManager smm, SpacesDirectory sd, ApplicationScratchSpace ass) {
+    public DataSpacesImpl(String appId, SpacesMountManager smm, SpacesDirectory sd,
+            ApplicationScratchSpace ass) {
         this.appId = appId;
         appScratchSpace = ass;
         spacesDirectory = sd;

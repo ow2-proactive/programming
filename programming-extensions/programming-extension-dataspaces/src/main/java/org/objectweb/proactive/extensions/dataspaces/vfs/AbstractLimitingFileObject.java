@@ -36,6 +36,7 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.cert.Certificate;
@@ -218,8 +219,9 @@ public abstract class AbstractLimitingFileObject<T extends FileObject> extends D
     }
 
     private void checkIsNotReadOnly() throws FileSystemException {
-        if (isReadOnly())
-            throw new FileSystemException("File is read-only");
+        if (isReadOnly()) {
+            throw new FileSystemException("File is read-only: " + this.toString());
+        }
     }
 
     private T decorateFile(final FileObject file) {
@@ -292,9 +294,6 @@ public abstract class AbstractLimitingFileObject<T extends FileObject> extends D
         }
 
         public FileObject getFile() {
-            // FIXME: depends on VFS-259, fixed in VFS fork
-            // for vanilla VFS it would break some down-casting in providers implementations
-            // (see HttpFileContentInfoFactory and WebdavFileContentInfoFactory).
             return decorateFile(content.getFile());
         }
 
@@ -334,6 +333,30 @@ public abstract class AbstractLimitingFileObject<T extends FileObject> extends D
             return content.isOpen();
         }
 
+        /**
+         * No check for read-only state is performed with the following write
+         * operations since the current file object is the provider not the recipient.
+         */
+        @Override
+        public long write(FileContent output) throws IOException {
+            return content.write(output);
+        }
+
+        @Override
+        public long write(FileObject file) throws IOException {
+            return content.write(file);
+        }
+
+        @Override
+        public long write(OutputStream output) throws IOException {
+            return content.write(output);
+        }
+
+        @Override
+        public long write(OutputStream output, int bufferSize) throws IOException {
+            return content.write(output, bufferSize);
+        }
+
         public void removeAttribute(String attrName) throws FileSystemException {
             checkIsNotReadOnly();
             content.removeAttribute(attrName);
@@ -348,5 +371,7 @@ public abstract class AbstractLimitingFileObject<T extends FileObject> extends D
             checkIsNotReadOnly();
             content.setLastModifiedTime(modTime);
         }
+
     }
+
 }

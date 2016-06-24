@@ -90,7 +90,7 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
         namingServiceDeployer = new NamingServiceDeployer();
 
         final long applicationId = 0xcafe;
-        namingServiceDeployer.getLocalNamingService().registerApplication(applicationId, null);
+        namingServiceDeployer.getLocalNamingService().registerApplication(Long.toString(applicationId), null);
 
         Node node = super.getANode();
         ao = PAActiveObject.newActive(AO.class, new Object[] { fsDeployer.getVFSRootURL(),
@@ -116,7 +116,7 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
                 // node is configured without scratch
                 Node node = PAActiveObject.getNode();
                 DataSpacesNodes.configureNode(node, null);
-                DataSpacesNodes.configureApplication(node, appId, namingService);
+                DataSpacesNodes.configureApplication(node, Long.toString(appId), namingService);
 
                 PADataSpaces.addDefaultInput(vfsRootUrl, null);
 

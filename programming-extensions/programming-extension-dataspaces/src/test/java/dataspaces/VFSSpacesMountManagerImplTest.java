@@ -97,7 +97,7 @@ public class VFSSpacesMountManagerImplTest {
 
     private static final String WRONG_DS_SERVER_URL = "pappnp://welcome.to.proactive:5461/inputserver?proactive_vfs_provider_path=/";
 
-    private static final DataSpacesURI NONEXISTING_SPACE = DataSpacesURI.createInOutSpaceURI(123,
+    private static final DataSpacesURI NONEXISTING_SPACE = DataSpacesURI.createInOutSpaceURI("123",
             SpaceType.OUTPUT, "dummy");
 
     private static void closeFileObject(final DataSpacesFileObject file) {
@@ -163,7 +163,7 @@ public class VFSSpacesMountManagerImplTest {
 
         final InputOutputSpaceConfiguration inputSpaceConf = InputOutputSpaceConfiguration
                 .createInputSpaceConfiguration(rootinputuris, null, null, "read_only_space");
-        final SpaceInstanceInfo inputSpaceInfo = new SpaceInstanceInfo(123, inputSpaceConf);
+        final SpaceInstanceInfo inputSpaceInfo = new SpaceInstanceInfo("123", inputSpaceConf);
         inputUri = inputSpaceInfo.getMountingPoint();
 
         // output space
@@ -182,7 +182,7 @@ public class VFSSpacesMountManagerImplTest {
 
         final InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration
                 .createOutputSpaceConfiguration(rootoutputuris, null, null, "read_write_space");
-        final SpaceInstanceInfo outputSpaceInfo = new SpaceInstanceInfo(123, outputSpaceConf);
+        final SpaceInstanceInfo outputSpaceInfo = new SpaceInstanceInfo("123", outputSpaceConf);
         outputUri = outputSpaceInfo.getMountingPoint();
 
         // scratch space
@@ -205,7 +205,7 @@ public class VFSSpacesMountManagerImplTest {
 
         final ScratchSpaceConfiguration scratchSpaceConf = new ScratchSpaceConfiguration(rootscratchuris,
             null, null);
-        final SpaceInstanceInfo scratchSpaceInfo = new SpaceInstanceInfo(123, "runtimeA", "nodeB",
+        final SpaceInstanceInfo scratchSpaceInfo = new SpaceInstanceInfo("123", "runtimeA", "nodeB",
             scratchSpaceConf);
         scratchUri = scratchSpaceInfo.getMountingPoint();
 
@@ -376,7 +376,7 @@ public class VFSSpacesMountManagerImplTest {
 
         InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration
                 .createOutputSpaceConfiguration(rootoutputuris, null, null, "read_write_space");
-        SpaceInstanceInfo outputSpaceInfo = new SpaceInstanceInfo(123, outputSpaceConf);
+        SpaceInstanceInfo outputSpaceInfo = new SpaceInstanceInfo("123", outputSpaceConf);
 
         // create manager
         SpacesDirectory directory2 = new SpacesDirectoryImpl();
