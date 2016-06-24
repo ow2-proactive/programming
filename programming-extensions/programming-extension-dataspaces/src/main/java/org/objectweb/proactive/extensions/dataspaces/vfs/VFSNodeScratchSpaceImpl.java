@@ -125,8 +125,9 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
             } catch (org.apache.commons.vfs2.FileSystemException e) {
                 logger.warn("Could not delete " + spaceFile, e);
             } finally {
-                // just a hint
                 try {
+                    // the close operation is just a hint to the implementation
+                    // that it can release any resources associated with the file.
                     spaceFile.close();
                 } catch (org.apache.commons.vfs2.FileSystemException e) {
                     throw new FileSystemException(e);
@@ -149,7 +150,8 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
                     // so we can avoid unnecessarily double mounting resulting in opening,
                     // closing and opening again the same file
                     createEmptyDirectoryRelative(spaceFile, aoid).close();
-                    // just a hint
+                    // the close operation is just a hint to the implementation
+                    // that it can release any resources associated with the file.
                     spaceFile.close();
                 } catch (org.apache.commons.vfs2.FileSystemException x) {
                     logger.error(String.format(
@@ -240,7 +242,8 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
                     throw new org.apache.commons.vfs2.FileSystemException(
                         "Created directory is unexpectedly not writable");
                 }
-                // just a hint
+                // the close operation is just a hint to the implementation
+                // that it can release any resources associated with the file.
                 partialSpaceFile.close();
             } catch (org.apache.commons.vfs2.FileSystemException x) {
                 logger.error("Could not initialize scratch space at: " + partialSpacePath);
