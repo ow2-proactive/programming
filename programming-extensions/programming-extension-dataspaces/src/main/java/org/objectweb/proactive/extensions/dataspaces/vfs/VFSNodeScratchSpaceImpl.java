@@ -80,8 +80,6 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
 
     private DefaultFileSystemManager fileSystemManager;
 
-    private boolean closed = false;
-
     /**
      * Inner class to implement {@link ApplicationScratchSpace} interface.
      */
@@ -265,10 +263,6 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
     }
 
     public synchronized void close() throws IllegalStateException {
-        if (closed) {
-            return;
-        }
-
         logger.debug("Closing node scratch space");
         checkIfConfigured();
 
@@ -303,10 +297,18 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
             ProActiveLogger.logEatedException(logger, "Could not close correctly node scratch space", x);
         } finally {
             this.fileSystemManager.close();
+
+            try {
+                // VFS 2.0 was offering the possibility to reuse a FileSystemManager after
+                // closing it. This ability has been removed with VFS 2.1. The FileSystemManager
+                // needs to be reinitialized to achieve the same behaviour.
+                this.fileSystemManager.init();
+            } catch (org.apache.commons.vfs2.FileSystemException e) {
+                logger.error("Error while reinitializing the file system manager used for scratch space");
+                throw new IllegalStateException(e);
+            }
         }
         logger.debug("Closed node scratch space");
-
-        closed = true;
     }
 
     private FileObject createEmptyDirectoryRelative(final FileObject parent, final String path)
