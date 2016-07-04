@@ -46,22 +46,25 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.apache.commons.vfs2.FileName;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.NameScope;
-import org.apache.commons.vfs2.Selectors;
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.dataspaces.api.*;
+import org.objectweb.proactive.extensions.dataspaces.api.Capability;
+import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
+import org.objectweb.proactive.extensions.dataspaces.api.FileContent;
 import org.objectweb.proactive.extensions.dataspaces.api.FileSelector;
+import org.objectweb.proactive.extensions.dataspaces.api.FileType;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.DataSpacesException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerImpl;
 import org.objectweb.proactive.extensions.vfsprovider.util.URIHelper;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.NameScope;
+import org.apache.commons.vfs2.Selectors;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -115,16 +118,12 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     /**
-     * @param adaptee
-     *            file object that is going to be represented as DataSpacesFileObject; cannot be
-     *            <code>null</code>
-     * @param dataSpaceURI
-     *            Data Spaces virtual URI of this file object's space; must have space part fully defined
-     *            and only this part; cannot be <code>null</code>
-     * @param dataSpaceVFSFileName
-     *            VFS file name of the space root FileObject; cannot be <code>null</code>
-     * @throws FileSystemException
-     *             when data space file name does not match adaptee's name
+     * @param adaptee              file object that is going to be represented as DataSpacesFileObject; cannot be
+     *                             <code>null</code>
+     * @param dataSpaceURI         Data Spaces virtual URI of this file object's space; must have space part fully defined
+     *                             and only this part; cannot be <code>null</code>
+     * @param dataSpaceVFSFileName VFS file name of the space root FileObject; cannot be <code>null</code>
+     * @throws FileSystemException when data space file name does not match adaptee's name
      */
     public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI,
             FileName dataSpaceVFSFileName, ArrayList<String> spaceRoots, String currentRoot,
@@ -307,6 +306,24 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         return currentFileObject.isContentOpen();
     }
 
+    @Override
+    public boolean isFile() throws FileSystemException {
+        try {
+            return currentFileObject.isFile();
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    @Override
+    public boolean isFolder() throws FileSystemException {
+        try {
+            return currentFileObject.isFolder();
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
     public boolean isHidden() throws FileSystemException {
         try {
             return currentFileObject.isHidden();
@@ -371,12 +388,9 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     /**
-     * @param array
-     *            may be null
-     * @param adapted
-     *            may be null only if <code>array</code> is
+     * @param array   may be null
+     * @param adapted may be null only if <code>array</code> is
      * @throws FileSystemException
-     *
      */
     private <T extends Collection<DataSpacesFileObject>> void adaptVFSResult(FileObject[] array, T adapted)
             throws FileSystemException {
@@ -388,10 +402,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     /**
-     * @param vfsResult
-     *            cannot be null
-     * @param adapted
-     *            cannot be null
+     * @param vfsResult cannot be null
+     * @param adapted   cannot be null
      * @throws FileSystemException
      */
     private <T extends Collection<DataSpacesFileObject>, E extends Collection<FileObject>> void adaptVFSResult(
@@ -403,8 +415,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     /**
-     * @param vfsFileObject
-     *            may be null
+     * @param vfsFileObject may be null
      * @throws FileSystemException
      */
     private VFSFileObjectAdapter adaptVFSResult(final FileObject vfsFileObject) throws FileSystemException {
@@ -425,8 +436,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     /**
-     * @param selector
-     *            may be null
+     * @param selector may be null
      */
     private static org.apache.commons.vfs2.FileSelector buildFVSSelector(FileSelector selector) {
         switch (selector) {
@@ -450,8 +460,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
     }
 
     /**
-     * @param capability
-     *            may be null
+     * @param capability may be null
      */
     private static org.apache.commons.vfs2.Capability buildVFSCapability(Capability capability) {
         switch (capability) {
@@ -597,33 +606,42 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         return null;
     }
 
-    private static boolean checkIfFileWritable(DataSpacesFileObject dsfo) throws FileSystemException {
-        if (!dsfo.isWritable()) {
+    private static boolean checkIfFileWritable(DataSpacesFileObject fileObject) throws FileSystemException {
+        if (!fileObject.isWritable()) {
             return false;
         }
-        File file = null;
+
         try {
-            file = convertDataSpaceToFileIfPossible(dsfo);
+            File file = convertDataSpaceToFileIfPossible(fileObject);
+
+            if (file != null) {
+                boolean answer = file.canWrite();
+
+                if (!answer) {
+                    return false;
+                }
+
+                // File.canWrite() cannot be trusted, especially over network drives, it is often returning
+                // true even though a file write will fail or vice-versa. A solution is to create a file to
+                // check real write permission
+                File tryFile = new File(file, "proactive-test-write-permission.ack");
+
+                try {
+                    tryFile.createNewFile();
+                } catch (IOException e) {
+                    return false;
+                } finally {
+                    tryFile.delete();
+                }
+
+                return true;
+            }
         } catch (URISyntaxException e) {
             throw new FileSystemException(e);
         } catch (DataSpacesException e) {
             throw new FileSystemException(e);
         }
-        if (file != null) {
-            boolean answer = file.canWrite();
-            if (!answer) {
-                return false;
-            }
-            // in some cases the canWrite method is not accurate, we try to create a file to check real write permission
-            File tryFile = new File(file, "testWrite.ack");
-            try {
-                tryFile.createNewFile();
-            } catch (IOException e) {
-                return false;
-            }
-            tryFile.delete();
-            return true;
-        }
+
         return true;
     }
 
@@ -669,4 +687,32 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         final DataSpacesFileObject file = (DataSpacesFileObject) candidate;
         return this.getVirtualURI().equals(file.getVirtualURI());
     }
+
+    @Override
+    public boolean setExecutable(boolean executable, boolean ownerOnly) throws FileSystemException {
+        try {
+            return currentFileObject.setExecutable(executable, ownerOnly);
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    @Override
+    public boolean setReadable(boolean readable, boolean ownerOnly) throws FileSystemException {
+        try {
+            return currentFileObject.setReadable(readable, ownerOnly);
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
+    @Override
+    public boolean setWritable(boolean writable, boolean ownerOnly) throws FileSystemException {
+        try {
+            return currentFileObject.setWritable(writable, ownerOnly);
+        } catch (org.apache.commons.vfs2.FileSystemException e) {
+            throw new FileSystemException(e);
+        }
+    }
+
 }

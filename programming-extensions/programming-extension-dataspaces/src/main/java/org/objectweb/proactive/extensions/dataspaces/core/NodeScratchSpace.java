@@ -52,7 +52,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
  * are set through {@link #init(Node, BaseScratchSpaceConfiguration)} method. It performs basic
  * preliminary initialization that is independent from concrete application. It need to be called
  * before any further use of this instance.</li>
- * <li>for each application executed at previously specified node, {@link #initForApplication(long)}
+ * <li>for each application executed at previously specified node, {@link #initForApplication(String)}
  * is called to acquire instance of {@link ApplicationScratchSpace}. It should be called only once
  * per each application.</li>
  * <li>when no more scratch space is going to be used on specified node, instance is closed by
@@ -64,6 +64,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
  * @see ApplicationScratchSpace
  */
 public interface NodeScratchSpace {
+
     /**
      * Initializes instance (and all related configuration objects) on a specified node and performs
      * file system initialization and accessing tests, basing on provided configuration.
@@ -75,7 +76,7 @@ public interface NodeScratchSpace {
      * <p>
      * This method can be called only once for each instance. Once called,
      * {@link ApplicationScratchSpace} instances can be returned by
-     * {@link #initForApplication(long)}. Once initialized, this instance must be closed by
+     * {@link #initForApplication(String)}. Once initialized, this instance must be closed by
      * {@link #close()} method. If initialization fails, there is no need to close it explicitly.
      *
      * @param node
@@ -89,8 +90,8 @@ public interface NodeScratchSpace {
      * @throws ConfigurationException
      *             when checking FS capabilities fails
      */
-    public void init(Node node, BaseScratchSpaceConfiguration baseScratchConfiguration)
-            throws FileSystemException, ConfigurationException, IllegalStateException;
+    void init(Node node, BaseScratchSpaceConfiguration baseScratchConfiguration) throws FileSystemException,
+            ConfigurationException, IllegalStateException;
 
     /**
      * Initializes scratch data space for an application that is running on a Node for which
@@ -110,7 +111,7 @@ public interface NodeScratchSpace {
      * @throws IllegalStateException
      *             when this instance is not initialized
      */
-    public ApplicationScratchSpace initForApplication(long appId) throws FileSystemException,
+    ApplicationScratchSpace initForApplication(String appId) throws FileSystemException,
             IllegalStateException;
 
     /**
@@ -118,13 +119,13 @@ public interface NodeScratchSpace {
      * scratch data space remains within this runtime, runtime-related files are also removed.
      * <p>
      * Before calling this method, returned {@link ApplicationScratchSpace} instance should be
-     * closed.
+     * closed. This method is idempotent.
      * <p>
      * Subsequent calls may result in an undefined behavior.
      *
      * @throws IllegalStateException
      *             when this instance is not initialized
      */
-    public abstract void close() throws IllegalStateException;
+    void close() throws IllegalStateException;
 
 }
