@@ -18,7 +18,8 @@ public class NodeImplTest {
     // The bug actually lies in ProActiveRuntimeImpl but is visible when trying to kill AOs on a node
     @Test
     public void allActiveObjectsAreKilled() throws Exception {
-        Node localNode = NodeFactory.createLocalNode("testing", false, "testing");
+        Node localNode = NodeFactory.createLocalNode("allActiveObjectsAreKilled", false,
+                "allActiveObjectsAreKilled");
 
         PAActiveObject.newActive(SimpleActiveObject.class.getName(), null, localNode);
         PAActiveObject.newActive(SimpleActiveObject.class.getName(), null, localNode);
@@ -32,6 +33,20 @@ public class NodeImplTest {
         localNode.killAllActiveObjects();
 
         assertEquals(0, localNode.getNumberOfActiveObjects());
+    }
+
+    @Test
+    public void testThreadDump() throws Exception {
+        Node localNode = NodeFactory.createLocalNode("testThreadDump", false, "testThreadDump");
+
+        PAActiveObject.newActive(SimpleActiveObject.class.getName(), null, localNode);
+
+        String threadDump = localNode.getThreadDump();
+
+        System.out.println(threadDump);
+
+        assertTrue(threadDump.contains(SimpleActiveObject.class.getSimpleName()));
+        localNode.killAllActiveObjects();
     }
 
     public static class SimpleActiveObject {

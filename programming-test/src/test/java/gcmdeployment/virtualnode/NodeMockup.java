@@ -36,8 +36,6 @@
  */
 package gcmdeployment.virtualnode;
 
-import java.io.IOException;
-
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
@@ -45,6 +43,8 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeInformation;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.VMInformation;
+
+import java.io.IOException;
 
 
 public class NodeMockup implements Node {
@@ -79,6 +79,11 @@ public class NodeMockup implements Node {
     }
 
     public String getProperty(String key) throws ProActiveException {
+        return null;
+    }
+
+    @Override
+    public String getThreadDump() throws ProActiveException {
         return null;
     }
 

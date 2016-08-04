@@ -36,11 +36,6 @@
  */
 package org.objectweb.proactive.core.node;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.util.List;
-
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.Constants;
@@ -52,6 +47,12 @@ import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.VMInformation;
+import org.objectweb.proactive.utils.StackTraceUtil;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -300,7 +301,7 @@ public class NodeImpl implements Node, Serializable {
 
         /**
          * Returns the name specified in the url
-         * @param url. The url of the node
+         * @param url The url of the node
          * @return String. The name of the node
          */
         private String extractNameFromUrl(String url) {
@@ -355,6 +356,11 @@ public class NodeImpl implements Node, Serializable {
      */
     public String getProperty(String key) throws ProActiveException {
         return this.proActiveRuntime.getLocalNodeProperty(this.nodeInformation.getName(), key);
+    }
+
+    @Override
+    public String getThreadDump() throws ProActiveException {
+        return StackTraceUtil.getAllStackTraces();
     }
 
     public VMInformation getVMInformation() {
