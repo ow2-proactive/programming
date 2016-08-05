@@ -40,6 +40,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -51,6 +55,8 @@ import java.util.Arrays;
  * @author The ProActive Team
 **/
 public final class StackTraceUtil {
+
+    static String nl = System.getProperty("line.separator");
 
     public static String getStackTrace(Throwable aThrowable) {
         final Writer result = new StringWriter();
@@ -83,6 +89,38 @@ public final class StackTraceUtil {
             return false;
         }
         return equalsStackTraces(a.getCause(), b.getCause());
+
+    }
+
+    public static String getAllStackTraces() {
+        Map<Thread, StackTraceElement[]> allThreads = Thread.getAllStackTraces();
+        SortedSet<Thread> sortedThreads = new TreeSet<>(new Comparator<Thread>() {
+            @Override
+            public int compare(Thread o1, Thread o2) {
+                // higher ids first
+                return (int) (o2.getId() - o1.getId());
+            }
+        });
+        sortedThreads.addAll(allThreads.keySet());
+        StringBuffer stringBuffer = new StringBuffer();
+        for (Thread thread : sortedThreads) {
+            StackTraceElement[] trace = allThreads.get(thread);
+            StringBuffer threadInfo = new StringBuffer();
+            threadInfo.append("\"" + thread.getName() + "\"");
+            threadInfo.append(" #" + thread.getId());
+            threadInfo.append(" group=" + thread.getThreadGroup().getName());
+            threadInfo.append(thread.isDaemon() ? " daemon" : "");
+            threadInfo.append(" prio=" + thread.getPriority());
+
+            threadInfo.append(" " + thread.getState());
+
+            stringBuffer.append(threadInfo + nl);
+            for (int i = 0; i < trace.length; i++) {
+                stringBuffer.append(" " + trace[i] + nl);
+            }
+            stringBuffer.append(nl);
+        }
+        return stringBuffer.toString();
 
     }
 

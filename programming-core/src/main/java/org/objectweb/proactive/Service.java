@@ -92,6 +92,8 @@ public class Service {
     //
     protected Body body;
     protected BlockingRequestQueue requestQueue;
+
+    protected Request currentRequest;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
     //protected RequestFilterOnMethodName requestFilterOnMethodName = null;
@@ -122,6 +124,7 @@ public class Service {
      * @param request the request to be served
      */
     public void serve(Request request) {
+        currentRequest = request;
         body.serve(request);
     }
 
@@ -131,7 +134,8 @@ public class Service {
      * @param request the request to be served
      * @param exception the exception that will be thrown to the caller
      */
-    public void serveWithException(Request request, Exception exception) {
+    public void serveWithException(Request request, Throwable exception) {
+        currentRequest = request;
         body.serveWithException(request, exception);
     }
 
@@ -146,7 +150,9 @@ public class Service {
                 blockingServeOldest();
             } catch (InterruptedException e) {
                 if (body.isActive()) {
-                    logger.warn("Interruption message received", e);
+                    logger.warn("Interruption message received in " + body.getUrl() +
+                            " while serving request " + currentRequest.getMethodName() + " from " +
+                            currentRequest.getSender().getUrl(), e);
                 }
             }
         }
@@ -164,7 +170,9 @@ public class Service {
                 blockingServeYoungest();
             } catch (InterruptedException e) {
                 if (body.isActive()) {
-                    logger.warn("Interruption message received", e);
+                    logger.warn("Interruption message received in " + body.getUrl() +
+                            " while serving request " + currentRequest.getMethodName() + " from " +
+                            currentRequest.getSender().getUrl(), e);
                 }
             }
         }
@@ -203,7 +211,7 @@ public class Service {
     public void blockingServeOldest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         Request r = requestQueue.blockingRemoveOldest(requestFilter, timeout);
         if (r != null) {
-            body.serve(r);
+            serve(r);
         }
     }
 
@@ -266,7 +274,7 @@ public class Service {
             throws InterruptedException {
         Request r = requestQueue.blockingRemoveOldest(requestFilter, timeout);
         if (r != null) {
-            body.serveWithException(r, ex);
+            serveWithException(r, ex);
         }
     }
 
@@ -307,7 +315,7 @@ public class Service {
      * @param ex The exception to send to the caller
      */
     public void serveOldestWithException(Throwable ex) {
-        body.serveWithException(requestQueue.removeOldest(), ex);
+        serveWithException(requestQueue.removeOldest(), ex);
     }
 
     /**
@@ -323,7 +331,7 @@ public class Service {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
         }
-        body.serveWithException(requestQueue.removeOldest(methodName), ex);
+        serveWithException(requestQueue.removeOldest(methodName), ex);
     }
 
     /**
@@ -334,7 +342,7 @@ public class Service {
      * @param ex The exception to send to the caller
      */
     public void serveOldestWithException(RequestFilter requestFilter, Throwable ex) {
-        body.serveWithException(requestQueue.removeOldest(requestFilter), ex);
+        serveWithException(requestQueue.removeOldest(requestFilter), ex);
     }
 
     /**
@@ -342,7 +350,7 @@ public class Service {
      * request, the method returns with no effect.
      */
     public void serveOldest() {
-        body.serve(requestQueue.removeOldest());
+        serve(requestQueue.removeOldest());
     }
 
     /**
@@ -356,7 +364,7 @@ public class Service {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
         }
-        body.serve(requestQueue.removeOldest(methodName));
+        serve(requestQueue.removeOldest(methodName));
     }
 
     /**
@@ -365,7 +373,7 @@ public class Service {
      * @param requestFilter The request filter accepting the request
      */
     public void serveOldest(RequestFilter requestFilter) {
-        body.serve(requestQueue.removeOldest(requestFilter));
+        serve(requestQueue.removeOldest(requestFilter));
     }
 
     // -- Serve Youngest ---------------------------------------------------
@@ -424,7 +432,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      */
     public void blockingServeYoungest(RequestFilter requestFilter, long timeout) throws InterruptedException {
-        body.serve(requestQueue.blockingRemoveYoungest(requestFilter, timeout));
+        serve(requestQueue.blockingRemoveYoungest(requestFilter, timeout));
     }
 
     /**
@@ -494,7 +502,7 @@ public class Service {
      */
     public void blockingServeYoungestWithException(RequestFilter requestFilter, long timeout, Throwable ex)
             throws InterruptedException {
-        body.serveWithException(requestQueue.blockingRemoveYoungest(requestFilter, timeout), ex);
+        serveWithException(requestQueue.blockingRemoveYoungest(requestFilter, timeout), ex);
     }
 
     /**
@@ -502,7 +510,7 @@ public class Service {
      * request, the method returns with no effect.
      */
     public void serveYoungest() {
-        body.serve(requestQueue.removeYoungest());
+        serve(requestQueue.removeYoungest());
     }
 
     /**
@@ -516,7 +524,7 @@ public class Service {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
         }
-        body.serve(requestQueue.removeYoungest(methodName));
+        serve(requestQueue.removeYoungest(methodName));
     }
 
     /**
@@ -525,7 +533,7 @@ public class Service {
      * @param requestFilter The request filter accepting the request
      */
     public void serveYoungest(RequestFilter requestFilter) {
-        body.serve(requestQueue.removeYoungest(requestFilter));
+        serve(requestQueue.removeYoungest(requestFilter));
     }
 
     /**
@@ -535,7 +543,7 @@ public class Service {
      * @param ex The exception to send to the caller
      */
     public void serveYoungestWithException(Throwable ex) {
-        body.serveWithException(requestQueue.removeYoungest(), ex);
+        serveWithException(requestQueue.removeYoungest(), ex);
     }
 
     /**
@@ -551,7 +559,7 @@ public class Service {
             throw new NoSuchMethodError(methodName + " is not defined in " +
                 this.body.getReifiedObject().getClass().getName());
         }
-        body.serveWithException(requestQueue.removeYoungest(methodName), ex);
+        serveWithException(requestQueue.removeYoungest(methodName), ex);
     }
 
     /**
@@ -562,7 +570,7 @@ public class Service {
      * @param ex The exception to send to the caller
      */
     public void serveYoungestWithException(RequestFilter requestFilter, Throwable ex) {
-        body.serveWithException(requestQueue.removeYoungest(requestFilter), ex);
+        serveWithException(requestQueue.removeYoungest(requestFilter), ex);
     }
 
     // -- Serve All ---------------------------------------------------

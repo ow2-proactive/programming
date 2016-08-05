@@ -36,13 +36,13 @@
  */
 package org.objectweb.proactive.core.node;
 
-import java.io.IOException;
-
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.VMInformation;
+
+import java.io.IOException;
 
 
 /**
@@ -131,4 +131,13 @@ public interface Node {
      * @throws ProActiveException
      */
     public String getProperty(String key) throws ProActiveException;
+
+    /**
+     * Returns the full thread dump of the Node's enclosing JVM
+     *
+     * @return thread dump
+     * @throws ProActiveException
+     */
+    public String getThreadDump() throws ProActiveException;
+
 }
