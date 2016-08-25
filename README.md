@@ -1,6 +1,6 @@
 # ProActive Programming
 
-[![Build Status](http://jenkins.activeeon.com/job/programming/badge/icon)](http://jenkins.activeeon.com/job/programming/)
+[![Build Status](http://jenkins.activeeon.com/buildStatus/icon?job=programming)](http://jenkins.activeeon.com/job/programming/)
 
 ProActive is a Java middleware that provides the programming and runtime facilities to build and deploy parallel, distributed and concurrent applications. It offers several [built-in features](http://proactive.activeeon.com) (Asynchrony, Data spaces, Security, Fault tolerance, etc.)
 
