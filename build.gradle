@@ -6,7 +6,9 @@ allprojects {
 
 buildscript {
     repositories {
-        if (project.hasProperty('local')) mavenLocal()
+        if (project.hasProperty('local')) {
+            mavenLocal()
+        }
         jcenter()
         maven { url 'http://repository.activeeon.com/content/groups/proactive/'}
         maven { url 'http://dl.bintray.com/content/abashev/vfs-s3'}
@@ -223,7 +225,7 @@ project('programming-extensions:programming-extension-annotation') {
     }
 }
 
-def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.1', 'com.github:vfs-s3:2.4.0']
+def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.1']
 
 def vfs2RuntimeDependencies = [
         'commons-net:commons-net:3.5',
@@ -236,6 +238,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
     dependencies {
         compile(
                 vfs2CompileDependencies,
+                'com.github:vfs-s3:2.4.0',
                 project(':programming-extensions:programming-extension-annotation')
         )
         testCompile 'org.apache.commons:commons-vfs2:2.1:tests'
