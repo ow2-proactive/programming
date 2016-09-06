@@ -36,11 +36,6 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
-import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
-import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemOptions;
@@ -57,6 +52,14 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.commons.vfs2.provider.url.UrlFileProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
+import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
+import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
+
+import com.github.vfss3.S3FileProvider;
+import com.github.vfss3.operations.S3FileOperationsProvider;
 
 
 /**
@@ -80,6 +83,7 @@ import org.apache.log4j.Logger;
  */
 public class VFSFactory {
     private static final Log4JLogger logger;
+
     static {
         final Logger rawLogger = ProActiveLogger.getLogger(Loggers.DATASPACES_VFS);
         if (rawLogger.getEffectiveLevel().isGreaterOrEqual(Level.INFO)) {
@@ -140,10 +144,13 @@ public class VFSFactory {
         manager.addProvider("https", new HttpsFileProvider());
         manager.addProvider("ftp", new FtpFileProvider());
         manager.addProvider("sftp", new SftpFileProvider());
+        manager.addProvider("s3", new S3FileProvider());
         final ProActiveFileProvider proactiveProvider = new ProActiveFileProvider();
         for (final String scheme : ProActiveFileName.getAllVFSSchemes()) {
             manager.addProvider(scheme, proactiveProvider);
         }
+
+        manager.addOperationProvider("s3", new S3FileOperationsProvider());
 
         manager.setDefaultProvider(new UrlFileProvider());
 
