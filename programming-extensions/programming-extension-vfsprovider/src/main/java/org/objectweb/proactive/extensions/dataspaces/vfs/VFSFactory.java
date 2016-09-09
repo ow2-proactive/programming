@@ -58,8 +58,8 @@ import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 
-import com.github.vfss3.S3FileProvider;
-import com.github.vfss3.operations.S3FileOperationsProvider;
+import com.intridea.io.vfs.provider.s3.S3FileProvider;
+import com.intridea.io.vfs.provider.s3.operations.S3FileOperationsProvider;
 
 
 /**
