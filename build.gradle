@@ -225,7 +225,7 @@ project('programming-extensions:programming-extension-annotation') {
     }
 }
 
-def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.1']
+def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.1.1744488.1']
 
 def vfs2RuntimeDependencies = [
         'commons-net:commons-net:3.5',
@@ -241,7 +241,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
                 'activeeon:vfs-s3:2.4.2',
                 project(':programming-extensions:programming-extension-annotation')
         )
-        testCompile 'org.apache.commons:commons-vfs2:2.1:tests'
+        testCompile 'org.apache.commons:commons-vfs2:2.1.1744488.1:tests'
         runtime vfs2RuntimeDependencies
     }
     test {
@@ -356,7 +356,7 @@ project(':programming-test') {
     dependencies {
         testCompile(
                 'commons-io:commons-io:2.4',
-                'org.apache.commons:commons-vfs2:2.1',
+                'org.apache.commons:commons-vfs2:2.1.1744488.1',
 
                 project(':programming-annotation'),
                 project(':programming-core'),
