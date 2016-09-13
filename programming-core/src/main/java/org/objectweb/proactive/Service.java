@@ -151,8 +151,8 @@ public class Service {
             } catch (InterruptedException e) {
                 if (body.isActive()) {
                     logger.warn("Interruption message received in " + body.getUrl() +
-                            " , last request served is " + currentRequest.getMethodName() + " from " +
-                            currentRequest.getSender().getUrl(), e);
+                        " , last request served is " + currentRequest.getMethodName() + " from " +
+                        currentRequest.getSender().getUrl(), e);
                 }
             }
         }
@@ -171,8 +171,8 @@ public class Service {
             } catch (InterruptedException e) {
                 if (body.isActive()) {
                     logger.warn("Interruption message received in " + body.getUrl() +
-                            " , last request served is " + currentRequest.getMethodName() + " from " +
-                            currentRequest.getSender().getUrl(), e);
+                        " , last request served is " + currentRequest.getMethodName() + " from " +
+                        currentRequest.getSender().getUrl(), e);
                 }
             }
         }
