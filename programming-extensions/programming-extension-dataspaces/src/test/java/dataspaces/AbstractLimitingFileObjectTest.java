@@ -90,8 +90,7 @@ public class AbstractLimitingFileObjectTest {
         anotherFile = manager.resolveFile("tmpfs:///test2");
         anotherFile.createFile();
         
-        readWriteFile.delete();
-        readOnlyFile.delete();
+        realFile.delete();
 
         assertFalse(readOnlyFile.exists());
         assertFalse(readWriteFile.exists());
