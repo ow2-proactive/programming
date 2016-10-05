@@ -78,7 +78,6 @@ public class AbstractLimitingFileObjectTest {
 
     @Before
     public void setUp() throws Exception {
-        tearDown();
         manager = VFSFactory.createDefaultFileSystemManager();
         manager.addProvider("tmpfs", new TemporaryFileProvider());
 
@@ -90,6 +89,9 @@ public class AbstractLimitingFileObjectTest {
 
         anotherFile = manager.resolveFile("tmpfs:///test2");
         anotherFile.createFile();
+        
+        readWriteFile.delete();
+        readOnlyFile.delete();
 
         assertFalse(readOnlyFile.exists());
         assertFalse(readWriteFile.exists());
