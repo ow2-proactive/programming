@@ -238,7 +238,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
     dependencies {
         compile(
                 vfs2CompileDependencies,
-                'activeeon:vfs-s3:2.4.6',
+                'activeeon:vfs-s3:2.4.7',
                 project(':programming-extensions:programming-extension-annotation')
         )
         testCompile 'org.apache.commons:commons-vfs2:2.1.1744488.1:tests'
