@@ -36,11 +36,16 @@
  */
 package dataspaces;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.objectweb.proactive.extensions.dataspaces.vfs.AbstractLimitingFileObject;
-import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -52,14 +57,11 @@ import org.apache.commons.vfs2.util.RandomAccessMode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.rules.TestName;
+import org.objectweb.proactive.extensions.dataspaces.vfs.AbstractLimitingFileObject;
+import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 
 
 /**
@@ -68,6 +70,10 @@ import static org.junit.Assert.fail;
  * array etc.).
  */
 public class AbstractLimitingFileObjectTest {
+
+    @Rule
+    public TestName name = new TestName();
+
     private static final String CHILD_NAME = "abc";
     private FileObject realFile;
     private FileObject readOnlyFile;
@@ -81,18 +87,18 @@ public class AbstractLimitingFileObjectTest {
         manager = VFSFactory.createDefaultFileSystemManager();
         manager.addProvider("tmpfs", new TemporaryFileProvider());
 
-        realFile = manager.resolveFile("tmpfs:///test1/test2");
+        realFile = manager.resolveFile("tmpfs:///test1/" + name.getMethodName());
 
         readWriteFile = new ConstantlyLimitingFileObject(realFile, false, true);
         readOnlyFile = new ConstantlyLimitingFileObject(realFile, true, true);
         ancestorLimitedFile = new ConstantlyLimitingFileObject(realFile, false, false);
 
-        anotherFile = manager.resolveFile("tmpfs:///test2");
+        anotherFile = manager.resolveFile("tmpfs:///" + name.getMethodName());
         anotherFile.createFile();
 
         realFile.delete();
 
-        assertFalse(readOnlyFile.exists());
+        assertFalse(readWriteFile.exists());
         assertFalse(readWriteFile.exists());
         assertTrue(anotherFile.exists());
     }
@@ -604,8 +610,8 @@ public class AbstractLimitingFileObjectTest {
         assertNotNull(child);
     }
 
-    private static class ConstantlyLimitingFileObject extends
-            AbstractLimitingFileObject<ConstantlyLimitingFileObject> {
+    private static class ConstantlyLimitingFileObject
+            extends AbstractLimitingFileObject<ConstantlyLimitingFileObject> {
         private final boolean readOnly;
         private boolean allowReturnAncestor;
 
