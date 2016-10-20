@@ -610,8 +610,8 @@ public class AbstractLimitingFileObjectTest {
         assertNotNull(child);
     }
 
-    private static class ConstantlyLimitingFileObject
-            extends AbstractLimitingFileObject<ConstantlyLimitingFileObject> {
+    private static class ConstantlyLimitingFileObject extends
+            AbstractLimitingFileObject<ConstantlyLimitingFileObject> {
         private final boolean readOnly;
         private boolean allowReturnAncestor;
 
