@@ -34,23 +34,6 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystem;
 import org.apache.commons.vfs2.FileSystemException;
@@ -61,6 +44,17 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.StackTraceUtil;
 import org.objectweb.proactive.utils.ThreadPools;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 /**
@@ -79,7 +73,7 @@ public class VFSMountManagerHelper {
 
     static final int MAX_THREADS = 20;
 
-    static final ThreadPoolExecutor executor = ThreadPools.newBoundedThreadPool(MAX_THREADS);
+    static ThreadPoolExecutor executor;
 
     // read write lock used to control the map
     static final ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock(true);
@@ -93,6 +87,7 @@ public class VFSMountManagerHelper {
             try {
                 writeLock.lock();
                 logger.debug("Initializing spaces mount manager");
+                executor = ThreadPools.newBoundedThreadPool(MAX_THREADS);
                 try {
                     // FIXME: depends on VFS-256 (fixed in VFS fork)
                     // in vanilla VFS version, this manager will always return FileObjects with broken
@@ -108,8 +103,7 @@ public class VFSMountManagerHelper {
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        vfsManager.close();
-                        executor.shutdownNow();
+                        terminate();
                     }
                 }));
             } finally {
@@ -295,34 +289,37 @@ public class VFSMountManagerHelper {
     public static void closeFileSystems(Collection<String> uris) {
         try {
             writeLock.lock();
-            for (String uri : uris) {
-                if (alreadyMountedSpaces.containsKey(uri)) {
-                    Future<FileObject> future = alreadyMountedSpaces.remove(uri);
-                    if (future.isDone()) {
+            if (vfsManager != null) {
+                logger.debug("Closing file systems : " + uris);
+                for (String uri : uris) {
+                    if (alreadyMountedSpaces.containsKey(uri)) {
+                        Future<FileObject> future = alreadyMountedSpaces.remove(uri);
+                        if (future.isDone()) {
 
-                        try {
-                            FileObject fo = future.get();
-                            final FileSystem spaceFileSystem = fo.getFileSystem();
-
-                            // we may not need to close FileObject, but with VFS you never know...
                             try {
-                                fo.close();
-                            } catch (org.apache.commons.vfs2.FileSystemException x) {
-                                logger.debug("Could not close data space root file object : " + fo, x);
-                                ProActiveLogger.logEatedException(logger,
-                                        String.format("Could not close data space %s root file object", fo),
-                                        x);
+                                FileObject fo = future.get();
+                                final FileSystem spaceFileSystem = fo.getFileSystem();
+
+                                // we may not need to close FileObject, but with VFS you never know...
+                                try {
+                                    fo.close();
+                                } catch (org.apache.commons.vfs2.FileSystemException x) {
+                                    logger.debug("Could not close data space root file object : " + fo, x);
+                                    ProActiveLogger.logEatedException(logger,
+                                            String.format("Could not close data space %s root file object", fo),
+                                            x);
+                                }
+                                vfsManager.closeFileSystem(spaceFileSystem);
+                                if (logger.isDebugEnabled())
+                                    logger.debug("Unmounted space: " + fo);
+                            } catch (InterruptedException e) {
+                                // ignore
+                            } catch (ExecutionException e) {
+                                // ignore
                             }
-                            vfsManager.closeFileSystem(spaceFileSystem);
-                            if (logger.isDebugEnabled())
-                                logger.debug("Unmounted space: " + fo);
-                        } catch (InterruptedException e) {
-                            // ignore
-                        } catch (ExecutionException e) {
-                            // ignore
+                        } else {
+                            future.cancel(true);
                         }
-                    } else {
-                        future.cancel(true);
                     }
                 }
             }
@@ -333,11 +330,18 @@ public class VFSMountManagerHelper {
 
     public static void terminate() {
         try {
+
             writeLock.lock();
             if (vfsManager != null) {
-                vfsManager.close();
+                logger.debug("Terminating spaces mount manager");
+
+                executor.shutdownNow();
+
+                if (vfsManager != null) {
+                    vfsManager.close();
+                    vfsManager = null;
+                }
             }
-            executor.shutdownNow();
         } finally {
             writeLock.unlock();
         }
