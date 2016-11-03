@@ -36,16 +36,16 @@
  */
 package org.objectweb.proactive.extensions.pnp;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.util.URIBuilder;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
 
 
 /** Represent a {@link Request} */

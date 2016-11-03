@@ -91,10 +91,14 @@ class PNPServerHandler extends SimpleChannelHandler {
         if (logger.isDebugEnabled()) {
             if (e.getMessage() instanceof PNPFrameCallResponse) {
                 PNPFrameCallResponse res = (PNPFrameCallResponse) e.getMessage();
-                logger.debug("Written  response #" + res.getCallId() + " on " + e.getChannel());
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Written  response #" + res.getCallId() + " on " + e.getChannel());
+                }
             } else if (e.getMessage() instanceof PNPFrameHeartbeat) {
                 PNPFrameHeartbeat hb = (PNPFrameHeartbeat) e.getMessage();
-                logger.debug("Written  hearthbt #" + hb.hearthbeatId + " on " + e.getChannel());
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Written  heartbeat #" + hb.hearthbeatId + " on " + e.getChannel());
+                }
             }
         }
     }
@@ -122,6 +126,15 @@ class PNPServerHandler extends SimpleChannelHandler {
         super.channelClosed(ctx, e);
         if (logger.isDebugEnabled()) {
             logger.debug("Channel closed " + e.getChannel());
+        }
+    }
+
+    public static long getServerDelay() {
+        long delay = PNPConfig.PA_PNP_TEST_RANDOMDELAY.getValue();
+        if (delay > 0) {
+            return Math.round(delay + Math.random() * delay);
+        } else {
+            return 0;
         }
     }
 
@@ -171,7 +184,12 @@ class PNPServerHandler extends SimpleChannelHandler {
             this.cClientCount++;
 
             if (!this.scheduled) {
-                this.timer.newTimeout(this, heartbeatPeriod / 2, TimeUnit.MILLISECONDS);
+                long period = heartbeatPeriod;
+                period += getServerDelay();
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Next heartbeat in " + period + " ms");
+                }
+                this.timer.newTimeout(this, period, TimeUnit.MILLISECONDS);
                 this.scheduled = true;
             }
         }
@@ -187,19 +205,23 @@ class PNPServerHandler extends SimpleChannelHandler {
             this.scheduled = false;
 
             if (((this.cClientCount == 0) && (this.cGraceTime++ > DEFAULT_EXTRA_TIME)) || this.canceled) {
-                if (logger.isTraceEnabled()) {
-                    logger.trace("Canceled the heartbeater timer task for " + this.channel);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Canceled the heartbeater timer task for " + this.channel);
                 }
                 return;
             }
-
-            this.timer.newTimeout(this, heartbeatPeriod / 2, TimeUnit.MILLISECONDS);
+            long period = heartbeatPeriod;
+            period += getServerDelay();
+            if (logger.isTraceEnabled()) {
+                logger.trace("Next heartbeat in " + period + " ms");
+            }
+            this.timer.newTimeout(this, period, TimeUnit.MILLISECONDS);
             this.scheduled = true;
 
             final long heartbeatId = this.cHeartbeatId++;
             PNPFrameHeartbeat hearthbeat = new PNPFrameHeartbeat(heartbeatId);
             if (logger.isDebugEnabled()) {
-                logger.debug("Sending eartbeat " + heartbeatId + " on " + channel);
+                logger.debug("Sending heartbeat " + heartbeatId + " on " + channel);
             }
             ChannelFuture cf = channel.write(hearthbeat); // FIXME check return value
             cf.addListener(new ChannelFutureListener() {
@@ -238,8 +260,10 @@ class PNPServerHandler extends SimpleChannelHandler {
 
         public void run() {
             if (logger.isTraceEnabled()) {
-                logger.trace("Received request #" + req.getCallId() + " on " + channel);
+                logger.trace("Received request " + req + " on " + channel);
             }
+
+            simulateServerDelay();
 
             ClassLoader savedClassLoader = Thread.currentThread().getContextClassLoader();
             try {
@@ -307,6 +331,17 @@ class PNPServerHandler extends SimpleChannelHandler {
             } finally {
                 Thread.currentThread().setContextClassLoader(savedClassLoader);
                 hearthbeater.clientLeave();
+            }
+        }
+    }
+
+    private static void simulateServerDelay() {
+        long delay = getServerDelay();
+        if (delay > 0) {
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                logger.warn("", e);
             }
         }
     }

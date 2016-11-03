@@ -28,8 +28,8 @@
 					<pathElement base="proactive" relpath="programming-test/build/resources/test/"/>
 					<pathElement base="proactive" relpath="programming-test/build/dist/lib/*"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
-				</proactiveClasspath>	
-<!--				<log4jProperties base="proactive" relpath="compile/proactive-log4j"/> -->
+				</proactiveClasspath>
+				<log4jProperties base="proactive" relpath="compile/proactive-log4j"/>
 		      <!--   <proactiveSecurity>
 		          <applicationPolicy base="proactive" relpath="descriptors/security/applicationPolicy1.xml"/>
 		          <runtimePolicy base="proactive" relpath="descriptors/security/applicationPolicy1.xml"/>

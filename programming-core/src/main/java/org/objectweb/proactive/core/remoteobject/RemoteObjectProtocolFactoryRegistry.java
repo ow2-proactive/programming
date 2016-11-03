@@ -36,19 +36,18 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-
-import javax.imageio.spi.ServiceRegistry;
-
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.remoteobject.http.HTTPRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmissh.RmiSshRemoteObjectFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.apache.log4j.Logger;
+
+import javax.imageio.spi.ServiceRegistry;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
 
 
 public class RemoteObjectProtocolFactoryRegistry {
