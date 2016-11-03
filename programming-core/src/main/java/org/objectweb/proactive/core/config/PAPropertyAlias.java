@@ -98,8 +98,8 @@ public class PAPropertyAlias implements PAProperty {
     }
 
     @Override
-    public String getDefaultValue() {
-        return this.target.getDefaultValue();
+    public String getDefaultValueAsString() {
+        return this.target.getDefaultValueAsString();
     }
 
     @Override

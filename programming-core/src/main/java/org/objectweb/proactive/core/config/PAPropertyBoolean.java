@@ -60,6 +60,11 @@ public class PAPropertyBoolean extends PAPropertyImpl {
         return Boolean.parseBoolean(str);
     }
 
+    final public boolean getDefaultValue() {
+        String str = super.getDefaultValueAsString();
+        return Boolean.parseBoolean(str);
+    }
+
     final public boolean isTrue() {
         return this.getValue();
     }

@@ -34,10 +34,10 @@
  */
 package org.objectweb.proactive.core.config;
 
-import java.util.Arrays;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 
 /**
@@ -49,10 +49,12 @@ public class PropertyListTest {
 
     @Test
     public void testParseListProperty() {
-        PAPropertyList myProperty = new PAPropertyList("my.property", ",", false);
+        PAPropertyList myProperty = new PAPropertyList("my.property", ",", false, "test,a,value");
         myProperty.setValue("test,a,value");
 
         Assert.assertEquals(Arrays.asList("test", "a", "value"), myProperty.getValue());
+
+        Assert.assertEquals(Arrays.asList("test", "a", "value"), myProperty.getDefaultValue());
 
         myProperty.setValue(Arrays.asList("test", "b", "value"));
         Assert.assertEquals("test,b,value", myProperty.getValueAsString());

@@ -53,11 +53,20 @@ public class PAPropertyInteger extends PAPropertyImpl {
 
     final public int getValue() {
         String str = super.getValueAsString();
+        return parseValue(str);
+    }
+
+    final public int getDefaultValue() {
+        String str = super.getDefaultValueAsString();
+        return parseValue(str);
+    }
+
+    private int parseValue(String str) {
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid value for ProActive property " + super.getAliasedName() +
-                " must be an integer", e);
+                    " must be an integer", e);
         }
     }
 
