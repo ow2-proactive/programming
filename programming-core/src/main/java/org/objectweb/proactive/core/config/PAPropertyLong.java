@@ -53,11 +53,20 @@ public class PAPropertyLong extends PAPropertyImpl {
 
     final public long getValue() {
         String str = super.getValueAsString();
+        return parseValue(str);
+    }
+
+    final public long getDefaultValue() {
+        String str = super.getDefaultValueAsString();
+        return parseValue(str);
+    }
+
+    private long parseValue(String str) {
         try {
             return Long.parseLong(str);
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid value for ProActive property " + super.getAliasedName() +
-                " must be a long", e);
+                    " must be a long", e);
         }
     }
 

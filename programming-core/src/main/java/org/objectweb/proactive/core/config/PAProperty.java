@@ -104,7 +104,7 @@ public interface PAProperty {
      * @return
      *    the default value or null.
      */
-    public String getDefaultValue();
+    public String getDefaultValueAsString();
 
     /**
      * Indicates if the property is set.

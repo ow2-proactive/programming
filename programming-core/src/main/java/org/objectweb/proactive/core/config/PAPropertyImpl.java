@@ -92,7 +92,7 @@ abstract class PAPropertyImpl implements PAProperty {
     }
 
     @Override
-    public String getDefaultValue() {
+    public String getDefaultValueAsString() {
         return this.defaultValue;
     }
 

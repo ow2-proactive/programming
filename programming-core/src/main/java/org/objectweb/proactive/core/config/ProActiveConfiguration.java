@@ -36,6 +36,12 @@
  */
 package org.objectweb.proactive.core.config;
 
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.config.xml.ProActiveConfigurationParser;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.OperatingSystem;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,12 +50,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import org.objectweb.proactive.core.config.xml.ProActiveConfigurationParser;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.utils.OperatingSystem;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -108,8 +108,8 @@ public class ProActiveConfiguration {
         Map<Class<?>, List<PAProperty>> allProperties = PAProperties.getAllProperties();
         for (List<PAProperty> list : allProperties.values()) {
             for (PAProperty prop : list) {
-                if (prop.getDefaultValue() != null) {
-                    setProperty(prop.getName(), prop.getDefaultValue(), prop.isSystemProperty());
+                if (prop.getDefaultValueAsString() != null) {
+                    setProperty(prop.getName(), prop.getDefaultValueAsString(), prop.isSystemProperty());
                 }
             }
         }

@@ -54,6 +54,10 @@ public class PAPropertyString extends PAPropertyImpl {
         return super.getValueAsString();
     }
 
+    final public String getDefaultValue() {
+        return super.getDefaultValueAsString();
+    }
+
     final public void setValue(String value) {
         super.internalSetValue(value);
     }

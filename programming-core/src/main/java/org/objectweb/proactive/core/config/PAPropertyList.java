@@ -79,13 +79,16 @@ public class PAPropertyList extends PAPropertyImpl {
 
     final public List<String> getValue() {
         if (computedValue == null) {
-            computeStringToList();
+            computedValue = computeStringToList(super.getValueAsString());
         }
         return computedValue;
     }
 
-    private void computeStringToList() {
-        String value = super.getValueAsString();
+    final public List<String> getDefaultValue() {
+        return computeStringToList(super.getDefaultValueAsString());
+    }
+
+    private List<String> computeStringToList(String value) {
         if (value != null) {
             ArrayList<String> tmplist = new ArrayList<>();
             for (String val : value.split(Pattern.quote(separator))) {
@@ -97,9 +100,9 @@ public class PAPropertyList extends PAPropertyImpl {
             if (validator != null) {
                 validator.accept(tmplist);
             }
-            computedValue = tmplist;
+            return tmplist;
         } else {
-            computedValue = null;
+            return null;
         }
     }
 
@@ -121,7 +124,7 @@ public class PAPropertyList extends PAPropertyImpl {
 
     final public void setValue(String value) {
         super.internalSetValue(value);
-        computeStringToList();
+        computedValue = computeStringToList(value);
     }
 
     final public void setValue(List<String> value) {
