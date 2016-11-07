@@ -67,8 +67,6 @@ class PNPClientHandler extends IdleStateAwareChannelHandler {
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        // Must be called ASAP to avoid late heartbeat
-        pnpClientChannel.signalInputMessage();
 
         if (!(e.getMessage() instanceof PNPFrame)) {
             throw new PNPException("Invalid message type " + e.getMessage().getClass().getName());
@@ -80,7 +78,7 @@ class PNPClientHandler extends IdleStateAwareChannelHandler {
                 pnpClientChannel.receiveResponse((PNPFrameCallResponse) msg);
                 break;
             case HEARTBEAT:
-                // OK we already notified the client channel
+                pnpClientChannel.signalHeartBeatMessage(ctx, (PNPFrameHeartbeat) msg);
                 break;
             default:
                 throw new PNPException("Unexpected message type: " + msg);

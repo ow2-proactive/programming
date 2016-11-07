@@ -50,6 +50,8 @@ public class PNPRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
         config.setPort(PNPConfig.PA_PNP_PORT.getValue());
         config.setIdleTimeout(PNPConfig.PA_PNP_IDLE_TIMEOUT.getValue());
         config.setDefaultHeartbeat(PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getValue());
+        config.setHeartbeatFactor(PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getValue());
+        config.setHeartbeatWindow(PNPConfig.PA_PNP_HEARTBEAT_WINDOW.getValue());
 
         final PNPRemoteObjectFactoryBackend rof;
         rof = new PNPRemoteObjectFactoryBackend(PROTO_ID, config, null);

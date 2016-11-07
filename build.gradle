@@ -297,7 +297,9 @@ project('programming-extensions:programming-extension-gcmdeployment') {
 project('programming-extensions:programming-extension-pnp') {
     dependencies {
         compile(
-                'io.netty:netty:3.10.4.Final'
+                'io.netty:netty:3.10.4.Final',
+                'com.google.guava:guava:19.0',
+                'org.apache.commons:commons-collections4:4.0'
         )
     }
 }

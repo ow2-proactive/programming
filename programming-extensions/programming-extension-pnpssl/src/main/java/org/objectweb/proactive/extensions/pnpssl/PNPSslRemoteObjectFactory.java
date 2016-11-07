@@ -36,6 +36,20 @@
  */
 package org.objectweb.proactive.extensions.pnpssl;
 
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.pnp.PNPConfig;
+import org.objectweb.proactive.extensions.pnp.PNPExtraHandlers;
+import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryAbstract;
+import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryBackend;
+import org.objectweb.proactive.extensions.ssl.CertificateGenerator;
+import org.objectweb.proactive.extensions.ssl.PermissiveTrustManager;
+import org.objectweb.proactive.extensions.ssl.SameCertTrustManager;
+import org.objectweb.proactive.extensions.ssl.SecureMode;
+import org.objectweb.proactive.extensions.ssl.SslException;
+import org.objectweb.proactive.extensions.ssl.SslHelpers;
+
+import javax.net.ssl.TrustManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,22 +64,6 @@ import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.net.ssl.TrustManager;
-
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryAbstract;
-import org.objectweb.proactive.extensions.pnp.PNPConfig;
-import org.objectweb.proactive.extensions.pnp.PNPExtraHandlers;
-import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryBackend;
-import org.objectweb.proactive.extensions.ssl.CertificateGenerator;
-import org.objectweb.proactive.extensions.ssl.PermissiveTrustManager;
-import org.objectweb.proactive.extensions.ssl.SslHelpers;
-import org.objectweb.proactive.extensions.ssl.SameCertTrustManager;
-import org.objectweb.proactive.extensions.ssl.SecureMode;
-import org.objectweb.proactive.extensions.ssl.SslException;
 
 
 /**
@@ -86,6 +84,8 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
         config.setPort(PNPSslConfig.PA_PNPSSL_PORT.getValue());
         config.setIdleTimeout(PNPSslConfig.PA_PNPSSL_IDLE_TIMEOUT.getValue());
         config.setDefaultHeartbeat(PNPSslConfig.PA_PNPSSL_DEFAULT_HEARTBEAT.getValue());
+        config.setHeartbeatFactor(PNPSslConfig.PA_PNPSSL_HEARTBEAT_FACTOR.getValue());
+        config.setHeartbeatWindow(PNPSslConfig.PA_PNPSSL_HEARTBEAT_WINDOW.getValue());
 
         if (PNPSslConfig.PA_PNPSSL_AUTHENTICATE.isTrue() && !PNPSslConfig.PA_PNPSSL_KEYSTORE.isSet()) {
             throw new PNPSslConfigurationException(PNPSslConfig.PA_PNPSSL_KEYSTORE.getName() +
