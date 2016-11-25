@@ -66,7 +66,7 @@ public class PAPropertyInteger extends PAPropertyImpl {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid value for ProActive property " + super.getAliasedName() +
-                    " must be an integer", e);
+                " must be an integer", e);
         }
     }
 

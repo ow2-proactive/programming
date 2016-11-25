@@ -15,6 +15,7 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+
 @Ignore("Ignored because it depends too much on the environment, but can be used for manual testing")
 public class LinuxProcessBuilderTest {
 
@@ -22,7 +23,6 @@ public class LinuxProcessBuilderTest {
     private static final String PASSWORD = "pwd";
     private static final String PROACTIVE_HOME = "/tmp/programming";
     private static final String PATH_TO_SSH_PRIVATE_KEY = "/tmp/.ssh/id_rsa";
-
 
     @Before
     public void before() {
@@ -45,7 +45,7 @@ public class LinuxProcessBuilderTest {
     @Test
     public void sudoEnvVar() throws Exception {
         LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME), null,
-                PROACTIVE_HOME);
+            PROACTIVE_HOME);
 
         processBuilder.environment().put("MYVAR1", "MYVALUE1");
         processBuilder.environment().put("MYVAR2", "MYVALUE2");
@@ -72,7 +72,7 @@ public class LinuxProcessBuilderTest {
     @Test
     public void suEnvVar() throws Exception {
         LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME, PASSWORD), null,
-                PROACTIVE_HOME);
+            PROACTIVE_HOME);
 
         processBuilder.environment().put("MYVAR1", "MYVALUE1");
         processBuilder.environment().put("MYVAR2", "MYVALUE2");
@@ -110,7 +110,7 @@ public class LinuxProcessBuilderTest {
     @Test
     public void sshEnvVar() throws Exception {
         LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME,
-                FileUtils.readFileToByteArray(new File(PATH_TO_SSH_PRIVATE_KEY))), null, PROACTIVE_HOME);
+            FileUtils.readFileToByteArray(new File(PATH_TO_SSH_PRIVATE_KEY))), null, PROACTIVE_HOME);
         processBuilder.environment().put("MYVAR1", "MYVALUE1");
         processBuilder.environment().put("MYVAR2", "MYVALUE2");
         Process process = processBuilder.command("env").start();

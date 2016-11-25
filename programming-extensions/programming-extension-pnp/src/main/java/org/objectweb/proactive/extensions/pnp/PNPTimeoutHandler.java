@@ -40,6 +40,7 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+
 /**
  * Dynamic heartbeat timeout mechanism
  */
@@ -154,7 +155,8 @@ public class PNPTimeoutHandler {
             return newTimeout;
         }
 
-        public HeartBeatNotificationData(boolean heartBeatReceived, long lastHeartbeatInterval, long newTimeout) {
+        public HeartBeatNotificationData(boolean heartBeatReceived, long lastHeartbeatInterval,
+                long newTimeout) {
             this.heartBeatReceived = heartBeatReceived;
             this.lastHeartbeatInterval = lastHeartbeatInterval;
             this.newTimeout = newTimeout;

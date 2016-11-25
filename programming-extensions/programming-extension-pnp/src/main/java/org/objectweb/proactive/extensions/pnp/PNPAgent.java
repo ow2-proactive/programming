@@ -295,7 +295,7 @@ public class PNPAgent {
             this.channels = new ConcurrentHashMap<PNPChannelId, PNPClientChannel>();
             this.clientBootstrap = clientBootstrap;
             NamedThreadFactory tf = new NamedThreadFactory("PNP client handler timer (shared)", true,
-                    Thread.MAX_PRIORITY);
+                Thread.MAX_PRIORITY);
             this.timer = new HashedWheelTimer(tf, 10, TimeUnit.MILLISECONDS);
         }
 
@@ -583,7 +583,8 @@ public class PNPAgent {
         private Parking(PNPChannelId channelId, Timer timer) {
             this.slots = new HashMap<Long, ParkingSlot>();
             this.timer = timer;
-            this.timeoutHandler = new PNPTimeoutHandler(channelId.heartbeat, PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getValue(), PNPConfig.PA_PNP_HEARTBEAT_WINDOW.getValue());
+            this.timeoutHandler = new PNPTimeoutHandler(channelId.heartbeat,
+                PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getValue(), PNPConfig.PA_PNP_HEARTBEAT_WINDOW.getValue());
             this.channelId = channelId;
 
             this.scheduled = false;
@@ -612,7 +613,8 @@ public class PNPAgent {
             // reset to default values
             this.scheduled = false;
 
-            PNPTimeoutHandler.HeartBeatNotificationData notificationData = this.timeoutHandler.getNotificationData();
+            PNPTimeoutHandler.HeartBeatNotificationData notificationData = this.timeoutHandler
+                    .getNotificationData();
             this.timeoutHandler.resetNotification();
 
             if (this.slots.isEmpty() && (this.extraTime++ > DEFAULT_EXTRA_TIME)) {
@@ -622,7 +624,9 @@ public class PNPAgent {
 
             if (notificationData.heartBeatReceived()) {
                 if (logger.isTraceEnabled()) {
-                    logger.trace("Heartbeat received in time in channel " + channelId + ((notificationData.getLastHeartBeatInterval() > 0) ? ", last interval was : " +
+                    logger.trace("Heartbeat received in time in channel " +
+                        channelId +
+                        ((notificationData.getLastHeartBeatInterval() > 0) ? ", last interval was : " +
                             notificationData.getLastHeartBeatInterval() + " ms" : ""));
                 }
                 long timeoutValue = notificationData.getTimeout();
@@ -642,8 +646,8 @@ public class PNPAgent {
         }
 
         synchronized private void unlockDueToDisconnection(long timeout) {
-            PNPIOException e = new PNPHeartbeatTimeoutException("Heartbeat not received in time (" +
-                    timeout + " ms)");
+            PNPIOException e = new PNPHeartbeatTimeoutException("Heartbeat not received in time (" + timeout +
+                " ms)");
             for (ParkingSlot slot : slots.values()) {
                 slot.setAndUnlock(e);
             }

@@ -66,7 +66,6 @@ public class TestPNPTimeout extends GCMFunctionalTest {
 
     static final long WAIT_TIME = 60000;
 
-
     @BeforeClass
     static public void prepareForTest() throws Exception {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pnp");
@@ -79,9 +78,8 @@ public class TestPNPTimeout extends GCMFunctionalTest {
     public TestPNPTimeout() throws ProActiveException {
         super(1, 1);
 
-        super.setOptionalJvmParamters(
-                PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getCmdLine() + TEST_HEART_BEAT + " " +
-                        PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getCmdLine() + TEST_FACTOR);
+        super.setOptionalJvmParamters(PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getCmdLine() + TEST_HEART_BEAT +
+            " " + PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getCmdLine() + TEST_FACTOR);
         super.startDeployment();
     }
 
@@ -93,8 +91,8 @@ public class TestPNPTimeout extends GCMFunctionalTest {
      * (this last bit can be observed in the log, but it seems not possible to check this via assertions).
      */
     @Test(timeout = 300000)
-    public void testGrowingDelay() throws ActiveObjectCreationException, NodeException, UnknownProtocolException,
-            NotYetExposedException, InterruptedException {
+    public void testGrowingDelay() throws ActiveObjectCreationException, NodeException,
+            UnknownProtocolException, NotYetExposedException, InterruptedException {
 
         System.out.println("Starting test: growing delay");
         Node node = super.getANode();
@@ -115,7 +113,8 @@ public class TestPNPTimeout extends GCMFunctionalTest {
         // the server delay should be maximum
         GrowingDelayAO remote2 = PAActiveObject.newActive(GrowingDelayAO.class, new Object[0], node);
 
-        Assert.assertTrue("Call to the second active object, with a big delay should not raise exceptions", remote2.simpleMessage());
+        Assert.assertTrue("Call to the second active object, with a big delay should not raise exceptions",
+                remote2.simpleMessage());
 
         remote.removeDelay();
         // the server delay is now set to 0
@@ -123,8 +122,12 @@ public class TestPNPTimeout extends GCMFunctionalTest {
 
         for (int i = 0; i < 20; i++) {
             Thread.sleep(1000);
-            Assert.assertTrue("Subsequent calls on the first active object with delay reset should not raise exceptions", remote.simpleMessage());
-            Assert.assertTrue("Subsequent calls on the second active object with delay reset should not raise exceptions", remote2.simpleMessage());
+            Assert.assertTrue(
+                    "Subsequent calls on the first active object with delay reset should not raise exceptions",
+                    remote.simpleMessage());
+            Assert.assertTrue(
+                    "Subsequent calls on the second active object with delay reset should not raise exceptions",
+                    remote2.simpleMessage());
         }
         System.out.println("End test: growing delay");
     }
@@ -133,7 +136,6 @@ public class TestPNPTimeout extends GCMFunctionalTest {
     public void releaseNodes() throws Throwable {
         killDeployment();
     }
-
 
     /**
      * This test ensures that a timeout exception is raised when a big delay is suddenly added to an active object's pnp server.

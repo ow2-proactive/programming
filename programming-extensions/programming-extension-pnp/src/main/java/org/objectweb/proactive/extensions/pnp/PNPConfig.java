@@ -67,7 +67,7 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      *
      */
     static final public PAPropertyInteger PA_PNP_DEFAULT_HEARTBEAT = new PAPropertyInteger(
-            "proactive.pnp.default_heartbeat", false, 10 * 1000);
+        "proactive.pnp.default_heartbeat", false, 10 * 1000);
 
     /**
      * A factor of the heartbeat period used to detect failure.
@@ -90,15 +90,15 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      * If the heartbeat_window is set too high, after a long period of network delay increase, the timeout will require the same amount of time to decrease back to its default value.
      */
     static final public PAPropertyInteger PA_PNP_HEARTBEAT_FACTOR = new PAPropertyInteger(
-            "proactive.pnp.heartbeat_factor", false, 3);
+        "proactive.pnp.heartbeat_factor", false, 3);
     static final public PAPropertyInteger PA_PNP_HEARTBEAT_WINDOW = new PAPropertyInteger(
-            "proactive.pnp.heartbeat_window", false, 5);
+        "proactive.pnp.heartbeat_window", false, 5);
 
     /**
      * This property is only used for testing purpose, to simulate a server delay
      */
     static final public PAPropertyInteger PA_PNP_TEST_RANDOMDELAY = new PAPropertyInteger(
-            "proactive.pnp.test.random_delay", false, 0);
+        "proactive.pnp.test.random_delay", false, 0);
 
     /**
      * Channel garbage collection timeout (in milliseconds)
