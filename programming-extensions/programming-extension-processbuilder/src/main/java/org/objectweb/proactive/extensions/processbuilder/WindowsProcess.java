@@ -327,9 +327,12 @@ public final class WindowsProcess extends Process {
 
         try {
             /////////////////////////////////////////////////////////////////////////////////////
-            // The client subprocess cannot be created with CreateProcessWithLogonW since it
-            // breaks away from ProActive Agent job object. Instead we must use
+            // The client subprocess used not to work with CreateProcessWithLogonW since it
+            // broke away from ProActive Agent job object. Instead it was needed to use
             // LogonUser, Impersonate, CreateProcessAsUser, Revert ...
+            // On recent windows version though, it is the opposite, CreateProcessAsUser always fails
+            // with a 1314 error and CreateProcessWithLogonW works, even when executing with a ProActive
+            // agent. It may break when the agent is configured to run as the system account.
             /////////////////////////////////////////////////////////////////////////////////////							
 
             if (!Advapi32.INSTANCE.LogonUser(this.user, this.domain, this.password,
@@ -380,111 +383,16 @@ public final class WindowsProcess extends Process {
                 lpPath = m.getString(0, true);
             }
 
-            // Fill the security attributes
-            final WinBase.SECURITY_ATTRIBUTES sa = new WinBase.SECURITY_ATTRIBUTES();
-            sa.lpSecurityDescriptor = null;
-            sa.bInheritHandle = true;// true otherwise streams are not piped
-            sa.write();
-
-            // Create pipes
-            if (!(Kernel32.INSTANCE.CreatePipe(this.inRead, this.inWrite, sa, 0) &&
-                Kernel32.INSTANCE.CreatePipe(this.outRead, this.outWrite, sa, 0) && Kernel32.INSTANCE
-                    .CreatePipe(this.errRead, this.errWrite, sa, 0))) {
-                throw win32ErrorIOException("CreatePipe");
-            }
-
-            final WinBase.STARTUPINFO si = new WinBase.STARTUPINFO();
-            si.dwFlags = WinBase.STARTF_USESHOWWINDOW | WinBase.STARTF_USESTDHANDLES;
-            si.hStdInput = this.inRead.getValue();
-            si.hStdOutput = this.outWrite.getValue();
-            si.hStdError = this.errWrite.getValue();
-            // From doc: If the system is initialized with the empty string, "",
-            // it will either create a new window station and desktop
-            // that you cannot see, or if one has been created by means
-            // of a prior call by using the same access token, the existing
-            // window station and desktop will be used.            
-            si.lpDesktop = "";
-            si.wShowWindow = new WinDef.WORD(0); // SW_HIDE
-            si.write();
-
-            if (!Kernel32.INSTANCE.SetHandleInformation(inWrite.getValue(), WinBase.HANDLE_FLAG_INHERIT, 0) ||
-                !Kernel32.INSTANCE.SetHandleInformation(outRead.getValue(), WinBase.HANDLE_FLAG_INHERIT, 0) ||
-                !Kernel32.INSTANCE.SetHandleInformation(errRead.getValue(), WinBase.HANDLE_FLAG_INHERIT, 0)) {
-                throw win32ErrorIOException("SetHandleInformation");
-            }
-
-            final WinBase.PROCESS_INFORMATION pi = new WinBase.PROCESS_INFORMATION();
-
             /////////////////////////////////////////////////////////////////////////////////////
             // If the environment is NULL, the new process uses the environment of the calling
             // process. An env block consists of a null-terminated block of null-terminated strings.
             // Each string is in the following form: name=value\0 
             /////////////////////////////////////////////////////////////////////////////////////
-            final HANDLE hToken = hTokenRef.getValue();
 
-            // Impersonate current user
-            if (!Advapi32.INSTANCE.ImpersonateLoggedOnUser(hToken)) {
-                throw win32ErrorIOException("ImpersonateLoggedOnUser");
-            }
+            // Call the startWithLogon method which uses CreateProcessWithLogonW to start the process
+            startWithLogon(cmd, lpEnvironment, lpPath);
 
-            /////////////////////////////////////////////////////////////////////////////////////
-            // If lpDesktop is NULL or "winsta0\\default"
-            // and the current process does not have the rights to access the default desktop
-            // the call to CreateProcessAsUserW will return true but 
-            // GetLastError return 1307 ERROR_INVALID_OWNER This security ID may not be assigned as the owner of this object
-            /////////////////////////////////////////////////////////////////////////////////////
-
-            boolean success = Advapi32.INSTANCE.CreateProcessAsUser(
-            /* WinNT.HANDLE */hToken, // user primary token
-                    /* String */null, // the name of the module to be executed 
-                    /* String */lpCommandLine, // the command line
-                    /* WinBase.SECURITY_ATTRIBUTES */null, // the security attributes inherited by child process
-                    /* WinBase.SECURITY_ATTRIBUTES */null, // the security attributes inherited by child thread 
-                    /* boolean */true, // inherit handles 
-                    /* int */WinBase.CREATE_NO_WINDOW | WinBase.CREATE_UNICODE_ENVIRONMENT, // creation flags  
-                    /* String */lpEnvironment, // block of null terminated strings 
-                    /* String */lpPath, // path to current directory for the process
-                    /* WinBase.STARTUPINFO */si, // pointer to STARTUPINFO or STARTUPINFOEX structure
-                    /* WinBase.PROCESS_INFORMATION */pi); // pointer to PROCESS_FORMATION structure					
-
-            // The error that corresponds to createProcessAsUser
-            final int createProcessAsUserError = Kernel32.INSTANCE.GetLastError();
-
-            // Always revert to self 
-            if (!Advapi32.INSTANCE.RevertToSelf()) {
-                // The error that corresponds to RevertToSelf
-                final int revertToSelfError = Kernel32.INSTANCE.GetLastError();
-                // We must not continue to run in the context of the client, kill the process
-                if (success) {
-                    try {
-                        Kernel32.INSTANCE.TerminateProcess(pi.hProcess, 1);
-                    } finally {
-                        Kernel32.INSTANCE.CloseHandle(pi.hProcess);
-                    }
-                }
-                // This is a really bad situation the current process should be killed
-                final String mess = Kernel32Util.formatMessageFromLastErrorCode(revertToSelfError);
-                throw new Error("RevertToSelf error=" + revertToSelfError + ", " + mess +
-                    " The current process should be killed!");
-            }
-
-            if (!success) {
-                final String mess = Kernel32Util.formatMessageFromLastErrorCode(createProcessAsUserError);
-                throw new IOException("CreateProcessAsUser error=" + createProcessAsUserError + ", " + mess +
-                    " [lpPath=" + lpPath + ", lpCommandLine=" + lpCommandLine + "]");
-            }
-
-            Kernel32.INSTANCE.CloseHandle(pi.hThread);
-            this.pid = pi.dwProcessId.intValue();
-            this.handle = pi.hProcess;
-
-            // Connect java-side streams
-            this.internalConnectStreams();
         } catch (Exception ex) {
-            // Clean up the parent's side of the pipes in case of failure only
-            closeSafely(this.inWrite);
-            closeSafely(this.outRead);
-            closeSafely(this.errRead);
 
             // If RuntimeException re-throw the internal IOException 
             if (ex instanceof IOException) {
@@ -495,18 +403,13 @@ public final class WindowsProcess extends Process {
                 throw new IOException(ex);
             }
         } finally {
-            // Always clean up the child's side of the pipes
-            closeSafely(this.inRead);
-            closeSafely(this.outWrite);
-            closeSafely(this.errWrite);
 
             // Always clean up the user token handle
             closeSafely(hTokenRef);
         }
     }
 
-    public void startWithLogon(final String cmd[] // can be null 
-    ) throws IOException {
+    public void startWithLogon(final String cmd[], String lpEnvironment, String lpPath) throws IOException {
         // Merge the command array into a single string
         final String lpCommandLine = this.internalMergeCommand(cmd);
 
@@ -536,8 +439,9 @@ public final class WindowsProcess extends Process {
             final WinBase.PROCESS_INFORMATION pi = new WinBase.PROCESS_INFORMATION();
 
             /////////////////////////////////////////////////////////////////////////////////////
-            // CreateProcessWithLogonW cannot be used since its parent process is svchost.exe and
-            // it breaks away from ProActive Agent job object.
+            // CreateProcessWithLogonW used not to work on old windows systems because its parent process is svchost.exe and
+            // this broke away from ProActive Agent job object.
+            // On recent windows, the problem seems to have disappeared.
             /////////////////////////////////////////////////////////////////////////////////////
 
             boolean result = MyAdvapi.INSTANCE.CreateProcessWithLogonW(
@@ -546,13 +450,18 @@ public final class WindowsProcess extends Process {
                     /* String */null, // The name of the module to be executed
                     /* String */lpCommandLine, // The command line to be executed 
                     /* int */WinBase.CREATE_NO_WINDOW | WinBase.CREATE_UNICODE_ENVIRONMENT, // creation flags
-                    /* String */null, // the new process uses an environment created from the profile of the user
-                    /* String */null, // the new process has the same current drive and directory as the calling process
+                    /* String */lpEnvironment, // the new process uses an environment created from the profile of the user
+                    /* String */lpPath, // the new process has the same current drive and directory as the calling process
                     /* WinBase.STARTUPINFO */si, // pointer to STARTUPINFO or STARTUPINFOEX structure
                     /* WinBase.PROCESS_INFORMATION */pi); // pointer to PROCESS_FORMATION structure
 
             if (!result) {
-                throw win32ErrorIOException("CreateProcessWithLogon");
+                final int CreateProcessWithLogonWError = Kernel32.INSTANCE.GetLastError();
+                final String messageFromLastErrorCode = Kernel32Util
+                        .formatMessageFromLastErrorCode(CreateProcessWithLogonWError);
+                throw new IOException("CreateProcessWithLogonW error=" + CreateProcessWithLogonWError + ", " +
+                        messageFromLastErrorCode + " [lpPath=" + lpPath + ", lpCommandLine=" + lpCommandLine +
+                        "]");
             }
 
             Kernel32.INSTANCE.CloseHandle(pi.hThread);
@@ -631,7 +540,7 @@ public final class WindowsProcess extends Process {
 
         WindowsProcess envProcess = new WindowsProcess(this.domain, this.user, this.password);
         try {
-            envProcess.startWithLogon(new String[] { "cmd.exe", "/c", "set" });
+            envProcess.startWithLogon(new String[]{"cmd.exe", "/c", "set"}, null, null);
 
             int exitCode = envProcess.waitFor();
             if (exitCode != 0) {
@@ -676,7 +585,7 @@ public final class WindowsProcess extends Process {
             try {
                 Class<?> cl = Class.forName("java.lang.ProcessEnvironment");
                 for (final Method method : cl.getDeclaredMethods()) {
-                    if ("toEnvironmentBlock".equals(method.getName())) {
+                    if (isToEnvironmentBlockMethodWithMapParameter(method)) {
                         method.setAccessible(true);
                         block = (String) method.invoke(null, overrideEnv);
                         break;
@@ -691,6 +600,11 @@ public final class WindowsProcess extends Process {
             envProcess.destroy();
             envProcess.close();
         }
+    }
+
+    private boolean isToEnvironmentBlockMethodWithMapParameter(Method method) {
+        return "toEnvironmentBlock".equals(method.getName()) && (method.getParameterTypes().length == 1) &&
+                (method.getParameterTypes()[0].equals(Map.class));
     }
 
     /**
