@@ -457,9 +457,11 @@ public final class WindowsProcess extends Process {
 
             if (!result) {
                 final int CreateProcessWithLogonWError = Kernel32.INSTANCE.GetLastError();
-                final String mess = Kernel32Util.formatMessageFromLastErrorCode(CreateProcessWithLogonWError);
+                final String messageFromLastErrorCode = Kernel32Util
+                        .formatMessageFromLastErrorCode(CreateProcessWithLogonWError);
                 throw new IOException("CreateProcessWithLogonW error=" + CreateProcessWithLogonWError + ", " +
-                        mess + " [lpPath=" + lpPath + ", lpCommandLine=" + lpCommandLine + "]");
+                        messageFromLastErrorCode + " [lpPath=" + lpPath + ", lpCommandLine=" + lpCommandLine +
+                        "]");
             }
 
             Kernel32.INSTANCE.CloseHandle(pi.hThread);
@@ -583,8 +585,7 @@ public final class WindowsProcess extends Process {
             try {
                 Class<?> cl = Class.forName("java.lang.ProcessEnvironment");
                 for (final Method method : cl.getDeclaredMethods()) {
-                    if ("toEnvironmentBlock".equals(method.getName()) &&
-                            (method.getParameterTypes().length == 1)) {
+                    if (isToEnvironmentBlockMethodWithMapParameter(method)) {
                         method.setAccessible(true);
                         block = (String) method.invoke(null, overrideEnv);
                         break;
@@ -599,6 +600,11 @@ public final class WindowsProcess extends Process {
             envProcess.destroy();
             envProcess.close();
         }
+    }
+
+    private boolean isToEnvironmentBlockMethodWithMapParameter(Method method) {
+        return "toEnvironmentBlock".equals(method.getName()) && (method.getParameterTypes().length == 1) &&
+                (method.getParameterTypes()[0].equals(Map.class));
     }
 
     /**
