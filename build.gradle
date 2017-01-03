@@ -141,7 +141,7 @@ project(':programming-build-utils') {
         compile 'ant:ant:1.7.0'
         compile 'commons-cli:commons-cli:1.3.1'
         compile "log4j:log4j:1.2.17"
-        compile 'org.jvnet.winp:winp:1.23-proactive'
+        compile 'org.jvnet.winp:winp:1.24'
     }
 }
 
@@ -351,6 +351,20 @@ project('programming-extensions:programming-extension-processbuilder') {
             }
             suer.dependsOn suermac64
         }
+    }
+
+    test {
+        if (project.hasProperty('runasme.user')) {
+            systemProperties << ['runasme.user': project.property('runasme.user')]
+        }
+        if (project.hasProperty('runasme.pwd')) {
+            systemProperties << ['runasme.pwd': project.property('runasme.pwd')]
+        }
+        if (project.hasProperty('runasme.key.path')) {
+            systemProperties << ['runasme.key.path': project.property('runasme.key.path')]
+        }
+
+        systemProperties << ['proactive.home': rootDir.absolutePath]
     }
 }
 

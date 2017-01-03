@@ -7,25 +7,35 @@ import org.apache.log4j.Level;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 
-@Ignore("Ignored because it depends too much on the environment, but can be used for manual testing")
-public class LinuxProcessBuilderTest {
+public class LinuxProcessBuilderTest extends ProcessBuilderTest {
 
-    private static final String USERNAME = "user";
-    private static final String PASSWORD = "pwd";
-    private static final String PROACTIVE_HOME = "/tmp/programming";
-    private static final String PATH_TO_SSH_PRIVATE_KEY = "/tmp/.ssh/id_rsa";
+    public static final String PROCESSBUILDER_KEYPATH_PROPNAME = "runasme.key.path";
+
+    private String proactiveHome;
+    private String pathToSSHKey;
 
     @Before
     public void before() {
+        assumeTrue(OperatingSystem.getOperatingSystem() == OperatingSystem.unix);
+
+        assumeTrue(CentralPAPropertyRepository.PA_HOME.isSet());
+        proactiveHome = CentralPAPropertyRepository.PA_HOME.getValue();
+
+        pathToSSHKey = System.getProperty(PROCESSBUILDER_KEYPATH_PROPNAME);
+        assumeTrue(pathToSSHKey != null);
+
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
         ProActiveLogger.getLogger(Loggers.OSPB).setLevel(Level.DEBUG);
@@ -33,24 +43,26 @@ public class LinuxProcessBuilderTest {
 
     @Test
     public void sudo() throws Exception {
-        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME), null,
-            PROACTIVE_HOME);
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username), null,
+                proactiveHome);
 
         Process process = processBuilder.command("whoami").start();
         int exitCode = process.waitFor();
+        System.out.println("[SUDO] process terminated with exit code " + exitCode);
 
         assertEquals(0, exitCode);
     }
 
     @Test
     public void sudoEnvVar() throws Exception {
-        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME), null,
-            PROACTIVE_HOME);
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username), null,
+                proactiveHome);
 
         processBuilder.environment().put("MYVAR1", "MYVALUE1");
         processBuilder.environment().put("MYVAR2", "MYVALUE2");
         Process process = processBuilder.command("env").start();
         int exitCode = process.waitFor();
+        System.out.println("[SUDO_ENVVAR] process terminated with exit code " + exitCode);
         assertEquals(0, exitCode);
         String output = IOUtils.toString(process.getInputStream());
         System.out.println(output);
@@ -60,24 +72,26 @@ public class LinuxProcessBuilderTest {
 
     @Test
     public void su() throws Exception {
-        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME, PASSWORD), null,
-            PROACTIVE_HOME);
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username, password), null,
+                proactiveHome);
 
         Process process = processBuilder.command("whoami").start();
         int exitCode = process.waitFor();
+        System.out.println("[SU] process terminated with exit code " + exitCode);
 
         assertEquals(0, exitCode);
     }
 
     @Test
     public void suEnvVar() throws Exception {
-        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME, PASSWORD), null,
-            PROACTIVE_HOME);
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username, password), null,
+                proactiveHome);
 
         processBuilder.environment().put("MYVAR1", "MYVALUE1");
         processBuilder.environment().put("MYVAR2", "MYVALUE2");
         Process process = processBuilder.command("env").start();
         int exitCode = process.waitFor();
+        System.out.println("[SU_ENVAR] process terminated with exit code " + exitCode);
         assertEquals(0, exitCode);
         String output = IOUtils.toString(process.getInputStream());
         System.out.println(output);
@@ -87,34 +101,36 @@ public class LinuxProcessBuilderTest {
 
     @Test(timeout = 5000)
     public void su_destroy_process() throws Exception {
-        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME, PASSWORD), null,
-            PROACTIVE_HOME);
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username, password), null,
+                proactiveHome);
         Process process = processBuilder.command("sleep", "5").start();
         process.destroy();
         int exitCode = process.waitFor();
-
+        System.out.println("[SU_DESTROYPROCESS] process terminated with exit code " + exitCode);
         assertEquals(0, exitCode);
     }
 
     @Test
     public void ssh() throws Exception {
-        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME,
-            FileUtils.readFileToByteArray(new File(PATH_TO_SSH_PRIVATE_KEY))), null, PROACTIVE_HOME);
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username,
+                FileUtils.readFileToByteArray(new File(pathToSSHKey))), null, proactiveHome);
 
         Process process = processBuilder.command("whoami").start();
         int exitCode = process.waitFor();
+        System.out.println("[SSH] process terminated with exit code " + exitCode);
 
         assertEquals(0, exitCode);
     }
 
     @Test
     public void sshEnvVar() throws Exception {
-        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(USERNAME,
-            FileUtils.readFileToByteArray(new File(PATH_TO_SSH_PRIVATE_KEY))), null, PROACTIVE_HOME);
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username,
+                FileUtils.readFileToByteArray(new File(pathToSSHKey))), null, proactiveHome);
         processBuilder.environment().put("MYVAR1", "MYVALUE1");
         processBuilder.environment().put("MYVAR2", "MYVALUE2");
         Process process = processBuilder.command("env").start();
         int exitCode = process.waitFor();
+        System.out.println("[SSH_ENVVAR] process terminated with exit code " + exitCode);
         assertEquals(0, exitCode);
         String output = IOUtils.toString(process.getInputStream());
         System.out.println(output);
