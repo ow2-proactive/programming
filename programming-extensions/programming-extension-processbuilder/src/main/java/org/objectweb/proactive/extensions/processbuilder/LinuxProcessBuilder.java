@@ -36,17 +36,7 @@
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -55,7 +45,18 @@ import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessB
 import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
-import org.apache.log4j.Logger;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -76,10 +77,13 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
 
     private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
     private static final String ENV_VAR_USER_KEY_CONTENT = "PA_OSPB_USER_KEY_CONTENT";
+    private static final String ENV_VAR_CUSTOM_VARIABLES_NAMES = "PA_OSPB_CUSTOM_VARIABLES";
 
     // the underlying ProcessBuilder to whom all work will be delegated
     // if no specified user
     protected final ProcessBuilder delegatedPB;
+
+    protected final Map<String, String> additionalEnvironment = new HashMap<>();
 
     // user - this should be a valid OS user entity (username and maybe a
     // password). The launched process will be run under this user's environment and rights.
@@ -254,11 +258,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      */
     @Override
     public Map<String, String> environment() {
-        if (this.user != null) {
-            throw new NotImplementedException(
-                "The environment modification of a user process is not implemented");
+        if (this.user == null) {
+            return this.delegatedPB.environment();
+        } else {
+            return additionalEnvironment;
         }
-        return this.delegatedPB.environment();
     }
 
     /* (non-Javadoc)
@@ -368,6 +372,17 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
             if (user().hasPassword()) {
                 delegatedPB.environment().put(ENV_VAR_USER_PASSWORD, user().getPassword());
             }
+            if (additionalEnvironment.size() > 0) {
+                delegatedPB.environment().putAll(additionalEnvironment);
+                StringBuilder namesBuilder = new StringBuilder();
+                for (String key : additionalEnvironment.keySet()) {
+                    namesBuilder.append(key);
+                    namesBuilder.append(";");
+                }
+                namesBuilder.deleteCharAt(namesBuilder.length() - 1);
+                delegatedPB.environment().put(ENV_VAR_CUSTOM_VARIABLES_NAMES, namesBuilder.toString());
+            }
+
         }
 
     }

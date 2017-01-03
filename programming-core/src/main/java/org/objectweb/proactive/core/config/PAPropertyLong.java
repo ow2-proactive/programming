@@ -66,7 +66,7 @@ public class PAPropertyLong extends PAPropertyImpl {
             return Long.parseLong(str);
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid value for ProActive property " + super.getAliasedName() +
-                    " must be a long", e);
+                " must be a long", e);
         }
     }
 

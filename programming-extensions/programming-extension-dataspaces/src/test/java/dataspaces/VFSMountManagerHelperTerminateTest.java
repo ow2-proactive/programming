@@ -51,6 +51,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
 
+
 public class VFSMountManagerHelperTerminateTest {
 
     private static File spacesDir;
@@ -62,10 +63,8 @@ public class VFSMountManagerHelperTerminateTest {
         ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
     }
 
-
     @Test
     public void testTerminate() throws Exception {
-
 
         spacesDir = new File(System.getProperty("java.io.tmpdir"), "ProActive SpaceMountManagerTest");
 

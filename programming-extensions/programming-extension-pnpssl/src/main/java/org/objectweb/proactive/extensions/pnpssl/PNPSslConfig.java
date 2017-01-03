@@ -73,7 +73,7 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
      * lower than 500 milliseconds.
      */
     static final public PAPropertyInteger PA_PNPSSL_DEFAULT_HEARTBEAT = new PAPropertyInteger(
-            "proactive.pnps.default_heartbeat", false, 10 * 1000);
+        "proactive.pnps.default_heartbeat", false, 10 * 1000);
 
     /**
      * A factor of the heartbeat period used to detect failure.
@@ -96,9 +96,9 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
      * If the heartbeat_window is set too high, after a long period of network delay increase, the timeout will require the same amount of time to decrease back to its default value.
      */
     static final public PAPropertyInteger PA_PNPSSL_HEARTBEAT_FACTOR = new PAPropertyInteger(
-            "proactive.pnps.heartbeat_factor", false, 3);
+        "proactive.pnps.heartbeat_factor", false, 3);
     static final public PAPropertyInteger PA_PNPSSL_HEARTBEAT_WINDOW = new PAPropertyInteger(
-            "proactive.pnps.heartbeat_window", false, 5);
+        "proactive.pnps.heartbeat_window", false, 5);
 
     /**
      * Channel garbage collection timeout (in milliseconds)

@@ -305,9 +305,8 @@ public class VFSMountManagerHelper {
                                     fo.close();
                                 } catch (org.apache.commons.vfs2.FileSystemException x) {
                                     logger.debug("Could not close data space root file object : " + fo, x);
-                                    ProActiveLogger.logEatedException(logger,
-                                            String.format("Could not close data space %s root file object", fo),
-                                            x);
+                                    ProActiveLogger.logEatedException(logger, String.format(
+                                            "Could not close data space %s root file object", fo), x);
                                 }
                                 vfsManager.closeFileSystem(spaceFileSystem);
                                 if (logger.isDebugEnabled())
