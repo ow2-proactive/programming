@@ -621,6 +621,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         final private OSUser user;
         final private String token;
 
+        private CleanupTimeoutGetter cleanupTimeoutGetter = new CleanupTimeoutGetter();
+
         public OSLinuxProcess(Process p, OSUser user, String token, String scriptBaseFolder) {
             this.process = p;
             this.scriptBaseFolder = scriptBaseFolder;
@@ -634,7 +636,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, scriptBaseFolder);
                 String killProcessTreeScript = new File(scriptBaseFolder, PROCESS_TREE_KILLER_LOCATION)
                         .getAbsolutePath();
-                lpb.command(killProcessTreeScript, this.token);
+                lpb.directory(new File(System.getProperty("java.io.tmpdir")));
+                lpb.command(killProcessTreeScript, this.token, this.cleanupTimeoutGetter.getCleanupTimeSecondsString());
                 Process p = lpb.start();
                 p.waitFor();
 
