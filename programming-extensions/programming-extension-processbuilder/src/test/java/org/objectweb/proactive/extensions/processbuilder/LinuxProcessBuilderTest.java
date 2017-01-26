@@ -110,6 +110,34 @@ public class LinuxProcessBuilderTest extends ProcessBuilderTest {
         assertEquals(0, exitCode);
     }
 
+    @Test(timeout = 2000)
+    public void su_destroy_process_gracefully() throws Exception {
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username, password), null,
+                proactiveHome);
+        Process process = processBuilder
+                .command("trap \"exit 5\" SIGTERM; echo $$; while true; do sleep 1; done")
+                .start();
+        process.destroy();
+        int exitCode = process.waitFor();
+        System.out.println("[SU_DESTROYPROCESS] process terminated with exit code " + exitCode);
+        assertEquals(5, exitCode);
+    }
+
+    @Test(timeout = 15000)
+    public void su_destroy_process_sigkill_after_graceful_timeout() throws Exception {
+        LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username, password), null,
+                proactiveHome);
+        System.setProperty("proactive.process.builder.cleanup.time.seconds", "1"); // Set SIGTERM timeout to 1 seconds
+        Process process = processBuilder
+                .command("trap \"echo trapped signal\" SIGTERM; echo $$; while true; do sleep 1; done")
+                .start();
+        process.destroy();
+        int exitCode = process.waitFor();
+        System.out.println("[SU_DESTROYPROCESS] process terminated with exit code " + exitCode);
+        assertEquals(0, exitCode);
+        System.clearProperty("proactive.process.builder.cleanup.time.seconds");
+    }
+
     @Test
     public void ssh() throws Exception {
         LinuxProcessBuilder processBuilder = new LinuxProcessBuilder(new OSUser(username,
