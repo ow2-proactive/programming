@@ -637,7 +637,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 String killProcessTreeScript = new File(scriptBaseFolder, PROCESS_TREE_KILLER_LOCATION)
                         .getAbsolutePath();
                 lpb.directory(new File(System.getProperty("java.io.tmpdir")));
-                lpb.command(killProcessTreeScript, this.token, this.cleanupTimeoutGetter.getCleanupTimeSecondsString());
+                lpb.command(killProcessTreeScript, this.cleanupTimeoutGetter.getCleanupTimeSecondsString());
+                lpb.environment().put("PROCESS_KILL_TOKEN", this.token);
                 Process p = lpb.start();
                 p.waitFor();
 
