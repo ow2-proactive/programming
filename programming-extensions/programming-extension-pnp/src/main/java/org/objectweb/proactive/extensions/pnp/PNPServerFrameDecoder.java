@@ -1,40 +1,31 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnp;
+
+import java.net.SocketAddress;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBufferFactory;
@@ -45,8 +36,6 @@ import org.jboss.netty.util.Timer;
 import org.objectweb.proactive.extensions.pnp.PNPFrame.MessageType;
 import org.objectweb.proactive.extensions.pnp.PNPServerHandler.Heartbeater;
 import org.objectweb.proactive.extensions.pnp.exception.PNPException;
-
-import java.net.SocketAddress;
 
 
 /** A PNP server frame decoder
@@ -64,16 +53,23 @@ import java.net.SocketAddress;
 @ChannelHandler.Sharable
 class PNPServerFrameDecoder implements ChannelUpstreamHandler {
     boolean firstFrame;
+
     final private PNPServerHandler pnpServerHandler;
+
     final private Timer timer;
 
     private final int maxFrameLength = Integer.MAX_VALUE;
+
     private final int lengthFieldLength = 4;
 
     private volatile int lengthBytesToRead;
+
     private volatile ChannelBuffer lengthBuffer;
+
     private volatile long frameBytesToRead;
+
     private volatile ChannelBuffer frameBuffer;
+
     private volatile boolean skipFrame;
 
     public PNPServerFrameDecoder(PNPServerHandler pnpServerHandler, Timer timer) {
@@ -95,8 +91,7 @@ class PNPServerFrameDecoder implements ChannelUpstreamHandler {
             if (stateEvent.getState() == ChannelState.CONNECTED) {
                 if (stateEvent.getValue() != null) {
                     lengthBytesToRead = lengthFieldLength;
-                    lengthBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(),
-                            lengthBytesToRead);
+                    lengthBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(), lengthBytesToRead);
                 }
             }
         }
@@ -130,16 +125,17 @@ class PNPServerFrameDecoder implements ChannelUpstreamHandler {
                 if (frameBytesToRead < 0) {
                     skipFrame = true;
                     frameBytesToRead = 0;
-                    Channels.fireExceptionCaught(ctx, new CorruptedFrameException("negative frame length: " +
-                        frameBytesToRead));
+                    Channels.fireExceptionCaught(ctx,
+                                                 new CorruptedFrameException("negative frame length: " +
+                                                                             frameBytesToRead));
                 } else if (frameBytesToRead > maxFrameLength) {
                     skipFrame = true;
-                    Channels.fireExceptionCaught(ctx, new TooLongFrameException("frame length exceeds " +
-                        maxFrameLength + ": " + frameBytesToRead));
+                    Channels.fireExceptionCaught(ctx,
+                                                 new TooLongFrameException("frame length exceeds " + maxFrameLength +
+                                                                           ": " + frameBytesToRead));
                 } else {
                     skipFrame = false;
-                    frameBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(),
-                            (int) frameBytesToRead);
+                    frameBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(), (int) frameBytesToRead);
                 }
             }
         }
@@ -184,8 +180,8 @@ class PNPServerFrameDecoder implements ChannelUpstreamHandler {
                         this.firstFrame = false;
                         return null; // Do not sent the first frame to the handler
                     } else {
-                        throw new PNPException("Invalid first frame type must be " +
-                            MessageType.HEARTBEAT_ADV + " but is " + m.getType());
+                        throw new PNPException("Invalid first frame type must be " + MessageType.HEARTBEAT_ADV +
+                                               " but is " + m.getType());
                     }
                 }
 

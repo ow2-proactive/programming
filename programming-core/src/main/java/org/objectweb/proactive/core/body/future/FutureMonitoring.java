@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.body.future;
 
@@ -47,8 +36,8 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.util.HeartbeatResponse;
 import org.objectweb.proactive.core.util.ActiveObjectLocationInfo;
+import org.objectweb.proactive.core.util.HeartbeatResponse;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -63,6 +52,7 @@ public class FutureMonitoring implements Runnable {
      * so we should detect a broken automatic continuations chain.
      */
     private static final Map<UniqueID, ConcurrentLinkedQueue<FutureProxy>> futuresToMonitor = new ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>>();
+
     private static final ConcurrentHashMap<UniqueID, String> nodeUrls = new ConcurrentHashMap<UniqueID, String>();
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
@@ -76,7 +66,7 @@ public class FutureMonitoring implements Runnable {
                 TTM = tmp;
             } else {
                 logger.error(CentralPAPropertyRepository.PA_FUTUREMONITORING_TTM.getName() +
-                    " must be positive. This value is ignored");
+                             " must be positive. This value is ignored");
             }
         }
 
@@ -134,12 +124,14 @@ public class FutureMonitoring implements Runnable {
                         /* If the object is dead, ping failed ... */
                         if (state.equals(HeartbeatResponse.IS_DEAD)) {
                             throw new ProActiveRuntimeException("Awaited body " + bodyId + " on " + nodeUrl +
-                                " has been terminated.");
+                                                                " has been terminated.");
                         }
                         /* Successful ping, nothing more to do */
                         return true;
                     } catch (Exception e) {
-                        /* Ping failure, update all awaited futures on this node with the exception */
+                        /*
+                         * Ping failure, update all awaited futures on this node with the exception
+                         */
                         bodyException = new FutureMonitoringPingFailureException(bodyId, nodeUrl, e);
                     }
                 }

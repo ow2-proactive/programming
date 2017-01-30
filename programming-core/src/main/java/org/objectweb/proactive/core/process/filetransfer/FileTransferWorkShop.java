@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.process.filetransfer;
 
@@ -63,20 +52,28 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class FileTransferWorkShop implements Serializable {
     private static final String PROCESSDEFAULT_KEYWORD = "processDefault";
+
     private static final String IMPLICIT_KEYWORD = "implicit";
-    private static final String[] ALLOWED_COPY_PROTOCOLS = { PROCESSDEFAULT_KEYWORD, "scp", "rcp",
-            "nordugrid", "pftp" };
+
+    private static final String[] ALLOWED_COPY_PROTOCOLS = { PROCESSDEFAULT_KEYWORD, "scp", "rcp", "nordugrid",
+                                                             "pftp" };
+
     private static final String[] URLPROTOCOLS = { "file://", "http://", "ftp://" };
+
     final protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
 
     /* Reference to filetransfer definitions */
     private HashMap<String, FileTransferDefinition> fileTransfers;
 
-    /*Array with protocols to try*/
+    /* Array with protocols to try */
     private String[] copyProtocol;
+
     private String processDefault;
+
     private boolean isImplicit;
+
     public StructureInformation srcInfoParams;
+
     public StructureInformation dstInfoParams;
 
     /**
@@ -89,7 +86,7 @@ public class FileTransferWorkShop implements Serializable {
         if ((processDefault == null) || (processDefault.length() <= 0) ||
             processDefault.equalsIgnoreCase(PROCESSDEFAULT_KEYWORD)) {
             logger.error("Illegal processDefault value=" + processDefault + " in " + this.getClass() +
-                ". Falling back to dummy.");
+                         ". Falling back to dummy.");
             this.processDefault = "dummy";
         } else {
             this.processDefault = processDefault;
@@ -362,13 +359,11 @@ public class FileTransferWorkShop implements Serializable {
      * @return The full path String
      */
     public String getAbsoluteSrcPath(FileDescription fileDesc) {
-        return buildFilePathString(srcInfoParams.getPrefix(), srcInfoParams.getFileSeparator(),
-                fileDesc.getSrcName());
+        return buildFilePathString(srcInfoParams.getPrefix(), srcInfoParams.getFileSeparator(), fileDesc.getSrcName());
     }
 
     public String getAbsoluteDstPath(FileDescription fileDesc) {
-        return buildFilePathString(dstInfoParams.getPrefix(), dstInfoParams.getFileSeparator(),
-                fileDesc.getDestName());
+        return buildFilePathString(dstInfoParams.getPrefix(), dstInfoParams.getFileSeparator(), fileDesc.getDestName());
     }
 
     public static String buildFilePathString(StructureInformation infoParam, String filename) {
@@ -377,7 +372,7 @@ public class FileTransferWorkShop implements Serializable {
 
     public static String buildFilePathString(String prefix, String fileSep, String filename) {
         /*
-         *BORDER CONDITIONS
+         * BORDER CONDITIONS
          */
 
         //Trim white spaces
@@ -407,8 +402,7 @@ public class FileTransferWorkShop implements Serializable {
         // -case1: filename starts from root path, nothing to do
         // -case2: filename starts with procol "http://", "ftp://", nothing to do
         // -case3: no prefix, nothing to do
-        if ((filename.charAt(0) == fileSep.charAt(0)) || begginsWithProtocol(filename) ||
-            (prefix.length() <= 0)) {
+        if ((filename.charAt(0) == fileSep.charAt(0)) || begginsWithProtocol(filename) || (prefix.length() <= 0)) {
             return filename;
         }
 
@@ -440,7 +434,8 @@ public class FileTransferWorkShop implements Serializable {
 
             if (begginsWithProtocol(filefullname)) {
 
-                /* Can't yet check existance for http:// or ftp://
+                /*
+                 * Can't yet check existance for http:// or ftp://
                  * Therefore, we suppose the file exists.
                  * But we can check: file://
                  */
@@ -505,9 +500,13 @@ public class FileTransferWorkShop implements Serializable {
 
         /* FileTransferQueue specific information */
         String prefix;
+
         String hostname;
+
         String username;
+
         String password;
+
         String fileSeparator;
 
         public StructureInformation() {
@@ -537,8 +536,7 @@ public class FileTransferWorkShop implements Serializable {
             } else if (name.equalsIgnoreCase("fileseparator")) {
                 fileSeparator = value;
             } else {
-                logger.warn("Skipping:" + name + "=" + value +
-                    ". Unknown FileTransfer information parameter.");
+                logger.warn("Skipping:" + name + "=" + value + ". Unknown FileTransfer information parameter.");
             }
         }
 

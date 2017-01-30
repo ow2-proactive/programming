@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.ssh;
 
@@ -63,7 +52,9 @@ public class SshTunnel {
     private LocalPortForwarder lpf;
 
     final private int localPort;
+
     final private int remotePort;
+
     final private String remoteHost;
 
     /** Open a SSH tunnel to remoteHost:remotePort over the SSH connection
@@ -78,11 +69,13 @@ public class SshTunnel {
      * 
      * @see {@link #getSshTunnel(SshConnection, String, int, int)}
      */
-    static SshTunnel getSshTunnel(SshConnection connection, String remoteHost, int remotePort)
-            throws IOException {
+    static SshTunnel getSshTunnel(SshConnection connection, String remoteHost, int remotePort) throws IOException {
         int initialPort = ProActiveRandom.nextInt(65536 - 1024) + 1024;
-        for (int localPort = (initialPort == 65535) ? 1024 : (initialPort + 1); localPort != initialPort; localPort = (localPort == 65535) ? 1024
-                : (localPort + 1)) {
+        for (int localPort = (initialPort == 65535) ? 1024
+                                                    : (initialPort +
+                                                       1); localPort != initialPort; localPort = (localPort == 65535) ? 1024
+                                                                                                                      : (localPort +
+                                                                                                                         1)) {
 
             try {
                 logger.trace("initialPort:" + initialPort + " localPort:" + localPort);
@@ -97,8 +90,8 @@ public class SshTunnel {
         }
 
         // Looped all over the port range
-        logger.error("No free local port can be found to establish a new SSH-2 tunnel to " + remoteHost +
-            ":" + remotePort);
+        logger.error("No free local port can be found to establish a new SSH-2 tunnel to " + remoteHost + ":" +
+                     remotePort);
         throw new BindException("No free local port found");
     }
 
@@ -121,8 +114,8 @@ public class SshTunnel {
         this.lpf = connection.getTrileadConnection().createLocalPortForwarder(isa, remoteHost, remotePort);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Opened SSH tunnel localport=" + localPort + " distantHost=" + remoteHost +
-                " distantPort=" + remotePort);
+            logger.debug("Opened SSH tunnel localport=" + localPort + " distantHost=" + remoteHost + " distantPort=" +
+                         remotePort);
         }
     }
 
@@ -139,9 +132,8 @@ public class SshTunnel {
      */
     public void close() throws IOException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Closing tunnel from " +
-                ProActiveInet.getInstance().getInetAddress().getHostAddress() + ":" + localPort + " to " +
-                remoteHost + ":" + remotePort);
+            logger.debug("Closing tunnel from " + ProActiveInet.getInstance().getInetAddress().getHostAddress() + ":" +
+                         localPort + " to " + remoteHost + ":" + remotePort);
         }
 
         lpf.close();
@@ -173,8 +165,7 @@ public class SshTunnel {
      * @throws IOException if the socket cannot be opened (should never happen)
      */
     public Socket getSocket() throws IOException {
-        InetSocketAddress address = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(),
-            this.getPort());
+        InetSocketAddress address = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(), this.getPort());
         Socket socket = new Socket();
         socket.connect(address);
         return socket;

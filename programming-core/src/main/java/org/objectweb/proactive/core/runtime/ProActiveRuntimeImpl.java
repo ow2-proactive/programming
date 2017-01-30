@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.runtime;
 
@@ -123,8 +112,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * 
  */
 
-public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl implements ProActiveRuntime,
-        LocalProActiveRuntime {
+public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
+        implements ProActiveRuntime, LocalProActiveRuntime {
 
     //
     // -- STATIC MEMBERS
@@ -135,6 +124,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     // JMX
     private static Logger jmxLogger = ProActiveLogger.getLogger(Loggers.JMX);
+
     private static final Logger clLogger = ProActiveLogger.getLogger(Loggers.CLASSLOADING);
 
     /**
@@ -193,11 +183,13 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     private Map<String, ProActiveRuntime> proActiveRuntimeMap;
 
     private ProActiveRuntime parentRuntime;
+
     protected RemoteObjectExposer<ProActiveRuntime> roe;
 
     // JMX
     /** The Server Connector to connect remotely to the JMX server */
     private ServerConnector serverConnector;
+
     private Object mutex = new Object();
 
     /** The MBean representing this ProActive Runtime */
@@ -225,10 +217,11 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         }
 
         // Remote Object exporter
-        this.roe = new RemoteObjectExposer<ProActiveRuntime>("ProActiveRuntime_" +
-            vmInformation.getHostName() + "_" + vmInformation.getVMID(),
-            org.objectweb.proactive.core.runtime.ProActiveRuntime.class.getName(), this,
-            ProActiveRuntimeRemoteObjectAdapter.class);
+        this.roe = new RemoteObjectExposer<ProActiveRuntime>("ProActiveRuntime_" + vmInformation.getHostName() + "_" +
+                                                             vmInformation.getVMID(),
+                                                             org.objectweb.proactive.core.runtime.ProActiveRuntime.class.getName(),
+                                                             this,
+                                                             ProActiveRuntimeRemoteObjectAdapter.class);
         this.roe.createRemoteObject(vmInformation.getName(), false);
 
         if (CentralPAPropertyRepository.PA_CLASSLOADING_USEHTTP.isTrue()) {
@@ -358,8 +351,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             return null; // pad == null
         } else { // else search pad in parent runtime
             if (this.parentRuntime == null) {
-                throw new IOException(
-                    "Descriptor cannot be found hierarchically since this runtime has no parent");
+                throw new IOException("Descriptor cannot be found hierarchically since this runtime has no parent");
             }
 
             return this.parentRuntime.getDescriptor(url, true);
@@ -440,7 +432,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
         if (!replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
             throw new AlreadyBoundException("Node " + nodeName +
-                " already created on this ProActiveRuntime. To overwrite this node, use true for replacePreviousBinding");
+                                            " already created on this ProActiveRuntime. To overwrite this node, use true for replacePreviousBinding");
         }
 
         try {
@@ -455,7 +447,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             Node node = null;
             try {
                 node = new NodeImpl((ProActiveRuntime) PARemoteObject.lookup(URI.create(localNode.getURL())),
-                    localNode.getURL());
+                                    localNode.getURL());
             } catch (ProActiveException e) {
                 throw new NodeException("Failed to created NodeImpl", e);
             }
@@ -470,8 +462,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @inheritDoc
      */
     @Override
-    public Node createGCMNode(String vnName, List<TechnicalService> tsList) throws NodeException,
-            AlreadyBoundException {
+    public Node createGCMNode(String vnName, List<TechnicalService> tsList)
+            throws NodeException, AlreadyBoundException {
 
         if (gcmNodes >= vmInformation.capacity) {
             logger.warn("Runtime capacity exceeded. A bug inside GCM Deployment occured");
@@ -581,22 +573,28 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @inheritDoc
      */
     @Override
-    public void register(ProActiveRuntime proActiveRuntimeDist, String proActiveRuntimeName,
-            String creatorID, String creationProtocol, String vmName) {
+    public void register(ProActiveRuntime proActiveRuntimeDist, String proActiveRuntimeName, String creatorID,
+            String creationProtocol, String vmName) {
         // System.out.println("register in Impl");
         // System.out.println("thread"+Thread.currentThread().getName());
         // System.out.println(vmInformation.getVMID().toString());
         this.proActiveRuntimeMap.put(proActiveRuntimeName, proActiveRuntimeDist);
 
         // ProActiveEvent
-        notifyListeners(this, RuntimeRegistrationEvent.RUNTIME_REGISTERED, proActiveRuntimeDist, creatorID,
-                creationProtocol, vmName);
+        notifyListeners(this,
+                        RuntimeRegistrationEvent.RUNTIME_REGISTERED,
+                        proActiveRuntimeDist,
+                        creatorID,
+                        creationProtocol,
+                        vmName);
         // END ProActiveEvent
 
         // JMX Notification
         if (getMBean() != null) {
             RuntimeNotificationData notificationData = new RuntimeNotificationData(creatorID,
-                proActiveRuntimeDist.getURL(), creationProtocol, vmName);
+                                                                                   proActiveRuntimeDist.getURL(),
+                                                                                   creationProtocol,
+                                                                                   vmName);
             getMBean().sendNotification(NotificationType.runtimeRegistered, notificationData);
         }
 
@@ -607,19 +605,25 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @inheritDoc
      */
     @Override
-    public void unregister(ProActiveRuntime proActiveRuntimeDist, String proActiveRuntimeUrl,
-            String creatorID, String creationProtocol, String vmName) {
+    public void unregister(ProActiveRuntime proActiveRuntimeDist, String proActiveRuntimeUrl, String creatorID,
+            String creationProtocol, String vmName) {
         this.proActiveRuntimeMap.remove(proActiveRuntimeUrl);
 
         // ProActiveEvent
-        notifyListeners(this, RuntimeRegistrationEvent.RUNTIME_UNREGISTERED, proActiveRuntimeDist, creatorID,
-                creationProtocol, vmName);
+        notifyListeners(this,
+                        RuntimeRegistrationEvent.RUNTIME_UNREGISTERED,
+                        proActiveRuntimeDist,
+                        creatorID,
+                        creationProtocol,
+                        vmName);
         // END ProActiveEvent
 
         // JMX Notification
         if (getMBean() != null) {
             RuntimeNotificationData notificationData = new RuntimeNotificationData(creatorID,
-                proActiveRuntimeDist.getURL(), creationProtocol, vmName);
+                                                                                   proActiveRuntimeDist.getURL(),
+                                                                                   creationProtocol,
+                                                                                   vmName);
             getMBean().sendNotification(NotificationType.runtimeUnregistered, notificationData);
         }
 
@@ -683,7 +687,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                     jmxLogger.error("The MBean with the objectName " + objectName + " was not found", e);
                 } catch (MBeanRegistrationException e) {
                     jmxLogger.error("The MBean with the objectName " + objectName +
-                        " can't be unregistered from the MBean server", e);
+                                    " can't be unregistered from the MBean server", e);
                 }
             }
             mbean = null;
@@ -711,8 +715,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             }
         }
 
-        Iterator<UniversalBody> halfBodies = LocalBodyStore.getInstance().getLocalHalfBodies()
-                .bodiesIterator();
+        Iterator<UniversalBody> halfBodies = LocalBodyStore.getInstance().getLocalHalfBodies().bodiesIterator();
         UniversalBody halfBody;
 
         while (halfBodies.hasNext()) {
@@ -800,8 +803,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @inheritDoc
      */
     @Override
-    public void registerVirtualNode(String virtualNodeName, boolean replacePreviousBinding)
-            throws ProActiveException {
+    public void registerVirtualNode(String virtualNodeName, boolean replacePreviousBinding) throws ProActiveException {
         this.roe.createRemoteObject(virtualNodeName, false);
     }
 
@@ -876,8 +878,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             ActiveObjectCreationException {
 
         if (NodeFactory.isHalfBodiesNode(nodeName)) {
-            throw new ActiveObjectCreationException(
-                "Cannot create an active object on the reserved halfbodies node.");
+            throw new ActiveObjectCreationException("Cannot create an active object on the reserved halfbodies node.");
         }
 
         Body localBody = (Body) bodyConstructorCall.execute();
@@ -973,8 +974,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         return null;
     }
 
-    public void launchMain(String className, String[] parameters) throws ClassNotFoundException,
-            NoSuchMethodException, ProActiveException {
+    public void launchMain(String className, String[] parameters)
+            throws ClassNotFoundException, NoSuchMethodException, ProActiveException {
         System.out.println("ProActiveRuntimeImpl.launchMain() -" + className + "-");
 
         Class<?> mainClass = Class.forName(className);
@@ -1013,11 +1014,17 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
         // the Unique ID of the JVM
         private final java.rmi.dgc.VMID uniqueVMID;
+
         private String name;
+
         private long capacity;
+
         private final String hostName;
+
         private long deploymentId;
+
         private long topologyId;
+
         private String vmName;
 
         public VMInformationImpl() throws java.net.UnknownHostException {
@@ -1135,8 +1142,11 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      */
     private class LauncherThread extends Thread {
         private final boolean launchMain;
+
         private Method mainMethod;
+
         private Class<?> remoteClass;
+
         private String[] parameters;
 
         public LauncherThread(Class<?> remoteClass) {
@@ -1203,7 +1213,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
         if (capacity < 1) {
             throw new IllegalArgumentException(capacity +
-                " is not a valid parameter for setCapicity. Must be a strictly positive long");
+                                               " is not a valid parameter for setCapicity. Must be a strictly positive long");
         }
         logger.debug("Capacity set to " + capacity + ". Creating the nodes...");
         vmInformation.setCapacity(capacity);
@@ -1311,8 +1321,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                 throw new ProActiveException(e);
             }
         } else {
-            throw new ProActiveException(
-                "Unable to find ProActive home. Running from class files but non standard repository layout");
+            throw new ProActiveException("Unable to find ProActive home. Running from class files but non standard repository layout");
         }
     }
 }

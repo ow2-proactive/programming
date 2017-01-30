@@ -1,44 +1,34 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.api;
 
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.body.future.FutureProxy;
@@ -57,7 +47,6 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -223,8 +212,11 @@ public class PAGroup {
         Object result = null;
 
         try {
-            result = MOP.newInstance(className, genericParameters, null,
-                    PAGroup.DEFAULT_PROXYFORGROUP_CLASS_NAME, null);
+            result = MOP.newInstance(className,
+                                     genericParameters,
+                                     null,
+                                     PAGroup.DEFAULT_PROXYFORGROUP_CLASS_NAME,
+                                     null);
 
             ProxyForGroup<?> proxy = (ProxyForGroup<?>) ((StubObject) result).getProxy();
             proxy.setClassName(className);
@@ -255,8 +247,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return PAGroup.newGroup(className, genericParameters, params, nodeList);
@@ -274,9 +265,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params, Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = PAGroup.newGroup(className, genericParameters);
         Group<Object> g = getGroup(result);
 
@@ -301,9 +291,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            List<Node> nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params, List<Node> nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = PAGroup.newGroup(className, genericParameters);
         Group<Object> g = getGroup(result);
 
@@ -330,9 +319,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            String nodeName) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params, String nodeName)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return PAGroup.newGroup(className, genericParameters, params, nodeList);
@@ -351,8 +339,8 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            String[] nodeListString) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            String[] nodeListString)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -372,8 +360,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -393,8 +380,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return PAGroup.newGroup(className, genericParameters, params, nodeList);
@@ -413,9 +399,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params, Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, genericParameters);
         Group<Object> g = getGroup(result);
 
@@ -442,8 +427,8 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            List<Node> nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            List<Node> nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, genericParameters);
         Group<Object> g = getGroup(result);
 
@@ -468,9 +453,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            String nodeName) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params, String nodeName)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return PAGroup.newGroup(className, genericParameters, params, nodeList);
@@ -489,8 +473,8 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            String[] nodeListString) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            String[] nodeListString)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -509,8 +493,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return PAGroup.newGroup(className, params, nodeList);
@@ -528,8 +511,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, (Class<?>[]) null);
         Group<Object> g = getGroup(result);
 
@@ -554,8 +536,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[] params, List<Node> nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, (Class<?>[]) null);
         Group<Object> g = getGroup(result);
 
@@ -582,8 +563,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[] params, String nodeName)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return PAGroup.newGroup(className, params, nodeList);
@@ -601,8 +581,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[] params, String[] nodeListString)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -622,8 +601,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroup(String className, Object[][] params) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Object[][] params)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -642,8 +621,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[][] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return PAGroup.newGroup(className, params, nodeList);
@@ -661,8 +639,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[][] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroup(className, (Class<?>[]) null, params, nodeList);
     }
 
@@ -678,8 +655,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[][] params, List<Node> nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroup(className, (Class<?>[]) null, params, nodeList);
     }
 
@@ -695,8 +671,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[][] params, String nodeName)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return PAGroup.newGroup(className, params, nodeList);
@@ -714,8 +689,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroup(String className, Object[][] params, String[] nodeListString)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -737,8 +711,7 @@ public class PAGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, (Class<?>[]) null);
         ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
@@ -763,8 +736,7 @@ public class PAGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[] params, String[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -785,8 +757,7 @@ public class PAGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -808,8 +779,7 @@ public class PAGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[][] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, (Class<?>[]) null);
         ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
@@ -833,9 +803,8 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     @Deprecated
-    public static Object newGroupBuiltWithMultithreading(String className, Object[][] params,
-            String[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroupBuiltWithMultithreading(String className, Object[][] params, String[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -855,8 +824,8 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[] params,
-            Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, genericParameters);
         ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
@@ -879,8 +848,8 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[] params,
-            String[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            String[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -900,8 +869,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -920,9 +888,9 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroupInParallel(String className, Class<?>[] genericParameters,
-            Object[][] params, Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[][] params,
+            Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, genericParameters);
         ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
@@ -944,9 +912,9 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
-    public static Object newGroupInParallel(String className, Class<?>[] genericParameters,
-            Object[][] params, String[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[][] params,
+            String[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -966,8 +934,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Object[] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -985,8 +952,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Object[] params, String[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -1002,8 +968,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params);
     }
 
@@ -1020,8 +985,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Object[][] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -1039,8 +1003,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created
      */
     public static Object newGroupInParallel(String className, Object[][] params, String[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -1054,8 +1017,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the node was null and that the DefaultNode cannot be created.
      */
-    public static Object turnActiveGroup(Object ogroup) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+    public static Object turnActiveGroup(Object ogroup)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return PAActiveObject.turnActive(ogroup, null, getType(ogroup), (Node) null, null, null);
     }
 
@@ -1070,8 +1033,7 @@ public class PAGroup {
      * @throws NodeException if the node was null and that the DefaultNode cannot be created.
      */
     public static Object turnActiveGroup(Object ogroup, Class<?>[] genericParameters)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return PAActiveObject.turnActive(ogroup, genericParameters, getType(ogroup), (Node) null, null, null);
     }
 
@@ -1087,8 +1049,7 @@ public class PAGroup {
      * @throws NodeException if the specified node can not be reached.
      */
     public static Object turnActiveGroup(Object ogroup, Class<?>[] genericParameters, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return PAActiveObject.turnActive(ogroup, genericParameters, getType(ogroup), node, null, null);
     }
 
@@ -1103,10 +1064,13 @@ public class PAGroup {
      * @throws NodeException if the specified node can not be reached.
      */
     public static Object turnActiveGroup(Object ogroup, Class<?>[] genericParameters, String nodeName)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
-        return PAActiveObject.turnActive(ogroup, genericParameters, getType(ogroup),
-                NodeFactory.getNode(nodeName), null, null);
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return PAActiveObject.turnActive(ogroup,
+                                         genericParameters,
+                                         getType(ogroup),
+                                         NodeFactory.getNode(nodeName),
+                                         null,
+                                         null);
     }
 
     /**
@@ -1120,8 +1084,8 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the specified node can not be reached.
      */
-    public static Object turnActiveGroup(Object ogroup, Node node) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+    public static Object turnActiveGroup(Object ogroup, Node node)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return PAActiveObject.turnActive(ogroup, null, getType(ogroup), node, null, null);
     }
 
@@ -1135,10 +1099,9 @@ public class PAGroup {
      * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
      * @throws NodeException if the specified node can not be reached.
      */
-    public static Object turnActiveGroup(Object ogroup, String nodeName) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
-        return PAActiveObject.turnActive(ogroup, null, getType(ogroup), NodeFactory.getNode(nodeName), null,
-                null);
+    public static Object turnActiveGroup(Object ogroup, String nodeName)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return PAActiveObject.turnActive(ogroup, null, getType(ogroup), NodeFactory.getNode(nodeName), null, null);
     }
 
     /**

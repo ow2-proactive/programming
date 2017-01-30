@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.router.processor;
 
@@ -45,12 +34,12 @@ import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageExcept
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
+import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
-import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
-import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extensions.pamr.router.Attachment;
 import org.objectweb.proactive.extensions.pamr.router.Client;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
@@ -64,8 +53,7 @@ public class ProcessorRegistrationRequest extends Processor {
 
     final private Attachment attachment;
 
-    public ProcessorRegistrationRequest(ByteBuffer messageAsByteBuffer, Attachment attachment,
-            RouterImpl router) {
+    public ProcessorRegistrationRequest(ByteBuffer messageAsByteBuffer, Attachment attachment, RouterImpl router) {
         super(messageAsByteBuffer, router);
         this.attachment = attachment;
     }
@@ -74,8 +62,8 @@ public class ProcessorRegistrationRequest extends Processor {
         // Message.constructMessage guarantees that the cast is safe. If the message is not a RegistrationRequestMessage,
         // a @{link MalformedMessageException} will be thrown
         try {
-            RegistrationRequestMessage message = (RegistrationRequestMessage) Message.constructMessage(
-                    this.rawMessage.array(), 0);
+            RegistrationRequestMessage message = (RegistrationRequestMessage) Message.constructMessage(this.rawMessage.array(),
+                                                                                                       0);
             this.attachment.setAgentHostname(message.getAgentHostname());
             AgentID agentId = message.getAgentID();
 
@@ -109,8 +97,8 @@ public class ProcessorRegistrationRequest extends Processor {
         // Check that it is not an "old" client
         if (message.getRouterID() != this.router.getId()) {
             logger.warn("AgentId " + agentId +
-                " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
-                attachment.getRemoteEndpointName());
+                        " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
+                        attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
             return;
         }
@@ -119,16 +107,16 @@ public class ProcessorRegistrationRequest extends Processor {
         Client client = router.getClient(agentId);
         if (client == null) {
             logger.warn("AgentId " + agentId +
-                " asked to reconnect but is not known by this router. Remote endpoint is: " +
-                attachment.getRemoteEndpointName());
+                        " asked to reconnect but is not known by this router. Remote endpoint is: " +
+                        attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_AGENT_ID);
             return;
         }
 
         if (!client.getMagicCookie().equals(message.getMagicCookie())) {
             logger.warn("AgentId " + agentId +
-                " asked to reconnect but provided an incorrect magic cookie. Remote endpoint is: " +
-                attachment.getRemoteEndpointName());
+                        " asked to reconnect but provided an incorrect magic cookie. Remote endpoint is: " +
+                        attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_WRONG_MAGIC_COOKIE);
             return;
         }
@@ -140,8 +128,11 @@ public class ProcessorRegistrationRequest extends Processor {
         }
 
         // Acknowledge the registration
-        RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-            this.router.getId(), client.getMagicCookie(), this.router.getHeartbeatTimeout());
+        RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId,
+                                                                      message.getMessageID(),
+                                                                      this.router.getId(),
+                                                                      client.getMagicCookie(),
+                                                                      this.router.getHeartbeatTimeout());
 
         client.setAttachment(attachment);
         boolean resp = this.sendReply(client, reply);
@@ -159,25 +150,24 @@ public class ProcessorRegistrationRequest extends Processor {
         Client client = router.getClient(agentId);
         if (client == null) {
             logger.warn("AgentId " + agentId + " asked to connect. But this reserved id " + agentId +
-                " is not known by the router (check your config). Remote endpoint is: " +
-                attachment.getRemoteEndpointName());
+                        " is not known by the router (check your config). Remote endpoint is: " +
+                        attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_AGENT_ID);
             return;
         }
 
         if (!client.getMagicCookie().equals(message.getMagicCookie())) {
             logger.warn("AgentId " + agentId +
-                " asked to reconnect but provided an incorrect magic cookie. Remote endpoint is: " +
-                attachment.getRemoteEndpointName());
+                        " asked to reconnect but provided an incorrect magic cookie. Remote endpoint is: " +
+                        attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_WRONG_MAGIC_COOKIE);
             return;
         }
 
-        if (message.getRouterID() != RouterImpl.DEFAULT_ROUTER_ID &&
-            message.getRouterID() != this.router.getId()) {
+        if (message.getRouterID() != RouterImpl.DEFAULT_ROUTER_ID && message.getRouterID() != this.router.getId()) {
             logger.warn("AgentId " + agentId +
-                " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
-                attachment.getRemoteEndpointName());
+                        " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
+                        attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
             return;
         }
@@ -190,8 +180,11 @@ public class ProcessorRegistrationRequest extends Processor {
         }
 
         // Acknowledge the registration
-        RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-            this.router.getId(), client.getMagicCookie(), this.router.getHeartbeatTimeout());
+        RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId,
+                                                                      message.getMessageID(),
+                                                                      this.router.getId(),
+                                                                      client.getMagicCookie(),
+                                                                      this.router.getHeartbeatTimeout());
 
         client.setAttachment(attachment);
         boolean resp = this.sendReply(client, reply);
@@ -210,7 +203,7 @@ public class ProcessorRegistrationRequest extends Processor {
         long routerId = message.getRouterID();
         if (routerId != RouterImpl.DEFAULT_ROUTER_ID) {
             logger.warn("Invalid connection request. router ID must be " + RouterImpl.DEFAULT_ROUTER_ID +
-                ". Remote endpoint is: " + attachment.getRemoteEndpointName());
+                        ". Remote endpoint is: " + attachment.getRemoteEndpointName());
 
             this.attachment.dtor();
             return;
@@ -218,8 +211,11 @@ public class ProcessorRegistrationRequest extends Processor {
 
         AgentID agentId = AgentIdGenerator.getId();
         MagicCookie magicCookie = message.getMagicCookie();
-        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-            this.router.getId(), magicCookie, this.router.getHeartbeatTimeout());
+        RegistrationMessage reply = new RegistrationReplyMessage(agentId,
+                                                                 message.getMessageID(),
+                                                                 this.router.getId(),
+                                                                 magicCookie,
+                                                                 this.router.getHeartbeatTimeout());
 
         Client client = new Client(attachment, agentId, magicCookie);
         boolean resp = this.sendReply(client, reply);
@@ -247,7 +243,8 @@ public class ProcessorRegistrationRequest extends Processor {
         this.attachment.dtor();
     }
 
-    /* Send the registration reply to the client (best effort)
+    /*
+     * Send the registration reply to the client (best effort)
      *
      * We don't want to cache the message on failure because if the tunnel
      * failed, the client will register again anyway.

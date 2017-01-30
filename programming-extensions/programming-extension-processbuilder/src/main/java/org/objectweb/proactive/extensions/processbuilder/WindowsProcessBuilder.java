@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
@@ -83,18 +72,22 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         this.cores = cores;
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#isCoreBindingSupported()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#isCoreBindingSupported()
      */
     public boolean isCoreBindingSupported() {
         return false;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#start()
      */
-    public Process start() throws IOException, OSUserException, CoreBindingException,
-            FatalProcessBuilderException {
+    public Process start() throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
         Process p = null;
 
         if (this.user != null || this.cores != null) {
@@ -110,58 +103,78 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         return p;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#command()
      */
     public List<String> command() {
         return this.delegatedPB.command();
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#command(java.lang.String[])
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#command(java.lang.String[]
+     * )
      */
     public OSProcessBuilder command(String... command) {
         this.delegatedPB.command(command);
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#user()
      */
     public OSUser user() {
         return this.user;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#cores()
      */
     public CoreBindingDescriptor cores() {
         return this.cores;
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#getAvaliableCoresDescriptor()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#
+     * getAvaliableCoresDescriptor()
      */
     public CoreBindingDescriptor getAvailableCoresDescriptor() {
         return this.cores;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#directory()
      */
     public File directory() {
         return this.delegatedPB.directory();
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#directory(java.io.File)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#directory(java.io.File)
      */
     public OSProcessBuilder directory(File directory) {
         this.delegatedPB.directory(directory);
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#environment()
      */
     public Map<String, String> environment() {
@@ -172,23 +185,31 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         return this.delegatedPB.environment();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#redirectErrorStream()
      */
     public boolean redirectErrorStream() {
         return this.delegatedPB.redirectErrorStream();
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#redirectErrorStream(boolean)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#redirectErrorStream(
+     * boolean)
      */
     public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream) {
         this.delegatedPB.redirectErrorStream(redirectErrorStream);
         return this;
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#canExecuteAsUser(org.objectweb.proactive.extensions.processbuilder.OSUser)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#canExecuteAsUser(org.
+     * objectweb.proactive.extensions.processbuilder.OSUser)
      */
     public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
         if (user.hasPrivateKey()) {
@@ -205,8 +226,8 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
      * Create a native representation of a process that will run in background
      * that means no interaction with the desktop 
      */
-    protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
-            FatalProcessBuilderException {
+    protected Process setupAndStart()
+            throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
 
         // If the user doesn't have any domain use the local one
         String domain = ".";
@@ -216,8 +237,7 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         }
 
         // Create the windows process 
-        final WindowsProcess p = new WindowsProcess(domain, this.user().getUserName(), this.user()
-                .getPassword());
+        final WindowsProcess p = new WindowsProcess(domain, this.user().getUserName(), this.user().getPassword());
 
         // Inherit environment
         final Map<String, String> env = this.delegatedPB.environment();

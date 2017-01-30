@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package diff;
 
@@ -111,7 +100,7 @@ public class DiffPrint {
         /** Divide SCRIPT into pieces by calling HUNKFUN and
            print each piece with PRINTFUN.
            Both functions take one arg, an edit script.
-
+        
            PRINTFUN takes a subscript which belongs together (with a null
            link at the end) and prints it.  */
         public void print_script(Diff.change script) {
@@ -122,21 +111,23 @@ public class DiffPrint {
                 Diff.change t;
                 Diff.change end;
 
-                /* Find a set of changes that belong together.  */
+                /* Find a set of changes that belong together. */
                 t = next;
                 end = hunkfun(next);
 
-                /* Disconnect them from the rest of the changes,
-                   making them a hunk, and remember the rest for next iteration.  */
+                /*
+                 * Disconnect them from the rest of the changes,
+                 * making them a hunk, and remember the rest for next iteration.
+                 */
                 next = end.link;
                 end.link = null;
                 //if (DEBUG)
                 //  debug_script(t);
 
-                /* Print this hunk.  */
+                /* Print this hunk. */
                 print_hunk(t);
 
-                /* Reconnect the script so it will all be freed properly.  */
+                /* Reconnect the script so it will all be freed properly. */
                 end.link = next;
             }
             outfile.flush();
@@ -150,10 +141,15 @@ public class DiffPrint {
         }
 
         protected int first0;
+
         protected int last0;
+
         protected int first1;
+
         protected int last1;
+
         protected int deletes;
+
         protected int inserts;
 
         /** Look at a hunk of edit script and report the range of lines in each file
@@ -161,9 +157,9 @@ public class DiffPrint {
           of `struct change'.  The first and last line numbers of file 0 are stored
           in *FIRST0 and *LAST0, and likewise for file 1 in *FIRST1 and *LAST1.
           Note that these are internal line numbers that count from 0.
-
+        
           If no lines from file 0 are deleted, then FIRST0 is LAST0+1.
-
+        
           Also set *DELETES nonzero if any lines of file 0 are deleted
           and set *INSERTS nonzero if any lines of file 1 are inserted.
           If only ignorable lines are inserted or deleted, both are
@@ -204,8 +200,10 @@ public class DiffPrint {
             first1 = f1;
             last1 = l1;
 
-            /* If all inserted or deleted lines are ignorable,
-               tell the caller to ignore this hunk.  */
+            /*
+             * If all inserted or deleted lines are ignorable,
+             * tell the caller to ignore this hunk.
+             */
             if (!nontrivial) {
                 show_from = show_to = 0;
             }
@@ -227,14 +225,16 @@ public class DiffPrint {
 
         /** Print a pair of line numbers with SEPCHAR, translated for file FILE.
            If the two numbers are identical, print just one number.
-
+        
            Args A and B are internal line numbers.
            We print the translated (real) line numbers.  */
         protected void print_number_range(char sepchar, int a, int b) {
 
-            /* Note: we can have B < A in the case of a range of no lines.
-               In this case, we should print the line number before the range,
-               which is B.  */
+            /*
+             * Note: we can have B < A in the case of a range of no lines.
+             * In this case, we should print the line number before the range,
+             * which is B.
+             */
             if (++b > ++a) {
                 outfile.print("" + a + sepchar + b);
             } else {
@@ -265,7 +265,7 @@ public class DiffPrint {
            describing changes in consecutive lines.  */
         @Override
         protected void print_hunk(Diff.change hunk) {
-            /* Determine range of line numbers involved in each file.  */
+            /* Determine range of line numbers involved in each file. */
             analyze_hunk(hunk);
             if ((deletes == 0) && (inserts == 0)) {
                 return;
@@ -277,7 +277,7 @@ public class DiffPrint {
             print_number_range(',', first1, last1);
             outfile.println();
 
-            /* Print the lines that the first file has.  */
+            /* Print the lines that the first file has. */
             if (deletes != 0) {
                 for (int i = first0; i <= last0; i++)
                     print_1_line("< ", file0[i]);
@@ -287,7 +287,7 @@ public class DiffPrint {
                 outfile.println("---");
             }
 
-            /* Print the lines that the second file has.  */
+            /* Print the lines that the second file has. */
             if (inserts != 0) {
                 for (int i = first1; i <= last1; i++)
                     print_1_line("> ", file1[i]);
@@ -307,7 +307,7 @@ public class DiffPrint {
         /** Print a hunk of an ed diff */
         @Override
         protected void print_hunk(Diff.change hunk) {
-            /* Determine range of line numbers involved in each file.  */
+            /* Determine range of line numbers involved in each file. */
             analyze_hunk(hunk);
             if ((deletes == 0) && (inserts == 0)) {
                 return;
@@ -322,29 +322,31 @@ public class DiffPrint {
                 boolean inserting = true;
                 for (int i = first1; i <= last1; i++) {
 
-                    /* Resume the insert, if we stopped.  */
+                    /* Resume the insert, if we stopped. */
                     if (!inserting) {
                         outfile.println(i - first1 + first0 + "a");
                     }
                     inserting = true;
 
-                    /* If the file's line is just a dot, it would confuse `ed'.
-                       So output it with a double dot, and set the flag LEADING_DOT
-                       so that we will output another ed-command later
-                       to change the double dot into a single dot.  */
+                    /*
+                     * If the file's line is just a dot, it would confuse `ed'.
+                     * So output it with a double dot, and set the flag LEADING_DOT
+                     * so that we will output another ed-command later
+                     * to change the double dot into a single dot.
+                     */
                     if (".".equals(file1[i])) {
                         outfile.println("src");
                         outfile.println(".");
-                        /* Now change that double dot to the desired single dot.  */
+                        /* Now change that double dot to the desired single dot. */
                         outfile.println(i - first1 + first0 + 1 + "s/^\\.\\././");
                         inserting = false;
                     } else {
-                        /* Line is not `.', so output it unmodified.  */
+                        /* Line is not `.', so output it unmodified. */
                         print_1_line("", file1[i]);
                     }
                 }
 
-                /* End insert mode, if we are still in it.  */
+                /* End insert mode, if we are still in it. */
                 if (inserting) {
                     outfile.println(".");
                 }
@@ -370,7 +372,7 @@ public class DiffPrint {
                 // FIXME: use DateFormat to get precise format needed.
                 outfile.println(mark + ' ' + inf.getPath() + '\t' + new Date(inf.lastModified()));
             } else {
-                /* Don't pretend that standard input is ancient.  */
+                /* Don't pretend that standard input is ancient. */
                 outfile.println(mark + ' ' + inf.getPath());
             }
         }
@@ -396,14 +398,14 @@ public class DiffPrint {
 
         @Override
         protected void print_hunk(Diff.change hunk) {
-            /* Determine range of line numbers involved in each file.  */
+            /* Determine range of line numbers involved in each file. */
             analyze_hunk(hunk);
 
             if ((deletes == 0) && (inserts == 0)) {
                 return;
             }
 
-            /* Include a context's width before and after.  */
+            /* Include a context's width before and after. */
             first0 = Math.max(first0 - context, 0);
             first1 = Math.max(first1 - context, 0);
             last0 = Math.min(last0 + context, file0.length - 1);
@@ -411,8 +413,10 @@ public class DiffPrint {
 
             outfile.print("***************");
 
-            /* If we looked for and found a function this is part of,
-               include its name in the header of the diff section.  */
+            /*
+             * If we looked for and found a function this is part of,
+             * include its name in the header of the diff section.
+             */
             print_function(file0, first0);
 
             outfile.println();
@@ -425,17 +429,21 @@ public class DiffPrint {
 
                 for (int i = first0; i <= last0; i++) {
 
-                    /* Skip past changes that apply (in file 0)
-                       only to lines before line I.  */
+                    /*
+                     * Skip past changes that apply (in file 0)
+                     * only to lines before line I.
+                     */
                     while ((next != null) && ((next.line0 + next.deleted) <= i))
                         next = next.link;
 
-                    /* Compute the marking for line I.  */
+                    /* Compute the marking for line I. */
                     String prefix = " ";
                     if ((next != null) && (next.line0 <= i)) {
-                        /* The change NEXT covers this line.
-                           If lines were inserted here in file 1, this is "changed".
-                           Otherwise it is "deleted".  */
+                        /*
+                         * The change NEXT covers this line.
+                         * If lines were inserted here in file 1, this is "changed".
+                         * Otherwise it is "deleted".
+                         */
                         prefix = (next.inserted > 0) ? "!" : "-";
                     }
 
@@ -452,17 +460,21 @@ public class DiffPrint {
 
                 for (int i = first1; i <= last1; i++) {
 
-                    /* Skip past changes that apply (in file 1)
-                       only to lines before line I.  */
+                    /*
+                     * Skip past changes that apply (in file 1)
+                     * only to lines before line I.
+                     */
                     while ((next != null) && ((next.line1 + next.inserted) <= i))
                         next = next.link;
 
-                    /* Compute the marking for line I.  */
+                    /* Compute the marking for line I. */
                     String prefix = " ";
                     if ((next != null) && (next.line1 <= i)) {
-                        /* The change NEXT covers this line.
-                           If lines were deleted here in file 0, this is "changed".
-                           Otherwise it is "inserted".  */
+                        /*
+                         * The change NEXT covers this line.
+                         * If lines were deleted here in file 0, this is "changed".
+                         * Otherwise it is "inserted".
+                         */
                         prefix = (next.deleted > 0) ? "!" : "+";
                     }
 
@@ -489,9 +501,11 @@ public class DiffPrint {
         private void print_number_range(int a, int b) {
             //translate_range (file, a, b, &trans_a, &trans_b);
 
-            /* Note: we can have B < A in the case of a range of no lines.
-               In this case, we should print the line number before the range,
-               which is B.  */
+            /*
+             * Note: we can have B < A in the case of a range of no lines.
+             * In this case, we should print the line number before the range,
+             * which is B.
+             */
             if (b < a) {
                 outfile.print(b + ",0");
             } else {
@@ -501,14 +515,14 @@ public class DiffPrint {
 
         @Override
         protected void print_hunk(Diff.change hunk) {
-            /* Determine range of line numbers involved in each file.  */
+            /* Determine range of line numbers involved in each file. */
             analyze_hunk(hunk);
 
             if ((deletes == 0) && (inserts == 0)) {
                 return;
             }
 
-            /* Include a context's width before and after.  */
+            /* Include a context's width before and after. */
             first0 = Math.max(first0 - context, 0);
             first1 = Math.max(first1 - context, 0);
             last0 = Math.min(last0 + context, file0.length - 1);
@@ -520,8 +534,10 @@ public class DiffPrint {
             print_number_range(first1, last1);
             outfile.print(" @@");
 
-            /* If we looked for and found a function this is part of,
-               include its name in the header of the diff section.  */
+            /*
+             * If we looked for and found a function this is part of,
+             * include its name in the header of the diff section.
+             */
             print_function(file0, first0);
 
             outfile.println();

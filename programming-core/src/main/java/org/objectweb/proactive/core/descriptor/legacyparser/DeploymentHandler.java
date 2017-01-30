@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.descriptor.legacyparser;
 
@@ -144,8 +133,7 @@ class DeploymentHandler extends PassiveCompositeUnmarshaller implements ProActiv
             String host = attributes.getValue("host");
 
             if (!checkNonEmpty(host) && protocol.equals("rmi")) {
-                throw new org.xml.sax.SAXException(
-                    "within a lookup tag attribute host must be defined for rmi protocol");
+                throw new org.xml.sax.SAXException("within a lookup tag attribute host must be defined for rmi protocol");
             }
 
             //            protocol = UrlBuilder.checkProtocol(protocol);
@@ -201,8 +189,7 @@ class DeploymentHandler extends PassiveCompositeUnmarshaller implements ProActiv
                 //throws an exception if vn has property unique or unique_singleAO and more than one vm are defined
                 if ((vmNames.length > 1) && (vn.getProperty() != null) &&
                     (vn.getProperty().equals("unique") || vn.getProperty().equals("unique_singleAO"))) {
-                    throw new org.xml.sax.SAXException(
-                        "a set of virtual machine is defined for a virtualNode that is unique");
+                    throw new org.xml.sax.SAXException("a set of virtual machine is defined for a virtualNode that is unique");
                 }
 
                 if (vmNames.length > 0) {
@@ -246,15 +233,13 @@ class DeploymentHandler extends PassiveCompositeUnmarshaller implements ProActiv
                 }
 
                 @Override
-                public void startContextElement(String name, Attributes attributes)
-                        throws org.xml.sax.SAXException {
+                public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
                     String vmName = attributes.getValue("value");
 
                     if (checkNonEmpty(vmName)) {
                         setResultObject(vmName);
                     } else {
-                        throw new org.xml.sax.SAXException(
-                            "The name of the Jvm cannot be set to an empty string");
+                        throw new org.xml.sax.SAXException("The name of the Jvm cannot be set to an empty string");
                     }
                 }
             } //end of inner class VmNameHandler
@@ -264,8 +249,7 @@ class DeploymentHandler extends PassiveCompositeUnmarshaller implements ProActiv
                 }
 
                 @Override
-                public void startContextElement(String name, Attributes attributes)
-                        throws org.xml.sax.SAXException {
+                public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
                     String protocol = attributes.getValue("protocol");
                     setResultObject(protocol);
                 }

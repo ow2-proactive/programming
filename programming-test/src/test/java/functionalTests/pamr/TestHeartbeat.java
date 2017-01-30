@@ -1,40 +1,33 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package functionalTests.pamr;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.net.InetAddress;
 import java.util.List;
@@ -47,6 +40,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
 import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
@@ -57,17 +52,12 @@ import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRPlainSocketFactory;
 import org.objectweb.proactive.extensions.pamr.router.Router;
+
 import com.sun.jdi.Bootstrap;
 import com.sun.jdi.ThreadReference;
 import com.sun.jdi.VirtualMachine;
 import com.sun.jdi.connect.Connector;
 import com.sun.tools.jdi.SocketAttachingConnector;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 
 /**
@@ -76,7 +66,9 @@ import static org.junit.Assert.fail;
 public class TestHeartbeat extends BlackBox {
 
     private static InetAddress localhost;
+
     private static int PORT = Integer.parseInt(System.getProperty("jdwp.port", "5550"));
+
     private static VirtualMachine virtualMachine;
 
     private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
@@ -115,9 +107,9 @@ public class TestHeartbeat extends BlackBox {
         } catch (ExecutionException e) {
             Throwable cause = e.getCause();
             assertTrue("sendMsg should throw PAMRException when interrupted by heartbeat mechanism",
-                    cause instanceof PAMRException);
-            assertTrue(cause.getMessage().contains(
-                    String.format("Remote agent %s disconnected", replyingAgentId.getId())));
+                       cause instanceof PAMRException);
+            assertTrue(cause.getMessage()
+                            .contains(String.format("Remote agent %s disconnected", replyingAgentId.getId())));
         }
 
         resumeMessageReaderThread(replyingAgentId);
@@ -203,8 +195,12 @@ public class TestHeartbeat extends BlackBox {
 
     static private Agent createAgent(Router router, Class<? extends MessageHandler> messageHandlerClass)
             throws IllegalArgumentException, ProActiveException {
-        return new AgentImpl(localhost, router.getPort(), null, new MagicCookie(), messageHandlerClass,
-            new PAMRPlainSocketFactory());
+        return new AgentImpl(localhost,
+                             router.getPort(),
+                             null,
+                             new MagicCookie(),
+                             messageHandlerClass,
+                             new PAMRPlainSocketFactory());
 
     }
 

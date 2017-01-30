@@ -1,40 +1,32 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s): ActiveEon Team - http://www.activeeon.com
- *
- * ################################################################
- * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject;
+
+import java.lang.reflect.Constructor;
+import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
@@ -46,9 +38,6 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.lang.reflect.Constructor;
-import java.net.URI;
 
 
 public class RemoteObjectHelper {
@@ -121,8 +110,7 @@ public class RemoteObjectHelper {
                 uri = URIBuilder.buildURIFromProperties(uri.getHost(), uri.getPath());
             } else {
                 // Set only protocol (using default) 
-                uri = URIBuilder.setProtocol(uri,
-                        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+                uri = URIBuilder.setProtocol(uri, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
             }
         } else {
             if (port == -1) {
@@ -150,8 +138,7 @@ public class RemoteObjectHelper {
     public static RemoteRemoteObject register(RemoteObject<?> target, URI url, boolean replacePreviousBinding)
             throws ProActiveException {
         InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(target, expandURI(url));
-        RemoteRemoteObject rro = getFactoryFromURL(url)
-                .register(irro, expandURI(url), replacePreviousBinding);
+        RemoteRemoteObject rro = getFactoryFromURL(url).register(irro, expandURI(url), replacePreviousBinding);
         irro.setRemoteRemoteObject(rro);
         return rro;
     }
@@ -179,10 +166,9 @@ public class RemoteObjectHelper {
             //            Object fakeObject = ro.getTargetClass().newInstance();
             //
             //            T reifiedObjectStub = (T) MOP.turnReified( ro.getClassName(), SynchronousProxy.class.getName(),
-            //                    new Object[] { null, new Object[] { ro } } , fakeObject, new Class[] {});
+            //                    new Object[] { null, new Object[] { ro } }, fakeObject, new Class[] {});
 
-            T reifiedObjectStub = (T) MOP.createStubObject(ro.getClassName(), ro.getTargetClass(),
-                    new Class[] {});
+            T reifiedObjectStub = (T) MOP.createStubObject(ro.getClassName(), ro.getTargetClass(), new Class[] {});
             ((StubObject) reifiedObjectStub).setProxy(new SynchronousProxy(null, new Object[] { ro }));
 
             Class<Adapter<T>> adapter = (Class<Adapter<T>>) ro.getAdapterClass();

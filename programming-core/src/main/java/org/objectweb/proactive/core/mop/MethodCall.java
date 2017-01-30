@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
 
@@ -46,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 import org.objectweb.proactive.core.mop.MethodCallInfo.SynchronousReason;
@@ -53,7 +43,6 @@ import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
 import org.objectweb.proactive.core.util.converter.ProActiveByteToObjectConverter;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -74,6 +63,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
      * isAsynchronousCall for every call, but only once for a given method
      */
     private static transient java.util.Hashtable<String, ReifiableAndExceptions> REIF_AND_EXCEP = new java.util.Hashtable<String, ReifiableAndExceptions>();
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
 
     /**
@@ -93,6 +83,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
 
     /**        Indicates if the recycling of MethodCall object is on. */
     private static boolean recycleMethodCallObject;
+
     private static java.util.Hashtable<String, Method> reifiedMethodsTable = new java.util.Hashtable<String, Method>();
 
     static {
@@ -117,8 +108,11 @@ public class MethodCall implements java.io.Serializable, Cloneable {
      * The method corresponding to the call
      */
     private transient Method reifiedMethod;
+
     private String key;
+
     private transient MethodCallExceptionContext exceptioncontext;
+
     private transient Map<TypeVariable<?>, Class<?>> genericTypesMapping = null;
 
     /**
@@ -135,8 +129,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     public void transformEffectiveArgumentsIntoByteArray() {
         if ((this.serializedEffectiveArguments == null) && (this.effectiveArguments != null)) {
             try {
-                this.serializedEffectiveArguments = ObjectToByteConverter.MarshallStream
-                        .convert(this.effectiveArguments);
+                this.serializedEffectiveArguments = ObjectToByteConverter.MarshallStream.convert(this.effectiveArguments);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -264,8 +257,9 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     public MethodCall(Method reifiedMethod, Map<TypeVariable<?>, Class<?>> genericTypesMapping,
             Object[] effectiveArguments, MethodCallExceptionContext exceptionContext) {
         this.reifiedMethod = reifiedMethod;
-        this.genericTypesMapping = ((genericTypesMapping != null) && (genericTypesMapping.size() > 0)) ? genericTypesMapping
-                : null;
+        this.genericTypesMapping = ((genericTypesMapping != null) && (genericTypesMapping.size() > 0))
+                                                                                                       ? genericTypesMapping
+                                                                                                       : null;
         this.effectiveArguments = effectiveArguments;
         this.key = buildKey(reifiedMethod, genericTypesMapping);
         this.exceptioncontext = MethodCallExceptionContext.optimize(exceptionContext);
@@ -319,13 +313,11 @@ public class MethodCall implements java.io.Serializable, Cloneable {
      * returned a primitive type, then it is wrapped inside the appropriate
      * wrapper object.
      */
-    public Object execute(Object targetObject) throws InvocationTargetException,
-            MethodCallExecutionFailedException {
+    public Object execute(Object targetObject) throws InvocationTargetException, MethodCallExecutionFailedException {
         // A test at how non-public methods can be reflected
         if ((this.serializedEffectiveArguments != null) && (this.effectiveArguments == null)) {
             try {
-                this.effectiveArguments = (Object[]) ProActiveByteToObjectConverter.MarshallStream
-                        .convert(this.serializedEffectiveArguments);
+                this.effectiveArguments = (Object[]) ProActiveByteToObjectConverter.MarshallStream.convert(this.serializedEffectiveArguments);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -337,7 +329,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
             logger.debug("MethodCall.execute() name = " + this.getName());
             logger.debug("MethodCall.execute() reifiedMethod = " + this.reifiedMethod);
             logger.debug("MethodCall.execute() reifiedMethod.getDeclaringClass() = " +
-                this.reifiedMethod.getDeclaringClass());
+                         this.reifiedMethod.getDeclaringClass());
             logger.debug("MethodCall.execute() targetObject " + targetObject);
         }
 
@@ -355,8 +347,8 @@ public class MethodCall implements java.io.Serializable, Cloneable {
             throw new MethodCallExecutionFailedException("Access rights to the method denied: " + e);
         } catch (IllegalArgumentException e) {
             throw new MethodCallExecutionFailedException("Arguments for the method " + this.getName() +
-                " are invalids: " + e + "for the object " + targetObject + "(" +
-                targetObject.getClass().getName() + ")", e);
+                                                         " are invalids: " + e + "for the object " + targetObject +
+                                                         "(" + targetObject.getClass().getName() + ")", e);
         }
     }
 
@@ -478,8 +470,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
         this.readTheObject(in);
     }
 
-    protected void readTheObject(java.io.ObjectInputStream in) throws java.io.IOException,
-            ClassNotFoundException {
+    protected void readTheObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
         this.reifiedMethod = reifiedMethodsTable.get(this.key);
         if (this.reifiedMethod == null) {
@@ -493,17 +484,14 @@ public class MethodCall implements java.io.Serializable, Cloneable {
                 this.reifiedMethod = declaringClass.getMethod(simpleName, parameters);
                 reifiedMethodsTable.put(this.key, this.reifiedMethod);
             } catch (NoSuchMethodException e) {
-                throw new InternalException(
-                    "Lookup for method failed: " +
-                        e +
-                        ". This may be caused by having different versions of the same class on different VMs. Check your CLASSPATH settings.");
+                throw new InternalException("Lookup for method failed: " + e +
+                                            ". This may be caused by having different versions of the same class on different VMs. Check your CLASSPATH settings.");
             }
         }
 
         if ((this.serializedEffectiveArguments != null) && (this.effectiveArguments == null)) {
             try {
-                this.effectiveArguments = (Object[]) ProActiveByteToObjectConverter.MarshallStream
-                        .convert(this.serializedEffectiveArguments);
+                this.effectiveArguments = (Object[]) ProActiveByteToObjectConverter.MarshallStream.convert(this.serializedEffectiveArguments);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -527,8 +515,11 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     /* Used in the REIF_AND_EXCEP cache */
     static class ReifiableAndExceptions {
         boolean reifiable; // Is the method return type reifiable ?
+
         boolean exceptions; // Does the method throws exceptions ?
+
         boolean returnsvoid; // Is the method returning void
+
         String reason; // Why is the method synchronous ? null if it is asynchronous
     }
 
@@ -660,6 +651,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     //
     public class FixWrapper implements java.io.Serializable {
         public boolean isPrimitive;
+
         public Class<?> encapsulated;
 
         public FixWrapper() {

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs.adapter;
 
@@ -46,6 +35,11 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.NameScope;
+import org.apache.commons.vfs2.Selectors;
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -60,11 +54,6 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
 import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerImpl;
 import org.objectweb.proactive.extensions.vfsprovider.util.URIHelper;
-import org.apache.commons.vfs2.FileName;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.NameScope;
-import org.apache.commons.vfs2.Selectors;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -105,15 +94,14 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     private final String ownerActiveObjectId;
 
-    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI,
-            FileName dataSpaceVFSFileName, ArrayList<String> spaceRoots, String currentRoot)
-            throws FileSystemException {
+    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI, FileName dataSpaceVFSFileName,
+            ArrayList<String> spaceRoots, String currentRoot) throws FileSystemException {
         this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, currentRoot, null, null);
     }
 
-    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI,
-            FileName dataSpaceVFSFileName, ArrayList<String> spaceRoots, String currentRoot,
-            VFSSpacesMountManagerImpl manager) throws FileSystemException {
+    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI, FileName dataSpaceVFSFileName,
+            ArrayList<String> spaceRoots, String currentRoot, VFSSpacesMountManagerImpl manager)
+            throws FileSystemException {
         this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, currentRoot, manager, null);
     }
 
@@ -125,9 +113,9 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
      * @param dataSpaceVFSFileName VFS file name of the space root FileObject; cannot be <code>null</code>
      * @throws FileSystemException when data space file name does not match adaptee's name
      */
-    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI,
-            FileName dataSpaceVFSFileName, ArrayList<String> spaceRoots, String currentRoot,
-            VFSSpacesMountManagerImpl manager, String ownerActiveObjectId) throws FileSystemException {
+    public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI, FileName dataSpaceVFSFileName,
+            ArrayList<String> spaceRoots, String currentRoot, VFSSpacesMountManagerImpl manager,
+            String ownerActiveObjectId) throws FileSystemException {
         this.dataSpaceURI = dataSpaceURI;
         this.dataSpaceVFSFileName = dataSpaceVFSFileName;
         this.currentFileObject = adaptee;
@@ -140,9 +128,13 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     private VFSFileObjectAdapter(FileObject adaptee, VFSFileObjectAdapter fileObjectAdapter)
             throws FileSystemException {
-        this(adaptee, fileObjectAdapter.dataSpaceURI, fileObjectAdapter.dataSpaceVFSFileName,
-                new ArrayList<String>(fileObjectAdapter.rootFOUriSet), fileObjectAdapter.currentRootFOUri,
-                fileObjectAdapter.manager, fileObjectAdapter.ownerActiveObjectId);
+        this(adaptee,
+             fileObjectAdapter.dataSpaceURI,
+             fileObjectAdapter.dataSpaceVFSFileName,
+             new ArrayList<String>(fileObjectAdapter.rootFOUriSet),
+             fileObjectAdapter.currentRootFOUri,
+             fileObjectAdapter.manager,
+             fileObjectAdapter.ownerActiveObjectId);
     }
 
     public void close() throws FileSystemException {
@@ -406,8 +398,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
      * @param adapted   cannot be null
      * @throws FileSystemException
      */
-    private <T extends Collection<DataSpacesFileObject>, E extends Collection<FileObject>> void adaptVFSResult(
-            E vfsResult, T adapted) throws FileSystemException {
+    private <T extends Collection<DataSpacesFileObject>, E extends Collection<FileObject>> void
+            adaptVFSResult(E vfsResult, T adapted) throws FileSystemException {
 
         for (FileObject fo : vfsResult) {
             adapted.add(new VFSFileObjectAdapter(fo, this));
@@ -600,7 +592,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
                     return newdsfo;
                 }
                 logger.debug(newdsfo.getRealURI() + " does not exist" +
-                    (checkWriteProtected ? " or is write protected" : ""));
+                             (checkWriteProtected ? " or is write protected" : ""));
             }
         }
         return null;
@@ -645,8 +637,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         return true;
     }
 
-    private static File convertDataSpaceToFileIfPossible(DataSpacesFileObject fo) throws URISyntaxException,
-            DataSpacesException {
+    private static File convertDataSpaceToFileIfPossible(DataSpacesFileObject fo)
+            throws URISyntaxException, DataSpacesException {
         URI foUri = new URI(fo.getRealURI());
         if (foUri.getScheme() == null || foUri.getScheme().equals("file")) {
             return new File(foUri);
@@ -663,8 +655,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         return answer;
     }
 
-    public DataSpacesFileObject switchToSpaceRoot(String spaceRootUri) throws FileSystemException,
-            SpaceNotFoundException {
+    public DataSpacesFileObject switchToSpaceRoot(String spaceRootUri)
+            throws FileSystemException, SpaceNotFoundException {
         if (!rootFOUriSet.contains(spaceRootUri)) {
             throw new IllegalArgumentException(spaceRootUri + " is not accessible by DFO " + getVirtualURI());
         }
@@ -673,7 +665,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         }
         String relativePath = computeRelativePath();
         DataSpacesFileObject newDsfo = manager.resolveFile(dataSpaceURI.withRelativeToSpace(relativePath),
-                ownerActiveObjectId, spaceRootUri);
+                                                           ownerActiveObjectId,
+                                                           spaceRootUri);
         logger.debug("switched to " + newDsfo.getRealURI());
         return newDsfo;
     }

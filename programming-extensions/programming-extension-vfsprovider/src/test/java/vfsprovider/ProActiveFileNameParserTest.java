@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package vfsprovider;
 
@@ -70,10 +59,9 @@ public class ProActiveFileNameParserTest {
         assertEquals("hostname.com", fileName.getHostName());
         assertEquals("/service/address", fileName.getServicePath());
         assertEquals("/dir/file.txt", fileName.getPath());
-        assertEquals("paprmi://hostname.com:3232/service/address?proactive_vfs_provider_path=/",
-                fileName.getRootURI());
+        assertEquals("paprmi://hostname.com:3232/service/address?proactive_vfs_provider_path=/", fileName.getRootURI());
         assertEquals("paprmi://hostname.com:3232/service/address?proactive_vfs_provider_path=/dir/file.txt",
-                fileName.getURI());
+                     fileName.getURI());
         assertEquals("rmi://hostname.com:3232/service/address", fileName.getServerURL());
     }
 
@@ -89,16 +77,13 @@ public class ProActiveFileNameParserTest {
         assertEquals("hostname.com", fileName.getHostName());
         assertEquals("/serviceAddress", fileName.getServicePath());
         assertEquals("/", fileName.getPath());
-        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/",
-                fileName.getRootURI());
-        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/",
-                fileName.getURI());
+        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/", fileName.getRootURI());
+        assertEquals("paprmi://hostname.com:1234/serviceAddress?proactive_vfs_provider_path=/", fileName.getURI());
         assertEquals("rmi://hostname.com:1234/serviceAddress", fileName.getServerURL());
     }
 
     @Test
-    public void testNameWithServiceIncludingQueryWithoutServiceAndFilePathSeparators()
-            throws FileSystemException {
+    public void testNameWithServiceIncludingQueryWithoutServiceAndFilePathSeparators() throws FileSystemException {
         fileName = parseURI("paprmi://hostname.com:3232/serviceAddress?someServiceQuery=xxx");
 
         assertEquals("paprmi", fileName.getScheme());
@@ -109,12 +94,10 @@ public class ProActiveFileNameParserTest {
         assertEquals("hostname.com", fileName.getHostName());
         assertEquals("/serviceAddress?someServiceQuery=xxx", fileName.getServicePath());
         assertEquals("/", fileName.getPath());
-        assertEquals(
-                "paprmi://hostname.com:3232/serviceAddress?someServiceQuery=xxx?proactive_vfs_provider_path=/",
-                fileName.getRootURI());
-        assertEquals(
-                "paprmi://hostname.com:3232/serviceAddress?someServiceQuery=xxx?proactive_vfs_provider_path=/",
-                fileName.getURI());
+        assertEquals("paprmi://hostname.com:3232/serviceAddress?someServiceQuery=xxx?proactive_vfs_provider_path=/",
+                     fileName.getRootURI());
+        assertEquals("paprmi://hostname.com:3232/serviceAddress?someServiceQuery=xxx?proactive_vfs_provider_path=/",
+                     fileName.getURI());
         assertEquals("rmi://hostname.com:3232/serviceAddress?someServiceQuery=xxx", fileName.getServerURL());
     }
 
@@ -131,16 +114,15 @@ public class ProActiveFileNameParserTest {
         assertEquals("/service/../anotherService", fileName.getServicePath());
         assertEquals("/dir/anotherSubDir", fileName.getPath());
         assertEquals("paprmi://hostname.com:3232/service/../anotherService?proactive_vfs_provider_path=/",
-                fileName.getRootURI());
-        assertEquals(
-                "paprmi://hostname.com:3232/service/../anotherService?proactive_vfs_provider_path=/dir/anotherSubDir",
-                fileName.getURI());
+                     fileName.getRootURI());
+        assertEquals("paprmi://hostname.com:3232/service/../anotherService?proactive_vfs_provider_path=/dir/anotherSubDir",
+                     fileName.getURI());
         assertEquals("rmi://hostname.com:3232/service/../anotherService", fileName.getServerURL());
     }
 
     @Test
-    public void testServiceURLInteractionWithProActiveFileName() throws UnknownProtocolException,
-            URISyntaxException, FileSystemException {
+    public void testServiceURLInteractionWithProActiveFileName()
+            throws UnknownProtocolException, URISyntaxException, FileSystemException {
         final String serverURL = "rmi://hostname.com:3232/service";
         String[] vfsURLs = ProActiveFileName.getServerVFSRootURLs(new String[] { serverURL });
         final String vfsURL = vfsURLs[0];

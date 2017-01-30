@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.jmx.notification;
 
@@ -41,6 +30,7 @@ package org.objectweb.proactive.core.jmx.notification;
  */
 public class NotificationType {
     public final static String unknown = "unknown";
+
     public final static String setOfNotifications = "setOfNotifications";
 
     // --- Corresponds to the RequestQueueEvent --------------------
@@ -52,16 +42,24 @@ public class NotificationType {
 
     // --- Corresponds to the MessageEvent -------------------------
     public final static String replyReceived = "replyReceived";
+
     public final static String replySent = "replySent";
+
     public final static String requestReceived = "requestReceived";
+
     public final static String requestSent = "requestSent";
+
     public final static String servingStarted = "servingStarted";
+
     public final static String voidRequestServed = "voidRequestServed";
 
     // --- Corresponds to the MigrationEvent -----------------------
     public final static String migratedBodyRestarted = "migratedBodyRestarted";
+
     public final static String migrationAboutToStart = "migrationAboutToStart";
+
     public final static String migrationExceptionThrown = "migrationExceptionThrown";
+
     /**
      * Emitted by {@link org.objectweb.proactive.core.body.migration.MigrationManagerImpl} 
      * when the migration is finished.
@@ -74,21 +72,26 @@ public class NotificationType {
 
     // --- Corresponds to the FuturEvent ---------------------------
     public final static String receivedFutureResult = "receivedFutureResult";
+
     public final static String waitByNecessity = "waitByNecessity";
 
     // --- Corresponds to the NodeCreationEvent --------------------
     public final static String nodeCreated = "nodeCreated";
+
     public final static String nodeDestroyed = "nodeDestroyed";
 
     // --- Corresponds to the BodyEventListener --------------------
     /* Not Used */
     // public final static String bodyChanged = "bodyChanged";
     public final static String bodyCreated = "bodyCreated";
+
     public final static String bodyDestroyed = "bodyDestroyed";
 
     // --- Corresponds to the RuntimeRegistrationEvent -------------
     public final static String runtimeRegistered = "runtimeRegistered";
+
     public final static String runtimeUnregistered = "runtimeUnregistered";
+
     public final static String runtimeAcquired = "runtimeAcquired";
 
     // --- GCM Deployment

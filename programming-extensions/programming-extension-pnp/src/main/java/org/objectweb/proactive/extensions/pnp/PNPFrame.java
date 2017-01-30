@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnp;
 
@@ -51,6 +40,7 @@ import org.objectweb.proactive.extensions.pnp.exception.PNPMalformedMessageExcep
  */
 abstract class PNPFrame {
     static final short PNP_MAGIC_KEY = 543;
+
     /** Protocol version implemented by this class */
     static final int PROTOV1 = PNP_MAGIC_KEY << 4 | 1;
 
@@ -65,7 +55,7 @@ abstract class PNPFrame {
         HEARTBEAT,
         /** When a channel is opened, the client advertise the heartbeat period */
         HEARTBEAT_ADV
-        /* That's all*/
+        /* That's all */
         ;
 
         /** Reverse map associate a message type to an ID  */
@@ -118,6 +108,7 @@ abstract class PNPFrame {
         MSG_TYPE(4, Integer.class);
 
         private int length;
+
         private int myOffset = 0;
 
         static private int totalOffset = 0;
@@ -134,7 +125,8 @@ abstract class PNPFrame {
 
         /** Offset of the field in the message */
         public int getOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              *
              * This method relies on the Java Memory Model specification to perform
              * a racy single-check initialization.
@@ -159,7 +151,8 @@ abstract class PNPFrame {
 
         /** Length of the fields defined by {@link PNPFrame} */
         static public int getTotalOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              *
              * This method relies on the Java Memory Model specification to perform
              * a racy single-check initialization.
@@ -234,11 +227,11 @@ abstract class PNPFrame {
      * @throws MalformedMessageException
      * 		If the buffer does not contain a valid message
      */
-    public static PNPFrame constructMessage(ChannelBuffer buf, int offset)
-            throws PNPMalformedMessageException {
+    public static PNPFrame constructMessage(ChannelBuffer buf, int offset) throws PNPMalformedMessageException {
         // depending on the type of message, call a different constructor
-        MessageType type = MessageType.getMessageType(TypeHelper.channelBufferToInt(buf, offset +
-            Field.MSG_TYPE.getOffset()));
+        MessageType type = MessageType.getMessageType(TypeHelper.channelBufferToInt(buf,
+                                                                                    offset +
+                                                                                         Field.MSG_TYPE.getOffset()));
 
         switch (type) {
             case CALL:
@@ -267,11 +260,10 @@ abstract class PNPFrame {
         int protoId = TypeHelper.channelBufferToInt(buf, offset + Field.PROTO_ID.getOffset());
         if (protoId != PROTOV1) {
             if ((protoId & PNP_MAGIC_KEY << 4) == PNP_MAGIC_KEY << 4) {
-                throw new PNPMalformedMessageException("Invalid protocol version " + protoId + " should be " +
-                    PROTOV1);
+                throw new PNPMalformedMessageException("Invalid protocol version " + protoId + " should be " + PROTOV1);
             } else {
-                throw new PNPMalformedMessageException("Invalid protocol version " + protoId + " should be " +
-                    PROTOV1 + " and match the magic key.");
+                throw new PNPMalformedMessageException("Invalid protocol version " + protoId + " should be " + PROTOV1 +
+                                                       " and match the magic key.");
             }
         }
 
@@ -293,12 +285,12 @@ abstract class PNPFrame {
         if (type != null)
             return type;
         else
-            throw new PNPMalformedMessageException("Invalid value for the " + Field.MSG_TYPE + " field:" +
-                typeInt);
+            throw new PNPMalformedMessageException("Invalid value for the " + Field.MSG_TYPE + " field:" + typeInt);
     }
 
     /** Protocol ID of this message */
     final private int protoId;
+
     /** Type of this message */
     final private MessageType type;
 
@@ -360,8 +352,7 @@ abstract class PNPFrame {
 
     @Override
     public String toString() {
-        return Field.MSG_TYPE.toString() + ":" + this.type + ";" + Field.PROTO_ID.toString() + ":" +
-            this.protoId + ";";
+        return Field.MSG_TYPE.toString() + ":" + this.type + ";" + Field.PROTO_ID.toString() + ":" + this.protoId + ";";
     }
 
     @Override

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.body;
 
@@ -48,6 +37,11 @@ package org.objectweb.proactive.core.body;
  * @see AbstractBody
  */
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.*;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -59,11 +53,6 @@ import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializable {
@@ -79,10 +68,13 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
     private transient InitActive initActive; // used only once when active object is started first time
+
     private RunActive runActive;
+
     private EndActive endActive;
 
     private boolean initActiveExecutionFailed = false;
+
     private Throwable lastErrorCaught = null;
 
     //
@@ -197,7 +189,7 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
             lastErrorCaught = t;
             callTerminate = true;
             logger.error("Exception occurred in runActivity method of body " + toString() +
-                ". Now terminating the body", t);
+                         ". Now terminating the body", t);
         } finally {
             // execute the end of activity
             if (this.endActive != null) {
@@ -232,11 +224,9 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
 
             // At this step localBodyStrategy is an instance of InactiveLocalBodyStrategy
             // since terminate has been called just before
-            Iterator<Request> it = ((InactiveLocalBodyStrategy) localBodyStrategy).getRemainingRequests()
-                    .iterator();
+            Iterator<Request> it = ((InactiveLocalBodyStrategy) localBodyStrategy).getRemainingRequests().iterator();
 
-            ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime()
-                    .availableProcessors());
+            ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
             // Notifies the callers of the method calls received that an issue has occurred with initActive
             // It is used to prevent callers to wait forever for a future or an acknowledgement
@@ -248,15 +238,17 @@ public class ActiveBody extends BodyImpl implements Runnable, java.io.Serializab
                     public void run() {
                         if (!request.getMethodCall().isOneWayCall()) {
                             try {
-                                request.getSender().receiveReply(
-                                        new ReplyImpl(getID(), request.getSequenceNumber(), request
-                                                .getMethodName(), methodCallResult));
+                                request.getSender()
+                                       .receiveReply(new ReplyImpl(getID(),
+                                                                   request.getSequenceNumber(),
+                                                                   request.getMethodName(),
+                                                                   methodCallResult));
                             } catch (IOException e) {
-                                sendReplyExceptionsLogger.error(
-                                        shortString() + " : Failed to send reply to method:" +
-                                            request.getMethodName() + " sequence: " +
-                                            request.getSequenceNumber() + " by " +
-                                            request.getSenderNodeURL() + "/" + request.getSender(), e);
+                                sendReplyExceptionsLogger.error(shortString() + " : Failed to send reply to method:" +
+                                                                request.getMethodName() + " sequence: " +
+                                                                request.getSequenceNumber() + " by " +
+                                                                request.getSenderNodeURL() + "/" + request.getSender(),
+                                                                e);
                             }
                         }
                     }

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.dataspaces.api;
 
@@ -176,8 +165,8 @@ public class PADataSpaces {
      * @see #resolveDefaultInputBlocking(long)
      * @see #resolveDefaultInput(String)
      */
-    public static DataSpacesFileObject resolveDefaultInput() throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveDefaultInput()
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, null);
     }
 
@@ -210,8 +199,8 @@ public class PADataSpaces {
      *             configuration)
      * @see #resolveDefaultInputBlocking(String, long)
      */
-    public static DataSpacesFileObject resolveDefaultInput(String path) throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveDefaultInput(String path)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, path);
     }
 
@@ -232,8 +221,8 @@ public class PADataSpaces {
      * @see #resolveDefaultOutputBlocking(long)
      * @see #resolveDefaultOutput(String)
      */
-    public static DataSpacesFileObject resolveDefaultOutput() throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveDefaultOutput()
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, null);
     }
 
@@ -268,8 +257,8 @@ public class PADataSpaces {
      *             configuration)
      * @see #resolveDefaultOutputBlocking(String, long)
      */
-    public static DataSpacesFileObject resolveDefaultOutput(String path) throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveDefaultOutput(String path)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, path);
     }
 
@@ -298,8 +287,7 @@ public class PADataSpaces {
      * @see #resolveDefaultInput()
      */
     public static DataSpacesFileObject resolveDefaultInputBlocking(long timeoutMillis)
-            throws ProActiveTimeoutException, FileSystemException, NotConfiguredException,
-            ConfigurationException {
+            throws ProActiveTimeoutException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.INPUT, null);
     }
 
@@ -332,8 +320,8 @@ public class PADataSpaces {
      * @see #resolveDefaultInput(String)
      */
     public static DataSpacesFileObject resolveDefaultInputBlocking(String path, long timeoutMillis)
-            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException,
-            NotConfiguredException, ConfigurationException {
+            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
+            ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.INPUT, path);
     }
 
@@ -361,9 +349,8 @@ public class PADataSpaces {
      *             when resolved space's file system has not enough capabilities (because of wrong
      *             configuration)
      */
-    public static DataSpacesFileObject resolveDefaultOutputBlocking(long timeoutMillis)
-            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException,
-            NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveDefaultOutputBlocking(long timeoutMillis) throws IllegalArgumentException,
+            ProActiveTimeoutException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.OUTPUT, null);
     }
 
@@ -396,8 +383,8 @@ public class PADataSpaces {
      *             configuration)
      */
     public static DataSpacesFileObject resolveDefaultOutputBlocking(String path, long timeoutMillis)
-            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException,
-            NotConfiguredException, ConfigurationException {
+            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
+            ConfigurationException {
         return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.OUTPUT, path);
     }
 
@@ -420,8 +407,8 @@ public class PADataSpaces {
      * @see #resolveInputBlocking(String, long)
      * @see #resolveInput(String, String)
      */
-    public static DataSpacesFileObject resolveInput(String name) throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveInput(String name)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, null);
     }
 
@@ -456,8 +443,8 @@ public class PADataSpaces {
      *             configuration)
      * @see #resolveInputBlocking(String, String, long)
      */
-    public static DataSpacesFileObject resolveInput(String name, String path) throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveInput(String name, String path)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, path);
     }
 
@@ -480,8 +467,8 @@ public class PADataSpaces {
      * @see #resolveOutputBlocking(String, long)
      * @see #resolveOutput(String, String)
      */
-    public static DataSpacesFileObject resolveOutput(String name) throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveOutput(String name)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, null);
     }
 
@@ -517,8 +504,8 @@ public class PADataSpaces {
      *             configuration)
      * @see #resolveOutputBlocking(String, String, long)
      */
-    public static DataSpacesFileObject resolveOutput(String name, String path) throws SpaceNotFoundException,
-            FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveOutput(String name, String path)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, path);
     }
 
@@ -550,8 +537,8 @@ public class PADataSpaces {
      * @see #resolveInput(String)
      */
     public static DataSpacesFileObject resolveInputBlocking(String name, long timeoutMillis)
-            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException,
-            NotConfiguredException, ConfigurationException {
+            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
+            ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.INPUT, null);
     }
 
@@ -587,8 +574,8 @@ public class PADataSpaces {
      * @see #resolveInput(String, String)
      */
     public static DataSpacesFileObject resolveInputBlocking(String name, String path, long timeoutMillis)
-            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException,
-            NotConfiguredException, ConfigurationException {
+            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
+            ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.INPUT, path);
     }
 
@@ -620,8 +607,8 @@ public class PADataSpaces {
      * @see #resolveOutput(String)
      */
     public static DataSpacesFileObject resolveOutputBlocking(String name, long timeoutMillis)
-            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException,
-            NotConfiguredException, ConfigurationException {
+            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
+            ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.OUTPUT, null);
     }
 
@@ -657,8 +644,8 @@ public class PADataSpaces {
      * @see #resolveOutput(String, String)
      */
     public static DataSpacesFileObject resolveOutputBlocking(String name, String path, long timeoutMillis)
-            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException,
-            NotConfiguredException, ConfigurationException {
+            throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
+            ConfigurationException {
         return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.OUTPUT, path);
     }
 
@@ -680,8 +667,8 @@ public class PADataSpaces {
      *             configuration)
      * @see #resolveScratchForAO(String)
      */
-    public static DataSpacesFileObject resolveScratchForAO() throws FileSystemException,
-            NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveScratchForAO()
+            throws FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveScratchForAO(null);
     }
 
@@ -716,8 +703,8 @@ public class PADataSpaces {
      *             when resolved space's file system has not enough capabilities (because of wrong
      *             configuration)
      */
-    public static DataSpacesFileObject resolveScratchForAO(String path) throws FileSystemException,
-            NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveScratchForAO(String path)
+            throws FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveScratchForAO(path);
     }
 
@@ -796,8 +783,8 @@ public class PADataSpaces {
      *             configuration)
      * @see #getAllKnownInputNames()
      */
-    public static Map<String, DataSpacesFileObject> resolveAllKnownInputs() throws FileSystemException,
-            NotConfiguredException, ConfigurationException {
+    public static Map<String, DataSpacesFileObject> resolveAllKnownInputs()
+            throws FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveAllKnownInputsOutputs(SpaceType.INPUT);
     }
 
@@ -834,8 +821,8 @@ public class PADataSpaces {
      *             configuration)
      * @see #getAllKnownOutputNames()
      */
-    public static Map<String, DataSpacesFileObject> resolveAllKnownOutputs() throws FileSystemException,
-            NotConfiguredException, ConfigurationException {
+    public static Map<String, DataSpacesFileObject> resolveAllKnownOutputs()
+            throws FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveAllKnownInputsOutputs(SpaceType.OUTPUT);
     }
 
@@ -877,8 +864,8 @@ public class PADataSpaces {
      *             configuration)
      * @see DataSpacesFileObject#getURI()
      */
-    public static DataSpacesFileObject resolveFile(String uri) throws MalformedURIException,
-            SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+    public static DataSpacesFileObject resolveFile(String uri) throws MalformedURIException, SpaceNotFoundException,
+            FileSystemException, NotConfiguredException, ConfigurationException {
         return getMyDataSpacesImpl().resolveFile(uri);
     }
 
@@ -912,8 +899,8 @@ public class PADataSpaces {
      * @see #resolveDefaultInput()
      * @see #resolveDefaultInputBlocking(long)
      */
-    public static String addDefaultInput(String url, String path) throws ConfigurationException,
-            SpaceAlreadyRegisteredException, NotConfiguredException {
+    public static String addDefaultInput(String url, String path)
+            throws ConfigurationException, SpaceAlreadyRegisteredException, NotConfiguredException {
         return getMyDataSpacesImpl().addDefaultInputOutput(url, path, SpaceType.INPUT);
     }
 
@@ -947,8 +934,8 @@ public class PADataSpaces {
      * @see #resolveDefaultOutput()
      * @see #resolveDefaultOutputBlocking(long)
      */
-    public static String addDefaultOutput(String url, String path) throws ConfigurationException,
-            SpaceAlreadyRegisteredException, NotConfiguredException {
+    public static String addDefaultOutput(String url, String path)
+            throws ConfigurationException, SpaceAlreadyRegisteredException, NotConfiguredException {
         return getMyDataSpacesImpl().addDefaultInputOutput(url, path, SpaceType.OUTPUT);
     }
 
@@ -987,8 +974,8 @@ public class PADataSpaces {
      * @throws NotConfiguredException
      *             when caller's node is not configured for Data Spaces application
      */
-    public static String addInput(String name, String url, String path) throws ConfigurationException,
-            SpaceAlreadyRegisteredException, NotConfiguredException {
+    public static String addInput(String name, String url, String path)
+            throws ConfigurationException, SpaceAlreadyRegisteredException, NotConfiguredException {
         return getMyDataSpacesImpl().addInputOutput(name, url, path, SpaceType.INPUT);
     }
 

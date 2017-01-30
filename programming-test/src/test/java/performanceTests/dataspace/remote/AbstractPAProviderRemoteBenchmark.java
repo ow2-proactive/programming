@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package performanceTests.dataspace.remote;
 
@@ -73,7 +62,9 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
     }
 
     FileSystemServerDeployer fsDeployer;
+
     NamingServiceDeployer namingServiceDeployer;
+
     AO ao;
 
     public AbstractPAProviderRemoteBenchmark(Class<? extends AbstractPAProviderRemoteBenchmark> cl)
@@ -93,13 +84,17 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
         namingServiceDeployer.getLocalNamingService().registerApplication(Long.toString(applicationId), null);
 
         Node node = super.getANode();
-        ao = PAActiveObject.newActive(AO.class, new Object[] { fsDeployer.getVFSRootURL(),
-                namingServiceDeployer.getRemoteNamingService(), applicationId }, node);
+        ao = PAActiveObject.newActive(AO.class,
+                                      new Object[] { fsDeployer.getVFSRootURL(),
+                                                     namingServiceDeployer.getRemoteNamingService(), applicationId },
+                                      node);
     }
 
     public static class AO implements Serializable, InitActive {
         String vfsRootUrl;
+
         NamingService namingService;
+
         long appId;
 
         public AO() {
@@ -125,8 +120,8 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
             }
         }
 
-        public BooleanWrapper test() throws SpaceNotFoundException, NotConfiguredException,
-                ConfigurationException, IOException {
+        public BooleanWrapper test()
+                throws SpaceNotFoundException, NotConfiguredException, ConfigurationException, IOException {
             final DataSpacesFileObject fo = PADataSpaces.resolveDefaultInput("/zero");
             final InputStream is = fo.getContent().getInputStream();
 
@@ -145,9 +140,11 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
                 final long tx = bs * count;
                 final long after = System.currentTimeMillis();
                 final double bw = ((tx * 1000.0) / (after - before)) / (1 << 20);
-                System.out.printf(
-                        "Block size: %8d bytes, bandwidth: %8.2f MiB/s, TX: %5d MiB, Time elapsed: %d ms\n",
-                        bs, bw, (tx / (1 << 20)), (after - before));
+                System.out.printf("Block size: %8d bytes, bandwidth: %8.2f MiB/s, TX: %5d MiB, Time elapsed: %d ms\n",
+                                  bs,
+                                  bw,
+                                  (tx / (1 << 20)),
+                                  (after - before));
             }
 
             is.close();
@@ -158,8 +155,7 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
     }
 
     @Test
-    public void test() throws SpaceNotFoundException, NotConfiguredException, ConfigurationException,
-            IOException {
+    public void test() throws SpaceNotFoundException, NotConfiguredException, ConfigurationException, IOException {
         PAFuture.waitFor(ao.test());
     }
 

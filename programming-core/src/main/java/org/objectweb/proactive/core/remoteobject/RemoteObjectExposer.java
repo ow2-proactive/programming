@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
@@ -70,7 +59,9 @@ public class RemoteObjectExposer<T> {
 
     // Use LinkedHashMap for keeping the insertion-order
     protected LinkedHashMap<URI, InternalRemoteRemoteObject> activeRemoteRemoteObjects;
+
     private String className;
+
     private RemoteObjectImpl<T> remoteObject;
 
     public RemoteObjectExposer() {
@@ -80,8 +71,7 @@ public class RemoteObjectExposer<T> {
         this(new UniqueID(className + "_").shortString(), className, target, null);
     }
 
-    public RemoteObjectExposer(String className, Object target,
-            Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
+    public RemoteObjectExposer(String className, Object target, Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         this(new UniqueID(className + "_").shortString(), className, target, targetRemoteObjectAdapter);
     }
 
@@ -131,8 +121,13 @@ public class RemoteObjectExposer<T> {
             int port = url.getPort();
             if (port == -1) {
                 try {
-                    url = new URI(url.getScheme(), url.getUserInfo(), url.getHost(), rof.getPort(),
-                        url.getPath(), url.getQuery(), url.getFragment());
+                    url = new URI(url.getScheme(),
+                                  url.getUserInfo(),
+                                  url.getHost(),
+                                  rof.getPort(),
+                                  url.getPath(),
+                                  url.getQuery(),
+                                  url.getFragment());
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -155,14 +150,14 @@ public class RemoteObjectExposer<T> {
      * By default, expose remote object with all available protocols specified by the property
      * PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
      */
-    public synchronized RemoteRemoteObject createRemoteObject(String name, boolean rebind)
-            throws ProActiveException {
+    public synchronized RemoteRemoteObject createRemoteObject(String name, boolean rebind) throws ProActiveException {
         // Must be created before additionals one in order to avoid an AlreadyBoundException
-        RemoteRemoteObject ret = createRemoteObject(name, rebind,
-                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+        RemoteRemoteObject ret = createRemoteObject(name,
+                                                    rebind,
+                                                    CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
         if (LOGGER_RO.isDebugEnabled()) {
             LOGGER_RO.debug("[ROExposer] Object \"" + name + "\" exposed with default protocol : " +
-                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+                            CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
         }
         multiExposeRemoteObject(name, rebind);
         return ret;
@@ -182,8 +177,7 @@ public class RemoteObjectExposer<T> {
             // select the factory matching the required protocol
             // here is an implicit check for protocol validity
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
-            URI uri = URIBuilder.buildURI(rof.getBaseURI().getHost(), name, rof.getProtocolId(),
-                    rof.getPort());
+            URI uri = URIBuilder.buildURI(rof.getBaseURI().getHost(), name, rof.getProtocolId(), rof.getPort());
             InternalRemoteRemoteObject irro = activeRemoteRemoteObjects.get(uri);
             if (irro == null) {
                 irro = rof.createRemoteObject(this.remoteObject, name, rebind);
@@ -208,8 +202,7 @@ public class RemoteObjectExposer<T> {
     private synchronized void multiExposeRemoteObject(String name, boolean rebind) throws ProActiveException {
         // Expose the remote object using all specified communication protocol
         if (CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.isSet()) {
-            List<String> protocols = CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
-                    .getValue();
+            List<String> protocols = CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.getValue();
             Iterator<String> it = protocols.iterator();
             while (it.hasNext()) {
                 String protocol = it.next();
@@ -218,16 +211,16 @@ public class RemoteObjectExposer<T> {
                         // Create and store RRO in hashtable
                         createRemoteObject(name, true, protocol);
                         if (LOGGER_RO.isDebugEnabled()) {
-                            LOGGER_RO.debug("[ROExposer] Object \"" + name +
-                                "\" exposed with additionnal protocol : " + protocol);
+                            LOGGER_RO.debug("[ROExposer] Object \"" + name + "\" exposed with additionnal protocol : " +
+                                            protocol);
                         }
                     } catch (ProActiveRuntimeException pare) {
                         // Not so beautiful
                         if (protocol.equalsIgnoreCase("pamr")) {
                             LOGGER_RO.warn("[ROExposer] The PAMR router seems to be down", pare);
                         } else {
-                            LOGGER_RO.warn("[ROExposer] The exposition of " + name +
-                                ", through the protocol " + protocol + " didn't succeed", pare);
+                            LOGGER_RO.warn("[ROExposer] The exposition of " + name + ", through the protocol " +
+                                           protocol + " didn't succeed", pare);
                         }
                     } catch (ProtocolException pae) {
                         if (pae.getCause() instanceof AlreadyBoundException) {
@@ -236,10 +229,9 @@ public class RemoteObjectExposer<T> {
                             continue;
                         }
                         // this protocol throw exception, so we remove it from the candidate list for multi exposure
-                        LOGGER_RO
-                                .warn("[ROExposer] Protocol " + protocol +
-                                    " seems invalid for this runtime, this is not a critical error, the protocol will be disabled.",
-                                        pae);
+                        LOGGER_RO.warn("[ROExposer] Protocol " + protocol +
+                                       " seems invalid for this runtime, this is not a critical error, the protocol will be disabled.",
+                                       pae);
 
                         // Remove the protocol
                         it.remove();
@@ -302,8 +294,7 @@ public class RemoteObjectExposer<T> {
         for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
             URI url = it.next();
             if (protocol.equals(url.getScheme())) {
-                return new RemoteObjectAdapter(this.activeRemoteRemoteObjects.get(url)
-                        .getRemoteRemoteObject());
+                return new RemoteObjectAdapter(this.activeRemoteRemoteObjects.get(url).getRemoteRemoteObject());
             }
         }
         return null;
@@ -351,8 +342,7 @@ public class RemoteObjectExposer<T> {
     public void unregisterAll() throws ProActiveException {
         // Keep a reference for debug
         @SuppressWarnings("unchecked")
-        LinkedHashMap<URI, InternalRemoteRemoteObject> cloned = (LinkedHashMap<URI, InternalRemoteRemoteObject>) this.activeRemoteRemoteObjects
-                .clone();
+        LinkedHashMap<URI, InternalRemoteRemoteObject> cloned = (LinkedHashMap<URI, InternalRemoteRemoteObject>) this.activeRemoteRemoteObjects.clone();
 
         for (URI uri : cloned.keySet()) {
             try {

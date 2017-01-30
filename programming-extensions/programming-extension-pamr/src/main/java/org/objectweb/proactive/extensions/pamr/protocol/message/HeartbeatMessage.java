@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.protocol.message;
 
@@ -75,6 +64,7 @@ public abstract class HeartbeatMessage extends Message {
         SRC_AGENT_ID(8, Long.class);
 
         private int length;
+
         private int myOffset = 0;
 
         static private int totalOffset = 0;
@@ -91,7 +81,8 @@ public abstract class HeartbeatMessage extends Message {
 
         /** Offset of the field in the message */
         public int getOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              *
              * This method relies on the Java Memory Model specification to perform
              * a racy single-check initialization.
@@ -116,7 +107,8 @@ public abstract class HeartbeatMessage extends Message {
 
         /** Length of the fields defined by {@link DataMessage} */
         static public int getTotalOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              *
              * This method relies on the Java Memory Model specification to perform
              * a racy single-check initialization.
@@ -160,14 +152,14 @@ public abstract class HeartbeatMessage extends Message {
      *         the given offset
      */
     private static long readHeartbeatPeriod(byte[] byteArray, int offset) {
-        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
-            Field.HEARTBEAT_ID.getOffset());
+        long id = TypeHelper.byteArrayToLong(byteArray,
+                                             offset + Message.Field.getTotalOffset() + Field.HEARTBEAT_ID.getOffset());
         return id;
     }
 
     private AgentID readSrcAgentId(byte[] byteArray, int offset) throws MalformedMessageException {
-        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
-            Field.SRC_AGENT_ID.getOffset());
+        long id = TypeHelper.byteArrayToLong(byteArray,
+                                             offset + Message.Field.getTotalOffset() + Field.SRC_AGENT_ID.getOffset());
 
         if (id >= 0) {
             return new AgentID(id);
@@ -179,6 +171,7 @@ public abstract class HeartbeatMessage extends Message {
     }
 
     final private long heartbeatId;
+
     final private AgentID srcAgentId;
 
     /** Create an error message
@@ -271,8 +264,9 @@ public abstract class HeartbeatMessage extends Message {
         byte[] buf = new byte[length];
 
         super.writeHeader(buf, 0);
-        TypeHelper.longToByteArray(this.heartbeatId, buf,
-                Message.Field.getTotalOffset() + Field.HEARTBEAT_ID.getOffset());
+        TypeHelper.longToByteArray(this.heartbeatId,
+                                   buf,
+                                   Message.Field.getTotalOffset() + Field.HEARTBEAT_ID.getOffset());
 
         long id = ROUTER_AGENT_ID;
         if (this.srcAgentId != null) {

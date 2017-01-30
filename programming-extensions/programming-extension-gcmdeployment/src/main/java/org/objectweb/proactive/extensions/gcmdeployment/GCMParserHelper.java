@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment;
 
@@ -156,10 +145,10 @@ public class GCMParserHelper implements GCMParserConstants {
      * @return
      * @throws XPathExpressionException
      */
-    static public List<PathElement> parseClasspath(XPath xpath, Node classPathNode)
-            throws XPathExpressionException {
-        NodeList pathElementNodes = (NodeList) xpath.evaluate(GCM_APPLICATION_NAMESPACE_PREFIX +
-            ":pathElement", classPathNode, XPathConstants.NODESET);
+    static public List<PathElement> parseClasspath(XPath xpath, Node classPathNode) throws XPathExpressionException {
+        NodeList pathElementNodes = (NodeList) xpath.evaluate(GCM_APPLICATION_NAMESPACE_PREFIX + ":pathElement",
+                                                              classPathNode,
+                                                              XPathConstants.NODESET);
 
         ArrayList<PathElement> res = new ArrayList<PathElement>();
 
@@ -204,7 +193,8 @@ public class GCMParserHelper implements GCMParserConstants {
         ArrayList<String> args = new ArrayList<String>();
 
         NodeList argNodes = (NodeList) xpath.evaluate(GCM_DEPLOYMENT_NAMESPACE_PREFIX + ":arg",
-                argumentListNode, XPathConstants.NODESET);
+                                                      argumentListNode,
+                                                      XPathConstants.NODESET);
 
         for (int i = 0; i < argNodes.getLength(); ++i) {
             Node argNode = argNodes.item(i);
@@ -228,8 +218,7 @@ public class GCMParserHelper implements GCMParserConstants {
 
             HashMap<String, String> propertyMap = new HashMap<String, String>();
 
-            NodeList propertyList = (NodeList) xpath.evaluate("app:property", classNode,
-                    XPathConstants.NODESET);
+            NodeList propertyList = (NodeList) xpath.evaluate("app:property", classNode, XPathConstants.NODESET);
 
             for (int j = 0; j < propertyList.getLength(); j++) {
                 Node propertyNode = propertyList.item(j);
@@ -246,8 +235,8 @@ public class GCMParserHelper implements GCMParserConstants {
         return new TechnicalServicesProperties(techServicesMap);
     }
 
-    public static InputOutputSpaceConfiguration parseInputOuputSpaceConfiguration(XPath xpath,
-            Node spaceNode, SpaceType type) throws XPathExpressionException {
+    public static InputOutputSpaceConfiguration parseInputOuputSpaceConfiguration(XPath xpath, Node spaceNode,
+            SpaceType type) throws XPathExpressionException {
         String name = getAttributeValue(spaceNode, "id");
         if (name == null) {
             // when there is no id - it is default input/output
@@ -279,8 +268,7 @@ public class GCMParserHelper implements GCMParserConstants {
         return getNewDocumentBuilder(domFactory, null);
     }
 
-    public static DocumentBuilder getNewDocumentBuilder(DocumentBuilderFactory domFactory,
-            ErrorHandler errorHandler) {
+    public static DocumentBuilder getNewDocumentBuilder(DocumentBuilderFactory domFactory, ErrorHandler errorHandler) {
         try {
             DocumentBuilder documentBuilder = domFactory.newDocumentBuilder();
             if (errorHandler == null) {

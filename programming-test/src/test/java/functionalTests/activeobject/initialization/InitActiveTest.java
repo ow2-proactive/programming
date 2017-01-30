@@ -1,4 +1,34 @@
+/*
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
+ *
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
+ *
+ * This library is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation: version 3 of
+ * the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
+ */
 package functionalTests.activeobject.initialization;
+
+import java.io.Serializable;
+import java.lang.management.ManagementFactory;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,11 +40,6 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
-
-import java.io.Serializable;
-import java.lang.management.ManagementFactory;
-import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -33,37 +58,35 @@ public final class InitActiveTest {
     @Parameterized.Parameters(name = "{1}")
     public static List<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                // Tests that should work even before applying the patch for PALIGHT-73
-                { new AsynchronousMethodCallBehaviour(DefaultInitActiveFunction.class, false),
-                        "testInitActiveWithAoPerformingAsyncMethodCall" },
-                { new SynchronousMethodCallBehaviour(DefaultInitActiveFunction.class, false),
-                        "testInitActiveWithAoPerformingSyncMethodCall"
+                                              // Tests that should work even before applying the patch for PALIGHT-73
+                                              { new AsynchronousMethodCallBehaviour(DefaultInitActiveFunction.class,
+                                                                                    false),
+                                                "testInitActiveWithAoPerformingAsyncMethodCall" },
+                                              { new SynchronousMethodCallBehaviour(DefaultInitActiveFunction.class,
+                                                                                   false),
+                                                "testInitActiveWithAoPerformingSyncMethodCall"
 
-                },
-                { new OneWayMethodCallBehaviour(DefaultInitActiveFunction.class, false),
-                        "testInitActiveWithAoPerformingSyncOneWayMethodCall"
+                                              }, { new OneWayMethodCallBehaviour(DefaultInitActiveFunction.class, false), "testInitActiveWithAoPerformingSyncOneWayMethodCall"
 
-                },
-                {
-                        // For this test the method call is one-way so the caller does not
-                        // wait for a result. Consequently, no exception is expected
-                        new OneWayMethodCallBehaviour(NastyInitActiveFunction.class, false),
-                        "testInitActiveThrowingExceptionWithAoPerformingOneWayMethodCall" },
-                // Tests that should work only when PALIGHT-73 is applied
-                { new AsynchronousMethodCallBehaviour(NastyInitActiveFunction.class, true),
-                        "testInitActiveThrowingExceptionWithAoPerformingAsyncMethodCall"
+                                              }, {
+                                                   // For this test the method call is one-way so the caller does not
+                                                   // wait for a result. Consequently, no exception is expected
+                                                   new OneWayMethodCallBehaviour(NastyInitActiveFunction.class, false),
+                                                   "testInitActiveThrowingExceptionWithAoPerformingOneWayMethodCall" },
+                                              // Tests that should work only when PALIGHT-73 is applied
+                                              { new AsynchronousMethodCallBehaviour(NastyInitActiveFunction.class,
+                                                                                    true),
+                                                "testInitActiveThrowingExceptionWithAoPerformingAsyncMethodCall"
 
-                },
-                { new SynchronousMethodCallBehaviour(NastyInitActiveFunction.class, true),
-                        "testInitActiveThrowingExceptionWithAoPerformingSyncMethodCall" }, });
+                                              }, { new SynchronousMethodCallBehaviour(NastyInitActiveFunction.class, true), "testInitActiveThrowingExceptionWithAoPerformingSyncMethodCall" }, });
     }
 
     private ActiveObject activeObject;
 
     public Behaviour testBehaviour;
 
-    public InitActiveTest(Behaviour testBehaviour, String name) throws ActiveObjectCreationException,
-            NodeException, InstantiationException, IllegalAccessException {
+    public InitActiveTest(Behaviour testBehaviour, String name)
+            throws ActiveObjectCreationException, NodeException, InstantiationException, IllegalAccessException {
         this.testBehaviour = testBehaviour;
         this.activeObject = createActiveObject(testBehaviour.initActiveFunctionClass);
     }
@@ -82,8 +105,7 @@ public final class InitActiveTest {
     }
 
     private ActiveObject createActiveObject(Class<? extends InitActiveFunction> clazz)
-            throws ActiveObjectCreationException, NodeException, IllegalAccessException,
-            InstantiationException {
+            throws ActiveObjectCreationException, NodeException, IllegalAccessException, InstantiationException {
         return PAActiveObject.newActive(ActiveObject.class, new Object[] { clazz.newInstance() });
     }
 
@@ -174,8 +196,7 @@ public final class InitActiveTest {
 
         private boolean exceptionExpected;
 
-        public Behaviour(Class<? extends InitActiveFunction> initActiveFunctionClass,
-                boolean exceptionExpected) {
+        public Behaviour(Class<? extends InitActiveFunction> initActiveFunctionClass, boolean exceptionExpected) {
             this.initActiveFunctionClass = initActiveFunctionClass;
             this.exceptionExpected = exceptionExpected;
         }

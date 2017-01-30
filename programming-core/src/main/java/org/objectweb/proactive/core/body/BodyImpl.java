@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s): ActiveEon Team - http://www.activeeon.com
- *
- * ################################################################
- * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.body;
 
@@ -159,8 +148,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         this.requestReceiver = factory.newRequestReceiverFactory().newRequestReceiver();
         this.replyReceiver = factory.newReplyReceiverFactory().newReplyReceiver();
 
-        setLocalBodyImpl(new ActiveLocalBodyStrategy(reifiedObject, factory.newRequestQueueFactory()
-                .newRequestQueue(this.bodyID), factory.newRequestFactory()));
+        setLocalBodyImpl(new ActiveLocalBodyStrategy(reifiedObject,
+                                                     factory.newRequestQueueFactory().newRequestQueue(this.bodyID),
+                                                     factory.newRequestFactory()));
         this.localBodyStrategy.getFuturePool().setOwnerBody(this);
 
         // JMX registration
@@ -201,10 +191,14 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // JMX Notification
         if (!isProActiveInternalObject && (this.mbean != null)) {
             String tagNotification = createTagNotification(request.getTags());
-            RequestNotificationData requestNotificationData = new RequestNotificationData(
-                request.getSourceBodyID(), request.getSenderNodeURL(), this.bodyID, this.nodeURL,
-                request.getMethodName(), getRequestQueue().size() + 1, request.getSequenceNumber(),
-                tagNotification);
+            RequestNotificationData requestNotificationData = new RequestNotificationData(request.getSourceBodyID(),
+                                                                                          request.getSenderNodeURL(),
+                                                                                          this.bodyID,
+                                                                                          this.nodeURL,
+                                                                                          request.getMethodName(),
+                                                                                          getRequestQueue().size() + 1,
+                                                                                          request.getSequenceNumber(),
+                                                                                          tagNotification);
             this.mbean.sendNotification(NotificationType.requestReceived, requestNotificationData);
         }
 
@@ -227,10 +221,14 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // JMX Notification
         if (!isProActiveInternalObject && (this.mbean != null) && reply.getResult().getException() == null) {
             String tagNotification = createTagNotification(reply.getTags());
-            RequestNotificationData requestNotificationData = new RequestNotificationData(
-                BodyImpl.this.bodyID, BodyImpl.this.getNodeURL(), reply.getSourceBodyID(), this.nodeURL,
-                reply.getMethodName(), getRequestQueue().size() + 1, reply.getSequenceNumber(),
-                tagNotification);
+            RequestNotificationData requestNotificationData = new RequestNotificationData(BodyImpl.this.bodyID,
+                                                                                          BodyImpl.this.getNodeURL(),
+                                                                                          reply.getSourceBodyID(),
+                                                                                          this.nodeURL,
+                                                                                          reply.getMethodName(),
+                                                                                          getRequestQueue().size() + 1,
+                                                                                          reply.getSequenceNumber(),
+                                                                                          tagNotification);
             this.mbean.sendNotification(NotificationType.replyReceived, requestNotificationData);
         }
 
@@ -298,8 +296,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
     public void setImmediateService(String methodName, Class<?>[] parametersTypes, boolean uniqueThread) {
         checkImmediateServiceMode(methodName, parametersTypes, uniqueThread);
-        ((RequestReceiverImpl) this.requestReceiver).setImmediateService(methodName, parametersTypes,
-                uniqueThread);
+        ((RequestReceiverImpl) this.requestReceiver).setImmediateService(methodName, parametersTypes, uniqueThread);
     }
 
     protected void initializeImmediateService(Object reifiedObject) {
@@ -317,7 +314,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         if (parametersTypes == null) { // all args               
             if (!checkMethod(methodName)) {
                 throw new NoSuchMethodError(methodName + " is not defined in " +
-                    getReifiedObject().getClass().getName());
+                                            getReifiedObject().getClass().getName());
             }
         } else { // args are specified
             if (!checkMethod(methodName, parametersTypes)) {
@@ -368,7 +365,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // check if the method is defined as public
         Class<?> reifiedClass = getReifiedObject().getClass();
         boolean exists = org.objectweb.proactive.core.mop.Utils.checkMethodExistence(reifiedClass,
-                methodName, parametersTypes);
+                                                                                     methodName,
+                                                                                     parametersTypes);
 
         if (exists) {
             storeInMethodCache(methodName, parametersTypes);
@@ -438,8 +436,11 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
          * The reified object target of the request processed by this body
          */
         protected Object reifiedObject;
+
         protected BlockingRequestQueue requestQueue;
+
         protected RequestFactory internalRequestFactory;
+
         private long absoluteSequenceID;
 
         //
@@ -514,9 +515,13 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             if (!isProActiveInternalObject && (mbean != null)) {
                 String tagNotification = createTagNotification(request.getTags());
                 RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(),
-                    request.getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL,
-                    request.getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
-                    tagNotification);
+                                                                           request.getSenderNodeURL(),
+                                                                           BodyImpl.this.bodyID,
+                                                                           BodyImpl.this.nodeURL,
+                                                                           request.getMethodName(),
+                                                                           getRequestQueue().size(),
+                                                                           request.getSequenceNumber(),
+                                                                           tagNotification);
                 mbean.sendNotification(NotificationType.servingStarted, data);
             }
 
@@ -532,20 +537,24 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                         // if the exception is a checked exception, the method must declare in its throws statement, otherwise
                         // the future sent to the user will be invalid
                         boolean thrownFound = false;
-                        for (Class<?> exptype : request.getMethodCall().getReifiedMethod()
-                                .getExceptionTypes()) {
+                        for (Class<?> exptype : request.getMethodCall().getReifiedMethod().getExceptionTypes()) {
                             thrownFound = thrownFound || exptype.isAssignableFrom(exception.getClass());
                         }
                         if (!thrownFound) {
                             throw new IllegalArgumentException("Invalid Exception " + exception.getClass() +
-                                ". The method " + request.getMethodCall().getReifiedMethod() +
-                                " don't declare it to be thrown.");
+                                                               ". The method " +
+                                                               request.getMethodCall().getReifiedMethod() +
+                                                               " don't declare it to be thrown.");
                         }
-                        reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(),
-                            request.getMethodName(), new MethodCallResult(null, exception));
+                        reply = new ReplyImpl(BodyImpl.this.getID(),
+                                              request.getSequenceNumber(),
+                                              request.getMethodName(),
+                                              new MethodCallResult(null, exception));
                     } else {
-                        reply = new ReplyImpl(BodyImpl.this.getID(), request.getSequenceNumber(),
-                            request.getMethodName(), new MethodCallResult(null, exception));
+                        reply = new ReplyImpl(BodyImpl.this.getID(),
+                                              request.getSequenceNumber(),
+                                              request.getMethodName(),
+                                              new MethodCallResult(null, exception));
                     }
 
                 } else {
@@ -563,9 +572,13 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 if (!isProActiveInternalObject && (mbean != null)) {
                     String tagNotification = createTagNotification(request.getTags());
                     RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(),
-                        request.getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL,
-                        request.getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
-                        tagNotification);
+                                                                               request.getSenderNodeURL(),
+                                                                               BodyImpl.this.bodyID,
+                                                                               BodyImpl.this.nodeURL,
+                                                                               request.getMethodName(),
+                                                                               getRequestQueue().size(),
+                                                                               request.getSequenceNumber(),
+                                                                               tagNotification);
                     mbean.sendNotification(NotificationType.voidRequestServed, data);
                 }
 
@@ -577,9 +590,13 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             if (!isProActiveInternalObject && (mbean != null) && reply.getResult().getException() == null) {
                 String tagNotification = createTagNotification(request.getTags());
                 RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(),
-                    request.getSenderNodeURL(), BodyImpl.this.bodyID, BodyImpl.this.nodeURL,
-                    request.getMethodName(), getRequestQueue().size(), request.getSequenceNumber(),
-                    tagNotification);
+                                                                           request.getSenderNodeURL(),
+                                                                           BodyImpl.this.bodyID,
+                                                                           BodyImpl.this.nodeURL,
+                                                                           request.getMethodName(),
+                                                                           getRequestQueue().size(),
+                                                                           request.getSequenceNumber(),
+                                                                           tagNotification);
                 mbean.sendNotification(NotificationType.replySent, data);
             }
 
@@ -598,9 +615,10 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 try {
                     PAActiveObject.getStubOnThis();
                     stubOnActiveObject = (Object) MOP.createStubObject(BodyImpl.this.getReifiedObject()
-                            .getClass().getName(), BodyImpl.this.getRemoteAdapter());
-                    objectReplacer = new ObjectReferenceReplacer(BodyImpl.this.getReifiedObject(),
-                        stubOnActiveObject);
+                                                                                    .getClass()
+                                                                                    .getName(),
+                                                                       BodyImpl.this.getRemoteAdapter());
+                    objectReplacer = new ObjectReferenceReplacer(BodyImpl.this.getReifiedObject(), stubOnActiveObject);
                     modifiedObject = objectReplacer.replaceObject(initialObject);
                     reply.getResult().setResult(modifiedObject);
                 } catch (InactiveBodyException e) {
@@ -635,8 +653,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                     // log the issue on the AO side for debugging purpose
                     // the initial exception must be the one to appear in the log.
                     sendReplyExceptionsLogger.error(shortString() + " : Failed to send reply to method:" +
-                        request.getMethodName() + " sequence: " + request.getSequenceNumber() + " by " +
-                        request.getSenderNodeURL() + "/" + request.getSender(), e1);
+                                                    request.getMethodName() + " sequence: " +
+                                                    request.getSequenceNumber() + " by " + request.getSenderNodeURL() +
+                                                    "/" + request.getSender(), e1);
                 }
             }
 
@@ -657,8 +676,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         }
 
         // If a reply sending has failed, try to send the exception as reply
-        private void retrySendReplyWithException(Reply reply, Throwable e, UniversalBody destination)
-                throws Exception {
+        private void retrySendReplyWithException(Reply reply, Throwable e, UniversalBody destination) throws Exception {
 
             //            Get current request TAGs from current context
             //            Request currentreq = LocalBodyStore.getInstance().getContext().getCurrentRequest();
@@ -667,8 +685,10 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             //            if (currentreq != null)
             //                tags = currentreq.getTags();
 
-            Reply exceptionReply = new ReplyImpl(reply.getSourceBodyID(), reply.getSequenceNumber(),
-                reply.getMethodName(), new MethodCallResult(null, e));
+            Reply exceptionReply = new ReplyImpl(reply.getSourceBodyID(),
+                                                 reply.getSequenceNumber(),
+                                                 reply.getMethodName(),
+                                                 new MethodCallResult(null, e));
             exceptionReply.send(destination);
         }
 
@@ -678,8 +698,11 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
             MessageTags tags = applyTags(sequenceID);
 
-            Request request = this.internalRequestFactory.newRequest(methodCall, BodyImpl.this,
-                    future == null, sequenceID, tags);
+            Request request = this.internalRequestFactory.newRequest(methodCall,
+                                                                     BodyImpl.this,
+                                                                     future == null,
+                                                                     sequenceID,
+                                                                     tags);
 
             if (future != null) {
                 future.setID(sequenceID);
@@ -691,8 +714,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             // TODO Send a notification only if the destination doesn't
             // implement ProActiveInternalObject
             if (!isProActiveInternalObject && (mbean != null)) {
-                ServerConnector serverConnector = ProActiveRuntimeImpl.getProActiveRuntime()
-                        .getJMXServerConnector();
+                ServerConnector serverConnector = ProActiveRuntimeImpl.getProActiveRuntime().getJMXServerConnector();
 
                 // If the connector server is not active the connectorID can be
                 // null
@@ -702,11 +724,15 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                     if (!connectorID.equals(destinationBody.getID())) {
                         String tagNotification = createTagNotification(tags);
 
-                        mbean.sendNotification(
-                                NotificationType.requestSent,
-                                new RequestNotificationData(BodyImpl.this.bodyID, BodyImpl.this.getNodeURL(),
-                                    destinationBody.getID(), destinationBody.getNodeURL(), methodCall
-                                            .getName(), -1, request.getSequenceNumber(), tagNotification));
+                        mbean.sendNotification(NotificationType.requestSent,
+                                               new RequestNotificationData(BodyImpl.this.bodyID,
+                                                                           BodyImpl.this.getNodeURL(),
+                                                                           destinationBody.getID(),
+                                                                           destinationBody.getNodeURL(),
+                                                                           methodCall.getName(),
+                                                                           -1,
+                                                                           request.getSequenceNumber(),
+                                                                           tagNotification));
                     }
                 }
             }
@@ -821,20 +847,22 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         }
 
         public void serve(Request request) {
-            throw new InactiveBodyException(BodyImpl.this, (request != null) ? request.getMethodName()
-                    : "null request");
+            throw new InactiveBodyException(BodyImpl.this,
+                                            (request != null) ? request.getMethodName() : "null request");
         }
 
         @Override
         public void serveWithException(Request request, Throwable exception) {
-            throw new InactiveBodyException(BodyImpl.this, (request != null) ? request.getMethodName()
-                    : "null request");
+            throw new InactiveBodyException(BodyImpl.this,
+                                            (request != null) ? request.getMethodName() : "null request");
         }
 
         public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
                 throws java.io.IOException {
-            throw new InactiveBodyException(BodyImpl.this, destinationBody.getNodeURL(),
-                destinationBody.getID(), methodCall.getName());
+            throw new InactiveBodyException(BodyImpl.this,
+                                            destinationBody.getNodeURL(),
+                                            destinationBody.getID(),
+                                            methodCall.getName());
         }
 
         /*

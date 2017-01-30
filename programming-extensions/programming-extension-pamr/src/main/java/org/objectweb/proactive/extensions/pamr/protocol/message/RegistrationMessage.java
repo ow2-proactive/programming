@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.protocol.message;
 
@@ -81,6 +70,7 @@ public abstract class RegistrationMessage extends Message {
         MAGIC_COOKIE(MagicCookie.COOKIE_SIZE, MagicCookie.class);
 
         private int length;
+
         private Class<?> type;
 
         private Field(int length, Class<?> type) {
@@ -224,12 +214,15 @@ public abstract class RegistrationMessage extends Message {
         }
 
         TypeHelper.longToByteArray(id, buff, Message.Field.getTotalOffset() + Field.AGENT_ID.getOffset());
-        TypeHelper.longToByteArray(routerID, buff,
-                Message.Field.getTotalOffset() + Field.ROUTER_ID.getOffset());
-        TypeHelper.intToByteArray(heartbeatPeriod, buff, Message.Field.getTotalOffset() +
-            Field.HEARTBEAT_PERIOD.getOffset());
-        System.arraycopy(this.magicCookie.getBytes(), 0, buff, Message.Field.getTotalOffset() +
-            Field.MAGIC_COOKIE.getOffset(), (int) Field.MAGIC_COOKIE.getLength());
+        TypeHelper.longToByteArray(routerID, buff, Message.Field.getTotalOffset() + Field.ROUTER_ID.getOffset());
+        TypeHelper.intToByteArray(heartbeatPeriod,
+                                  buff,
+                                  Message.Field.getTotalOffset() + Field.HEARTBEAT_PERIOD.getOffset());
+        System.arraycopy(this.magicCookie.getBytes(),
+                         0,
+                         buff,
+                         Message.Field.getTotalOffset() + Field.MAGIC_COOKIE.getOffset(),
+                         (int) Field.MAGIC_COOKIE.getLength());
         return buff;
     }
 
@@ -241,8 +234,8 @@ public abstract class RegistrationMessage extends Message {
      * @throws MalformedMessageException if the message contains an invalid agentID value
      */
     static public AgentID readAgentID(byte[] byteArray, int offset) throws MalformedMessageException {
-        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
-            Field.AGENT_ID.getOffset());
+        long id = TypeHelper.byteArrayToLong(byteArray,
+                                             offset + Message.Field.getTotalOffset() + Field.AGENT_ID.getOffset());
         if (id >= 0)
             return new AgentID(id);
         else if (id == UNKNOWN_AGENT_ID) {
@@ -251,8 +244,7 @@ public abstract class RegistrationMessage extends Message {
             if (type.equals(MessageType.REGISTRATION_REQUEST))
                 return null;
             else
-                throw new MalformedMessageException("Invalid value for the " + Field.AGENT_ID + " field:" +
-                    id);
+                throw new MalformedMessageException("Invalid value for the " + Field.AGENT_ID + " field:" + id);
         } else
             throw new MalformedMessageException("Invalid value for the " + Field.AGENT_ID + " field:" + id);
     }
@@ -264,8 +256,8 @@ public abstract class RegistrationMessage extends Message {
      * @return the Router ID of the formatted message
      */
     static public long readRouterID(byte[] byteArray, int offset) {
-        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
-            Field.ROUTER_ID.getOffset());
+        long id = TypeHelper.byteArrayToLong(byteArray,
+                                             offset + Message.Field.getTotalOffset() + Field.ROUTER_ID.getOffset());
         return id;
     }
 
@@ -276,20 +268,23 @@ public abstract class RegistrationMessage extends Message {
      * @return the heartbeat period of the formatted message
      */
     static public int readHeartbeatPeriod(byte[] byteArray, int offset) throws MalformedMessageException {
-        int hb = TypeHelper.byteArrayToInt(byteArray, offset + Message.Field.getTotalOffset() +
-            Field.HEARTBEAT_PERIOD.getOffset());
+        int hb = TypeHelper.byteArrayToInt(byteArray,
+                                           offset + Message.Field.getTotalOffset() +
+                                                      Field.HEARTBEAT_PERIOD.getOffset());
 
         if (hb < 0) {
-            throw new MalformedMessageException(
-                "Invalid registration message. The hearbeat field must be positive");
+            throw new MalformedMessageException("Invalid registration message. The hearbeat field must be positive");
         }
         return hb;
     }
 
     static public MagicCookie readMagicCookie(byte[] byteArray, int offset) {
         byte[] cBuf = new byte[MagicCookie.COOKIE_SIZE];
-        System.arraycopy(byteArray, offset + Message.Field.getTotalOffset() + Field.MAGIC_COOKIE.getOffset(),
-                cBuf, 0, (int) Field.MAGIC_COOKIE.getLength());
+        System.arraycopy(byteArray,
+                         offset + Message.Field.getTotalOffset() + Field.MAGIC_COOKIE.getOffset(),
+                         cBuf,
+                         0,
+                         (int) Field.MAGIC_COOKIE.getLength());
         return new MagicCookie(cBuf);
     }
 
@@ -331,9 +326,8 @@ public abstract class RegistrationMessage extends Message {
 
     @Override
     public String toString() {
-        return super.toString() + Field.AGENT_ID.toString() + ":" + this.agentID + ";" +
-            Field.ROUTER_ID.toString() + ":" + this.routerID + ";" + Field.HEARTBEAT_PERIOD.toString() + ":" +
-            this.heartbeatPeriod;
+        return super.toString() + Field.AGENT_ID.toString() + ":" + this.agentID + ";" + Field.ROUTER_ID.toString() +
+               ":" + this.routerID + ";" + Field.HEARTBEAT_PERIOD.toString() + ":" + this.heartbeatPeriod;
     }
 
 }

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.util.converter.remote;
 
@@ -74,10 +63,9 @@ public class ProActiveRemoteClassLoader {
                 return pamrLoader.loadClass(clazzName);
             } catch (ProActiveException proActiveEx) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Cannot load " +
-                        clazzName +
-                        " using the pamr class loader, reason: cannot look up the runtime where the class data is, at url " +
-                        runtimeURL);
+                    logger.debug("Cannot load " + clazzName +
+                                 " using the pamr class loader, reason: cannot look up the runtime where the class data is, at url " +
+                                 runtimeURL);
                 }
                 throw e;
             }
@@ -99,7 +87,7 @@ public class ProActiveRemoteClassLoader {
             // TODO the lock should be on a per-runtimeURL basis
             if (logger.isTraceEnabled()) {
                 logger.trace("Did not find ClassLoader for the URL " + runtimeURL +
-                    " in the cache, creating a new one...");
+                             " in the cache, creating a new one...");
             }
             // lookup the remote part
             ProActiveRuntime rt = RuntimeFactory.getRuntime(runtimeURL);
@@ -127,15 +115,14 @@ public class ProActiveRemoteClassLoader {
             try {
                 Class<?> ret = this.getParent().loadClass(clazzName);
                 if (logger.isTraceEnabled()) {
-                    logger.trace("Class " + clazzName + " loaded by the parent class loader " +
-                        this.getParent());
+                    logger.trace("Class " + clazzName + " loaded by the parent class loader " + this.getParent());
                 }
                 return ret;
             } catch (ClassNotFoundException e) {
                 try {
                     if (clazzLocation == null)
                         throw new ClassNotFoundException("Cannot load class " + clazzName +
-                            " reason: the remote ProActive runtime where this class resides is not available");
+                                                         " reason: the remote ProActive runtime where this class resides is not available");
 
                     byte[] clazzData = readClassData(clazzName);
                     if (logger.isTraceEnabled()) {
@@ -144,11 +131,9 @@ public class ProActiveRemoteClassLoader {
                     return defineClass(clazzName, clazzData, 0, clazzData.length);
                 } catch (ClassNotFoundException e2) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Cannot load class from the remote ProActive runtime:" + e.getMessage(),
-                                e);
+                        logger.debug("Cannot load class from the remote ProActive runtime:" + e.getMessage(), e);
                     }
-                    throw new ClassNotFoundException(clazzName + " (both locally and from " + clazzLocation +
-                        ")", e2);
+                    throw new ClassNotFoundException(clazzName + " (both locally and from " + clazzLocation + ")", e2);
                 }
             }
         }
@@ -165,8 +150,8 @@ public class ProActiveRemoteClassLoader {
 
                 return b;
             } catch (ProActiveRuntimeException e) {
-                throw new ClassNotFoundException("Communication error occured while trying to download " +
-                    clazzName + " from" + clazzLocation);
+                throw new ClassNotFoundException("Communication error occured while trying to download " + clazzName +
+                                                 " from" + clazzLocation);
             }
 
         }

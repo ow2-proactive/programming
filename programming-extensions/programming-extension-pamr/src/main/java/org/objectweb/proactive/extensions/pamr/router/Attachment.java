@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.router;
 
@@ -77,7 +66,8 @@ public class Attachment {
     final private long attachmentId;
 
     /** The client */
-    /* Not final because can't be set in the constructor. Once this field is
+    /*
+     * Not final because can't be set in the constructor. Once this field is
      * set, it MUST NOT be updated again.
      */
     private Client client = null;
@@ -120,8 +110,9 @@ public class Attachment {
         }
     }
 
-    /* To avoid file descriptor leak, we use finalize() to close the fds 
-     * even if dtor() has not been called. 
+    /*
+     * To avoid file descriptor leak, we use finalize() to close the fds
+     * even if dtor() has not been called.
      * 
      * fd are eventually closed when the GC is run
      */
@@ -160,7 +151,7 @@ public class Attachment {
             this.client = client;
         } else {
             logger.warn("Attachement.setClientId() cannot be called twice. Current client: " + this.client +
-                ", discarded: " + client);
+                        ", discarded: " + client);
         }
     }
 
@@ -170,8 +161,7 @@ public class Attachment {
             // Troubleshooting: Unknown is sometime returned in production
             // We are trying to understand why.
             Socket s = socketChannel.socket();
-            return "unknown (Socket:" + s + " isClosed:" + s.isClosed() + " isConnected: " + s.isConnected() +
-                ")";
+            return "unknown (Socket:" + s + " isClosed:" + s.isClosed() + " isConnected: " + s.isConnected() + ")";
         } else {
             return sa.toString();
         }
@@ -203,10 +193,9 @@ public class Attachment {
 
                 if (logger.isDebugEnabled()) {
                     String dstClient = this.client == null ? "unknown" : client.getAgentId().toString();
-                    String remaining = byteBuffer.remaining() > 0 ? byteBuffer.remaining() +
-                        " remaining to send" : "";
+                    String remaining = byteBuffer.remaining() > 0 ? byteBuffer.remaining() + " remaining to send" : "";
                     logger.debug("Sent a " + bytes + " bytes message to client " + dstClient + " with " +
-                        this.socketChannel.socket() + ". " + remaining);
+                                 this.socketChannel.socket() + ". " + remaining);
                 }
             }
         }

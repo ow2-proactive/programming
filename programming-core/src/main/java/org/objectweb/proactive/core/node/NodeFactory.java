@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.node;
 
@@ -87,9 +76,11 @@ public class NodeFactory {
     public static final String DEFAULT_VIRTUAL_NODE_NAME = "DefaultVN";
 
     private static final String DEFAULT_NODE_NAME = "Node";
+
     private static Node defaultNode = null;
 
     private static final String HALFBODIES_NODE_NAME = "HalfbodiesNode_";
+
     private static Node halfBodiesNode = null;
 
     static {
@@ -116,7 +107,8 @@ public class NodeFactory {
             try {
                 // hopefully no collision will occur
                 defaultNode = runtime.createLocalNode(DEFAULT_NODE_NAME + ProActiveRandom.nextPosInt(),
-                        false, DEFAULT_VIRTUAL_NODE_NAME);
+                                                      false,
+                                                      DEFAULT_VIRTUAL_NODE_NAME);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the default Node", e);
             } catch (AlreadyBoundException e) {
@@ -137,9 +129,9 @@ public class NodeFactory {
         ProActiveRuntime defaultRuntime = ProActiveRuntimeImpl.getProActiveRuntime();
         while (halfBodiesNode == null) {
             try {
-                halfBodiesNode = defaultRuntime
-                        .createLocalNode(HALFBODIES_NODE_NAME + ProActiveRandom.nextPosInt(), false,
-                                DEFAULT_VIRTUAL_NODE_NAME);
+                halfBodiesNode = defaultRuntime.createLocalNode(HALFBODIES_NODE_NAME + ProActiveRandom.nextPosInt(),
+                                                                false,
+                                                                DEFAULT_VIRTUAL_NODE_NAME);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the halfbodies hosting Node", e);
             } catch (AlreadyBoundException e) {
@@ -244,8 +236,8 @@ public class NodeFactory {
      * @exception NodeException 
      * 			if the node cannot be created or if the nodeName is invalid
      */
-    public static Node createLocalNode(String nodeName, boolean replacePreviousBinding, Object nullParam,
-            String vnname) throws NodeException, AlreadyBoundException {
+    public static Node createLocalNode(String nodeName, boolean replacePreviousBinding, Object nullParam, String vnname)
+            throws NodeException, AlreadyBoundException {
         return createLocalNode(nodeName, replacePreviousBinding, vnname);
     }
 

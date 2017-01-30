@@ -1,6 +1,36 @@
+/*
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
+ *
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
+ *
+ * This library is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation: version 3 of
+ * the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
+ */
 package functionalTests.mop.concurrency;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.concurrent.*;
 import javassist.*;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,11 +43,6 @@ import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.concurrent.*;
 
 
 /**
@@ -91,8 +116,11 @@ public class MOPConcurrencyTest {
 
                     for (String className : classNames) {
                         if (index % 2 == 0) {
-                            StubObject stub = (StubObject) MOP.newInstance(className, new Class[0], null,
-                                    Constants.DEFAULT_FUTURE_PROXY_CLASS_NAME, null);
+                            StubObject stub = (StubObject) MOP.newInstance(className,
+                                                                           new Class[0],
+                                                                           null,
+                                                                           Constants.DEFAULT_FUTURE_PROXY_CLASS_NAME,
+                                                                           null);
                         } else {
                             JavassistByteCodeStubBuilder.create(className, null);
                             Thread.sleep(20);
@@ -188,8 +216,12 @@ public class MOPConcurrencyTest {
             int randomClassIndex = rn.nextInt(i + 1);
 
             CtMethod exec1 = CtNewMethod.make(javassist.Modifier.PUBLIC,
-                    pool.get(classNames.get(randomClassIndex)), METHOD_NAME, new CtClass[0], new CtClass[0],
-                    "return new " + classNames.get(randomClassIndex) + "();", cc);
+                                              pool.get(classNames.get(randomClassIndex)),
+                                              METHOD_NAME,
+                                              new CtClass[0],
+                                              new CtClass[0],
+                                              "return new " + classNames.get(randomClassIndex) + "();",
+                                              cc);
             cc.addMethod(exec1);
 
             classesToLoad.add(new AbstractMap.SimpleEntry(className, pool.toClass(cc)));

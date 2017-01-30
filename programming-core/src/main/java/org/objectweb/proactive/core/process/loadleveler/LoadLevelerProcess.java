@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.process.loadleveler;
 
@@ -50,28 +39,42 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 
 public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
     private static final String DEFAULT_OUTPUTFILE_NAME = "proactive-loadleveler";
-    public final static String DEFAULT_LLPATH = File.separator + "usr" + File.separator + "lpp" +
-        File.separator + "LoadL" + File.separator + "full" + File.separator + "bin";
+
+    public final static String DEFAULT_LLPATH = File.separator + "usr" + File.separator + "lpp" + File.separator +
+                                                "LoadL" + File.separator + "full" + File.separator + "bin";
 
     /**
      * LoadLeveler configuration file attributes names.
      */
     private static final String LLPREFIX = "#@";
+
     private static final String LLTAG_EXECUTABLE = "executable";
+
     private static final String LLTAG_INITIAL_DIR = "initialdir";
+
     private static final String LLTAG_ERROR_OUTPUT_FILENAME = "error";
+
     private static final String LLTAG_ERROR_ENVIRONMENT = "environment";
+
     private static final String LLTAG_STD_OUTPUT_FILENAME = "output";
+
     private static final String LLTAG_WALL_CLOCK_LIMIT = "wall_clock_limit";
+
     private static final String LLTAG_RESOURCES = "resources";
+
     private static final String LLTAG_EXEC_ARGS = "arguments";
+
     private static final String LLTAG_CONSUMABLE_CPUS = "ConsumableCpus";
 
     // Load leveler task repartition
     private static final String LLTAG_TASK_GEOMETRY = "task_geometry";
+
     private static final String LLTAG_NODE = "node";
+
     private static final String LLTAG_TASKS_PER_NODE = "tasks_per_node";
+
     private static final String LLTAG_BLOCKING = "blocking";
+
     private static final String LLTAG_TOTAL_TASKS = "total_tasks";
 
     /* The proactive cmd variable name used in the loadlLevelerStartRuntime.sh */
@@ -81,14 +84,18 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
      * These are the most frequently used LoadLeveler Options
      **/
 
-    /* Mandatory Field : Executable name. Could either be an absolute or relative path if initialDir is set.
+    /*
+     * Mandatory Field : Executable name. Could either be an absolute or relative path if initialDir
+     * is set.
      * By default setted to /usr/bin/poe which is the responsible of starting parallel jobs
      */
     private String executable = "/usr/bin/poe";
 
-    /* Mandatory Field : if executable path is not absolute. Is also the default directory
+    /*
+     * Mandatory Field : if executable path is not absolute. Is also the default directory
      * to output the generated job configuration file and the
-     * std out/err if their given path is not absolute */
+     * std out/err if their given path is not absolute
+     */
     private String initialDir = System.getProperty("java.io.tmpdir");
 
     /* Executable standard output */
@@ -97,7 +104,8 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
     /* Executable error output */
     private String errorFile = null;
 
-    /* Arguments to be passed to the executable, by default
+    /*
+     * Arguments to be passed to the executable, by default
      * the path to the loadLevelerStartRuntime shell script
      */
     private String arguments = null;
@@ -107,14 +115,20 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
 
     // advanced task submission mode
     private int blocking = -1;
+
     private int node = -1;
+
     private int totalTasks = -1;
+
     private int tasksPerNode = -1;
+
     private String taskGeometry = null;
 
     // simple task submission mode
     private int nbTasks = -1;
+
     private int tasksPerHosts = -1;
+
     private int cpusPerTasks = -1;
 
     /** Setted in the deployment descriptor **/
@@ -123,6 +137,7 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
 
     /* Job's duration wall clock limit */
     private String wallClockLimit = null;
+
     private String jobSubmissionScriptPath;
 
     /* The job id returned by load leveler on successfull job submission */
@@ -211,7 +226,8 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
             builder.append(buildLoadLevelerProperty(LLTAG_WALL_CLOCK_LIMIT, this.getWallClockLimit()));
         }
 
-        /* Dealing with the consumable cpu option which is automatically
+        /*
+         * Dealing with the consumable cpu option which is automatically
          * added in the simple task repartition mode.
          */
         String resourcesString = null;
@@ -237,11 +253,14 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
 
         if (this.isSimpleTaskRepartition()) {
             builder.append(buildLoadLevelerProperty(LLTAG_TASK_GEOMETRY,
-                    this.buildSimpleTaskAsTaskGeometry(this.nbTasks, this.tasksPerHosts)));
+                                                    this.buildSimpleTaskAsTaskGeometry(this.nbTasks,
+                                                                                       this.tasksPerHosts)));
         } else {
 
-            /* Only subsets of these keywords are valid to combine,
-             * the schema should have filtered them, check loadleveler documentation */
+            /*
+             * Only subsets of these keywords are valid to combine,
+             * the schema should have filtered them, check loadleveler documentation
+             */
             if (this.getBlocking() != -1) {
                 builder.append(buildLoadLevelerProperty(LLTAG_BLOCKING, "" + this.getBlocking()));
             }
@@ -290,17 +309,21 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
 
     protected String buildLoadLevelerProperty(String tag, String value) {
 
-        /* LoadLeveler targets AIX thus \n as newline char is ok.
+        /*
+         * LoadLeveler targets AIX thus \n as newline char is ok.
          * We need an additionnal \ so that java system exec does
-         * not remove it while parsing args */
+         * not remove it while parsing args
+         */
         return LLPREFIX + tag + " = " + value + "\\n";
     }
 
     protected String buildLoadLevelerComment(String comment) {
 
-        /* LoadLeveler targets AIX thus \n as newline char is ok.
+        /*
+         * LoadLeveler targets AIX thus \n as newline char is ok.
          * We need an additionnal \ so that java system exec does
-         * not remove it while parsing args */
+         * not remove it while parsing args
+         */
         return "#" + comment + "\\n";
     }
 
@@ -566,7 +589,8 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
          */
         protected void extractJobId(String message) {
 
-            /* Output pattern on successful submission:
+            /*
+             * Output pattern on successful submission:
              * llsubmit: The job "mesocentre.2172" has been submitted.
              */
             Pattern p = Pattern.compile(".*\".+\".*has been submitted.*");
@@ -574,10 +598,11 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
 
             if (m.matches()) {
                 LoadLevelerProcess.this.setJobId(message.substring(message.indexOf("\"") + 1,
-                        message.lastIndexOf("\"")));
+                                                                   message.lastIndexOf("\"")));
             }
 
-            /* Output pattern on error:
+            /*
+             * Output pattern on error:
              * llsubmit: This job has not been submitted to LoadLeveler.
              */
             p = Pattern.compile(".*has not been submitted.*");

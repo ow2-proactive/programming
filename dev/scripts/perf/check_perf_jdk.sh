@@ -12,15 +12,15 @@ TMPDIR=$(mktemp -d)
 OLD_JAVA_HOME=$JAVA_HOME
 until [ -z "$1" ]
 do
-	jdk="$1"
-	shift
+    jdk="$1"
+    shift
 
-	echo "Switching to JDK $jdk"
-	export JAVA_HOME=$jdk
-	rm performanceTests.*
-	./compile/build clean junit.performance || exit 1
+    echo "Switching to JDK $jdk"
+    export JAVA_HOME=$jdk
+    rm performanceTests.*
+    ./compile/build clean junit.performance || exit 1
 
-	mkdir $TMPDIR/$(basename $jdk)
-	cp *.Test* $TMPDIR/$(basename $jdk)
+    mkdir $TMPDIR/$(basename $jdk)
+    cp *.Test* $TMPDIR/$(basename $jdk)
 done
 python $(dirname $0)/perf_graph.py $TMPDIR  performanceTests.bandwidth  performanceTests.throughput

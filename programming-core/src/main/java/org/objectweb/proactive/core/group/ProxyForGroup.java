@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.group;
 
@@ -124,8 +113,10 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
     /** A pool of thread to serve the request */
     // transient protected ExecutorService threadpool;
     transient protected Dispatcher dispatcher;
+
     protected int bufferSize = 1; // size of buffer of requests on server side when
     // dynamically dispatching requests
+
     transient protected TaskFactory taskFactory;
 
     /**
@@ -368,27 +359,32 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
             }
 
             // FIXME the returnTypeClassName maybe an other type for multicast interface 
-            result = MOP.newInstance(returnTypeClassName, null, null, ProxyForGroup.class.getName(),
-                    paramProxy);
+            result = MOP.newInstance(returnTypeClassName, null, null, ProxyForGroup.class.getName(), paramProxy);
 
             ((ProxyForGroup<?>) ((StubObject) result).getProxy()).className = returnTypeClassName;
         } catch (ClassNotReifiableException e1) {
-            throw new InvocationTargetException(e1, "Method " + mc.getReifiedMethod().toGenericString() +
-                " : cannot return a group of results for the non reifiable type " + returnTypeClassName);
+            throw new InvocationTargetException(e1,
+                                                "Method " + mc.getReifiedMethod().toGenericString() +
+                                                    " : cannot return a group of results for the non reifiable type " +
+                                                    returnTypeClassName);
         } catch (Exception e2) {
-            throw new InvocationTargetException(e2, "Method " + mc.getReifiedMethod().toGenericString() +
-                " : cannot create group of results");
+            throw new InvocationTargetException(e2,
+                                                "Method " + mc.getReifiedMethod().toGenericString() +
+                                                    " : cannot create group of results");
         }
 
         // data partitioning
         List<MethodCall> methodsToDispatch = taskFactory.generateMethodCalls(mc);
         int nbExpectedCalls = methodsToDispatch.size();
         CountDownLatch doneSignal = new CountDownLatch(nbExpectedCalls);
-        Queue<AbstractProcessForGroup> tasksToDispatch = taskFactory.generateTasks(mc, methodsToDispatch,
-                result, null, doneSignal, this);
+        Queue<AbstractProcessForGroup> tasksToDispatch = taskFactory.generateTasks(mc,
+                                                                                   methodsToDispatch,
+                                                                                   result,
+                                                                                   null,
+                                                                                   doneSignal,
+                                                                                   this);
         // dispatch
-        dispatcher.dispatchTasks(tasksToDispatch, doneSignal,
-                mc.getReifiedMethod().getAnnotation(Dispatch.class));
+        dispatcher.dispatchTasks(tasksToDispatch, doneSignal, mc.getReifiedMethod().getAnnotation(Dispatch.class));
 
         // TODO rely on API or method call rather than annotation?
         // Reduce reduceAnnotation = mc.getReifiedMethod().getAnnotation(Reduce.class);
@@ -427,11 +423,11 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
      * @param groupIndex
      *            TODO
      */
-    public static void addToListOfResult(Vector<Object> memberListOfResultGroup, Object result,
-            int resultIndex, DispatchMonitor dispatchMonitor, int groupIndex) {
+    public static void addToListOfResult(Vector<Object> memberListOfResultGroup, Object result, int resultIndex,
+            DispatchMonitor dispatchMonitor, int groupIndex) {
         if (memberListOfResultGroup.get(resultIndex) != null) {
-            throw new ProActiveRuntimeException(
-                "Problem while updating result group: there is already something at index " + resultIndex);
+            throw new ProActiveRuntimeException("Problem while updating result group: there is already something at index " +
+                                                resultIndex);
         }
         if (result == null) { // could not execute method on a null object
             System.out.println("############ result is null");
@@ -458,8 +454,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 if (!(((ExceptionInGroup) result).getObject() instanceof StubObject)) {
                     throw new ProActiveRuntimeException("mmm. not good!");
                 }
-                dispatchMonitor.updatedResult(((StubObject) ((ExceptionInGroup) result).getObject())
-                        .getProxy());
+                dispatchMonitor.updatedResult(((StubObject) ((ExceptionInGroup) result).getObject()).getProxy());
             } else {
                 dispatchMonitor.updatedResult(groupIndex);
                 // (standard object)
@@ -481,10 +476,13 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         List<MethodCall> methodsToDispatch = taskFactory.generateMethodCalls(mc);
         int nbExpectedCalls = methodsToDispatch.size();
         CountDownLatch doneSignal = new CountDownLatch(nbExpectedCalls);
-        Queue<AbstractProcessForGroup> tasksToDispatch = taskFactory.generateTasks(mc, methodsToDispatch,
-                null, exceptionList, doneSignal, this);
-        dispatcher.dispatchTasks(tasksToDispatch, doneSignal,
-                mc.getReifiedMethod().getAnnotation(Dispatch.class));
+        Queue<AbstractProcessForGroup> tasksToDispatch = taskFactory.generateTasks(mc,
+                                                                                   methodsToDispatch,
+                                                                                   null,
+                                                                                   exceptionList,
+                                                                                   doneSignal,
+                                                                                   this);
+        dispatcher.dispatchTasks(tasksToDispatch, doneSignal, mc.getReifiedMethod().getAnnotation(Dispatch.class));
         // LocalBodyStore.getInstance().setCurrentThreadBody(body);
     }
 
@@ -745,8 +743,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
              * check oGroup is an Reified Object and if it is "assignableFrom" the class of the
              * group
              */
-            if ((MOP.isReifiedObject(oGroup)) &&
-                ((MOP.forName(this.className)).isAssignableFrom(oGroup.getClass()))) {
+            if ((MOP.isReifiedObject(oGroup)) && ((MOP.forName(this.className)).isAssignableFrom(oGroup.getClass()))) {
 
                 /* check oGroup is an object representing a group */
                 if (((StubObject) oGroup).getProxy() instanceof ProxyForGroup) {
@@ -1249,8 +1246,8 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
      * @param nodeList
      *            - the nodes where the member will be created.
      */
-    public void createMemberWithMultithread(String className, Class<?>[] genericParameters,
-            Object[][] params, Node[] nodeList) {
+    public void createMemberWithMultithread(String className, Class<?>[] genericParameters, Object[][] params,
+            Node[] nodeList) {
         // Initializes the Group to the correct size
         for (int i = 0; i < params.length; i++) {
             this.memberList.add(null);
@@ -1258,8 +1255,13 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         CountDownLatch doneSignal = new CountDownLatch(params.length);
         Queue<AbstractProcessForGroup> tasksToDispatch = new LinkedList<AbstractProcessForGroup>();
         for (int i = 0; i < params.length; i++) {
-            tasksToDispatch.add(new ProcessForGroupCreation(this, className, genericParameters, params[i],
-                nodeList[i % nodeList.length], i, doneSignal));
+            tasksToDispatch.add(new ProcessForGroupCreation(this,
+                                                            className,
+                                                            genericParameters,
+                                                            params[i],
+                                                            nodeList[i % nodeList.length],
+                                                            i,
+                                                            doneSignal));
         }
         dispatcher.dispatchTasks(tasksToDispatch, doneSignal, null);
         try {
@@ -1289,8 +1291,13 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         CountDownLatch doneSignal = new CountDownLatch(nodeList.length);
         Queue<AbstractProcessForGroup> tasksToDispatch = new LinkedList<AbstractProcessForGroup>();
         for (int i = 0; i < nodeList.length; i++) {
-            tasksToDispatch.add(new ProcessForGroupCreation(this, className, genericParameters, params,
-                nodeList[i], i, doneSignal));
+            tasksToDispatch.add(new ProcessForGroupCreation(this,
+                                                            className,
+                                                            genericParameters,
+                                                            params,
+                                                            nodeList[i],
+                                                            i,
+                                                            doneSignal));
         }
         dispatcher.dispatchTasks(tasksToDispatch, doneSignal, null);
         try {

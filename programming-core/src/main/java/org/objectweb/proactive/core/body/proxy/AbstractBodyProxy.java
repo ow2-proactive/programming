@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.body.proxy;
 
@@ -85,6 +74,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
     protected Integer cachedHashCode = null;
 
     protected String sourceBodyUrl = UNKNOWN;
+
     protected String targetBodyUrl = UNKNOWN;
 
     //
@@ -154,15 +144,12 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
                 return reifyAsAsynchronous(methodCall);
             }
 
-            if (!isToString(methodCall) && !isHashCode(methodCall) &&
-                syncCallLogger.isEnabledFor(Level.DEBUG)) {
+            if (!isToString(methodCall) && !isHashCode(methodCall) && syncCallLogger.isEnabledFor(Level.DEBUG)) {
                 String msg = "[Proxy DEBUG: synchronous call] All calls to the method below are synchronous " +
-                    "(not an error, but may lead to performance issues or deadlocks):" +
-                    System.getProperty("line.separator") +
-                    methodCall.getReifiedMethod() +
-                    System.getProperty("line.separator") +
-                    "They are synchronous for the following reason: " +
-                    mci.getMessage();
+                             "(not an error, but may lead to performance issues or deadlocks):" +
+                             System.getProperty("line.separator") + methodCall.getReifiedMethod() +
+                             System.getProperty("line.separator") + "They are synchronous for the following reason: " +
+                             mci.getMessage();
 
                 if (loggedSyncCalls.add(msg)) {
                     syncCallLogger.debug(msg);
@@ -181,8 +168,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
             try {
                 sourceBodyUrl = urls2String(LocalBodyStore.getInstance().getContext().getBody().getUrls());
             } catch (Exception e) {
-                logger.debug("[Proxy] Could not retrieve urls of the source active object (" +
-                    e.getMessage() + ")");
+                logger.debug("[Proxy] Could not retrieve urls of the source active object (" + e.getMessage() + ")");
             }
         }
 
@@ -190,8 +176,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
             try {
                 targetBodyUrl = urls2String(this.getBody().getUrls());
             } catch (Exception e) {
-                logger.debug("[Proxy] Could not retrieve urls of the target active object (" +
-                    e.getMessage() + ")");
+                logger.debug("[Proxy] Could not retrieve urls of the target active object (" + e.getMessage() + ")");
             }
         }
 
@@ -236,8 +221,8 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
      */
     protected void reifyAsOneWay(MethodCall methodCall) throws Exception {
 
-        logger.debug("[Proxy] reify " + methodCall.getName() + "() as one-way from " + sourceBodyUrl +
-            " to " + targetBodyUrl);
+        logger.debug("[Proxy] reify " + methodCall.getName() + "() as one-way from " + sourceBodyUrl + " to " +
+                     targetBodyUrl);
 
         sendRequest(methodCall, null);
     }
@@ -256,8 +241,8 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
 
         // Creates a stub + FutureProxy for representing the result
 
-        logger.debug("[Proxy] reify " + methodCall.getName() + "() as asynchronous from " + sourceBodyUrl +
-            " to " + targetBodyUrl);
+        logger.debug("[Proxy] reify " + methodCall.getName() + "() as asynchronous from " + sourceBodyUrl + " to " +
+                     targetBodyUrl);
 
         try {
 
@@ -271,20 +256,24 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
 
             if (returnType.equals(java.lang.Void.TYPE)) {
                 /* A future for a void call is used to put the potential exception inside */
-                futureobject = (StubObject) MOP.newInstance(VoidFuture.class, null,
-                        Constants.DEFAULT_FUTURE_PROXY_CLASS_NAME, null);
+                futureobject = (StubObject) MOP.newInstance(VoidFuture.class,
+                                                            null,
+                                                            Constants.DEFAULT_FUTURE_PROXY_CLASS_NAME,
+                                                            null);
             } else {
-                futureobject = (StubObject) MOP.newInstance(returnType, null,
-                        Constants.DEFAULT_FUTURE_PROXY_CLASS_NAME, null);
+                futureobject = (StubObject) MOP.newInstance(returnType,
+                                                            null,
+                                                            Constants.DEFAULT_FUTURE_PROXY_CLASS_NAME,
+                                                            null);
             }
         } catch (MOPException e) {
             throw new FutureCreationException("[Proxy] Exception occurred in reifyAsAsynchronous from " +
-                sourceBodyUrl + " to " + targetBodyUrl + " while creating future for methodcall = " +
-                methodCall.getName(), e);
+                                              sourceBodyUrl + " to " + targetBodyUrl +
+                                              " while creating future for methodcall = " + methodCall.getName(), e);
         } catch (ClassNotFoundException e) {
             throw new FutureCreationException("[Proxy] Exception occurred in reifyAsAsynchronous from " +
-                sourceBodyUrl + " to " + targetBodyUrl + " while creating future for methodcall = " +
-                methodCall.getName(), e);
+                                              sourceBodyUrl + " to " + targetBodyUrl +
+                                              " while creating future for methodcall = " + methodCall.getName(), e);
         }
 
         // Set the id of the body creator in the created future
@@ -293,8 +282,10 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         fp.setUpdater(this.getBody());
         fp.setOriginatingProxy(this);
         Method m = methodCall.getReifiedMethod();
-        fp.setCreatorStackTraceElement(new StackTraceElement(m.getDeclaringClass().getName(), m.getName(),
-            targetBodyUrl, -1));
+        fp.setCreatorStackTraceElement(new StackTraceElement(m.getDeclaringClass().getName(),
+                                                             m.getName(),
+                                                             targetBodyUrl,
+                                                             -1));
 
         try {
             if (enableStack) {
@@ -302,9 +293,9 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
             }
             sendRequest(methodCall, fp);
         } catch (java.io.IOException e) {
-            throw new SendRequestCommunicationException(
-                "[Proxy] Exception occurred in reifyAsAsynchronous while sending request for methodcall = " +
-                    methodCall.getName() + " from " + sourceBodyUrl + " to " + targetBodyUrl, e);
+            throw new SendRequestCommunicationException("[Proxy] Exception occurred in reifyAsAsynchronous while sending request for methodcall = " +
+                                                        methodCall.getName() + " from " + sourceBodyUrl + " to " +
+                                                        targetBodyUrl, e);
         }
 
         // And return the future object
@@ -317,18 +308,20 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         fp.setCreatorID(this.getBodyID());
         fp.setUpdater(this.getBody());
         Method m = methodCall.getReifiedMethod();
-        fp.setCreatorStackTraceElement(new StackTraceElement(m.getDeclaringClass().getName(), m.getName(),
-            targetBodyUrl, -1));
+        fp.setCreatorStackTraceElement(new StackTraceElement(m.getDeclaringClass().getName(),
+                                                             m.getName(),
+                                                             targetBodyUrl,
+                                                             -1));
 
-        logger.debug("[Proxy] reify " + methodCall.getName() + "() as synchronous from " + sourceBodyUrl +
-            " to " + targetBodyUrl);
+        logger.debug("[Proxy] reify " + methodCall.getName() + "() as synchronous from " + sourceBodyUrl + " to " +
+                     targetBodyUrl);
 
         try {
             sendRequest(methodCall, fp);
         } catch (java.io.IOException e) {
-            throw new SendRequestCommunicationException(
-                "[Proxy] Exception occurred in reifyAsSynchronous while sending request for methodcall = " +
-                    methodCall.getName() + " from " + sourceBodyUrl + " to " + targetBodyUrl, e);
+            throw new SendRequestCommunicationException("[Proxy] Exception occurred in reifyAsSynchronous while sending request for methodcall = " +
+                                                        methodCall.getName() + " from " + sourceBodyUrl + " to " +
+                                                        targetBodyUrl, e);
         }
 
         // PROACTIVE_1180

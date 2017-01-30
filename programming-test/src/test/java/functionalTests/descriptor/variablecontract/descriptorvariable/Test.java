@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.descriptor.variablecontract.descriptorvariable;
 
@@ -56,11 +45,14 @@ import functionalTests.FunctionalTest;
  * Tests conditions for variables of type DescriptorVariable
  */
 public class Test extends FunctionalTest {
-    private static URL XML_LOCATION = Test.class
-            .getResource("/functionalTests/descriptor/variablecontract/descriptorvariable/Test.xml");
+    private static URL XML_LOCATION = Test.class.getResource("/functionalTests/descriptor/variablecontract/descriptorvariable/Test.xml");
+
     GCMApplication gcma;
+
     boolean bogusFromDescriptor;
+
     boolean bogusFromProgram;
+
     boolean bogusCheckContract;
 
     @Before
@@ -75,13 +67,15 @@ public class Test extends FunctionalTest {
         VariableContractImpl variableContract = new VariableContractImpl();
 
         //Setting from Descriptor
-        variableContract.setDescriptorVariable("test_var1", "value1",
-                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+        variableContract.setDescriptorVariable("test_var1",
+                                               "value1",
+                                               VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
 
         //Setting bogus from descriptor (this should fail)
         try {
-            variableContract.setDescriptorVariable("test_empty", "",
-                    VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+            variableContract.setDescriptorVariable("test_empty",
+                                                   "",
+                                                   VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
         } catch (Exception e) {
             bogusFromDescriptor = false;
         }
@@ -90,16 +84,18 @@ public class Test extends FunctionalTest {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("test_var2", "");
         variableContract.setVariableFromProgram(map,
-                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+                                                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
 
         bogusCheckContract = variableContract.checkContract(); //Contract should fail (return false)
-        variableContract.setDescriptorVariable("test_var2", "value2",
-                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+        variableContract.setDescriptorVariable("test_var2",
+                                               "value2",
+                                               VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
 
         //Setting bogus variable from Program (this should fail)
         try {
-            variableContract.setVariableFromProgram("bogus_from_program", "bogus_value",
-                    VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
+            variableContract.setVariableFromProgram("bogus_from_program",
+                                                    "bogus_value",
+                                                    VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_TAG));
         } catch (Exception e) {
             bogusFromProgram = false;
         }

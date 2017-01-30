@@ -41,5 +41,3 @@ echo "$mpi_path/bin/mpirun -np $np -machinefile $machinefile $args"
 $mpi_path/bin/mpirun -np $np -machinefile $machinefile $args
 
 exit 0
-
-

@@ -1,51 +1,40 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.util;
+
+import java.net.*;
+import java.nio.channels.SocketChannel;
+import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
-import java.net.*;
-import java.nio.channels.SocketChannel;
-import java.util.*;
-import java.util.concurrent.*;
 
 
 /**
@@ -156,13 +145,13 @@ public class ProActiveInet {
         } else {
             // Force a specific address
             logger.debug(CentralPAPropertyRepository.PA_HOSTNAME.getName() +
-                " defined. Using getByName() to elected an IP address");
+                         " defined. Using getByName() to elected an IP address");
             // return the result of getByName
             try {
                 ia = InetAddress.getByName(CentralPAPropertyRepository.PA_HOSTNAME.getValue());
             } catch (UnknownHostException e) {
                 logger.error(CentralPAPropertyRepository.PA_HOSTNAME.getName() +
-                    " is set, but no IP address is bound to this hostname");
+                             " is set, but no IP address is bound to this hostname");
             }
         }
 
@@ -327,7 +316,7 @@ public class ProActiveInet {
 
     private static List<InetAddress> filterLinkLocal(List<InetAddress> l) {
         if (!CentralPAPropertyRepository.PA_NET_NOLINKLOCAL.isSet() ||
-                !CentralPAPropertyRepository.PA_NET_NOLINKLOCAL.isTrue()) {
+            !CentralPAPropertyRepository.PA_NET_NOLINKLOCAL.isTrue()) {
             // All InetAddress match
             return l;
         }
@@ -370,8 +359,8 @@ public class ProActiveInet {
      */
     private static void sortInetAddresses(List<InetAddress> iaList) {
         // By default we prefer IPv4 addresses, unless the prefer_ipv6_address is set
-        final int cmpIp4Ip6 = ((CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES.isSet() && CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES
-                .isTrue())) ? 1 : -1;
+        final int cmpIp4Ip6 = ((CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES.isSet() &&
+                                CentralPAPropertyRepository.PREFER_IPV6_ADDRESSES.isTrue())) ? 1 : -1;
         Collections.sort(iaList, new Comparator<InetAddress>() {
             @Override
             public int compare(InetAddress o1, InetAddress o2) {
@@ -423,9 +412,7 @@ public class ProActiveInet {
                         long start = System.currentTimeMillis();
 
                         // try to connect to *somewhere*
-                        socket.connect(new InetSocketAddress(InetAddress.getByName(serverToConnectTo)
-                                , port
-                        ));
+                        socket.connect(new InetSocketAddress(InetAddress.getByName(serverToConnectTo), port));
                         long end = System.currentTimeMillis();
                         return new AbstractMap.SimpleImmutableEntry(address, (int) (end - start));
                     }
@@ -434,8 +421,11 @@ public class ProActiveInet {
         }
 
         try {
-            Map.Entry<InetAddress, Integer> fastestAddress = service.invokeAny(testConnectionCallables, (long) timeout * 2, TimeUnit.MILLISECONDS);
-            logger.debug("Fastest address detected : " + fastestAddress.getKey() + " (" + fastestAddress.getValue() + " ms)");
+            Map.Entry<InetAddress, Integer> fastestAddress = service.invokeAny(testConnectionCallables,
+                                                                               (long) timeout * 2,
+                                                                               TimeUnit.MILLISECONDS);
+            logger.debug("Fastest address detected : " + fastestAddress.getKey() + " (" + fastestAddress.getValue() +
+                         " ms)");
             return fastestAddress.getKey();
         } catch (Exception e) {
             return null;
@@ -446,7 +436,7 @@ public class ProActiveInet {
 
     private static List<InetAddress> filterIPv6(List<InetAddress> l) {
         if (!CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isSet() ||
-                !CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isTrue()) {
+            !CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isTrue()) {
             // All InetAddress match
             return l;
         }
@@ -473,8 +463,8 @@ public class ProActiveInet {
         try {
             matcher = new IPMatcher(CentralPAPropertyRepository.PA_NET_NETMASK.getValue());
         } catch (Throwable e) {
-            logger.fatal("Invalid format for property " +
-                    CentralPAPropertyRepository.PA_NET_NETMASK.getName() + ". Must be xxx.xxx.xxx.xxx/xx");
+            logger.fatal("Invalid format for property " + CentralPAPropertyRepository.PA_NET_NETMASK.getName() +
+                         ". Must be xxx.xxx.xxx.xxx/xx");
             return new LinkedList<>();
         }
 
@@ -484,8 +474,7 @@ public class ProActiveInet {
                 if (matcher.match(ia)) {
                     ret.add(ia);
                 } else {
-                    logger.debug("Discarded " + ia +
-                            " because of netmask criteria is not compatible with IPv6");
+                    logger.debug("Discarded " + ia + " because of netmask criteria is not compatible with IPv6");
                 }
             } else {
                 logger.debug("Discarded " + ia + " because of the  netmask criteria");
@@ -497,6 +486,7 @@ public class ProActiveInet {
     static private class IPMatcher {
 
         final private int networkPortion;
+
         final private int mask;
 
         public IPMatcher(String str) throws Throwable {

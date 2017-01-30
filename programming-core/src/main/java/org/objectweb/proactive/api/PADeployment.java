@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.api;
 
@@ -82,8 +71,7 @@ public class PADeployment {
      * @see org.objectweb.proactive.core.descriptor.data.VirtualNode
      * @see org.objectweb.proactive.core.descriptor.data.VirtualMachine
      */
-    public static ProActiveDescriptor getProactiveDescriptor(String xmlDescriptorUrl)
-            throws ProActiveException {
+    public static ProActiveDescriptor getProactiveDescriptor(String xmlDescriptorUrl) throws ProActiveException {
         return getProActiveDescriptor(xmlDescriptorUrl, new VariableContractImpl(), false);
     }
 
@@ -97,8 +85,8 @@ public class PADeployment {
      * @see org.objectweb.proactive.core.descriptor.data.VirtualNode
      * @see org.objectweb.proactive.core.descriptor.data.VirtualMachine
      */
-    public static ProActiveDescriptor getProactiveDescriptor(String xmlDescriptorUrl,
-            VariableContract variableContract) throws ProActiveException {
+    public static ProActiveDescriptor getProactiveDescriptor(String xmlDescriptorUrl, VariableContract variableContract)
+            throws ProActiveException {
         VariableContractImpl variableContractImpl = (VariableContractImpl) variableContract;
 
         if (variableContractImpl == null) {
@@ -108,8 +96,8 @@ public class PADeployment {
         return getProActiveDescriptor(xmlDescriptorUrl, variableContractImpl, false);
     }
 
-    public static ProActiveDescriptor getProActiveDescriptor(String xmlDescriptorUrl,
-            VariableContract variableContract, boolean hierarchicalSearch) throws ProActiveException {
+    public static ProActiveDescriptor getProActiveDescriptor(String xmlDescriptorUrl, VariableContract variableContract,
+            boolean hierarchicalSearch) throws ProActiveException {
         VariableContractImpl variableContractImpl = (VariableContractImpl) variableContract;
         //Get lock on XMLProperties global static variable
         org.objectweb.proactive.core.xml.VariableContractImpl.lock.aquire();
@@ -146,11 +134,9 @@ public class PADeployment {
             VariableContractImpl variableContract, boolean hierarchicalSearch) throws ProActiveException {
         ProActiveDescriptorInternal descriptor;
         if (CentralPAPropertyRepository.PA_LEGACY_PARSER.isTrue()) {
-            descriptor = internalGetProActiveDescriptor_old(xmlDescriptorUrl, variableContract,
-                    hierarchicalSearch);
+            descriptor = internalGetProActiveDescriptor_old(xmlDescriptorUrl, variableContract, hierarchicalSearch);
         } else {
-            descriptor = internalGetProActiveDescriptor_new(xmlDescriptorUrl, variableContract,
-                    hierarchicalSearch);
+            descriptor = internalGetProActiveDescriptor_new(xmlDescriptorUrl, variableContract, hierarchicalSearch);
         }
         return descriptor;
     }
@@ -193,7 +179,7 @@ public class PADeployment {
         try {
             if (PADeployment.logger.isInfoEnabled()) {
                 PADeployment.logger.info("************* Reading deployment descriptor: " + xmlDescriptorUrl +
-                    " ********************");
+                                         " ********************");
             }
             JaxpDescriptorParser parser = new JaxpDescriptorParser(xmlDescriptorUrl, variableContractImpl);
             parser.parse();
@@ -202,17 +188,14 @@ public class PADeployment {
             return pad;
         } catch (org.xml.sax.SAXException e) {
             //e.printStackTrace(); hides errors when testing parameters in xml descriptors
-            PADeployment.logger
-                    .fatal("A problem occured when getting the proActiveDescriptor at location \"" +
-                        xmlDescriptorUrl + "\"." + e.getMessage());
-            throw new ProActiveException(
-                "A problem occured when getting the proActiveDescriptor at location \"" + xmlDescriptorUrl +
-                    "\"." + e.getMessage(), e);
+            PADeployment.logger.fatal("A problem occured when getting the proActiveDescriptor at location \"" +
+                                      xmlDescriptorUrl + "\"." + e.getMessage());
+            throw new ProActiveException("A problem occured when getting the proActiveDescriptor at location \"" +
+                                         xmlDescriptorUrl + "\"." + e.getMessage(), e);
         } catch (java.io.IOException e) {
             //e.printStackTrace(); hides errors when testing parameters in xml descriptors
-            PADeployment.logger
-                    .fatal("An IO problem occured when getting the proActiveDescriptor at location \"" +
-                        xmlDescriptorUrl + "\".");
+            PADeployment.logger.fatal("An IO problem occured when getting the proActiveDescriptor at location \"" +
+                                      xmlDescriptorUrl + "\".");
             throw new ProActiveException(e);
         }
     }
@@ -255,26 +238,23 @@ public class PADeployment {
         try {
             if (PADeployment.logger.isInfoEnabled()) {
                 PADeployment.logger.info("************* Reading deployment descriptor: " + xmlDescriptorUrl +
-                    " ********************");
+                                         " ********************");
             }
-            ProActiveDescriptorHandler proActiveDescriptorHandler = ProActiveDescriptorHandler
-                    .createProActiveDescriptor(xmlDescriptorUrl, variableContractImpl);
+            ProActiveDescriptorHandler proActiveDescriptorHandler = ProActiveDescriptorHandler.createProActiveDescriptor(xmlDescriptorUrl,
+                                                                                                                         variableContractImpl);
             pad = (ProActiveDescriptorInternal) proActiveDescriptorHandler.getResultObject();
             part.registerDescriptor(pad.getUrl(), pad);
             return pad;
         } catch (org.xml.sax.SAXException e) {
             //e.printStackTrace(); hides errors when testing parameters in xml descriptors
-            PADeployment.logger
-                    .fatal("A problem occured when getting the proActiveDescriptor at location \"" +
-                        xmlDescriptorUrl + "\".");
-            throw new ProActiveException(
-                "A problem occured when getting the proActiveDescriptor at location \"" + xmlDescriptorUrl +
-                    "\".", e);
+            PADeployment.logger.fatal("A problem occured when getting the proActiveDescriptor at location \"" +
+                                      xmlDescriptorUrl + "\".");
+            throw new ProActiveException("A problem occured when getting the proActiveDescriptor at location \"" +
+                                         xmlDescriptorUrl + "\".", e);
         } catch (java.io.IOException e) {
             //e.printStackTrace(); hides errors when testing parameters in xml descriptors
-            PADeployment.logger
-                    .fatal("A problem occured when getting the proActiveDescriptor at location \"" +
-                        xmlDescriptorUrl + "\".");
+            PADeployment.logger.fatal("A problem occured when getting the proActiveDescriptor at location \"" +
+                                      xmlDescriptorUrl + "\".");
             throw new ProActiveException(e);
         }
     }
@@ -317,7 +297,7 @@ public class PADeployment {
         VirtualNodeInternal vn = part.getVirtualNode(virtualnodeName);
         if (vn == null) {
             throw new ProActiveException("VirtualNode " + virtualnodeName +
-                " has not been yet activated or does not exist! Try to activate it first !");
+                                         " has not been yet activated or does not exist! Try to activate it first !");
         }
         part.registerVirtualNode(URIBuilder.appendVnSuffix(virtualnodeName), replacePreviousBinding);
     }
@@ -334,8 +314,7 @@ public class PADeployment {
             throw new ProActiveException("Cannot unregister such virtualNode since it results from a lookup!");
         }
         String virtualNodeName = virtualNode.getName();
-        ProActiveRuntime part = RuntimeFactory.getProtocolSpecificRuntime(((VirtualNodeImpl) virtualNode)
-                .getRegistrationProtocol());
+        ProActiveRuntime part = RuntimeFactory.getProtocolSpecificRuntime(((VirtualNodeImpl) virtualNode).getRegistrationProtocol());
         part.unregisterVirtualNode(URIBuilder.appendVnSuffix(virtualNode.getName()));
         if (PADeployment.logger.isInfoEnabled()) {
             PADeployment.logger.info("Success at unbinding " + virtualNodeName);

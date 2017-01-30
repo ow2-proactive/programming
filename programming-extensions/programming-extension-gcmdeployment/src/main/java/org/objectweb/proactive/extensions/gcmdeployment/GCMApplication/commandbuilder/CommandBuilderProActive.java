@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
@@ -85,6 +74,7 @@ public class CommandBuilderProActive implements CommandBuilder {
      * If not set, then the default classpath is used
      */
     private List<PathElement> proactiveClasspath;
+
     private boolean overwriteClasspath;
 
     /** Application classpath */
@@ -273,8 +263,14 @@ public class CommandBuilderProActive implements CommandBuilder {
         return sb.substring(0, sb.length() - 1);
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder#buildCommand(org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo, org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder
+     * #buildCommand(org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.
+     * HostInfo,
+     * org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal)
      */
     public String buildCommand(HostInfo hostInfo, GCMApplicationInternal gcma) {
         return buildCommand(hostInfo, gcma, true);
@@ -290,15 +286,13 @@ public class CommandBuilderProActive implements CommandBuilder {
      */
     public String buildCommand(HostInfo hostInfo, GCMApplicationInternal gcma, boolean withClasspath) {
         if ((proActivePath == null) && (hostInfo.getTool(Tools.PROACTIVE.id) == null)) {
-            throw new IllegalStateException(
-                "ProActive installation path must be specified with the relpath attribute inside the proactive element (GCMA), or as tool in all hostInfo elements (GCMD). HostInfo=" +
-                    hostInfo.getId());
+            throw new IllegalStateException("ProActive installation path must be specified with the relpath attribute inside the proactive element (GCMA), or as tool in all hostInfo elements (GCMD). HostInfo=" +
+                                            hostInfo.getId());
         }
 
         if (!hostInfo.isCapacitiyValid()) {
-            throw new IllegalStateException(
-                "To enable capacity autodetection nor VM Capacity nor Host Capacity must be specified. HostInfo=" +
-                    hostInfo.getId());
+            throw new IllegalStateException("To enable capacity autodetection nor VM Capacity nor Host Capacity must be specified. HostInfo=" +
+                                            hostInfo.getId());
         }
 
         StringBuilder command = new StringBuilder();
@@ -360,8 +354,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         }
 
         if (hostInfo.getNetworkInterface() != null) {
-            command.append(CentralPAPropertyRepository.PA_NET_INTERFACE.getCmdLine() +
-                hostInfo.getNetworkInterface());
+            command.append(CentralPAPropertyRepository.PA_NET_INTERFACE.getCmdLine() + hostInfo.getNetworkInterface());
             command.append(" ");
         }
 
@@ -389,8 +382,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         try {
             parentURL = RuntimeFactory.getDefaultRuntime().getURL();
         } catch (ProActiveException e) {
-            GCMD_LOGGER.error(
-                    "Cannot determine the URL of this runtime. Childs will not be able to register", e);
+            GCMD_LOGGER.error("Cannot determine the URL of this runtime. Childs will not be able to register", e);
             parentURL = "unkownParentURL";
         }
         command.append("-" + StartPARuntime.Params.parent.shortOpt() + " " + parentURL);
@@ -454,8 +446,14 @@ public class CommandBuilderProActive implements CommandBuilder {
         return ret.toString();
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder#buildCommand(org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo, org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder
+     * #buildCommand(org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.
+     * HostInfo,
+     * org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal)
      */
     public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma) {
         return buildCommandLocal(hostInfo, gcma, true);
@@ -470,18 +468,15 @@ public class CommandBuilderProActive implements CommandBuilder {
      * -cp argument after 'java' command (Classpath surrounded by "), otherwise classpath is not defined.
      * @return
      */
-    public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma,
-            boolean withClasspath) {
+    public List<List<String>> buildCommandLocal(HostInfo hostInfo, GCMApplicationInternal gcma, boolean withClasspath) {
         if ((proActivePath == null) && (hostInfo.getTool(Tools.PROACTIVE.id) == null)) {
-            throw new IllegalStateException(
-                "ProActive installation path must be specified with the relpath attribute inside the proactive element (GCMA), or as tool in all hostInfo elements (GCMD). HostInfo=" +
-                    hostInfo.getId());
+            throw new IllegalStateException("ProActive installation path must be specified with the relpath attribute inside the proactive element (GCMA), or as tool in all hostInfo elements (GCMD). HostInfo=" +
+                                            hostInfo.getId());
         }
 
         if (!hostInfo.isCapacitiyValid()) {
-            throw new IllegalStateException(
-                "To enable capacity autodetection nor VM Capacity nor Host Capacity must be specified. HostInfo=" +
-                    hostInfo.getId());
+            throw new IllegalStateException("To enable capacity autodetection nor VM Capacity nor Host Capacity must be specified. HostInfo=" +
+                                            hostInfo.getId());
         }
 
         ArrayList<String> command = new ArrayList<String>();
@@ -510,34 +505,32 @@ public class CommandBuilderProActive implements CommandBuilder {
         // Log4j
         if (log4jProperties != null) {
             command.add(CentralPAPropertyRepository.LOG4J.getCmdLine() + "file:" +
-                log4jProperties.getFullPath(hostInfo, this));
+                        log4jProperties.getFullPath(hostInfo, this));
         } else {
-            command.add(CentralPAPropertyRepository.PA_LOG4J_COLLECTOR.getCmdLine() +
-                gcma.getLogCollectorUrl());
+            command.add(CentralPAPropertyRepository.PA_LOG4J_COLLECTOR.getCmdLine() + gcma.getLogCollectorUrl());
         }
 
         // Java Security Policy
         if (javaSecurityPolicy != null) {
             command.add(CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getCmdLine() +
-                javaSecurityPolicy.getFullPath(hostInfo, this));
+                        javaSecurityPolicy.getFullPath(hostInfo, this));
         } else {
             command.add(CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getCmdLine() +
-                CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getValue());
+                        CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getValue());
         }
 
         if (hostInfo.getNetworkInterface() != null) {
-            command.add(CentralPAPropertyRepository.PA_NET_INTERFACE.getCmdLine() +
-                hostInfo.getNetworkInterface());
+            command.add(CentralPAPropertyRepository.PA_NET_INTERFACE.getCmdLine() + hostInfo.getNetworkInterface());
         }
 
         if (hostInfo.getDataSpacesScratchURL() != null) {
             command.add(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URLS.getCmdLine() +
-                hostInfo.getDataSpacesScratchURL());
+                        hostInfo.getDataSpacesScratchURL());
         }
 
         if (hostInfo.getDataSpacesScratchPath() != null) {
             command.add(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_PATH.getCmdLine() +
-                hostInfo.getDataSpacesScratchPath().getFullPath(hostInfo, this));
+                        hostInfo.getDataSpacesScratchPath().getFullPath(hostInfo, this));
         }
 
         // Class to be started and its arguments
@@ -547,8 +540,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         try {
             parentURL = RuntimeFactory.getDefaultRuntime().getURL();
         } catch (ProActiveException e) {
-            GCMD_LOGGER.error(
-                    "Cannot determine the URL of this runtime. Children will not be able to register", e);
+            GCMD_LOGGER.error("Cannot determine the URL of this runtime. Children will not be able to register", e);
             parentURL = "unkownParentURL";
         }
         command.add("-" + StartPARuntime.Params.parent.shortOpt());

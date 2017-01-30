@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.group;
 
@@ -59,6 +48,7 @@ import org.objectweb.proactive.core.mop.StubObject;
 public class BasicTaskFactory implements TaskFactory {
 
     protected Dispatcher dispatcher;
+
     protected ProxyForGroup groupProxy;
 
     public BasicTaskFactory(ProxyForGroup groupProxy) {
@@ -94,12 +84,14 @@ public class BasicTaskFactory implements TaskFactory {
                 for (int j = 0; j < mc.getNumberOfParameter(); j++)
                     if (PAGroup.isScatterGroupOn(mc.getParameter(j))) {
                         individualEffectiveArguments[j] = PAGroup.get(mc.getParameter(j),
-                                i % PAGroup.size(mc.getParameter(j)));
+                                                                      i % PAGroup.size(mc.getParameter(j)));
                     } else {
                         individualEffectiveArguments[j] = mc.getParameter(j);
                     }
                 methodsToDispatch.add(MethodCall.getMethodCall(mc.getReifiedMethod(),
-                        mc.getGenericTypesMapping(), individualEffectiveArguments, mc.getExceptionContext()));
+                                                               mc.getGenericTypesMapping(),
+                                                               individualEffectiveArguments,
+                                                               mc.getExceptionContext()));
             }
 
         }
@@ -138,9 +130,9 @@ public class BasicTaskFactory implements TaskFactory {
         return nbTasks;
     }
 
-    public Queue<AbstractProcessForGroup> generateTasks(MethodCall originalMethodCall,
-            List<MethodCall> methodCalls, Object result, ExceptionListException exceptionList,
-            CountDownLatch doneSignal, ProxyForGroup<?> groupProxy) {
+    public Queue<AbstractProcessForGroup> generateTasks(MethodCall originalMethodCall, List<MethodCall> methodCalls,
+            Object result, ExceptionListException exceptionList, CountDownLatch doneSignal,
+            ProxyForGroup<?> groupProxy) {
 
         Queue<AbstractProcessForGroup> taskList = new ConcurrentLinkedQueue<AbstractProcessForGroup>();
 
@@ -151,8 +143,7 @@ public class BasicTaskFactory implements TaskFactory {
         // tasks
         // reorder(methodCalls, originalMethodCall.getReifiedMethod());
 
-        List<Integer> taskIndexes = getTaskIndexes(originalMethodCall, methodCalls, groupProxy
-                .getMemberList().size());
+        List<Integer> taskIndexes = getTaskIndexes(originalMethodCall, methodCalls, groupProxy.getMemberList().size());
         if (!(result == null)) {
             memberListOfResultGroup = initializeResultsGroup(result, methodCalls.size());
         }
@@ -160,10 +151,23 @@ public class BasicTaskFactory implements TaskFactory {
         for (int i = 0; i < methodCalls.size(); i++) {
             MethodCall mc = methodCalls.get(i);
             AbstractProcessForGroup task = useOneWayProcess(mc) ? new ProcessForOneWayCall(groupProxy,
-                groupProxy.getMemberList(), getTaskIndex(mc, i, groupProxy.getMemberList().size()), mc,
-                PAActiveObject.getBodyOnThis(), exceptionList, doneSignal) : new ProcessForAsyncCall(
-                groupProxy, groupProxy.getMemberList(), memberListOfResultGroup, taskIndexes.get(i), mc, i,
-                PAActiveObject.getBodyOnThis(), doneSignal);
+                                                                                           groupProxy.getMemberList(),
+                                                                                           getTaskIndex(mc,
+                                                                                                        i,
+                                                                                                        groupProxy.getMemberList()
+                                                                                                                  .size()),
+                                                                                           mc,
+                                                                                           PAActiveObject.getBodyOnThis(),
+                                                                                           exceptionList,
+                                                                                           doneSignal)
+                                                                : new ProcessForAsyncCall(groupProxy,
+                                                                                          groupProxy.getMemberList(),
+                                                                                          memberListOfResultGroup,
+                                                                                          taskIndexes.get(i),
+                                                                                          mc,
+                                                                                          i,
+                                                                                          PAActiveObject.getBodyOnThis(),
+                                                                                          doneSignal);
 
             setDynamicDispatchTag(task, originalMethodCall);
             taskList.offer(task);
@@ -192,23 +196,18 @@ public class BasicTaskFactory implements TaskFactory {
                 // TODO cache instance !
                 try {
                     DispatchBehavior allocationBehavior = (DispatchBehavior) dispatchAnnotation.customMode()
-                            .newInstance();
-                    return allocationBehavior.getTaskIndexes(originalMethodCall, generatedMethodCalls,
-                            nbWorkers);
+                                                                                               .newInstance();
+                    return allocationBehavior.getTaskIndexes(originalMethodCall, generatedMethodCalls, nbWorkers);
                 } catch (InstantiationException e) {
-                    throw new AllocationException("cannot instantiate custom class for allocation behavior",
-                        e);
+                    throw new AllocationException("cannot instantiate custom class for allocation behavior", e);
                 } catch (IllegalAccessException e) {
-                    throw new AllocationException("cannot instantiate custom class for allocation behavior",
-                        e);
+                    throw new AllocationException("cannot instantiate custom class for allocation behavior", e);
                 }
             } else {
-                return dispatchAnnotation.mode().getTaskIndexes(originalMethodCall, generatedMethodCalls,
-                        nbWorkers);
+                return dispatchAnnotation.mode().getTaskIndexes(originalMethodCall, generatedMethodCalls, nbWorkers);
             }
         } else {
-            return DispatchMode.UNSPECIFIED.getTaskIndexes(originalMethodCall, generatedMethodCalls,
-                    nbWorkers);
+            return DispatchMode.UNSPECIFIED.getTaskIndexes(originalMethodCall, generatedMethodCalls, nbWorkers);
         }
     }
 
@@ -230,9 +229,12 @@ public class BasicTaskFactory implements TaskFactory {
         // knowledge based means dynamic dispatch
         // info specified through proxy API has priority
         if (groupProxy.balancing().equals(DispatchMode.DYNAMIC) ||
-            (groupProxy.balancing().equals(DispatchMode.UNSPECIFIED) && ((originalMethodCall
-                    .getReifiedMethod().getAnnotation(Dispatch.class) != null) && (originalMethodCall
-                    .getReifiedMethod().getAnnotation(Dispatch.class).mode().equals(DispatchMode.DYNAMIC))))) {
+            (groupProxy.balancing().equals(DispatchMode.UNSPECIFIED) &&
+             ((originalMethodCall.getReifiedMethod().getAnnotation(Dispatch.class) != null) &&
+              (originalMethodCall.getReifiedMethod()
+                                 .getAnnotation(Dispatch.class)
+                                 .mode()
+                                 .equals(DispatchMode.DYNAMIC))))) {
             task.setDynamicallyDispatchable(true);
         }
     }

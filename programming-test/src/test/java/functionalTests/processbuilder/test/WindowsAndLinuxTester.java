@@ -1,40 +1,33 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package functionalTests.processbuilder.test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +36,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder;
@@ -52,26 +50,20 @@ import org.objectweb.proactive.extensions.processbuilder.PAOSProcessBuilderFacto
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
-import functionalTests.FunctionalTest;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import functionalTests.FunctionalTest;
 
 
 @Ignore
 // require suer
 public class WindowsAndLinuxTester extends FunctionalTest {
     final static boolean isLinux = System.getProperty("os.name").toLowerCase().startsWith("linux");
+
     final static boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");
 
     // Modify these to fit your environment
     OSUser userPasswd;
+
     OSUser userSsh;
 
     String tempPath;
@@ -501,8 +493,8 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         p.destroy();
     }
 
-    public static void runAndMatch(String[] cmd, OSUser user, File dir, Map<String, String> env,
-            String[] expectedOut, String[] expectedError, Integer expectedRet) throws Exception {
+    public static void runAndMatch(String[] cmd, OSUser user, File dir, Map<String, String> env, String[] expectedOut,
+            String[] expectedError, Integer expectedRet) throws Exception {
         Process p = (user != null) ? osRuntime.exec(user, cmd, env, dir) : osRuntime.exec(cmd, env, dir);
         String[] out = getOutput(p);
         String[] err = getError(p);
@@ -512,18 +504,18 @@ public class WindowsAndLinuxTester extends FunctionalTest {
             //check output
             for (int i = 0; i < out.length; i++) {
                 if (!out[i].equals(expectedOut[i]))
-                    errors += ("Outputs don't match at line " + i + "\n I have \"" + out[i] +
-                        "\" instead of \"" + expectedOut[i] + "\"\n");
+                    errors += ("Outputs don't match at line " + i + "\n I have \"" + out[i] + "\" instead of \"" +
+                               expectedOut[i] + "\"\n");
             }
             //check error
             for (int i = 0; i < err.length; i++) {
                 if (!err[i].equals(expectedError[i]))
-                    errors += ("Errors don't match at line " + i + "\n I have \"" + err[i] +
-                        "\" instead of \"" + expectedError[i] + "\"\n");
+                    errors += ("Errors don't match at line " + i + "\n I have \"" + err[i] + "\" instead of \"" +
+                               expectedError[i] + "\"\n");
             }
         } else {
-            errors += ("Output lengths does not match!\nReal Out:" + out.length + " Exp. Out:" +
-                expectedOut.length + "\nReal Err: " + err.length + " Exp. Err:" + expectedError.length);
+            errors += ("Output lengths does not match!\nReal Out:" + out.length + " Exp. Out:" + expectedOut.length +
+                       "\nReal Err: " + err.length + " Exp. Err:" + expectedError.length);
         }
         p.waitFor();
         int eval = p.exitValue();

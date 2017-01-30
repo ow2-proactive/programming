@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package dataspaces;
 
@@ -86,15 +75,23 @@ public abstract class SpacesDirectoryAbstractBase {
 
         dir = getSource();
 
-        InputOutputSpaceConfiguration configInput1 = InputOutputSpaceConfiguration
-                .createInputSpaceConfiguration("http://hostA", "/tmp", "h1", "input1");
-        InputOutputSpaceConfiguration configInput2 = InputOutputSpaceConfiguration
-                .createInputSpaceConfiguration("http://hostB", "/tmp", "h1", "input2");
-        InputOutputSpaceConfiguration configOutput1 = InputOutputSpaceConfiguration
-                .createOutputSpaceConfiguration("http://hostC", "/tmp", "h1", "output1");
+        InputOutputSpaceConfiguration configInput1 = InputOutputSpaceConfiguration.createInputSpaceConfiguration("http://hostA",
+                                                                                                                 "/tmp",
+                                                                                                                 "h1",
+                                                                                                                 "input1");
+        InputOutputSpaceConfiguration configInput2 = InputOutputSpaceConfiguration.createInputSpaceConfiguration("http://hostB",
+                                                                                                                 "/tmp",
+                                                                                                                 "h1",
+                                                                                                                 "input2");
+        InputOutputSpaceConfiguration configOutput1 = InputOutputSpaceConfiguration.createOutputSpaceConfiguration("http://hostC",
+                                                                                                                   "/tmp",
+                                                                                                                   "h1",
+                                                                                                                   "output1");
         ScratchSpaceConfiguration configScratch = new ScratchSpaceConfiguration("http://hostD", "/tmp", "h1");
-        InputOutputSpaceConfiguration configOutput2 = InputOutputSpaceConfiguration
-                .createOutputSpaceConfiguration("http://hostA", "/tmp", "h1", "output2");
+        InputOutputSpaceConfiguration configOutput2 = InputOutputSpaceConfiguration.createOutputSpaceConfiguration("http://hostA",
+                                                                                                                   "/tmp",
+                                                                                                                   "h1",
+                                                                                                                   "output2");
 
         spaceInstanceInput1 = new SpaceInstanceInfo(MAIN_APPID, configInput1);
         spaceInstanceInput1b = new SpaceInstanceInfo(ANOTHER_APPID1, configInput1);
@@ -138,8 +135,7 @@ public abstract class SpacesDirectoryAbstractBase {
     public void testLookupFirst() {
         final DataSpacesURI query1 = DataSpacesURI.createInOutSpaceURI(MAIN_APPID, SpaceType.INPUT, "input1");
         final DataSpacesURI query2 = DataSpacesURI.createInOutSpaceURI(MAIN_APPID, SpaceType.INPUT, "input2");
-        final DataSpacesURI query3 = DataSpacesURI.createInOutSpaceURI(MAIN_APPID, SpaceType.OUTPUT,
-                "output1");
+        final DataSpacesURI query3 = DataSpacesURI.createInOutSpaceURI(MAIN_APPID, SpaceType.OUTPUT, "output1");
 
         final SpaceInstanceInfo actual1 = dir.lookupOne(query1);
         final SpaceInstanceInfo actual2 = dir.lookupOne(query2);
@@ -237,8 +233,7 @@ public abstract class SpacesDirectoryAbstractBase {
 
     @Test
     public void testLookupFirstIllegalArgumentException2() {
-        final DataSpacesURI query = DataSpacesURI.createInOutSpaceURI(MAIN_APPID, SpaceType.INPUT, "name1",
-                "path");
+        final DataSpacesURI query = DataSpacesURI.createInOutSpaceURI(MAIN_APPID, SpaceType.INPUT, "name1", "path");
 
         try {
             dir.lookupOne(query);

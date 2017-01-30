@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package functionalTests.pamr.message;
 
@@ -44,11 +33,11 @@ import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.TypeHelper;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
+import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationMessage.Field;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
-import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
-import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationMessage.Field;
 
 
 /**
@@ -57,12 +46,12 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationMess
  */
 public class TestMessageRegistration extends MessageFunctionalTest {
 
-    /* Randomly construct valid registration request then check all the fields.
+    /*
+     * Randomly construct valid registration request then check all the fields.
      */
     @Test
     public void testRegistrationRequest() {
-        RegistrationMessageGenerator msgGen = new RegistrationMessageGenerator(
-            MessageType.REGISTRATION_REQUEST);
+        RegistrationMessageGenerator msgGen = new RegistrationMessageGenerator(MessageType.REGISTRATION_REQUEST);
         try {
             for (int i = 0; i < NB_CHECK; i++) {
                 msgGen.buildValidMessage();
@@ -72,14 +61,15 @@ public class TestMessageRegistration extends MessageFunctionalTest {
             }
         } catch (MalformedMessageException e) {
             Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST + " implementation:" +
-                " the message " + msgGen.getMessage() + " cannot be reconstructed from its " +
-                "raw byte form, because:" + e.getMessage());
+                        " the message " + msgGen.getMessage() + " cannot be reconstructed from its " +
+                        "raw byte form, because:" + e.getMessage());
         }
 
         msgGen.testExtremeValues();
     }
 
-    /* Randomly construct valid registration reply then check all the fields.
+    /*
+     * Randomly construct valid registration reply then check all the fields.
      */
     @Test
     public void testRegistrationReply() {
@@ -93,8 +83,8 @@ public class TestMessageRegistration extends MessageFunctionalTest {
             }
         } catch (MalformedMessageException e) {
             Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY + " implementation:" +
-                " the message " + msgGen.getMessage() + " cannot be reconstructed from its " +
-                "raw byte form, because:" + e.getMessage());
+                        " the message " + msgGen.getMessage() + " cannot be reconstructed from its " +
+                        "raw byte form, because:" + e.getMessage());
         }
 
         msgGen.testExtremeValues();
@@ -103,7 +93,9 @@ public class TestMessageRegistration extends MessageFunctionalTest {
     private class RegistrationMessageGenerator extends MessageGenerator {
 
         private AgentID agent;
+
         private long msgId;
+
         private long routerId;
 
         public RegistrationMessageGenerator(MessageType type) {
@@ -176,9 +168,9 @@ public class TestMessageRegistration extends MessageFunctionalTest {
                 long invalidAgentId = nextLongLEQ(-2);
                 logger.debug("invalid agentId " + invalidAgentId);
                 RegistrationMessage m = testAgentId(invalidAgentId);
-                Assert.fail("Problem with " + type + " implementation: Attemp to reconstruct the message " +
-                    m + " with a corrupted " + RegistrationMessage.Field.AGENT_ID +
-                    " from its raw byte array representation actually succeeded!");
+                Assert.fail("Problem with " + type + " implementation: Attemp to reconstruct the message " + m +
+                            " with a corrupted " + RegistrationMessage.Field.AGENT_ID +
+                            " from its raw byte array representation actually succeeded!");
             } catch (MalformedMessageException e) {
                 // success
             }
@@ -188,9 +180,9 @@ public class TestMessageRegistration extends MessageFunctionalTest {
                 long invalidRouterId = nextLongLEQ(-1);
                 logger.debug("invalid routerId " + invalidRouterId);
                 RegistrationMessage m = testRouterId(invalidRouterId);
-                Assert.fail("Problem with " + type + " implementation: Attemp to reconstruct the message " +
-                    m + " with a corrupted " + RegistrationMessage.Field.ROUTER_ID +
-                    " from its raw byte array representation actually succeeded!");
+                Assert.fail("Problem with " + type + " implementation: Attemp to reconstruct the message " + m +
+                            " with a corrupted " + RegistrationMessage.Field.ROUTER_ID +
+                            " from its raw byte array representation actually succeeded!");
             } catch (MalformedMessageException e) {
                 // success
             }
@@ -199,8 +191,8 @@ public class TestMessageRegistration extends MessageFunctionalTest {
 
         /*
          * Extreme values:
-         *  - agentId == -1
-         *  - routerId == 0
+         * - agentId == -1
+         * - routerId == 0
          */
         protected void testExtremeValues() {
 
@@ -212,16 +204,16 @@ public class TestMessageRegistration extends MessageFunctionalTest {
                 if (type.equals(MessageType.REGISTRATION_REQUEST)) {
                     // is allowed
                 } else {
-                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY +
-                        " implementation:" + " the " + RegistrationMessage.Field.AGENT_ID +
-                        " field cannot be filled with the value " + UNKNOWN_AGENT_ID);
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY + " implementation:" +
+                                " the " + RegistrationMessage.Field.AGENT_ID +
+                                " field cannot be filled with the value " + UNKNOWN_AGENT_ID);
                 }
             } catch (MalformedMessageException e) {
                 if (type.equals(MessageType.REGISTRATION_REQUEST))
-                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST +
-                        " implementation:" + " the value used to mark an unknown agent ID " +
-                        UNKNOWN_AGENT_ID + " is not accepted as a valid value for the " +
-                        RegistrationMessage.Field.AGENT_ID + " field");
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST + " implementation:" +
+                                " the value used to mark an unknown agent ID " + UNKNOWN_AGENT_ID +
+                                " is not accepted as a valid value for the " + RegistrationMessage.Field.AGENT_ID +
+                                " field");
                 else {
                     // success
                 }
@@ -235,16 +227,16 @@ public class TestMessageRegistration extends MessageFunctionalTest {
                 if (type.equals(MessageType.REGISTRATION_REQUEST)) {
                     // is allowed
                 } else {
-                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY +
-                        " implementation:" + " the " + RegistrationMessage.Field.ROUTER_ID +
-                        " field cannot be filled with the value " + UNKNOWN_ROUTER_ID);
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY + " implementation:" +
+                                " the " + RegistrationMessage.Field.ROUTER_ID +
+                                " field cannot be filled with the value " + UNKNOWN_ROUTER_ID);
                 }
             } catch (MalformedMessageException e) {
                 if (type.equals(MessageType.REGISTRATION_REQUEST))
-                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST +
-                        " implementation:" + " the value used to mark an unknown router ID " +
-                        UNKNOWN_ROUTER_ID + " is not accepted as a valid value for the " +
-                        RegistrationMessage.Field.ROUTER_ID + " field");
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST + " implementation:" +
+                                " the value used to mark an unknown router ID " + UNKNOWN_ROUTER_ID +
+                                " is not accepted as a valid value for the " + RegistrationMessage.Field.ROUTER_ID +
+                                " field");
                 else {
                     // success
                 }
@@ -254,8 +246,9 @@ public class TestMessageRegistration extends MessageFunctionalTest {
 
         private RegistrationMessage testAgentId(long invalidAgentId) throws MalformedMessageException {
             byte[] corruptedMsg = msg.toByteArray();
-            TypeHelper.longToByteArray(invalidAgentId, corruptedMsg, Message.Field.getTotalOffset() +
-                Field.AGENT_ID.getOffset());
+            TypeHelper.longToByteArray(invalidAgentId,
+                                       corruptedMsg,
+                                       Message.Field.getTotalOffset() + Field.AGENT_ID.getOffset());
             RegistrationMessage m = null;
             switch (type) {
                 case REGISTRATION_REQUEST:
@@ -272,8 +265,9 @@ public class TestMessageRegistration extends MessageFunctionalTest {
 
         private RegistrationMessage testRouterId(long invalidRouterId) throws MalformedMessageException {
             byte[] corruptedMsg = msg.toByteArray();
-            TypeHelper.longToByteArray(invalidRouterId, corruptedMsg, Message.Field.getTotalOffset() +
-                Field.ROUTER_ID.getOffset());
+            TypeHelper.longToByteArray(invalidRouterId,
+                                       corruptedMsg,
+                                       Message.Field.getTotalOffset() + Field.ROUTER_ID.getOffset());
             RegistrationMessage m = null;
             switch (type) {
                 case REGISTRATION_REQUEST:

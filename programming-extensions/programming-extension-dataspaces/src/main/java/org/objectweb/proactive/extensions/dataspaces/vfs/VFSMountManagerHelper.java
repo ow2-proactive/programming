@@ -1,49 +1,29 @@
 /*
- *  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (C) 1997-2013 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- *  * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
-
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystem;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.MutableInteger;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.utils.StackTraceUtil;
-import org.objectweb.proactive.utils.ThreadPools;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -55,6 +35,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystem;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.MutableInteger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.StackTraceUtil;
+import org.objectweb.proactive.utils.ThreadPools;
 
 
 /**
@@ -77,7 +68,9 @@ public class VFSMountManagerHelper {
 
     // read write lock used to control the map
     static final ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock(true);
+
     static final ReentrantReadWriteLock.ReadLock readLock = rwlock.readLock();
+
     static final ReentrantReadWriteLock.WriteLock writeLock = rwlock.writeLock();
 
     static DefaultFileSystemManager vfsManager;
@@ -212,7 +205,7 @@ public class VFSMountManagerHelper {
                 // if at least one file uri was deployed successfully, but no other protocols, display a warning
                 if (exceptionCount.getValue() < urisfiltered.size() && atLeastOneFileDeployed) {
                     logger.warn("[VFSMountManager] Only file protocol file systems were accessible when trying to mount " +
-                        urisfiltered + ". Here are all the exception received : " + nl + exceptionMessage);
+                                urisfiltered + ". Here are all the exception received : " + nl + exceptionMessage);
                 }
             }
         }
@@ -220,8 +213,8 @@ public class VFSMountManagerHelper {
         // no other protocol was deployed successfully
         // if the total number of exceptions match the uri list size then it is a failure
         if (exceptionCount.getValue() == urisfiltered.size()) {
-            throw new FileSystemException("Only Exceptions occurred when trying to mount " + urisfiltered +
-                " : " + nl + nl + exceptionMessage.toString());
+            throw new FileSystemException("Only Exceptions occurred when trying to mount " + urisfiltered + " : " + nl +
+                                          nl + exceptionMessage.toString());
         }
 
     }
@@ -231,8 +224,8 @@ public class VFSMountManagerHelper {
         return new ArrayList<String>(uriset);
     }
 
-    private static void filterFileUris(List<String> uris, ArrayList<String> fileUris,
-            ArrayList<String> otherUris) throws FileSystemException {
+    private static void filterFileUris(List<String> uris, ArrayList<String> fileUris, ArrayList<String> otherUris)
+            throws FileSystemException {
         for (String uri : uris) {
             URI uriuri;
             try {
@@ -264,9 +257,8 @@ public class VFSMountManagerHelper {
         }
     }
 
-    private static void handleFuture(Future<FileObject> future, List<String> uris,
-            StringBuilder exceptionMessage, MutableInteger exceptionCount, String nl)
-            throws FileSystemException {
+    private static void handleFuture(Future<FileObject> future, List<String> uris, StringBuilder exceptionMessage,
+            MutableInteger exceptionCount, String nl) throws FileSystemException {
         if (future.isDone()) {
             try {
                 FileObject answer = future.get();
@@ -305,8 +297,10 @@ public class VFSMountManagerHelper {
                                     fo.close();
                                 } catch (org.apache.commons.vfs2.FileSystemException x) {
                                     logger.debug("Could not close data space root file object : " + fo, x);
-                                    ProActiveLogger.logEatedException(logger, String.format(
-                                            "Could not close data space %s root file object", fo), x);
+                                    ProActiveLogger.logEatedException(logger,
+                                                                      String.format("Could not close data space %s root file object",
+                                                                                    fo),
+                                                                      x);
                                 }
                                 vfsManager.closeFileSystem(spaceFileSystem);
                                 if (logger.isDebugEnabled())
@@ -400,8 +394,7 @@ public class VFSMountManagerHelper {
                 }
 
                 // mounting successful
-                logger.debug("[" + VFSMountManagerHelper.class.getSimpleName() + "] " + uriToMount +
-                    " mounted.");
+                logger.debug("[" + VFSMountManagerHelper.class.getSimpleName() + "] " + uriToMount + " mounted.");
 
                 if (fileSystems != null) {
                     fileSystems.put(uriToMount, mounted);
@@ -420,6 +413,7 @@ public class VFSMountManagerHelper {
     private static class FutureAnswer implements Future<FileObject> {
 
         FileObject answer;
+
         Throwable exception;
 
         public FutureAnswer(FileObject answer, Throwable exception) {
@@ -451,8 +445,8 @@ public class VFSMountManagerHelper {
         }
 
         @Override
-        public FileObject get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException,
-                TimeoutException {
+        public FileObject get(long timeout, TimeUnit unit)
+                throws InterruptedException, ExecutionException, TimeoutException {
             throw new UnsupportedOperationException();
         }
     }

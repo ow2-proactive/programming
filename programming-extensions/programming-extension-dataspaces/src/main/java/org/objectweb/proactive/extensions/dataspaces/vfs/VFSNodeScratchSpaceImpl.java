@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
@@ -103,8 +92,9 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
                 throw new FileSystemException(x);
             }
             try {
-                final ScratchSpaceConfiguration scratchSpaceConf = baseScratchConfiguration
-                        .createScratchSpaceConfiguration(runtimeId, nodeId, appId);
+                final ScratchSpaceConfiguration scratchSpaceConf = baseScratchConfiguration.createScratchSpaceConfiguration(runtimeId,
+                                                                                                                            nodeId,
+                                                                                                                            appId);
                 this.spaceInstanceInfo = new SpaceInstanceInfo(appId, runtimeId, nodeId, scratchSpaceConf);
             } catch (ConfigurationException x) {
                 ProActiveLogger.logImpossibleException(logger, x);
@@ -152,14 +142,13 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
                     // that it can release any resources associated with the file.
                     spaceFile.close();
                 } catch (org.apache.commons.vfs2.FileSystemException x) {
-                    logger.error(String.format(
-                            "Could not create directory for Active Object (id: %s) scratch", aoid), x);
+                    logger.error(String.format("Could not create directory for Active Object (id: %s) scratch", aoid),
+                                 x);
                     throw new FileSystemException(x);
                 }
                 uri = spaceInstanceInfo.getMountingPoint().withActiveObjectId(aoid);
                 if (logger.isDebugEnabled())
-                    logger.debug(String.format("Created scratch for Active Object with id: %s, URI: %s",
-                            aoid, uri));
+                    logger.debug(String.format("Created scratch for Active Object with id: %s, URI: %s", aoid, uri));
                 scratches.put(aoid, uri);
             } else
                 uri = scratches.get(aoid);
@@ -176,8 +165,8 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
         }
     }
 
-    public synchronized void init(Node node, BaseScratchSpaceConfiguration conf) throws FileSystemException,
-            ConfigurationException, IllegalStateException {
+    public synchronized void init(Node node, BaseScratchSpaceConfiguration conf)
+            throws FileSystemException, ConfigurationException, IllegalStateException {
         logger.debug("Initializing node scratch space");
         if (configured) {
             logger.error("Attempting to configure already configured node scratch space");
@@ -221,11 +210,13 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
             if (fileUri != null) {
                 // if a file url was among the list use it
                 localAccessUrl = Utils.getLocalAccessURL((new File(fileUri)).getAbsolutePath(),
-                        baseScratchConfiguration.getPath(), Utils.getHostname());
+                                                         baseScratchConfiguration.getPath(),
+                                                         Utils.getHostname());
             } else {
                 // otherwise compute a new url using the configuration root path
-                localAccessUrl = Utils.getLocalAccessURL(originalUrls[0], baseScratchConfiguration.getPath(),
-                        Utils.getHostname());
+                localAccessUrl = Utils.getLocalAccessURL(originalUrls[0],
+                                                         baseScratchConfiguration.getPath(),
+                                                         Utils.getHostname());
             }
 
             final String partialSpacePath = Utils.appendSubDirs(localAccessUrl, runtimeId, nodeId);
@@ -237,8 +228,7 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
                 partialSpaceFile.delete(Selectors.EXCLUDE_SELF);
                 partialSpaceFile.createFolder();
                 if (!partialSpaceFile.isWriteable()) {
-                    throw new org.apache.commons.vfs2.FileSystemException(
-                        "Created directory is unexpectedly not writable");
+                    throw new org.apache.commons.vfs2.FileSystemException("Created directory is unexpectedly not writable");
                 }
                 // the close operation is just a hint to the implementation
                 // that it can release any resources associated with the file.
@@ -286,8 +276,7 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
                 else
                     logger.debug("Scratch directory for whole runtime was not deleted (not considered as empty)");
             } catch (org.apache.commons.vfs2.FileSystemException x) {
-                logger.debug(
-                        "Could not delete scratch directory for whole runtime - perhaps it was not empty", x);
+                logger.debug("Could not delete scratch directory for whole runtime - perhaps it was not empty", x);
             }
 
             // it is probably not needed to close files if manager is closed, but with VFS you never know...
@@ -336,9 +325,9 @@ public class VFSNodeScratchSpaceImpl implements NodeScratchSpace {
         // final Capability[] expected = PADataSpaces.getCapabilitiesForSpaceType(SpaceType.SCRATCH);
 
         // but you never know what is there.. therefore:
-        final Capability[] expected = new Capability[] { Capability.CREATE, Capability.DELETE,
-                Capability.GET_TYPE, Capability.LIST_CHILDREN, Capability.READ_CONTENT,
-                Capability.WRITE_CONTENT };
+        final Capability[] expected = new Capability[] { Capability.CREATE, Capability.DELETE, Capability.GET_TYPE,
+                                                         Capability.LIST_CHILDREN, Capability.READ_CONTENT,
+                                                         Capability.WRITE_CONTENT };
 
         for (int i = 0; i < expected.length; i++) {
             final Capability capability = expected[i];

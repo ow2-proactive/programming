@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication;
 
@@ -115,6 +104,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
     /** Defined Virtual Nodes */
     private Map<String, GCMVirtualNodeInternal> virtualNodes = null;
+
     private Map<String, GCMVirtualNode> ROvirtualNodes = null;
 
     /** The Deployment Tree */
@@ -128,6 +118,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
     /** The node allocator in charge of Node dispatching */
     private NodeMapper nodeMapper;
+
     private ArrayList<String> currentDeploymentPath;
 
     /** All the nodes created by this GCM Application */
@@ -135,8 +126,11 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
     /** All the runtime created by this GCM Application */
     private Queue<ProActiveRuntime> deployedRuntimes;
+
     private Object deploymentMutex = new Object();
+
     private boolean isStarted;
+
     private boolean isKilled;
 
     private VariableContractImpl vContract;
@@ -166,8 +160,8 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         this(new URL("file", null, filename), null);
     }
 
-    public GCMApplicationImpl(String filename, VariableContractImpl vContract) throws ProActiveException,
-            MalformedURLException {
+    public GCMApplicationImpl(String filename, VariableContractImpl vContract)
+            throws ProActiveException, MalformedURLException {
         this(new URL("file", null, filename), vContract);
     }
 
@@ -184,7 +178,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             file.openStream();
         } catch (IOException e) {
             throw new ProActiveException("Failed to create GCM Application: URL " + file.toString() +
-                " cannot be opened");
+                                         " cannot be opened");
         }
 
         try {
@@ -225,8 +219,8 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             if (dataSpacesEnabled) {
                 synchronized (dataSpacesConfiguredOnJVMLock) {
                     if (dataSpacesConfiguredOnJVM) {
-                        GCMA_LOGGER.error("DataSpaces were already configured for this JVM"
-                            + " for different GCM application, they cannot be configured again");
+                        GCMA_LOGGER.error("DataSpaces were already configured for this JVM" +
+                                          " for different GCM application, they cannot be configured again");
                         dataSpacesEnabled = false;
                     } else {
                         dataSpacesConfiguredOnJVM = true;
@@ -240,8 +234,8 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
                 // (deploymentId) and NamingService URL
                 // TODO this kind of hacks should be eventually moved to CommandBuilderProActive#setup()
                 // or similar developed mechanism
-                final TechnicalServicesProperties dataSpacesTSP = DataSpacesTechnicalService
-                        .createTechnicalServiceProperties(deploymentId, namingServiceURL);
+                final TechnicalServicesProperties dataSpacesTSP = DataSpacesTechnicalService.createTechnicalServiceProperties(deploymentId,
+                                                                                                                              namingServiceURL);
                 for (GCMVirtualNodeInternal vn : virtualNodes.values()) {
                     vn.addTechnicalServiceProperties(dataSpacesTSP);
                 }
@@ -271,7 +265,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
         } catch (Exception e) {
             throw new ProActiveException("Failed to create GCMApplication: " + e.getMessage() +
-                ", see embded message for more details", e);
+                                         ", see embded message for more details", e);
         }
     }
 
@@ -308,7 +302,9 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         // Export this GCMApplication as a remote object
         String name = this.getDeploymentId() + "/VirtualNode/" + vn.getName();
         RemoteObjectExposer<GCMVirtualNode> roe = new RemoteObjectExposer<GCMVirtualNode>(name,
-            GCMVirtualNode.class.getName(), vn, GCMVirtualNodeRemoteObjectAdapter.class);
+                                                                                          GCMVirtualNode.class.getName(),
+                                                                                          vn,
+                                                                                          GCMVirtualNodeRemoteObjectAdapter.class);
         try {
             roe.createRemoteObject(name, false);
             return (GCMVirtualNode) RemoteObjectHelper.generatedObjectStub(roe.getRemoteObject());
@@ -476,8 +472,8 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         return new ArrayList<String>(currentDeploymentPath);
     }
 
-    private TopologyImpl buildHostInfoTreeNode(TopologyRootImpl rootNode, TopologyImpl parentNode,
-            HostInfo hostInfo, NodeProvider nodeProvider, GCMDeploymentDescriptor gcmd) {
+    private TopologyImpl buildHostInfoTreeNode(TopologyRootImpl rootNode, TopologyImpl parentNode, HostInfo hostInfo,
+            NodeProvider nodeProvider, GCMDeploymentDescriptor gcmd) {
         pushDeploymentPath(hostInfo.getId());
         TopologyImpl node = new TopologyImpl();
         node.setDeploymentDescriptorPath(gcmd.getDescriptorURL().toExternalForm());
@@ -584,7 +580,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
                 }
             } catch (NodeException e) {
                 GCMA_LOGGER.warn("GCM Deployment failed to create a node on " + fakeNode.getRuntimeURL() +
-                    ". Please check your network configuration", e);
+                                 ". Please check your network configuration", e);
             }
         }
     }
@@ -627,9 +623,9 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         try {
             namingService.registerApplication(Long.toString(deploymentId), spacesInstances);
         } catch (ApplicationAlreadyRegisteredException e) {
-            GCMA_LOGGER.error(
-                    String.format("Application with id=%d is already registered in specified Naming Serivce",
-                            deploymentId), e);
+            GCMA_LOGGER.error(String.format("Application with id=%d is already registered in specified Naming Serivce",
+                                            deploymentId),
+                              e);
         } catch (WrongApplicationIdException e) {
             ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
         }

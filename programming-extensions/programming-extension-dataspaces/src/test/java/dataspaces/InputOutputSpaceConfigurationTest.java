@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package dataspaces;
 
@@ -52,10 +41,15 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
 
 public class InputOutputSpaceConfigurationTest {
     private static final String URL = "http://host/";
+
     private static final String[] URLS = { "/file.txt", "http://host/" };
+
     private static final String PATH = "/file.txt";
+
     private static final String HOSTNAME = "host";
+
     private static final String NAME = "name";
+
     private static final SpaceType TYPE = SpaceType.INPUT;
 
     private InputOutputSpaceConfiguration config;
@@ -68,8 +62,7 @@ public class InputOutputSpaceConfigurationTest {
 
     @Test
     public void testCreateInputWithURLsName() throws ConfigurationException {
-        config = InputOutputSpaceConfiguration.createInputSpaceConfiguration(Arrays.asList(URLS), null, null,
-                NAME);
+        config = InputOutputSpaceConfiguration.createInputSpaceConfiguration(Arrays.asList(URLS), null, null, NAME);
         assertProperlyConfigured(Arrays.asList(URLS), null, null, NAME, SpaceType.INPUT, true);
     }
 
@@ -81,8 +74,7 @@ public class InputOutputSpaceConfigurationTest {
 
     @Test
     public void testCreateOutputWithURLsName() throws ConfigurationException {
-        config = InputOutputSpaceConfiguration.createOutputSpaceConfiguration(Arrays.asList(URLS), null,
-                null, NAME);
+        config = InputOutputSpaceConfiguration.createOutputSpaceConfiguration(Arrays.asList(URLS), null, null, NAME);
         assertProperlyConfigured(Arrays.asList(URLS), null, null, NAME, SpaceType.OUTPUT, true);
     }
 
@@ -94,8 +86,7 @@ public class InputOutputSpaceConfigurationTest {
 
     @Test
     public void testCreateWithURLsPathHostnameNameType() throws ConfigurationException {
-        config = InputOutputSpaceConfiguration.createConfiguration(Arrays.asList(URLS), PATH, HOSTNAME, NAME,
-                TYPE);
+        config = InputOutputSpaceConfiguration.createConfiguration(Arrays.asList(URLS), PATH, HOSTNAME, NAME, TYPE);
         assertProperlyConfigured(Arrays.asList(URLS), PATH, HOSTNAME, NAME, TYPE, true);
     }
 
@@ -107,8 +98,7 @@ public class InputOutputSpaceConfigurationTest {
 
     @Test
     public void testCreateWithURLsNameType() throws ConfigurationException {
-        config = InputOutputSpaceConfiguration.createConfiguration(Arrays.asList(URLS), null, null, NAME,
-                TYPE);
+        config = InputOutputSpaceConfiguration.createConfiguration(Arrays.asList(URLS), null, null, NAME, TYPE);
         assertProperlyConfigured(Arrays.asList(URLS), null, null, NAME, TYPE, true);
     }
 
@@ -124,8 +114,8 @@ public class InputOutputSpaceConfigurationTest {
         assertProperlyConfigured((String) null, PATH, HOSTNAME, NAME, TYPE, false);
     }
 
-    private void assertProperlyConfigured(String url, String path, String hostname, String name,
-            SpaceType type, boolean complete) {
+    private void assertProperlyConfigured(String url, String path, String hostname, String name, SpaceType type,
+            boolean complete) {
         if (url != null) {
             assertEquals(url, config.getUrls().get(0));
         } else {
@@ -138,8 +128,8 @@ public class InputOutputSpaceConfigurationTest {
         assertEquals(complete, config.isComplete());
     }
 
-    private void assertProperlyConfigured(List<String> urls, String path, String hostname, String name,
-            SpaceType type, boolean complete) {
+    private void assertProperlyConfigured(List<String> urls, String path, String hostname, String name, SpaceType type,
+            boolean complete) {
         assertEquals(urls, config.getUrls());
         assertEquals(path, config.getPath());
         assertEquals(hostname, config.getHostname());
@@ -173,8 +163,7 @@ public class InputOutputSpaceConfigurationTest {
         testTryCreateWrongConfig(URL, null, null, null, TYPE);
     }
 
-    private void testTryCreateWrongConfig(String url, String path, String hostname, String name,
-            SpaceType type) {
+    private void testTryCreateWrongConfig(String url, String path, String hostname, String name, SpaceType type) {
         try {
             config = InputOutputSpaceConfiguration.createConfiguration(url, path, hostname, name, type);
             fail("exception expected");
@@ -185,10 +174,16 @@ public class InputOutputSpaceConfigurationTest {
     @Test
     public void testEquals() throws ConfigurationException {
         config = InputOutputSpaceConfiguration.createConfiguration(URL, null, "hostname", NAME, TYPE);
-        InputOutputSpaceConfiguration config2 = InputOutputSpaceConfiguration.createConfiguration(URL, null,
-                "hostname", NAME, TYPE);
-        InputOutputSpaceConfiguration config3 = InputOutputSpaceConfiguration.createConfiguration(URL, null,
-                "hostname", NAME + "x", TYPE);
+        InputOutputSpaceConfiguration config2 = InputOutputSpaceConfiguration.createConfiguration(URL,
+                                                                                                  null,
+                                                                                                  "hostname",
+                                                                                                  NAME,
+                                                                                                  TYPE);
+        InputOutputSpaceConfiguration config3 = InputOutputSpaceConfiguration.createConfiguration(URL,
+                                                                                                  null,
+                                                                                                  "hostname",
+                                                                                                  NAME + "x",
+                                                                                                  TYPE);
 
         assertEquals(config, config2);
         assertFalse(config.equals(config3));

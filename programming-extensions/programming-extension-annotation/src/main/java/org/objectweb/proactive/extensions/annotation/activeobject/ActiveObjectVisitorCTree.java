@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.annotation.activeobject;
 
@@ -54,8 +43,8 @@ import com.sun.source.tree.ModifiersTree;
 import com.sun.source.tree.ReturnTree;
 import com.sun.source.tree.StatementTree;
 import com.sun.source.tree.Tree;
-import com.sun.source.tree.VariableTree;
 import com.sun.source.tree.Tree.Kind;
+import com.sun.source.tree.VariableTree;
 import com.sun.source.util.TreePath;
 import com.sun.source.util.TreePathScanner;
 import com.sun.source.util.Trees;
@@ -77,8 +66,11 @@ import com.sun.source.util.Trees;
 public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
 
     private Messager compilerOutput;
+
     private boolean insideClass = false;
+
     private TreePath curMethod;
+
     private boolean methodReturnsNull = false;
 
     public ActiveObjectVisitorCTree(ProcessingEnvironment procEnv) {
@@ -108,11 +100,10 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
             if (clazzMember.getKind().equals(Kind.VARIABLE)) {
                 VariableTree fieldNode = (VariableTree) clazzMember;
 
-                if (accessedFromOutside(fieldNode) &&
-                    !fieldNode.getModifiers().getFlags().contains(Modifier.FINAL) &&
+                if (accessedFromOutside(fieldNode) && !fieldNode.getModifiers().getFlags().contains(Modifier.FINAL) &&
                     !hasAccessors(fieldNode.getName().toString(), clazzMembers)) {
                     reportWarning("The class declares the public field " + fieldNode.getName() + ".\n" +
-                        ErrorMessages.NO_GETTERS_SETTERS_ERROR_MESSAGE, trees.getElement(getCurrentPath()));
+                                  ErrorMessages.NO_GETTERS_SETTERS_ERROR_MESSAGE, trees.getElement(getCurrentPath()));
                 }
 
             } else {
@@ -129,7 +120,7 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
     private final boolean accessedFromOutside(VariableTree fieldNode) {
 
         return !fieldNode.getModifiers().getFlags().contains(Modifier.PROTECTED) &&
-            !fieldNode.getModifiers().getFlags().contains(Modifier.PRIVATE);
+               !fieldNode.getModifiers().getFlags().contains(Modifier.PRIVATE);
 
     }
 
@@ -166,7 +157,7 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
         if (methodNode.getModifiers().getFlags().contains(Modifier.FINAL) &&
             !methodNode.getModifiers().getFlags().contains(Modifier.PRIVATE)) {
             reportError(" The class declares the final method " + methodNode.getName() + ".\n" +
-                ErrorMessages.HAS_FINAL_METHOD_ERROR_MESSAGE, trees.getElement(getCurrentPath()));
+                        ErrorMessages.HAS_FINAL_METHOD_ERROR_MESSAGE, trees.getElement(getCurrentPath()));
         }
 
         // test serializable args
@@ -253,7 +244,7 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
 
                         if (constructor.getModifiers().getFlags().contains(Modifier.PRIVATE)) {
                             reportError(ErrorMessages.NO_NOARG_CONSTRUCTOR_CANNOT_BE_PRIVATE_MESSAGE,
-                                    trees.getElement(getCurrentPath()));
+                                        trees.getElement(getCurrentPath()));
                             return;
                         }
 
@@ -272,8 +263,7 @@ public class ActiveObjectVisitorCTree extends TreePathScanner<Void, Trees> {
                             }
 
                             if (!onlySuperInside) {
-                                reportWarning(ErrorMessages.EMPTY_CONSTRUCTOR,
-                                        trees.getElement(getCurrentPath()));
+                                reportWarning(ErrorMessages.EMPTY_CONSTRUCTOR, trees.getElement(getCurrentPath()));
                             }
                         }
 

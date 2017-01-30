@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.descriptor.legacyparser;
 
@@ -71,10 +60,11 @@ import org.xml.sax.SAXException;
 
 
 //import org.xml.sax.SAXException;
-public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator implements
-        ProActiveDescriptorConstants {
+public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator implements ProActiveDescriptorConstants {
     protected String id;
+
     protected ProActiveDescriptorInternal proActiveDescriptor;
+
     protected ExternalProcess targetProcess;
 
     public ProcessDefinitionHandler(ProActiveDescriptorInternal proActiveDescriptor) {
@@ -92,8 +82,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
         this.addHandler(OAR_PROCESS_TAG, new OARProcessHandler(proActiveDescriptor));
         this.addHandler(OARGRID_PROCESS_TAG, new OARGRIDProcessHandler(proActiveDescriptor));
         this.addHandler(MPI_PROCESS_TAG, new MPIProcessHandler(proActiveDescriptor));
-        this.addHandler(DEPENDENT_PROCESS_SEQUENCE_TAG, new DependentProcessSequenceHandler(
-            proActiveDescriptor));
+        this.addHandler(DEPENDENT_PROCESS_SEQUENCE_TAG, new DependentProcessSequenceHandler(proActiveDescriptor));
         this.addHandler(SEQUENTIAL_PROCESS_TAG, new SequentialProcessHandler(proActiveDescriptor));
         ProcessListHandler handler = new ProcessListHandler(proActiveDescriptor);
         this.addHandler(PROCESS_LIST_TAG, handler);
@@ -131,6 +120,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
 
     public class ProcessHandler extends AbstractUnmarshallerDecorator implements ProActiveDescriptorConstants {
         protected ProActiveDescriptorInternal proActiveDescriptor;
+
         protected boolean isRef;
 
         public ProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {
@@ -207,8 +197,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                 targetProcess.setEnvironment((String[]) activeHandler.getResultObject());
             } else if (name.equals(PROCESS_REFERENCE_TAG)) {
                 if (!(targetProcess instanceof ExternalProcessDecorator)) {
-                    throw new org.xml.sax.SAXException(
-                        "found a Process defined inside a non composite process");
+                    throw new org.xml.sax.SAXException("found a Process defined inside a non composite process");
                 }
 
                 ExternalProcessDecorator cep = (ExternalProcessDecorator) targetProcess;
@@ -230,8 +219,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
                 variables = new java.util.ArrayList<String>();
             }
 
@@ -275,27 +263,27 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
                 String path = attributes.getValue("value");
 
                 if (checkNonEmpty(path)) {
                     setResultObject(path);
                 } else {
-                    throw new org.xml.sax.SAXException(
-                        "The Id of the referenced definition cannot be set to an empty string");
+                    throw new org.xml.sax.SAXException("The Id of the referenced definition cannot be set to an empty string");
                 }
             }
         }
 
         protected class FileTransferStructureHandler extends PassiveCompositeUnmarshaller {
 
-            /* Specifies the queue to use in the FileTransferStructure
+            /*
+             * Specifies the queue to use in the FileTransferStructure
              * For now this queues are:
-             *                 FileTransferStructure.DEPLOY
-             *                 FileTransferStructure.RETRIEVE
+             * FileTransferStructure.DEPLOY
+             * FileTransferStructure.RETRIEVE
              */
             protected String fileTransferQueue;
+
             protected FileTransferWorkShop fileTransferStructure;
 
             public FileTransferStructureHandler(String queue) {
@@ -312,14 +300,12 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
                     throws org.xml.sax.SAXException {
                 if (name.equals(FILE_TRANSFER_COPY_PROTOCOL_TAG)) {
-                    fileTransferStructure.setFileTransferCopyProtocol((String) activeHandler
-                            .getResultObject());
+                    fileTransferStructure.setFileTransferCopyProtocol((String) activeHandler.getResultObject());
                 }
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
                 if (fileTransferQueue.equalsIgnoreCase("deploy")) {
                     fileTransferStructure = targetProcess.getFileTransferWorkShopDeploy();
                 } else { //if(fileTransferQueue.equalsIgnoreCase("retrieve"))
@@ -341,8 +327,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
 
             protected class InfoAttributeHandler extends BasicUnmarshaller {
                 @Override
-                public void startContextElement(String name, Attributes attributes)
-                        throws org.xml.sax.SAXException {
+                public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
                     String[] parameter = { "prefix", "hostname", "username", "password" };
 
                     for (int i = 0; i < parameter.length; i++) {
@@ -403,8 +388,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             if (checkNonEmpty(fixedName) && checkNonEmpty(list)) {
-                ((AbstractListProcessDecorator) targetProcess).setHostConfig(fixedName, list, domain,
-                        padding, repeat);
+                ((AbstractListProcessDecorator) targetProcess).setHostConfig(fixedName, list, domain, padding, repeat);
             }
 
             if (checkNonEmpty(hostlist)) {
@@ -465,8 +449,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -538,8 +521,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -602,8 +584,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -684,8 +665,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -747,8 +727,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -865,7 +844,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                 jvmProcess.setLog4jFile(((String) activeHandler.getResultObject()).trim());
             } else if (name.equals(PROACTIVE_PROPS_FILE_TAG)) {
                 jvmProcess.addJvmOption("-Dproactive.configuration=" +
-                    ((String) activeHandler.getResultObject()).trim());
+                                        ((String) activeHandler.getResultObject()).trim());
             } else if (name.equals(CLASSNAME_TAG)) {
                 jvmProcess.setClassname((String) activeHandler.getResultObject());
             } else if (name.equals(PARAMETERS_TAG)) {
@@ -874,7 +853,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             } else if (name.equals(EXTENDED_JVM_TAG)) {
                 try {
                     proActiveDescriptor.mapToExtendedJVM((JVMProcess) targetProcess,
-                            (String) activeHandler.getResultObject());
+                                                         (String) activeHandler.getResultObject());
                 } catch (ProActiveException e) {
                     throw new SAXException(e);
                 }
@@ -888,8 +867,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
                 super.startContextElement(name, attributes);
 
                 String overwrite = attributes.getValue("overwriteParameters");
@@ -1010,8 +988,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -1073,8 +1050,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -1131,8 +1107,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
         }
 
         @Override
-        protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                throws SAXException {
+        protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler) throws SAXException {
             super.notifyEndActiveHandler(name, activeHandler);
         }
 
@@ -1149,8 +1124,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             }
 
             @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
+            public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
             }
 
             @Override
@@ -1178,9 +1152,10 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
     } //  END OF MPI PROCESS HANDLER
 
     // DEPENDENTPROCESSSEQUENCE process Handler
-    public class DependentProcessSequenceHandler extends AbstractUnmarshallerDecorator implements
-            ProActiveDescriptorConstants {
+    public class DependentProcessSequenceHandler extends AbstractUnmarshallerDecorator
+            implements ProActiveDescriptorConstants {
         protected ProActiveDescriptorInternal proActiveDescriptor;
+
         protected boolean isRef;
 
         public DependentProcessSequenceHandler(ProActiveDescriptorInternal proActiveDescriptor) {
@@ -1229,9 +1204,10 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
     }
 
     // SEQUENTIALPROCESS process Handler
-    public class SequentialProcessHandler extends AbstractUnmarshallerDecorator implements
-            ProActiveDescriptorConstants {
+    public class SequentialProcessHandler extends AbstractUnmarshallerDecorator
+            implements ProActiveDescriptorConstants {
         protected ProActiveDescriptorInternal proActiveDescriptor;
+
         protected boolean isRef;
 
         public SequentialProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {

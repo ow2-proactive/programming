@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.ssh;
 
@@ -54,6 +43,7 @@ import com.trilead.ssh2.Connection;
  */
 public class SshConnection {
     final private String username;
+
     final private Connection connection;
 
     /**
@@ -74,8 +64,8 @@ public class SshConnection {
         this.username = username;
 
         if (keys.length == 0) {
-            throw new IOException("Failed to open a SSH connection to " + username + "@" + hostname + ":" +
-                port + ". No private keys");
+            throw new IOException("Failed to open a SSH connection to " + username + "@" + hostname + ":" + port +
+                                  ". No private keys");
         }
 
         Connection connection = null;
@@ -84,8 +74,7 @@ public class SshConnection {
             connection.connect();
             try {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Trying private key " + key + " for " + username + "@" + hostname + ":" +
-                        port);
+                    logger.debug("Trying private key " + key + " for " + username + "@" + hostname + ":" + port);
                 }
                 connection.authenticateWithPublicKey(username, new File(key), null);
                 if (connection.isAuthenticationComplete()) {
@@ -99,7 +88,7 @@ public class SshConnection {
                 Throwable t = e;
                 while (t != null && !isPasswordProtected) {
                     if (t.getMessage().contains("PEM is encrypted, but no password was specified") ||
-                    // discard RSA-1 key
+                        // discard RSA-1 key
                         t.getMessage().contains("Invalid PEM structure")) {
                         isPasswordProtected = true;
                     }
@@ -126,13 +115,12 @@ public class SshConnection {
                 }
                 logger.info(sb.toString());
             }
-            throw new IOException("Failed to open a SSH connection to " + username + "@" + hostname + ":" +
-                port);
+            throw new IOException("Failed to open a SSH connection to " + username + "@" + hostname + ":" + port);
         }
 
         if (logger.isDebugEnabled()) {
             logger.info("Opened an SSH connection to " + username + "@" + connection.getHostname() + ":" +
-                connection.getPort());
+                        connection.getPort());
         }
         connection.setTCPNoDelay(true);
         this.connection = connection;
@@ -162,8 +150,7 @@ public class SshConnection {
      * @throws IOException if the tunnel cannot be opened
      * @throws BindException if localport is not free
      */
-    synchronized public SshTunnel getSSHTunnel(String remotetHost, int remotePort, int localport)
-            throws IOException {
+    synchronized public SshTunnel getSSHTunnel(String remotetHost, int remotePort, int localport) throws IOException {
         return new SshTunnel(this, remotetHost, remotePort, localport);
     }
 

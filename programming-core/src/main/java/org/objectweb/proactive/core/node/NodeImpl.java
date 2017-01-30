@@ -1,40 +1,34 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.node;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.List;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -48,11 +42,6 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.VMInformation;
 import org.objectweb.proactive.utils.StackTraceUtil;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.util.List;
 
 
 /**
@@ -77,7 +66,9 @@ import java.util.List;
 public class NodeImpl implements Node, Serializable {
 
     protected NodeInformation nodeInformation;
+
     protected ProActiveRuntime proActiveRuntime;
+
     protected String vnName;
 
     //
@@ -148,7 +139,7 @@ public class NodeImpl implements Node, Serializable {
             bodyArray = this.proActiveRuntime.getActiveObjects(this.nodeInformation.getName());
         } catch (ProActiveException e) {
             throw new NodeException("Cannot get Active Objects registered on this node: " +
-                this.nodeInformation.getURL(), e);
+                                    this.nodeInformation.getURL(), e);
         }
         if (bodyArray.size() == 0) {
             return new Object[0];
@@ -160,8 +151,7 @@ public class NodeImpl implements Node, Serializable {
                 try {
                     stubOnAO[i] = createStubObject(className, body);
                 } catch (MOPException e) {
-                    throw new ActiveObjectCreationException(
-                        "Exception occured when trying to create stub-proxy", e);
+                    throw new ActiveObjectCreationException("Exception occured when trying to create stub-proxy", e);
                 }
             }
             return stubOnAO;
@@ -177,7 +167,7 @@ public class NodeImpl implements Node, Serializable {
             bodyArray = this.proActiveRuntime.getActiveObjects(this.nodeInformation.getName());
         } catch (ProActiveException e) {
             throw new NodeException("Cannot get Active Objects registered on this node: " +
-                this.nodeInformation.getURL(), e);
+                                    this.nodeInformation.getURL(), e);
         }
         return bodyArray.size();
     }
@@ -190,12 +180,12 @@ public class NodeImpl implements Node, Serializable {
         try {
             bodyArray = this.proActiveRuntime.getActiveObjects(this.nodeInformation.getName(), className);
         } catch (ProActiveException e) {
-            throw new NodeException("Cannot get Active Objects of type " + className +
-                " registered on this node: " + this.nodeInformation.getURL(), e);
+            throw new NodeException("Cannot get Active Objects of type " + className + " registered on this node: " +
+                                    this.nodeInformation.getURL(), e);
         }
         if (bodyArray.size() == 0) {
-            throw new NodeException("no ActiveObjects of type " + className +
-                " are registered for this node: " + this.nodeInformation.getURL());
+            throw new NodeException("no ActiveObjects of type " + className + " are registered for this node: " +
+                                    this.nodeInformation.getURL());
         } else {
             Object[] stubOnAO = new Object[bodyArray.size()];
             for (int i = 0; i < bodyArray.size(); i++) {
@@ -203,16 +193,15 @@ public class NodeImpl implements Node, Serializable {
                 try {
                     stubOnAO[i] = createStubObject(className, body);
                 } catch (MOPException e) {
-                    throw new ActiveObjectCreationException(
-                        "Exception occured when trying to create stub-proxy", e);
+                    throw new ActiveObjectCreationException("Exception occured when trying to create stub-proxy", e);
                 }
             }
             return stubOnAO;
         }
     }
 
-    private void readObject(ObjectInputStream in) throws java.io.IOException, ClassNotFoundException,
-            ProActiveException {
+    private void readObject(ObjectInputStream in)
+            throws java.io.IOException, ClassNotFoundException, ProActiveException {
         in.defaultReadObject();
         if (NodeFactory.isNodeLocal(this)) {
             this.proActiveRuntime = RuntimeFactory.getRuntime(nodeInformation.getURL());
@@ -228,11 +217,14 @@ public class NodeImpl implements Node, Serializable {
         return createStubObject(className, null, new Object[] { body });
     }
 
-    private static Object createStubObject(String className, Object[] constructorParameters,
-            Object[] proxyParameters) throws MOPException {
+    private static Object createStubObject(String className, Object[] constructorParameters, Object[] proxyParameters)
+            throws MOPException {
         try {
-            return MOP.newInstance(className, (Class[]) null, constructorParameters,
-                    Constants.DEFAULT_BODY_PROXY_CLASS_NAME, proxyParameters);
+            return MOP.newInstance(className,
+                                   (Class[]) null,
+                                   constructorParameters,
+                                   Constants.DEFAULT_BODY_PROXY_CLASS_NAME,
+                                   proxyParameters);
         } catch (ClassNotFoundException e) {
             throw new ConstructionOfProxyObjectFailedException("Class can't be found e=" + e);
         }
@@ -244,7 +236,9 @@ public class NodeImpl implements Node, Serializable {
     protected class NodeInformationImpl implements NodeInformation {
 
         final private String nodeName;
+
         final private String nodeURL;
+
         final private VMInformation vmInformation;
 
         public NodeInformationImpl(String url) {
@@ -328,18 +322,17 @@ public class NodeImpl implements Node, Serializable {
             bodyArray = this.proActiveRuntime.getActiveObjects(this.nodeInformation.getName());
         } catch (ProActiveException e) {
             throw new NodeException("Cannot get Active Objects registered on this node: " +
-                this.nodeInformation.getURL(), e);
+                                    this.nodeInformation.getURL(), e);
         }
 
         for (UniversalBody body : bodyArray) {
             try {
                 // reify for remote terminate
-                PAActiveObject
-                        .terminateActiveObject(MOP.createStubObject(Object.class.getName(), body), true);
+                PAActiveObject.terminateActiveObject(MOP.createStubObject(Object.class.getName(), body), true);
             } catch (MOPException e) {
                 // Bad error handling but terminateActiveObject eat remote exceptions
-                throw new IOException("Cannot contact Active Objects on this node: " +
-                    this.nodeInformation.getURL() + " caused by " + e.getMessage());
+                throw new IOException("Cannot contact Active Objects on this node: " + this.nodeInformation.getURL() +
+                                      " caused by " + e.getMessage());
             }
         }
     }

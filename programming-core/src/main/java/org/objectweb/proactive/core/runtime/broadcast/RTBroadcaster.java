@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.runtime.broadcast;
 
@@ -59,18 +48,26 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     // -- CONSTANT -----------------------------------------------
     //
     public static final String CREATION_HEADER = "creation:";
+
     public static final String DISCOVER_HEADER = "discover:";
+
     public static final int BUFFER_SIZE = 256;
 
     //
     // -- ATTRIBUTE -----------------------------------------------
     //
     private InetAddress address = null;
+
     private Vector<RTBroadcastAction> rtAction = new Vector<RTBroadcastAction>();
+
     private volatile boolean isAlive;
+
     private LocalBTCallback myBtCallback;
+
     private BTCallback remoteBtCallback;
+
     private URI uriMyBtCallback;
+
     private static boolean issetCallback;
 
     // --Singleton
@@ -82,15 +79,12 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     private RTBroadcaster() throws BroadcastDisabledException {
         // --Address
         try {
-            address = InetAddress.getByName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_ADDRESS
-                    .getValueAsString());
+            address = InetAddress.getByName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_ADDRESS.getValueAsString());
 
             //--The property is specified
 
             @SuppressWarnings("unchecked")
-            Class<? extends LocalBTCallback> btCallbackClass = (Class<? extends LocalBTCallback>) Class
-                    .forName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_CALLBACK_CLASS
-                            .getValueAsString());
+            Class<? extends LocalBTCallback> btCallbackClass = (Class<? extends LocalBTCallback>) Class.forName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_CALLBACK_CLASS.getValueAsString());
 
             myBtCallback = btCallbackClass.newInstance();
 
@@ -99,7 +93,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
 
             // create a remote object exposer for this object
             RemoteObjectExposer<BTCallback> roe = PARemoteObject.newRemoteObject(BTCallback.class.getName(),
-                    (BTCallback) myBtCallback);
+                                                                                 (BTCallback) myBtCallback);
 
             String name = ProActiveRuntimeImpl.getProActiveRuntime().getURL() + "_rtBroadcast";
 
@@ -109,8 +103,8 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
             remoteBtCallback = PARemoteObject.bind(roe, uriMyBtCallback);
 
         } catch (Exception e) {
-            throw new BroadcastDisabledException(
-                "An exception occured when creating the RTBroadcaster. It is now disabled", e);
+            throw new BroadcastDisabledException("An exception occured when creating the RTBroadcaster. It is now disabled",
+                                                 e);
         }
     }
 
@@ -153,8 +147,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
 
         try {
 
-            MulticastSocket socket = new MulticastSocket(
-                CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_PORT.getValue());
+            MulticastSocket socket = new MulticastSocket(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_PORT.getValue());
             socket.joinGroup(address); // BLOCKING ???
 
             DatagramPacket packet = null;
@@ -255,10 +248,11 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
         buf = msg.getBytes();
 
         // send it
-        InetAddress group = InetAddress.getByName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_ADDRESS
-                .getValueAsString());
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, group,
-            CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_PORT.getValue());
+        InetAddress group = InetAddress.getByName(CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_ADDRESS.getValueAsString());
+        DatagramPacket packet = new DatagramPacket(buf,
+                                                   buf.length,
+                                                   group,
+                                                   CentralPAPropertyRepository.PA_RUNTIME_BROADCAST_PORT.getValue());
         socket.send(packet);
 
     }

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.body.proxy;
 
@@ -88,8 +77,11 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     // note that we do not want to serialize this member but rather handle
     // the serialization by ourselves
     protected transient UniversalBody universalBody;
+
     protected transient boolean isLocal;
+
     private UniqueID cachedBodyId;
+
     private static ThreadLocal<Collection<UniversalBodyProxy>> incomingReferences = new ThreadLocal<Collection<UniversalBodyProxy>>() {
         @Override
         protected synchronized Collection<UniversalBodyProxy> initialValue() {
@@ -143,9 +135,8 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
                 Active activity = (Active) parameters[1];
                 MetaObjectFactory factory = (MetaObjectFactory) parameters[2];
                 Class<?>[] argsClass = new Class<?>[] { ConstructorCall.class, String.class, Active.class,
-                        MetaObjectFactory.class };
-                Object[] args = new Object[] { constructorCall, node.getNodeInformation().getURL(), activity,
-                        factory };
+                                                        MetaObjectFactory.class };
+                Object[] args = new Object[] { constructorCall, node.getNodeInformation().getURL(), activity, factory };
 
                 // added lines--------------------------
                 // Object[] args = new Object[] { constructorCall,
@@ -221,12 +212,11 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
 
                 try {
                     BodyImpl bodyImpl = (BodyImpl) body;
-                    stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass()
-                            .getName(), bodyImpl.getRemoteAdapter());
+                    stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass().getName(),
+                                                                       bodyImpl.getRemoteAdapter());
                     initialObject = reifiedObjectConstructorCall.getEffectiveArguments();
 
-                    objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(),
-                        stubOnActiveObject);
+                    objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(), stubOnActiveObject);
                     modifiedObject = (Object[]) objectReplacer.replaceObject(initialObject);
 
                     reifiedObjectConstructorCall.setEffectiveArguments(modifiedObject);
@@ -242,8 +232,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             // accessing it directly avoids to get a copy of the body
             ProActiveRuntime part = ProActiveRuntimeImpl.getProActiveRuntime();
 
-            UniversalBody result = part.createBody(node.getNodeInformation().getName(), bodyConstructorCall,
-                    true);
+            UniversalBody result = part.createBody(node.getNodeInformation().getName(), bodyConstructorCall, true);
 
             if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
                 try {
@@ -267,8 +256,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         }
     }
 
-    protected UniversalBody createRemoteBody(ConstructorCall bodyConstructorCall, Node node)
-            throws ProActiveException {
+    protected UniversalBody createRemoteBody(ConstructorCall bodyConstructorCall, Node node) throws ProActiveException {
         try {
             ProActiveRuntime part = node.getProActiveRuntime();
             UniversalBody result = null;
@@ -294,11 +282,10 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
                 initialObject = bodyConstructorCall.getEffectiveArguments();
                 try {
                     BodyImpl bodyImpl = (BodyImpl) body;
-                    stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass()
-                            .getName(), bodyImpl.getRemoteAdapter());
+                    stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass().getName(),
+                                                                       bodyImpl.getRemoteAdapter());
 
-                    objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(),
-                        stubOnActiveObject);
+                    objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(), stubOnActiveObject);
                     modifiedObject = (Object[]) objectReplacer.replaceObject(initialObject);
 
                     bodyConstructorCall.setEffectiveArguments(modifiedObject);
@@ -360,8 +347,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     }
 
     @Override
-    protected void sendRequest(MethodCall methodCall, Future future, Body sourceBody)
-            throws java.io.IOException {
+    protected void sendRequest(MethodCall methodCall, Future future, Body sourceBody) throws java.io.IOException {
         // TODO if component request and shortcut : update body ref
         // Now we check whether the reference to the remoteBody has changed i.e the body has
         // migrated
@@ -387,8 +373,8 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             initialObject = methodCall.getParameters();
             try {
                 BodyImpl bodyImpl = (BodyImpl) body;
-                stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass()
-                        .getName(), bodyImpl.getRemoteAdapter());
+                stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass().getName(),
+                                                                   bodyImpl.getRemoteAdapter());
 
                 objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(), stubOnActiveObject);
                 modifiedObject = (Object[]) objectReplacer.replaceObject(initialObject);

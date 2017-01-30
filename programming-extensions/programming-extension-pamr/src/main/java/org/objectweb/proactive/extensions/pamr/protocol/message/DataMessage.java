@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.protocol.message;
 
@@ -49,8 +38,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.TypeHelper;
  */
 public abstract class DataMessage extends Message {
     /** The offset of the payload */
-    private static final int DATA_MESSAGE_HEADER_LENGTH = Message.Field.getTotalOffset() +
-        Field.getTotalOffset();
+    private static final int DATA_MESSAGE_HEADER_LENGTH = Message.Field.getTotalOffset() + Field.getTotalOffset();
 
     private static final long UNKNOWN_AGENT_ID = -1;
 
@@ -83,10 +71,11 @@ public abstract class DataMessage extends Message {
 
         /** Offset of the field in the message */
         public int getOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              * 
              * This method relies on the Java Memory Model specification to perform
-             * a racy single-check initialization. 
+             * a racy single-check initialization.
              * DO NOT CHANGE THIS METHOD IF YOU DON'T KNOW WHAT IT IS.
              * 
              * See: Effective Java, chapter 10, Item 71: Lazy initialization
@@ -108,10 +97,11 @@ public abstract class DataMessage extends Message {
 
         /** Length of the fields defined by {@link DataMessage} */
         static public int getTotalOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              * 
              * This method relies on the Java Memory Model specification to perform
-             * a racy single-check initialization. 
+             * a racy single-check initialization.
              * DO NOT CHANGE THIS METHOD IF YOU DON'T KNOW WHAT IT IS.
              * 
              * See: Effective Java, chapter 10, Item 71: Lazy initialization
@@ -156,8 +146,8 @@ public abstract class DataMessage extends Message {
      * 			if the SRC_AGENT_ID field from the message is invalid
      */
     static public AgentID readSender(byte[] byteArray, int offset) throws MalformedMessageException {
-        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
-            Field.SRC_AGENT_ID.getOffset());
+        long id = TypeHelper.byteArrayToLong(byteArray,
+                                             offset + Message.Field.getTotalOffset() + Field.SRC_AGENT_ID.getOffset());
         if (id >= 0)
             return new AgentID(id);
         else if (id == UNKNOWN_AGENT_ID) {
@@ -166,8 +156,7 @@ public abstract class DataMessage extends Message {
             if (type.equals(MessageType.ERR_))
                 return null;
             else
-                throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " +
-                    id);
+                throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " + id);
         } else
             throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " + id);
     }
@@ -184,8 +173,8 @@ public abstract class DataMessage extends Message {
      * 			if the DST_AGENT_ID field from the message is invalid
      */
     public static AgentID readRecipient(byte[] byteArray, int offset) throws MalformedMessageException {
-        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
-            Field.DST_AGENT_ID.getOffset());
+        long id = TypeHelper.byteArrayToLong(byteArray,
+                                             offset + Message.Field.getTotalOffset() + Field.DST_AGENT_ID.getOffset());
 
         if (id >= 0)
             return new AgentID(id);
@@ -195,22 +184,24 @@ public abstract class DataMessage extends Message {
             if (type.equals(MessageType.ERR_))
                 return null;
             else
-                throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " +
-                    id);
+                throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " + id);
         } else
             throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " + id);
     }
 
     /** Sender of this message */
     final protected AgentID sender;
+
     /** Recipient of this message */
     final protected AgentID recipient;
+
     /** Payload of this message */
     /*
      * Since data is not used by the router could be lazily created to avoid
      * data duplication
      */
     final protected byte[] data;
+
     /**
      * This message as a byte array
      * 
@@ -276,8 +267,8 @@ public abstract class DataMessage extends Message {
 
             this.toByteArray = byteArray;
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new MalformedMessageException("Malformed " + this.getType() + " message:" +
-                "Invalid value for " + Message.Field.LENGTH + " field:" + super.getLength(), e);
+            throw new MalformedMessageException("Malformed " + this.getType() + " message:" + "Invalid value for " +
+                                                Message.Field.LENGTH + " field:" + super.getLength(), e);
         } catch (MalformedMessageException e) {
             throw new MalformedMessageException("Malformed " + this.getType() + " message:" + e.getMessage());
         }
@@ -298,15 +289,13 @@ public abstract class DataMessage extends Message {
         if (sender != null) {
             srcId = sender.getId();
         }
-        TypeHelper.longToByteArray(srcId, buf,
-                Message.Field.getTotalOffset() + Field.SRC_AGENT_ID.getOffset());
+        TypeHelper.longToByteArray(srcId, buf, Message.Field.getTotalOffset() + Field.SRC_AGENT_ID.getOffset());
 
         long dstId = UNKNOWN_AGENT_ID;
         if (recipient != null) {
             dstId = recipient.getId();
         }
-        TypeHelper.longToByteArray(dstId, buf,
-                Message.Field.getTotalOffset() + Field.DST_AGENT_ID.getOffset());
+        TypeHelper.longToByteArray(dstId, buf, Message.Field.getTotalOffset() + Field.DST_AGENT_ID.getOffset());
 
         if (data != null) {
             System.arraycopy(data, 0, buf, DATA_MESSAGE_HEADER_LENGTH, data.length);
@@ -369,7 +358,7 @@ public abstract class DataMessage extends Message {
     @Override
     public String toString() {
         return super.toString() + Field.SRC_AGENT_ID.toString() + ":" + this.sender + ";" +
-            Field.DST_AGENT_ID.toString() + ":" + this.recipient + ";";
+               Field.DST_AGENT_ID.toString() + ":" + this.recipient + ";";
     }
 
 }

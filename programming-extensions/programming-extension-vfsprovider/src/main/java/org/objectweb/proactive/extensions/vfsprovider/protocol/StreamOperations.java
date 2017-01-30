@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.vfsprovider.protocol;
 
@@ -103,8 +92,8 @@ public interface StreamOperations {
      * @throws WrongStreamTypeException
      *             when mode of a stream does not allow to call this method
      */
-    public abstract byte[] streamRead(long stream, int bytes) throws IOException, StreamNotFoundException,
-            WrongStreamTypeException;
+    public abstract byte[] streamRead(long stream, int bytes)
+            throws IOException, StreamNotFoundException, WrongStreamTypeException;
 
     /**
      * Write an array of bytes into an open stream specified by an unique id that was previously
@@ -124,8 +113,8 @@ public interface StreamOperations {
      * @throws WrongStreamTypeException
      *             when mode of a stream does not allow to call this method
      */
-    public abstract void streamWrite(long stream, byte[] data) throws IOException, StreamNotFoundException,
-            WrongStreamTypeException;
+    public abstract void streamWrite(long stream, byte[] data)
+            throws IOException, StreamNotFoundException, WrongStreamTypeException;
 
     /**
      * Change the position of a file stream pointer specified by an unique id that was previously
@@ -149,8 +138,8 @@ public interface StreamOperations {
      * @throws WrongStreamTypeException
      *             when mode of a stream does not allow to call this method
      */
-    public abstract void streamSeek(long stream, long position) throws IOException, StreamNotFoundException,
-            WrongStreamTypeException;
+    public abstract void streamSeek(long stream, long position)
+            throws IOException, StreamNotFoundException, WrongStreamTypeException;
 
     /**
      * Return the length of a file represented by a stream that has been once open by
@@ -169,8 +158,8 @@ public interface StreamOperations {
      * @throws WrongStreamTypeException
      *             when mode of a stream does not allow to call this method
      */
-    public abstract long streamGetLength(long stream) throws IOException, StreamNotFoundException,
-            WrongStreamTypeException;
+    public abstract long streamGetLength(long stream)
+            throws IOException, StreamNotFoundException, WrongStreamTypeException;
 
     /**
      * Return the position of a file stream pointer specified by an unique id that was previously
@@ -190,8 +179,8 @@ public interface StreamOperations {
      * @throws WrongStreamTypeException
      *             when mode of a stream does not allow to call this method
      */
-    public abstract long streamGetPosition(long stream) throws IOException, StreamNotFoundException,
-            WrongStreamTypeException;
+    public abstract long streamGetPosition(long stream)
+            throws IOException, StreamNotFoundException, WrongStreamTypeException;
 
     /**
      * Skip and discard number of bytes <code>bytes</code> of an open stream defined by unique id
@@ -214,8 +203,8 @@ public interface StreamOperations {
      * @throws WrongStreamTypeException
      *             when mode of a stream does not allow to call this method
      */
-    public abstract long streamSkip(long stream, long bytes) throws IOException, StreamNotFoundException,
-            WrongStreamTypeException;
+    public abstract long streamSkip(long stream, long bytes)
+            throws IOException, StreamNotFoundException, WrongStreamTypeException;
 
     /**
      * Flushes an output stream specified by unique id that was previously returned by
@@ -234,8 +223,7 @@ public interface StreamOperations {
      * @throws WrongStreamTypeException
      *             when mode of a stream does not allow to call this method
      */
-    public abstract void streamFlush(long stream) throws IOException, StreamNotFoundException,
-            WrongStreamTypeException;
+    public abstract void streamFlush(long stream) throws IOException, StreamNotFoundException, WrongStreamTypeException;
 
     /**
      * Close a stream specified by unique id that was previously returned by

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive;
 
@@ -91,9 +80,11 @@ public class Service {
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
     protected Body body;
+
     protected BlockingRequestQueue requestQueue;
 
     protected Request currentRequest;
+
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
     //protected RequestFilterOnMethodName requestFilterOnMethodName = null;
@@ -150,9 +141,8 @@ public class Service {
                 blockingServeOldest();
             } catch (InterruptedException e) {
                 if (body.isActive()) {
-                    logger.warn("Interruption message received in " + body.getUrl() +
-                        " , last request served is " + currentRequest.getMethodName() + " from " +
-                        currentRequest.getSender().getUrl(), e);
+                    logger.warn("Interruption message received in " + body.getUrl() + " , last request served is " +
+                                currentRequest.getMethodName() + " from " + currentRequest.getSender().getUrl(), e);
                 }
             }
         }
@@ -170,9 +160,8 @@ public class Service {
                 blockingServeYoungest();
             } catch (InterruptedException e) {
                 if (body.isActive()) {
-                    logger.warn("Interruption message received in " + body.getUrl() +
-                        " , last request served is " + currentRequest.getMethodName() + " from " +
-                        currentRequest.getSender().getUrl(), e);
+                    logger.warn("Interruption message received in " + body.getUrl() + " , last request served is " +
+                                currentRequest.getMethodName() + " from " + currentRequest.getSender().getUrl(), e);
                 }
             }
         }
@@ -225,7 +214,7 @@ public class Service {
     public void blockingServeOldest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         blockingServeOldest(new RequestFilterOnMethodName(methodName));
     }
@@ -290,7 +279,7 @@ public class Service {
     public void blockingServeOldestWithException(String methodName, Throwable ex) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         blockingServeOldestWithException(new RequestFilterOnMethodName(methodName), ex);
     }
@@ -329,7 +318,7 @@ public class Service {
     public void serveOldestWithException(String methodName, Throwable ex) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         serveWithException(requestQueue.removeOldest(methodName), ex);
     }
@@ -362,7 +351,7 @@ public class Service {
     public void serveOldest(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         serve(requestQueue.removeOldest(methodName));
     }
@@ -408,7 +397,7 @@ public class Service {
     public void blockingServeYoungest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         blockingServeYoungest(new RequestFilterOnMethodName(methodName));
     }
@@ -468,11 +457,10 @@ public class Service {
      * @param ex The exception to send to the caller
      * @throws NoSuchMethodError if methodName is not a public method of the reified object.
      */
-    public void blockingServeYoungestWithException(String methodName, Throwable ex)
-            throws InterruptedException {
+    public void blockingServeYoungestWithException(String methodName, Throwable ex) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         blockingServeYoungestWithException(new RequestFilterOnMethodName(methodName), ex);
     }
@@ -522,7 +510,7 @@ public class Service {
     public void serveYoungest(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         serve(requestQueue.removeYoungest(methodName));
     }
@@ -557,7 +545,7 @@ public class Service {
     public void serveYoungestWithException(String methodName, Throwable ex) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         serveWithException(requestQueue.removeYoungest(methodName), ex);
     }
@@ -596,7 +584,7 @@ public class Service {
     public void serveAll(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         serveAll(new RequestFilterOnMethodName(methodName));
     }
@@ -635,7 +623,7 @@ public class Service {
     public void serveAllWithException(String methodName, Throwable ex) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         serveAllWithException(new RequestFilterOnMethodName(methodName), ex);
     }
@@ -677,7 +665,7 @@ public class Service {
     public void flushingServeYoungest(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         flushingServeYoungest(new RequestFilterOnMethodName(methodName));
     }
@@ -722,7 +710,7 @@ public class Service {
     public void flushingServeYoungestWithException(String methodName, Throwable ex) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         flushingServeYoungestWithException(new RequestFilterOnMethodName(methodName), ex);
     }
@@ -767,7 +755,7 @@ public class Service {
     public void flushingServeOldest(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         flushingServeOldest(new RequestFilterOnMethodName(methodName));
     }
@@ -812,7 +800,7 @@ public class Service {
     public void flushingServeOldestWithException(String methodName, Throwable ex) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         flushingServeOldestWithException(new RequestFilterOnMethodName(methodName), ex);
     }
@@ -856,7 +844,7 @@ public class Service {
     public boolean hasRequestToServe(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         return requestQueue.hasRequest(methodName);
     }
@@ -908,7 +896,7 @@ public class Service {
     public Request getOldest(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         return requestQueue.getOldest(methodName);
     }
@@ -961,7 +949,7 @@ public class Service {
     public Request getYoungest(String methodName) {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         return requestQueue.getYoungest(methodName);
     }
@@ -1016,8 +1004,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @return the oldest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveOldest(RequestFilter requestFilter, long timeout)
-            throws InterruptedException {
+    public Request blockingRemoveOldest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         return requestQueue.blockingRemoveOldest(requestFilter, timeout);
     }
 
@@ -1032,7 +1019,7 @@ public class Service {
     public Request blockingRemoveOldest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         return blockingRemoveOldest(new RequestFilterOnMethodName(methodName), 0);
     }
@@ -1085,8 +1072,7 @@ public class Service {
      * @param timeout : for how long the thread can be blocked.
      * @return the youngest request found in the queue that is accepted by the filter.
      */
-    public Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout)
-            throws InterruptedException {
+    public Request blockingRemoveYoungest(RequestFilter requestFilter, long timeout) throws InterruptedException {
         return requestQueue.blockingRemoveYoungest(requestFilter, timeout);
     }
 
@@ -1101,7 +1087,7 @@ public class Service {
     public Request blockingRemoveYoungest(String methodName) throws InterruptedException {
         if (!this.body.checkMethod(methodName)) {
             throw new NoSuchMethodError(methodName + " is not defined in " +
-                this.body.getReifiedObject().getClass().getName());
+                                        this.body.getReifiedObject().getClass().getName());
         }
         return blockingRemoveYoungest(new RequestFilterOnMethodName(methodName), 0);
     }
@@ -1146,6 +1132,7 @@ public class Service {
 
         /** the filter*/
         private RequestFilter selectorRequestFilter;
+
         private Throwable exception;
 
         public ServingRequestProcessor(RequestFilter selectorRequestFilter) {
@@ -1191,9 +1178,13 @@ public class Service {
      */
     protected class FlushingServeYoungestRequestProcessor implements RequestProcessor {
         private RequestFilter selectorRequestFilter;
+
         private Request requestToServe;
+
         private int counter;
+
         private int numberOfRequests;
+
         private Throwable exception;
 
         public FlushingServeYoungestRequestProcessor(RequestFilter selectorRequestFilter) {
@@ -1254,7 +1245,9 @@ public class Service {
      */
     protected class FlushingServeOldestRequestProcessor implements RequestProcessor {
         private RequestFilter selectorRequestFilter;
+
         private boolean hasServed;
+
         private Throwable exception;
 
         public FlushingServeOldestRequestProcessor(RequestFilter selectorRequestFilter) {

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.body.request;
 
@@ -54,17 +43,22 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.utils.TimeoutAccounter;
 
 
-public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.io.Serializable,
-        BlockingRequestQueue {
+public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.io.Serializable, BlockingRequestQueue {
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
     protected boolean shouldWait;
+
     private transient ProActiveSPMDGroupManager spmdManager = null;
+
     volatile private boolean suspended = false;
+
     private boolean specialExecution = false;
+
     private String specialMethod = "";
+
     private LinkedList<MethodBarrier> methodBarriers = new LinkedList<MethodBarrier>();
+
     private boolean waitingForRequest = false;
 
     //
@@ -153,8 +147,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
         return blockingRemove(null, true, timeout);
     }
 
-    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter)
-            throws InterruptedException {
+    public synchronized Request blockingRemoveYoungest(RequestFilter requestFilter) throws InterruptedException {
         return blockingRemove(requestFilter, false);
     }
 
@@ -252,8 +245,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
 
         if (oldest && (requestFilter == null) && (timeout == 0)) {
             if (this.spmdManager == null) {
-                this.spmdManager = ((AbstractBody) PAActiveObject.getBodyOnThis())
-                        .getProActiveSPMDGroupManager();
+                this.spmdManager = ((AbstractBody) PAActiveObject.getBodyOnThis()).getProActiveSPMDGroupManager();
             }
             if (!spmdManager.isCurrentBarriersEmpty()) {
                 return this.barrierBlockingRemove(); // the oospmd way ...
@@ -270,7 +262,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
                     // The queue is active.
                     // Check is a request is available
                     r = oldest ? ((requestFilter == null) ? removeOldest() : removeOldest(requestFilter))
-                            : ((requestFilter == null) ? removeYoungest() : removeYoungest(requestFilter));
+                               : ((requestFilter == null) ? removeYoungest() : removeYoungest(requestFilter));
 
                     if (r == null) {
                         // Wait for a request OR the queue becomes active again
@@ -341,7 +333,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
     protected Request barrierBlockingRemoveOldest(long timeout) throws InterruptedException {
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
         while (((this.isEmpty() && this.shouldWait) || this.suspended || (this.indexOfRequestToServe() == -1)) &&
-            !this.specialExecution) {
+               !this.specialExecution) {
             if (time.isTimeoutElapsed()) {
                 return removeOldest();
             }
@@ -375,7 +367,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
      */
     protected Request barrierBlockingRemove() throws InterruptedException {
         while (((this.isEmpty() && this.shouldWait) || this.suspended || (this.indexOfRequestToServe() == -1)) &&
-            !this.specialExecution) {
+               !this.specialExecution) {
             internalWait(0);
         }
         if (this.specialExecution) {

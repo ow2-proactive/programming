@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.client;
 
@@ -72,14 +61,15 @@ public class ProActiveMessageHandler implements MessageHandler {
     public ProActiveMessageHandler(Agent agent) {
         this.agent = agent;
 
-        /* DO NOT USE A FIXED THREAD POOL
+        /*
+         * DO NOT USE A FIXED THREAD POOL
          * 
-         * Each time a message arrives, it is handled by a task submitted to 
-         * this executor service. Each task can a perform remote calls. If 
+         * Each time a message arrives, it is handled by a task submitted to
+         * this executor service. Each task can a perform remote calls. If
          * the number of workers is fixed it can lead to deadlock.
          * 
-         * Reentrant calls is the most obvious case of deadlock. But the same 
-         * issue can occur with remote calls. 
+         * Reentrant calls is the most obvious case of deadlock. But the same
+         * issue can occur with remote calls.
          */
         ThreadFactory tf = new NamedThreadFactory("ProActive PAMR message handler");
         tpe = Executors.newCachedThreadPool(tf);
@@ -99,8 +89,10 @@ public class ProActiveMessageHandler implements MessageHandler {
     private class ProActiveMessageProcessor implements Runnable {
         /** the request*/
         private final DataRequestMessage _toProcess;
+
         /** the local agent*/
         private final Agent agent;
+
         /** serialization*/
         private final ProActiveMarshaller marshaller;
 
@@ -126,7 +118,7 @@ public class ProActiveMessageHandler implements MessageHandler {
                     message = (PAMRMessage) this.marshaller.unmarshallObject(_toProcess.getData());
                 } catch (Throwable t) {
                     PAMRException e = new PAMRException("Failed to unmarshall incoming message on " +
-                        this.agent.getAgentID() + "for " + this._toProcess, t);
+                                                        this.agent.getAgentID() + "for " + this._toProcess, t);
                     SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, e));
                     agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
                     return;
@@ -142,7 +134,7 @@ public class ProActiveMessageHandler implements MessageHandler {
                     resultBytes = this.marshaller.marshallObject(result);
                 } catch (Throwable t) {
                     PAMRException e = new PAMRException("Failed to marshall the result bytes on " +
-                        this.agent.getAgentID() + " for " + _toProcess, t);
+                                                        this.agent.getAgentID() + " for " + _toProcess, t);
                     SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, e));
                     agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
                     return;
@@ -152,16 +144,16 @@ public class ProActiveMessageHandler implements MessageHandler {
                     agent.sendReply(_toProcess, resultBytes);
                 } catch (Throwable t) {
                     logger.info("Failed to send the PAMR reply to " + this._toProcess +
-                        ". The router should discover the disconnection and unlock the caller", t);
+                                ". The router should discover the disconnection and unlock the caller", t);
                     return;
                 }
             } catch (PAMRException e) {
                 logger.info("Failed to send the PAMR error reply to " + this._toProcess +
-                    ". The router should discover the disconnection and unlock the caller", e);
+                            ". The router should discover the disconnection and unlock the caller", e);
                 agent.closeTunnel(e);
             } catch (IOException e) {
                 logger.info("Failed to send the PAMR error reply to " + this._toProcess +
-                    ". The router should discover the disconnection and unlock the caller", e);
+                            ". The router should discover the disconnection and unlock the caller", e);
                 agent.closeTunnel(new PAMRException(e));
             } catch (Throwable t) {
                 PAMRException e = new PAMRException("Fatal error occured while serving acall", t);

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.annotation.common;
 
@@ -60,25 +49,34 @@ public interface ErrorMessages {
 
     // the class's  no-arg constructor is private
     public static final String NO_NOARG_CONSTRUCTOR_CANNOT_BE_PRIVATE_MESSAGE = "An active object cannot have private non-args constructor";
+
     // the class is final
     public static final String IS_FINAL_ERROR_MESSAGE = "An active object must be subclassable, and therefore cannot be final.\n";
+
     // the class has final methods
     public static final String HAS_FINAL_METHOD_ERROR_MESSAGE = "An active object cannot have final methods.\n";
+
     // the class has final field
     public static final String HAS_FINAL_FIELD_ERROR_MESSAGE = "An active object cannot have final fileds.\n";
+
     // the class has volatile members
     public static final String HAS_SYNCHRONIZED_MEMBER_ERORR_MESSAGE = "An active object already has an implicit synchronisation mechanism, wait-by-necessity. The synchronized/volatile keywords are therefore useless for a member of an active object.\n";
+
     // the class is not public
     public static final String IS_NOT_PUBLIC_ERROR_MESSAGE = "An active object must be public.\n";
+
     // the return type of a method of the class is not reifiable
     public static final String RETURN_TYPE_NOT_REIFIABLE_ERROR_MESSAGE = " is not a reifiable type. The return type must be reifiable in order to have asynchronous method calls.\n";
+
     // there is a field without getters/setters
     public static final String NO_GETTERS_SETTERS_ERROR_MESSAGE = "A field of an active object cannot be accessed directly, but only through getter/setter methods.\n";
+
     // a method of the class returns null
-    public static final String NO_NULL_RETURN_ERROR_MSG = "A method of an active object should not return null,"
-        + " as the caller cannot check the future value against the null literal";
+    public static final String NO_NULL_RETURN_ERROR_MSG = "A method of an active object should not return null," +
+                                                          " as the caller cannot check the future value against the null literal";
 
     // @VirtualNodeIsReadyCallback and @NodeAttachmentCallback
     public static final String INCORRECT_METHOD_SIGNATURE_FOR_ISREADY_CALLBACK = "Incorrect method signature. \nIsReady callback method must have the following signature: void method(String)";
+
     public static final String INCORRECT_METHOD_SIGNATURE_FOR_NODE_ATTACHEMENT_CALLBACK = "Incorrect method signature. \nNode attachement callback method must have the following signature: void method(Node, String)";
 }

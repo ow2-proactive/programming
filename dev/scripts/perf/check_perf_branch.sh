@@ -16,18 +16,18 @@ ORIG_BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1 /')
 
 until [ -z "$1" ]
 do
-	branch="$1"
-	shift
+    branch="$1"
+    shift
 
-	echo "Switching to $branch"
-	git co $branch
-	rm performanceTests.*
-	./compile/build clean junit.performance || exit 1
+    echo "Switching to $branch"
+    git co $branch
+    rm performanceTests.*
+    ./compile/build clean junit.performance || exit 1
 
         branchdir=$(echo $branch | tr -d '/')
 
-	mkdir -p $TMPDIR/$branchdir
-	cp *.Test* $TMPDIR/$branchdir
+    mkdir -p $TMPDIR/$branchdir
+    cp *.Test* $TMPDIR/$branchdir
 done
 python $(dirname $0)/perf_graph.py $TMPDIR  performanceTests.bandwidth  performanceTests.throughput
 git co $ORIG_BRANCH
