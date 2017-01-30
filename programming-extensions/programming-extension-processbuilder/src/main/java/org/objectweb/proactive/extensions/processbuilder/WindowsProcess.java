@@ -100,7 +100,7 @@ public final class WindowsProcess extends Process {
         };
     }
 
-    static interface MyAdvapi extends Library {
+    static interface MyAdvapi extends com.sun.jna.Library {
         final MyAdvapi INSTANCE = (MyAdvapi) Native.loadLibrary("Advapi32", MyAdvapi.class, Options.UNICODE_OPTIONS);
 
         /**
@@ -120,7 +120,7 @@ public final class WindowsProcess extends Process {
         public static final int LOGON_WITH_PROFILE = 0x00000001;
     }
 
-    static interface MyUserenv extends Library {
+    static interface MyUserenv extends com.sun.jna.Library {
         final MyUserenv INSTANCE = (MyUserenv) Native.loadLibrary("Userenv", MyUserenv.class);
 
         /**
@@ -136,7 +136,7 @@ public final class WindowsProcess extends Process {
     /**
      * The Interface MyKernel32.
      */
-    static interface MyKernel32 extends Library {
+    static interface MyKernel32 extends com.sun.jna.Library {
         final MyKernel32 INSTANCE = (MyKernel32) Native.loadLibrary("kernel32", MyKernel32.class);
 
         /** The PROCES s_ terminate */
