@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.dataspaces.core;
 
@@ -40,8 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
@@ -93,7 +82,7 @@ public class DataSpacesImpl {
                 break;
             case SCRATCH:
                 expected = (owner ? PADataSpaces.SCRATCH_SPACE_OWNER_CAPABILITIES
-                        : PADataSpaces.SCRATCH_SPACE_NONOWNER_CAPABILITIES);
+                                  : PADataSpaces.SCRATCH_SPACE_NONOWNER_CAPABILITIES);
                 break;
             default:
                 throw new IllegalArgumentException("Unexpected space type; World is not round-shaped");
@@ -101,7 +90,9 @@ public class DataSpacesImpl {
 
         if (logger.isTraceEnabled())
             logger.trace(String.format("Checking FS capabilities (count: %d) for %s type, owner: %b",
-                    expected.size(), type, owner));
+                                       expected.size(),
+                                       type,
+                                       owner));
 
         try {
             Utils.assertCapabilitiesMatch(expected, fo);
@@ -147,8 +138,7 @@ public class DataSpacesImpl {
      *            application scratch space for this application; may be <code>null</code> if not
      *            available
      */
-    public DataSpacesImpl(String appId, SpacesMountManager smm, SpacesDirectory sd,
-            ApplicationScratchSpace ass) {
+    public DataSpacesImpl(String appId, SpacesMountManager smm, SpacesDirectory sd, ApplicationScratchSpace ass) {
         this.appId = appId;
         appScratchSpace = ass;
         spacesDirectory = sd;
@@ -169,8 +159,7 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveDefaultOutput()
      */
     public DataSpacesFileObject resolveDefaultInputOutput(SpaceType type, String path)
-            throws IllegalArgumentException, FileSystemException, SpaceNotFoundException,
-            ConfigurationException {
+            throws IllegalArgumentException, FileSystemException, SpaceNotFoundException, ConfigurationException {
         return resolveInputOutput(PADataSpaces.DEFAULT_IN_OUT_NAME, type, path);
     }
 
@@ -181,9 +170,8 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveDefaultInputBlocking(long)
      * @see PADataSpaces#resolveDefaultOutputBlocking(long)
      */
-    public DataSpacesFileObject resolveDefaultInputOutputBlocking(long timeoutMillis, SpaceType type,
-            String path) throws IllegalArgumentException, FileSystemException, ProActiveTimeoutException,
-            ConfigurationException {
+    public DataSpacesFileObject resolveDefaultInputOutputBlocking(long timeoutMillis, SpaceType type, String path)
+            throws IllegalArgumentException, FileSystemException, ProActiveTimeoutException, ConfigurationException {
         return resolveInputOutputBlocking(PADataSpaces.DEFAULT_IN_OUT_NAME, timeoutMillis, type, path);
     }
 
@@ -194,8 +182,7 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveOutput(String)
      */
     public DataSpacesFileObject resolveInputOutput(String name, SpaceType type, String path)
-            throws FileSystemException, IllegalArgumentException, SpaceNotFoundException,
-            ConfigurationException {
+            throws FileSystemException, IllegalArgumentException, SpaceNotFoundException, ConfigurationException {
         if (logger.isTraceEnabled())
             logger.trace(String.format("Resolving request for %s with name %s", type, name));
 
@@ -232,9 +219,8 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveInputBlocking(String, long)
      * @see PADataSpaces#resolveOutputBlocking(String, long)
      */
-    public DataSpacesFileObject resolveInputOutputBlocking(String name, long timeoutMillis, SpaceType type,
-            String path) throws FileSystemException, IllegalArgumentException, ProActiveTimeoutException,
-            ConfigurationException {
+    public DataSpacesFileObject resolveInputOutputBlocking(String name, long timeoutMillis, SpaceType type, String path)
+            throws FileSystemException, IllegalArgumentException, ProActiveTimeoutException, ConfigurationException {
         if (logger.isTraceEnabled())
             logger.trace(String.format("Resolving blocking request for %s with name %s", type, name));
 
@@ -259,8 +245,10 @@ public class DataSpacesImpl {
                 final String aoId = Utils.getActiveObjectId(Utils.getCurrentActiveObjectBody());
                 final DataSpacesFileObject fo = spacesMountManager.resolveFile(uri, aoId);
                 if (logger.isTraceEnabled()) {
-                    final String message = String.format(
-                            "Resolved blocking request for %s with name %s (%s)", type, name, uri);
+                    final String message = String.format("Resolved blocking request for %s with name %s (%s)",
+                                                         type,
+                                                         name,
+                                                         uri);
                     logger.trace(message);
                 }
                 checkCapabilitiesOrWound(fo, type, false);
@@ -270,8 +258,8 @@ public class DataSpacesImpl {
 
                 // request processing may have taken some time
                 currTime = System.currentTimeMillis();
-                final long sleepTime = Math.min(RESOLVE_BLOCKING_RESEND_PERIOD_MILLIS, startTime +
-                    timeoutMillis - currTime);
+                final long sleepTime = Math.min(RESOLVE_BLOCKING_RESEND_PERIOD_MILLIS,
+                                                startTime + timeoutMillis - currTime);
                 try {
                     if (logger.isTraceEnabled())
                         logger.trace("Going sleeping for " + sleepTime);
@@ -286,8 +274,10 @@ public class DataSpacesImpl {
         }
 
         if (logger.isDebugEnabled()) {
-            final String message = String.format(
-                    "Timeout expired for blocking resolve for %s with name %s (%s)", type, name, uri);
+            final String message = String.format("Timeout expired for blocking resolve for %s with name %s (%s)",
+                                                 type,
+                                                 name,
+                                                 uri);
             logger.debug(message);
         }
         throw new ProActiveTimeoutException();
@@ -296,8 +286,8 @@ public class DataSpacesImpl {
     /**
      * @see PADataSpaces#resolveScratchForAO()
      */
-    public DataSpacesFileObject resolveScratchForAO(String path) throws FileSystemException,
-            NotConfiguredException, ConfigurationException {
+    public DataSpacesFileObject resolveScratchForAO(String path)
+            throws FileSystemException, NotConfiguredException, ConfigurationException {
         logger.trace("Resolving scratch for an Active Object");
         if (appScratchSpace == null) {
             logger.debug("Request scratch data space for AO on node without scratch space configured");
@@ -393,8 +383,8 @@ public class DataSpacesImpl {
     /**
      * @see PADataSpaces#resolveFile(String)
      */
-    public DataSpacesFileObject resolveFile(String uri) throws MalformedURIException, FileSystemException,
-            SpaceNotFoundException, ConfigurationException {
+    public DataSpacesFileObject resolveFile(String uri)
+            throws MalformedURIException, FileSystemException, SpaceNotFoundException, ConfigurationException {
         if (logger.isTraceEnabled())
             logger.trace("Resolving file: " + uri);
 
@@ -452,8 +442,11 @@ public class DataSpacesImpl {
                 hostname = Utils.getHostname();
 
             // name and type are checked here
-            final InputOutputSpaceConfiguration config = InputOutputSpaceConfiguration.createConfiguration(
-                    url, path, hostname, name, type);
+            final InputOutputSpaceConfiguration config = InputOutputSpaceConfiguration.createConfiguration(url,
+                                                                                                           path,
+                                                                                                           hostname,
+                                                                                                           name,
+                                                                                                           type);
             // url is checked here
             spaceInstanceInfo = new SpaceInstanceInfo(appId, config);
         } catch (ConfigurationException x) {
@@ -465,12 +458,11 @@ public class DataSpacesImpl {
             spacesDirectory.register(spaceInstanceInfo);
         } catch (WrongApplicationIdException x) {
             ProActiveLogger.logImpossibleException(logger, x);
-            throw new ProActiveRuntimeException(
-                "This application id is not registered in used naming service", x);
+            throw new ProActiveRuntimeException("This application id is not registered in used naming service", x);
         } catch (SpaceAlreadyRegisteredException x) {
-            logger.debug(
-                    String.format("User-added space %s is already registered",
-                            spaceInstanceInfo.getMountingPoint()), x);
+            logger.debug(String.format("User-added space %s is already registered",
+                                       spaceInstanceInfo.getMountingPoint()),
+                         x);
             throw x;
         }
 

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.utils;
 
@@ -50,14 +39,18 @@ import java.util.*;
  */
 class FileUtils {
     private static final int EXPAND_SPACE = 50;
+
     private static final FileUtils PRIMARY_INSTANCE = new FileUtils();
 
     //get some non-crypto-grade randomness from various places.
     private static Random rand = new Random(System.currentTimeMillis() + Runtime.getRuntime().freeMemory());
 
     private static final boolean ON_NETWARE = Os.isFamily("netware");
+
     private static final boolean ON_DOS = Os.isFamily("dos");
+
     private static final boolean ON_WIN9X = Os.isFamily("win9x");
+
     private static final boolean ON_WINDOWS = Os.isFamily("windows");
 
     static final int BUF_SIZE = 8192;
@@ -86,7 +79,9 @@ class FileUtils {
      * of the last call.
      */
     private Object cacheFromUriLock = new Object();
+
     private String cacheFromUriRequest = null;
+
     private String cacheFromUriResponse = null;
 
     /**
@@ -176,8 +171,8 @@ class FileUtils {
         char c = filename.charAt(0);
         int len = filename.length();
         return (c == sep && (len == 1 || filename.charAt(1) != sep)) ||
-            (Character.isLetter(c) && len > 1 && filename.indexOf(':') == 1 && (len == 2 || filename
-                    .charAt(2) != sep));
+               (Character.isLetter(c) && len > 1 && filename.indexOf(':') == 1 &&
+                (len == 2 || filename.charAt(2) != sep));
     }
 
     /**
@@ -212,7 +207,7 @@ class FileUtils {
         }
         int colon = filename.indexOf(':');
         return (Character.isLetter(c) && colon == 1 && filename.length() > 2 && filename.charAt(2) == sep) ||
-            (ON_NETWARE && colon > 0);
+               (ON_NETWARE && colon > 0);
     }
 
     /**
@@ -399,7 +394,7 @@ class FileUtils {
             directory.insert(0, '.');
         }
         osPath = ((device != null) ? device + ":" : "") + ((directory != null) ? "[" + directory + "]" : "") +
-            ((file != null) ? file : "");
+                 ((file != null) ? file : "");
         return osPath;
     }
 
@@ -423,8 +418,7 @@ class FileUtils {
      * @return a File reference to the new temporary file.
      * @since Ant 1.7.1
      */
-    public File createTempFile(String prefix, String suffix, File parentDir, boolean deleteOnExit,
-            boolean createFile) {
+    public File createTempFile(String prefix, String suffix, File parentDir, boolean deleteOnExit, boolean createFile) {
         File result = null;
         String parent = (parentDir == null) ? System.getProperty("java.io.tmpdir") : parentDir.getPath();
 
@@ -617,8 +611,8 @@ class FileUtils {
      * @since Ant 1.5.3
      */
     public boolean fileNameEquals(File f1, File f2) {
-        return normalize(f1.getAbsolutePath()).getAbsolutePath().equals(
-                normalize(f2.getAbsolutePath()).getAbsolutePath());
+        return normalize(f1.getAbsolutePath()).getAbsolutePath()
+                                              .equals(normalize(f2.getAbsolutePath()).getAbsolutePath());
     }
 
     /**

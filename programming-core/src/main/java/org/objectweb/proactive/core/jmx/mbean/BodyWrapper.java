@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.jmx.mbean;
 
@@ -77,6 +66,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
 
     /** JMX Logger */
     private transient Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);
+
     private transient Logger notificationsLogger = ProActiveLogger.getLogger(Loggers.JMX_NOTIFICATION);
 
     /** ObjectName of this MBean */
@@ -168,8 +158,8 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
     public void sendNotification(String type, Object userData) {
         ObjectName source = getObjectName();
         if (notificationsLogger.isDebugEnabled()) {
-            notificationsLogger.debug("[" + type + "]#[BodyWrapper.sendNotification] source=" + source +
-                ", userData=" + userData);
+            notificationsLogger.debug("[" + type + "]#[BodyWrapper.sendNotification] source=" + source + ", userData=" +
+                                      userData);
         }
 
         Notification notification = new Notification(type, source, counter++, System.nanoTime() / 1000); // timeStamp in microseconds
@@ -245,8 +235,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
         // synchronized (notifications) {
         if (!this.notifications.isEmpty()) {
             ObjectName source = getObjectName();
-            Notification n = new Notification(NotificationType.setOfNotifications, source, counter++,
-                userMessage);
+            Notification n = new Notification(NotificationType.setOfNotifications, source, counter++, userMessage);
             n.setUserData(this.notifications);
             super.sendNotification(n);
             this.notifications.clear();
@@ -273,11 +262,11 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
             try {
                 mbs.unregisterMBean(objectName);
             } catch (InstanceNotFoundException e) {
-                logger.error("The objectName " + objectName +
-                    " was not found during the serialization of the MBean", e);
+                logger.error("The objectName " + objectName + " was not found during the serialization of the MBean",
+                             e);
             } catch (MBeanRegistrationException e) {
                 logger.error("The MBean " + objectName +
-                    " can't be unregistered from the MBean server during the serialization of the MBean", e);
+                             " can't be unregistered from the MBean server during the serialization of the MBean", e);
             }
         }
 
@@ -314,7 +303,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
             logger.error("A Mean is already registered with this objectName " + objectName, e);
         } catch (MBeanRegistrationException e) {
             logger.error("The MBean " + objectName +
-                " can't be registered on the MBean server during the deserialization of the MBean", e);
+                         " can't be registered on the MBean server during the deserialization of the MBean", e);
         } catch (NotCompliantMBeanException e) {
             logger.error("Exception throws during the deserialization of the MBean", e);
         }

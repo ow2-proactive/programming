@@ -8,14 +8,14 @@ CLASSPATH=.
 
 # User envrionment variable
 if [ ! -z "$PROACTIVE_HOME" ] ; then
-	PROACTIVE=$PROACTIVE_HOME
+    PROACTIVE=$PROACTIVE_HOME
 fi
 
 
 # Internal ProActive scripts can override $PROACTIVE
 if [ -z "$PROACTIVE" ]
 then
-	PROACTIVE=$(cd $workingDir/.././ || (echo "Broken PROACTIVE installation" ; exit 1) && echo $PWD)
+    PROACTIVE=$(cd $workingDir/.././ || (echo "Broken PROACTIVE installation" ; exit 1) && echo $PWD)
 
 fi
 
@@ -43,13 +43,13 @@ if [ -d $PROACTIVE/classes/Core ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Core
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extensions
-    CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extra    
+    CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extra
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Utils
     for i in $PROACTIVE/lib/*.jar ; do
       CLASSPATH=$CLASSPATH:$i
     done
 else
-    CLASSPATH=$CLASSPATH:$PROACTIVE/dist/lib/ProActive.jar    
+    CLASSPATH=$CLASSPATH:$PROACTIVE/dist/lib/ProActive.jar
     CLASSPATH=$CLASSPATH:$PROACTIVE/dist/lib/ProActive_utils.jar
 fi
 

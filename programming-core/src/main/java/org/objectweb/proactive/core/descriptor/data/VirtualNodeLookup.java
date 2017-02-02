@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.descriptor.data;
 
@@ -69,19 +58,30 @@ import org.objectweb.proactive.core.util.URIBuilder;
 
 public class VirtualNodeLookup extends RuntimeDeploymentProperties implements VirtualNodeInternal {
     private VirtualNodeInternal virtualNode;
+
     private String name;
+
     private String urlForLookup;
+
     private String lookupProtocol;
+
     private String lookupHost;
+
     private boolean isActivated = false;
 
     //we use 1099 as default port
     private int portForLookup = 1099;
+
     private String message = "########## Calling this method on a VirtualNodeLookup has no sense, since such VirtualNode object references a remote VirtualNode ##########";
+
     private String notActivatedMessage = "This VirtualNode lookup is not yet activated. Activate it first";
+
     protected String runtimeHostForLookup = "LOOKUP_HOST";
+
     protected String runtimePortForLookup = "LOOKUP_PORT";
+
     private int fileBlockSize;
+
     private int overlapping;
 
     public VirtualNodeLookup(String name) {
@@ -145,8 +145,11 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
                 return;
             }
             try {
-                this.urlForLookup = URIBuilder.buildURI(this.lookupHost, this.name, this.lookupProtocol,
-                        this.portForLookup).toString();
+                this.urlForLookup = URIBuilder.buildURI(this.lookupHost,
+                                                        this.name,
+                                                        this.lookupProtocol,
+                                                        this.portForLookup)
+                                              .toString();
                 //		this.remoteProActiveRuntime = RuntimeFactory.getRuntime(urlForLookup,lookupProtocol);
                 //		this.virtualNode = remoteProActiveRuntime.getVirtualNode(this.name);
                 this.virtualNode = PADeployment.lookupVirtualNode(urlForLookup).getVirtualNodeInternal();
@@ -175,8 +178,7 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
      */
     @Deprecated
     public int createdNodeCount() {
-        throw new RuntimeException(
-            "This method is deprecated, use getNumberOfCurrentlyCreatedNodes() or getNumberOfCreatedNodesAfterDeployment()");
+        throw new RuntimeException("This method is deprecated, use getNumberOfCurrentlyCreatedNodes() or getNumberOfCreatedNodesAfterDeployment()");
     }
 
     /**
@@ -205,8 +207,10 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
     }
 
     /*
-     *  (non-Javadoc)
-     * @see org.objectweb.proactive.core.descriptor.data.VirtualNode#getNumberOfCreatedNodesAfterDeployment()
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.core.descriptor.data.VirtualNode#
+     * getNumberOfCreatedNodesAfterDeployment()
      */
     public int getNumberOfCreatedNodesAfterDeployment() {
         if (!isActivated) {
@@ -315,7 +319,7 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
             checkProperty(information);
         } catch (ProActiveException e) {
             throw new ProActiveException("only " + runtimeHostForLookup + " and" + runtimePortForLookup +
-                " property can be set at runtime", e);
+                                         " property can be set at runtime", e);
         }
         performTask(information, value);
     }
@@ -377,8 +381,8 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
         }
         runtimeProperties.remove(information);
         if (!isWaitingForProperties()) {
-            this.urlForLookup = URIBuilder.buildURI(this.lookupHost, this.name, this.lookupProtocol,
-                    this.portForLookup).toString();
+            this.urlForLookup = URIBuilder.buildURI(this.lookupHost, this.name, this.lookupProtocol, this.portForLookup)
+                                          .toString();
             activate();
         }
     }
@@ -397,7 +401,9 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
         throw new RuntimeException(" ERROR: No MPI process attached with the virtual node !");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.core.descriptor.data.VirtualNode#fileTransferRetrieve()
      */
     public List<RemoteFile> fileTransferRetrieve() throws ProActiveException {

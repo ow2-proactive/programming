@@ -1,44 +1,33 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnp;
 
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.config.PAPropertyInteger;
 import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
+import org.objectweb.proactive.core.config.PAPropertyInteger;
 
 
 /**
@@ -66,8 +55,9 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      * lower than 500 milliseconds.
      *
      */
-    static final public PAPropertyInteger PA_PNP_DEFAULT_HEARTBEAT = new PAPropertyInteger(
-        "proactive.pnp.default_heartbeat", false, 10 * 1000);
+    static final public PAPropertyInteger PA_PNP_DEFAULT_HEARTBEAT = new PAPropertyInteger("proactive.pnp.default_heartbeat",
+                                                                                           false,
+                                                                                           10 * 1000);
 
     /**
      * A factor of the heartbeat period used to detect failure.
@@ -89,16 +79,20 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      * If the heartbeat_window is set too low, then only a few samples will be considered and the timeout will always be set according to the last heartbeat interval.
      * If the heartbeat_window is set too high, after a long period of network delay increase, the timeout will require the same amount of time to decrease back to its default value.
      */
-    static final public PAPropertyInteger PA_PNP_HEARTBEAT_FACTOR = new PAPropertyInteger(
-        "proactive.pnp.heartbeat_factor", false, 3);
-    static final public PAPropertyInteger PA_PNP_HEARTBEAT_WINDOW = new PAPropertyInteger(
-        "proactive.pnp.heartbeat_window", false, 5);
+    static final public PAPropertyInteger PA_PNP_HEARTBEAT_FACTOR = new PAPropertyInteger("proactive.pnp.heartbeat_factor",
+                                                                                          false,
+                                                                                          3);
+
+    static final public PAPropertyInteger PA_PNP_HEARTBEAT_WINDOW = new PAPropertyInteger("proactive.pnp.heartbeat_window",
+                                                                                          false,
+                                                                                          5);
 
     /**
      * This property is only used for testing purpose, to simulate a server delay
      */
-    static final public PAPropertyInteger PA_PNP_TEST_RANDOMDELAY = new PAPropertyInteger(
-        "proactive.pnp.test.random_delay", false, 0);
+    static final public PAPropertyInteger PA_PNP_TEST_RANDOMDELAY = new PAPropertyInteger("proactive.pnp.test.random_delay",
+                                                                                          false,
+                                                                                          0);
 
     /**
      * Channel garbage collection timeout (in milliseconds)
@@ -106,13 +100,18 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      * Idle channels are garbage collected after a given timeout. If a channel is unused since this value then
      * the channel will be garbage collected.
      */
-    static final public PAPropertyInteger PA_PNP_IDLE_TIMEOUT = new PAPropertyInteger(
-        "proactive.pnp.idle_timeout", false, 600 * 1000);
+    static final public PAPropertyInteger PA_PNP_IDLE_TIMEOUT = new PAPropertyInteger("proactive.pnp.idle_timeout",
+                                                                                      false,
+                                                                                      600 * 1000);
 
     private int port;
+
     private int idleTimeout;
+
     private int defaultHeartbeat;
+
     private int heartbeatFactor;
+
     private int heartbeatWindow;
 
     public PNPConfig() {
@@ -165,8 +164,11 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
 
     public interface Loggers {
         static final public String PNP = org.objectweb.proactive.core.util.log.Loggers.CORE + ".pnp";
+
         static final public String PNP_HANDLER_SERVER = PNP + ".handler.server";
+
         static final public String PNP_HANDLER_CLIENT = PNP + ".handler.client";
+
         static final public String PNP_CODEC = PNP + ".codec";
     }
 }

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.ssh;
 
@@ -43,15 +32,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.objectweb.proactive.utils.TimeoutAccounter;
-import com.trilead.ssh2.ChannelCondition;
-import com.trilead.ssh2.Connection;
-import com.trilead.ssh2.Session;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.objectweb.proactive.utils.TimeoutAccounter;
+
+import com.trilead.ssh2.ChannelCondition;
+import com.trilead.ssh2.Connection;
+import com.trilead.ssh2.Session;
 
 
 /**
@@ -68,11 +58,17 @@ public class SSHClient {
     static final int EXIT_ERROR = 255; // like OpenSSH
 
     static final private String OPT_PASSWORD = "p";
+
     static final private String OPT_USERNAME = "l";
+
     static final private String OPT_IDENTITY = "i";
+
     static final private String OPT_IDENTITY_PASSWORD = "d";
+
     static final private String OPT_HELP = "h";
+
     static final private String OPT_VERBOSE = "v";
+
     static private boolean verbose = false;
 
     private static String buildCmdLine(List<String> args) {
@@ -229,13 +225,16 @@ public class SSHClient {
             while (true) {
                 if ((stdout.available() == 0) && (stderr.available() == 0)) {
 
-                    /* Even though currently there is no data available, it may be that new data arrives
-                     * and the session's underlying channel is closed before we call waitForCondition().
+                    /*
+                     * Even though currently there is no data available, it may be that new data
+                     * arrives
+                     * and the session's underlying channel is closed before we call
+                     * waitForCondition().
                      * This means that EOF and STDOUT_DATA (or STDERR_DATA, or both) may
                      * be set together.
                      */
-                    int conditions = sess.waitForCondition(ChannelCondition.STDOUT_DATA |
-                        ChannelCondition.STDERR_DATA | ChannelCondition.EOF, 0);
+                    int conditions = sess.waitForCondition(ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA |
+                                                           ChannelCondition.EOF, 0);
 
                     /* Wait no longer than 2 seconds (= 2000 milliseconds) */
                     if ((conditions & ChannelCondition.TIMEOUT) != 0) {
@@ -244,7 +243,9 @@ public class SSHClient {
                         throw new IOException("Timeout while waiting for data from peer.");
                     }
 
-                    /* Here we do not need to check separately for CLOSED, since CLOSED implies EOF */
+                    /*
+                     * Here we do not need to check separately for CLOSED, since CLOSED implies EOF
+                     */
                     if ((conditions & ChannelCondition.EOF) != 0) {
 
                         /* The remote side won't send us further data... */
@@ -274,7 +275,9 @@ public class SSHClient {
                     //	throw new IllegalStateException("Unexpected condition result (" + conditions + ")");
                 }
 
-                /* If you below replace "while" with "if", then the way the output appears on the local
+                /*
+                 * If you below replace "while" with "if", then the way the output appears on the
+                 * local
                  * stdout and stder streams is more "balanced". Addtionally reducing the buffer size
                  * will also improve the interleaving, but performance will slightly suffer.
                  * OKOK, that all matters only if you get HUGE amounts of stdout and stderr data =)

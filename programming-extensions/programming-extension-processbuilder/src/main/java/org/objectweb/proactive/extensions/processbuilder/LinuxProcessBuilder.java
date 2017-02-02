@@ -1,50 +1,29 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.processbuilder;
-
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
-import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
-import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
-import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
-import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,6 +37,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
+import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
+import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
+import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
+import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
+
 
 /**
  * Class that extends the {@link OSProcessBuilder} for machines running Linux.<br>
@@ -70,13 +59,17 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.OSPB);
 
     private static final String LINUX_SCRIPT_FOLDER_PATH = "dist/scripts/processbuilder/linux/";
+
     private static final String CHECK_SUDO = "check_sudo.sh";
+
     private static final String LAUNCH_SCRIPT = "launch.sh";
-    private static final String PROCESS_TREE_KILLER_LOCATION = LINUX_SCRIPT_FOLDER_PATH +
-        "kill_process_tree.sh";
+
+    private static final String PROCESS_TREE_KILLER_LOCATION = LINUX_SCRIPT_FOLDER_PATH + "kill_process_tree.sh";
 
     private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
+
     private static final String ENV_VAR_USER_KEY_CONTENT = "PA_OSPB_USER_KEY_CONTENT";
+
     private static final String ENV_VAR_CUSTOM_VARIABLES_NAMES = "PA_OSPB_CUSTOM_VARIABLES";
 
     // the underlying ProcessBuilder to whom all work will be delegated
@@ -100,10 +93,10 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     private final String scriptLocation;
 
     protected final String token;
+
     private String scriptBaseFolder;
 
-    protected LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores,
-            final String scriptBaseFolder) {
+    protected LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String scriptBaseFolder) {
         this.scriptBaseFolder = scriptBaseFolder;
         this.scriptLocation = scriptBaseFolder + "/" + LINUX_SCRIPT_FOLDER_PATH;
         this.delegatedPB = new ProcessBuilder();
@@ -113,7 +106,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         this.token = ProActiveRandom.nextString(15);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#command()
      */
     @Override
@@ -121,8 +116,12 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return this.delegatedPB.command();
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#command(java.lang.String[])
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#command(java.lang.String[
+     * ])
      */
     @Override
     public OSProcessBuilder command(String... command) {
@@ -130,7 +129,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#user()
      */
     @Override
@@ -138,22 +139,25 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return this.user;
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#canExecuteAsUser(org.objectweb.proactive.extensions.processbuilder.OSUser)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#canExecuteAsUser(org.
+     * objectweb.proactive.extensions.processbuilder.OSUser)
      */
     @Override
     public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
         try {
             String[] args = { this.scriptLocation + CHECK_SUDO, user.getUserName(),
-                    (user.hasPassword()) ? this.scriptLocation : "" };
+                              (user.hasPassword()) ? this.scriptLocation : "" };
             Process p;
 
             try {
                 // running a script that sudo-s into user and runs whoami
-                String[] environment = {
-                        ENV_VAR_USER_PASSWORD + "=" + ((user.hasPassword()) ? user.getPassword() : ""),
-                        ENV_VAR_USER_KEY_CONTENT + "=" +
-                            ((user.hasPrivateKey()) ? new String(user.getPrivateKey()) : "") };
+                String[] environment = { ENV_VAR_USER_PASSWORD + "=" + ((user.hasPassword()) ? user.getPassword() : ""),
+                                         ENV_VAR_USER_KEY_CONTENT + "=" + ((user.hasPrivateKey()) ? new String(user.getPrivateKey())
+                                                                                                  : "") };
                 p = Runtime.getRuntime().exec(args, environment);
             } catch (IOException e) {
                 additionalCleanup();
@@ -204,12 +208,14 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      * @throws CoreBindingException
      * @throws OSUserException
      */
-    private void createAndThrowException(String eline) throws IOException, FatalProcessBuilderException,
-            CoreBindingException, OSUserException {
+    private void createAndThrowException(String eline)
+            throws IOException, FatalProcessBuilderException, CoreBindingException, OSUserException {
         outputInterpreter.createAndThrowException(eline, null);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#cores()
      */
     @Override
@@ -217,16 +223,22 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return cores;
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#isCoreBindingSupported()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#isCoreBindingSupported()
      */
     @Override
     public boolean isCoreBindingSupported() {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#getAvaliableCoresDescriptor()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#
+     * getAvaliableCoresDescriptor()
      */
     @Override
     public CoreBindingDescriptor getAvailableCoresDescriptor() {
@@ -236,7 +248,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#directory()
      */
     @Override
@@ -244,8 +258,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return delegatedPB.directory();
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#directory(java.io.File)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#directory(java.io.File)
      */
     @Override
     public OSProcessBuilder directory(File directory) {
@@ -253,7 +270,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#environment()
      */
     @Override
@@ -265,16 +284,22 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#redirectErrorStream()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#redirectErrorStream()
      */
     @Override
     public boolean redirectErrorStream() {
         return delegatedPB.redirectErrorStream();
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#redirectErrorStream(booleann)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#redirectErrorStream(
+     * booleann)
      */
     @Override
     public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream) {
@@ -282,12 +307,13 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderI#start()
      */
     @Override
-    public Process start() throws IOException, OSUserException, CoreBindingException,
-            FatalProcessBuilderException {
+    public Process start() throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
         if (user() != null || cores() != null) {
             // user or core binding is specified - do the fancy stuff
             return setupAndStart();
@@ -319,8 +345,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      * @throws CoreBindingException
      * @throws OSUserException
      */
-    private Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
-            FatalProcessBuilderException {
+    private Process setupAndStart()
+            throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
         // TODO check if there will ever be race conditions on the command swap
         // part
 
@@ -429,7 +455,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
      */
     private class ProcessOutputInterpreter {
         final static String ERROR_PREFIX = "_OS_PROCESS_LAUNCH_ERROR_";
+
         final static String OK_MESSAGE = "_OS_PROCESS_LAUNCH_INIT_FINISHED_";
+
         final static String ERROR_CAUSE = "CAUSE";
 
         /**
@@ -490,23 +518,22 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
          * @throws CoreBindingException
          * @throws FatalProcessBuilderException
          */
-        private void waitForUserCommandStart(Process process) throws IOException, OSUserException,
-                CoreBindingException, FatalProcessBuilderException {
+        private void waitForUserCommandStart(Process process)
+                throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
 
             if (process == null) {
                 return;
             }
 
             InputStream inputstream = process.getInputStream();
-            InputStream errorstream = (!redirectErrorStream()) ? process.getErrorStream() : process
-                    .getInputStream();
+            InputStream errorstream = (!redirectErrorStream()) ? process.getErrorStream() : process.getInputStream();
             LineReader bireader = new LineReader(inputstream);
             LineReader bereader = new LineReader(errorstream);
             String eline;
             String iline;
 
             while ((eline = bereader.readLine()) != null &&
-                !(eline.trim().contains(OK_MESSAGE) || eline.trim().contains(ERROR_PREFIX))) {
+                   !(eline.trim().contains(OK_MESSAGE) || eline.trim().contains(ERROR_PREFIX))) {
                 // read it so we do not pollute output of user
                 if (logger.isDebugEnabled()) {
                     logger.debug("Token:" + token + " script stderr: " + eline);
@@ -549,8 +576,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
          * @throws CoreBindingException
          * @throws OSUserException
          */
-        private void createAndThrowException(String eline, List<String> trace) throws IOException,
-                FatalProcessBuilderException, CoreBindingException, OSUserException {
+        private void createAndThrowException(String eline, List<String> trace)
+                throws IOException, FatalProcessBuilderException, CoreBindingException, OSUserException {
 
             if (!(eline.indexOf(ERROR_PREFIX) < eline.indexOf(ERROR_CAUSE))) {
                 return;
@@ -559,7 +586,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
             // let's process the string which is in form:
             // ERROR_PREFIX exception_class ERROR_CAUSE text_description
             String type = eline.substring(eline.indexOf(ERROR_PREFIX) + ERROR_PREFIX.length(),
-                    eline.indexOf(ProcessOutputInterpreter.ERROR_CAUSE));
+                                          eline.indexOf(ProcessOutputInterpreter.ERROR_CAUSE));
             type = type.replace(" ", "");
             String descr = eline.substring(eline.indexOf(ERROR_CAUSE) + ERROR_CAUSE.length());
             Exception obj;
@@ -592,10 +619,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 // description before the IOException.
 
                 throw new IOException("Cannot run the program \"" + command().get(0) + "\"" +
-                    ((user() == null) ? "" : " as \"" + user().getUserName() + "\"") +
-                    ((cores() == null) ? "" : "on cores " + cores().listBoundCores()) +
-                    ((directory() == null) ? "" : " (in directory \"" + directory().getPath() + "\")") +
-                    ". Cause: " + e.getMessage());
+                                      ((user() == null) ? "" : " as \"" + user().getUserName() + "\"") +
+                                      ((cores() == null) ? "" : "on cores " + cores().listBoundCores()) +
+                                      ((directory() == null) ? ""
+                                                             : " (in directory \"" + directory().getPath() + "\")") +
+                                      ". Cause: " + e.getMessage());
 
             } catch (CoreBindingException e) {
                 throw new CoreBindingException(e.getMessage());
@@ -617,8 +645,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
     static class OSLinuxProcess extends Process {
 
         final private Process process;
+
         private String scriptBaseFolder;
+
         final private OSUser user;
+
         final private String token;
 
         private CleanupTimeoutGetter cleanupTimeoutGetter = new CleanupTimeoutGetter();
@@ -634,8 +665,8 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         public void destroy() {
             try {
                 LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, scriptBaseFolder);
-                String killProcessTreeScript = new File(scriptBaseFolder, PROCESS_TREE_KILLER_LOCATION)
-                        .getAbsolutePath();
+                String killProcessTreeScript = new File(scriptBaseFolder,
+                                                        PROCESS_TREE_KILLER_LOCATION).getAbsolutePath();
                 lpb.directory(new File(System.getProperty("java.io.tmpdir")));
                 lpb.command(killProcessTreeScript, this.cleanupTimeoutGetter.getCleanupTimeSecondsString());
                 lpb.environment().put("PROCESS_KILL_TOKEN", this.token);

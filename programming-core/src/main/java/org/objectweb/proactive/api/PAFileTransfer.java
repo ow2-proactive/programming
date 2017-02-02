@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.api;
 
@@ -149,8 +138,7 @@ public class PAFileTransfer {
      * Transfers a single file between third parties.
      * @see #transfer(Node, File[], Node, File[])
      */
-    public static RemoteFile transfer(Node srcNode, File srcFile, Node dstNode, File dstFile)
-            throws IOException {
+    public static RemoteFile transfer(Node srcNode, File srcFile, Node dstNode, File dstFile) throws IOException {
         List<RemoteFile> rfiles = transfer(srcNode, new File[] { srcFile }, dstNode, new File[] { dstFile });
 
         return rfiles.get(0);
@@ -168,8 +156,12 @@ public class PAFileTransfer {
      */
     public static List<RemoteFile> transfer(Node srcNode, File[] srcFile, Node dstNode, File[] dstFile)
             throws IOException {
-        return transfer(srcNode, srcFile, dstNode, dstFile, FileBlock.DEFAULT_BLOCK_SIZE,
-                FileTransferService.DEFAULT_MAX_SIMULTANEOUS_BLOCKS);
+        return transfer(srcNode,
+                        srcFile,
+                        dstNode,
+                        dstFile,
+                        FileBlock.DEFAULT_BLOCK_SIZE,
+                        FileTransferService.DEFAULT_MAX_SIMULTANEOUS_BLOCKS);
     }
 
     /**
@@ -180,8 +172,8 @@ public class PAFileTransfer {
      *
      * @see #transfer(Node, File[], Node, File[])
      */
-    public static List<RemoteFile> transfer(Node srcNode, File[] srcFile, Node dstNode, File[] dstFile,
-            int bsize, int numFlyingBlocks) throws IOException {
+    public static List<RemoteFile> transfer(Node srcNode, File[] srcFile, Node dstNode, File[] dstFile, int bsize,
+            int numFlyingBlocks) throws IOException {
         if (srcFile.length != dstFile.length) {
             throw new IOException("Error, number destination and source file lists do not match in length");
         }
@@ -211,8 +203,7 @@ public class PAFileTransfer {
             //Case srcNode == dstNode
             if (FileTransferEngine.nodeEquals(srcNode, dstNode)) {
                 if (dstFile[i].equals(srcFile[i])) {
-                    logger.error("Can't copy, src and destination are the same: " +
-                        srcFile[i].getAbsolutePath());
+                    logger.error("Can't copy, src and destination are the same: " + srcFile[i].getAbsolutePath());
                 }
             }
         }
@@ -232,8 +223,8 @@ public class PAFileTransfer {
      * @return  A list of {@link org.objectweb.proactive.core.filetransfer.RemoteFile  RemoteFile} instances representing the file transfer operation of each file.
      * @throws IOException  If an initialization error was detected.
      */
-    protected static List<RemoteFile> internalTransfer(Node srcNode, File[] srcFile, Node dstNode,
-            File[] dstFile, int bsize, int numFlyingBlocks) throws IOException {
+    protected static List<RemoteFile> internalTransfer(Node srcNode, File[] srcFile, Node dstNode, File[] dstFile,
+            int bsize, int numFlyingBlocks) throws IOException {
         FileTransferServiceSend ftsSrc;
         FileTransferServiceReceive ftsDst;
 
@@ -243,8 +234,8 @@ public class PAFileTransfer {
         } catch (Exception e) {
             //TODO change when moving to Java 1.6
             //throw new IOException("Unable to connect or use ProActive Node: " + srcNode + " -> " + dstNode, e);
-            throw new IOException("Unable to connect or use ProActive Node: " + srcNode + " -> " + dstNode +
-                " " + e.getMessage());
+            throw new IOException("Unable to connect or use ProActive Node: " + srcNode + " -> " + dstNode + " " +
+                                  e.getMessage());
         }
 
         ArrayList<RemoteFile> rfile = new ArrayList<RemoteFile>(srcFile.length);

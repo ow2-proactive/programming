@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment;
 
@@ -46,8 +35,11 @@ import java.util.regex.Pattern;
 
 public class ListGenerator {
     final static protected Pattern plainHostname = Pattern.compile("[a-zA-Z0-9\\-.:]+");
+
     final static protected Pattern simpleInterval = Pattern.compile("\\[([\\d\\-,; ]+)\\]");
+
     final static protected Pattern subInterval = Pattern.compile("(\\d+)-(\\d+);?(\\d+)?");
+
     final static protected String SUB_INTERVAL_SPLIT_REGEXP = " *, *";
 
     static public List<String> generateNames(String nameSetDefinition) {
@@ -102,8 +94,8 @@ public class ListGenerator {
             }
 
             String[] subIntervals = intervalDef.split(SUB_INTERVAL_SPLIT_REGEXP);
-            String[] subExclusionIntervals = (exclusionInterval != null) ? exclusionInterval
-                    .split(SUB_INTERVAL_SPLIT_REGEXP) : null;
+            String[] subExclusionIntervals = (exclusionInterval != null) ? exclusionInterval.split(SUB_INTERVAL_SPLIT_REGEXP)
+                                                                         : null;
 
             res = getSubNames(prefix, suffix, subIntervals, subExclusionIntervals);
         } else {
@@ -167,8 +159,8 @@ public class ListGenerator {
      * @param nameSetDefinition a set definition in the form described above
      * @return
      */
-    static private void generateNames(String prefix, String suffix, String subIntervalDef,
-            NumberChecker numberChecker, List<String> names) {
+    static private void generateNames(String prefix, String suffix, String subIntervalDef, NumberChecker numberChecker,
+            List<String> names) {
         Interval interval = new Interval(subIntervalDef);
 
         String paddingFormat = getPadding(interval.startStr);
@@ -178,8 +170,7 @@ public class ListGenerator {
                 continue;
             }
 
-            String formattedName = MessageFormat.format("{0}{1,number," + paddingFormat + "}{2}", prefix, n,
-                    suffix);
+            String formattedName = MessageFormat.format("{0}{1,number," + paddingFormat + "}{2}", prefix, n, suffix);
             names.add(formattedName);
         }
     }
@@ -220,6 +211,7 @@ public class ListGenerator {
      */
     static protected class NumberChecker {
         List<int[]> intervals;
+
         List<Integer> values;
 
         public NumberChecker() {
@@ -258,9 +250,13 @@ public class ListGenerator {
      */
     static protected class Interval {
         public int start;
+
         public int end;
+
         public int step;
+
         public String startStr;
+
         public String endStr;
 
         public Interval(String intervalDef) {

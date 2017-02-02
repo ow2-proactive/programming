@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.process.nordugrid;
 
@@ -47,8 +36,8 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.process.AbstractExternalProcessDecorator;
 import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition;
-import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition.FileDescription;
+import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -63,18 +52,30 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class NGProcess extends AbstractExternalProcessDecorator {
     private static final String DEFAULT_SCRIPT_LOCATION = System.getProperty("user.home") + File.separator +
-        "ProActive" + File.separator + "scripts" + File.separator + "unix" + File.separator + "cluster" +
-        File.separator + "ngStartRuntime.sh ";
+                                                          "ProActive" + File.separator + "scripts" + File.separator +
+                                                          "unix" + File.separator + "cluster" + File.separator +
+                                                          "ngStartRuntime.sh ";
+
     public final static String DEFAULT_NGPATH = "ngsub";
+
     protected String count = "1";
+
     protected String stderr = null;
+
     protected String stdout = null;
+
     protected String queue = null;
+
     protected String jobname = null;
+
     protected String executable_path = DEFAULT_SCRIPT_LOCATION;
+
     protected String tmp_executable;
+
     protected String DEFAULT_INPUT_FILE = "(inputfiles = ";
+
     protected String inputFiles;
+
     protected ArrayList<String> command_buffer;
 
     //===========================================================
@@ -130,12 +131,9 @@ public class NGProcess extends AbstractExternalProcessDecorator {
             // we have access. This should change with // RTEs
             try {
                 externalProcess = Runtime.getRuntime().exec(ng_command);
-                java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(
-                    externalProcess.getInputStream()));
-                java.io.BufferedReader err = new java.io.BufferedReader(new java.io.InputStreamReader(
-                    externalProcess.getErrorStream()));
-                java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.OutputStreamWriter(
-                    externalProcess.getOutputStream()));
+                java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(externalProcess.getInputStream()));
+                java.io.BufferedReader err = new java.io.BufferedReader(new java.io.InputStreamReader(externalProcess.getErrorStream()));
+                java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.OutputStreamWriter(externalProcess.getOutputStream()));
                 handleProcess(in, out, err);
             } catch (java.io.IOException e) {
                 isFinished = true;

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.runtime;
 
@@ -115,8 +104,7 @@ public class StartPARuntime {
         Options options = new Options();
         options.addOption(Params.parent.sOpt, Params.parent.toString(), true, Params.parent.desc);
         options.addOption(Params.capacity.sOpt, Params.capacity.toString(), true, Params.capacity.desc);
-        options.addOption(Params.deploymentId.sOpt, Params.deploymentId.toString(), true,
-                Params.deploymentId.desc);
+        options.addOption(Params.deploymentId.sOpt, Params.deploymentId.toString(), true, Params.deploymentId.desc);
         options.addOption(Params.topologyId.sOpt, Params.topologyId.toString(), true, Params.topologyId.desc);
 
         CommandLine line = null;
@@ -163,7 +151,7 @@ public class StartPARuntime {
     protected void start() {
         // Print some information message
         logger.info("Starting a ProActiveRuntime on " +
-            URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress()));
+                    URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress()));
 
         if (logger.isDebugEnabled()) {
             logger.debug("**** Starting jvm with classpath " + System.getProperty("java.class.path"));
@@ -178,9 +166,7 @@ public class StartPARuntime {
 
         ProActiveRuntime localRuntime = null;
         try {
-            localRuntime = RuntimeFactory
-                    .getProtocolSpecificRuntime(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
-                            .getValue());
+            localRuntime = RuntimeFactory.getProtocolSpecificRuntime(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
         } catch (ProActiveException e1) {
             logger.warn("Cannot get the local ProActive Runtime", e1);
             abort();
@@ -197,8 +183,9 @@ public class StartPARuntime {
                 localRuntimeImpl.setParent(parentRuntime);
 
                 // Register
-                GCMRuntimeRegistrationNotificationData notification = new GCMRuntimeRegistrationNotificationData(
-                    localRuntime, deploymendId, topologyId);
+                GCMRuntimeRegistrationNotificationData notification = new GCMRuntimeRegistrationNotificationData(localRuntime,
+                                                                                                                 deploymendId,
+                                                                                                                 topologyId);
                 parentRuntime.register(notification);
 
                 waitUntilInterupted();
@@ -225,9 +212,12 @@ public class StartPARuntime {
     }
 
     public enum Params {
-        parent("p", "URL of the parent ProActive Runtime"), topologyId("i", "Topology Node"), deploymentId(
-                "d", "GCM Application identifier"), capacity("c", "Number of Node to be created");
+        parent("p", "URL of the parent ProActive Runtime"),
+        topologyId("i", "Topology Node"),
+        deploymentId("d", "GCM Application identifier"),
+        capacity("c", "Number of Node to be created");
         protected String sOpt;
+
         protected String desc;
 
         private Params(String sOpt, String desc) {

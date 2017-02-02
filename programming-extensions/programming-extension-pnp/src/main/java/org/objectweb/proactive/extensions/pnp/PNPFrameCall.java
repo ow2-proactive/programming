@@ -1,48 +1,37 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnp;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import org.objectweb.proactive.extensions.pnp.exception.PNPMalformedMessageException;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBufferInputStream;
 import org.jboss.netty.buffer.ChannelBuffers;
+import org.objectweb.proactive.extensions.pnp.exception.PNPMalformedMessageException;
 
 
 /** A PNP frame for a call
@@ -57,8 +46,7 @@ import org.jboss.netty.buffer.ChannelBuffers;
  */
 class PNPFrameCall extends PNPFrame {
     /** The offset of the payload */
-    static final private int REQUEST_MESSAGE_HEADER_LENGTH = PNPFrame.Field.getTotalOffset() +
-        Field.getTotalOffset();
+    static final private int REQUEST_MESSAGE_HEADER_LENGTH = PNPFrame.Field.getTotalOffset() + Field.getTotalOffset();
 
     /** Fields of the {@link PNPFrameCall} header.
      *
@@ -83,6 +71,7 @@ class PNPFrameCall extends PNPFrame {
         SERVICE_TIMEOUT(8, Long.class);
 
         private int length;
+
         private int myOffset = 0;
 
         static private int totalOffset = 0;
@@ -99,7 +88,8 @@ class PNPFrameCall extends PNPFrame {
 
         /** Offset of the field in the message */
         public int getOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              *
              * This method relies on the Java Memory Model specification to perform
              * a racy single-check initialization.
@@ -124,7 +114,8 @@ class PNPFrameCall extends PNPFrame {
 
         /** Length of the fields defined by {@link PNPFrameCall} */
         static public int getTotalOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              *
              * This method relies on the Java Memory Model specification to perform
              * a racy single-check initialization.
@@ -163,10 +154,15 @@ class PNPFrameCall extends PNPFrame {
     }
 
     final protected boolean oneWay;
+
     final protected long hearthbeatPeriod;
+
     final protected long serviceTimeout;
+
     final protected long callId;
+
     final protected byte[] payload;
+
     final protected ChannelBuffer payloadChannelBuffer;
 
     /**
@@ -174,8 +170,7 @@ class PNPFrameCall extends PNPFrame {
      *
      * All the parameters must be non null
      */
-    public PNPFrameCall(long callId, boolean oneWay, long hearthbeatPeriod, long serviceTimeout,
-            byte[] payload) {
+    public PNPFrameCall(long callId, boolean oneWay, long hearthbeatPeriod, long serviceTimeout, byte[] payload) {
         super(PNPFrame.MessageType.CALL);
 
         this.callId = callId;
@@ -215,8 +210,9 @@ class PNPFrameCall extends PNPFrame {
     }
 
     private long readServiceTimeout(ChannelBuffer buf, int offset) throws PNPMalformedMessageException {
-        long timeout = TypeHelper.channelBufferToLong(buf, offset + PNPFrame.Field.getTotalOffset() +
-            Field.SERVICE_TIMEOUT.getOffset());
+        long timeout = TypeHelper.channelBufferToLong(buf,
+                                                      offset + PNPFrame.Field.getTotalOffset() +
+                                                           Field.SERVICE_TIMEOUT.getOffset());
 
         if (timeout < 0) {
             throw new PNPMalformedMessageException("Invalid " + Field.SERVICE_TIMEOUT + " value: " + timeout);
@@ -226,27 +222,29 @@ class PNPFrameCall extends PNPFrame {
     }
 
     private long readHearthbeatPeriod(ChannelBuffer buf, int offset) throws PNPMalformedMessageException {
-        long heartbeat = TypeHelper.channelBufferToLong(buf, offset + PNPFrame.Field.getTotalOffset() +
-            Field.HEARTBEAT_PERIOD.getOffset());
+        long heartbeat = TypeHelper.channelBufferToLong(buf,
+                                                        offset + PNPFrame.Field.getTotalOffset() +
+                                                             Field.HEARTBEAT_PERIOD.getOffset());
 
         if (heartbeat < 0) {
-            throw new PNPMalformedMessageException("Invalid " + Field.HEARTBEAT_PERIOD + " value: " +
-                heartbeat);
+            throw new PNPMalformedMessageException("Invalid " + Field.HEARTBEAT_PERIOD + " value: " + heartbeat);
         }
 
         return heartbeat;
     }
 
     private boolean readOneWay(ChannelBuffer buf, int offset) {
-        int oneWay = TypeHelper.channelBufferToInt(buf, offset + PNPFrame.Field.getTotalOffset() +
-            Field.ONE_WAY.getOffset());
+        int oneWay = TypeHelper.channelBufferToInt(buf,
+                                                   offset + PNPFrame.Field.getTotalOffset() +
+                                                        Field.ONE_WAY.getOffset());
 
         return oneWay != 0;
     }
 
     private long readCallId(ChannelBuffer buf, int offset) {
-        long callId = TypeHelper.channelBufferToLong(buf, offset + PNPFrame.Field.getTotalOffset() +
-            Field.CALL_ID.getOffset());
+        long callId = TypeHelper.channelBufferToLong(buf,
+                                                     offset + PNPFrame.Field.getTotalOffset() +
+                                                          Field.CALL_ID.getOffset());
 
         return callId;
     }
@@ -278,9 +276,9 @@ class PNPFrameCall extends PNPFrame {
         }
 
         return super.toString() + Field.CALL_ID.toString() + ":" + this.callId + ";" +
-            Field.HEARTBEAT_PERIOD.toString() + ":" + this.hearthbeatPeriod + ";" + Field.ONE_WAY.toString() +
-            ":" + this.oneWay + ";" + Field.SERVICE_TIMEOUT.toString() + ":" + this.serviceTimeout +
-            "; PAYLOAD" + ":(" + payloadLenght + ")" + byteArrayToHexString(buf, 64);
+               Field.HEARTBEAT_PERIOD.toString() + ":" + this.hearthbeatPeriod + ";" + Field.ONE_WAY.toString() + ":" +
+               this.oneWay + ";" + Field.SERVICE_TIMEOUT.toString() + ":" + this.serviceTimeout + "; PAYLOAD" + ":(" +
+               payloadLenght + ")" + byteArrayToHexString(buf, 64);
     }
 
     @Override
@@ -288,14 +286,16 @@ class PNPFrameCall extends PNPFrame {
 
         byte[] header = new byte[REQUEST_MESSAGE_HEADER_LENGTH];
         super.writeHeader(header, 0);
-        TypeHelper.longToByteArray(this.callId, header,
-                PNPFrame.Field.getTotalOffset() + Field.CALL_ID.getOffset());
-        TypeHelper.intToByteArray(this.oneWay ? 1 : 0, header, PNPFrame.Field.getTotalOffset() +
-            Field.ONE_WAY.getOffset());
-        TypeHelper.longToByteArray(this.hearthbeatPeriod, header, PNPFrame.Field.getTotalOffset() +
-            Field.HEARTBEAT_PERIOD.getOffset());
-        TypeHelper.longToByteArray(this.serviceTimeout, header, PNPFrame.Field.getTotalOffset() +
-            Field.SERVICE_TIMEOUT.getOffset());
+        TypeHelper.longToByteArray(this.callId, header, PNPFrame.Field.getTotalOffset() + Field.CALL_ID.getOffset());
+        TypeHelper.intToByteArray(this.oneWay ? 1 : 0,
+                                  header,
+                                  PNPFrame.Field.getTotalOffset() + Field.ONE_WAY.getOffset());
+        TypeHelper.longToByteArray(this.hearthbeatPeriod,
+                                   header,
+                                   PNPFrame.Field.getTotalOffset() + Field.HEARTBEAT_PERIOD.getOffset());
+        TypeHelper.longToByteArray(this.serviceTimeout,
+                                   header,
+                                   PNPFrame.Field.getTotalOffset() + Field.SERVICE_TIMEOUT.getOffset());
 
         return ChannelBuffers.wrappedBuffer(header, this.payload);
     }

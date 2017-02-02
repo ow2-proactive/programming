@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package ant;
 
@@ -59,7 +48,9 @@ import org.apache.tools.ant.types.Reference;
  */
 public class AntStubGenerator extends Java {
     private List<String> classNames = new LinkedList<String>();
+
     private String srcDir;
+
     private String dstDir;
 
     public AntStubGenerator() {
@@ -116,7 +107,9 @@ public class AntStubGenerator extends Java {
      */
     static public class Main {
         private File srcDir;
+
         private File dstDir;
+
         private List<String> classNames = new LinkedList<String>();
 
         // Called by the java ant task
@@ -155,17 +148,14 @@ public class AntStubGenerator extends Java {
             }
 
             if (!this.srcDir.isDirectory()) {
-                throw new BuildException("Invalid srcDir attribute: " + srcDir.toString() +
-                    " is not a directory");
+                throw new BuildException("Invalid srcDir attribute: " + srcDir.toString() + " is not a directory");
             }
 
             if (!this.dstDir.isDirectory()) {
-                throw new BuildException("Invalid dest attribute: " + dstDir.toString() +
-                    " is not a directory");
+                throw new BuildException("Invalid dest attribute: " + dstDir.toString() + " is not a directory");
             }
             if (!this.dstDir.isDirectory()) {
-                throw new BuildException("Invalid src attribute: " + dstDir.toString() +
-                    " is not a directory");
+                throw new BuildException("Invalid src attribute: " + dstDir.toString() + " is not a directory");
             }
         }
 
@@ -181,8 +171,7 @@ public class AntStubGenerator extends Java {
 
                 // Write the bytecode into a File
                 char sep = File.separatorChar;
-                String fileName = new File(this.dstDir, stubClassName.replace('.', sep) + ".class")
-                        .toString();
+                String fileName = new File(this.dstDir, stubClassName.replace('.', sep) + ".class").toString();
                 try {
                     // Create directory is needed
                     new File(fileName.substring(0, fileName.lastIndexOf(sep))).mkdirs();

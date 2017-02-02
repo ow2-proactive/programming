@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.remoteobject;
 
@@ -46,6 +35,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
@@ -74,7 +64,6 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.P
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySelector;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSshSocketFactory;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -88,7 +77,9 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     static final public String PROTOCOL_ID = "pamr";
 
     final private Agent agent;
+
     final private PAMRRegistry registry;
+
     final private PAMRException badConfigException;
 
     public PAMRRemoteObjectFactory() {
@@ -112,8 +103,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             }
         } else {
             routerPort = RouterImpl.DEFAULT_PORT;
-            logger.debug(PAMRConfig.PA_NET_ROUTER_PORT.getName() + " not set. Using the default port: " +
-                routerPort);
+            logger.debug(PAMRConfig.PA_NET_ROUTER_PORT.getName() + " not set. Using the default port: " + routerPort);
         }
 
         InetAddress routerAddress = null;
@@ -158,8 +148,12 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         AgentImpl agent = null;
         if ("".equals(errMsg)) {
             try {
-                agent = new AgentImpl(routerAddress, routerPort, agentId, magicCookie,
-                    ProActiveMessageHandler.class, PAMRSocketFactorySelector.get());
+                agent = new AgentImpl(routerAddress,
+                                      routerPort,
+                                      agentId,
+                                      magicCookie,
+                                      ProActiveMessageHandler.class,
+                                      PAMRSocketFactorySelector.get());
             } catch (ProActiveException e) {
                 errMsg += "Failed to create PAMR agent: " + e.getMessage();
             }
@@ -288,8 +282,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             message.send();
             return message.getReturnedObject();
         } catch (IOException e) {
-            throw new PAMRException("Listing registered remote objects on " + uri +
-                " failed due to network error", e);
+            throw new PAMRException("Listing registered remote objects on " + uri + " failed due to network error", e);
         }
     }
 
@@ -309,13 +302,12 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         return -1;
     }
 
-    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
-            boolean rebind) throws ProActiveException {
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name, boolean rebind)
+            throws ProActiveException {
         checkConfig();
 
         if (this.agent.getAgentID() == null) {
-            throw new PAMRException(
-                "PAMR agent has not yet been able to connect to the router. Remote object cannot be created");
+            throw new PAMRException("PAMR agent has not yet been able to connect to the router. Remote object cannot be created");
         }
 
         try {
@@ -324,8 +316,13 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
                 name = "/" + name;
             }
 
-            URI uri = new URI(this.getProtocolId(), null, this.agent.getAgentID().toString(), this.getPort(),
-                name, null, null);
+            URI uri = new URI(this.getProtocolId(),
+                              null,
+                              this.agent.getAgentID().toString(),
+                              this.getPort(),
+                              name,
+                              null,
+                              null);
 
             // register the object on the register
             InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);

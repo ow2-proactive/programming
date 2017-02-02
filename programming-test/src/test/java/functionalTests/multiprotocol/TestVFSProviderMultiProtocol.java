@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2013 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.multiprotocol;
 
@@ -41,15 +30,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
-import org.objectweb.proactive.extensions.pamr.PAMRConfig;
-import org.objectweb.proactive.extensions.pamr.router.Router;
-import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
-import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
-import functionalTests.FunctionalTest;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.Selectors;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
@@ -58,6 +38,16 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.router.Router;
+import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
+import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+
+import functionalTests.FunctionalTest;
 
 
 /**
@@ -70,8 +60,7 @@ import org.junit.Test;
 public class TestVFSProviderMultiProtocol extends FunctionalTest {
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp",
-            "pamr" }));
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp", "pamr" }));
 
     // pamr router
     static Router router;
@@ -107,8 +96,7 @@ public class TestVFSProviderMultiProtocol extends FunctionalTest {
     @Test
     public void testVFSProviderMP() throws Exception {
 
-        logger.info("**************** Testing deploying dataspace server with protocol list : " +
-            protocolsToTest);
+        logger.info("**************** Testing deploying dataspace server with protocol list : " + protocolsToTest);
 
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue(protocolsToTest.get(0));
         String add_str = protocolsToTest.get(1);
@@ -118,26 +106,29 @@ public class TestVFSProviderMultiProtocol extends FunctionalTest {
         CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.setValue(add_str);
 
         FileSystemServerDeployer deployer = new FileSystemServerDeployer("space name",
-            SERVER_PATH.getAbsolutePath(), true);
+                                                                         SERVER_PATH.getAbsolutePath(),
+                                                                         true);
 
         try {
 
             String[] urls = deployer.getVFSRootURLs();
             logger.info("Received urls :" + Arrays.asList(urls));
-            Assert.assertEquals(
-                    "Number of urls of the FileSystemServerDeployer should match the number of protocols + the file protocol",
-                    protocolsToTest.size() + 1, urls.length);
+            Assert.assertEquals("Number of urls of the FileSystemServerDeployer should match the number of protocols + the file protocol",
+                                protocolsToTest.size() + 1,
+                                urls.length);
 
             // check the file server uris
 
             URI receiveduri = new URI(urls[0]);
-            Assert.assertEquals("protocol of first uri " + receiveduri + " should be file", "file",
-                    receiveduri.getScheme());
+            Assert.assertEquals("protocol of first uri " + receiveduri + " should be file",
+                                "file",
+                                receiveduri.getScheme());
 
             for (int i = 1; i < urls.length; i++) {
                 receiveduri = new URI(urls[i]);
                 Assert.assertEquals("protocol of uri " + urls[i] + " should match the expected protocol",
-                        "pap" + protocolsToTest.get(i - 1), receiveduri.getScheme());
+                                    "pap" + protocolsToTest.get(i - 1),
+                                    receiveduri.getScheme());
             }
 
             // use the file server
@@ -148,8 +139,7 @@ public class TestVFSProviderMultiProtocol extends FunctionalTest {
                 FileObject source = fileSystemManager.resolveFile(f.toURI().toURL().toExternalForm());
                 FileObject dest = fileSystemManager.resolveFile(urls[i] + "/" + f.getName());
                 dest.copyFrom(source, Selectors.SELECT_SELF);
-                Assert.assertTrue("Copy successful of " + source.getURL() + " to " + dest.getURL(),
-                        dest.exists());
+                Assert.assertTrue("Copy successful of " + source.getURL() + " to " + dest.getURL(), dest.exists());
 
             }
 

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.vfsprovider.client;
 
@@ -115,8 +104,8 @@ public class ProActiveFileName extends GenericFileName {
      *             when scheme of given URL is not supported, i.e. is not one of ProActive Remote
      *             Object protocols
      */
-    public static String[] getServerVFSRootURLs(String[] serverURLs) throws URISyntaxException,
-            UnknownProtocolException {
+    public static String[] getServerVFSRootURLs(String[] serverURLs)
+            throws URISyntaxException, UnknownProtocolException {
 
         String[] answer = new String[serverURLs.length];
         for (int i = 0; i < serverURLs.length; i++) {
@@ -125,8 +114,7 @@ public class ProActiveFileName extends GenericFileName {
         return answer;
     }
 
-    private static String getServerVFSRootURL(String serverURL) throws URISyntaxException,
-            UnknownProtocolException {
+    private static String getServerVFSRootURL(String serverURL) throws URISyntaxException, UnknownProtocolException {
         final int dotIndex = serverURL.indexOf(':');
         if (dotIndex == -1) {
             throw new URISyntaxException(serverURL, "Could not find URL scheme");
@@ -135,7 +123,7 @@ public class ProActiveFileName extends GenericFileName {
         final String remainingPart = serverURL.substring(dotIndex);
         checkServerScheme(schemeString);
         return URIHelper.convertToEncodedURIString(getVFSSchemeForServerScheme(schemeString) + remainingPart +
-            SERVICE_AND_FILE_PATH_SEPARATOR + SEPARATOR_CHAR);
+                                                   SERVICE_AND_FILE_PATH_SEPARATOR + SEPARATOR_CHAR);
     }
 
     private static String getVFSSchemeForServerScheme(String serverScheme) {
@@ -153,7 +141,7 @@ public class ProActiveFileName extends GenericFileName {
     private static void checkServerScheme(final String serverScheme) throws UnknownProtocolException {
         if (RemoteObjectProtocolFactoryRegistry.get(serverScheme) == null) {
             throw new UnknownProtocolException("Scheme " + serverScheme +
-                " is not recognized as used by any of transport protocols");
+                                               " is not recognized as used by any of transport protocols");
         }
     }
 
@@ -163,23 +151,22 @@ public class ProActiveFileName extends GenericFileName {
             serverScheme = getServerSchemeForVFSScheme(vfsScheme);
         } catch (IllegalArgumentException x) {
             throw new UnknownProtocolException("Scheme " + vfsScheme +
-                " is not properly formed ProVFS ProActive provider scheme");
+                                               " is not properly formed ProVFS ProActive provider scheme");
         }
         checkServerScheme(serverScheme);
-        final RemoteObjectFactory serverProtocolFactory = AbstractRemoteObjectFactory
-                .getRemoteObjectFactory(serverScheme);
+        final RemoteObjectFactory serverProtocolFactory = AbstractRemoteObjectFactory.getRemoteObjectFactory(serverScheme);
         return serverProtocolFactory.getPort();
     }
 
     private final String servicePath;
 
     private volatile String serverURL;
+
     private final Object serverURLSync = new Object();
 
     protected ProActiveFileName(String scheme, String hostName, int port, String userName, String password,
             String servicePath, String path, FileType type) throws UnknownProtocolException {
-        super(scheme, hostName, port, getServerDefaultPortForVFSScheme(scheme), userName, password, path,
-                type);
+        super(scheme, hostName, port, getServerDefaultPortForVFSScheme(scheme), userName, password, path, type);
         if (servicePath == null || servicePath.length() == 0) {
             this.servicePath = ROOT_PATH;
         } else {
@@ -197,8 +184,14 @@ public class ProActiveFileName extends GenericFileName {
     @Override
     public FileName createName(String absPath, FileType type) {
         try {
-            return new ProActiveFileName(getScheme(), getHostName(), getPort(), getUserName(), getPassword(),
-                servicePath, absPath, type);
+            return new ProActiveFileName(getScheme(),
+                                         getHostName(),
+                                         getPort(),
+                                         getUserName(),
+                                         getPassword(),
+                                         servicePath,
+                                         absPath,
+                                         type);
         } catch (UnknownProtocolException e) {
             // it should never happen as it would be already thrown for this instance constructor
             throw new ProActiveRuntimeException(e);

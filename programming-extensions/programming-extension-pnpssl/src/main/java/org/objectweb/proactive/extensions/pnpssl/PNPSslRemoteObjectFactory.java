@@ -1,55 +1,30 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnpssl;
 
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.pnp.PNPConfig;
-import org.objectweb.proactive.extensions.pnp.PNPExtraHandlers;
-import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryAbstract;
-import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryBackend;
-import org.objectweb.proactive.extensions.ssl.CertificateGenerator;
-import org.objectweb.proactive.extensions.ssl.PermissiveTrustManager;
-import org.objectweb.proactive.extensions.ssl.SameCertTrustManager;
-import org.objectweb.proactive.extensions.ssl.SecureMode;
-import org.objectweb.proactive.extensions.ssl.SslException;
-import org.objectweb.proactive.extensions.ssl.SslHelpers;
-
-import javax.net.ssl.TrustManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -64,6 +39,21 @@ import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.net.ssl.TrustManager;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.pnp.PNPConfig;
+import org.objectweb.proactive.extensions.pnp.PNPExtraHandlers;
+import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryAbstract;
+import org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactoryBackend;
+import org.objectweb.proactive.extensions.ssl.CertificateGenerator;
+import org.objectweb.proactive.extensions.ssl.PermissiveTrustManager;
+import org.objectweb.proactive.extensions.ssl.SameCertTrustManager;
+import org.objectweb.proactive.extensions.ssl.SecureMode;
+import org.objectweb.proactive.extensions.ssl.SslException;
+import org.objectweb.proactive.extensions.ssl.SslHelpers;
 
 
 /**
@@ -89,7 +79,8 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
 
         if (PNPSslConfig.PA_PNPSSL_AUTHENTICATE.isTrue() && !PNPSslConfig.PA_PNPSSL_KEYSTORE.isSet()) {
             throw new PNPSslConfigurationException(PNPSslConfig.PA_PNPSSL_KEYSTORE.getName() +
-                " property must be set when " + PNPSslConfig.PA_PNPSSL_AUTHENTICATE.getName() + " is true");
+                                                   " property must be set when " +
+                                                   PNPSslConfig.PA_PNPSSL_AUTHENTICATE.getName() + " is true");
         }
 
         KeyStore ks = getKeystore();
@@ -124,9 +115,8 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
                 }
 
                 if (certs.size() == 0) {
-                    throw new PNPSslException("No certificate matching \"" +
-                        SslHelpers.DEFAULT_ALIAS_PATTERN + "\" found in the keystore " + ks +
-                        ". Cannot enable authenticate mode");
+                    throw new PNPSslException("No certificate matching \"" + SslHelpers.DEFAULT_ALIAS_PATTERN +
+                                              "\" found in the keystore " + ks + ". Cannot enable authenticate mode");
                 }
 
                 return new SameCertTrustManager(certs.toArray(new X509Certificate[certs.size()]));
@@ -143,9 +133,8 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
             return readKeystoreFromDisk(PNPSslConfig.PA_PNPSSL_KEYSTORE.getValue());
         } else {
             if (PNPSslConfig.PA_PNPSSL_AUTHENTICATE.isTrue()) {
-                logger.error(PROTO_ID +
-                    " configured to authenticate remote runtimes but keystore is not set. " + PROTO_ID +
-                    "will not work");
+                logger.error(PROTO_ID + " configured to authenticate remote runtimes but keystore is not set. " +
+                             PROTO_ID + "will not work");
             }
 
             return createKeystore();
@@ -164,14 +153,12 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
         } catch (FileNotFoundException e) {
             throw new PNPSslConfigurationException("Failed to read user specifed keystore for " + PROTO_ID, e);
         } catch (NoSuchAlgorithmException e) {
-            throw new PNPSslConfigurationException("Failed to load user specified keystore for " + PROTO_ID,
-                e);
+            throw new PNPSslConfigurationException("Failed to load user specified keystore for " + PROTO_ID, e);
         } catch (CertificateException e) {
-            throw new PNPSslConfigurationException(
-                "Failed to load a certificate in the user specified keystore for " + PROTO_ID, e);
+            throw new PNPSslConfigurationException("Failed to load a certificate in the user specified keystore for " +
+                                                   PROTO_ID, e);
         } catch (IOException e) {
-            throw new PNPSslConfigurationException("Failed to load user specified keystore for " + PROTO_ID,
-                e);
+            throw new PNPSslConfigurationException("Failed to load user specified keystore for " + PROTO_ID, e);
         }
 
     }
@@ -184,20 +171,19 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
 
             KeyStore ks = KeyStore.getInstance("PKCS12");
             ks.load(null, null);
-            ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN, pair.getPrivate(),
-                    PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
-                    new X509Certificate[] { cert });
+            ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN,
+                           pair.getPrivate(),
+                           PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                           new X509Certificate[] { cert });
             return ks;
         } catch (KeyStoreException e) {
             throw new PNPSslConfigurationException("Failed to create or fill the keystore for " + PROTO_ID, e);
         } catch (NoSuchAlgorithmException e) {
             throw new PNPSslConfigurationException("Failed to create the keystore for " + PROTO_ID, e);
         } catch (CertificateException e) {
-            throw new PNPSslException("Failed to load a certificate in the user specified keystore for " +
-                PROTO_ID, e);
+            throw new PNPSslException("Failed to load a certificate in the user specified keystore for " + PROTO_ID, e);
         } catch (IOException e) {
-            throw new PNPSslConfigurationException("Failed to load user specified keystore for " + PROTO_ID,
-                e);
+            throw new PNPSslConfigurationException("Failed to load user specified keystore for " + PROTO_ID, e);
         } catch (SslException e) {
             throw new PNPSslConfigurationException("Failed to create a certificate for " + PROTO_ID, e);
         }

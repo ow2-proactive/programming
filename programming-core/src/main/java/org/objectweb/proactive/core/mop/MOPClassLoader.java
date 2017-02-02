@@ -1,44 +1,29 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
-
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -49,6 +34,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class MOPClassLoader extends URLClassLoader {
@@ -126,7 +115,7 @@ public class MOPClassLoader extends URLClassLoader {
             logger.error("Launcher: cannot find class " + args[0]);
         } catch (NoSuchMethodException e) {
             logger.error("Launcher: class " + args[0] +
-                " does not contain have method void 'public void main (String[])'");
+                         " does not contain have method void 'public void main (String[])'");
         } catch (InvocationTargetException e) {
             throw e.getTargetException();
         }
@@ -204,8 +193,7 @@ public class MOPClassLoader extends URLClassLoader {
         } catch (ClassNotFoundException e) {
             if (PAProxyBuilder.doesClassNameEndWithPAProxySuffix(name) && !(Utils.isStubClassName(name))) {
                 try {
-                    byte[] data = PAProxyBuilder.generatePAProxy(PAProxyBuilder
-                            .getBaseClassNameFromPAProxyName(name));
+                    byte[] data = PAProxyBuilder.generatePAProxy(PAProxyBuilder.getBaseClassNameFromPAProxyName(name));
                     classDataCache.put(name, data);
 
                     Class<?> baseCl = Class.forName(PAProxyBuilder.getBaseClassNameFromPAProxyName(name));
@@ -216,7 +204,7 @@ public class MOPClassLoader extends URLClassLoader {
 
                     Class<?> clazz = callDefineClassUsingReflection(name, data, cl);
                     logger.debug("Generated paproxy class : " + name + "loaded into " +
-                        clazz.getClassLoader().toString());
+                                 clazz.getClassLoader().toString());
                     return clazz;
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -255,8 +243,7 @@ public class MOPClassLoader extends URLClassLoader {
                 try {
                     Class<?> clazz = callDefineClassUsingReflection(name, data, null);
 
-                    logger.debug("Generated class : " + name + "loaded into " +
-                        clazz.getClassLoader().toString());
+                    logger.debug("Generated class : " + name + "loaded into " + clazz.getClassLoader().toString());
                     return clazz;
                 } catch (Exception ex) {
                     logger.debug(ex);
@@ -270,8 +257,8 @@ public class MOPClassLoader extends URLClassLoader {
     }
 
     private Class<?> callDefineClassUsingReflection(String name, byte[] data, ClassLoader delegateCl)
-            throws ClassNotFoundException, SecurityException, NoSuchMethodException,
-            IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+            throws ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException,
+            IllegalAccessException, InvocationTargetException {
         Class<?> clc = Class.forName("java.lang.ClassLoader");
         Class<?>[] argumentTypes = new Class<?>[5];
         argumentTypes[0] = name.getClass();

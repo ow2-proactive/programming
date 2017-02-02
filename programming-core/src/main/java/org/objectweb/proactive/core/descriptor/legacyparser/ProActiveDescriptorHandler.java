@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.descriptor.legacyparser;
 
@@ -62,8 +51,7 @@ import org.xml.sax.SAXException;
  * @version 1.0, 2002/09/20
  * @since ProActive 0.9.3
  */
-public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator implements
-        ProActiveDescriptorConstants {
+public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator implements ProActiveDescriptorConstants {
     protected ProActiveDescriptorInternal proActiveDescriptor;
 
     //
@@ -131,8 +119,8 @@ public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator im
         // we get the schema from the class location
         ClassLoader classLoader = ProActiveDescriptorHandler.class.getClassLoader();
 
-        Enumeration<URL> schemaURLs = classLoader
-                .getResources("org/objectweb/proactive/core/descriptor/xml/schemas/" + schema);
+        Enumeration<URL> schemaURLs = classLoader.getResources("org/objectweb/proactive/core/descriptor/xml/schemas/" +
+                                                               schema);
 
         // among the various descriptor schema that we may find, we will always
         // favor the one that is in the jar file
@@ -150,7 +138,7 @@ public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator im
 
         if (schemaURLcandidate == null) {
             logger.error("The schema " + schema +
-                " could not be located in your environment. Consider compiling ProActive using ant");
+                         " could not be located in your environment. Consider compiling ProActive using ant");
         }
 
         return schemaURLcandidate;
@@ -187,8 +175,10 @@ public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator im
             if (selectedSchemasArray.length == 0) {
                 selectedSchemasArray = null;
             }
-            sr = new org.objectweb.proactive.core.xml.io.StreamReader(new org.xml.sax.InputSource(uri), h,
-                selectedSchemasArray, new SAXParserErrorHandlerTerminating());
+            sr = new org.objectweb.proactive.core.xml.io.StreamReader(new org.xml.sax.InputSource(uri),
+                                                                      h,
+                                                                      selectedSchemasArray,
+                                                                      new SAXParserErrorHandlerTerminating());
         } else {
             sr = new org.objectweb.proactive.core.xml.io.StreamReader(new org.xml.sax.InputSource(uri), h);
         }
@@ -372,8 +362,7 @@ public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator im
         }
 
         @Override
-        protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                throws SAXException {
+        protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler) throws SAXException {
         }
 
         public Object getResultObject() throws SAXException {

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication;
 
@@ -63,9 +52,6 @@ import javax.xml.xpath.XPathFactory;
 
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
-import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.ApplicationParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.ApplicationParserExecutable;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.ApplicationParserExecutableMPI;
@@ -74,6 +60,9 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentDescriptor;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentDescriptorImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentDescriptorParams;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.environment.Environment;
@@ -93,32 +82,51 @@ import org.xml.sax.SAXException;
  */
 public class GCMApplicationParserImpl implements GCMApplicationParser {
     private static final String OLD_DESCRIPTOR_SCHEMA = "http://www-sop.inria.fr/oasis/proactive/schema/3.2/DescriptorSchema.xsd";
+
     private static final String XPATH_GCMAPP = "/app:GCMApplication/";
-    private static final String XPATH_VIRTUAL_NODE = XPATH_GCMAPP +
-        "app:application/app:proactive/app:virtualNode";
+
+    private static final String XPATH_VIRTUAL_NODE = XPATH_GCMAPP + "app:application/app:proactive/app:virtualNode";
+
     private static final String XPATH_NODE_PROVIDERS = XPATH_GCMAPP + "app:resources/app:nodeProvider";
+
     private static final String XPATH_APPLICATION = XPATH_GCMAPP + "app:application";
+
     private static final String XPATH_NODE_PROVIDER = "app:nodeProvider";
+
     private static final String XPATH_TECHNICAL_SERVICES = "app:technicalServices";
+
     private static final String XPATH_FILE = "app:file";
 
     private static final String[] SUPPORTED_PROTOCOLS = { "file", "http", "http", "https", "jar", "ftp" };
+
     public static final String ATTR_RP_CAPACITY = "capacity";
+
     protected URL descriptor;
+
     protected VariableContractImpl vContract;
 
     protected Document document;
+
     protected DocumentBuilderFactory domFactory;
+
     protected XPath xpath;
 
     protected List<String> schemas;
+
     protected CommandBuilder commandBuilder;
+
     protected Map<String, NodeProvider> nodeProvidersMap;
+
     protected Map<String, GCMVirtualNodeInternal> virtualNodes;
+
     protected Map<String, ApplicationParser> applicationParsersMap;
+
     protected TechnicalServicesProperties appTechnicalServices;
+
     protected boolean dataSpacesEnabled;
+
     protected Set<InputOutputSpaceConfiguration> inputOutputSpacesConfigurations;
+
     protected String dataSpacesNamingServiceURL;
 
     public GCMApplicationParserImpl(URL descriptor, VariableContractImpl vContract) throws Exception {
@@ -142,15 +150,16 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
         setupJAXP();
 
         try {
-            InputSource processedInputSource = Environment.replaceVariables(descriptor, vContract, xpath,
-                    GCM_APPLICATION_NAMESPACE_PREFIX);
+            InputSource processedInputSource = Environment.replaceVariables(descriptor,
+                                                                            vContract,
+                                                                            xpath,
+                                                                            GCM_APPLICATION_NAMESPACE_PREFIX);
             DocumentBuilder documentBuilder = GCMParserHelper.getNewDocumentBuilder(domFactory);
             document = documentBuilder.parse(processedInputSource);
 
             // sanity check : make sure there isn't a ref to an old schema in the document
             //
-            String noNamespaceSchema = document.getDocumentElement().getAttribute(
-                    "xsi:noNamespaceSchemaLocation");
+            String noNamespaceSchema = document.getDocumentElement().getAttribute("xsi:noNamespaceSchemaLocation");
             if (noNamespaceSchema != null && noNamespaceSchema.contains(OLD_DESCRIPTOR_SCHEMA)) {
                 throw new SAXException("Trying to parse an old descriptor");
             }
@@ -259,9 +268,8 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
                         URL urlWithFile = new URL(path);
                         if (urlWithFile.getHost().length() > 1) {
                             // the host can include the Windows drive letter (in that case it is of size 1)
-                            throw new IOException(
-                                urlWithFile +
-                                    " is using the form <host>/<path> which is not supported. Other possibility is that the url is of the form file:/<path> and it should be file://<path>");
+                            throw new IOException(urlWithFile +
+                                                  " is using the form <host>/<path> which is not supported. Other possibility is that the url is of the form file:/<path> and it should be file://<path>");
                         } else if (urlWithFile.getHost().length() == 1) {
                             path = urlWithFile.getHost() + ":" + "/" + urlWithFile.getPath();
                         } else {
@@ -284,8 +292,8 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
                         // This is very unlikely, but : ff this path is relative and the base url is not hierarchical (and differs from jar)
                         // we just can't handle it
                         throw new IOException(descriptor.toExternalForm() +
-                            " is not a hierarchical uri and can't be resolved against the relative path " +
-                            path);
+                                              " is not a hierarchical uri and can't be resolved against the relative path " +
+                                              path);
                     } else {
                         // We can handle the last case by using URI resolve method
                         URI uriDescriptor = descriptor.toURI();
@@ -302,7 +310,7 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
 
                         if (cleaneruri.isAbsolute()) {
                             throw new IOException("Internal error: " + cleaneruri +
-                                " is absolute and should be relative");
+                                                  " is absolute and should be relative");
                         }
                         // now that we have a clean relative, we can resolve it against the base url
                         URI fullUri = uriDescriptor.resolve(cleaneruri);
@@ -350,7 +358,7 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
             ApplicationParser applicationParser = getApplicationParserForNode(commandNode);
             if (applicationParser == null) {
                 GCMDeploymentLoggers.GCMA_LOGGER.warn("No application parser registered for node <" +
-                    commandNode.getNodeName() + ">");
+                                                      commandNode.getNodeName() + ">");
             } else {
                 applicationParser.parseApplicationNode(commandNode, this, xpath);
                 commandBuilder = applicationParser.getCommandBuilder();
@@ -399,20 +407,22 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
             //
             Node techServices = (Node) xpath.evaluate(XPATH_TECHNICAL_SERVICES, xmlNode, XPathConstants.NODE);
             if (techServices != null) {
-                TechnicalServicesProperties vnodeTechnicalServices = GCMParserHelper
-                        .parseTechnicalServicesNode(xpath, techServices);
+                TechnicalServicesProperties vnodeTechnicalServices = GCMParserHelper.parseTechnicalServicesNode(xpath,
+                                                                                                                techServices);
                 virtualNode.setTechnicalServicesProperties(vnodeTechnicalServices);
             }
 
             // get resource providers references
             //
-            NodeList nodeProviderNodes = (NodeList) xpath.evaluate(XPATH_NODE_PROVIDER, xmlNode,
-                    XPathConstants.NODESET);
+            NodeList nodeProviderNodes = (NodeList) xpath.evaluate(XPATH_NODE_PROVIDER,
+                                                                   xmlNode,
+                                                                   XPathConstants.NODESET);
             if (nodeProviderNodes.getLength() == 0) {
                 // Add all the Node Providers to this Virtual Node
                 for (NodeProvider nodeProvider : NodeProvider.getAllNodeProviders()) {
-                    virtualNode.addNodeProviderContract(nodeProvider, TechnicalServicesProperties.EMPTY,
-                            GCMVirtualNode.MAX_CAPACITY);
+                    virtualNode.addNodeProviderContract(nodeProvider,
+                                                        TechnicalServicesProperties.EMPTY,
+                                                        GCMVirtualNode.MAX_CAPACITY);
                 }
             } else {
                 for (int j = 0; j < nodeProviderNodes.getLength(); j++) {
@@ -423,17 +433,19 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
 
                     NodeProvider nodeProvider = nodeProvidersMap.get(refId);
 
-                    Node nodeProviderTechServices = (Node) xpath.evaluate(XPATH_TECHNICAL_SERVICES, nodeProv,
-                            XPathConstants.NODE);
+                    Node nodeProviderTechServices = (Node) xpath.evaluate(XPATH_TECHNICAL_SERVICES,
+                                                                          nodeProv,
+                                                                          XPathConstants.NODE);
                     TechnicalServicesProperties nodeProviderTechServicesProperties = TechnicalServicesProperties.EMPTY;
                     if (nodeProviderTechServices != null) {
-                        nodeProviderTechServicesProperties = GCMParserHelper.parseTechnicalServicesNode(
-                                xpath, nodeProviderTechServices);
+                        nodeProviderTechServicesProperties = GCMParserHelper.parseTechnicalServicesNode(xpath,
+                                                                                                        nodeProviderTechServices);
                         nodeProvider.setTechnicalServicesProperties(nodeProviderTechServicesProperties);
                     }
 
-                    virtualNode.addNodeProviderContract(nodeProvider, nodeProviderTechServicesProperties,
-                            capacityAsLong(capacity));
+                    virtualNode.addNodeProviderContract(nodeProvider,
+                                                        nodeProviderTechServicesProperties,
+                                                        capacityAsLong(capacity));
 
                 }
             }
@@ -453,7 +465,7 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
             return Long.parseLong(capacity);
         } catch (NumberFormatException e) {
             throw new NumberFormatException(capacity +
-                " is an invalid value for a capacity (should have been checked by the XSD)");
+                                            " is an invalid value for a capacity (should have been checked by the XSD)");
         }
     }
 
@@ -481,8 +493,7 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
         return inputOutputSpacesConfigurations;
     }
 
-    public void setInputOutputSpacesConfigurations(
-            Set<InputOutputSpaceConfiguration> inputOutputSpacesConfigurations) {
+    public void setInputOutputSpacesConfigurations(Set<InputOutputSpaceConfiguration> inputOutputSpacesConfigurations) {
         this.inputOutputSpacesConfigurations = inputOutputSpacesConfigurations;
     }
 }

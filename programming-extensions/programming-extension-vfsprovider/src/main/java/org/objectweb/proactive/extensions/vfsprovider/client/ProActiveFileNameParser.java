@@ -1,48 +1,37 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.vfsprovider.client;
 
-import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.provider.HostFileNameParser;
 import org.apache.commons.vfs2.provider.UriParser;
 import org.apache.commons.vfs2.provider.VfsComponentContext;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 
 
 /**
@@ -60,8 +49,7 @@ public class ProActiveFileNameParser extends HostFileNameParser {
 
     private static String extractServicePath(StringBuilder path) throws FileSystemException {
         if (path.length() > 0 && path.charAt(0) != FileName.SEPARATOR_CHAR) {
-            throw new FileSystemException(
-                "Invalid path in URI: service path after host name does not begin with slash");
+            throw new FileSystemException("Invalid path in URI: service path after host name does not begin with slash");
         }
 
         int idx = path.indexOf(ProActiveFileName.SERVICE_AND_FILE_PATH_SEPARATOR);
@@ -82,8 +70,7 @@ public class ProActiveFileNameParser extends HostFileNameParser {
     }
 
     @Override
-    public FileName parseUri(VfsComponentContext context, FileName base, String filename)
-            throws FileSystemException {
+    public FileName parseUri(VfsComponentContext context, FileName base, String filename) throws FileSystemException {
         final StringBuilder name = new StringBuilder();
 
         // Extract the scheme and authority parts
@@ -101,8 +88,14 @@ public class ProActiveFileNameParser extends HostFileNameParser {
         final String path = name.toString();
 
         try {
-            return new ProActiveFileName(auth.getScheme(), auth.getHostName(), auth.getPort(),
-                auth.getUserName(), auth.getPassword(), servicePath, path, fileType);
+            return new ProActiveFileName(auth.getScheme(),
+                                         auth.getHostName(),
+                                         auth.getPort(),
+                                         auth.getUserName(),
+                                         auth.getPassword(),
+                                         servicePath,
+                                         path,
+                                         fileType);
         } catch (UnknownProtocolException e) {
             throw new FileSystemException("Unknown protocol scheme of URL", e);
         }

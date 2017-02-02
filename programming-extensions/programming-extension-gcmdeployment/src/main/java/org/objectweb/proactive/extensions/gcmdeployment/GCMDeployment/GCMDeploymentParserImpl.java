@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
@@ -59,8 +48,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.BroadcastEntry;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
@@ -89,6 +76,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsu
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfoImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.objectweb.proactive.extensions.gcmdeployment.environment.Environment;
 import org.objectweb.proactive.utils.OperatingSystem;
 import org.w3c.dom.Attr;
@@ -117,52 +106,87 @@ import org.xml.sax.SAXException;
  */
 public class GCMDeploymentParserImpl implements GCMDeploymentParser {
     private static final String PA_HOST = "host";
+
     private static final String PA_GROUP = "group";
+
     private static final String PA_BRIDGE = "bridge";
+
     private static final String PA_LOOKUP = "lookup";
+
     private static final String PA_BROADCAST = "broadcast";
+
     private static final String PA_NODE_ASKED = "nodesAsked";
+
     private static final String PA_LOCAL_CLIENT = "localClient";
+
     private static final String PA_PEER_SET = "peerSet";
+
     private static final String PA_PEER = "peer";
+
     private static final String PA_PROTOCOL = "protocol";
+
     private static final String PA_PORT = "port";
+
     private static final String XPATH_GCMDEPLOYMENT = "/dep:GCMDeployment/";
+
     private static final String XPATH_ACQUISITION = XPATH_GCMDEPLOYMENT + "dep:acquisition";
+
     private static final String XPATH_INFRASTRUCTURE = XPATH_GCMDEPLOYMENT + "dep:infrastructure";
+
     private static final String XPATH_RESOURCES = XPATH_GCMDEPLOYMENT + "dep:resources";
+
     private static final String XPATH_TOOL = "dep:tool";
+
     private static final String XPATH_HOME_DIRECTORY = "dep:homeDirectory";
+
     private static final String XPATH_NETWORK_INTERFACE = "dep:networkInterface";
+
     private static final String XPATH_SCRATCH = "dep:scratch";
+
     private static final String XPATH_REMOTE_ACCESS = "dep:remoteAccess";
+
     private static final String XPATH_PATH = "dep:path";
+
     private static final String XPATH_BRIDGES = "dep:bridges/*";
+
     private static final String XPATH_GROUPS = "dep:groups/*";
+
     private static final String XPATH_HOSTS = "dep:hosts/dep:host";
+
     private static final String XPATH_HOST = "dep:host";
+
     private static final String XPATH_DESCRIPTOR_VARIABLE = "dep:descriptorVariable";
 
     protected DocumentBuilderFactory domFactory;
+
     protected XPath xpath;
+
     protected Document document;
 
     protected List<String> schemas;
+
     protected Map<String, GroupParser> groupParserMap;
+
     protected Map<String, BridgeParser> bridgeParserMap;
+
     protected GCMDeploymentInfrastructure infrastructure;
 
     // protected GCMDeploymentEnvironment environment;
     protected GCMDeploymentResources resources;
+
     private VariableContractImpl variableContract;
+
     private GCMDeploymentAcquisition acquisitions;
+
     private boolean parsedAcquisitions = false;
+
     private boolean parsedResource = false;
+
     private boolean parsedInfrastructure = false;
+
     private URL descriptor;
 
-    public GCMDeploymentParserImpl(URL descriptor, VariableContractImpl vContract) throws Exception,
-            RuntimeException {
+    public GCMDeploymentParserImpl(URL descriptor, VariableContractImpl vContract) throws Exception, RuntimeException {
         this(descriptor, vContract, null);
     }
 
@@ -184,8 +208,10 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         registerDefaultBridgeParsers();
         registerUserBridgeParsers();
         try {
-            InputSource processedInputSource = Environment.replaceVariables(descriptor, vContract, xpath,
-                    GCM_DEPLOYMENT_NAMESPACE_PREFIX);
+            InputSource processedInputSource = Environment.replaceVariables(descriptor,
+                                                                            vContract,
+                                                                            xpath,
+                                                                            GCM_DEPLOYMENT_NAMESPACE_PREFIX);
 
             // we need to create a new DocumentBuilder before each parsing,
             // otherwise the schemas set in setupJAXP() through
@@ -447,8 +473,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
      * 
      * @throws IOException
      */
-    protected void parseGroupResource(Node resourceNode, Group group) throws XPathExpressionException,
-            IOException {
+    protected void parseGroupResource(Node resourceNode, Group group) throws XPathExpressionException, IOException {
         Node hostNode = (Node) xpath.evaluate(XPATH_HOST, resourceNode, XPathConstants.NODE);
 
         String refid = GCMParserHelper.getAttributeValue(hostNode, "refid");
@@ -472,8 +497,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
      * 
      * @throws IOException
      */
-    protected void parseBridgeResource(Node resourceNode, Bridge bridge) throws IOException,
-            XPathExpressionException {
+    protected void parseBridgeResource(Node resourceNode, Bridge bridge) throws IOException, XPathExpressionException {
         NodeList childNodes = resourceNode.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); ++i) {
             Node childNode = childNodes.item(i);
@@ -532,7 +556,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
             GroupParser groupParser = groupParserMap.get(groupNode.getNodeName());
             if (groupParser == null) {
                 GCMDeploymentLoggers.GCMD_LOGGER.warn("No group parser registered for node <" +
-                    groupNode.getNodeName() + ">");
+                                                      groupNode.getNodeName() + ">");
             } else {
                 AbstractGroup group = groupParser.parseGroupNode(groupNode, xpath);
                 infrastructure.addGroup(group);
@@ -542,15 +566,14 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         //
         // Bridges
         //
-        NodeList bridges = (NodeList) xpath.evaluate(XPATH_BRIDGES, infrastructureNode,
-                XPathConstants.NODESET);
+        NodeList bridges = (NodeList) xpath.evaluate(XPATH_BRIDGES, infrastructureNode, XPathConstants.NODESET);
 
         for (int i = 0; i < bridges.getLength(); ++i) {
             Node bridgeNode = bridges.item(i);
             BridgeParser bridgeParser = bridgeParserMap.get(bridgeNode.getNodeName());
             if (bridgeParser == null) {
                 GCMDeploymentLoggers.GCMD_LOGGER.warn("No bridge parser registered for node <" +
-                    bridgeNode.getNodeName() + ">");
+                                                      bridgeNode.getNodeName() + ">");
             } else {
                 AbstractBridge bridge = bridgeParser.parseBridgeNode(bridgeNode, xpath);
                 infrastructure.addBrige(bridge);
@@ -569,7 +592,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
     public void registerGroupParser(GroupParser groupParser) {
         if (groupParserMap.containsKey(groupParser.getNodeName())) {
             GCMDeploymentLoggers.GCMD_LOGGER.error("Group parser for '" + groupParser.getNodeName() +
-                "' already registered");
+                                                   "' already registered");
         }
         groupParserMap.put(groupParser.getNodeName(), groupParser);
     }
@@ -583,7 +606,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
     public void registerBridgeParser(BridgeParser bridgeParser) {
         if (bridgeParserMap.containsKey(bridgeParser.getNodeName())) {
             GCMDeploymentLoggers.GCMD_LOGGER.error("Bridge parser for '" + bridgeParser.getNodeName() +
-                "' already registered");
+                                                   "' already registered");
         }
         bridgeParserMap.put(bridgeParser.getNodeName(), bridgeParser);
     }
@@ -639,8 +662,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
             hostInfo.setHomeDirectory(GCMParserHelper.getAttributeValue(homeDirectoryNode, "relpath"));
         }
 
-        Node networkInterfaceNode = (Node) xpath.evaluate(XPATH_NETWORK_INTERFACE, hostNode,
-                XPathConstants.NODE);
+        Node networkInterfaceNode = (Node) xpath.evaluate(XPATH_NETWORK_INTERFACE, hostNode, XPathConstants.NODE);
         if (networkInterfaceNode != null) {
             hostInfo.setNetworkInterface(GCMParserHelper.getAttributeValue(networkInterfaceNode, "name"));
         }
@@ -654,7 +676,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         for (int i = 0; i < toolNodes.getLength(); ++i) {
             Node toolNode = toolNodes.item(i);
             Tool tool = new Tool(GCMParserHelper.getAttributeValue(toolNode, "id"),
-                GCMParserHelper.getAttributeValue(toolNode, "path"));
+                                 GCMParserHelper.getAttributeValue(toolNode, "path"));
             hostInfo.addTool(tool);
         }
 
@@ -674,8 +696,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
 
         if (remoteAccessNode == null && pathNode == null) {
             // workaround for XSD limitation(?) - lack of disjunction
-            GCMDeploymentLoggers.GCMD_LOGGER
-                    .error("No access specified for host scratch, scratch not configured");
+            GCMDeploymentLoggers.GCMD_LOGGER.error("No access specified for host scratch, scratch not configured");
         }
     }
 

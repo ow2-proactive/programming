@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.router;
 
@@ -42,11 +31,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.pamr.PAMRConfig;
-import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;
-import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
-import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurationMessage;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -57,6 +41,11 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;
+import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurationMessage;
 
 
 /** Start a router.
@@ -220,8 +209,7 @@ public class Main {
             try {
                 long i = Long.parseLong(arg);
                 if (i == 0 || i < -1) {
-                    printHelpAndExit("Invalid client eviction timeout value. Must be either -1 or positive",
-                            options);
+                    printHelpAndExit("Invalid client eviction timeout value. Must be either -1 or positive", options);
                 }
                 config.setClientEvictionTimeout(i);
             } catch (NumberFormatException e) {
@@ -312,14 +300,18 @@ public class Main {
 
     private Options createOptions() {
         Options options = new Options();
-        options.addOption("p", "port", true,
-                "Specifies the port on which the server listens for connections (default 33647).");
+        options.addOption("p",
+                          "port",
+                          true,
+                          "Specifies the port on which the server listens for connections (default 33647).");
         options.addOption("i", "ip", true, "Bind to a given IP address or hostname");
         options.addOption("4", "ipv4", false, "Force the router to use IPv4 addresses only");
         options.addOption("6", "ipv6", false, "Force the router to use IPv6 addresses only");
         options.addOption("t", "timeout", true, "The heartbeat timeout value");
-        options.addOption("e", "evictTimeout", true,
-                "Timeout for the eviction of disconnected clients (default: -1, means no eviction)");
+        options.addOption("e",
+                          "evictTimeout",
+                          true,
+                          "Timeout for the eviction of disconnected clients (default: -1, means no eviction)");
         options.addOption("w", "nbWorkers", true, "Size of the worker thread pool");
         options.addOption("f", "configFile", true, "configuration file");
         options.addOption("h", "help", false, "Print help message");

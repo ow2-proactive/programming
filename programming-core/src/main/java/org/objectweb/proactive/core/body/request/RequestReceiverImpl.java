@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.body.request;
 
@@ -81,6 +70,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
      */
     private static final class ClassArrayWrapper implements Serializable {
         private final Class<?>[] wrappedClassArray;
+
         // cached hashcode since CAW is final
         private final int myHashcode;
 
@@ -115,13 +105,17 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
      * id served by a dedicated thread, which is the same for a given caller).
      */
     public enum ServiceMode {
-        NORMAL_SERVICE, IMMEDIATE_MULTI_THREAD, IMMEDIATE_UNIQUE_THREAD;
+        NORMAL_SERVICE,
+        IMMEDIATE_MULTI_THREAD,
+        IMMEDIATE_UNIQUE_THREAD;
     }
 
     // Map of service mode per method name and method parameters
     private final Map<String, Map<ClassArrayWrapper, ServiceMode>> serviceModes;
+
     // immediate services are currently executed if != 0
     private AtomicInteger inImmediateService;
+
     // Thread associated to a given caller for immediate service with unique thread
     private transient Map<UniqueID, ThreadForImmediateService> threadsForCallers;
 
@@ -147,10 +141,10 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
             if (!mode.equals(ServiceMode.NORMAL_SERVICE)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("immediately serving " +
-                        request.getMethodName() +
-                        (mode.equals(ServiceMode.IMMEDIATE_UNIQUE_THREAD) ? " with unique thread for caller " +
-                            request.getSourceBodyID()
-                                : ""));
+                                 request.getMethodName() + (mode.equals(ServiceMode.IMMEDIATE_UNIQUE_THREAD)
+                                                                                                             ? " with unique thread for caller " +
+                                                                                                               request.getSourceBodyID()
+                                                                                                             : ""));
                 }
                 this.inImmediateService.incrementAndGet();
                 try {
@@ -179,14 +173,12 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                     queue = bodyReceiver.getRequestQueue();
                 } catch (InactiveBodyException e) {
                     throw new InactiveBodyException("Cannot add request \"" + request.getMethodName() +
-                        "\" because this body is inactive", e);
+                                                    "\" because this body is inactive", e);
                 }
                 queue.add(request);
             }
         } catch (Exception e) {
-            logger.info(
-                    "Error while receiving request " + (request == null ? "null" : request.getMethodName()),
-                    e);
+            logger.info("Error while receiving request " + (request == null ? "null" : request.getMethodName()), e);
         }
     }
 
@@ -203,7 +195,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
             if (serviceModes.containsKey(methodName)) {
                 final Map<ClassArrayWrapper, ServiceMode> params = serviceModes.get(methodName);
                 final ClassArrayWrapper parameterTypes = new ClassArrayWrapper(request.getMethodCall()
-                        .getReifiedMethod().getParameterTypes());
+                                                                                      .getReifiedMethod()
+                                                                                      .getParameterTypes());
                 if (params.containsKey(parameterTypes)) {
                     // return the most specific result 
                     return params.get(parameterTypes);
@@ -231,8 +224,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
 
     public void setImmediateService(String methodName, boolean uniqueThread) {
         final Hashtable<ClassArrayWrapper, ServiceMode> t = new Hashtable<ClassArrayWrapper, ServiceMode>(1);
-        t.put(ANY_PARAMETERS, uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD
-                : ServiceMode.IMMEDIATE_MULTI_THREAD);
+        t.put(ANY_PARAMETERS, uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD : ServiceMode.IMMEDIATE_MULTI_THREAD);
         this.serviceModes.put(methodName, t);
     }
 
@@ -260,21 +252,20 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
             if (params.containsKey(ANY_PARAMETERS)) {
                 // check if the "all-params" mode is the awaited one. If not, add a specific entry
                 if (!(params.get(ANY_PARAMETERS).equals((uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD
-                        : ServiceMode.IMMEDIATE_MULTI_THREAD)))) {
-                    params.put(wrappedParams, uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD
-                            : ServiceMode.IMMEDIATE_MULTI_THREAD);
+                                                                      : ServiceMode.IMMEDIATE_MULTI_THREAD)))) {
+                    params.put(wrappedParams,
+                               uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD : ServiceMode.IMMEDIATE_MULTI_THREAD);
                 }
             } else {
                 // no "all-params" entry, add specific one
-                params.put(wrappedParams, uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD
-                        : ServiceMode.IMMEDIATE_MULTI_THREAD);
+                params.put(wrappedParams,
+                           uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD : ServiceMode.IMMEDIATE_MULTI_THREAD);
             }
         } else {
             // no entry for this method name, add one
-            final Hashtable<ClassArrayWrapper, ServiceMode> t = new Hashtable<ClassArrayWrapper, ServiceMode>(
-                1);
-            t.put(wrappedParams, uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD
-                    : ServiceMode.IMMEDIATE_MULTI_THREAD);
+            final Hashtable<ClassArrayWrapper, ServiceMode> t = new Hashtable<ClassArrayWrapper, ServiceMode>(1);
+            t.put(wrappedParams,
+                  uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD : ServiceMode.IMMEDIATE_MULTI_THREAD);
             this.serviceModes.put(methodName, t);
         }
     }
@@ -313,12 +304,17 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     private class ThreadForImmediateService extends Thread {
 
         private final UniversalBody associatedCaller;
+
         private final Semaphore callerLock;
+
         private final Semaphore localLock;
 
         private Request currentRequest;
+
         private Body currentReceiver;
+
         private final AtomicBoolean isActive;
+
         private final AtomicBoolean isInService;
 
         /**
@@ -350,8 +346,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                     throw new ProActiveRuntimeException("Deleguate services cannot be concurrent.");
                 }
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Serving IS with unique thread : " + request.getMethodName() +
-                        " for caller " + this.associatedCaller);
+                    logger.debug("Serving IS with unique thread : " + request.getMethodName() + " for caller " +
+                                 this.associatedCaller);
                 }
                 this.currentRequest = request;
                 this.currentReceiver = receiver;
@@ -361,7 +357,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                 this.isInService.set(false);
             } else {
                 throw new ProActiveException("" + this.getName() + " is no more active. Request " +
-                    request.getMethodName() + " from " + request.getSourceBodyID() + " cannot be served");
+                                             request.getMethodName() + " from " + request.getSourceBodyID() +
+                                             " cannot be served");
             }
         }
 
@@ -370,7 +367,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
             while (isActive.get()) {
                 try {
                     didCall = this.localLock.tryAcquire(RequestReceiverImpl.THREAD_FOR_IS_PING_PERIOD,
-                            TimeUnit.SECONDS);
+                                                        TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     // interruption is ignored
                     if (isActive.get()) {
@@ -385,8 +382,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                     try {
                         this.currentReceiver.serve(this.currentRequest);
                     } catch (Throwable e) {
-                        logger.error("An exception occured in the service of " +
-                            this.currentRequest.getMethodName() + " by " + this);
+                        logger.error("An exception occured in the service of " + this.currentRequest.getMethodName() +
+                                     " by " + this);
                         e.printStackTrace();
                     }
                     // the following set do not have to be synchronized since only one deleguateServe call at a time is possible 

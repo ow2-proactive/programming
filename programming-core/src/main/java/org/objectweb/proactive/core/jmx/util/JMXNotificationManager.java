@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.jmx.util;
 
@@ -115,8 +104,7 @@ public class JMXNotificationManager implements NotificationListener {
 
         try {
             // Initalise the JMXNotificationListener which is an active object listening all needed MBeans
-            this.notificationlistener = PAActiveObject.newActive(JMXNotificationListener.class,
-                    new Object[] {});
+            this.notificationlistener = PAActiveObject.newActive(JMXNotificationListener.class, new Object[] {});
         } catch (ActiveObjectCreationException e) {
             logger.error("Can't create the JMX notifications listener active object", e);
         } catch (NodeException e) {
@@ -160,8 +148,7 @@ public class JMXNotificationManager implements NotificationListener {
     public void subscribe(ObjectName objectName, NotificationListener listener, NotificationFilter filter,
             Object handback) {
         try {
-            ManagementFactory.getPlatformMBeanServer().addNotificationListener(objectName, listener, filter,
-                    handback);
+            ManagementFactory.getPlatformMBeanServer().addNotificationListener(objectName, listener, filter, handback);
         } catch (InstanceNotFoundException e) {
             logger.error("The objectName: " + objectName + " cooresponds tot none registered MBeans", e);
         }
@@ -173,8 +160,7 @@ public class JMXNotificationManager implements NotificationListener {
      * @param listener The notification listener.
      * @param runtimeUrl The url of the remote ProActiveRuntime where the MBean is located
      */
-    public void subscribe(ObjectName objectName, NotificationListener listener, String runtimeUrl)
-            throws IOException {
+    public void subscribe(ObjectName objectName, NotificationListener listener, String runtimeUrl) throws IOException {
         // Search if this objectName is already listened
         ConcurrentLinkedQueue<NotificationListener> listeners = allListeners.get(objectName);
 
@@ -222,7 +208,7 @@ public class JMXNotificationManager implements NotificationListener {
         // No listener listen this objectName, so we display an error message.
         if (listeners == null) {
             logger.warn("The unsubscribe action has failed : The objectName=" + objectName +
-                " has been already unsubscribe");
+                        " has been already unsubscribe");
             return;
         }
         // We have to remove the listener.
@@ -233,7 +219,7 @@ public class JMXNotificationManager implements NotificationListener {
             // The listener didn't be listening this objectName, so we display an error message.
             if (!isRemoved) {
                 logger.warn("The unsubscribe action has failed : The given listener doesn't listen the objectName=" +
-                    objectName);
+                            objectName);
                 return;
             }
 
@@ -291,7 +277,7 @@ public class JMXNotificationManager implements NotificationListener {
         if (!PAActiveObject.pingActiveObject(connection)) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Trying to unregister listener on a connection with terminated body. Ping faild on the connection object: " +
-                    connection.toString());
+                             connection.toString());
             }
             return;
         }
@@ -318,8 +304,7 @@ public class JMXNotificationManager implements NotificationListener {
 
         if (type.equals(NotificationType.setOfNotifications)) {
             @SuppressWarnings("unchecked")
-            ConcurrentLinkedQueue<Notification> notifications = (ConcurrentLinkedQueue<Notification>) notification
-                    .getUserData();
+            ConcurrentLinkedQueue<Notification> notifications = (ConcurrentLinkedQueue<Notification>) notification.getUserData();
 
             String msg = notification.getMessage();
 
@@ -352,7 +337,7 @@ public class JMXNotificationManager implements NotificationListener {
                     Connection oldConnection = connectionsWithObjectName.get(ob);
                     if (oldConnection == null) {
                         logger.warn("Could not unsubscribe listener for object " + ob +
-                            " from the old host after migration");
+                                    " from the old host after migration");
                     } else {
                         oldConnection.removeObjectName(ob);
                         unsubscribeObjectFromRemoteMBean(oldConnection.getConnection(), ob, null, null);
@@ -362,9 +347,8 @@ public class JMXNotificationManager implements NotificationListener {
                 }
 
             } catch (IOException e) {
-                logger.error(
-                        "Got a migration notification but was not able to contact the new runtime for the following reason : ",
-                        e);
+                logger.error("Got a migration notification but was not able to contact the new runtime for the following reason : ",
+                             e);
             }
 
         }
@@ -419,8 +403,7 @@ public class JMXNotificationManager implements NotificationListener {
             proActiveRuntime.startJMXServerConnector();
 
             // Create a new connection
-            ClientConnector cc = new ClientConnector(runtimeURI.toString(),
-                FactoryName.getJMXServerName(runtimeURI));
+            ClientConnector cc = new ClientConnector(runtimeURI.toString(), FactoryName.getJMXServerName(runtimeURI));
             // Connect to the remote JMX Server Connector
             cc.connect();
 
@@ -558,8 +541,7 @@ public class JMXNotificationManager implements NotificationListener {
 
             //System.out.println("Unregistered the JMXNotificationListener for IC2D from the regisrty.");
         } catch (Exception e) {
-            System.out
-                    .println("Could not unregistered the JMXNotificationListener for IC2D from the regisrty.");
+            System.out.println("Could not unregistered the JMXNotificationListener for IC2D from the regisrty.");
             e.printStackTrace();
         }
 

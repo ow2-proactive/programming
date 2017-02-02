@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s): ActiveEon Team - http://www.activeeon.com
- *
- * ################################################################
- * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.body;
 
@@ -121,10 +110,12 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
     // JMX
     /** The MBean representing this body */
     protected BodyWrapperMBean mbean;
+
     protected boolean isProActiveInternalObject = false;
 
     // MESSAGE-TAGS Factory
     protected MessageTagsFactory messageTagsFactory;
+
     protected Map<String, LocalMemoryTag> localMemoryTags;
 
     //
@@ -224,7 +215,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             this.enterInThreadStore();
             if (this.isDead) {
                 throw new BodyTerminatedRequestException(shortString(),
-                    request != null ? request.getMethodName() : null);
+                                                         request != null ? request.getMethodName() : null);
             }
             this.registerIncomingFutures();
             this.internalReceiveRequest(request);
@@ -239,7 +230,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             enterInThreadStore();
             if (this.isDead && (this.getFuturePool() == null)) {
                 throw new BodyTerminatedReplyException(reifiedObjectClassName,
-                    reply != null ? reply.getMethodName() : null);
+                                                       reply != null ? reply.getMethodName() : null);
             }
             this.registerIncomingFutures();
             internalReceiveReply(reply);
@@ -321,7 +312,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
                     logger.error("The MBean with the objectName " + objectName + " was not found", e);
                 } catch (MBeanRegistrationException e) {
                     logger.error("The MBean with the objectName " + objectName +
-                        " can't be unregistered from the MBean server", e);
+                                 " can't be unregistered from the MBean server", e);
                 }
             }
             this.mbean = null;
@@ -437,8 +428,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         this.localBodyStrategy.serveWithException(request, exception);
     }
 
-    public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
-            throws IOException {
+    public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody) throws IOException {
         // Tag the outgoing request with the barrier tags
         if (!this.spmdManager.isTagsListEmpty()) {
             methodCall.setBarrierTags(this.spmdManager.getBarrierTags());
@@ -514,7 +504,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
                     logger.error("The MBean with the objectName " + objectName + " was not found", e);
                 } catch (MBeanRegistrationException e) {
                     logger.error("The MBean with the objectName " + objectName +
-                        " can't be unregistered from the MBean server", e);
+                                 " can't be unregistered from the MBean server", e);
                 }
             }
             this.mbean = null;

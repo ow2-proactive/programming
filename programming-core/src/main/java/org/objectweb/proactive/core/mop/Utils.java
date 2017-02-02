@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
 
@@ -58,29 +47,38 @@ public abstract class Utils extends Object {
      * Static variables
      */
     public static final Class<?> JAVA_LANG_NUMBER = silentForName("java.lang.Number");
+
     public static final Class<?> JAVA_LANG_CHARACTER = silentForName("java.lang.Character");
+
     public static final Class<?> JAVA_LANG_BOOLEAN = silentForName("java.lang.Boolean");
+
     public static final Class<?> JAVA_LANG_VOID = silentForName("java.lang.Void");
+
     public static final Class<?> JAVA_LANG_RUNTIMEEXCEPTION = silentForName("java.lang.RuntimeException");
+
     public static final Class<?> JAVA_LANG_EXCEPTION = silentForName("java.lang.Exception");
+
     public static final Class<?> JAVA_LANG_THROWABLE = silentForName("java.lang.Throwable");
 
     /**
      * The char used to escaped "meta" information in generated classname.
      */
     public static final char STUB_ESCAPE_CHAR = '_';
+
     public static final String STUB_ESCAPE = "" + STUB_ESCAPE_CHAR + STUB_ESCAPE_CHAR;
 
     /**
      * Used to replace '.'
      */
     public static final char STUB_PACKAGE_SEPARATOR_CHAR = 'P';
+
     public static final String STUB_PACKAGE_SEPARATOR = "" + STUB_ESCAPE_CHAR + STUB_PACKAGE_SEPARATOR_CHAR;
 
     /**
      * Separate many Type classname in case of parameterizing Type.
      */
     public static final char STUB_GENERICS_SEPARATOR_CHAR = 'D';
+
     public static final String STUB_GENERICS_SEPARATOR = "" + STUB_ESCAPE_CHAR + STUB_GENERICS_SEPARATOR_CHAR;
 
     //prefix and suffix
@@ -356,8 +354,7 @@ public abstract class Utils extends Object {
             indexOfLastDot = indexOfDot + 1;
             indexOfDot = packageName.indexOf('.', indexOfDot + 1);
             if (indexOfDot == -1) {
-                result = result + File.separator +
-                    packageName.substring(indexOfLastDot, packageName.length());
+                result = result + File.separator + packageName.substring(indexOfLastDot, packageName.length());
             }
         }
 
@@ -369,9 +366,10 @@ public abstract class Utils extends Object {
     }
 
     /*
-       public static String getStubName(String nameOfClass) {
-         return Utils.getPackageName(nameOfClass) + "." + STUB_DEFAULT_PREFIX + Utils.getSimpleName(nameOfClass);
-       }
+     * public static String getStubName(String nameOfClass) {
+     * return Utils.getPackageName(nameOfClass) + "." + STUB_DEFAULT_PREFIX +
+     * Utils.getSimpleName(nameOfClass);
+     * }
      */
     public static boolean isNormalException(Class<?> exc) {
         boolean result;
@@ -527,8 +525,8 @@ public abstract class Utils extends Object {
             packageName += ".";
         }
         packageName = STUB_DEFAULT_PACKAGE +
-            (((genericParameters == null) || (genericParameters.length == 0)) ? "" : STUB_GENERICS_PACKAGE) +
-            packageName;
+                      (((genericParameters == null) || (genericParameters.length == 0)) ? "" : STUB_GENERICS_PACKAGE) +
+                      packageName;
 
         String genericsDifferentiator = "";
         if (genericParameters != null) {
@@ -543,8 +541,7 @@ public abstract class Utils extends Object {
             }
         }
 
-        return packageName + STUB_DEFAULT_PREFIX + escapeClassName(getSimpleName(classname)) +
-            genericsDifferentiator;
+        return packageName + STUB_DEFAULT_PREFIX + escapeClassName(getSimpleName(classname)) + genericsDifferentiator;
     }
 
     public static boolean isStubClassName(String classname) {
@@ -612,8 +609,8 @@ public abstract class Utils extends Object {
      * @return the list of elements containing in the given stubClassName
      * @throws IllegalArgumentException if the given escapedClassesName isn't well escaped
      */
-    private static List<CharSequence> unEscapeStubClassesName(String stubClassName,
-            boolean withParameterizingTypes) throws IllegalArgumentException {
+    private static List<CharSequence> unEscapeStubClassesName(String stubClassName, boolean withParameterizingTypes)
+            throws IllegalArgumentException {
         ArrayList<CharSequence> result = new ArrayList<CharSequence>();
         StringBuilder sb = new StringBuilder(stubClassName.length());
         boolean stubFlag = false;
@@ -625,8 +622,7 @@ public abstract class Utils extends Object {
             if (stubClassName.startsWith(Utils.STUB_DEFAULT_PACKAGE + Utils.STUB_GENERICS_PACKAGE)) {
                 genericPackage = true;
                 // remove generics stuff
-                temp = stubClassName.substring((Utils.STUB_DEFAULT_PACKAGE + Utils.STUB_GENERICS_PACKAGE)
-                        .length());
+                temp = stubClassName.substring((Utils.STUB_DEFAULT_PACKAGE + Utils.STUB_GENERICS_PACKAGE).length());
             } else {
                 temp = stubClassName.substring(Utils.STUB_DEFAULT_PACKAGE.length());
             }
@@ -648,7 +644,7 @@ public abstract class Utils extends Object {
                 } else {
                     i++;
                     switch (stubClassName.charAt(i)) {
-                    // one char Flags : 'STUB_ESCAPE_CHAR''a_char'
+                        // one char Flags : 'STUB_ESCAPE_CHAR''a_char'
                         case STUB_PACKAGE_SEPARATOR_CHAR:
                             sb.append('.');
                             break;
@@ -665,12 +661,10 @@ public abstract class Utils extends Object {
                         case 'S':
                             if (stubClassName.startsWith(STUB_DEFAULT_PREFIX, i - 1)) { //Stub
                                 if (stubFlag) {
-                                    throw new IllegalArgumentException(
-                                        "The escapedClassesName is not a well formed escaped string at index " +
-                                            i +
-                                            ", the flag STUB_DEFAULT_PREFIX (" +
-                                            STUB_DEFAULT_PREFIX +
-                                            ") are present twice : " + stubClassName);
+                                    throw new IllegalArgumentException("The escapedClassesName is not a well formed escaped string at index " +
+                                                                       i + ", the flag STUB_DEFAULT_PREFIX (" +
+                                                                       STUB_DEFAULT_PREFIX + ") are present twice : " +
+                                                                       stubClassName);
                                 }
                                 stubFlag = true;
                                 i += (STUB_DEFAULT_PREFIX.length() - 2); // 2 char _S
@@ -679,16 +673,12 @@ public abstract class Utils extends Object {
                         case 'G':
                             if (stubClassName.startsWith(STUB_GENERICS_SUFFIX, i - 1)) { //Generics
                                 if (genericFlag || !genericPackage) {
-                                    throw new IllegalArgumentException(
-                                        "The escapedClassesName is not a well formed escaped string at index " +
-                                            i +
-                                            ", the flag STUB_GENERICS_SUFFIX (" +
-                                            STUB_GENERICS_SUFFIX +
-                                            ") are present twice  or this class is not in the STUB_GENERICS_PACKAGE (" +
-                                            STUB_DEFAULT_PACKAGE +
-                                            STUB_GENERICS_PACKAGE +
-                                            "): " +
-                                            stubClassName);
+                                    throw new IllegalArgumentException("The escapedClassesName is not a well formed escaped string at index " +
+                                                                       i + ", the flag STUB_GENERICS_SUFFIX (" +
+                                                                       STUB_GENERICS_SUFFIX +
+                                                                       ") are present twice  or this class is not in the STUB_GENERICS_PACKAGE (" +
+                                                                       STUB_DEFAULT_PACKAGE + STUB_GENERICS_PACKAGE +
+                                                                       "): " + stubClassName);
                                 }
                                 genericFlag = true;
                                 i += (STUB_GENERICS_SUFFIX.length() - 2); // 2 char _G
@@ -703,9 +693,8 @@ public abstract class Utils extends Object {
                             break;
                         default:
                             //ERROR
-                            throw new IllegalArgumentException(
-                                "The escapedClassesName is not a well formed escaped string at index " + i +
-                                    " : " + stubClassName);
+                            throw new IllegalArgumentException("The escapedClassesName is not a well formed escaped string at index " +
+                                                               i + " : " + stubClassName);
                     }
                 }
             }
@@ -758,9 +747,8 @@ public abstract class Utils extends Object {
         try {
             return MOP.forName(classname);
         } catch (ClassNotFoundException e) {
-            System.err
-                    .println("Static initializer in class org.objectweb.proactive.core.mop.Utils: Cannot load class " +
-                        classname);
+            System.err.println("Static initializer in class org.objectweb.proactive.core.mop.Utils: Cannot load class " +
+                               classname);
             return null;
         }
     }
@@ -774,8 +762,7 @@ public abstract class Utils extends Object {
      * @param parametersTypes the parametersTypes list
      * @return true if the method was found, false otherwise
      */
-    public static boolean checkMethodExistence(Class<?> reifiedClass, String methodName,
-            Class<?>[] parametersTypes) {
+    public static boolean checkMethodExistence(Class<?> reifiedClass, String methodName, Class<?>[] parametersTypes) {
         Method[] methods = reifiedClass.getDeclaredMethods();
         for (Method m : methods) {
             int modifiers = m.getModifiers();

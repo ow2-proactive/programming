@@ -1,57 +1,48 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package functionalTests.activeobject.async;
 
 import java.io.Serializable;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.utils.TimeoutAccounter;
+
 import functionalTests.FunctionalTest;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 
 public class TestAsync extends FunctionalTest {
     final static int TIMEOUT = 500;
+
     final static int ESPYLON = (int) (TIMEOUT / 10);
 
     static AO ao;
@@ -84,7 +75,7 @@ public class TestAsync extends FunctionalTest {
 
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue("Method call seems to be synchronous but should be async",
-                after - before < TIMEOUT + ESPYLON);
+                          after - before < TIMEOUT + ESPYLON);
     }
 
     // sync
@@ -95,8 +86,7 @@ public class TestAsync extends FunctionalTest {
         long after = System.currentTimeMillis();
 
         logger.info("Waited " + (after - before) + "ms");
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     // sync
@@ -107,8 +97,7 @@ public class TestAsync extends FunctionalTest {
         long after = System.currentTimeMillis();
 
         logger.info("Waited " + (after - before) + "ms");
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     // sync
@@ -119,8 +108,7 @@ public class TestAsync extends FunctionalTest {
         long after = System.currentTimeMillis();
 
         logger.info("Waited " + (after - before) + "ms");
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
 
     }
 
@@ -132,8 +120,7 @@ public class TestAsync extends FunctionalTest {
         long after = System.currentTimeMillis();
 
         logger.info("Waited " + (after - before) + "ms");
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
 
     }
 
@@ -145,8 +132,7 @@ public class TestAsync extends FunctionalTest {
         long after = System.currentTimeMillis();
 
         logger.info("Waited " + (after - before) + "ms");
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
 
     }
 
@@ -158,8 +144,7 @@ public class TestAsync extends FunctionalTest {
         long after = System.currentTimeMillis();
 
         logger.info("Waited " + (after - before) + "ms");
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     // async
@@ -172,7 +157,7 @@ public class TestAsync extends FunctionalTest {
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue(ao instanceof StubObject);
         Assert.assertTrue("Method call seems to be synchronous but should be async",
-                after - before < TIMEOUT + ESPYLON);
+                          after - before < TIMEOUT + ESPYLON);
     }
 
     // sync
@@ -184,8 +169,7 @@ public class TestAsync extends FunctionalTest {
 
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue(ao instanceof StubObject);
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     // sync
@@ -196,8 +180,7 @@ public class TestAsync extends FunctionalTest {
         long after = System.currentTimeMillis();
 
         logger.info("Waited " + (after - before) + "ms");
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     // async
@@ -210,7 +193,7 @@ public class TestAsync extends FunctionalTest {
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue(ao instanceof StubObject);
         Assert.assertTrue("Method call seems to be synchronous but should be async",
-                after - before < TIMEOUT + ESPYLON);
+                          after - before < TIMEOUT + ESPYLON);
     }
 
     // sync
@@ -222,8 +205,7 @@ public class TestAsync extends FunctionalTest {
 
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue(ao instanceof StubObject);
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     // sync
@@ -235,8 +217,7 @@ public class TestAsync extends FunctionalTest {
 
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue(ao instanceof StubObject);
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     // sync
@@ -248,8 +229,7 @@ public class TestAsync extends FunctionalTest {
 
         logger.info("Waited " + (after - before) + "ms");
         Assert.assertTrue(ao instanceof StubObject);
-        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
-            ESPYLON);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT - ESPYLON);
     }
 
     public static class AO {

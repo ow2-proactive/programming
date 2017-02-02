@@ -1,6 +1,6 @@
 if [ $# -ne 2 ]
 then
-echo "Usage: $0 <file> <newNumber>" 
+echo "Usage: $0 <file> <newNumber>"
 exit
 fi
 

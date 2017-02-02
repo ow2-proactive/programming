@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.group;
 
@@ -148,8 +137,8 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#newGroup(String,Object[][])} instead
      */
     @Deprecated
-    public static Object newGroup(String className, Object[][] params) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Object[][] params)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -170,8 +159,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[][] params, String nodeName)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return ProActiveGroup.newGroup(className, params, nodeList);
@@ -191,8 +179,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[][] params, String[] nodeListString)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -213,8 +200,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[][] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return ProActiveGroup.newGroup(className, params, nodeList);
@@ -236,9 +222,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params, Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = ProActiveGroup.newGroup(className, genericParameters);
         Group g = ProActiveGroup.getGroup(result);
 
@@ -256,8 +241,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[][] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroup(className, (Class<?>[]) null, params, nodeList);
     }
 
@@ -276,8 +260,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[][] params, VirtualNodeInternal virtualNode)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroup(className, params, virtualNode.getNodes());
     }
 
@@ -296,8 +279,7 @@ public class ProActiveGroup {
     @Deprecated
     @SuppressWarnings("unchecked")
     public static Object newGroup(String className, Object[] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = ProActiveGroup.newGroup(className, (Class<?>[]) null);
         Group g = ProActiveGroup.getGroup(result);
 
@@ -324,8 +306,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[] params, VirtualNodeInternal virtualNode)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroup(className, params, virtualNode.getNodes());
     }
 
@@ -343,8 +324,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return ProActiveGroup.newGroup(className, params, nodeList);
@@ -364,8 +344,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[] params, String nodeName)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return ProActiveGroup.newGroup(className, params, nodeList);
@@ -385,8 +364,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Object[] params, String[] nodeListString)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -405,10 +383,9 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#turnActiveGroup(Object)} instead
      */
     @Deprecated
-    public static Object turnActiveGroup(Object ogroup) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
-        return PAActiveObject.turnActive(ogroup, null, ProActiveGroup.getType(ogroup), (Node) null, null,
-                null);
+    public static Object turnActiveGroup(Object ogroup)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return PAActiveObject.turnActive(ogroup, null, ProActiveGroup.getType(ogroup), (Node) null, null, null);
     }
 
     /**
@@ -424,8 +401,8 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#turnActiveGroup(Object,Node)} instead
      */
     @Deprecated
-    public static Object turnActiveGroup(Object ogroup, Node node) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+    public static Object turnActiveGroup(Object ogroup, Node node)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return PAActiveObject.turnActive(ogroup, null, ProActiveGroup.getType(ogroup), node, null, null);
     }
 
@@ -441,10 +418,14 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#turnActiveGroup(Object,String)} instead
      */
     @Deprecated
-    public static Object turnActiveGroup(Object ogroup, String nodeName) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
-        return PAActiveObject.turnActive(ogroup, null, ProActiveGroup.getType(ogroup),
-                NodeFactory.getNode(nodeName), null, null);
+    public static Object turnActiveGroup(Object ogroup, String nodeName)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return PAActiveObject.turnActive(ogroup,
+                                         null,
+                                         ProActiveGroup.getType(ogroup),
+                                         NodeFactory.getNode(nodeName),
+                                         null,
+                                         null);
     }
 
     // -------------------------------------------------------------------------
@@ -466,8 +447,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -491,11 +471,9 @@ public class ProActiveGroup {
     @Deprecated
     @SuppressWarnings("unchecked")
     public static Object newGroupBuiltWithMultithreading(String className, Object[][] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = ProActiveGroup.newGroup(className, (Class<?>[]) null);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup
-                .getGroup(result);
+        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup.getGroup(result);
 
         proxy.createMemberWithMultithread(className, null, params, nodeList);
 
@@ -518,9 +496,8 @@ public class ProActiveGroup {
      * @deprecated  use newGroupInParallel
      */
     @Deprecated
-    public static Object newGroupBuiltWithMultithreading(String className, Object[][] params,
-            String[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroupBuiltWithMultithreading(String className, Object[][] params, String[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -544,8 +521,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[][] params,
-            VirtualNodeInternal virtualNode) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            VirtualNodeInternal virtualNode)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroupBuiltWithMultithreading(className, params, virtualNode.getNodes());
     }
 
@@ -566,8 +543,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[] params, String[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -591,11 +567,9 @@ public class ProActiveGroup {
     @Deprecated
     @SuppressWarnings("unchecked")
     public static Object newGroupBuiltWithMultithreading(String className, Object[] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = ProActiveGroup.newGroup(className, (Class<?>[]) null);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup
-                .getGroup(result);
+        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup.getGroup(result);
 
         proxy.createMemberWithMultithread(className, null, params, nodeList);
 
@@ -619,8 +593,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupBuiltWithMultithreading(String className, Object[] params,
-            VirtualNodeInternal virtualNode) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            VirtualNodeInternal virtualNode)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroupBuiltWithMultithreading(className, params, virtualNode.getNodes());
     }
 
@@ -638,8 +612,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params);
     }
 
@@ -658,8 +631,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Object[][] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -679,8 +651,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Object[][] params, String[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -699,9 +670,8 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#newGroupInParallel(String,Object[][],VirtualNodeInternal)} instead
      */
     @Deprecated
-    public static Object newGroupInParallel(String className, Object[][] params,
-            VirtualNodeInternal virtualNode) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroupInParallel(String className, Object[][] params, VirtualNodeInternal virtualNode)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, virtualNode);
     }
 
@@ -721,8 +691,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Object[] params, String[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -741,8 +710,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Object[] params, Node[] nodeList)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return newGroupInParallel(className, null, params, nodeList);
     }
 
@@ -762,8 +730,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Object[] params, VirtualNodeInternal virtualNode)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroupInParallel(className, null, params, virtualNode);
     }
 
@@ -782,8 +749,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -805,12 +771,11 @@ public class ProActiveGroup {
      */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public static Object newGroupInParallel(String className, Class<?>[] genericParameters,
-            Object[][] params, Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[][] params,
+            Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = ProActiveGroup.newGroup(className, genericParameters);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup
-                .getGroup(result);
+        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup.getGroup(result);
 
         proxy.createMemberWithMultithread(className, genericParameters, params, nodeList);
 
@@ -832,9 +797,9 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#newGroupInParallel(String,Class<?>[],Object[][],String[])} instead
      */
     @Deprecated
-    public static Object newGroupInParallel(String className, Class<?>[] genericParameters,
-            Object[][] params, String[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[][] params,
+            String[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -856,11 +821,10 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#newGroupInParallel(String,Class<?>[],Object[][],VirtualNodeInternal)} instead
      */
     @Deprecated
-    public static Object newGroupInParallel(String className, Class<?>[] genericParameters,
-            Object[][] params, VirtualNodeInternal virtualNode) throws ClassNotFoundException,
-            ClassNotReifiableException, ActiveObjectCreationException, NodeException {
-        return ProActiveGroup
-                .newGroupInParallel(className, genericParameters, params, virtualNode.getNodes());
+    public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[][] params,
+            VirtualNodeInternal virtualNode)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return ProActiveGroup.newGroupInParallel(className, genericParameters, params, virtualNode.getNodes());
     }
 
     /**
@@ -879,8 +843,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[] params,
-            String[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            String[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeListString = new Node[nodeList.length];
         for (int i = 0; i < nodeList.length; i++)
             nodeListString[i] = NodeFactory.getNode(nodeList[i]);
@@ -903,11 +867,10 @@ public class ProActiveGroup {
     @Deprecated
     @SuppressWarnings("unchecked")
     public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[] params,
-            Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = ProActiveGroup.newGroup(className, genericParameters);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup
-                .getGroup(result);
+        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ProActiveGroup.getGroup(result);
 
         proxy.createMemberWithMultithread(className, genericParameters, params, nodeList);
 
@@ -930,10 +893,9 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroupInParallel(String className, Class<?>[] genericParameters, Object[] params,
-            VirtualNodeInternal virtualNode) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
-        return ProActiveGroup
-                .newGroupInParallel(className, genericParameters, params, virtualNode.getNodes());
+            VirtualNodeInternal virtualNode)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return ProActiveGroup.newGroupInParallel(className, genericParameters, params, virtualNode.getNodes());
     }
 
     /**
@@ -954,11 +916,9 @@ public class ProActiveGroup {
         Object result = null;
 
         try {
-            result = MOP.newInstance(className, genericParameters, null, DEFAULT_PROXYFORGROUP_CLASS_NAME,
-                    null);
+            result = MOP.newInstance(className, genericParameters, null, DEFAULT_PROXYFORGROUP_CLASS_NAME, null);
 
-            ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ((StubObject) result)
-                    .getProxy();
+            ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ((StubObject) result).getProxy();
             proxy.className = className;
             proxy.setStub((StubObject) result);
         } catch (ClassNotReifiableException e) {
@@ -989,8 +949,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getDefaultNode();
 
@@ -1011,9 +970,8 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#newGroup(String,Class<?>[],Object[][],String)} instead
      */
     @Deprecated
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            String nodeName) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params, String nodeName)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return ProActiveGroup.newGroup(className, genericParameters, params, nodeList);
@@ -1034,8 +992,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            String[] nodeListString) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            String[] nodeListString)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -1057,8 +1015,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return ProActiveGroup.newGroup(className, genericParameters, params, nodeList);
@@ -1080,8 +1037,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
-            VirtualNodeInternal virtualNode) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            VirtualNodeInternal virtualNode)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroup(className, genericParameters, params, virtualNode.getNodes());
     }
 
@@ -1100,16 +1057,14 @@ public class ProActiveGroup {
      */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params, Node[] nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Object result = ProActiveGroup.newGroup(className, genericParameters);
         Group g = ProActiveGroup.getGroup(result);
 
         if (params != null) {
             for (int i = 0; i < nodeList.length; i++) {
-                g.add(PAActiveObject.newActive(className, genericParameters, params, nodeList[i %
-                    nodeList.length]));
+                g.add(PAActiveObject.newActive(className, genericParameters, params, nodeList[i % nodeList.length]));
             }
         }
 
@@ -1131,8 +1086,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            VirtualNodeInternal virtualNode) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            VirtualNodeInternal virtualNode)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         return ProActiveGroup.newGroup(className, genericParameters, params, virtualNode.getNodes());
     }
 
@@ -1151,8 +1106,7 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = node;
         return ProActiveGroup.newGroup(className, genericParameters, params, nodeList);
@@ -1172,9 +1126,8 @@ public class ProActiveGroup {
      * @deprecated Use {@link org.objectweb.proactive.api.PAGroup#newGroup(String,Class<?>[],Object[],String)} instead
      */
     @Deprecated
-    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            String nodeName) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params, String nodeName)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[1];
         nodeList[0] = NodeFactory.getNode(nodeName);
         return ProActiveGroup.newGroup(className, genericParameters, params, nodeList);
@@ -1195,8 +1148,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
-            String[] nodeListString) throws ClassNotFoundException, ClassNotReifiableException,
-            ActiveObjectCreationException, NodeException {
+            String[] nodeListString)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
         Node[] nodeList = new Node[nodeListString.length];
         for (int i = 0; i < nodeListString.length; i++)
             nodeList[i] = NodeFactory.getNode(nodeListString[i]);
@@ -1216,10 +1169,13 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object turnActiveGroup(Object ogroup, Class<?>[] genericParameters)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
-        return PAActiveObject.turnActive(ogroup, genericParameters, ProActiveGroup.getType(ogroup),
-                (Node) null, null, null);
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return PAActiveObject.turnActive(ogroup,
+                                         genericParameters,
+                                         ProActiveGroup.getType(ogroup),
+                                         (Node) null,
+                                         null,
+                                         null);
     }
 
     /**
@@ -1236,10 +1192,8 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object turnActiveGroup(Object ogroup, Class<?>[] genericParameters, Node node)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
-        return PAActiveObject.turnActive(ogroup, genericParameters, ProActiveGroup.getType(ogroup), node,
-                null, null);
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return PAActiveObject.turnActive(ogroup, genericParameters, ProActiveGroup.getType(ogroup), node, null, null);
     }
 
     /**
@@ -1255,10 +1209,13 @@ public class ProActiveGroup {
      */
     @Deprecated
     public static Object turnActiveGroup(Object ogroup, Class<?>[] genericParameters, String nodeName)
-            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
-            NodeException {
-        return PAActiveObject.turnActive(ogroup, genericParameters, ProActiveGroup.getType(ogroup),
-                NodeFactory.getNode(nodeName), null, null);
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException, NodeException {
+        return PAActiveObject.turnActive(ogroup,
+                                         genericParameters,
+                                         ProActiveGroup.getType(ogroup),
+                                         NodeFactory.getNode(nodeName),
+                                         null,
+                                         null);
     }
 
     /**
@@ -1444,8 +1401,7 @@ public class ProActiveGroup {
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy)
-                        .waitAndGetOneThenRemoveIt();
+                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitAndGetOneThenRemoveIt();
             }
             // Else the "standard waitFor" method has been used in the findProxyForGroup method so the future is arrived, just return it
             else {

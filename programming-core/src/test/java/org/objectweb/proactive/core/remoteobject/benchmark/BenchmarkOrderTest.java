@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2013 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.remoteobject.benchmark;
 
@@ -66,69 +55,82 @@ public class BenchmarkOrderTest {
 
         // natural order
         Assert.assertArrayEquals(new String[] { "a:a", "b:b", "c:c" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[0], "a:a"));
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { 3, 2, 1 },
+                                        new String[0],
+                                        "a:a"));
 
         // natural order + one protocol unreachable + unreachable protocol is different from default protocol
         // => unreachable default protocol is removed from the list
-        Assert.assertArrayEquals(
-                new String[] { "b:b", "c:c" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE, 2, 1 },
-                        new String[0], "b:b"));
+        Assert.assertArrayEquals(new String[] { "b:b", "c:c" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { Integer.MIN_VALUE, 2, 1 },
+                                        new String[0],
+                                        "b:b"));
 
         // natural order + one protocol unreachable + unreachable protocol equals default protocol
         // => unreachable default protocol is put at the end of the list but not removed
-        Assert.assertArrayEquals(
-                new String[] { "b:b", "c:c", "a:a" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE, 2, 1 },
-                        new String[0], "a:a"));
+        Assert.assertArrayEquals(new String[] { "b:b", "c:c", "a:a" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { Integer.MIN_VALUE, 2, 1 },
+                                        new String[0],
+                                        "a:a"));
 
         // natural order + two protocols unreachable (different than default)
-        Assert.assertArrayEquals(
-                new String[] { "c:c" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE,
-                        Integer.MIN_VALUE, 1 }, new String[0], "c:c"));
+        Assert.assertArrayEquals(new String[] { "c:c" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { Integer.MIN_VALUE, Integer.MIN_VALUE, 1 },
+                                        new String[0],
+                                        "c:c"));
 
         // natural order + two protocols unreachable (one is the default)
-        Assert.assertArrayEquals(
-                new String[] { "c:c", "a:a" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { Integer.MIN_VALUE,
-                        Integer.MIN_VALUE, 1 }, new String[0], "a:a"));
+        Assert.assertArrayEquals(new String[] { "c:c", "a:a" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { Integer.MIN_VALUE, Integer.MIN_VALUE, 1 },
+                                        new String[0],
+                                        "a:a"));
 
         // natural order + fixed order property (same order)
-        Assert.assertArrayEquals(
-                new String[] { "a:a", "b:b", "c:c" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[] { "a", "b",
-                        "c" }, "a:a"));
+        Assert.assertArrayEquals(new String[] { "a:a", "b:b", "c:c" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { 3, 2, 1 },
+                                        new String[] { "a", "b", "c" },
+                                        "a:a"));
 
         // natural order + fixed order property (reverse order)
-        Assert.assertArrayEquals(
-                new String[] { "c:c", "b:b", "a:a" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[] { "c", "b",
-                        "a" }, "a:a"));
+        Assert.assertArrayEquals(new String[] { "c:c", "b:b", "a:a" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { 3, 2, 1 },
+                                        new String[] { "c", "b", "a" },
+                                        "a:a"));
 
         // inverse natural order + fixed order property
-        Assert.assertArrayEquals(
-                new String[] { "c:c", "b:b", "a:a" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 1, 2, 3 }, new String[] { "c", "b",
-                        "a" }, "a:a"));
+        Assert.assertArrayEquals(new String[] { "c:c", "b:b", "a:a" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { 1, 2, 3 },
+                                        new String[] { "c", "b", "a" },
+                                        "a:a"));
 
         // natural order + fixed order property in only one protocol
-        Assert.assertArrayEquals(
-                new String[] { "c:c", "a:a", "b:b" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, 1 }, new String[] { "c" },
-                        "a:a"));
+        Assert.assertArrayEquals(new String[] { "c:c", "a:a", "b:b" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { 3, 2, 1 },
+                                        new String[] { "c" },
+                                        "a:a"));
 
         // natural order + fixed order property + 1 unreachable protocol
-        Assert.assertArrayEquals(
-                new String[] { "b:b", "a:a" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, 2, Integer.MIN_VALUE },
-                        new String[] { "c", "b", "a" }, "a:a"));
+        Assert.assertArrayEquals(new String[] { "b:b", "a:a" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { 3, 2, Integer.MIN_VALUE },
+                                        new String[] { "c", "b", "a" },
+                                        "a:a"));
 
         // natural order + fixed order property + 2 unreachable protocols + 1 is the default
-        Assert.assertArrayEquals(
-                new String[] { "a:a" },
-                doSort(new String[] { "a:a", "b:b", "c:c" }, new int[] { 3, Integer.MIN_VALUE,
-                        Integer.MIN_VALUE }, new String[] { "c", "b", "a" }, "a:a"));
+        Assert.assertArrayEquals(new String[] { "a:a" },
+                                 doSort(new String[] { "a:a", "b:b", "c:c" },
+                                        new int[] { 3, Integer.MIN_VALUE, Integer.MIN_VALUE },
+                                        new String[] { "c", "b", "a" },
+                                        "a:a"));
     }
 
     /**
@@ -151,8 +153,10 @@ public class BenchmarkOrderTest {
             input.add(new URI(inputuris[i]));
         }
 
-        ArrayList<URI> outputList = RemoteObjectSet.sortProtocols(input, Arrays.asList(fixedOrder),
-                benchmarkres, new URI(defaultUri));
+        ArrayList<URI> outputList = RemoteObjectSet.sortProtocols(input,
+                                                                  Arrays.asList(fixedOrder),
+                                                                  benchmarkres,
+                                                                  new URI(defaultUri));
         String[] output = new String[outputList.size()];
         for (int i = 0; i < outputList.size(); i++) {
             output[i] = outputList.get(i).toString();

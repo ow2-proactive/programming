@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.descriptor.variablecontract.javapropertiesDescriptor;
 
@@ -56,10 +45,12 @@ import functionalTests.FunctionalTest;
  * Tests conditions for variables of type JavaPropertiesDescriptor
  */
 public class Test extends FunctionalTest {
-    private static URL XML_LOCATION = Test.class
-            .getResource("/functionalTests/descriptor/variablecontract/javapropertiesDescriptor/Test.xml");
+    private static URL XML_LOCATION = Test.class.getResource("/functionalTests/descriptor/variablecontract/javapropertiesDescriptor/Test.xml");
+
     GCMApplication gcma;
+
     boolean bogusFromProgram;
+
     boolean bogusFromDescriptor;
 
     @Before
@@ -75,23 +66,26 @@ public class Test extends FunctionalTest {
         //Setting from Program
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("user.home", "/home/userprogram");
-        variableContract.setVariableFromProgram(map, VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
-        variableContract.setVariableFromProgram("bogus.property", "", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
+        variableContract.setVariableFromProgram(map,
+                                                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
+        variableContract.setVariableFromProgram("bogus.property",
+                                                "",
+                                                VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
 
         assertTrue(variableContract.getValue("user.home").equals(System.getProperty("user.home")));
 
         //Setting from Descriptor
-        variableContract.setDescriptorVariable("user.home", "/home/userdesc", VariableContractType
-                .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
+        variableContract.setDescriptorVariable("user.home",
+                                               "/home/userdesc",
+                                               VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
         assertTrue(variableContract.getValue("user.home").equals(System.getProperty("user.home")));
 
         //Setting bogus from program
         boolean bogus = false;
         try {
-            variableContract.setDescriptorVariable("bogus.property", "", VariableContractType
-                    .getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
+            variableContract.setDescriptorVariable("bogus.property",
+                                                   "",
+                                                   VariableContractType.getType(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG));
             bogus = true; //shouldn't reach this line
         } catch (Exception e) {
         }

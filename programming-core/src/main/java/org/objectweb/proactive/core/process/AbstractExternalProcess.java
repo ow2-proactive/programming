@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.process;
 
@@ -48,20 +37,33 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public abstract class AbstractExternalProcess extends AbstractUniversalProcess implements ExternalProcess {
     protected static Logger clogger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_PROCESS);
+
     protected static Logger fileTransferLogger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
-    protected static final boolean IS_WINDOWS_SYSTEM = System.getProperty("os.name").toLowerCase()
-            .startsWith("win");
+
+    protected static final boolean IS_WINDOWS_SYSTEM = System.getProperty("os.name").toLowerCase().startsWith("win");
+
     protected Process externalProcess;
+
     protected volatile boolean shouldRun = true;
+
     public static final int NO_COMPOSITION = 0;
+
     protected boolean closeStream = false;
+
     protected RemoteProcessMessageLogger inputMessageLogger;
+
     protected RemoteProcessMessageLogger errorMessageLogger;
+
     protected MessageSink outputMessageSink;
+
     private ThreadActivityMonitor inThreadMonitor;
+
     private ThreadActivityMonitor errThreadMonitor;
+
     private FileTransferWorkShop ftsDeploy = null;
+
     private FileTransferWorkShop ftsRetrieve = null;
+
     protected String FILE_TRANSFER_DEFAULT_PROTOCOL = "dummy";
 
     //Used to determine if a File Transfer is required to the Nodes deployed from
@@ -197,12 +199,9 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
         try {
             shouldRun = true;
             externalProcess = Runtime.getRuntime().exec(commandToExecute);
-            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(
-                externalProcess.getInputStream()));
-            java.io.BufferedReader err = new java.io.BufferedReader(new java.io.InputStreamReader(
-                externalProcess.getErrorStream()));
-            java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.OutputStreamWriter(
-                externalProcess.getOutputStream()));
+            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(externalProcess.getInputStream()));
+            java.io.BufferedReader err = new java.io.BufferedReader(new java.io.InputStreamReader(externalProcess.getErrorStream()));
+            java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.OutputStreamWriter(externalProcess.getOutputStream()));
             handleProcess(in, out, err);
         } catch (java.io.IOException e) {
             isFinished = true;
@@ -244,17 +243,19 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
         long end = beginning;
 
         /*
-           if (fileTransferLogger.isDebugEnabled()) {
-               fileTransferLogger.debug(
-                   "Using the following FileTransferWorkShop:\n" + fts);
-           }
+         * if (fileTransferLogger.isDebugEnabled()) {
+         * fileTransferLogger.debug(
+         * "Using the following FileTransferWorkShop:\n" + fts);
+         * }
          */
         if (!fts.check()) {
             return; //No files to transfer or some error.
         }
 
-        /* Try all the protocols for this FileTransferStructure
-         * until one of them is successful */
+        /*
+         * Try all the protocols for this FileTransferStructure
+         * until one of them is successful
+         */
         for (int i = 0; (i < copyProtocol.length) && !success; i++) {
             fileTransferLogger.info("Trying copyprotocol: " + copyProtocol[i].getProtocolName());
             if (!copyProtocol[i].checkProtocol()) {
@@ -316,8 +317,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
         return requiresFileTransferDeployOnNodeCreation;
     }
 
-    protected void handleProcess(java.io.BufferedReader in, java.io.BufferedWriter out,
-            java.io.BufferedReader err) {
+    protected void handleProcess(java.io.BufferedReader in, java.io.BufferedWriter out, java.io.BufferedReader err) {
         if (closeStream) {
             try {
                 //the sleep might be needed for processes that fail if
@@ -414,8 +414,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
     /**
      * Implementation of a RemoteProcessMessageLogger that output all messages to the standard output
      */
-    public static class StandardOutputMessageLogger implements RemoteProcessMessageLogger,
-            java.io.Serializable {
+    public static class StandardOutputMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
         public StandardOutputMessageLogger() {
             //messageLogger.addAppender(new ConsoleAppender(new PatternLayout("%-5p %m %n")));
         }
@@ -460,6 +459,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
      */
     public static class SimpleMessageSink implements MessageSink, java.io.Serializable {
         private String message;
+
         private boolean isActive = true;
 
         public synchronized String getMessage() {
@@ -512,7 +512,9 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
      */
     protected class ProcessInputHandler implements Runnable {
         private java.io.BufferedReader in;
+
         private RemoteProcessMessageLogger logger;
+
         private ThreadActivityMonitor threadMonitor;
 
         public ProcessInputHandler(java.io.BufferedReader in, RemoteProcessMessageLogger logger,
@@ -524,8 +526,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
 
         public void run() {
             if (AbstractExternalProcess.clogger.isDebugEnabled()) {
-                AbstractExternalProcess.clogger.debug("Process started Thread=" +
-                    Thread.currentThread().getName());
+                AbstractExternalProcess.clogger.debug("Process started Thread=" + Thread.currentThread().getName());
             }
 
             //
@@ -574,6 +575,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
      */
     protected class ProcessOutputHandler implements Runnable {
         private java.io.BufferedWriter out;
+
         private MessageSink messageSink;
 
         public ProcessOutputHandler(java.io.BufferedWriter out, MessageSink messageSink) {

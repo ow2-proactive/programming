@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.ssh;
 
@@ -43,6 +32,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.objectweb.proactive.core.ssh.SshConfigFileParser.SshToken;
 import org.objectweb.proactive.core.ssh.proxycommand.SubnetChecker;
 
@@ -54,16 +44,24 @@ import org.objectweb.proactive.core.ssh.proxycommand.SubnetChecker;
  */
 public class SshConfig {
     private final static String defaultPath = System.getProperty("user.home") + File.separator + ".ssh" +
-        File.separator;
+                                              File.separator;
+
     private final static String IPv4Regexp = "^.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}";
 
     private final AtomicBoolean readOnly = new AtomicBoolean(false);
+
     private boolean tryPlainSocket;
+
     private boolean tryProxyCommand;
+
     private long gcInterval;
+
     private long gcIdleTime;
+
     private int connectTimeout;
+
     private String sshDirPath;
+
     private String DEFAULT = "*";
 
     /**
@@ -75,13 +73,15 @@ public class SshConfig {
      * the switch/case with the right method.
      */
     private Map<String, Map<SshToken, String>> sshInfos;
-    private SshToken[] capabilities = { SshToken.HOSTNAME, SshToken.USERNAME, SshToken.PORT,
-            SshToken.PRIVATEKEY, SshToken.GATEWAY };
+
+    private SshToken[] capabilities = { SshToken.HOSTNAME, SshToken.USERNAME, SshToken.PORT, SshToken.PRIVATEKEY,
+                                        SshToken.GATEWAY };
 
     // Store here the mapping subnet / gateway
     private SubnetChecker subnetChecker = new SubnetChecker();
 
     private String knownHostFile;
+
     private String keyDir;
 
     /**
@@ -169,22 +169,21 @@ public class SshConfig {
                 if (hostsInfos.get(request) != null) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Ssh configuration : information " + information + " as " +
-                            request.toString().toLowerCase() +
-                            (hostname.equalsIgnoreCase(DEFAULT) ? " as default" : " for " + hostname) +
-                            " is already declared, ignored");
+                                     request.toString().toLowerCase() +
+                                     (hostname.equalsIgnoreCase(DEFAULT) ? " as default" : " for " + hostname) +
+                                     " is already declared, ignored");
                     }
                     return;
                 }
                 hostsInfos.put(request, information);
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("Ssh configuration : " + information + " as " +
-                    request.toString().toLowerCase() + " stored " +
-                    (hostname.equalsIgnoreCase(DEFAULT) ? "as default." : "for " + hostname + "."));
+                logger.debug("Ssh configuration : " + information + " as " + request.toString().toLowerCase() +
+                             " stored " +
+                             (hostname.equalsIgnoreCase(DEFAULT) ? "as default." : "for " + hostname + "."));
             }
         } else {
-            logger.warn("Ssh configuration option \"" + request.getValue() + " = " + information +
-                "has been ignored.");
+            logger.warn("Ssh configuration option \"" + request.getValue() + " = " + information + "has been ignored.");
         }
     }
 
@@ -218,8 +217,7 @@ public class SshConfig {
 
     final private void checkReadOnly() {
         if (this.readOnly.get())
-            throw new IllegalStateException(SshConfig.class.getName() +
-                " bean is now read only, cannot be modified");
+            throw new IllegalStateException(SshConfig.class.getName() + " bean is now read only, cannot be modified");
     }
 
     //////////////////////////////////////////////////////////////////////////////////

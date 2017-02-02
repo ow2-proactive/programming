@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.process.mpi;
 
@@ -56,17 +45,29 @@ public abstract class MPIProcess extends AbstractExternalProcessDecorator implem
      * Firsts parameters
      */
     protected static final String DEFAULT_HOSTSFILENAME_PATH = ".machinefile";
+
     protected static final String DEFAULT_MPICOMMAND_PATH = "/usr/bin/mpirun";
+
     protected static final String DEFAULT_FILE_LOCATION = System.getProperty("user.home");
+
     public final static String DEFAULT_SSH_COPYPROTOCOL = "scp";
+
     protected static final String DEFAULT_HOSTS_NUMBER = "1";
+
     protected int jobID;
+
     protected String mpiCommandOptions = null;
+
     protected String hostsFileName = DEFAULT_HOSTSFILENAME_PATH;
+
     protected String mpiFileName = null;
+
     protected boolean nolocal = false;
+
     protected String localPath = DEFAULT_FILE_LOCATION;
+
     protected String remotePath = null;
+
     protected String hostsNumber = DEFAULT_HOSTS_NUMBER;
 
     // TEMPORARY
@@ -89,7 +90,9 @@ public abstract class MPIProcess extends AbstractExternalProcessDecorator implem
         FILE_TRANSFER_DEFAULT_PROTOCOL = DEFAULT_SSH_COPYPROTOCOL;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.core.process.UniversalProcess#getProcessId()
      */
     public String getProcessId() {

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
@@ -92,7 +81,9 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
      * that is supposed to be called when object is not used anymore.
      */
     private final ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
+
     private final ReentrantReadWriteLock.ReadLock readLock = rwlock.readLock();
+
     private final ReentrantReadWriteLock.WriteLock writeLock = rwlock.writeLock();
 
     /**
@@ -195,10 +186,8 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             for (final SpaceInstanceInfo space : spaces) {
                 final DataSpacesURI spaceUri = space.getMountingPoint();
                 if (!spaceUri.isSuitableForUserPath()) {
-                    logger.error("[VFSMountManager] Resolved space is not suitable for user path: " +
-                        spaceUri);
-                    throw new IllegalArgumentException("Resolved space is not suitable for user path: " +
-                        spaceUri);
+                    logger.error("[VFSMountManager] Resolved space is not suitable for user path: " + spaceUri);
+                    throw new IllegalArgumentException("Resolved space is not suitable for user path: " + spaceUri);
                 }
                 try {
                     ensureVirtualSpaceIsMounted(spaceUri, space);
@@ -255,8 +244,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             }
             if (info == null) {
                 logger.warn("[VFSMountManager] Could not find data space in spaces directory: " + spacePart);
-                throw new SpaceNotFoundException(
-                    "Requested data space is not registered in spaces directory.");
+                throw new SpaceNotFoundException("Requested data space is not registered in spaces directory.");
             }
 
             try {
@@ -294,8 +282,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             DataSpacesURI spacePart = mountingPoint.getSpacePartOnly();
             ArrayList<String> urls = new ArrayList<String>(spaceInfo.getUrls());
             if (urls.size() == 1) {
-                urls.add(0,
-                        Utils.getLocalAccessURL(urls.get(0), spaceInfo.getPath(), spaceInfo.getHostname()));
+                urls.add(0, Utils.getLocalAccessURL(urls.get(0), spaceInfo.getPath(), spaceInfo.getHostname()));
             }
 
             logger.debug("[VFSMountManager] Request mounting VFS root list : " + urls);
@@ -317,20 +304,18 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 }
                 if (srl.isEmpty()) {
                     throw new IllegalStateException("Invalid empty size list when trying to mount " + urls +
-                        " mounted map content is " + fileSystems);
+                                                    " mounted map content is " + fileSystems);
                 }
                 accessibleFileObjectUris.put(mountingPoint, srl);
 
                 if (logger.isDebugEnabled())
-                    logger.debug(String.format("[VFSMountManager] Mounted space: %s (access URL: %s)",
-                            spacePart, srl));
+                    logger.debug(String.format("[VFSMountManager] Mounted space: %s (access URL: %s)", spacePart, srl));
 
                 mountedSpaces.put(mountingPoint, fileSystems);
 
             } catch (org.apache.commons.vfs2.FileSystemException e) {
                 mountedSpaces.remove(mountingPoint);
-                throw new FileSystemException("An error occurred while trying to mount " +
-                    spaceInfo.getName(), e);
+                throw new FileSystemException("An error occurred while trying to mount " + spaceInfo.getName(), e);
             }
         } finally {
             writeLock.unlock();
@@ -372,13 +357,15 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 writeLock.unlock();
             }
             if (logger.isDebugEnabled())
-                logger.debug(String.format("[VFSMountManager] Mounted space: %s (access URL: %s)", spacePart,
-                        spaceRootFOUri));
+                logger.debug(String.format("[VFSMountManager] Mounted space: %s (access URL: %s)",
+                                           spacePart,
+                                           spaceRootFOUri));
             return true;
 
         } catch (org.apache.commons.vfs2.FileSystemException x) {
             String err = String.format("[VFSMountManager] Could not access URL %s to mount %s",
-                    spaceRootFOUri, spacePart);
+                                       spaceRootFOUri,
+                                       spacePart);
             logger.info(err);
             removeSpaceRootUri(spacePart, spaceRootFOUri);
             throw new FileSystemException(err, x);
@@ -463,10 +450,16 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
                 else
                     file = spaceRoot.resolveFile(relativeToSpace);
                 final DataSpacesLimitingFileObject limitingFile = new DataSpacesLimitingFileObject(file,
-                    spacePart, spaceRoot.getName(), ownerActiveObjectId);
-                return new VFSFileObjectAdapter(limitingFile, spacePart, dataSpaceVFSFileName,
-                    new ArrayList<String>(accessibleFileObjectUris.get(spacePart)), spaceRootFOUri, this,
-                    ownerActiveObjectId);
+                                                                                                   spacePart,
+                                                                                                   spaceRoot.getName(),
+                                                                                                   ownerActiveObjectId);
+                return new VFSFileObjectAdapter(limitingFile,
+                                                spacePart,
+                                                dataSpaceVFSFileName,
+                                                new ArrayList<String>(accessibleFileObjectUris.get(spacePart)),
+                                                spaceRootFOUri,
+                                                this,
+                                                ownerActiveObjectId);
             } catch (org.apache.commons.vfs2.FileSystemException x) {
                 logger.error("[VFSMountManager] Could not access file within a space: " + uri);
 

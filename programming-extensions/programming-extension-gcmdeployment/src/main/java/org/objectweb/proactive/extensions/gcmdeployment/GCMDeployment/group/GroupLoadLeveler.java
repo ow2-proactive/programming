@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
 
@@ -40,35 +29,49 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
-import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
+import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 
 
 public class GroupLoadLeveler extends AbstractGroup {
 
     private static final String LLTAG_QUEUE = "queue";
+
     private static final String DEFAULT_OUTPUTFILE_NAME = "proactive-loadleveler";
-    public final static String DEFAULT_LLPATH = File.separator + "usr" + File.separator + "lpp" +
-        File.separator + "LoadL" + File.separator + "full" + File.separator + "bin";
+
+    public final static String DEFAULT_LLPATH = File.separator + "usr" + File.separator + "lpp" + File.separator +
+                                                "LoadL" + File.separator + "full" + File.separator + "bin";
 
     //LoadLeveler configuration file attributes names.
     private static final String LLPREFIX = "#@";
+
     private static final String LLTAG_EXECUTABLE = "executable";
+
     private static final String LLTAG_INITIAL_DIR = "initialdir";
+
     private static final String LLTAG_ERROR_OUTPUT_FILENAME = "error";
+
     private static final String LLTAG_ENVIRONMENT = "environment";
+
     private static final String LLTAG_STD_OUTPUT_FILENAME = "output";
+
     private static final String LLTAG_WALL_CLOCK_LIMIT = "wall_clock_limit";
+
     private static final String LLTAG_RESOURCES = "resources";
+
     private static final String LLTAG_EXEC_ARGS = "arguments";
 
     // Load leveler task repartition
     private static final String LLTAG_TASK_GEOMETRY = "task_geometry";
+
     private static final String LLTAG_NODE = "node";
+
     private static final String LLTAG_TASKS_PER_NODE = "tasks_per_node";
+
     private static final String LLTAG_BLOCKING = "blocking";
+
     private static final String LLTAG_TOTAL_TASKS = "total_tasks";
 
     private static final String CMD_TAG = "CMD";
@@ -77,6 +80,7 @@ public class GroupLoadLeveler extends AbstractGroup {
      * By default set to /usr/bin/poe which is the responsible of starting parallel jobs
      */
     private PathElement executable = new PathElement("/usr/bin/poe");
+
     private String executable_as_str;
 
     /** Mandatory Field : if executable path is not absolute. It is also the default directory
@@ -112,9 +116,13 @@ public class GroupLoadLeveler extends AbstractGroup {
 
     // task submission mode
     private int blocking = -1;
+
     private int node = -1;
+
     private int totalTasks = -1;
+
     private int tasksPerNode = -1;
+
     private String taskGeometry = null;
 
     @Override
@@ -162,8 +170,10 @@ public class GroupLoadLeveler extends AbstractGroup {
     private void buildLoadLevelerTaskRepartition(StringBuilder builder) {
         builder.append(buildLoadLevelerComment(" ---- Task Repartion ---- "));
 
-        /* Only subsets of these keywords are valid to combine,
-         * the schema should have filtered them, check load leveler documentation */
+        /*
+         * Only subsets of these keywords are valid to combine,
+         * the schema should have filtered them, check load leveler documentation
+         */
         if (this.blocking != -1) {
             builder.append(buildLoadLevelerProperty(LLTAG_BLOCKING, "" + this.blocking));
         }
@@ -193,7 +203,8 @@ public class GroupLoadLeveler extends AbstractGroup {
             builder.append(buildLoadLevelerProperty(LLTAG_WALL_CLOCK_LIMIT, this.maxTime));
         }
 
-        /* Dealing with the consumable cpu option which is automatically
+        /*
+         * Dealing with the consumable cpu option which is automatically
          * added in the simple task repartition mode.
          */
         String resourcesString = null;
@@ -266,17 +277,21 @@ public class GroupLoadLeveler extends AbstractGroup {
 
     private String buildLoadLevelerProperty(String tag, String value) {
 
-        /* LoadLeveler targets AIX thus \n as newline char is ok.
+        /*
+         * LoadLeveler targets AIX thus \n as newline char is ok.
          * We need an additional \ so that java system exec does
-         * not remove it while parsing args */
+         * not remove it while parsing args
+         */
         return LLPREFIX + tag + " = " + value + "\\n";
     }
 
     private String buildLoadLevelerComment(String comment) {
 
-        /* LoadLeveler targets AIX thus \n as newline char is ok.
+        /*
+         * LoadLeveler targets AIX thus \n as newline char is ok.
          * We need an additional \ so that java system exec does
-         * not remove it while parsing args */
+         * not remove it while parsing args
+         */
         return "#" + comment + "\\n";
     }
 

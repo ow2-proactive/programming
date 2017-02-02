@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.filetransfer;
 
@@ -65,13 +54,15 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
  *
  * @author The ProActive Team
  */
-public class FileTransferService implements ProActiveInternalObject, InitActive, FileTransferServiceSend,
-        FileTransferServiceReceive {
+public class FileTransferService
+        implements ProActiveInternalObject, InitActive, FileTransferServiceSend, FileTransferServiceReceive {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
-    public final static int DEFAULT_MAX_SIMULTANEOUS_BLOCKS = CentralPAPropertyRepository.PA_FILETRANSFER_MAX_SIMULTANEOUS_BLOCKS
-            .getValue();
-    public static final int DEFAULT_BUFFER_SIZE = CentralPAPropertyRepository.PA_FILETRANSFER_MAX_BUFFER_SIZE
-            .getValue() * 1024; //Bytes
+
+    public final static int DEFAULT_MAX_SIMULTANEOUS_BLOCKS = CentralPAPropertyRepository.PA_FILETRANSFER_MAX_SIMULTANEOUS_BLOCKS.getValue();
+
+    public static final int DEFAULT_BUFFER_SIZE = CentralPAPropertyRepository.PA_FILETRANSFER_MAX_BUFFER_SIZE.getValue() *
+                                                  1024; //Bytes
+
     protected HashMap<File, BufferedOutputStream> writeBufferMap; //Map for storing the opened output sockets
 
     /**
@@ -88,7 +79,7 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
         //PAActiveObject.setImmediateService("requestFileTransfer", new Class[] { FileTransferRequest.class });
     }
 
-    /* ***************** BEGIN FILETRANSFER SERVICE RECIEVE  ***************************/
+    /* ***************** BEGIN FILETRANSFER SERVICE RECIEVE ***************************/
     public void openWrite(File file) throws IOException {
         getWritingBuffer(file, false);
     }
@@ -135,8 +126,8 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
 
         if (!writeBufferMap.containsKey(f)) {
             try {
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(f.getAbsolutePath(),
-                    append), DEFAULT_BUFFER_SIZE);
+                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(f.getAbsolutePath(), append),
+                                                                    DEFAULT_BUFFER_SIZE);
                 writeBufferMap.put(f, bos);
             } catch (FileNotFoundException e) {
                 logger.error("Unable to open file: " + f.getAbsolutePath());
@@ -202,7 +193,7 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
         return path.isFile();
     }
 
-    /* ***************** BEGIN FILETRANSFER SERVICE SEND  ***************************/
+    /* ***************** BEGIN FILETRANSFER SERVICE SEND ***************************/
     /**
      * This method is the entry point for sending files. It can handle both directories or files.
      */
@@ -241,8 +232,8 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
      * @param numFlyingBlocks The number of simultaneous blocks that will be sent.
      * @return The result status of the operation.
      */
-    protected boolean internalSendFile(File srcFile, FileTransferServiceReceive ftsRemote, File dstFile,
-            int bsize, int numFlyingBlocks) throws IOException {
+    protected boolean internalSendFile(File srcFile, FileTransferServiceReceive ftsRemote, File dstFile, int bsize,
+            int numFlyingBlocks) throws IOException {
         long init = System.currentTimeMillis();
         long numBlocks = 0;
 
@@ -253,8 +244,7 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
         } catch (Exception e) {
             //TODO change when moving to Java 1.6
             //throw new IOException( "Cannot open for sending:" + srcFile.getAbsoluteFile(), e);
-            throw new IOException("Cannot open for sending:" + srcFile.getAbsoluteFile() + " " +
-                e.getMessage());
+            throw new IOException("Cannot open for sending:" + srcFile.getAbsoluteFile() + " " + e.getMessage());
         }
 
         long totalNumBlocks = Math.round(Math.ceil((double) srcFile.length() / bsize));
@@ -272,7 +262,7 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
             //TODO change when moving to Java 1.6
             //throw new IOException( "Unable to open remote file for writing: " + dstFile.getAbsolutePath(), e);
             throw new IOException("Unable to open remote file for writing: " + dstFile.getAbsolutePath() +
-                e.getMessage());
+                                  e.getMessage());
         }
 
         FileBlock fileBlock = new FileBlock(0, bsize);
@@ -291,7 +281,7 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
                     //TODO change when moving to Java 1.6
                     //throw new IOException("Cannot send file block to:" + PAActiveObject.getActiveObjectNodeUrl(ftsRemote), e);
                     throw new IOException("Cannot send file block to:" +
-                        PAActiveObject.getActiveObjectNodeUrl(ftsRemote) + e);
+                                          PAActiveObject.getActiveObjectNodeUrl(ftsRemote) + e);
                 }
             }
         }
@@ -304,8 +294,7 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
         } catch (IOException e) {
             //TODO change when moving to Java 1.6
             //throw new IOException("Cannot send File to:" + PAActiveObject.getActiveObjectNodeUrl(ftsRemote), e);
-            throw new IOException("Cannot send File to:" + PAActiveObject.getActiveObjectNodeUrl(ftsRemote) +
-                e);
+            throw new IOException("Cannot send File to:" + PAActiveObject.getActiveObjectNodeUrl(ftsRemote) + e);
         }
 
         //Close the remote/local buffers
@@ -315,8 +304,8 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
         if (logger.isDebugEnabled()) {
             long fin = System.currentTimeMillis();
             long delta = (fin - init);
-            logger.debug("File " + dstFile.getAbsolutePath() + " sent using " + numBlocks + " blocks,  in: " +
-                delta + "[ms]");
+            logger.debug("File " + dstFile.getAbsolutePath() + " sent using " + numBlocks + " blocks,  in: " + delta +
+                         "[ms]");
         }
 
         return true;
@@ -334,8 +323,7 @@ public class FileTransferService implements ProActiveInternalObject, InitActive,
      * Put this active object back in the local pool
      */
     public void putBackInLocalPool() {
-        FileTransferEngine.getFileTransferEngine().putFTS(
-                (FileTransferService) PAActiveObject.getStubOnThis());
+        FileTransferEngine.getFileTransferEngine().putFTS((FileTransferService) PAActiveObject.getStubOnThis());
     }
 
     /**

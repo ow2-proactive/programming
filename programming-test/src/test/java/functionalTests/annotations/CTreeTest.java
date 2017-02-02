@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.annotations;
 
@@ -57,8 +46,8 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
-import org.objectweb.proactive.extensions.annotation.common.ProActiveProcessorCTree;
 import org.junit.Ignore;
+import org.objectweb.proactive.extensions.annotation.common.ProActiveProcessorCTree;
 
 
 /**
@@ -71,10 +60,14 @@ import org.junit.Ignore;
 public abstract class CTreeTest extends AnnotationTest {
 
     private JavaCompiler _compiler;
+
     private NoClassOutputFileManager _fileManager;
+
     private DiagnosticCollector<JavaFileObject> _nonFatalErrors;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see functionalTests.annotations.AnnotationTest#testInit()
      */
     @Override
@@ -84,13 +77,11 @@ public abstract class CTreeTest extends AnnotationTest {
         if (_compiler == null) {
             logger.error("Cannot detect the system Java compiler. Check for your JDK settings(btw, you DO have a JDK installed, right?)");
             // this test can no longer continue...
-            throw new NoCompilerDetectedException(
-                "The annotations test will not be run, because a Java compiler was not detected.");
+            throw new NoCompilerDetectedException("The annotations test will not be run, because a Java compiler was not detected.");
         }
         _nonFatalErrors = new DiagnosticCollector<JavaFileObject>();
         // get the file manager
-        StandardJavaFileManager stdFileManager = _compiler
-                .getStandardFileManager(_nonFatalErrors, null, null); // go for the defaults
+        StandardJavaFileManager stdFileManager = _compiler.getStandardFileManager(_nonFatalErrors, null, null); // go for the defaults
         _fileManager = new NoClassOutputFileManager(stdFileManager);
 
     }
@@ -105,7 +96,9 @@ public abstract class CTreeTest extends AnnotationTest {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see functionalTests.annotations.AnnotationTest#checkFile(java.lang.String)
      */
     @Override
@@ -115,7 +108,9 @@ public abstract class CTreeTest extends AnnotationTest {
         return checkFilesAbsolutePath(fileNames, annotationsClassNames);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see functionalTests.annotations.AnnotationTest#checkFile(java.lang.String)
      */
     @Override
@@ -123,8 +118,8 @@ public abstract class CTreeTest extends AnnotationTest {
         String[] fileNamesAbs = new String[fileNames.length];
         String[] annotationClassNames = new String[fileNames.length];
         for (int i = 0; i < fileNames.length; i++) {
-            fileNamesAbs[i] = INPUT_FILES_PATH + File.separator +
-                fileNames[i].replace('.', File.separatorChar) + ".java";
+            fileNamesAbs[i] = INPUT_FILES_PATH + File.separator + fileNames[i].replace('.', File.separatorChar) +
+                              ".java";
             annotationClassNames[i] = TEST_FILES_PACKAGE + fileNames[i];
         }
 
@@ -141,17 +136,17 @@ public abstract class CTreeTest extends AnnotationTest {
         // compiler options
         // the arguments of the options come after the option
         String[] compilerOptions = { "-proc:only", "-processorpath", PROC_PATH, "-processor",
-                ProActiveProcessorCTree.class.getName() };
+                                     ProActiveProcessorCTree.class.getName() };
 
         StringWriter output = new StringWriter();
 
         // create the compilation task
         CompilationTask compilationTask = _compiler.getTask(output, // where to write error messages
-                _fileManager, // the file manager
-                diagnosticListener, // where to receive the errors from compilation
-                Arrays.asList(compilerOptions), // the compiler options
-                Arrays.asList(annotationsClassNames), // classes on which to perform annotation processing
-                compilationUnits);
+                                                            _fileManager, // the file manager
+                                                            diagnosticListener, // where to receive the errors from compilation
+                                                            Arrays.asList(compilerOptions), // the compiler options
+                                                            Arrays.asList(annotationsClassNames), // classes on which to perform annotation processing
+                                                            compilationUnits);
 
         // call the compilation task
         compilationTask.call();
@@ -183,6 +178,7 @@ public abstract class CTreeTest extends AnnotationTest {
     final class NoClassOutputFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
         private final BlackHoleFileObject _blackHoleFileObject;
+
         private final JavaFileManager _underlyingFileManager;
 
         protected NoClassOutputFileManager(JavaFileManager fileManager) {
@@ -198,8 +194,8 @@ public abstract class CTreeTest extends AnnotationTest {
         }
 
         @Override
-        public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind,
-                FileObject sibling) throws IOException {
+        public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
+                throws IOException {
 
             if (kind == JavaFileObject.Kind.CLASS && isClassLocation(location)) {
                 return _blackHoleFileObject;
@@ -213,8 +209,7 @@ public abstract class CTreeTest extends AnnotationTest {
             if (!location.isOutputLocation())
                 return false;
 
-            if (location instanceof StandardLocation &&
-                ((StandardLocation) location) == StandardLocation.CLASS_OUTPUT)
+            if (location instanceof StandardLocation && ((StandardLocation) location) == StandardLocation.CLASS_OUTPUT)
                 return true;
 
             return false;

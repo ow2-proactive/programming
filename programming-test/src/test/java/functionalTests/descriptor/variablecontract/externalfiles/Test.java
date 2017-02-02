@@ -1,62 +1,54 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.descriptor.variablecontract.externalfiles;
+
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.net.URL;
 
+import org.junit.Before;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
-import functionalTests.FunctionalTest;
-import org.junit.Before;
 
-import static org.junit.Assert.assertTrue;
+import functionalTests.FunctionalTest;
 
 
 /**
  * Tests conditions for external files
  */
 public class Test extends FunctionalTest {
-    private static URL XML_LOCATION = Test.class
-            .getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.xml");
+    private static URL XML_LOCATION = Test.class.getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.xml");
+
     GCMApplication gcma;
+
     boolean bogusFromDescriptor;
+
     boolean bogusFromProgram;
 
     @Before
@@ -68,8 +60,7 @@ public class Test extends FunctionalTest {
     @org.junit.Test
     public void action() throws Exception {
         VariableContractImpl variableContract = new VariableContractImpl();
-        URL url = Test.class
-                .getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.properties");
+        URL url = Test.class.getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.properties");
         String path = new File(url.toURI()).getAbsolutePath();
         variableContract.setVariableFromProgram("RPATH", path, VariableContractType.ProgramVariable);
 

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package dataspaces;
 
@@ -70,8 +59,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test
-    public void testIsApplicationRegistered1() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException {
+    public void testIsApplicationRegistered1()
+            throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
 
         assertFalse(ns.isApplicationIdRegistered(MAIN_APPID));
         assertFalse(ns.isApplicationIdRegistered(ANOTHER_APPID1));
@@ -88,8 +77,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test
-    public void testIsApplicationRegistered2() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException {
+    public void testIsApplicationRegistered2()
+            throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
 
         Set<SpaceInstanceInfo> spaces = new HashSet<SpaceInstanceInfo>();
 
@@ -113,8 +102,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test
-    public void testRegisteredApplicationId1() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException {
+    public void testRegisteredApplicationId1()
+            throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
 
         Set<String> apps;
 
@@ -131,8 +120,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testRegisteredApplicationId2() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException {
+    public void testRegisteredApplicationId2()
+            throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
 
         Set<String> apps;
         ns.registerApplication(MAIN_APPID, null);
@@ -144,8 +133,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
      * Normal case, two inputs, two outputs.
      */
     @Test
-    public void testRegisterApplication1() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException, SpaceAlreadyRegisteredException, IllegalArgumentException {
+    public void testRegisterApplication1() throws ApplicationAlreadyRegisteredException, WrongApplicationIdException,
+            SpaceAlreadyRegisteredException, IllegalArgumentException {
 
         Set<SpaceInstanceInfo> spaces = new HashSet<SpaceInstanceInfo>();
 
@@ -172,8 +161,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
      * Normal case, no spaces
      */
     @Test
-    public void testRegisterApplication2() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException, SpaceAlreadyRegisteredException, IllegalArgumentException {
+    public void testRegisterApplication2() throws ApplicationAlreadyRegisteredException, WrongApplicationIdException,
+            SpaceAlreadyRegisteredException, IllegalArgumentException {
 
         ns.registerApplication(MAIN_APPID, null);
         ns.register(spaceInstanceInput1);
@@ -198,8 +187,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test
-    public void testRegisterApplicationWrongAppid() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException, SpaceAlreadyRegisteredException {
+    public void testRegisterApplicationWrongAppid()
+            throws ApplicationAlreadyRegisteredException, WrongApplicationIdException, SpaceAlreadyRegisteredException {
 
         Set<SpaceInstanceInfo> spaces = new HashSet<SpaceInstanceInfo>();
 
@@ -226,8 +215,7 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test
-    public void testUnregisterApplication() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException {
+    public void testUnregisterApplication() throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
 
         Set<SpaceInstanceInfo> spaces = new HashSet<SpaceInstanceInfo>();
 
@@ -252,8 +240,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test
-    public void testUnregisterApplicationEmpty() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException {
+    public void testUnregisterApplicationEmpty()
+            throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
 
         Set<SpaceInstanceInfo> spaces = new HashSet<SpaceInstanceInfo>();
 
@@ -262,8 +250,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
     }
 
     @Test
-    public void testUnregisterApplicationWrongAppid() throws ApplicationAlreadyRegisteredException,
-            WrongApplicationIdException {
+    public void testUnregisterApplicationWrongAppid()
+            throws ApplicationAlreadyRegisteredException, WrongApplicationIdException {
 
         ns.registerApplication(MAIN_APPID, null);
 
@@ -280,8 +268,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
      * Register space of not registered application
      */
     @Test
-    public void testNSRegister1() throws ApplicationAlreadyRegisteredException,
-            SpaceAlreadyRegisteredException, IllegalArgumentException, WrongApplicationIdException {
+    public void testNSRegister1() throws ApplicationAlreadyRegisteredException, SpaceAlreadyRegisteredException,
+            IllegalArgumentException, WrongApplicationIdException {
 
         try {
             ns.register(spaceInstanceInput1b);
@@ -296,8 +284,8 @@ public class NamingServiceTest extends SpacesDirectoryAbstractBase {
      * Unregister space of not registered application
      */
     @Test
-    public void testNSUnregister1() throws ApplicationAlreadyRegisteredException,
-            SpaceAlreadyRegisteredException, IllegalArgumentException, WrongApplicationIdException {
+    public void testNSUnregister1() throws ApplicationAlreadyRegisteredException, SpaceAlreadyRegisteredException,
+            IllegalArgumentException, WrongApplicationIdException {
 
         assertFalse(ns.unregister(spaceInstanceInput1b.getMountingPoint()));
     }

@@ -1,40 +1,32 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package vfsprovider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -46,9 +38,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
-import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.RandomAccessContent;
@@ -57,9 +46,9 @@ import org.apache.commons.vfs2.util.RandomAccessMode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
+import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 
 
 /**
@@ -67,10 +56,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestProActiveProviderAutoclosing extends AbstractIOOperationsBase {
     private static final int AUTOCLOSE_TIME = 100;
+
     private static final int CHECKING_TIME = 10;
+
     private static final int SLEEP_TIME = AUTOCLOSE_TIME * 3;
+
     // big enough to ignore buffering behavior
     private static final int TEST_FILE_A_CHARS_NUMBER = 1000000;
+
     private static final int TEST_FILE_B_CHARS_NUMBER = 1000000;
 
     private static BufferedReader openBufferedReader(final FileObject fo) throws FileSystemException {
@@ -85,8 +78,8 @@ public class TestProActiveProviderAutoclosing extends AbstractIOOperationsBase {
         return new OutputStreamWriter(fo.getContent().getOutputStream());
     }
 
-    private static RandomAccessContent openRandomAccessContent(final FileObject fo,
-            final RandomAccessMode mode) throws FileSystemException {
+    private static RandomAccessContent openRandomAccessContent(final FileObject fo, final RandomAccessMode mode)
+            throws FileSystemException {
         return fo.getContent().getRandomAccessContent(mode);
     }
 
@@ -105,6 +98,7 @@ public class TestProActiveProviderAutoclosing extends AbstractIOOperationsBase {
     }
 
     private FileSystemServerDeployer serverDeployer;
+
     private DefaultFileSystemManager vfsManager;
 
     @Before
@@ -120,10 +114,8 @@ public class TestProActiveProviderAutoclosing extends AbstractIOOperationsBase {
         writer.close();
 
         // start FileSystemServer with proper settings
-        CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_AUTOCLOSE_CHECKING_INTERVAL_MILLIS
-                .setValue(CHECKING_TIME);
-        CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS
-                .setValue(AUTOCLOSE_TIME);
+        CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_AUTOCLOSE_CHECKING_INTERVAL_MILLIS.setValue(CHECKING_TIME);
+        CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS.setValue(AUTOCLOSE_TIME);
         serverDeployer = new FileSystemServerDeployer(testDir.getAbsolutePath(), true);
 
         // set up VFS manager with ProActiveProvider

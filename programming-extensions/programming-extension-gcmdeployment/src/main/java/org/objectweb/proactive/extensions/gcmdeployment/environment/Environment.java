@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.environment;
 
@@ -62,11 +51,13 @@ import org.xml.sax.SAXException;
 
 public class Environment {
 
-    /* Since XSLT 1.0 & Java static methods are used to perform the variable replacement, it is not thread safe
+    /*
+     * Since XSLT 1.0 & Java static methods are used to perform the variable replacement, it is not
+     * thread safe
      */
-    synchronized public static InputSource replaceVariables(URL descriptor, VariableContractImpl vContract,
-            XPath xpath, String namespace) throws IOException, SAXException, XPathExpressionException,
-            TransformerException, URISyntaxException {
+    synchronized public static InputSource replaceVariables(URL descriptor, VariableContractImpl vContract, XPath xpath,
+            String namespace)
+            throws IOException, SAXException, XPathExpressionException, TransformerException, URISyntaxException {
 
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
@@ -84,17 +75,17 @@ public class Environment {
         // we have to do this because we have no schema validation at this stage 
         //
         String expectedNamespace = namespace.equals(GCMParserConstants.GCM_APPLICATION_NAMESPACE_PREFIX) ? GCMParserConstants.GCM_APPLICATION_NAMESPACE
-                : GCMParserConstants.GCM_DEPLOYMENT_NAMESPACE;
+                                                                                                         : GCMParserConstants.GCM_DEPLOYMENT_NAMESPACE;
         NamedNodeMap rootNodeAttributes = baseDocument.getFirstChild().getAttributes();
         if (rootNodeAttributes != null) {
             Node attr = rootNodeAttributes.getNamedItem("xmlns");
             if (attr == null || !attr.getNodeValue().equals(expectedNamespace)) {
                 if (attr != null && attr.getNodeValue().equals("urn:proactive:deployment:3.3")) {
                     throw new SAXException("descriptor is using old format - expected namespace is " +
-                        expectedNamespace);
+                                           expectedNamespace);
                 } else {
                     throw new SAXException("document has wrong namespace or no namespace - must be in " +
-                        expectedNamespace);
+                                           expectedNamespace);
                 }
             }
         } else {
@@ -102,8 +93,7 @@ public class Environment {
         }
 
         EnvironmentTransformer environmentTransformer;
-        environmentTransformer = new EnvironmentTransformer(environmentParser.getVariableContract(),
-            descriptor);
+        environmentTransformer = new EnvironmentTransformer(environmentParser.getVariableContract(), descriptor);
 
         // We get the file name from the url
         // TODO test it on linux / windows

@@ -1,40 +1,44 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnp;
+
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -61,21 +65,6 @@ import org.objectweb.proactive.extensions.pnp.exception.PNPIOException;
 import org.objectweb.proactive.extensions.pnp.exception.PNPTimeoutException;
 import org.objectweb.proactive.utils.NamedThreadFactory;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
-
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -140,8 +129,7 @@ public class PNPAgent {
                 logger.debug("PNP is listening on " + sa);
             } else {
                 this.port = -1;
-                throw new PNPException(
-                    "Failed to setup the server side of PNP. The SocketAddress is not an InetSocketAddress");
+                throw new PNPException("Failed to setup the server side of PNP. The SocketAddress is not an InetSocketAddress");
             }
         } catch (ChannelException e) {
             throw new PNPException("Failed to setup the server side of PNP", e);
@@ -225,8 +213,10 @@ public class PNPAgent {
     static class PNPChannelId {
         /** The remote inet address  */
         final private InetAddress addr;
+
         /** The remote port*/
         final private int port;
+
         /** The heartbeat period of the channel*/
         final private long heartbeat;
 
@@ -294,8 +284,9 @@ public class PNPAgent {
         public PNPClientChannelCache(final ClientBootstrap clientBootstrap) {
             this.channels = new ConcurrentHashMap<PNPChannelId, PNPClientChannel>();
             this.clientBootstrap = clientBootstrap;
-            NamedThreadFactory tf = new NamedThreadFactory("PNP client handler timer (shared)", true,
-                Thread.MAX_PRIORITY);
+            NamedThreadFactory tf = new NamedThreadFactory("PNP client handler timer (shared)",
+                                                           true,
+                                                           Thread.MAX_PRIORITY);
             this.timer = new HashedWheelTimer(tf, 10, TimeUnit.MILLISECONDS);
         }
 
@@ -355,10 +346,13 @@ public class PNPAgent {
 
         /** Identify the channel*/
         final private PNPChannelId channelId;
+
         /** The Netty channel */
         final private Channel channel;
+
         /** To park calling thread until the response is received */
         final private Parking parking;
+
         /** A reference on the channel cache to be able to remove ourself on channel close*/
         final private PNPClientChannelCache cache;
 
@@ -368,8 +362,7 @@ public class PNPAgent {
          * If not, a default 60 seconds connect timeout is used
          */
         public PNPClientChannel(final ClientBootstrap bootstrap, final PNPChannelId channelId,
-                final PNPClientChannelCache cache, final Timer timer) throws PNPTimeoutException,
-                PNPIOException {
+                final PNPClientChannelCache cache, final Timer timer) throws PNPTimeoutException, PNPIOException {
             this.channelId = channelId;
             this.parking = new Parking(this.channelId, timer);
             this.cache = cache;
@@ -403,28 +396,25 @@ public class PNPAgent {
             clientHandler.setPnpClientChannel(this);
 
             // Sends the first frame to negociate the heartbeat
-            PNPFrameHeartbeatAdvertisement frame = new PNPFrameHeartbeatAdvertisement(
-                this.getHeartbeatPeriod());
+            PNPFrameHeartbeatAdvertisement frame = new PNPFrameHeartbeatAdvertisement(this.getHeartbeatPeriod());
             cf = this.channel.write(frame);
             timeout = this.getHeartbeatPeriod() != 0 ? this.getHeartbeatPeriod() : 60 * 1000;
             if (cf.awaitUninterruptibly(timeout)) {
                 if (cf.isSuccess()) {
                     logger.trace("Successfully advertised the heartbeat period to the server");
                 } else {
-                    throw new PNPIOException("Failed to advertise the heartbeat period to the server",
-                        cf.getCause());
+                    throw new PNPIOException("Failed to advertise the heartbeat period to the server", cf.getCause());
                 }
             } else {
                 if (cf.cancel()) {
-                    throw new PNPIOException(
-                        "Failed to advertise the heartbeat period to the server (timeout reached)",
-                        cf.getCause());
+                    throw new PNPIOException("Failed to advertise the heartbeat period to the server (timeout reached)",
+                                             cf.getCause());
                 } else {
                     if (cf.isSuccess()) {
                         logger.trace("Successfully advertised the heartbeat period to the server");
                     } else {
                         throw new PNPIOException("Failed to advertise the heartbeat period to the server",
-                            cf.getCause());
+                                                 cf.getCause());
                     }
                 }
             }
@@ -460,8 +450,7 @@ public class PNPAgent {
             if (ps != null) {
                 ps.setAndUnlock(response.getPayload());
             } else {
-                logger.debug("Discarded message response since the client is no longer in the parking. " +
-                    response);
+                logger.debug("Discarded message response since the client is no longer in the parking. " + response);
             }
         }
 
@@ -551,8 +540,8 @@ public class PNPAgent {
      */
     /*
      * Concurrency:
-     *  - Non final fields are not atomic nor volatile since the methods are synchronized (see JMM)
-     *  - Not yet fine grained concurrency. Not sure if it is needed...
+     * - Non final fields are not atomic nor volatile since the methods are synchronized (see JMM)
+     * - Not yet fine grained concurrency. Not sure if it is needed...
      */
     static class Parking implements TimerTask {
         static final private int DEFAULT_EXTRA_TIME = 3;
@@ -562,11 +551,15 @@ public class PNPAgent {
 
         /** The heartbeat period in ms */
         final private PNPTimeoutHandler timeoutHandler;
+
         /** The timer used to check if blocked thread smust be unlocked due to a late heartbeat */
         final private Timer timer;
+
         private final PNPChannelId channelId;
+
         /** Is the timer armed ? */
         private boolean scheduled;
+
         /** The number of times the timer task has been run with all slots empty
          *
          * As soon as a calling thread enters the parking, this value is reset to 0
@@ -584,7 +577,8 @@ public class PNPAgent {
             this.slots = new HashMap<Long, ParkingSlot>();
             this.timer = timer;
             this.timeoutHandler = new PNPTimeoutHandler(channelId.heartbeat,
-                PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getValue(), PNPConfig.PA_PNP_HEARTBEAT_WINDOW.getValue());
+                                                        PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getValue(),
+                                                        PNPConfig.PA_PNP_HEARTBEAT_WINDOW.getValue());
             this.channelId = channelId;
 
             this.scheduled = false;
@@ -613,8 +607,7 @@ public class PNPAgent {
             // reset to default values
             this.scheduled = false;
 
-            PNPTimeoutHandler.HeartBeatNotificationData notificationData = this.timeoutHandler
-                    .getNotificationData();
+            PNPTimeoutHandler.HeartBeatNotificationData notificationData = this.timeoutHandler.getNotificationData();
             this.timeoutHandler.resetNotification();
 
             if (this.slots.isEmpty() && (this.extraTime++ > DEFAULT_EXTRA_TIME)) {
@@ -624,10 +617,11 @@ public class PNPAgent {
 
             if (notificationData.heartBeatReceived()) {
                 if (logger.isTraceEnabled()) {
-                    logger.trace("Heartbeat received in time in channel " +
-                        channelId +
-                        ((notificationData.getLastHeartBeatInterval() > 0) ? ", last interval was : " +
-                            notificationData.getLastHeartBeatInterval() + " ms" : ""));
+                    logger.trace("Heartbeat received in time in channel " + channelId +
+                                 ((notificationData.getLastHeartBeatInterval() > 0) ? ", last interval was : " +
+                                                                                      notificationData.getLastHeartBeatInterval() +
+                                                                                      " ms"
+                                                                                    : ""));
                 }
                 long timeoutValue = notificationData.getTimeout();
                 if (logger.isTraceEnabled()) {
@@ -646,8 +640,7 @@ public class PNPAgent {
         }
 
         synchronized private void unlockDueToDisconnection(long timeout) {
-            PNPIOException e = new PNPHeartbeatTimeoutException("Heartbeat not received in time (" + timeout +
-                " ms)");
+            PNPIOException e = new PNPHeartbeatTimeoutException("Heartbeat not received in time (" + timeout + " ms)");
             for (ParkingSlot slot : slots.values()) {
                 slot.setAndUnlock(e);
             }
@@ -669,12 +662,16 @@ public class PNPAgent {
     static private class ParkingSlot {
         /** A reference on the parking to remove ourself when the response is received */
         final private Parking parking;
+
         /** 0 when the response is available or an error occured */
         final private SweetCountDownLatch latch;
+
         /** The response */
         volatile private InputStream response = null;
+
         /** Received exception */
         volatile private PNPException exception = null;
+
         /** message ID of the request */
         final private long callId;
 

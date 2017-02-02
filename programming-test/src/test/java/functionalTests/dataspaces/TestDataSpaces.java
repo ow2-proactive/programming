@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.dataspaces;
 
@@ -82,20 +71,35 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
     }
 
     private static final String ADDED_INPUT_NAME = "another_input";
+
     private static final String OUTPUT_FILE_NAME = "some_file.txt";
+
     private static final String OUTPUT_FILE_CONTENT1 = "didum";
+
     private static final String OUTPUT_FILE_CONTENT2 = "didum_toto";
+
     private Node node1;
+
     private Node node2;
+
     private Node node3;
+
     private Node node4;
+
     private Node nodeLocal;
+
     private TestActiveObject ao1;
+
     private TestActiveObject ao1B;
+
     private TestActiveObject ao2;
+
     private TestActiveObject ao3;
+
     private TestActiveObject ao4;
+
     private TestActiveObject aoLocal;
+
     private TestActiveObject aoFake;
 
     public TestDataSpaces() throws URISyntaxException, IOException, ProActiveException {
@@ -124,9 +128,8 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
     }
 
     @Test
-    public void action() throws SpaceNotFoundException, NotConfiguredException, IOException,
-            MalformedURIException, ProActiveTimeoutException, SpaceAlreadyRegisteredException,
-            ConfigurationException, InterruptedException {
+    public void action() throws SpaceNotFoundException, NotConfiguredException, IOException, MalformedURIException,
+            ProActiveTimeoutException, SpaceAlreadyRegisteredException, ConfigurationException, InterruptedException {
         // read inputs:
         assertEquals(INPUT_FILE_CONTENT, ao1.readDefaultInputFile(INPUT_FILE_NAME));
         assertEquals(INPUT_FILE_CONTENT, ao1B.readDefaultInputFile(INPUT_FILE_NAME));
@@ -147,8 +150,7 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         assertEquals(INPUT_FILE_CONTENT, ao1.readDefaultInputFile(INPUT_FILE_NAME));
 
         // write to outputs:
-        final String defaultOutputFileUri = ao1
-                .writeDefaultOutputFile(OUTPUT_FILE_NAME, OUTPUT_FILE_CONTENT1);
+        final String defaultOutputFileUri = ao1.writeDefaultOutputFile(OUTPUT_FILE_NAME, OUTPUT_FILE_CONTENT1);
         assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(defaultOutputFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, ao1B.readFile(defaultOutputFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(defaultOutputFileUri));
@@ -157,8 +159,9 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(defaultOutputFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(defaultOutputFileUri));
 
-        final String outputWithDirFileUri = ao1.writeOutputFile(OUTPUT_WITH_DIR_NAME, OUTPUT_FILE_NAME,
-                OUTPUT_FILE_CONTENT1);
+        final String outputWithDirFileUri = ao1.writeOutputFile(OUTPUT_WITH_DIR_NAME,
+                                                                OUTPUT_FILE_NAME,
+                                                                OUTPUT_FILE_CONTENT1);
         assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithDirFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithDirFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithDirFileUri));
@@ -166,8 +169,7 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(outputWithDirFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithDirFileUri));
 
-        final String outputWithFileFileUri = ao1.writeOutputFile(OUTPUT_WITH_FILE_NAME, null,
-                OUTPUT_FILE_CONTENT1);
+        final String outputWithFileFileUri = ao1.writeOutputFile(OUTPUT_WITH_FILE_NAME, null, OUTPUT_FILE_CONTENT1);
         assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithFileFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithFileFileUri));
         assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithFileFileUri));
@@ -176,7 +178,8 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithFileFileUri));
 
         final String outputWithNothingFileUri1 = ao1.writeOutputFile(OUTPUT_WITH_NOTHING1_NAME,
-                OUTPUT_FILE_NAME, OUTPUT_FILE_CONTENT1);
+                                                                     OUTPUT_FILE_NAME,
+                                                                     OUTPUT_FILE_CONTENT1);
         assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithNothingFileUri1));
         assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithNothingFileUri1));
         assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithNothingFileUri1));
@@ -184,8 +187,9 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         assertEquals(OUTPUT_FILE_CONTENT1, aoLocal.readFile(outputWithNothingFileUri1));
         assertEquals(OUTPUT_FILE_CONTENT1, aoFake.readFile(outputWithNothingFileUri1));
 
-        final String outputWithNothingFileUri2 = ao1.writeOutputFile(OUTPUT_WITH_NOTHING2_NAME, null,
-                OUTPUT_FILE_CONTENT1);
+        final String outputWithNothingFileUri2 = ao1.writeOutputFile(OUTPUT_WITH_NOTHING2_NAME,
+                                                                     null,
+                                                                     OUTPUT_FILE_CONTENT1);
         assertEquals(OUTPUT_FILE_CONTENT1, ao1.readFile(outputWithNothingFileUri2));
         assertEquals(OUTPUT_FILE_CONTENT1, ao2.readFile(outputWithNothingFileUri2));
         assertEquals(OUTPUT_FILE_CONTENT1, ao3.readFile(outputWithNothingFileUri2));
@@ -285,22 +289,21 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         // blocking resolve input + add input:
         // (exceptions for readInputFileBlocking - to make it asynchronous)
         PAException.tryWithCatch(new Class[] { SpaceNotFoundException.class, NotConfiguredException.class,
-                IOException.class, ProActiveTimeoutException.class });
+                                               IOException.class, ProActiveTimeoutException.class });
         try {
-            final StringWrapper contentWrapper1B = ao1B.readInputFileBlocking(ADDED_INPUT_NAME,
-                    INPUT_FILE_NAME, 30000);
-            final StringWrapper contentWrapper2 = ao2.readInputFileBlocking(ADDED_INPUT_NAME,
-                    INPUT_FILE_NAME, 30000);
-            final StringWrapper contentWrapper4 = ao4.readInputFileBlocking(ADDED_INPUT_NAME,
-                    INPUT_FILE_NAME, 30000);
+            final StringWrapper contentWrapper1B = ao1B.readInputFileBlocking(ADDED_INPUT_NAME, INPUT_FILE_NAME, 30000);
+            final StringWrapper contentWrapper2 = ao2.readInputFileBlocking(ADDED_INPUT_NAME, INPUT_FILE_NAME, 30000);
+            final StringWrapper contentWrapper4 = ao4.readInputFileBlocking(ADDED_INPUT_NAME, INPUT_FILE_NAME, 30000);
             final StringWrapper contentWrapperLocal = aoLocal.readInputFileBlocking(ADDED_INPUT_NAME,
-                    INPUT_FILE_NAME, 30000);
+                                                                                    INPUT_FILE_NAME,
+                                                                                    30000);
             final StringBuilder contentWrapperFake = new StringBuilder();
             new Thread() {
                 public void run() {
                     try {
                         contentWrapperFake.append(aoFake.readInputFileBlocking(ADDED_INPUT_NAME,
-                                INPUT_FILE_NAME, 30000));
+                                                                               INPUT_FILE_NAME,
+                                                                               30000));
                         synchronized (contentWrapperFake) {
                             contentWrapperFake.notifyAll();
                         }
@@ -371,11 +374,10 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
          * 
          */
 
-        private static String readAndCloseFile(final DataSpacesFileObject fo) throws FileSystemException,
-                IOException {
+        private static String readAndCloseFile(final DataSpacesFileObject fo) throws FileSystemException, IOException {
             try {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(fo.getContent()
-                        .getInputStream()));
+                                                                                         .getInputStream()));
                 try {
                     return reader.readLine();
                 } finally {
@@ -390,7 +392,7 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
                 throws FileSystemException, IOException {
             try {
                 final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fo.getContent()
-                        .getOutputStream()));
+                                                                                          .getOutputStream()));
                 try {
                     writer.write(content);
                     return fo.getVirtualURI();
@@ -405,45 +407,44 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         public TestActiveObject() {
         }
 
-        public String readDefaultInputFile(String fileName) throws SpaceNotFoundException,
-                NotConfiguredException, IOException, ConfigurationException {
+        public String readDefaultInputFile(String fileName)
+                throws SpaceNotFoundException, NotConfiguredException, IOException, ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveDefaultInput(fileName);
             return readAndCloseFile(fo);
         }
 
-        public String writeDefaultInputFile(String fileName, String content) throws FileSystemException,
-                IOException, SpaceNotFoundException, NotConfiguredException, ConfigurationException {
+        public String writeDefaultInputFile(String fileName, String content) throws FileSystemException, IOException,
+                SpaceNotFoundException, NotConfiguredException, ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveDefaultInput(fileName);
             return writeAndCloseFile(fo, content);
         }
 
-        public String readInputFile(String inputName, String fileName) throws SpaceNotFoundException,
-                NotConfiguredException, IOException, ConfigurationException {
+        public String readInputFile(String inputName, String fileName)
+                throws SpaceNotFoundException, NotConfiguredException, IOException, ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveInput(inputName, fileName);
             return readAndCloseFile(fo);
         }
 
-        public String readFile(String uri) throws SpaceNotFoundException, NotConfiguredException,
-                IOException, MalformedURIException, ConfigurationException {
+        public String readFile(String uri) throws SpaceNotFoundException, NotConfiguredException, IOException,
+                MalformedURIException, ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveFile(uri);
             return readAndCloseFile(fo);
         }
 
-        public String writeDefaultOutputFile(String fileName, String content) throws FileSystemException,
-                IOException, SpaceNotFoundException, NotConfiguredException, ConfigurationException {
+        public String writeDefaultOutputFile(String fileName, String content) throws FileSystemException, IOException,
+                SpaceNotFoundException, NotConfiguredException, ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveDefaultOutput(fileName);
             return writeAndCloseFile(fo, content);
         }
 
-        public String writeOutputFile(String outputName, String fileName, String content)
-                throws FileSystemException, IOException, SpaceNotFoundException, NotConfiguredException,
-                ConfigurationException {
+        public String writeOutputFile(String outputName, String fileName, String content) throws FileSystemException,
+                IOException, SpaceNotFoundException, NotConfiguredException, ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveOutput(outputName, fileName);
             return writeAndCloseFile(fo, content);
         }
 
-        public String writeScratchFile(String fileName, String content) throws FileSystemException,
-                IOException, SpaceNotFoundException, NotConfiguredException, ConfigurationException {
+        public String writeScratchFile(String fileName, String content) throws FileSystemException, IOException,
+                SpaceNotFoundException, NotConfiguredException, ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveScratchForAO(fileName);
             return writeAndCloseFile(fo, content);
         }
@@ -463,14 +464,14 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         }
 
         public StringWrapper readInputFileBlocking(String inputName, String fileName, long timeout)
-                throws SpaceNotFoundException, NotConfiguredException, IOException,
-                ProActiveTimeoutException, ConfigurationException {
+                throws SpaceNotFoundException, NotConfiguredException, IOException, ProActiveTimeoutException,
+                ConfigurationException {
             final DataSpacesFileObject fo = PADataSpaces.resolveInputBlocking(inputName, fileName, timeout);
             return new StringWrapper(readAndCloseFile(fo));
         }
 
-        public void addInputSpace(String inputName, String url) throws SpaceAlreadyRegisteredException,
-                ConfigurationException, NotConfiguredException {
+        public void addInputSpace(String inputName, String url)
+                throws SpaceAlreadyRegisteredException, ConfigurationException, NotConfiguredException {
             PADataSpaces.addInput(inputName, url, null);
         }
 

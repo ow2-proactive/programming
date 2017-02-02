@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.body.future;
 
@@ -228,9 +217,8 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      */
     public synchronized void receiveReply(MethodCallResult obj) {
         if (isAvailable()) {
-            throw new IllegalStateException(
-                "FutureProxy receives a reply and the current target field is not null. Current target is " +
-                    this.target + " while reply's target is " + obj);
+            throw new IllegalStateException("FutureProxy receives a reply and the current target field is not null. Current target is " +
+                                            this.target + " while reply's target is " + obj);
         }
         if (dispatchMonitor != null) {
             dispatchMonitor.updatedResult(originatingProxy);
@@ -335,8 +323,8 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         if (body != null) {
             mbean = body.getMBean();
             if (mbean != null) {
-                mbean.sendNotification(NotificationType.waitByNecessity, new FutureNotificationData(bodyId,
-                    getCreatorID()));
+                mbean.sendNotification(NotificationType.waitByNecessity,
+                                       new FutureNotificationData(bodyId, getCreatorID()));
             }
         }
 
@@ -355,8 +343,8 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
         // JMX Notification
         if (mbean != null) {
-            mbean.sendNotification(NotificationType.receivedFutureResult, new FutureNotificationData(bodyId,
-                getCreatorID()));
+            mbean.sendNotification(NotificationType.receivedFutureResult,
+                                   new FutureNotificationData(bodyId, getCreatorID()));
         }
 
         // END JMX Notification
@@ -415,8 +403,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      */
     public void updateContext() {
         if (target != null) {
-            target = new ContextAwareMethodCallResult(target.getResultObjet(), target.getException(),
-                callerContext);
+            target = new ContextAwareMethodCallResult(target.getResultObjet(), target.getException(), callerContext);
         }
     }
 
@@ -579,8 +566,8 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      * the use of the synchronized keyword in readObject is meant to prevent race conditions on
      * futures -- do not remove it.
      */
-    private synchronized void readObject(java.io.ObjectInputStream in) throws java.io.IOException,
-            ClassNotFoundException {
+    private synchronized void readObject(java.io.ObjectInputStream in)
+            throws java.io.IOException, ClassNotFoundException {
         senderID = (UniqueID) in.readObject();
         target = (MethodCallResult) in.readObject();
         id = (FutureID) in.readObject();

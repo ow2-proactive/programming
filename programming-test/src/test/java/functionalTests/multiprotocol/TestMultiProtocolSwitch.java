@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2013 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.multiprotocol;
 
@@ -43,6 +32,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.log4j.Level;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.Node;
@@ -54,13 +49,8 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
+
 import functionalTests.FunctionalTest;
-import org.apache.log4j.Level;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 
 
 /**
@@ -78,8 +68,7 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
     URL gcma = TestMultiProtocolSwitch.class.getResource("TestMultiProtocol.xml");
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp",
-            "pamr" }));
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp", "pamr" }));
 
     HashSet<List<String>> permutations = new HashSet<List<String>>();
 
@@ -148,24 +137,22 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
 
             // Here we need to clone the variable contract received from the super class in order to be able to use a new
             // VC at each loop iteration
-            VariableContractImpl variableContract = (VariableContractImpl) super.getVariableContract()
-                    .clone();
+            VariableContractImpl variableContract = (VariableContractImpl) super.getVariableContract().clone();
 
             // we remove the value of the proactive.communication.protocol set by the FuntionalTest
             List<String> jvmParameters = super.getJvmParameters();
 
-            Node node = MultiProtocolHelper.deployANodeWithProtocols(proto, gcma, variableContract,
-                    jvmParameters);
+            Node node = MultiProtocolHelper.deployANodeWithProtocols(proto, gcma, variableContract, jvmParameters);
 
-            AOMultiProtocolSwitch ao = PAActiveObject.newActive(AOMultiProtocolSwitch.class, new Object[0],
-                    node);
+            AOMultiProtocolSwitch ao = PAActiveObject.newActive(AOMultiProtocolSwitch.class, new Object[0], node);
             String[] aouris = PAActiveObject.getUrls(ao);
 
             // Ensure that the remote active object is deployed using the correct protocols
             Assert.assertEquals("Number of uris match protocol list size", proto.size(), aouris.length);
             for (int i = 0; i < aouris.length; i++) {
-                Assert.assertEquals(aouris[i] + " is protocol " + proto.get(i), proto.get(i), (new URI(
-                    aouris[i])).getScheme());
+                Assert.assertEquals(aouris[i] + " is protocol " + proto.get(i),
+                                    proto.get(i),
+                                    (new URI(aouris[i])).getScheme());
             }
 
             // for each protocol except the last one, run a suite of calls to the test ActiveObject then disable the protocol
@@ -208,8 +195,7 @@ public class TestMultiProtocolSwitch extends FunctionalTest {
 
                 // get the future after switch
                 System.out.println("Future 1 already arrived before switch: " + future1.getBooleanValue());
-                System.out.println("Future 2 probably not arrived before switch : " +
-                    future2.getBooleanValue());
+                System.out.println("Future 2 probably not arrived before switch : " + future2.getBooleanValue());
                 System.out.println("Automatic continuation 1 (short) " + autocont1.getBooleanValue());
                 System.out.println("Automatic continuation 2 (long) " + autocont2.getBooleanValue());
             }

@@ -1,44 +1,34 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.api;
 
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -56,7 +46,6 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -70,6 +59,7 @@ public class PARemoteObject {
 
     /* Used to attribute an unique name to RO created by turnRemote */
     private final static String TURN_REMOTE_PREFIX;
+
     private final static String ADD_PROTOCOL_PREFIX;
 
     static {
@@ -126,8 +116,7 @@ public class PARemoteObject {
      */
     public static Object lookup(URI url) throws ProActiveException {
         logger.debug("Trying to lookup " + url);
-        return RemoteObjectHelper.getFactoryFromURL(url).lookup(RemoteObjectHelper.expandURI(url))
-                .getObjectProxy();
+        return RemoteObjectHelper.getFactoryFromURL(url).lookup(RemoteObjectHelper.expandURI(url)).getObjectProxy();
     }
 
     /**
@@ -191,8 +180,8 @@ public class PARemoteObject {
      * @throws IllegalArgumentException
      *          If obj isn't an RemoteObject
      */
-    public static void forceProtocol(Object obj, String protocol) throws UnknownProtocolException,
-            NotYetExposedException {
+    public static void forceProtocol(Object obj, String protocol)
+            throws UnknownProtocolException, NotYetExposedException {
         if (obj instanceof StubObject) {
             Proxy proxy = ((StubObject) obj).getProxy();
             if (proxy instanceof SynchronousProxy) {
@@ -202,8 +191,7 @@ public class PARemoteObject {
                     ((RemoteObjectAdapter) ro).forceProtocol(protocol);
                     return;
                 } else {
-                    throw new IllegalArgumentException(
-                        "Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
+                    throw new IllegalArgumentException("Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
                 }
             } else {
                 throw new IllegalArgumentException("The object " + obj + " isn't a RemoteObject");
@@ -219,8 +207,7 @@ public class PARemoteObject {
      * @throws UnknownProtocolException
      * @throws NotYetExposedException
      */
-    public static void forceToDefault(Object aRemoteObject) throws UnknownProtocolException,
-            NotYetExposedException {
+    public static void forceToDefault(Object aRemoteObject) throws UnknownProtocolException, NotYetExposedException {
         forceProtocol(aRemoteObject, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
     }
 
@@ -230,8 +217,7 @@ public class PARemoteObject {
      * @throws UnknownProtocolException
      * @throws NotYetExposedException
      */
-    public static void unforceProtocol(Object aRemoteObject) throws UnknownProtocolException,
-            NotYetExposedException {
+    public static void unforceProtocol(Object aRemoteObject) throws UnknownProtocolException, NotYetExposedException {
         forceProtocol(aRemoteObject, null);
     }
 
@@ -243,8 +229,9 @@ public class PARemoteObject {
      */
     public static void addProtocol(RemoteObjectExposer<?> aRemoteObjectExposer, String protocolToActivate)
             throws ProActiveException {
-        aRemoteObjectExposer.createRemoteObject(ADD_PROTOCOL_PREFIX + counter.incrementAndGet(), false,
-                protocolToActivate);
+        aRemoteObjectExposer.createRemoteObject(ADD_PROTOCOL_PREFIX + counter.incrementAndGet(),
+                                                false,
+                                                protocolToActivate);
     }
 
     /**

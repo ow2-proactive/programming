@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.util.log.remote;
 
@@ -84,7 +73,9 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
  */
 public final class ThrottlingProvider extends LoggingEventSenderSPI {
     final static int DEFAULT_QSIZE = 10000;
+
     final static int DEFAULT_PERIOD = 10000; // ms
+
     final static int DEFAULT_THRESHOLD = 50;
 
     final static private String MDC_FLUSHING_TAG = "ThrottlingProvider";
@@ -94,6 +85,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
      * milliseconds).
      */
     private int period;
+
     final String periodProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.period";
 
     /**
@@ -101,6 +93,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
      * available.
      */
     private int threshold;
+
     final String thresholdProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.threshold";
 
     /**
@@ -108,12 +101,14 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
      * flushing thread is able to recover a steady state.
      */
     private int qsize;
+
     final String qsizeProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.qsize";
 
     /**
      * If the logging events must be dropped or saved into a log file when the log collector is not available
      */
     private boolean noLogFile;
+
     final String noLogFileProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.nologfile";
 
     /** Logging Events to be send to the collector */
@@ -138,8 +133,10 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
      * Reset to null each time the collector becomes available again
      */
     private Date failureDate;
+
     /** The first cause of log collector unavailability */
     private Throwable failureCause;
+
     /** Number of dropped messages since the collector is unavailable */
     private long nbDroppedMsg;
 
@@ -181,8 +178,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
                     throw new NumberFormatException("Must be positive");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid parameter for property " + periodProperty +
-                    ". Must be a positive integer");
+                System.out.println("Invalid parameter for property " + periodProperty + ". Must be a positive integer");
             }
         }
         this.period = value;
@@ -199,7 +195,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid parameter for property " + thresholdProperty +
-                    ". Must be a positive integer");
+                                   ". Must be a positive integer");
             }
         }
         this.threshold = value;
@@ -215,8 +211,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
                     throw new NumberFormatException("Must be positive");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid parameter for property " + qsizeProperty +
-                    ". Must be a positive integer");
+                System.out.println("Invalid parameter for property " + qsizeProperty + ". Must be a positive integer");
             }
         }
         this.qsize = value;
@@ -274,18 +269,16 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
                 if (this.failureDate != null) {
                     String msg;
                     if (this.noLogFile) {
-                        msg = this.nbDroppedMsg + " logging events dropped by " + this.getClass().getName() +
-                            "since " + DateFormat.getDateInstance().format(this.failureDate);
+                        msg = this.nbDroppedMsg + " logging events dropped by " + this.getClass().getName() + "since " +
+                              DateFormat.getDateInstance().format(this.failureDate);
                     } else {
-                        msg = this.nbDroppedMsg + " logging events dropped by " + this.getClass().getName() +
-                            "since " + DateFormat.getDateInstance().format(this.failureDate) +
-                            ". A copy of theses logging events is available in " +
-                            this.getErrorAppender().getFile() + " on " +
-                            ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getHostName();
+                        msg = this.nbDroppedMsg + " logging events dropped by " + this.getClass().getName() + "since " +
+                              DateFormat.getDateInstance().format(this.failureDate) +
+                              ". A copy of theses logging events is available in " + this.getErrorAppender().getFile() +
+                              " on " + ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getHostName();
                     }
                     Logger l = Logger.getLogger(this.getClass());
-                    LoggingEvent le = new LoggingEvent(Category.class.getName(), l, Level.INFO, msg,
-                        this.failureCause);
+                    LoggingEvent le = new LoggingEvent(Category.class.getName(), l, Level.INFO, msg, this.failureCause);
                     events.add(le);
                 }
 

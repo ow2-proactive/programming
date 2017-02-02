@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s): ActiveEon Team - http://www.activeeon.com
- *
- * ################################################################
- * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject.http;
 
@@ -111,7 +100,8 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      * (non-Javadoc)
      * 
      * @see
-     * org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#register(org.objectweb.proactive
+     * org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#register(org.objectweb.
+     * proactive
      * .core.remoteobject.RemoteObject, java.net.URI, boolean)
      */
     public RemoteRemoteObject register(InternalRemoteRemoteObject ro, URI url, boolean replacePrevious)
@@ -129,8 +119,7 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
         HttpRemoteObjectImpl rro = new HttpRemoteObjectImpl(ro, url);
 
-        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT)
-                .debug("registering remote object  at endpoint " + url);
+        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).debug("registering remote object  at endpoint " + url);
         return rro;
     }
 
@@ -225,8 +214,8 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         // see PROACTIVE-419
     }
 
-    public InternalRemoteRemoteObject createRemoteObject(RemoteObject remoteObject, String name,
-            boolean rebind) throws ProActiveException {
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject remoteObject, String name, boolean rebind)
+            throws ProActiveException {
         URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, this.getProtocolId());
 
         // register the object on the register
@@ -238,8 +227,8 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     }
 
     public URI getBaseURI() {
-        return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" +
-            getPort() + "/");
+        return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" + getPort() +
+                          "/");
     }
 
     public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {

@@ -1,43 +1,30 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2016 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.pnp;
 
-import functionalTests.FunctionalTest;
-import functionalTests.GCMFunctionalTest;
 import org.apache.log4j.Level;
 import org.junit.After;
 import org.junit.Assert;
@@ -56,6 +43,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.pnp.PNPConfig;
+
+import functionalTests.FunctionalTest;
+import functionalTests.GCMFunctionalTest;
 
 
 public class TestPNPTimeout extends GCMFunctionalTest {
@@ -78,8 +68,8 @@ public class TestPNPTimeout extends GCMFunctionalTest {
     public TestPNPTimeout() throws ProActiveException {
         super(1, 1);
 
-        super.setOptionalJvmParamters(PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getCmdLine() + TEST_HEART_BEAT +
-            " " + PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getCmdLine() + TEST_FACTOR);
+        super.setOptionalJvmParamters(PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getCmdLine() + TEST_HEART_BEAT + " " +
+                                      PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getCmdLine() + TEST_FACTOR);
         super.startDeployment();
     }
 
@@ -91,8 +81,8 @@ public class TestPNPTimeout extends GCMFunctionalTest {
      * (this last bit can be observed in the log, but it seems not possible to check this via assertions).
      */
     @Test(timeout = 300000)
-    public void testGrowingDelay() throws ActiveObjectCreationException, NodeException,
-            UnknownProtocolException, NotYetExposedException, InterruptedException {
+    public void testGrowingDelay() throws ActiveObjectCreationException, NodeException, UnknownProtocolException,
+            NotYetExposedException, InterruptedException {
 
         System.out.println("Starting test: growing delay");
         Node node = super.getANode();
@@ -114,7 +104,7 @@ public class TestPNPTimeout extends GCMFunctionalTest {
         GrowingDelayAO remote2 = PAActiveObject.newActive(GrowingDelayAO.class, new Object[0], node);
 
         Assert.assertTrue("Call to the second active object, with a big delay should not raise exceptions",
-                remote2.simpleMessage());
+                          remote2.simpleMessage());
 
         remote.removeDelay();
         // the server delay is now set to 0
@@ -122,12 +112,10 @@ public class TestPNPTimeout extends GCMFunctionalTest {
 
         for (int i = 0; i < 20; i++) {
             Thread.sleep(1000);
-            Assert.assertTrue(
-                    "Subsequent calls on the first active object with delay reset should not raise exceptions",
-                    remote.simpleMessage());
-            Assert.assertTrue(
-                    "Subsequent calls on the second active object with delay reset should not raise exceptions",
-                    remote2.simpleMessage());
+            Assert.assertTrue("Subsequent calls on the first active object with delay reset should not raise exceptions",
+                              remote.simpleMessage());
+            Assert.assertTrue("Subsequent calls on the second active object with delay reset should not raise exceptions",
+                              remote2.simpleMessage());
         }
         System.out.println("End test: growing delay");
     }

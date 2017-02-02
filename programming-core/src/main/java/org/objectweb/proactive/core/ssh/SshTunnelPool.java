@@ -1,40 +1,31 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.ssh;
+
+import static org.objectweb.proactive.core.ssh.SSH.logger;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -59,18 +50,20 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.Sleeper;
 
-import static org.objectweb.proactive.core.ssh.SSH.logger;
-
 
 public class SshTunnelPool {
     /** The SSH configuration to use in this pool */
     private SshConfig config;
+
     /** A cache to remember if plain socket connection works for a given destination */
     final private TryCache tryCache;
+
     /** SSH connection & tunnels cache */
     final private Map<String, Pair> cache;
+
     /** SSH proxy connection & sessions cache */
     final private Map<String, List<ProxyPair>> proxyCommandCache;
+
     /** The thread in charge of tunnel & connection garbage collection */
     private Thread gcThread = null;
 
@@ -159,8 +152,8 @@ public class SshTunnelPool {
         if (socket == null && config.tryProxyCommand() &&
             !InetAddress.getByName(host).equals(ProActiveInet.getInstance().getInetAddress())) {
             String gateway = config.getGateway(host);
-            String outGateway = ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT.isSet() ? ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT
-                    .getValue() : null;
+            String outGateway = ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT.isSet() ? ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT.getValue()
+                                                                                        : null;
             // if proxyCommand command mechanism is needed
             if (gateway != null || outGateway != null) {
                 synchronized (this.proxyCommandCache) {
@@ -213,8 +206,7 @@ public class SshTunnelPool {
                 Pair pair = this.cache.get(host);
                 if (pair == null) {
                     // Open a SSH connection
-                    SshConnection cnx = new SshConnection(username, host, sshPort,
-                        config.getPrivateKeyPath(host));
+                    SshConnection cnx = new SshConnection(username, host, sshPort, config.getPrivateKeyPath(host));
                     pair = new Pair(cnx);
                     this.cache.put(host, pair);
                 }
@@ -240,8 +232,8 @@ public class SshTunnelPool {
      */
     private static class TryCache {
         /*
-         * - Key does not exist:         never tried
-         * - Key exists, value is true:  direct connection ok
+         * - Key does not exist: never tried
+         * - Key exists, value is true: direct connection ok
          * - Key exists, value is false: direct connection nok
          */
         final private ConcurrentHashMap<String, Boolean> _hash;
@@ -286,16 +278,18 @@ public class SshTunnelPool {
     }
 
     // Cannot be static in SshTunnelStatefull 
-    private SshTunnelStatefull createSshTunStatefull(SshConnection connection, String remoteHost,
-            int remotePort) throws IOException {
+    private SshTunnelStatefull createSshTunStatefull(SshConnection connection, String remoteHost, int remotePort)
+            throws IOException {
         int initialPort = ProActiveRandom.nextInt(65536 - 1024) + 1024;
-        for (int localPort = (initialPort == 65535) ? 1024 : (initialPort + 1); localPort != initialPort; localPort = (localPort == 65535) ? 1024
-                : (localPort + 1)) {
+        for (int localPort = (initialPort == 65535) ? 1024
+                                                    : (initialPort +
+                                                       1); localPort != initialPort; localPort = (localPort == 65535) ? 1024
+                                                                                                                      : (localPort +
+                                                                                                                         1)) {
 
             try {
                 logger.trace("initialPort:" + initialPort + " localPort:" + localPort);
-                SshTunnelStatefull tunnel = new SshTunnelStatefull(connection, remoteHost, remotePort,
-                    localPort);
+                SshTunnelStatefull tunnel = new SshTunnelStatefull(connection, remoteHost, remotePort, localPort);
                 return tunnel;
             } catch (BindException e) {
                 // Try another port
@@ -314,6 +308,7 @@ public class SshTunnelPool {
     private class SshTunnelStatefull extends SshTunnel {
         /** number of currently open sockets */
         final private AtomicInteger users = new AtomicInteger();
+
         /** If users == 0, the timestamp of the last call to close() */
         final private AtomicLong unusedSince = new AtomicLong();
 
@@ -327,7 +322,7 @@ public class SshTunnelPool {
             this.users.incrementAndGet();
 
             InetSocketAddress address = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(),
-                this.getPort());
+                                                              this.getPort());
             Socket socket = new Socket() {
                 public synchronized void close() throws IOException {
                     synchronized (SshTunnelPool.this.cache) {
@@ -352,6 +347,7 @@ public class SshTunnelPool {
 
     private static class Pair {
         final private SshConnection cnx;
+
         final private Map<String, SshTunnelStatefull> tunnels;
 
         private Pair(SshConnection cnx) {
@@ -377,6 +373,7 @@ public class SshTunnelPool {
 
     private static class ProxyPair {
         final private SshProxyConnection cnx;
+
         final private List<SshProxySession> sessions;
 
         private ProxyPair(SshProxyConnection cnx) {

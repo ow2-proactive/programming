@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.router;
 
@@ -68,6 +57,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
  */
 public class Client {
     static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
+
     public static final Logger admin_logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
 
     /** This client represents one remote Agent. */
@@ -250,7 +240,7 @@ public class Client {
         synchronized (this.attachment_lock) {
             if (this.attachment != null) {
                 logger.warn("set attachment called on client #" + this.agentId +
-                    " but attachment is not null. Race condition occured !");
+                            " but attachment is not null. Race condition occured !");
             }
 
             logger.debug("New attachment for " + this.agentId);
@@ -260,12 +250,12 @@ public class Client {
             if (admin_logger.isDebugEnabled()) {
                 if (this.lastSeen.get() == 0) {
                     admin_logger.debug("AgentID " + this.getAgentId() + " connected from " +
-                        this.attachment.getAgentHostname() + " (TCP endpoint: " +
-                        this.attachment.getRemoteEndpointName() + ")");
+                                       this.attachment.getAgentHostname() + " (TCP endpoint: " +
+                                       this.attachment.getRemoteEndpointName() + ")");
                 } else {
                     admin_logger.debug("AgentID " + this.getAgentId() + " reconnected from " +
-                        this.attachment.getAgentHostname() + " (TCP endpoint: " +
-                        this.attachment.getRemoteEndpointName() + ")");
+                                       this.attachment.getAgentHostname() + " (TCP endpoint: " +
+                                       this.attachment.getRemoteEndpointName() + ")");
                 }
             }
 
@@ -274,7 +264,8 @@ public class Client {
 
     /** Send the pending message to the client */
     public void sendPendingMessage() {
-        /* Coarse grained locking: should be improved
+        /*
+         * Coarse grained locking: should be improved
          *
          * This lock currently ensure that their is no race condition
          * between add() and peek()
@@ -356,6 +347,6 @@ public class Client {
     @Override
     public String toString() {
         return "Agent id=" + this.agentId + " remote endpoint=" +
-            (isConnected() ? this.attachment.getRemoteEndpointName() : "not connected");
+               (isConnected() ? this.attachment.getRemoteEndpointName() : "not connected");
     }
 }

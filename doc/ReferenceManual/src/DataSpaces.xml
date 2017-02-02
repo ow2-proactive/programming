@@ -326,7 +326,7 @@ VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?
         </para>
             <example xml:id="ds_snippet1">
                 <info><title>Reading from default input and writing to named output</title></info>
-                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet1.java"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet1.snip"/></textobject></programlisting>
             </example>
         </section>
         <section xml:id="ds_codesnippet2">
@@ -336,7 +336,7 @@ VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?
             </para>
             <example xml:id="ds_snippet2">
                 <info><title>Dealing with inputs more dynamically — adding named input, reading all defined inputs</title></info>
-                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet2.java"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet2.snip"/></textobject></programlisting>
             </example>
         </section>
         <section xml:id="ds_cotesnippet3">
@@ -346,7 +346,7 @@ VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?
             </para>
             <example xml:id="ds_snippet3">
                 <info><title>Writing into ones scratch, that is later read by another AO</title></info>
-                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet3.java"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet3.snip"/></textobject></programlisting>
             </example>
         </section>
     </section>

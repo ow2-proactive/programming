@@ -1,58 +1,30 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
-import com.sun.jna.Library;
-import com.sun.jna.Memory;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLong;
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.platform.win32.Advapi32;
-import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.Kernel32Util;
-import com.sun.jna.platform.win32.WinBase;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinNT.HANDLE;
-import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
-import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.win32.W32APIFunctionMapper;
-import com.sun.jna.win32.W32APITypeMapper;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -74,8 +46,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeoutException;
+
 import org.objectweb.proactive.extensions.processbuilder.WindowsProcess.MyKernel32.PROCESSENTRY32;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
+
+import com.sun.jna.Library;
+import com.sun.jna.Memory;
+import com.sun.jna.Native;
+import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+import com.sun.jna.platform.win32.Advapi32;
+import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
+import com.sun.jna.platform.win32.Kernel32;
+import com.sun.jna.platform.win32.Kernel32Util;
+import com.sun.jna.platform.win32.WinBase;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinNT.HANDLE;
+import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.win32.W32APIFunctionMapper;
+import com.sun.jna.win32.W32APITypeMapper;
 
 
 /**
@@ -109,9 +100,8 @@ public final class WindowsProcess extends Process {
         };
     }
 
-    static interface MyAdvapi extends Library {
-        final MyAdvapi INSTANCE = (MyAdvapi) Native.loadLibrary("Advapi32", MyAdvapi.class,
-                Options.UNICODE_OPTIONS);
+    static interface MyAdvapi extends com.sun.jna.Library {
+        final MyAdvapi INSTANCE = (MyAdvapi) Native.loadLibrary("Advapi32", MyAdvapi.class, Options.UNICODE_OPTIONS);
 
         /**
          * BOOL WINAPI CreateProcessWithLogonW( __in LPCWSTR lpUsername,
@@ -122,15 +112,15 @@ public final class WindowsProcess extends Process {
          * LPSTARTUPINFOW lpStartupInfo, __out LPPROCESS_INFORMATION
          * lpProcessInfo );
          */
-        boolean CreateProcessWithLogonW(String lpUsername, String lpDomain, String lpPassword,
-                int dwLogonFlags, String lpApplicationName, String lpCommandLine, int dwCreationFlags,
-                String lpEnvironment, String lpCurrentDirectory, WinBase.STARTUPINFO lpStartupInfo,
+        boolean CreateProcessWithLogonW(String lpUsername, String lpDomain, String lpPassword, int dwLogonFlags,
+                String lpApplicationName, String lpCommandLine, int dwCreationFlags, String lpEnvironment,
+                String lpCurrentDirectory, WinBase.STARTUPINFO lpStartupInfo,
                 WinBase.PROCESS_INFORMATION lpProcessInfo);
 
         public static final int LOGON_WITH_PROFILE = 0x00000001;
     }
 
-    static interface MyUserenv extends Library {
+    static interface MyUserenv extends com.sun.jna.Library {
         final MyUserenv INSTANCE = (MyUserenv) Native.loadLibrary("Userenv", MyUserenv.class);
 
         /**
@@ -146,11 +136,12 @@ public final class WindowsProcess extends Process {
     /**
      * The Interface MyKernel32.
      */
-    static interface MyKernel32 extends Library {
+    static interface MyKernel32 extends com.sun.jna.Library {
         final MyKernel32 INSTANCE = (MyKernel32) Native.loadLibrary("kernel32", MyKernel32.class);
 
         /** The PROCES s_ terminate */
         final int PROCESS_TERMINATE = 1;
+
         /** The T h32 c s_ snapprocess */
         final int TH32CS_SNAPPROCESS = 0x2;
 
@@ -193,22 +184,31 @@ public final class WindowsProcess extends Process {
         public static final class PROCESSENTRY32 extends Structure {
             /** The dw size */
             public int dwSize;
+
             /** The cnt usage */
             public int cntUsage;
+
             /** The th32 process id */
             public int th32ProcessID;
+
             /** The th32 default heap id */
             public ULONG_PTR th32DefaultHeapID;
+
             /** The th32 module id */
             public int th32ModuleID;
+
             /** The cnt threads */
             public int cntThreads;
+
             /** The th32 parent process id */
             public int th32ParentProcessID;
+
             /** The pc pri class base */
             public NativeLong pcPriClassBase;
+
             /** The dw flags */
             public int dwFlags;
+
             /** The sz exe file */
             public char[] szExeFile;
 
@@ -237,20 +237,28 @@ public final class WindowsProcess extends Process {
 
     /** User information needed for the security context of the process */
     private final String domain, user, password;
+
     /** The read/write handles of in/out/err streams */
     private final HANDLEByReference inRead, inWrite, outRead, outWrite, errRead, errWrite;
+
     /** The java file descriptors for in/out/err streams */
     private final FileDescriptor in_fd, out_fd, err_fd;
+
     /** The process input stream */
     private InputStream inputStream;
+
     /** The process output stream. */
     private OutputStream outputStream;
+
     /** The process error stream */
     private InputStream errorStream;
+
     /** The PID of the process, default values is -1 */
     private int pid;
+
     /** Is this process destroyed */
     private boolean destroyed;
+
     /** The handle to the native process */
     private HANDLE handle;
 
@@ -335,13 +343,16 @@ public final class WindowsProcess extends Process {
             // agent. It may break when the agent is configured to run as the system account.
             /////////////////////////////////////////////////////////////////////////////////////							
 
-            if (!Advapi32.INSTANCE.LogonUser(this.user, this.domain, this.password,
-                    WinBase.LOGON32_LOGON_INTERACTIVE, WinBase.LOGON32_PROVIDER_DEFAULT, hTokenRef)) {
+            if (!Advapi32.INSTANCE.LogonUser(this.user,
+                                             this.domain,
+                                             this.password,
+                                             WinBase.LOGON32_LOGON_INTERACTIVE,
+                                             WinBase.LOGON32_PROVIDER_DEFAULT,
+                                             hTokenRef)) {
 
                 // The logon failure must result as a OSUserException
                 final int err = Kernel32.INSTANCE.GetLastError();
-                final String mess = "LogonUser error=" + err + ", " +
-                    Kernel32Util.formatMessageFromLastErrorCode(err);
+                final String mess = "LogonUser error=" + err + ", " + Kernel32Util.formatMessageFromLastErrorCode(err);
                 throw new OSUserException(mess);
             }
 
@@ -423,8 +434,8 @@ public final class WindowsProcess extends Process {
 
             // Create pipes
             if (!(Kernel32.INSTANCE.CreatePipe(this.inRead, this.inWrite, sa, 0) &&
-                Kernel32.INSTANCE.CreatePipe(this.outRead, this.outWrite, sa, 0) && Kernel32.INSTANCE
-                    .CreatePipe(this.errRead, this.errWrite, sa, 0))) {
+                  Kernel32.INSTANCE.CreatePipe(this.outRead, this.outWrite, sa, 0) &&
+                  Kernel32.INSTANCE.CreatePipe(this.errRead, this.errWrite, sa, 0))) {
                 throw win32ErrorIOException("CreatePipe");
             }
 
@@ -444,24 +455,28 @@ public final class WindowsProcess extends Process {
             // On recent windows, the problem seems to have disappeared.
             /////////////////////////////////////////////////////////////////////////////////////
 
-            boolean result = MyAdvapi.INSTANCE.CreateProcessWithLogonW(
-            /* String */this.user, this.domain, this.password,
-            /* int */MyAdvapi.LOGON_WITH_PROFILE, // load user profile
-                    /* String */null, // The name of the module to be executed
-                    /* String */lpCommandLine, // The command line to be executed 
-                    /* int */WinBase.CREATE_NO_WINDOW | WinBase.CREATE_UNICODE_ENVIRONMENT, // creation flags
-                    /* String */lpEnvironment, // the new process uses an environment created from the profile of the user
-                    /* String */lpPath, // the new process has the same current drive and directory as the calling process
-                    /* WinBase.STARTUPINFO */si, // pointer to STARTUPINFO or STARTUPINFOEX structure
-                    /* WinBase.PROCESS_INFORMATION */pi); // pointer to PROCESS_FORMATION structure
+            boolean result = MyAdvapi.INSTANCE.CreateProcessWithLogonW(/* String */this.user,
+                                                                       this.domain,
+                                                                       this.password,
+                                                                       /* int */MyAdvapi.LOGON_WITH_PROFILE, // load user profile
+                                                                       /* String */null, // The name of the module to be executed
+                                                                       /* String */lpCommandLine, // The command line to be executed 
+                                                                       /* int */WinBase.CREATE_NO_WINDOW |
+                                                                                                  WinBase.CREATE_UNICODE_ENVIRONMENT, // creation flags
+                                                                       /* String */lpEnvironment, // the new process uses an environment created from the profile of the user
+                                                                       /* String */lpPath, // the new process has the same current drive and directory as the calling process
+                                                                       /* WinBase.STARTUPINFO */si, // pointer to STARTUPINFO or STARTUPINFOEX structure
+                                                                       /*
+                                                                        * WinBase.
+                                                                        * PROCESS_INFORMATION
+                                                                        */pi); // pointer to PROCESS_FORMATION structure
 
             if (!result) {
                 final int CreateProcessWithLogonWError = Kernel32.INSTANCE.GetLastError();
-                final String messageFromLastErrorCode = Kernel32Util
-                        .formatMessageFromLastErrorCode(CreateProcessWithLogonWError);
+                final String messageFromLastErrorCode = Kernel32Util.formatMessageFromLastErrorCode(CreateProcessWithLogonWError);
                 throw new IOException("CreateProcessWithLogonW error=" + CreateProcessWithLogonWError + ", " +
-                        messageFromLastErrorCode + " [lpPath=" + lpPath + ", lpCommandLine=" + lpCommandLine +
-                        "]");
+                                      messageFromLastErrorCode + " [lpPath=" + lpPath + ", lpCommandLine=" +
+                                      lpCommandLine + "]");
             }
 
             Kernel32.INSTANCE.CloseHandle(pi.hThread);
@@ -540,12 +555,11 @@ public final class WindowsProcess extends Process {
 
         WindowsProcess envProcess = new WindowsProcess(this.domain, this.user, this.password);
         try {
-            envProcess.startWithLogon(new String[]{"cmd.exe", "/c", "set"}, null, null);
+            envProcess.startWithLogon(new String[] { "cmd.exe", "/c", "set" }, null, null);
 
             int exitCode = envProcess.waitFor();
             if (exitCode != 0) {
-                throw win32ErrorIOException("Unable to read user environment from cmd.exe, exitCode=" +
-                    exitCode);
+                throw win32ErrorIOException("Unable to read user environment from cmd.exe, exitCode=" + exitCode);
             }
 
             // Read stdout that contains the user environment
@@ -604,7 +618,7 @@ public final class WindowsProcess extends Process {
 
     private boolean isToEnvironmentBlockMethodWithMapParameter(Method method) {
         return "toEnvironmentBlock".equals(method.getName()) && (method.getParameterTypes().length == 1) &&
-                (method.getParameterTypes()[0].equals(Map.class));
+               (method.getParameterTypes()[0].equals(Map.class));
     }
 
     /**
@@ -742,8 +756,12 @@ public final class WindowsProcess extends Process {
                 // Killing a process must be done from an impersonated context
                 final HANDLEByReference phUser = new HANDLEByReference();
 
-                if (!Advapi32.INSTANCE.LogonUser(this.user, this.domain, this.password,
-                        WinBase.LOGON32_LOGON_INTERACTIVE, WinBase.LOGON32_PROVIDER_DEFAULT, phUser)) {
+                if (!Advapi32.INSTANCE.LogonUser(this.user,
+                                                 this.domain,
+                                                 this.password,
+                                                 WinBase.LOGON32_LOGON_INTERACTIVE,
+                                                 WinBase.LOGON32_PROVIDER_DEFAULT,
+                                                 phUser)) {
                     win32ErrorRuntime("LogonUser");
                 }
 
@@ -855,8 +873,7 @@ public final class WindowsProcess extends Process {
         final List<Integer> pids = new ArrayList<Integer>();
         pids.add(new Integer(pid));
 
-        final HANDLE processes = MyKernel32.INSTANCE.CreateToolhelp32Snapshot(MyKernel32.TH32CS_SNAPPROCESS,
-                0);
+        final HANDLE processes = MyKernel32.INSTANCE.CreateToolhelp32Snapshot(MyKernel32.TH32CS_SNAPPROCESS, 0);
 
         // The process can be childless 
         if (processes == null) {

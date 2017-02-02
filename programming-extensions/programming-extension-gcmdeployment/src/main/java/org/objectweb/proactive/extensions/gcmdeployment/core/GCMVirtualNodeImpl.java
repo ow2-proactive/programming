@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.core;
 
@@ -96,14 +85,19 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
     final private List<Node> nodes;
 
     final private Object isReadyMonitor = new Object();
+
     private int getANewNodeIndex = 0;
 
     private List<Node> previousNodes;
+
     final private Set<Subscriber> nodeAttachmentSubscribers;
+
     final private Set<Subscriber> isReadySubscribers;
+
     private TopologyRootImpl deploymentTree;
 
     private TechnicalServicesProperties nodeTechnicalServicesProperties;
+
     private TechnicalServicesProperties applicationTechnicalServicesProperties;
 
     private boolean readyNotifSent = false;
@@ -199,8 +193,8 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
         StringBuilder sb = new StringBuilder();
         sb.append("waitReady timeout reached on " + this.getName() + ", some debug information follow:\n");
         if (needNode()) {
-            sb.append("\t Capacity requirements are not fullfilled: " + capacity +
-                " nodes required but only " + getNbCurrentNodes() + "mapped\n");
+            sb.append("\t Capacity requirements are not fullfilled: " + capacity + " nodes required but only " +
+                      getNbCurrentNodes() + "mapped\n");
         }
         if (hasUnsatisfiedContract()) {
             sb.append("\t Some contract are not satisfied:\n");
@@ -209,8 +203,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
                     String id = nodeProviderContract.nodeProvider.getId();
                     long capacity = nodeProviderContract.capacity;
                     long mapped = nodeProviderContract.nodes;
-                    sb.append("\t\t " + id + " Capacity=" + capacity + "but only " + mapped +
-                        " nodes mapped\n");
+                    sb.append("\t\t " + id + " Capacity=" + capacity + "but only " + mapped + " nodes mapped\n");
                 }
             }
         }
@@ -291,9 +284,9 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
             }
         } catch (NoSuchMethodException e) {
             GCM_NODEMAPPER_LOGGER.warn("Method " + methodeName + "(Node, String) cannot be found on " +
-                cl.getSimpleName());
+                                       cl.getSimpleName());
             throw new ProActiveException("Method " + methodeName + "(Node, String) cannot be found on " +
-                cl.getSimpleName(), e);
+                                         cl.getSimpleName(), e);
         }
     }
 
@@ -326,7 +319,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
             }
         } catch (NoSuchMethodException e) {
             throw new ProActiveException("Method " + methodeName + "(GCMVirtualNode) cannot be found on " +
-                cl.getSimpleName(), e);
+                                         cl.getSimpleName(), e);
         }
     }
 
@@ -360,11 +353,11 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
     /*
      * ------------------- GCMVirtualNodeInternal interface
      */
-    public void addNodeProviderContract(NodeProvider provider,
-            TechnicalServicesProperties techServProperties, long capacity) {
+    public void addNodeProviderContract(NodeProvider provider, TechnicalServicesProperties techServProperties,
+            long capacity) {
         if (findNodeProviderContract(provider) != null) {
-            throw new IllegalStateException("A contract with the provider " + provider.getId() +
-                " already exist for " + id);
+            throw new IllegalStateException("A contract with the provider " + provider.getId() + " already exist for " +
+                                            id);
         }
 
         nodeProvidersContracts.add(new NodeProviderContract(provider, techServProperties, capacity));
@@ -376,8 +369,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
             }
 
             if (acc > this.capacity) {
-                GCMA_LOGGER.warn("Virtual Node " + id +
-                    " capacity is lower than Node Provider contracts requirements");
+                GCMA_LOGGER.warn("Virtual Node " + id + " capacity is lower than Node Provider contracts requirements");
             }
         }
     }
@@ -454,8 +446,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
         GCM_NODEMAPPER_LOGGER.debug("One Node " + fakeNode.getRuntimeURL() + " attached to " + getName());
         Node node;
         synchronized (nodes) {
-            TechnicalServicesProperties tsProperties = applicationTechnicalServicesProperties
-                    .getCombinationWith(nodeTechnicalServicesProperties);
+            TechnicalServicesProperties tsProperties = applicationTechnicalServicesProperties.getCombinationWith(nodeTechnicalServicesProperties);
 
             if (contract != null) {
                 tsProperties = tsProperties.getCombinationWith(contract.getTechnicalServicesProperties());
@@ -497,7 +488,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
                 }
             } catch (NodeException e) {
                 GCMA_LOGGER.warn("GCM Deployment failed to create a node on " + fakeNode.getRuntimeURL() +
-                    ". Please check your network configuration", e);
+                                 ". Please check your network configuration", e);
             }
         }
 
@@ -548,8 +539,11 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
 
     static class NodeProviderContract {
         NodeProvider nodeProvider;
+
         TechnicalServicesProperties technicalServicesProperties;
+
         long capacity;
+
         long nodes;
 
         NodeProviderContract(NodeProvider nodeProvider,
@@ -601,6 +595,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
 
     static private class Subscriber {
         private Object client;
+
         private String method;
 
         public Subscriber(Object client, String method) {
@@ -668,8 +663,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
     }
 
     public void addTechnicalServiceProperties(TechnicalServicesProperties technicalServices) {
-        this.nodeTechnicalServicesProperties = this.nodeTechnicalServicesProperties
-                .getCombinationWith(technicalServices);
+        this.nodeTechnicalServicesProperties = this.nodeTechnicalServicesProperties.getCombinationWith(technicalServices);
     }
 
     public UniqueID getUniqueID() {

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package dataspaces;
 
@@ -69,24 +58,33 @@ import org.objectweb.proactive.utils.OperatingSystem;
 public class VFSFileObjectAdapterTest {
 
     private static final String appId = "1";
+
     private static final String runtimeId = "rt1";
+
     private static final String nodeId = "node1";
+
     private static final String activeObjectId = "ao1";
+
     private static final String path = "dir/file.txt";
-    private static final DataSpacesURI spaceURI = DataSpacesURI.createScratchSpaceURI(appId, runtimeId,
-            nodeId);
-    private static final DataSpacesURI fileURI = spaceURI.withActiveObjectId(activeObjectId).withUserPath(
-            path);
+
+    private static final DataSpacesURI spaceURI = DataSpacesURI.createScratchSpaceURI(appId, runtimeId, nodeId);
+
+    private static final DataSpacesURI fileURI = spaceURI.withActiveObjectId(activeObjectId).withUserPath(path);
 
     private String vfsServerUrl;
 
     private static DefaultFileSystemManager fileSystemManager;
+
     private DataSpacesFileObject dsFileObject;
 
     private static FileSystemServerDeployer server;
+
     private FileObject adaptee;
+
     private File testDir;
+
     private String differentDirPath;
+
     private String rootDirPath;
 
     private ArrayList<String> rootUris;
@@ -134,8 +132,7 @@ public class VFSFileObjectAdapterTest {
         rootUris.add(rootFileUri);
         rootUris.add(vfsServerUrl);
 
-        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName, rootUris,
-            rootFileUri);
+        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName, rootUris, rootFileUri);
     }
 
     @After
@@ -150,13 +147,16 @@ public class VFSFileObjectAdapterTest {
     }
 
     @Test
-    public void testGetURI1() throws org.apache.commons.vfs2.FileSystemException, MalformedURIException,
-            FileSystemException {
+    public void testGetURI1()
+            throws org.apache.commons.vfs2.FileSystemException, MalformedURIException, FileSystemException {
         final FileObject rootFileObject = fileSystemManager.resolveFile(rootFileUri);
         final FileName mountintPointFileName = rootFileObject.getName();
         final FileObject rootAdaptee = rootFileObject;
-        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI,
-            mountintPointFileName, rootUris, rootFileUri);
+        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee,
+                                                                 spaceURI,
+                                                                 mountintPointFileName,
+                                                                 rootUris,
+                                                                 rootFileUri);
 
         assertEquals(spaceURI.toString(), fo.getVirtualURI());
     }
@@ -169,8 +169,7 @@ public class VFSFileObjectAdapterTest {
     @Test
     public void testGetRealURI_WithSpecialChars() throws Exception {
         // because of PROACTIVE-1314, uri string returned by getRealURI() can escape characters and thus be different than the original URL
-        assertEquals(URIHelper.convertToEncodedURIString(adaptee.getURL().toString()),
-                dsFileObject.getRealURI());
+        assertEquals(URIHelper.convertToEncodedURIString(adaptee.getURL().toString()), dsFileObject.getRealURI());
         assertEquals(rootUris, dsFileObject.getAllSpaceRootURIs());
 
         // testing that all are valid uris
@@ -209,8 +208,8 @@ public class VFSFileObjectAdapterTest {
     }
 
     @Test(expected = FileSystemException.class)
-    public void testGetParentOnFilesystemRoot() throws org.apache.commons.vfs2.FileSystemException,
-            FileSystemException, MalformedURLException {
+    public void testGetParentOnFilesystemRoot()
+            throws org.apache.commons.vfs2.FileSystemException, FileSystemException, MalformedURLException {
         FileObject rootFileObject;
         if (OperatingSystem.getOperatingSystem() == OperatingSystem.windows) {
             rootFileObject = fileSystemManager.resolveFile(new File("c:\\").toURI().toURL().toString());
@@ -221,8 +220,11 @@ public class VFSFileObjectAdapterTest {
         final FileObject rootAdaptee = rootFileObject;
         ArrayList<String> fos = new ArrayList<String>();
         fos.add("file:///");
-        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI,
-            mountintPointFileName, fos, "file:///");
+        final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee,
+                                                                 spaceURI,
+                                                                 mountintPointFileName,
+                                                                 fos,
+                                                                 "file:///");
         fo.getParent();
     }
 
@@ -241,7 +243,7 @@ public class VFSFileObjectAdapterTest {
 
     private void assertIsSomeDir(DataSpacesFileObject parent) throws FileSystemException {
         assertEquals(spaceURI.withActiveObjectId(activeObjectId).withUserPath("dir").toString(),
-                parent.getVirtualURI());
+                     parent.getVirtualURI());
         final List<DataSpacesFileObject> desc = parent.getChildren();
         assertEquals(1, desc.size());
         assertTrue(desc.contains(dsFileObject));

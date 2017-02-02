@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.vfsprovider.gui;
 
@@ -58,7 +47,7 @@ class DataServer {
     private static DataServer instance = null;
 
     private static final File serversHistoryFile = new File(System.getProperty("user.home") +
-        "/.proactive/dataservers.history");
+                                                            "/.proactive/dataservers.history");
 
     private Map<String, Server> servers = null;
 
@@ -67,10 +56,15 @@ class DataServer {
      */
     class Server {
         private FileSystemServerDeployer deployer = null;
+
         private List<String> urls = null;
+
         private String rootDir = null;
+
         private String name = null;
+
         private String proto = null;
+
         private boolean started = false;
 
         public String toString() {
@@ -122,8 +116,7 @@ class DataServer {
                 if (this.proto == null) {
                     this.deployer = new FileSystemServerDeployer(this.name, this.rootDir, true, rebind);
                 } else {
-                    this.deployer = new FileSystemServerDeployer(this.name, this.rootDir, true, rebind,
-                        this.proto);
+                    this.deployer = new FileSystemServerDeployer(this.name, this.rootDir, true, rebind, this.proto);
                 }
             } catch (Throwable e) {
                 String msg = "";
@@ -138,8 +131,7 @@ class DataServer {
                         }
                     }
                 }
-                throw new DataSpacesException("Failed to deploy DataServer " + name + " at " + rootDir + msg,
-                    e);
+                throw new DataSpacesException("Failed to deploy DataServer " + name + " at " + rootDir + msg, e);
             }
 
             this.urls = Arrays.asList(this.deployer.getVFSRootURLs());
@@ -280,8 +272,7 @@ class DataServer {
             try {
                 this.addServer(root, name, false, false, proto);
             } catch (DataSpacesException e) {
-                ServerBrowser
-                        .error("Failed to restore server from history: root=" + root + " name" + name, e);
+                ServerBrowser.error("Failed to restore server from history: root=" + root + " name" + name, e);
             }
         }
     }

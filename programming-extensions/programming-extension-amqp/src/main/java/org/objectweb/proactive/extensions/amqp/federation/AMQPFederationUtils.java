@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.amqp.federation;
 
@@ -72,9 +61,9 @@ class AMQPFederationUtils {
         if (AMQPFederationConfig.PA_AMQP_FEDERATION_SOCKET_FACTORY.isSet() &&
             "ssh".equals(AMQPFederationConfig.PA_AMQP_FEDERATION_SOCKET_FACTORY.getValue())) {
             socketFactory = new SshTunnelSocketFactory(AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_KEY_DIR,
-                AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_KNOWN_HOSTS,
-                AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_REMOTE_PORT,
-                AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_REMOTE_USERNAME);
+                                                       AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_KNOWN_HOSTS,
+                                                       AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_REMOTE_PORT,
+                                                       AMQPFederationConfig.PA_AMQP_FEDERATION_SSH_REMOTE_USERNAME);
         } else {
             socketFactory = null;
         }
@@ -101,15 +90,18 @@ class AMQPFederationUtils {
         String username = AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_USER.getValue();
         String password = AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_PASSWORD.getValue();
         String vhost = AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_VHOST.getValue();
-        AMQPConnectionParameters defaultConnectionParameters = new AMQPConnectionParameters(host, port,
-            username, password, vhost);
+        AMQPConnectionParameters defaultConnectionParameters = new AMQPConnectionParameters(host,
+                                                                                            port,
+                                                                                            username,
+                                                                                            password,
+                                                                                            vhost);
 
         if (AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_MAPPING_FILE.isSet()) {
             brokerAddressMap = BrokerAddressMap.createFromMappingFile(defaultConnectionParameters,
-                    AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_MAPPING_FILE.getValue());
+                                                                      AMQPFederationConfig.PA_AMQP_FEDERATION_BROKER_MAPPING_FILE.getValue());
         } else {
             brokerAddressMap = new BrokerAddressMap(defaultConnectionParameters,
-                new HashMap<String, AMQPConnectionParameters>());
+                                                    new HashMap<String, AMQPConnectionParameters>());
         }
     }
 
@@ -118,16 +110,19 @@ class AMQPFederationUtils {
         Channel channel = reusableChannel.getChannel();
         try {
             BasicProperties props = new BasicProperties.Builder().replyTo(reusableChannel.getReplyQueue())
-                    .type(AMQPFederationRemoteObjectServer.PING_MESSAGE_TYPE).build();
+                                                                 .type(AMQPFederationRemoteObjectServer.PING_MESSAGE_TYPE)
+                                                                 .build();
 
             channel.basicPublish(AMQPFederationConfig.PA_AMQP_FEDERATION_RPC_EXCHANGE_NAME.getValue(),
-                    queueName, props, null);
+                                 queueName,
+                                 props,
+                                 null);
 
             QueueingConsumer.Delivery delivery = null;
 
             try {
-                delivery = reusableChannel.getReplyQueueConsumer().nextDelivery(
-                        AMQPFederationConfig.PA_AMQP_FEDERATION_PING_TIMEOUT.getValue());
+                delivery = reusableChannel.getReplyQueueConsumer()
+                                          .nextDelivery(AMQPFederationConfig.PA_AMQP_FEDERATION_PING_TIMEOUT.getValue());
             } catch (InterruptedException e) {
                 logger.warn("AMQPFederationUtils.isQueueExists is interrupted", e);
             }

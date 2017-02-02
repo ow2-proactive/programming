@@ -1,67 +1,71 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
-import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
+import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 
 
 public class GroupOAR extends AbstractGroup {
     final static public int BEST = -1;
+
     protected static final String DEFAULT_HOSTS_NUMBER = "1";
+
     protected String hostNumber = DEFAULT_HOSTS_NUMBER;
+
     protected String OARSUB = "oarsub";
+
     protected boolean interactive = false;
+
     protected String queueName;
+
     private PathElement scriptLocation = new PathElement("dist/scripts/gcmdeployment/oar2.sh",
-        PathElement.PathBase.PROACTIVE);
+                                                         PathElement.PathBase.PROACTIVE);
+
     private String directory;
+
     private String stdout;
+
     private String stderr;
+
     private String type = null;
+
     private String resources = null;
+
     private String wallTime = null;
+
     private int nodes = 0;
+
     private int cpu = 0;
+
     private int core = 0;
 
     @Override

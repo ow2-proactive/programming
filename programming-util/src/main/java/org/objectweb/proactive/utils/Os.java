@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.utils;
 
@@ -46,70 +35,88 @@ import java.util.Locale;
  */
 class Os {
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase(Locale.US);
+
     private static final String OS_ARCH = System.getProperty("os.arch").toLowerCase(Locale.US);
+
     private static final String OS_VERSION = System.getProperty("os.version").toLowerCase(Locale.US);
+
     private static final String PATH_SEP = System.getProperty("path.separator");
 
     /**
      * OS family to look for
      */
     private String family;
+
     /**
      * Name of OS
      */
     private String name;
+
     /**
      * version of OS
      */
     private String version;
+
     /**
      * OS architecture
      */
     private String arch;
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_WINDOWS = "windows";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_9X = "win9x";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_NT = "winnt";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_OS2 = "os/2";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_NETWARE = "netware";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_DOS = "dos";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_MAC = "mac";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_TANDEM = "tandem";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_UNIX = "unix";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_VMS = "openvms";
+
     /**
      * OS family that can be tested for. {@value}
      */
     public static final String FAMILY_ZOS = "z/os";
+
     /** OS family that can be tested for. {@value} */
     public static final String FAMILY_OS400 = "os/400";
 
@@ -266,11 +273,10 @@ class Os {
                 boolean isNT = false;
                 if (isWindows) {
                     //there are only four 9x platforms that we look for
-                    is9x = (OS_NAME.indexOf("95") >= 0 || OS_NAME.indexOf("98") >= 0 ||
-                        OS_NAME.indexOf("me") >= 0
+                    is9x = (OS_NAME.indexOf("95") >= 0 || OS_NAME.indexOf("98") >= 0 || OS_NAME.indexOf("me") >= 0
                     //wince isn't really 9x, but crippled enough to
                     //be a muchness. Ant doesnt run on CE, anyway.
-                    || OS_NAME.indexOf("ce") >= 0);
+                            || OS_NAME.indexOf("ce") >= 0);
                     isNT = !is9x;
                 }
                 if (family.equals(FAMILY_WINDOWS)) {
@@ -291,7 +297,7 @@ class Os {
                     isFamily = OS_NAME.indexOf("nonstop_kernel") > -1;
                 } else if (family.equals(FAMILY_UNIX)) {
                     isFamily = PATH_SEP.equals(":") && !isFamily(FAMILY_VMS) &&
-                        (!isFamily(FAMILY_MAC) || OS_NAME.endsWith("x"));
+                               (!isFamily(FAMILY_MAC) || OS_NAME.endsWith("x"));
                 } else if (family.equals(FAMILY_ZOS)) {
                     isFamily = OS_NAME.indexOf(FAMILY_ZOS) > -1 || OS_NAME.indexOf("os/390") > -1;
                 } else if (family.equals(FAMILY_OS400)) {

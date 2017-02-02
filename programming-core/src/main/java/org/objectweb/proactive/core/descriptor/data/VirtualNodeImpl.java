@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.descriptor.data;
 
@@ -103,8 +92,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @see VirtualMachine
  */
 
-public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements VirtualNodeInternal,
-        Serializable, ServiceUser {
+public class VirtualNodeImpl extends NodeCreationEventProducerImpl
+        implements VirtualNodeInternal, Serializable, ServiceUser {
 
     /**
      *
@@ -112,8 +101,9 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     /** Logger */
     private final static Logger FILETRANSFER_LOGGER = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
-    private final static Logger DEPLOYMENT_FILETRANSFER_LOGGER = ProActiveLogger
-            .getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
+
+    private final static Logger DEPLOYMENT_FILETRANSFER_LOGGER = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
+
     public static AtomicInteger vnCounter = new AtomicInteger();
 
     //
@@ -172,13 +162,17 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     /** true if the node has been created*/
     private boolean nodeCreated = false;
+
     private boolean isActivated = false;
 
     /** the list of VirtualNodes Id that this VirualNode is waiting for in order to create Nodes on a JVM
      * already assigned in the XML descriptor */
     private Hashtable<String, VirtualMachine> awaitedVirtualNodes;
+
     private String registrationProtocol;
+
     private boolean registration = false;
+
     private boolean waitForTimeout = false;
 
     //protected int MAX_RETRY = 70;
@@ -188,10 +182,12 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     /** represents the sum of the timeout + current time in ms*/
     protected long globalTimeOut;
+
     private Object uniqueActiveObject = null;
 
     // PAD infos
     private boolean mainVirtualNode;
+
     private String padURL;
 
     //REGISTRATION ATTEMPTS
@@ -199,7 +195,9 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     // MPI Process
     ExternalProcess mpiProcess = null;
+
     private TechnicalService technicalService;
+
     private String descriptorURL;
 
     //    protected RemoteObjectExposer roe = null;
@@ -216,8 +214,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
     /**
      * Contructs a new intance of VirtualNode
      */
-    public VirtualNodeImpl(String name, String padURL, boolean isMainVN,
-            ProActiveDescriptorInternal descriptor) {
+    public VirtualNodeImpl(String name, String padURL, boolean isMainVN, ProActiveDescriptorInternal descriptor) {
         // if we launch several times the same application
         // we have to change the name of the main VNs because of
         // the register, otherwise we will monitor each time all the last
@@ -243,7 +240,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         //        this.roe = new RemoteObjectExposer(VirtualNode.class.getName(),this);
         if (logger.isDebugEnabled()) {
             logger.debug("vn " + this.name + " registered on " +
-                this.proActiveRuntimeImpl.getVMInformation().getVMID().toString());
+                         this.proActiveRuntimeImpl.getVMInformation().getVMID().toString());
         }
 
         // added for main infos
@@ -311,8 +308,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         this.virtualMachines.add(virtualMachine);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("mapped VirtualNode=" + this.name + " with VirtualMachine=" +
-                virtualMachine.getName());
+            logger.debug("mapped VirtualNode=" + this.name + " with VirtualMachine=" + virtualMachine.getName());
         }
     }
 
@@ -380,8 +376,9 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 }
             }
 
-            JMXNotificationManager.getInstance().subscribe(
-                    ProActiveRuntimeImpl.getProActiveRuntime().getMBean().getObjectName(), this);
+            JMXNotificationManager.getInstance()
+                                  .subscribe(ProActiveRuntimeImpl.getProActiveRuntime().getMBean().getObjectName(),
+                                             this);
             this.proActiveRuntimeImpl.registerLocalVirtualNode(this, this.name);
 
             for (int i = 0; i < this.virtualMachines.size(); i++) {
@@ -394,20 +391,22 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                     //boolean vmAlreadyAssigned = vm.isActivated();
                     ExternalProcess process = getProcess(vm, vmAlreadyAssigned);
 
-                    /*   //check if it's a gLiteProcess. If it's a gLiteProcess, get the cpu number and run the glite submission command "cpuNumber" times.
-                       int cpuNumber = checkGLiteProcess(process);
-                       if (cpuNumber > -1) {
-                           while (cpuNumber > 0) {
-                               try {
-                                   setParameters(process, vm);
-                                   process.startProcess();
-                                   process.setStarted(false);
-                               } catch (IOException e) {
-                                   e.printStackTrace();
-                               }
-                               cpuNumber--;
-                           }
-                       }
+                    /*
+                     * //check if it's a gLiteProcess. If it's a gLiteProcess, get the cpu number
+                     * and run the glite submission command "cpuNumber" times.
+                     * int cpuNumber = checkGLiteProcess(process);
+                     * if (cpuNumber > -1) {
+                     * while (cpuNumber > 0) {
+                     * try {
+                     * setParameters(process, vm);
+                     * process.startProcess();
+                     * process.setStarted(false);
+                     * } catch (IOException e) {
+                     * e.printStackTrace();
+                     * }
+                     * cpuNumber--;
+                     * }
+                     * }
                      */
 
                     //  get the rank of sequential process - return -1 if it does not exist
@@ -424,8 +423,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
                         // check if the first element is a Service or a process
                         if (((AbstractSequentialListProcessDecorator) process).isFirstElementIsService()) {
-                            UniversalService firstService = ((AbstractSequentialListProcessDecorator) process)
-                                    .getFirstService();
+                            UniversalService firstService = ((AbstractSequentialListProcessDecorator) process).getFirstService();
 
                             //   It is a service that is mapped to the vm.
                             startService(firstService, vm);
@@ -438,14 +436,13 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                                 e.printStackTrace();
                             }
                         } else {
-                            ExternalProcess firstProcess = ((AbstractSequentialListProcessDecorator) process)
-                                    .getFirstProcess();
+                            ExternalProcess firstProcess = ((AbstractSequentialListProcessDecorator) process).getFirstProcess();
 
                             // build the process with the rest of hierarchie
                             if (rankOfSequentialProcess > 0) {
-                                firstProcess = buildProcessWithHierarchie(
-                                        (ExternalProcess) makeDeepCopy(deepCopy), firstProcess,
-                                        rankOfSequentialProcess);
+                                firstProcess = buildProcessWithHierarchie((ExternalProcess) makeDeepCopy(deepCopy),
+                                                                          firstProcess,
+                                                                          rankOfSequentialProcess);
                             }
 
                             setParameters(firstProcess, vm);
@@ -465,11 +462,11 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                             ExternalProcess nextProcess = null;
 
                             // loop on each process in the sequence
-                            while ((nextProcess = ((AbstractSequentialListProcessDecorator) process)
-                                    .getNextProcess()) != null) {
+                            while ((nextProcess = ((AbstractSequentialListProcessDecorator) process).getNextProcess()) != null) {
                                 boolean launchProcessManually = false;
 
-                                /* if process is a dependent process then each process
+                                /*
+                                 * if process is a dependent process then each process
                                  * in the sequence list except the first one have to receive
                                  * an array of objects relative to their dependence.
                                  * we assume that this dependence is the generation ov nodes
@@ -484,9 +481,9 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
                                 // rebuild the process with the rest of hierarchie
                                 if (rankOfSequentialProcess > 0) {
-                                    nextProcess = this.buildProcessWithHierarchie(
-                                            (ExternalProcess) makeDeepCopy(deepCopy), nextProcess,
-                                            rankOfSequentialProcess);
+                                    nextProcess = this.buildProcessWithHierarchie((ExternalProcess) makeDeepCopy(deepCopy),
+                                                                                  nextProcess,
+                                                                                  rankOfSequentialProcess);
                                 }
 
                                 if (!launchProcessManually) {
@@ -517,8 +514,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                                 this.proActiveRuntimeImpl.createVM(process);
                             } catch (java.io.IOException e) {
                                 e.printStackTrace();
-                                logger.error("cannot activate virtualNode " + this.name +
-                                    " with the process " + process.getCommand());
+                                logger.error("cannot activate virtualNode " + this.name + " with the process " +
+                                             process.getCommand());
                             }
                         }
                     }
@@ -576,8 +573,9 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         if (rank == 0) {
             return finalProcess;
         } else {
-            ((AbstractExternalProcessDecorator) process).setTargetProcess(buildProcessWithHierarchie(
-                    ((AbstractExternalProcessDecorator) process).getTargetProcess(), finalProcess, rank - 1));
+            ((AbstractExternalProcessDecorator) process).setTargetProcess(buildProcessWithHierarchie(((AbstractExternalProcessDecorator) process).getTargetProcess(),
+                                                                                                     finalProcess,
+                                                                                                     rank - 1));
 
             return process;
         }
@@ -667,21 +665,24 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
      */
     @Deprecated
     public int createdNodeCount() {
-        throw new RuntimeException(
-            "This method is deprecated, use getNumberOfCurrentlyCreatedNodes() or getNumberOfCreatedNodesAfterDeployment()");
+        throw new RuntimeException("This method is deprecated, use getNumberOfCurrentlyCreatedNodes() or getNumberOfCreatedNodesAfterDeployment()");
     }
 
     /*
-     *  (non-Javadoc)
-     * @see org.objectweb.proactive.core.descriptor.data.VirtualNode#getNumberOfCurrentlyCreatedNodes()
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.core.descriptor.data.VirtualNode#getNumberOfCurrentlyCreatedNodes()
      */
     public int getNumberOfCurrentlyCreatedNodes() {
         return this.nbCreatedNodes;
     }
 
     /*
-     *  (non-Javadoc)
-     * @see org.objectweb.proactive.core.descriptor.data.VirtualNode#getNumberOfCreatedNodesAfterDeployment()
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.core.descriptor.data.VirtualNode#
+     * getNumberOfCreatedNodesAfterDeployment()
      */
     public int getNumberOfCreatedNodesAfterDeployment() {
         try {
@@ -711,8 +712,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
             return node;
         } else {
-            throw new NodeException("Cannot get a node from Virtual Node " + this.name +
-                ". Descriptor in use : \"" + this.descriptorURL + "\".");
+            throw new NodeException("Cannot get a node from Virtual Node " + this.name + ". Descriptor in use : \"" +
+                                    this.descriptorURL + "\".");
         }
     }
 
@@ -721,9 +722,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         Node node = this.createdNodes.get(index);
 
         if (node == null) {
-            throw new NodeException(
-                "Cannot return the first node, no nodes hava been created for Virtual Node " + this.name +
-                    ". Descriptor in use : \"" + this.descriptorURL + "\".");
+            throw new NodeException("Cannot return the first node, no nodes hava been created for Virtual Node " +
+                                    this.name + ". Descriptor in use : \"" + this.descriptorURL + "\".");
         }
 
         waitForNodeTransferFiles(node);
@@ -749,8 +749,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 }
             }
         } else {
-            throw new NodeException("Cannot return nodes, no nodes have been created for Virtual Node " +
-                this.name + ". Descriptor in use : \"" + this.descriptorURL + "\".");
+            throw new NodeException("Cannot return nodes, no nodes have been created for Virtual Node " + this.name +
+                                    ". Descriptor in use : \"" + this.descriptorURL + "\".");
         }
 
         return nodeNames;
@@ -774,8 +774,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 }
             }
         } else {
-            throw new NodeException("Cannot return nodes, no nodes have been created for Virtual Node " +
-                this.name + ". Descriptor in use : \"" + this.descriptorURL + "\".");
+            throw new NodeException("Cannot return nodes, no nodes have been created for Virtual Node " + this.name +
+                                    ". Descriptor in use : \"" + this.descriptorURL + "\".");
         }
 
         return nodeTab;
@@ -803,9 +803,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 return node;
             }
         } else {
-            throw new NodeException(
-                "Cannot return nodes, no nodes hava been created. Descriptor in use : \"" +
-                    this.descriptorURL + "\".");
+            throw new NodeException("Cannot return nodes, no nodes hava been created. Descriptor in use : \"" +
+                                    this.descriptorURL + "\".");
         }
     }
 
@@ -827,8 +826,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                         part.killRT(softly);
                     } catch (Exception e) {
                         logger.info(" Virtual Machine " + part.getVMInformation().getVMID() + " on host " +
-                            URIBuilder.getHostNameorIP(part.getVMInformation().getInetAddress()) +
-                            " terminated.");
+                                    URIBuilder.getHostNameorIP(part.getVMInformation().getInetAddress()) +
+                                    " terminated.");
                     }
                 } else {
                     try {
@@ -983,15 +982,12 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                     // co-allocation
                     // in the jvm.
                     try {
-                        Node node = proActiveRuntimeRegistered.createLocalNode(nodeName, false,
-                                this.getName());
+                        Node node = proActiveRuntimeRegistered.createLocalNode(nodeName, false, this.getName());
 
                         // JMX Notification
-                        ProActiveRuntimeWrapperMBean mbean = ProActiveRuntimeImpl.getProActiveRuntime()
-                                .getMBean();
+                        ProActiveRuntimeWrapperMBean mbean = ProActiveRuntimeImpl.getProActiveRuntime().getMBean();
                         if (mbean != null) {
-                            NodeNotificationData notificationData = new NodeNotificationData(node,
-                                this.getName());
+                            NodeNotificationData notificationData = new NodeNotificationData(node, this.getName());
                             mbean.sendNotification(NotificationType.nodeCreated, notificationData);
                         }
                         break;
@@ -1001,8 +997,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 }
 
                 if (registerAttempts == 0) {
-                    logger.warn("createLocalNode failed " + this.REGISTRATION_ATTEMPTS +
-                        " times for runtime " + nodeHost);
+                    logger.warn("createLocalNode failed " + this.REGISTRATION_ATTEMPTS + " times for runtime " +
+                                nodeHost);
                 }
             }
         } catch (ProActiveException e) {
@@ -1127,14 +1123,12 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                     // it may happen that we entered in the loop and just after
                     // the timeToSleep is < 0. It means that the timeout expired
                     // that is why we catch the runtime exception
-                    throw new NodeException(
-                        "After many retries, not even one node can be found for Virtual Node \"" + this.name +
-                            "\" in descriptor \"" + this.descriptorURL + "\".");
+                    throw new NodeException("After many retries, not even one node can be found for Virtual Node \"" +
+                                            this.name + "\" in descriptor \"" + this.descriptorURL + "\".");
                 }
             } else {
-                throw new NodeException(
-                    "After many retries, not even one node can be found for Virtual Node \"" + this.name +
-                        "\" in descriptor \"" + this.descriptorURL + "\".");
+                throw new NodeException("After many retries, not even one node can be found for Virtual Node \"" +
+                                        this.name + "\" in descriptor \"" + this.descriptorURL + "\".");
             }
         }
 
@@ -1205,13 +1199,13 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                     // the timeToSleep is < 0. It means that the timeout expired
                     // that is why we catch the runtime exception
                     throw new NodeException("After many retries, only " + this.nbCreatedNodes +
-                        " nodes are created on " + tempNodeCount + " expected for Virtual Node \"" +
-                        this.name + "\" in descriptor \"" + this.descriptorURL + "\".");
+                                            " nodes are created on " + tempNodeCount + " expected for Virtual Node \"" +
+                                            this.name + "\" in descriptor \"" + this.descriptorURL + "\".");
                 }
             } else {
-                throw new NodeException("After many retries, only " + this.nbCreatedNodes +
-                    " nodes are created on " + tempNodeCount + " expected for Virtual Node \"" + this.name +
-                    "\" in descriptor \"" + this.descriptorURL + "\".");
+                throw new NodeException("After many retries, only " + this.nbCreatedNodes + " nodes are created on " +
+                                        tempNodeCount + " expected for Virtual Node \"" + this.name +
+                                        "\" in descriptor \"" + this.descriptorURL + "\".");
             }
         }
     }
@@ -1254,8 +1248,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             return copyProcess;
         } else {
             //increment the node count by askedNodes
-            increaseNumberOfNodes(process.getNodeNumber() *
-                Integer.valueOf(vm.getNbNodesOnCreatedVMs()).intValue());
+            increaseNumberOfNodes(process.getNodeNumber() * Integer.valueOf(vm.getNbNodesOnCreatedVMs()).intValue());
 
             return process;
         }
@@ -1309,7 +1302,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             jvmProcess.setParameters(Arrays.asList(vnName, localruntimeURL, vm.getName()));
         }
 
-        /* Setting the file transfer definitions associated with the current process,
+        /*
+         * Setting the file transfer definitions associated with the current process,
          * and defined at the process level.
          */
         FileTransferWorkShop ftsDeploy = process.getFileTransferWorkShopDeploy();
@@ -1439,8 +1433,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
      */
     synchronized public void nodeCreated(NodeNotificationData notification) {
         Node node = notification.getNode();
-        logger.info("**** Mapping VirtualNode " + this.name + " with Node: " +
-            node.getNodeInformation().getURL() + " done");
+        logger.info("**** Mapping VirtualNode " + this.name + " with Node: " + node.getNodeInformation().getURL() +
+                    " done");
 
         synchronized (this.createdNodes) {
             this.createdNodes.add(node);
@@ -1479,15 +1473,16 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         try {
             nodes = getNodes();
         } catch (NodeException e) {
-            throw new ProActiveException(
-                "Can not Retrieve Files, since no nodes where created for Virtual Node" + this.getName());
+            throw new ProActiveException("Can not Retrieve Files, since no nodes where created for Virtual Node" +
+                                         this.getName());
         }
 
         if (FILETRANSFER_LOGGER.isDebugEnabled()) {
             FILETRANSFER_LOGGER.debug("Retrieving files for " + nodes.length + " node(s).");
         }
 
-        /* For all the nodes we get the VirtualMachine that spawned it, and
+        /*
+         * For all the nodes we get the VirtualMachine that spawned it, and
          * then the process linked with this VirtualMachine. We then obtain
          * the FileTransfer Retrieve Workshop from the process and using
          * the FileTransfer API we retrieve the Files.
@@ -1499,7 +1494,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             if (vm == null) {
                 if (FILETRANSFER_LOGGER.isDebugEnabled()) {
                     FILETRANSFER_LOGGER.info("No VM found with name: " + vmName + " for node: " +
-                        nodes[i].getNodeInformation().getName());
+                                             nodes[i].getNodeInformation().getName());
                 }
 
                 continue;
@@ -1511,7 +1506,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             if (eProcess == null) {
                 if (FILETRANSFER_LOGGER.isDebugEnabled()) {
                     FILETRANSFER_LOGGER.debug("No Process linked with VM: " + vmName + " for node: " +
-                        nodes[i].getNodeInformation().getName());
+                                              nodes[i].getNodeInformation().getName());
                 }
 
                 continue;
@@ -1526,7 +1521,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             for (int j = 0; j < fd.length; j++) {
                 srcFile[j] = new File(ftwRetrieve.getAbsoluteSrcPath(fd[j]));
                 dstFile[j] = new File(ftwRetrieve.getAbsoluteDstPath(fd[j]) + "-" +
-                    nodes[i].getNodeInformation().getName());
+                                      nodes[i].getNodeInformation().getName());
             }
 
             long init = System.currentTimeMillis();
@@ -1557,7 +1552,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
         if (DEPLOYMENT_FILETRANSFER_LOGGER.isDebugEnabled()) {
             DEPLOYMENT_FILETRANSFER_LOGGER.debug("File Transfer Deploy files for node" +
-                node.getNodeInformation().getName());
+                                                 node.getNodeInformation().getName());
         }
 
         String vmName = node.getVMInformation().getDescriptorVMName();
@@ -1566,8 +1561,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         if (vm == null) {
             //throw new ProActiveException("No VM found with name: " + vmName + " for node: " + node.getNodeInformation().getName());
             if (logger.isDebugEnabled()) {
-                logger.debug("No VM found with name: " + vmName + " for node: " +
-                    node.getNodeInformation().getName());
+                logger.debug("No VM found with name: " + vmName + " for node: " + node.getNodeInformation().getName());
             }
             return list;
         }
@@ -1578,8 +1572,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         if (eProcess == null) {
             //throw new ProActiveException("No Process linked with VM: " +vmName + " for node: " + node.getNodeInformation().getName());
             if (logger.isDebugEnabled()) {
-                logger.debug("No VM found with name: " + vmName + " for node: " +
-                    node.getNodeInformation().getName());
+                logger.debug("No VM found with name: " + vmName + " for node: " + node.getNodeInformation().getName());
             }
             return list;
         }
@@ -1587,8 +1580,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         //if the process handled the FileTransfer we have nothing to do
         if (!eProcess.isRequiredFileTransferDeployOnNodeCreation()) {
             if (DEPLOYMENT_FILETRANSFER_LOGGER.isDebugEnabled()) {
-                DEPLOYMENT_FILETRANSFER_LOGGER
-                        .debug("No ProActive FileTransfer API is required for this node.");
+                DEPLOYMENT_FILETRANSFER_LOGGER.debug("No ProActive FileTransfer API is required for this node.");
             }
 
             return list;

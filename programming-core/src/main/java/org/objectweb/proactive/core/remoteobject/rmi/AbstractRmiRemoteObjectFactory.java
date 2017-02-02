@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.remoteobject.rmi;
 
@@ -53,10 +42,9 @@ import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.util.converter.SunMarshalInputStream;
-import org.objectweb.proactive.core.util.converter.SunMarshalOutputStream;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
@@ -70,21 +58,24 @@ import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.rmi.RegistryHelper;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.converter.SunMarshalInputStream;
+import org.objectweb.proactive.core.util.converter.SunMarshalOutputStream;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.apache.log4j.Logger;
 
 
 /**
  * @author The ProActive Team
  *        remote object Factory for the RMI protocol
  */
-public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjectFactory implements
-        RemoteObjectFactory {
+public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjectFactory
+        implements RemoteObjectFactory {
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
+
     final private Class<? extends RmiRemoteObject> clRemoteObject;
 
     final protected String protocolIdentifier;
+
     protected static RegistryHelper registryHelper;
 
     static {
@@ -95,7 +86,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
                     public Socket createSocket(String host, int port) throws IOException {
                         Socket socket = new Socket();
                         socket.connect(new InetSocketAddress(host, port),
-                                CentralPAPropertyRepository.PA_RMI_CONNECT_TIMEOUT.getValue());
+                                       CentralPAPropertyRepository.PA_RMI_CONNECT_TIMEOUT.getValue());
                         return socket;
                     }
 
@@ -104,9 +95,8 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
                     }
                 });
             } catch (IOException e) {
-                LOGGER_RO
-                        .warn("Failed to register a RMI socket factory supporting Connect timeout. The default one will be used",
-                                e);
+                LOGGER_RO.warn("Failed to register a RMI socket factory supporting Connect timeout. The default one will be used",
+                               e);
                 e.printStackTrace();
             }
         }
@@ -115,8 +105,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         createRegistry();
     }
 
-    public AbstractRmiRemoteObjectFactory(String protocolIdentifier,
-            Class<? extends RmiRemoteObject> clRemoteObject) {
+    public AbstractRmiRemoteObjectFactory(String protocolIdentifier, Class<? extends RmiRemoteObject> clRemoteObject) {
         this.protocolIdentifier = protocolIdentifier;
         this.clRemoteObject = clRemoteObject;
     }
@@ -137,20 +126,25 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
     protected abstract Registry getRegistry(URI url) throws RemoteException;
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#newRemoteObject(org.objectweb.proactive.core.remoteobject.RemoteObject)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#newRemoteObject(org.objectweb.
+     * proactive.core.remoteobject.RemoteObject)
      */
     public RemoteRemoteObject newRemoteObject(InternalRemoteRemoteObject target) throws ProActiveException {
         try {
-            Constructor<? extends RmiRemoteObject> c = clRemoteObject
-                    .getConstructor(InternalRemoteRemoteObject.class);
+            Constructor<? extends RmiRemoteObject> c = clRemoteObject.getConstructor(InternalRemoteRemoteObject.class);
             return c.newInstance(target);
         } catch (Exception e) {
             throw new RMIException(e);
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#list(java.net.URI)
      */
     public URI[] list(URI url) throws ProActiveException {
@@ -161,8 +155,10 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             if (names != null) {
                 URI[] uris = new URI[names.length];
                 for (int i = 0; i < names.length; i++) {
-                    uris[i] = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(url), names[i],
-                            protocolIdentifier, URIBuilder.getPortNumber(url));
+                    uris[i] = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(url),
+                                                  names[i],
+                                                  protocolIdentifier,
+                                                  URIBuilder.getPortNumber(url));
                 }
                 return uris;
             }
@@ -172,15 +168,17 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#register(org.objectweb.proactive.core.remoteobject.RemoteObject, java.net.URI, boolean)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#register(org.objectweb.
+     * proactive.core.remoteobject.RemoteObject, java.net.URI, boolean)
      */
-    public RemoteRemoteObject register(InternalRemoteRemoteObject target, URI url,
-            boolean replacePreviousBinding) throws ProActiveException {
+    public RemoteRemoteObject register(InternalRemoteRemoteObject target, URI url, boolean replacePreviousBinding)
+            throws ProActiveException {
         RmiRemoteObject rro = null;
         try {
-            Constructor<? extends RmiRemoteObject> c = clRemoteObject
-                    .getConstructor(InternalRemoteRemoteObject.class);
+            Constructor<? extends RmiRemoteObject> c = clRemoteObject.getConstructor(InternalRemoteRemoteObject.class);
             rro = c.newInstance(target);
         } catch (Exception e) {
             throw new RMIException(e);
@@ -219,7 +217,9 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         return rro;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#unregister(java.net.URI)
      */
     public void unregister(URI url) throws ProActiveException {
@@ -235,7 +235,9 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#lookup(java.net.URI)
      */
     @SuppressWarnings("unchecked")
@@ -246,7 +248,8 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         if (uri.getPort() == -1) {
             LOGGER_RO.debug("No port specified, using the default one");
             modifiedURI = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(uri),
-                    URIBuilder.getNameFromURI(uri), this.protocolIdentifier);
+                                              URIBuilder.getNameFromURI(uri),
+                                              this.protocolIdentifier);
             modifiedURI = RemoteObjectHelper.expandURI(modifiedURI);
         }
 
@@ -266,11 +269,13 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             return new RemoteObjectAdapter((RmiRemoteObject) o);
         }
 
-        throw new RMIException("The given url does exist but doesn't point to a remote object  url=" +
-            modifiedURI + " class found is " + o.getClass().getName());
+        throw new RMIException("The given url does exist but doesn't point to a remote object  url=" + modifiedURI +
+                               " class found is " + o.getClass().getName());
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#getPort()
      */
     public int getPort() {
@@ -294,8 +299,8 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
     }
 
-    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
-            boolean rebind) throws ProActiveException {
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name, boolean rebind)
+            throws ProActiveException {
         URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, this.getProtocolId());
         // register the object on the register
         InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
@@ -306,8 +311,8 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
     }
 
     public URI getBaseURI() {
-        return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" +
-            getPort() + "/");
+        return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" + getPort() +
+                          "/");
     }
 
     public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {

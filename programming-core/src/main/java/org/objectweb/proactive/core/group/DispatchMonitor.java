@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.group;
 
@@ -76,12 +65,15 @@ public class DispatchMonitor {
     int instance;
 
     public static final int WORKER_LOAD_WEIGHT = 0;
+
     public static final int WORKER_SPEED_WEIGHT = 10;
 
     BlockingQueue<Integer> availableSlots = new LinkedBlockingQueue<Integer>();
 
     ProxyForGroup<?> groupProxy;
+
     Map<Integer, Worker> dispatched = new ConcurrentHashMap<Integer, Worker>();
+
     Map<Worker, Worker> replicated = new ConcurrentHashMap<Worker, Worker>();
 
     LinkedList<Worker> rankedWorkers = new LinkedList<Worker>();
@@ -136,8 +128,11 @@ public class DispatchMonitor {
     private static class DispatchedJob {
 
         int workerIndex;
+
         long initTime;
+
         long endTime;
+
         AbstractProcessForGroup task;
 
         public DispatchedJob(int workerIndex, long currentTime, AbstractProcessForGroup task) {
@@ -157,9 +152,12 @@ public class DispatchMonitor {
 
     private static class Worker implements Comparable<Worker> {
         int index;
+
         int bufferSize = 0;
+
         //	      Stats stats;
         Queue<DispatchedJob> dispatchedJobs = new ConcurrentLinkedQueue<DispatchedJob>();
+
         Queue<DispatchedJob> completedJobs = new ConcurrentLinkedQueue<DispatchedJob>();
 
         public Worker(int index, int bufferSize) {
@@ -192,8 +190,7 @@ public class DispatchMonitor {
                     if (mySize < itsSize) {
                         return +1;
                     } else if (mySize == itsSize) {
-                        return Long.valueOf(averageCompletionTime()).compareTo(
-                                Long.valueOf(w.averageCompletionTime()));
+                        return Long.valueOf(averageCompletionTime()).compareTo(Long.valueOf(w.averageCompletionTime()));
                     } else if (mySize > itsSize) {
                         return -1;
                     }
@@ -220,8 +217,7 @@ public class DispatchMonitor {
                     }
                 } else {
                     // same size for completed jobs. 
-                    return Long.valueOf(averageCompletionTime()).compareTo(
-                            Long.valueOf(w.averageCompletionTime()));
+                    return Long.valueOf(averageCompletionTime()).compareTo(Long.valueOf(w.averageCompletionTime()));
                 }
             }
 
@@ -261,7 +257,7 @@ public class DispatchMonitor {
 
         public String toString() {
             return "[worker " + index + "] - completed=" + completedJobs.size() + " - dispatched=" +
-                dispatchedJobs.size();
+                   dispatchedJobs.size();
         }
 
     }
@@ -272,8 +268,7 @@ public class DispatchMonitor {
         //		boolean refIsBodyAdapterImpl = (originatingProxy instanceof BodyAdapterImpl);
         //		boolean refIsBodyAdapterImpl = false;
         for (int i = 0; i < groupProxy.getMemberList().size(); i++) {
-            BodyProxy groupMemberProxy = (BodyProxy) ((StubObject) groupProxy.getMemberList().get(i))
-                    .getProxy();
+            BodyProxy groupMemberProxy = (BodyProxy) ((StubObject) groupProxy.getMemberList().get(i)).getProxy();
             // need some workaround because getBodyID is not part of Proxy
             // interface
             if (refIsBodyProxy) {

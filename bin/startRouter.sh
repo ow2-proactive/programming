@@ -6,7 +6,7 @@ workingDir=`dirname $0`
 
 VM_ARGS=""
 
-# Fine GC tuning: 
+# Fine GC tuning:
 # 1- Most object are short lived (messages)
 # 2- Very few objects go to the old generation (client information, few kB per client)
 # 3- Try to avoid stop the world (concurrent mark & sweep, full GC at 50%)

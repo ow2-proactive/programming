@@ -1,57 +1,46 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s): ActiveEon Team - http://www.activeeon.com
- *
- * ################################################################
- * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.mop;
-
-import javassist.*;
-import javassist.bytecode.ClassFile;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.annotation.*;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.TypeVariable;
 import java.util.*;
+import javassist.*;
+import javassist.bytecode.ClassFile;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.annotation.*;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.runtime.ProActiveRuntime;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -97,8 +86,7 @@ public class JavassistByteCodeStubBuilder {
             Method[] reifiedMethodsWithoutGenerics;
             try {
                 ClassPool pool = getClassPool();
-                generatedCtClass = pool.makeClass(Utils.convertClassNameToStubClassName(className,
-                        genericParameters));
+                generatedCtClass = pool.makeClass(Utils.convertClassNameToStubClassName(className, genericParameters));
                 generatedCtClass.getClassFile().setMajorVersion(ClassFile.JAVA_6);
 
                 CtClass superCtClass = null;
@@ -122,10 +110,10 @@ public class JavassistByteCodeStubBuilder {
                 }
 
                 CtField outsideOfConstructorField = new CtField(pool.get(CtClass.booleanType.getName()),
-                    "outsideOfConstructor", generatedCtClass);
+                                                                "outsideOfConstructor",
+                                                                generatedCtClass);
 
-                generatedCtClass.addField(outsideOfConstructorField, (superCtClass.isInterface() ? " false"
-                        : "true"));
+                generatedCtClass.addField(outsideOfConstructorField, (superCtClass.isInterface() ? " false" : "true"));
 
                 if (superCtClass.isInterface()) {
                     generatedCtClass.addInterface(superCtClass);
@@ -156,13 +144,15 @@ public class JavassistByteCodeStubBuilder {
                 CtMethod[] proxyMethods = createStubObjectMethods(generatedCtClass);
 
                 CtField methodsField = new CtField(pool.get("java.lang.reflect.Method[]"),
-                    "overridenMethods", generatedCtClass);
+                                                   "overridenMethods",
+                                                   generatedCtClass);
 
                 methodsField.setModifiers(Modifier.STATIC);
                 generatedCtClass.addField(methodsField);
 
                 CtField genericTypesMappingField = new CtField(pool.get("java.util.Map"),
-                    "genericTypesMapping", generatedCtClass);
+                                                               "genericTypesMapping",
+                                                               generatedCtClass);
 
                 genericTypesMappingField.setModifiers(Modifier.STATIC);
                 generatedCtClass.addField(genericTypesMappingField);
@@ -207,16 +197,15 @@ public class JavassistByteCodeStubBuilder {
                 }
 
                 // create static block with method initializations
-                createStaticInitializer(generatedCtClass, validCtMethods, classesIndexer, className,
-                        genericParameters);
+                createStaticInitializer(generatedCtClass, validCtMethods, classesIndexer, className, genericParameters);
 
                 createReifiedMethods(generatedCtClass, validMethods, superCtClass.isInterface());
 
                 if (logger.isTraceEnabled()) {
                     logger.debug("generated class : " + generatedCtClass.getName() + "loaded into " +
-                        generatedCtClass.getClass().getClassLoader().toString() +
-                        ", initial class' classloader " + superCtClass.getClass().getClassLoader() +
-                        ", url " + superCtClass.getURL());
+                                 generatedCtClass.getClass().getClassLoader().toString() +
+                                 ", initial class' classloader " + superCtClass.getClass().getClassLoader() + ", url " +
+                                 superCtClass.getURL());
                 } else if (logger.isDebugEnabled()) {
                     logger.debug("generated class : " + generatedCtClass.getName());
                 }
@@ -225,8 +214,7 @@ public class JavassistByteCodeStubBuilder {
                 byte[] bytecode = generatedCtClass.toBytecode();
 
                 if (CentralPAPropertyRepository.PA_MOP_WRITESTUBONDISK.isTrue()) {
-                    generatedCtClass.debugWriteFile(CentralPAPropertyRepository.PA_MOP_GENERATEDCLASSES_DIR
-                            .getValue());
+                    generatedCtClass.debugWriteFile(CentralPAPropertyRepository.PA_MOP_GENERATEDCLASSES_DIR.getValue());
                 }
 
                 generatedCtClass.detach();
@@ -234,8 +222,8 @@ public class JavassistByteCodeStubBuilder {
                 return bytecode;
             } catch (Exception e) {
                 // generatedCtClass.debugWriteFile();
-                throw new RuntimeException("Failed to generate stub for class " + className +
-                    " with javassist : " + e.getMessage(), e);
+                throw new RuntimeException("Failed to generate stub for class " + className + " with javassist : " +
+                                           e.getMessage(), e);
             }
         }
     }
@@ -360,8 +348,8 @@ public class JavassistByteCodeStubBuilder {
      * @throws NotFoundException
      * @throws CannotCompileException
      */
-    private static void createReifiedMethods(CtClass generatedClass, Method[] reifiedMethods,
-            boolean stubOnInterface) throws NotFoundException, CannotCompileException {
+    private static void createReifiedMethods(CtClass generatedClass, Method[] reifiedMethods, boolean stubOnInterface)
+            throws NotFoundException, CannotCompileException {
         for (int i = 0; i < reifiedMethods.length; i++) {
             Method reifiedMethod = reifiedMethods[i];
             StringBuilder body = new StringBuilder("{");
@@ -378,20 +366,16 @@ public class JavassistByteCodeStubBuilder {
 
                 if (hasAnnotation(reifiedMethod.getCtMethod(), TurnRemoteParam.class)) {
                     TurnRemoteParam trp = getAnnotation(reifiedMethod.getCtMethod(), TurnRemoteParam.class);
-                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(),
-                            trp.parameterName());
-                    body.append("$" + parameterIndex +
-                        " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" + parameterIndex +
-                        "); \n");
+                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp.parameterName());
+                    body.append("$" + parameterIndex + " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" +
+                                parameterIndex + "); \n");
                 }
 
                 if (hasAnnotation(reifiedMethod.getCtMethod(), TurnActiveParam.class)) {
                     TurnActiveParam trp = getAnnotation(reifiedMethod.getCtMethod(), TurnActiveParam.class);
-                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(),
-                            trp.parameterName());
-                    body.append("$" + parameterIndex +
-                        " = org.objectweb.proactive.api.PAActiveObject.turnActive($" + parameterIndex +
-                        "); \n");
+                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp.parameterName());
+                    body.append("$" + parameterIndex + " = org.objectweb.proactive.api.PAActiveObject.turnActive($" +
+                                parameterIndex + "); \n");
                 }
 
                 boolean fieldToCache = hasAnnotation(reifiedMethod.getCtMethod(), Cache.class);
@@ -400,9 +384,9 @@ public class JavassistByteCodeStubBuilder {
                 if (fieldToCache) {
                     // the generated has to cache the method
 
-                    cachedField = new CtField(getClassPool().get(
-                            reifiedMethod.getCtMethod().getReturnType().getName()), reifiedMethod
-                            .getCtMethod().getName() + i, generatedClass);
+                    cachedField = new CtField(getClassPool().get(reifiedMethod.getCtMethod().getReturnType().getName()),
+                                              reifiedMethod.getCtMethod().getName() + i,
+                                              generatedClass);
 
                     generatedClass.addField(cachedField);
 
@@ -439,8 +423,7 @@ public class JavassistByteCodeStubBuilder {
                 }
 
                 body.append("myProxy.reify(org.objectweb.proactive.core.mop.MethodCall.getMethodCall(" +
-                    "(java.lang.reflect.Method)overridenMethods[" + i + "]" +
-                    ", $args, genericTypesMapping))");
+                            "(java.lang.reflect.Method)overridenMethods[" + i + "]" + ", $args, genericTypesMapping))");
 
                 if (fieldToCache) {
                     body.append(";\n } \n return ($r)" + cachedField.getName());
@@ -475,9 +458,11 @@ public class JavassistByteCodeStubBuilder {
 
             try {
                 methodToGenerate = CtNewMethod.make(reifiedMethod.getCtMethod().getReturnType(),
-                        reifiedMethod.getCtMethod().getName(), reifiedMethod.getCtMethod()
-                                .getParameterTypes(), reifiedMethod.getCtMethod().getExceptionTypes(), body
-                                .toString(), generatedClass);
+                                                    reifiedMethod.getCtMethod().getName(),
+                                                    reifiedMethod.getCtMethod().getParameterTypes(),
+                                                    reifiedMethod.getCtMethod().getExceptionTypes(),
+                                                    body.toString(),
+                                                    generatedClass);
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -500,21 +485,17 @@ public class JavassistByteCodeStubBuilder {
      * @return the index of the parameters in the list of parameters (first parameter has index 1)
      */
     private static int parameterNameToIndex(CtMethod reifiedMethod, String parameterName) {
-        CodeAttribute codeAttribute = (CodeAttribute) reifiedMethod.getMethodInfo().getAttribute(
-                CodeAttribute.tag);
-        LocalVariableAttribute localVariableAttribute = (LocalVariableAttribute) codeAttribute
-                .getAttribute(LocalVariableAttribute.tag);
+        CodeAttribute codeAttribute = (CodeAttribute) reifiedMethod.getMethodInfo().getAttribute(CodeAttribute.tag);
+        LocalVariableAttribute localVariableAttribute = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
         for (int j = 0; j < localVariableAttribute.tableLength(); j++) {
-            String name = localVariableAttribute.getConstPool().getUtf8Info(
-                    localVariableAttribute.nameIndex(j));
+            String name = localVariableAttribute.getConstPool().getUtf8Info(localVariableAttribute.nameIndex(j));
             if (!name.equals("this")) {
                 if (name.equals(parameterName)) {
                     return j;
                 }
             }
         }
-        throw new RuntimeException("parameter " + parameterName + "not found in method " +
-            reifiedMethod.getLongName());
+        throw new RuntimeException("parameter " + parameterName + "not found in method " + reifiedMethod.getLongName());
     }
 
     /**
@@ -533,15 +514,13 @@ public class JavassistByteCodeStubBuilder {
         CtConstructor classInitializer = generatedClass.makeClassInitializer();
 
         StringBuilder classInitializerBody = new StringBuilder("{\n");
-        classInitializerBody.append("Class[] genericParameters = new Class[" + genericParameters.length +
-            "];\n");
+        classInitializerBody.append("Class[] genericParameters = new Class[" + genericParameters.length + "];\n");
         for (int i = 0; i < genericParameters.length; i++) {
             classInitializerBody.append("genericParameters[" + i + "] = Class.forName(\"" +
-                genericParameters[i].getName() + "\");\n");
+                                        genericParameters[i].getName() + "\");\n");
         }
         classInitializerBody.append("Class realSuperClass = Class.forName(\"" + superClassName + "\");\n");
-        classInitializerBody
-                .append("java.lang.reflect.TypeVariable[] tv = realSuperClass.getTypeParameters();\n");
+        classInitializerBody.append("java.lang.reflect.TypeVariable[] tv = realSuperClass.getTypeParameters();\n");
         classInitializerBody.append("genericTypesMapping = new java.util.HashMap();\n");
 
         // generic types mapping only occurs when parameters are specified
@@ -551,8 +530,8 @@ public class JavassistByteCodeStubBuilder {
             classInitializerBody.append("}\n");
         }
 
-        classInitializerBody.append("overridenMethods = new java.lang.reflect.Method[" +
-            reifiedMethods.length + "];\n");
+        classInitializerBody.append("overridenMethods = new java.lang.reflect.Method[" + reifiedMethods.length +
+                                    "];\n");
         classInitializerBody.append("Class classes[] = new Class[" + (classesIndexer.size()) + "];\n");
         classInitializerBody.append("Class[] temp;\n");
 
@@ -568,16 +547,16 @@ public class JavassistByteCodeStubBuilder {
             classInitializerBody.append("temp = new Class[" + paramTypes.length + "];\n");
             for (int n = 0; n < paramTypes.length; n++) {
                 if (paramTypes[n].isPrimitive()) {
-                    classInitializerBody.append("temp[" + n + "] = " +
-                        getClassTypeInitializer(paramTypes[n], false) + ";\n");
+                    classInitializerBody.append("temp[" + n + "] = " + getClassTypeInitializer(paramTypes[n], false) +
+                                                ";\n");
                 } else {
                     classInitializerBody.append("temp[" + n + "] = Class.forName(\"" +
-                        getClassTypeInitializer(paramTypes[n], false) + "\");\n");
+                                                getClassTypeInitializer(paramTypes[n], false) + "\");\n");
                 }
             }
             classInitializerBody.append("overridenMethods[" + (methodsIndex) + "] = classes[" +
-                classesIndexer.indexOf(reifiedMethods[i].getDeclaringClass().getName()) +
-                "].getDeclaredMethod(\"" + reifiedMethods[i].getName() + "\", temp);\n");
+                                        classesIndexer.indexOf(reifiedMethods[i].getDeclaringClass().getName()) +
+                                        "].getDeclaredMethod(\"" + reifiedMethods[i].getName() + "\", temp);\n");
             methodsIndex++;
         }
 
@@ -591,10 +570,11 @@ public class JavassistByteCodeStubBuilder {
      * @throws CannotCompileException
      * @throws NotFoundException
      */
-    public static CtMethod[] createStubObjectMethods(CtClass generatedClass) throws CannotCompileException,
-            NotFoundException {
-        CtField proxyField = new CtField(getClassPool().getDefault().get(Proxy.class.getName()), "myProxy",
-            generatedClass);
+    public static CtMethod[] createStubObjectMethods(CtClass generatedClass)
+            throws CannotCompileException, NotFoundException {
+        CtField proxyField = new CtField(getClassPool().getDefault().get(Proxy.class.getName()),
+                                         "myProxy",
+                                         generatedClass);
         generatedClass.addField(proxyField);
         CtMethod proxyGetter = CtNewMethod.getter("getProxy", proxyField);
         generatedClass.addMethod(proxyGetter);
@@ -604,8 +584,7 @@ public class JavassistByteCodeStubBuilder {
         return new CtMethod[] { proxyGetter, proxySetter };
     }
 
-    private static String getClassTypeInitializer(CtClass param, boolean elementInArray)
-            throws NotFoundException {
+    private static String getClassTypeInitializer(CtClass param, boolean elementInArray) throws NotFoundException {
         if (param.isArray()) {
             return "[" + getClassTypeInitializer(param.getComponentType(), true);
         } else if (param.equals(CtClass.byteType)) {
@@ -686,8 +665,8 @@ public class JavassistByteCodeStubBuilder {
             return false;
         }
 
-        if ((met.getSignature().equals(proxyMethods[0].getSignature()) || met.getSignature().equals(
-                proxyMethods[1].getSignature()))) {
+        if ((met.getSignature().equals(proxyMethods[0].getSignature()) ||
+             met.getSignature().equals(proxyMethods[1].getSignature()))) {
             return false;
         }
 
@@ -777,10 +756,10 @@ public class JavassistByteCodeStubBuilder {
             List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
             for (javassist.bytecode.annotation.Annotation annotation : la) {
                 if (TurnRemote.class.getName().equals(annotation.getTypeName())) {
-                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" +
-                        (i + 1) + "); \n");
+                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" + (i + 1) +
+                                "); \n");
                     logger.trace("method " + method.getCtMethod().getLongName() + ", param " + i +
-                        " has TurnRemote Annotation");
+                                 " has TurnRemote Annotation");
                     break;
                 }
             }
@@ -796,10 +775,10 @@ public class JavassistByteCodeStubBuilder {
             List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
             for (javassist.bytecode.annotation.Annotation annotation : la) {
                 if (TurnActive.class.getName().equals(annotation.getTypeName())) {
-                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAActiveObject.turnActive($" +
-                        (i + 1) + "); \n");
+                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAActiveObject.turnActive($" + (i + 1) +
+                                "); \n");
                     logger.trace("method " + method.getCtMethod().getLongName() + ", param " + i +
-                        " has TurnActive Annotation");
+                                 " has TurnActive Annotation");
                     break;
                 }
             }
@@ -815,10 +794,10 @@ public class JavassistByteCodeStubBuilder {
             for (javassist.bytecode.annotation.Annotation annotation : la) {
 
                 if (UnwrapFuture.class.getName().equals(annotation.getTypeName())) {
-                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAFuture.getFutureValue($" +
-                        (i + 1) + "); \n");
+                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAFuture.getFutureValue($" + (i + 1) +
+                                "); \n");
                     logger.trace("method " + method.getCtMethod().getLongName() + ", param " + i +
-                        " has UnwrapFuture Annotation");
+                                 " has UnwrapFuture Annotation");
                     break;
                 }
             }

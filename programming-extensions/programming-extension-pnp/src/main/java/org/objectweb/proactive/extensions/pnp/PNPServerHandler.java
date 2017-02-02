@@ -1,40 +1,32 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pnp;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.*;
@@ -49,9 +41,6 @@ import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pnp.exception.PNPException;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
-
 
 /** The server side handler of the PNP protocol*/
 @ChannelHandler.Sharable
@@ -60,11 +49,14 @@ class PNPServerHandler extends SimpleChannelHandler {
 
     /** The name of this handler */
     final static String NAME = "PNPServerHandler";
+
     /** The executor to be used to run the {@link PNPROMessage} */
     // Requests must be handled in separate threads to avoid deadlock
     final private Executor executor;
+
     /** The object in charge of sending heartbeats to the client */
     private Heartbeater hearthbeater;
+
     /** Serialization */
     final private ProActiveMarshaller marshaller;
 
@@ -106,7 +98,7 @@ class PNPServerHandler extends SimpleChannelHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
         logger.debug("Exception caught in PNP server handler on: " + e.getChannel() + ". Closing connection",
-                e.getCause());
+                     e.getCause());
         e.getChannel().close();
     }
 
@@ -147,20 +139,26 @@ class PNPServerHandler extends SimpleChannelHandler {
 
         /** The channel to heartbeat */
         final private Channel channel;
+
         /** The heartbeat period of this channel*/
         final long heartbeatPeriod;
 
         // Cache coherence is ensured by method synchronization (see JMM)
         /** The number of {@link PNPROMessage} currently processed (in the channel) */
         int cClientCount;
+
         /** The timer thread */
         Timer timer;
+
         /** The current heartbeat ID*/
         long cHeartbeatId;
+
         /** the current extra time */
         int cGraceTime;
+
         /** Signal that the channel is closed*/
         volatile boolean canceled;
+
         /** Is the timer currently armed ? */
         boolean scheduled;
 
@@ -227,8 +225,7 @@ class PNPServerHandler extends SimpleChannelHandler {
             cf.addListener(new ChannelFutureListener() {
                 public void operationComplete(ChannelFuture future) throws Exception {
                     if (!future.isSuccess() && !canceled) {
-                        logger.info("Failed to send heartbeat " + heartbeatId + " on " + channel,
-                                future.getCause());
+                        logger.info("Failed to send heartbeat " + heartbeatId + " on " + channel, future.getCause());
                     }
                 }
             });
@@ -243,10 +240,13 @@ class PNPServerHandler extends SimpleChannelHandler {
     static class RequestExecutor implements Runnable {
         /** The message request*/
         final private PNPFrameCall req;
+
         /** The channel to be used to send the response*/
         final private Channel channel;
+
         /** The heartbeater to notify when the handling is finished */
         final private Heartbeater hearthbeater;
+
         /** Serialization */
         final private ProActiveMarshaller marshaller;
 
@@ -285,8 +285,8 @@ class PNPServerHandler extends SimpleChannelHandler {
                     cf.addListener(new ChannelFutureListener() {
                         public void operationComplete(ChannelFuture future) throws Exception {
                             if (!future.isSuccess()) {
-                                logger.warn("Failed to send response to call  #" + req.callId + " on " +
-                                    channel, future.getCause());
+                                logger.warn("Failed to send response to call  #" + req.callId + " on " + channel,
+                                            future.getCause());
                             }
                         }
                     });
@@ -308,8 +308,8 @@ class PNPServerHandler extends SimpleChannelHandler {
                     cf.addListener(new ChannelFutureListener() {
                         public void operationComplete(ChannelFuture future) throws Exception {
                             if (!future.isSuccess()) {
-                                logger.info("Failed to send response to call  #" + req.callId + " on " +
-                                    channel, future.getCause());
+                                logger.info("Failed to send response to call  #" + req.callId + " on " + channel,
+                                            future.getCause());
                             }
                         }
                     });
@@ -322,7 +322,7 @@ class PNPServerHandler extends SimpleChannelHandler {
                     public void operationComplete(ChannelFuture future) throws Exception {
                         if (!future.isSuccess()) {
                             logger.info("Failed to send response to call  #" + req.callId + " on " + channel,
-                                    future.getCause());
+                                        future.getCause());
                         }
                     }
                 });

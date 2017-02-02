@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
@@ -82,6 +71,7 @@ public class RemoteObjectSet implements Serializable, Observer {
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
     public static final int UNREACHABLE_VALUE = Integer.MIN_VALUE;
+
     public static final int NOCHANGE_VALUE = 0;
 
     private ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
@@ -121,9 +111,11 @@ public class RemoteObjectSet implements Serializable, Observer {
      * The default protocol of this remote object set
      */
     private transient RemoteRemoteObject defaultRO;
+
     private transient URI defaultURI = null;
 
     private String remoteRuntimeName;
+
     private VMID vmid = null;
 
     /**
@@ -133,8 +125,7 @@ public class RemoteObjectSet implements Serializable, Observer {
 
     static {
         if (CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.isSet()) {
-            defaultProtocolOrder = new ArrayList<String>(
-                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.getValue());
+            defaultProtocolOrder = new ArrayList<String>(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.getValue());
         } else {
             defaultProtocolOrder = Collections.emptyList();
         }
@@ -145,8 +136,7 @@ public class RemoteObjectSet implements Serializable, Observer {
         }
     }
 
-    public RemoteObjectSet(RemoteRemoteObject defaultRRO, Collection<RemoteRemoteObject> rros)
-            throws IOException {
+    public RemoteObjectSet(RemoteRemoteObject defaultRRO, Collection<RemoteRemoteObject> rros) throws IOException {
         this.rros = new LinkedHashMap<URI, RemoteRemoteObject>();
 
         try {
@@ -168,8 +158,7 @@ public class RemoteObjectSet implements Serializable, Observer {
             }
 
         } catch (RemoteRemoteObjectException e) {
-            throw new IOException("[ROAdapter] Cannot access the remoteObject " + defaultRRO + " : " +
-                e.getMessage());
+            throw new IOException("[ROAdapter] Cannot access the remoteObject " + defaultRRO + " : " + e.getMessage());
         }
     }
 
@@ -249,14 +238,13 @@ public class RemoteObjectSet implements Serializable, Observer {
     // Handles the Exceptions received in the receiveMessage method, doing a special treatment for the default protocol
     private Throwable handleProtocolException(Throwable e, URI uri, boolean multiProtocol) {
         if (!uri.equals(defaultURI)) {
-            LOGGER_RO.warn("[ROAdapter] Disabling protocol " + uri.getScheme() +
-                " because of received exception", e);
+            LOGGER_RO.warn("[ROAdapter] Disabling protocol " + uri.getScheme() + " because of received exception", e);
             lastBenchmarkResults.put(uri, UNREACHABLE_VALUE);
             return null;
         } else {
             if (multiProtocol) {
                 LOGGER_RO.warn("[ROAdapter] Skipping default protocol " + uri.getScheme() +
-                    " because of received exception", e);
+                               " because of received exception", e);
             }
             lastBenchmarkResults.put(uri, UNREACHABLE_VALUE);
             return e;
@@ -375,8 +363,7 @@ public class RemoteObjectSet implements Serializable, Observer {
         // finally remove unreachable protocols
         for (ListIterator<URI> it = output.listIterator(output.size()); it.hasPrevious();) {
             URI reachableOrNot = it.previous();
-            if (benchmarkRes.containsKey(reachableOrNot) &&
-                benchmarkRes.get(reachableOrNot) == UNREACHABLE_VALUE) {
+            if (benchmarkRes.containsKey(reachableOrNot) && benchmarkRes.get(reachableOrNot) == UNREACHABLE_VALUE) {
                 if (!reachableOrNot.equals(defUri)) {
                     it.remove();
                 }
@@ -418,20 +405,16 @@ public class RemoteObjectSet implements Serializable, Observer {
      */
     private URI getURI(RemoteRemoteObject rro) throws RemoteRemoteObjectException {
         try {
-            MethodCall mc = MethodCall.getMethodCall(getURI, new Object[0],
-                    new HashMap<TypeVariable<?>, Class<?>>());
+            MethodCall mc = MethodCall.getMethodCall(getURI, new Object[0], new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
             Reply rep = rro.receiveMessage(r);
             return (URI) rep.getResult().getResult();
         } catch (ProActiveException e) {
-            throw new RemoteRemoteObjectException(
-                "RemoteObjectSet: can't access RemoteObject through " + rro, e);
+            throw new RemoteRemoteObjectException("RemoteObjectSet: can't access RemoteObject through " + rro, e);
         } catch (IOException e) {
-            throw new RemoteRemoteObjectException(
-                "RemoteObjectSet: can't access RemoteObject through " + rro, e);
+            throw new RemoteRemoteObjectException("RemoteObjectSet: can't access RemoteObject through " + rro, e);
         } catch (ProActiveRuntimeException e) {
-            throw new RemoteRemoteObjectException(
-                "RemoteObjectSet: can't access RemoteObject through " + rro, e);
+            throw new RemoteRemoteObjectException("RemoteObjectSet: can't access RemoteObject through " + rro, e);
         }
     }
 
@@ -444,11 +427,9 @@ public class RemoteObjectSet implements Serializable, Observer {
             Reply rep = rro.receiveMessage(r);
             return (String) rep.getResult().getResult();
         } catch (ProActiveException e) {
-            throw new RemoteRemoteObjectException("RemoteObjectSet: can't get ProActiveRuntime urls from " +
-                rro, e);
+            throw new RemoteRemoteObjectException("RemoteObjectSet: can't get ProActiveRuntime urls from " + rro, e);
         } catch (IOException e) {
-            throw new RemoteRemoteObjectException("RemoteObjectSet: can't get ProActiveRuntime urls from " +
-                rro, e);
+            throw new RemoteRemoteObjectException("RemoteObjectSet: can't get ProActiveRuntime urls from " + rro, e);
         }
     }
 
@@ -497,8 +478,8 @@ public class RemoteObjectSet implements Serializable, Observer {
         // The update of the order is done asynchronously
         if (CentralPAPropertyRepository.PA_BENCHMARK_ACTIVATE.isTrue()) {
             if (rros.size() > 1)
-                RemoteObjectBenchmark.getInstance().subscribeAsObserver(this, rros, this.remoteRuntimeName,
-                        lastBenchmarkResults);
+                RemoteObjectBenchmark.getInstance()
+                                     .subscribeAsObserver(this, rros, this.remoteRuntimeName, lastBenchmarkResults);
         }
     }
 
@@ -562,8 +543,8 @@ public class RemoteObjectSet implements Serializable, Observer {
         }
     }
 
-    private Map.Entry<URI, RemoteRemoteObject> readProtocol(java.io.ObjectInputStream in) throws IOException,
-            ClassNotFoundException {
+    private Map.Entry<URI, RemoteRemoteObject> readProtocol(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
         ObjectInputStream ois = null;
 
         URI uri;
@@ -623,8 +604,8 @@ public class RemoteObjectSet implements Serializable, Observer {
         sortProtocolsInternal();
 
         if (LOGGER_RO.isDebugEnabled()) {
-            LOGGER_RO.debug("[Multi-Protocol] " + URIBuilder.getNameFromURI(defaultURI) +
-                " received protocol order: " + sortedrros);
+            LOGGER_RO.debug("[Multi-Protocol] " + URIBuilder.getNameFromURI(defaultURI) + " received protocol order: " +
+                            sortedrros);
         }
         wl.unlock();
     }

@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2013 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package functionalTests.multiprotocol;
 
@@ -44,6 +33,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Level;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.node.Node;
@@ -55,12 +49,8 @@ import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
+
 import functionalTests.FunctionalTest;
-import org.apache.log4j.Level;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 
 /**
@@ -77,8 +67,7 @@ public class TestNamingServiceSwitch extends FunctionalTest {
     URL gcma = TestNamingServiceSwitch.class.getResource("TestMultiProtocol.xml");
 
     // remote protocols that will be used, the local protocol will always be the protocol used in the test suite
-    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp",
-            "pamr" }));
+    ArrayList<String> protocolsToTest = new ArrayList<String>(Arrays.asList(new String[] { "rmi", "pnp", "pamr" }));
 
     // pamr router
     static Router router;
@@ -120,8 +109,10 @@ public class TestNamingServiceSwitch extends FunctionalTest {
         // we remove the value of the proactive.communication.protocol set by the FuntionalTest
         List<String> jvmParameters = super.getJvmParameters();
 
-        Node node = MultiProtocolHelper.deployANodeWithProtocols(protocolsToTest, gcma, variableContract,
-                jvmParameters);
+        Node node = MultiProtocolHelper.deployANodeWithProtocols(protocolsToTest,
+                                                                 gcma,
+                                                                 variableContract,
+                                                                 jvmParameters);
 
         AONamingServiceSwitch ao = PAActiveObject.newActive(AONamingServiceSwitch.class, new Object[0], node);
         String[] aouris = PAActiveObject.getUrls(ao);
@@ -129,8 +120,9 @@ public class TestNamingServiceSwitch extends FunctionalTest {
         // Ensure that the remote active object is deployed using the correct protocols
         Assert.assertEquals("Number of uris match protocol list size", protocolsToTest.size(), aouris.length);
         for (int i = 0; i < aouris.length; i++) {
-            Assert.assertEquals(aouris[i] + " is protocol " + protocolsToTest.get(i), protocolsToTest.get(i),
-                    (new URI(aouris[i])).getScheme());
+            Assert.assertEquals(aouris[i] + " is protocol " + protocolsToTest.get(i),
+                                protocolsToTest.get(i),
+                                (new URI(aouris[i])).getScheme());
         }
 
         NamingService namingService = ao.createNamingService();
@@ -141,19 +133,19 @@ public class TestNamingServiceSwitch extends FunctionalTest {
         // for each protocol except the last one, we try to register an empty applications
         for (int i = 0; i < protocolsToTest.size() - 1; i++) {
 
-            namingService.registerApplication(Long.toString(protocolsToTest.get(i).hashCode()),
-                    predefinedSpaces);
+            namingService.registerApplication(Long.toString(protocolsToTest.get(i).hashCode()), predefinedSpaces);
             System.out.println("******** Disabling protocol " + protocolsToTest.get(i));
             // switch protocol
             ao.disableProtocol(protocolsToTest.get(i));
 
         }
-        namingService.registerApplication(
-                Long.toString(protocolsToTest.get(protocolsToTest.size() - 1).hashCode()), predefinedSpaces);
+        namingService.registerApplication(Long.toString(protocolsToTest.get(protocolsToTest.size() - 1).hashCode()),
+                                          predefinedSpaces);
 
         Set<String> registeredApps = namingService.getRegisteredApplications();
         Assert.assertEquals("Number of application registered should match the number of protocols",
-                protocolsToTest.size(), registeredApps.size());
+                            protocolsToTest.size(),
+                            registeredApps.size());
 
     }
 

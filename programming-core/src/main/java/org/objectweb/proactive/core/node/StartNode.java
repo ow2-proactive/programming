@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.node;
 
@@ -71,7 +60,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class StartNode {
     static Logger logger;
+
     protected static final int MAX_RETRY = 3;
+
     protected static final String NO_REBIND_OPTION_NAME = "-noRebind";
 
     static {
@@ -95,6 +86,7 @@ public class StartNode {
     }
 
     protected boolean noRebind = false;
+
     protected String nodeName;
 
     //
@@ -147,8 +139,8 @@ public class StartNode {
                 }
 
                 logger.info("OK. Node " + node.getNodeInformation().getName() + " ( " +
-                    node.getNodeInformation().getURL() + " ) " + " is created in VM id=" +
-                    UniqueID.getCurrentVMID());
+                            node.getNodeInformation().getURL() + " ) " + " is created in VM id=" +
+                            UniqueID.getCurrentVMID());
 
                 break;
             } catch (NodeException e) {
@@ -204,12 +196,10 @@ public class StartNode {
         logger.info(" - options");
         logger.info("                      By default a ClassServer is automatically created");
         logger.info("                      to serve class files on demand.");
-        logger.info("     " + NO_REBIND_OPTION_NAME +
-            "      : indicates not to use rebind when registering the");
+        logger.info("     " + NO_REBIND_OPTION_NAME + "      : indicates not to use rebind when registering the");
         logger.info("                      node to the registry. If a node of the same name");
         logger.info("                      already exists, the creation of the new node will fail.");
         logger.info("  for instance: java " + StartNode.class.getName() + " myNode");
-        logger.info("                java " + StartNode.class.getName() + " myNode2  " +
-            NO_REBIND_OPTION_NAME);
+        logger.info("                java " + StartNode.class.getName() + " myNode2  " + NO_REBIND_OPTION_NAME);
     }
 }

@@ -1,40 +1,32 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
 package dataspaces;
+
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeFalse;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,6 +38,14 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.log4j.Level;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -66,17 +66,6 @@ import org.objectweb.proactive.extensions.dataspaces.vfs.VFSSpacesMountManagerIm
 import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.utils.OperatingSystem;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
-import org.apache.log4j.Level;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
 
 
 /**
@@ -98,7 +87,8 @@ public class VFSSpacesMountManagerImplTest {
     private static final String WRONG_DS_SERVER_URL = "pappnp://welcome.to.proactive:5461/inputserver?proactive_vfs_provider_path=/";
 
     private static final DataSpacesURI NONEXISTING_SPACE = DataSpacesURI.createInOutSpaceURI("123",
-            SpaceType.OUTPUT, "dummy");
+                                                                                             SpaceType.OUTPUT,
+                                                                                             "dummy");
 
     private static void closeFileObject(final DataSpacesFileObject file) {
         if (file != null) {
@@ -111,19 +101,33 @@ public class VFSSpacesMountManagerImplTest {
     }
 
     private SpacesMountManager manager;
+
     private SpacesDirectory directory;
+
     private File spacesDir;
+
     private File inputSpaceDir;
+
     private File outputSpaceDir;
+
     private DataSpacesURI inputUri;
+
     private DataSpacesURI outputUri;
+
     private DataSpacesURI scratchUri;
+
     private DataSpacesFileObject fileObject;
+
     private static String inputSpaceFileUrl;
+
     private static String outputSpaceFileUrl;
+
     private static String scratchSpaceFileUrl;
+
     private static FileSystemServerDeployer serverInput;
+
     private static FileSystemServerDeployer serverOutput;
+
     private static FileSystemServerDeployer serverScratch;
 
     private static DefaultFileSystemManager fileSystemManager;
@@ -161,8 +165,10 @@ public class VFSSpacesMountManagerImplTest {
         rootinputuris.add(inputSpaceFileUrl);
         rootinputuris.add(serverInput.getVFSRootURL());
 
-        final InputOutputSpaceConfiguration inputSpaceConf = InputOutputSpaceConfiguration
-                .createInputSpaceConfiguration(rootinputuris, null, null, "read_only_space");
+        final InputOutputSpaceConfiguration inputSpaceConf = InputOutputSpaceConfiguration.createInputSpaceConfiguration(rootinputuris,
+                                                                                                                         null,
+                                                                                                                         null,
+                                                                                                                         "read_only_space");
         final SpaceInstanceInfo inputSpaceInfo = new SpaceInstanceInfo("123", inputSpaceConf);
         inputUri = inputSpaceInfo.getMountingPoint();
 
@@ -180,8 +186,10 @@ public class VFSSpacesMountManagerImplTest {
         rootoutputuris.add(outputSpaceFileUrl);
         rootoutputuris.add(serverOutput.getVFSRootURL());
 
-        final InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration
-                .createOutputSpaceConfiguration(rootoutputuris, null, null, "read_write_space");
+        final InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration.createOutputSpaceConfiguration(rootoutputuris,
+                                                                                                                           null,
+                                                                                                                           null,
+                                                                                                                           "read_write_space");
         final SpaceInstanceInfo outputSpaceInfo = new SpaceInstanceInfo("123", outputSpaceConf);
         outputUri = outputSpaceInfo.getMountingPoint();
 
@@ -190,8 +198,7 @@ public class VFSSpacesMountManagerImplTest {
         assertTrue(scratchSpaceDir.mkdirs());
 
         if (serverScratch == null) {
-            serverScratch = new FileSystemServerDeployer("scratchserver", scratchSpaceDir.toString(), true,
-                true);
+            serverScratch = new FileSystemServerDeployer("scratchserver", scratchSpaceDir.toString(), true, true);
             System.out.println("Started Scratch File Server at " + serverScratch.getVFSRootURLs());
         }
 
@@ -203,10 +210,8 @@ public class VFSSpacesMountManagerImplTest {
         rootscratchuris.add(scratchSpaceFileUrl);
         rootscratchuris.add(serverScratch.getVFSRootURL());
 
-        final ScratchSpaceConfiguration scratchSpaceConf = new ScratchSpaceConfiguration(rootscratchuris,
-            null, null);
-        final SpaceInstanceInfo scratchSpaceInfo = new SpaceInstanceInfo("123", "runtimeA", "nodeB",
-            scratchSpaceConf);
+        final ScratchSpaceConfiguration scratchSpaceConf = new ScratchSpaceConfiguration(rootscratchuris, null, null);
+        final SpaceInstanceInfo scratchSpaceInfo = new SpaceInstanceInfo("123", "runtimeA", "nodeB", scratchSpaceConf);
         scratchUri = scratchSpaceInfo.getMountingPoint();
 
         // directory and finally manager
@@ -328,9 +333,12 @@ public class VFSSpacesMountManagerImplTest {
         FileObject fileObjectWithWrongFileUri = fileSystemManager.resolveFile(wrongpath);
 
         // create Adapter
-        DataSpacesFileObject dsFileObjectWithWrongFileUri = new VFSFileObjectAdapter(
-            fileObjectWithWrongFileUri, outputUri, fileObjectWithWrongFileUri.getName(),
-            rootUrisWithWrongFileUri, wrongpath, manager2);
+        DataSpacesFileObject dsFileObjectWithWrongFileUri = new VFSFileObjectAdapter(fileObjectWithWrongFileUri,
+                                                                                     outputUri,
+                                                                                     fileObjectWithWrongFileUri.getName(),
+                                                                                     rootUrisWithWrongFileUri,
+                                                                                     wrongpath,
+                                                                                     manager2);
 
         // switch to existing
         DataSpacesFileObject newfo = dsFileObjectWithWrongFileUri.ensureExistingOrSwitch(true);
@@ -358,7 +366,7 @@ public class VFSSpacesMountManagerImplTest {
         assertTrue(write_p.setWritable(false));
 
         assumeFalse("Probably running the test as root as we cannot make the file read only (JDK-6931128)",
-                write_p.canWrite());
+                    write_p.canWrite());
 
         return write_p.toURI().toURL().toString();
     }
@@ -374,8 +382,10 @@ public class VFSSpacesMountManagerImplTest {
         rootoutputuris.add(WRONG_DS_SERVER_URL);
         rootoutputuris.add(serverOutput.getVFSRootURL());
 
-        InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration
-                .createOutputSpaceConfiguration(rootoutputuris, null, null, "read_write_space");
+        InputOutputSpaceConfiguration outputSpaceConf = InputOutputSpaceConfiguration.createOutputSpaceConfiguration(rootoutputuris,
+                                                                                                                     null,
+                                                                                                                     null,
+                                                                                                                     "read_write_space");
         SpaceInstanceInfo outputSpaceInfo = new SpaceInstanceInfo("123", outputSpaceConf);
 
         // create manager
@@ -386,8 +396,8 @@ public class VFSSpacesMountManagerImplTest {
 
     }
 
-    private void assertIsWorkingInputSpaceDir(final DataSpacesFileObject fo) throws FileSystemException,
-            SpaceNotFoundException {
+    private void assertIsWorkingInputSpaceDir(final DataSpacesFileObject fo)
+            throws FileSystemException, SpaceNotFoundException {
         assertTrue(fo.exists());
 
         ArrayList<String> expectedRootList = new ArrayList<String>();
@@ -448,8 +458,8 @@ public class VFSSpacesMountManagerImplTest {
         }
     }
 
-    private void assertIsWorkingOutputSpaceDir(DataSpacesFileObject fo) throws FileSystemException,
-            SpaceNotFoundException {
+    private void assertIsWorkingOutputSpaceDir(DataSpacesFileObject fo)
+            throws FileSystemException, SpaceNotFoundException {
         assertTrue(fo.exists());
 
         ArrayList<String> expectedRootList = new ArrayList<String>();
@@ -490,15 +500,13 @@ public class VFSSpacesMountManagerImplTest {
     }
 
     @Test
-    public void testResolveFileForFileInInputSpaceAlreadyMounted1() throws SpaceNotFoundException,
-            IOException {
+    public void testResolveFileForFileInInputSpaceAlreadyMounted1() throws SpaceNotFoundException, IOException {
         testResolveFileForFileInInputSpace();
         testResolveFileForFileInInputSpace();
     }
 
     @Test
-    public void testResolveFileForFileInInputSpaceAlreadyMounted2() throws SpaceNotFoundException,
-            IOException {
+    public void testResolveFileForFileInInputSpaceAlreadyMounted2() throws SpaceNotFoundException, IOException {
         testResolveFileForInputSpace();
         testResolveFileForFileInInputSpace();
     }
@@ -519,8 +527,7 @@ public class VFSSpacesMountManagerImplTest {
     }
 
     @Test
-    public void testResolveFileForFileInScratchSpaceForAnonymousOwner() throws SpaceNotFoundException,
-            IOException {
+    public void testResolveFileForFileInScratchSpaceForAnonymousOwner() throws SpaceNotFoundException, IOException {
         final DataSpacesURI fileUri = scratchUri.withActiveObjectId(SCRATCH_ACTIVE_OBJECT_ID);
         fileObject = manager.resolveFile(fileUri, null);
         assertIsWorkingScratchForAODir(fileObject, fileUri, false);
@@ -574,15 +581,15 @@ public class VFSSpacesMountManagerImplTest {
     }
 
     @Test
-    public void testResolveFileForUnexistingFileInInputSpaceAlreadyMounted1() throws SpaceNotFoundException,
-            IOException {
+    public void testResolveFileForUnexistingFileInInputSpaceAlreadyMounted1()
+            throws SpaceNotFoundException, IOException {
         testResolveFileForFileInInputSpace();
         testResolveFileForUnexistingFileInSpace();
     }
 
     @Test
-    public void testResolveFileForUnexistingFileInInputSpaceAlreadyMounted2() throws SpaceNotFoundException,
-            IOException {
+    public void testResolveFileForUnexistingFileInInputSpaceAlreadyMounted2()
+            throws SpaceNotFoundException, IOException {
         testResolveFileForInputSpace();
         testResolveFileForUnexistingFileInSpace();
     }
@@ -600,8 +607,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveSpaces() throws Exception {
         final DataSpacesURI queryUri = DataSpacesURI.createURI(inputUri.getAppId(), inputUri.getSpaceType());
-        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces = manager.resolveSpaces(queryUri,
-                null);
+        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces = manager.resolveSpaces(queryUri, null);
         assertEquals(1, spaces.size());
 
         fileObject = spaces.get(inputUri);
@@ -624,8 +630,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveSpacesNonexisting() throws SpaceNotFoundException, IOException {
         final String nonexistingRuntimeId = scratchUri.getRuntimeId() + "toto";
-        final DataSpacesURI queryUri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(),
-                nonexistingRuntimeId);
+        final DataSpacesURI queryUri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(), nonexistingRuntimeId);
         assertEquals(0, manager.resolveSpaces(queryUri, null).size());
     }
 
@@ -633,13 +638,11 @@ public class VFSSpacesMountManagerImplTest {
     public void testResolveSpacesNotSharedFileObject() throws IOException {
         final DataSpacesURI queryUri = DataSpacesURI.createURI(inputUri.getAppId(), inputUri.getSpaceType());
 
-        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces1 = manager.resolveSpaces(queryUri,
-                null);
+        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces1 = manager.resolveSpaces(queryUri, null);
         assertEquals(1, spaces1.size());
         final DataSpacesFileObject fileObject1 = spaces1.get(inputUri);
 
-        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces2 = manager.resolveSpaces(queryUri,
-                null);
+        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces2 = manager.resolveSpaces(queryUri, null);
         assertEquals(1, spaces2.size());
         final DataSpacesFileObject fileObject2 = spaces2.get(inputUri);
         assertNotSame(fileObject1, fileObject2);
@@ -656,8 +659,7 @@ public class VFSSpacesMountManagerImplTest {
 
     @Test
     public void testResolveSpacesForNotSuitableForUserPath() throws SpaceNotFoundException, IOException {
-        final DataSpacesURI uri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(),
-                scratchUri.getRuntimeId());
+        final DataSpacesURI uri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(), scratchUri.getRuntimeId());
         try {
             manager.resolveSpaces(uri, null);
             fail("Exception expected");

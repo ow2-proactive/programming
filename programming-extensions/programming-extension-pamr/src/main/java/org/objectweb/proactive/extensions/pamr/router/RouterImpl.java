@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.router;
 
@@ -69,6 +58,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -87,7 +77,6 @@ import org.objectweb.proactive.utils.SafeTimerTask;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
 import org.objectweb.proactive.utils.ThreadPools;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -96,6 +85,7 @@ import org.apache.log4j.Logger;
  */
 public class RouterImpl extends RouterInternal implements Runnable {
     public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
+
     public static final Logger admin_logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
 
     static final public int DEFAULT_PORT = 33647;
@@ -107,8 +97,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     /** True is the router must stop or is stopped*/
     private final AtomicBoolean stopped = new AtomicBoolean(false);
+
     /** Can pass when the router has been successfully shutdown */
     private final SweetCountDownLatch isStopped = new SweetCountDownLatch(1, logger);
+
     /** The thread running the select loop */
     private final AtomicReference<Thread> selectThread = new AtomicReference<Thread>();
 
@@ -120,15 +112,19 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     /** The local InetAddress on which the router is listening */
     private InetAddress inetAddress;
+
     /** The local TCP port on which the router is listening */
     private int port;
 
     private Selector selector = null;
+
     private ServerSocketChannel ssc = null;
+
     private ServerSocket serverSocket = null;
 
     /** An unique identifier for this router */
     private final long routerId;
+
     /** The administrator magic cookie 
      *
      * This cookie must be provided to perform remote administrative operations
@@ -138,6 +134,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
     private final File configFile;
 
     private final int heartbeatTimeout;
+
     private final long clientEvictionTimeout;
 
     /** Create a new router
@@ -191,7 +188,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
         this.port = serverSocket.getLocalPort();
         logger.info("Message router listening on " + serverSocket.toString() + ". Heartbeat timeout is " +
-            this.heartbeatTimeout + " ms");
+                    this.heartbeatTimeout + " ms");
         if (this.clientEvictionTimeout == -1) {
             logger.info("Client eviction is disabled");
         } else {
@@ -213,8 +210,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
     private class HeartbeatTimerTask extends SafeTimerTask {
         /** Maximum execution time (ms) */
         final private long maxTime;
+
         /** Unique id for each heartbeat */
         private long heartbeatId = 0;
+
         /** Used to send the heartbeat asynchrnously */
         final private ThreadPoolExecutor tpe;
 
@@ -235,8 +234,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
             final int busyWorkers = this.tpe.getActiveCount();
             if (busyWorkers > 0) {
                 admin_logger.warn(busyWorkers + " workers [cur:" + this.tpe.getPoolSize() + ",lar:" +
-                    this.tpe.getLargestPoolSize() + ",max:" + this.tpe.getMaximumPoolSize() +
-                    "] still busy before heartbeats #" + this.heartbeatId + " being send");
+                                  this.tpe.getLargestPoolSize() + ",max:" + this.tpe.getMaximumPoolSize() +
+                                  "] still busy before heartbeats #" + this.heartbeatId + " being send");
             }
 
             // Snapshot all the client
@@ -271,8 +270,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
                 new Sleeper(rtime, ProActiveLogger.getLogger(Loggers.SLEEPER)).sleep();
             } else {
                 admin_logger.warn("Tooks more than " + this.maxTime +
-                    " ms to submit send tasks and check received heartbeats (" + (this.maxTime - rtime) +
-                    "ms)");
+                                  " ms to submit send tasks and check received heartbeats (" + (this.maxTime - rtime) +
+                                  "ms)");
             }
 
             // Check all submitted tasks completed
@@ -283,12 +282,11 @@ public class RouterImpl extends RouterInternal implements Runnable {
                     try { // Detect failures while sending heartbeat
                         f.get();
                     } catch (Throwable e) {
-                        admin_logger
-                                .info("Exception occured while sending heartbeat to " + clients.get(i), e);
+                        admin_logger.info("Exception occured while sending heartbeat to " + clients.get(i), e);
                     }
                 } else {
-                    admin_logger.info("Sending heartbeat to " + clients.get(i) + " took longer than " +
-                        this.maxTime + "ms.");
+                    admin_logger.info("Sending heartbeat to " + clients.get(i) + " took longer than " + this.maxTime +
+                                      "ms.");
 
                 }
             }
@@ -304,8 +302,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
                     if (diff > heartbeatTimeout) {
                         // Disconnect
                         try {
-                            logger.info("Client " + client + " disconnected due to late heartbeat (" + diff +
-                                " ms)");
+                            logger.info("Client " + client + " disconnected due to late heartbeat (" + diff + " ms)");
                             client.disconnect();
                         } catch (IOException e) {
                             logger.info("Failed to disconnected client " + client, e);
@@ -323,7 +320,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
         private class SendTask implements Callable<Boolean> {
             final Client client;
+
             final byte[] msg;
+
             final long heartbeatId;
 
             public SendTask(Client client, byte[] msg, long heartbeatId) {
@@ -338,8 +337,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
                         client.sendMessage(msg);
                     }
                 } catch (IOException e) {
-                    throw new PAMRException(
-                        "Failed to send heartbeat #" + this.heartbeatId + " to " + client, e);
+                    throw new PAMRException("Failed to send heartbeat #" + this.heartbeatId + " to " + client, e);
                 }
 
                 return true;
@@ -363,8 +361,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
                 if (!agentID.isReserved() && !client.isConnected()) {
                     long timeSinceLastSeen = currentTime - client.getLastSeen();
                     if (timeSinceLastSeen >= clientEvictionTimeout) {
-                        logger.info("Evicting client " + client + ": last seen " + timeSinceLastSeen +
-                            " ms ago");
+                        logger.info("Evicting client " + client + ": last seen " + timeSinceLastSeen + " ms ago");
                         clientMap.remove(agentID);
                     }
                 }
@@ -382,8 +379,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
     public void run() {
         boolean r = this.selectThread.compareAndSet(null, Thread.currentThread());
         if (r == false) {
-            logger.error("A select thread has already been started, aborting the current thread ",
-                    new Exception());
+            logger.error("A select thread has already been started, aborting the current thread ", new Exception());
             return;
         }
 
@@ -440,7 +436,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
         }
 
         try {
-            /* Not sure if we have to set the attachments to null 
+            /*
+             * Not sure if we have to set the attachments to null
              * Possible memory leak
              */
             this.ssc.socket().close();
@@ -539,9 +536,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     }
 
-    /* @@@@@@@@@@ ROUTER PACKAGE INTERFACE 
+    /*
+     * @@@@@@@@@@ ROUTER PACKAGE INTERFACE
      * 
-     * Theses methods cannot be package private due to the processor sub package 
+     * Theses methods cannot be package private due to the processor sub package
      */
 
     public void handleAsynchronously(ByteBuffer message, Attachment attachment) {
@@ -586,6 +584,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     private static class DisconnectionBroadcaster implements Runnable {
         final private List<Client> clients;
+
         final private AgentID disconnectedAgent;
 
         public DisconnectionBroadcaster(Collection<Client> clients, AgentID disconnectedAgent) {
@@ -599,7 +598,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
                     continue;
 
                 ErrorMessage error = new ErrorMessage(ErrorType.ERR_DISCONNECTION_BROADCAST,
-                    client.getAgentId(), this.disconnectedAgent, 0);
+                                                      client.getAgentId(),
+                                                      this.disconnectedAgent,
+                                                      0);
                 try {
                     client.sendMessage(error.toByteArray());
                 } catch (Exception e) {
@@ -650,29 +651,27 @@ public class RouterImpl extends RouterInternal implements Runnable {
                     agentId = new AgentID(Long.parseLong(sId));
                 } catch (NumberFormatException e) {
                     throw new Exception("Invalid configuration file" + this.configFile +
-                        ": Keys must be an integer but " + sId + " is not");
+                                        ": Keys must be an integer but " + sId + " is not");
                 }
 
                 MagicCookie cookie = null;
                 try {
                     cookie = new MagicCookie(sCookie);
                 } catch (IllegalArgumentException e) {
-                    throw new Exception("Invalid configuration file " + this.configFile +
-                        ": invalid cookie value  " + sCookie + ". " + e.getMessage());
+                    throw new Exception("Invalid configuration file " + this.configFile + ": invalid cookie value  " +
+                                        sCookie + ". " + e.getMessage());
                 }
 
                 if (!agentId.isReserved()) {
-                    throw new Exception("Invalid configuration file " + this.configFile +
-                        ": invalid Agent ID " + sId + "Agent ID must be between 0 and " +
-                        (AgentID.MIN_DYNAMIC_AGENT_ID - 1));
+                    throw new Exception("Invalid configuration file " + this.configFile + ": invalid Agent ID " + sId +
+                                        "Agent ID must be between 0 and " + (AgentID.MIN_DYNAMIC_AGENT_ID - 1));
                 }
                 map.put(agentId, cookie);
             }
         }
 
         if (configMagicCookie == null) {
-            throw new Exception(
-                "Configuration magic cookie must be defined in the configuration file (key: configuration)");
+            throw new Exception("Configuration magic cookie must be defined in the configuration file (key: configuration)");
         }
 
         admin_logger.debug("Set config magic cookie to: " + configMagicCookie);
@@ -710,7 +709,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
                 client = new Client(agentID, map.get(agentID));
                 this.clientMap.put(agentID, client);
                 admin_logger.debug("Disconnected reserved agent " + agentID +
-                    " and updated magic cookie (configuration change)");
+                                   " and updated magic cookie (configuration change)");
             }
         }
     }

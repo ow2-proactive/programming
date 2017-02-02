@@ -1,38 +1,27 @@
 /*
- * ################################################################
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * ProActive Parallel Suite(TM): The Java(TM) library for
- *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
  *
- * Copyright (C) 1997-2012 INRIA/University of
- *                 Nice-Sophia Antipolis/ActiveEon
- * Contact: proactive@ow2.org or contact@activeeon.com
- *
- * This library is free software; you can redistribute it and/or
+ * This library is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation; version 3 of
+ * as published by the Free Software Foundation: version 3 of
  * the License.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
- *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
- *  Contributor(s):
- *
- * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extensions.pamr.protocol.message;
 
@@ -98,7 +87,7 @@ public abstract class Message {
         HEARTBEAT_ROUTER,
         /** A message sent by the CLI tool, to ask the router to reload its configuration file*/
         RELOAD_CONFIGURATION
-        /* That's all*/
+        /* That's all */
         ;
 
         /** Reverse map associate a message type to an ID  */
@@ -195,10 +184,11 @@ public abstract class Message {
 
         /** Offset of the field in the message */
         public int getOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              * 
              * This method relies on the Java Memory Model specification to perform
-             * a racy single-check initialization. 
+             * a racy single-check initialization.
              * DO NOT CHANGE THIS METHOD IF YOU DON'T KNOW WHAT IT IS.
              * 
              * See: Effective Java, chapter 10, Item 71: Lazy initialization
@@ -220,10 +210,11 @@ public abstract class Message {
 
         /** Length of the fields defined by {@link Message} */
         static public int getTotalOffset() {
-            /* WARNING: RACY SINGLE-CHECK INTIALIZATION
+            /*
+             * WARNING: RACY SINGLE-CHECK INTIALIZATION
              * 
              * This method relies on the Java Memory Model specification to perform
-             * a racy single-check initialization. 
+             * a racy single-check initialization.
              * DO NOT CHANGE THIS METHOD IF YOU DON'T KNOW WHAT IT IS.
              * 
              * See: Effective Java, chapter 10, Item 71: Lazy initialization
@@ -272,7 +263,7 @@ public abstract class Message {
     public static Message constructMessage(byte[] buf, int offset) throws MalformedMessageException {
         // depending on the type of message, call a different constructor
         MessageType type = MessageType.getMessageType(TypeHelper.byteArrayToInt(buf,
-                offset + Field.MSG_TYPE.getOffset()));
+                                                                                offset + Field.MSG_TYPE.getOffset()));
 
         switch (type) {
             case REGISTRATION_REQUEST:
@@ -349,16 +340,18 @@ public abstract class Message {
         if (type != null)
             return type;
         else
-            throw new MalformedMessageException("Invalid value for the " + Field.MSG_TYPE + " field:" +
-                typeInt);
+            throw new MalformedMessageException("Invalid value for the " + Field.MSG_TYPE + " field:" + typeInt);
     }
 
     /** Length of this message */
     private int length;
+
     /** Protocol ID of this message */
     final private int protoId;
+
     /** Type of this message */
     final private MessageType type;
+
     /** ID of this message*/
     final private long messageId;
 
@@ -395,13 +388,13 @@ public abstract class Message {
         this.messageId = readMessageID(buf, offset);
 
         if (this.length < Field.getTotalOffset() + fieldsSize) {
-            throw new MalformedMessageException("Malformed " + type.toString() + " message: " +
-                "Invalid value for " + Field.LENGTH + " field:" + this.length);
+            throw new MalformedMessageException("Malformed " + type.toString() + " message: " + "Invalid value for " +
+                                                Field.LENGTH + " field:" + this.length);
         }
 
         if (this.protoId != PROTOV2) {
-            throw new MalformedMessageException("Malformed " + type.toString() + " message: " +
-                "Invalid value for " + Field.PROTO_ID + " field:" + this.protoId);
+            throw new MalformedMessageException("Malformed " + type.toString() + " message: " + "Invalid value for " +
+                                                Field.PROTO_ID + " field:" + this.protoId);
         }
     }
 
@@ -455,9 +448,9 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return Field.MSG_TYPE.toString() + ":" + this.type + ";" + Field.PROTO_ID.toString() + ":" +
-            this.protoId + ";" + Field.MSG_ID.toString() + ":" + this.messageId + ";" +
-            Field.LENGTH.toString() + ":" + this.length + ";";
+        return Field.MSG_TYPE.toString() + ":" + this.type + ";" + Field.PROTO_ID.toString() + ":" + this.protoId +
+               ";" + Field.MSG_ID.toString() + ":" + this.messageId + ";" + Field.LENGTH.toString() + ":" +
+               this.length + ";";
     }
 
     @Override
