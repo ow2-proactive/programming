@@ -30,7 +30,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.AlreadyBoundException;
 import java.util.List;
 
-import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
@@ -230,5 +229,10 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
 
     public byte[] getClassData(String className) {
         return target.getClassData(className);
+    }
+
+    @Override
+    public String getThreadDump() {
+        return target.getThreadDump();
     }
 }

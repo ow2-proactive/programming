@@ -346,4 +346,11 @@ public interface ProActiveRuntime {
      * @return the FileTransferEngine singleton active object.
      */
     public FileTransferEngine getFileTransferEngine();
+
+    /**
+     * Returns the full thread dump of the Runtime's enclosing JVM
+     *
+     * @return thread dump
+     */
+    public String getThreadDump();
 }

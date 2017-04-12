@@ -246,4 +246,9 @@ public class MOCKProActiveRuntime implements ProActiveRuntime {
         return null;
     }
 
+    @Override
+    public String getThreadDump() {
+        return null;
+    }
+
 }
