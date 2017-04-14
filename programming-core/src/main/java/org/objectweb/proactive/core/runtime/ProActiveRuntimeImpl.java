@@ -99,6 +99,7 @@ import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.StackTraceUtil;
 
 
 /**
@@ -1323,5 +1324,10 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
         } else {
             throw new ProActiveException("Unable to find ProActive home. Running from class files but non standard repository layout");
         }
+    }
+
+    @Override
+    public String getThreadDump() {
+        return StackTraceUtil.getAllStackTraces();
     }
 }

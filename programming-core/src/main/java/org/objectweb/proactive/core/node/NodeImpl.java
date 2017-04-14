@@ -41,7 +41,6 @@ import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.VMInformation;
-import org.objectweb.proactive.utils.StackTraceUtil;
 
 
 /**
@@ -353,7 +352,7 @@ public class NodeImpl implements Node, Serializable {
 
     @Override
     public String getThreadDump() throws ProActiveException {
-        return StackTraceUtil.getAllStackTraces();
+        return this.proActiveRuntime.getThreadDump();
     }
 
     public VMInformation getVMInformation() {
