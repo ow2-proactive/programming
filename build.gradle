@@ -162,6 +162,8 @@ project(':programming-core') {
 
                 'xerces:xercesImpl:2.11.0',
 
+                'com.google.guava:guava:19.0',
+
                 project(':programming-annotation'),
                 project(':programming-util')
         )

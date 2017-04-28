@@ -53,7 +53,7 @@ public class RemoteObjectHelper {
      */
     public static URI generateUrl(String protocol, String name) throws UnknownProtocolException {
         RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
-        return URIBuilder.buildURI(null, name, protocol, rof.getPort(), true);
+        return URIBuilder.buildURI(null, null, name, protocol, rof.getPort(), null, true);
     }
 
     /**

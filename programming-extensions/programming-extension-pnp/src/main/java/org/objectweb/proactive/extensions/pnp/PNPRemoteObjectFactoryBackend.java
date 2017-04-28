@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalInputStream;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalOutputStream;
@@ -230,7 +231,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
             }
 
             URI uri = new URI(this.getProtocolId(),
-                              null,
+                              ProActiveInet.getPublicAddress(),
                               URIBuilder.getHostNameorIP(this.agent.getInetAddress()),
                               this.agent.getPort(),
                               name,
@@ -253,15 +254,25 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
     }
 
     public URI getBaseURI() {
-        final URI uri;
+        URI uri;
+
         if (this.agent == null) {
-            uri = URI.create(this.getProtocolId() + "://pnp-failed-to-initialize-invalid-url/");
+            uri = createInvalidURI();
         } else {
-            uri = URI.create(this.getProtocolId() + "://" + URIBuilder.getHostNameorIP(this.agent.getInetAddress()) +
-                             ":" + this.agent.getPort() + "/");
+            uri = URI.create(this.getProtocolId() + "://" + getUserInfoString() +
+                             URIBuilder.getHostNameorIP(this.agent.getInetAddress()) + ":" + this.agent.getPort());
         }
 
         return uri;
+    }
+
+    private String getUserInfoString() {
+        String publicAddress = ProActiveInet.getPublicAddress();
+        return (publicAddress != null) ? publicAddress + "@" : "";
+    }
+
+    private URI createInvalidURI() {
+        return URI.create(this.getProtocolId() + "://pnp-failed-to-initialize-invalid-url/");
     }
 
     public int getPort() {
