@@ -67,7 +67,7 @@ public interface RemoteObjectFactory {
             throws ProActiveException;
 
     /**
-     * unregister the remote remote object located at a given
+     * unregister the remote remote object located at a given url
      *
      * @param url
      *            the url
