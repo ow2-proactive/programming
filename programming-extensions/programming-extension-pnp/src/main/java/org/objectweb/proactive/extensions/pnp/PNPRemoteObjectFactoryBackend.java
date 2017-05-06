@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalInputStream;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalOutputStream;
@@ -104,20 +105,13 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
      * org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#newRemoteObject
      * (org.objectweb .proactive.core.remoteobject.RemoteObject)
      */
+    @Override
     public RemoteRemoteObject newRemoteObject(InternalRemoteRemoteObject target) throws ProActiveException {
         throwIfAgentIsNul("newRemoteObject call failed");
 
         return new PNPRemoteObject(target, null, agent);
     }
 
-    /**
-     * Registers an remote object into the registry
-     *
-     * @param uri
-     *            The urn of the body (in fact his url + his name)
-     * @exception java.io.IOException
-     *                if the remote body cannot be registered
-     */
     /*
      * (non-Javadoc)
      *
@@ -126,6 +120,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
      * (org.objectweb.proactive .core.remoteobject.RemoteObject, java.net.URI,
      * boolean)
      */
+    @Override
     public RemoteRemoteObject register(InternalRemoteRemoteObject ro, URI uri, boolean replacePrevious)
             throws ProActiveException {
         throwIfAgentIsNul("register call failed");
@@ -138,24 +133,12 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
         return rro;
     }
 
-    /**
-     * Unregisters an remote object previously registered into the bodies table
-     *
-     * @param uri
-     *            the urn under which the active object has been registered
-     */
+    @Override
     public void unregister(URI uri) throws ProActiveException {
         this.registry.unbind(URIBuilder.getNameFromURI(uri));
     }
 
-    /**
-     * Looks-up a remote object previously registered in the bodies table .
-     *
-     * @param uri
-     *            the urn (in fact its url + name) the remote Body is registered
-     *            to
-     * @return a UniversalBody
-     */
+    @Override
     public RemoteObject lookup(URI uri) throws ProActiveException {
         throwIfAgentIsNul("lookup call failed");
 
@@ -174,24 +157,13 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
         }
     }
 
-    /**
-     * List all active object previously registered in the registry
-     *
-     * @param uri
-     *            the url of the host to scan, typically //machine_name
-     * @return a list of Strings, representing the registered names, and {} if
-     *         no registry
-     * @exception java.io.IOException
-     *                if scanning reported some problem (registry not found, or
-     *                malformed Url)
-     */
-
     /*
      * (non-Javadoc)
      *
      * @see
      * org.objectweb.proactive.core.body.BodyAdapterImpl#list(java.lang.String)
      */
+    @Override
     public URI[] list(URI uri) throws ProActiveException {
         throwIfAgentIsNul("list call failed");
 
@@ -211,14 +183,17 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
         }
     }
 
+    @Override
     public String getProtocolId() {
         return this.protoId;
     }
 
+    @Override
     public void unexport(RemoteRemoteObject rro) throws ProActiveException {
         // see PROACTIVE-419
     }
 
+    @Override
     public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name, boolean rebind)
             throws ProActiveException {
         throwIfAgentIsNul("createRemoteObject call failed");
@@ -229,8 +204,10 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
                 name = "/" + name;
             }
 
+            // the URI is constructed with a userinfo parameter if the property proactive.net.public_address is enabled
+            // in that case, the PNP remote object will have a uri such as pnp://public_address@host:port/name
             URI uri = new URI(this.getProtocolId(),
-                              null,
+                              ProActiveInet.getPublicAddress(),
                               URIBuilder.getHostNameorIP(this.agent.getInetAddress()),
                               this.agent.getPort(),
                               name,
@@ -252,26 +229,40 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
         return this.agent;
     }
 
+    @Override
     public URI getBaseURI() {
-        final URI uri;
+        URI uri;
+
         if (this.agent == null) {
-            uri = URI.create(this.getProtocolId() + "://pnp-failed-to-initialize-invalid-url/");
+            uri = createInvalidURI();
         } else {
-            uri = URI.create(this.getProtocolId() + "://" + URIBuilder.getHostNameorIP(this.agent.getInetAddress()) +
-                             ":" + this.agent.getPort() + "/");
+            uri = URI.create(this.getProtocolId() + "://" + getUserInfoString() +
+                             URIBuilder.getHostNameorIP(this.agent.getInetAddress()) + ":" + this.agent.getPort());
         }
 
         return uri;
     }
 
+    private String getUserInfoString() {
+        String publicAddress = ProActiveInet.getPublicAddress();
+        return (publicAddress != null) ? publicAddress + "@" : "";
+    }
+
+    private URI createInvalidURI() {
+        return URI.create(this.getProtocolId() + "://pnp-failed-to-initialize-invalid-url/");
+    }
+
+    @Override
     public int getPort() {
         return this.agent == null ? -1 : this.agent.getPort();
     }
 
+    @Override
     public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
         return new ProActiveMarshalInputStream(in);
     }
 
+    @Override
     public ObjectOutputStream getProtocolObjectOutputStream(OutputStream out) throws IOException {
         return new ProActiveMarshalOutputStream(out, ProActiveRuntimeImpl.getProActiveRuntime().getURL());
     }

@@ -28,6 +28,7 @@ package org.objectweb.proactive.core.node;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
@@ -298,9 +299,8 @@ public class NodeImpl implements Node, Serializable {
          * @return String. The name of the node
          */
         private String extractNameFromUrl(String url) {
-            int n = url.lastIndexOf("/");
-            String name = url.substring(n + 1);
-            return name;
+            URI uri = URI.create(url);
+            return uri.getPath().replace("/", "");
         }
 
         public VMInformation getVMInformation() {

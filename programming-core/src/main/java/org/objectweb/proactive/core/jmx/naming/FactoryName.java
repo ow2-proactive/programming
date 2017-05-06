@@ -87,7 +87,7 @@ public class FactoryName {
     public static ObjectName createActiveObjectName(UniqueID id) {
         ObjectName oname = null;
         try {
-            oname = new ObjectName(FactoryName.AO + "," + AO_ID_PROPERTY + "=" + id.getCanonString());
+            oname = new ObjectName(FactoryName.AO + "," + AO_ID_PROPERTY + "=" + ObjectName.quote(id.getCanonString()));
         } catch (MalformedObjectNameException e) {
             logger.error("Can't create the objectName of the active object", e);
         } catch (NullPointerException e) {
@@ -123,8 +123,8 @@ public class FactoryName {
 
         ObjectName oname = null;
         try {
-            oname = new ObjectName(FactoryName.NODE + "," + RUNTIME_URL_PROPERTY + "=" + runtimeUrl.replace(':', '-') +
-                                   "," + NODE_NAME_PROPERTY + "=" + nodeName.replace(':', '-'));
+            oname = new ObjectName(FactoryName.NODE + "," + RUNTIME_URL_PROPERTY + "=" + ObjectName.quote(runtimeUrl) +
+                                   "," + NODE_NAME_PROPERTY + "=" + ObjectName.quote(nodeName));
         } catch (MalformedObjectNameException e) {
             logger.error("Can't create the objectName of the node", e);
         } catch (NullPointerException e) {
@@ -143,7 +143,7 @@ public class FactoryName {
 
         ObjectName oname = null;
         try {
-            oname = new ObjectName(FactoryName.RUNTIME + "," + RUNTIME_URL_PROPERTY + "=" + url.replace(':', '-'));
+            oname = new ObjectName(FactoryName.RUNTIME + "," + RUNTIME_URL_PROPERTY + "=" + ObjectName.quote(url));
         } catch (MalformedObjectNameException e) {
             logger.error("Can't create the objectName of the runtime", e);
         } catch (NullPointerException e) {
@@ -162,8 +162,8 @@ public class FactoryName {
         ObjectName oname = null;
         try {
             oname = new ObjectName(FactoryName.VIRTUAL_NODE + "," + VIRTUAL_NODE_NAME_PROPERTY + "=" +
-                                   name.replace(':', '-') + "," + VIRTUAL_NODE_JOBID_PROPERTY + "=" +
-                                   jobID.replace(':', '-'));
+                                   ObjectName.quote(name) + "," + VIRTUAL_NODE_JOBID_PROPERTY + "=" +
+                                   ObjectName.quote(jobID));
         } catch (MalformedObjectNameException e) {
             logger.error("Can't create the objectName of the virtual node", e);
         } catch (NullPointerException e) {
@@ -183,7 +183,7 @@ public class FactoryName {
 
     /**
      * Return the JMX Server Name used for a given uri of a runtime
-     * @param runtimeUrl
+     * @param runtimeURI
      * @return The JMX Server Name
      */
     public static String getJMXServerName(URI runtimeURI) {

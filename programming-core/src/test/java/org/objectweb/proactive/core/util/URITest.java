@@ -41,12 +41,14 @@ import org.junit.Test;
 public class URITest {
     @Test
     public void checkURI() throws Exception {
-        String protocol = "rmi";
+        String protocol = "pnp";
+        String userInfo = "machine";
         String host = "localhost.localdomain";
         String path = "apath";
+        String query = "toto=value";
         int port = 1258;
 
-        URI uri = URIBuilder.buildURI(host, path, protocol, port, false);
+        URI uri = URIBuilder.buildURI(userInfo, host, path, protocol, port, query, false);
 
         // checking getters
         assertTrue(URIBuilder.getPortNumber(uri) == port);
@@ -55,9 +57,17 @@ public class URITest {
 
         assertTrue(path.equals(URIBuilder.getNameFromURI(uri)));
 
+        assertTrue(userInfo.equals(uri.getUserInfo()));
+
+        assertTrue(query.equals(uri.getQuery()));
+
         // check the remove protocol method
         URI u = URIBuilder.removeProtocol(uri);
-        assertTrue("//localhost.localdomain:1258/apath".equals(u.toString()));
+        assertTrue("//machine@localhost.localdomain:1258/apath?toto=value".equals(u.toString()));
+
+        // check the remove query method
+        u = URIBuilder.removeQuery(uri);
+        assertTrue("pnp://machine@localhost.localdomain:1258/apath".equals(u.toString()));
 
         // check the setPort method
         int port2 = 5656;
@@ -66,7 +76,7 @@ public class URITest {
 
         // check the setProtocol
         u = URIBuilder.setProtocol(uri, "http");
-        assertTrue("http://localhost.localdomain:1258/apath".equals(u.toString()));
+        assertTrue("http://machine@localhost.localdomain:1258/apath?toto=value".equals(u.toString()));
 
         // validate an URI
         try {

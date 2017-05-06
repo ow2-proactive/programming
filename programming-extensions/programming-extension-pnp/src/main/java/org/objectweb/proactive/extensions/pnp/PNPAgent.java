@@ -153,27 +153,44 @@ public class PNPAgent {
      * @throws PNPException If the call failed to execute successfully
      */
     public InputStream sendMsg(URI uri, PNPFrameCall msgReq) throws PNPException {
-        InetAddress ia;
+        InetAddress address;
+        InetAddress publicAddress = null;
+        String publicAddressString = uri.getUserInfo();
+
+        if (publicAddressString != null) {
+            try {
+                publicAddress = InetAddress.getByName(publicAddressString);
+            } catch (UnknownHostException e) {
+                logger.debug("Unknown public address " + publicAddressString, e);
+            }
+        }
+
         try {
-            ia = InetAddress.getByName(uri.getHost());
+            address = InetAddress.getByName(uri.getHost());
         } catch (UnknownHostException e) {
-            throw new PNPException("Invalid uri: " + uri, e);
+            if (publicAddress != null) {
+                address = publicAddress;
+            } else {
+                throw new PNPException("Invalid uri: " + uri, e);
+            }
         }
 
         int port = uri.getPort();
-        return sendMsg(ia, port, msgReq);
+        return sendMsg(address, publicAddress, port, msgReq);
     }
 
     /** Sends a call to a remote PNP server
      *
      * @param addr The inet address of the recipient
+     * @param publicAddr The public inet address of the recipient
      * @param port The port on which the recipient is listening
      * @param msgReq The call
      * @return The result of the call
      * @throws PNPException If the call failed to execute successfully
      */
-    public InputStream sendMsg(InetAddress addr, int port, PNPFrameCall msgReq) throws PNPException {
-        PNPClientChannel channel = channelCache.getChannel(addr, port, msgReq.getHearthbeatPeriod());
+    public InputStream sendMsg(InetAddress addr, InetAddress publicAddr, int port, PNPFrameCall msgReq)
+            throws PNPException {
+        PNPClientChannel channel = channelCache.getChannel(addr, publicAddr, port, msgReq.getHearthbeatPeriod());
         return channel.sendMessage(msgReq);
     }
 
@@ -214,14 +231,19 @@ public class PNPAgent {
         /** The remote inet address  */
         final private InetAddress addr;
 
+        /** The remote public inet address  */
+        final private InetAddress publicAddr;
+
         /** The remote port*/
         final private int port;
 
         /** The heartbeat period of the channel*/
         final private long heartbeat;
 
-        public PNPChannelId(final InetAddress addr, final int port, final long heartbeat) {
+        public PNPChannelId(final InetAddress addr, final InetAddress publicAddr, final int port,
+                final long heartbeat) {
             this.addr = addr;
+            this.publicAddr = publicAddr;
             this.port = port;
             this.heartbeat = heartbeat;
         }
@@ -231,6 +253,7 @@ public class PNPAgent {
             final int prime = 31;
             int result = 1;
             result = prime * result + ((addr == null) ? 0 : addr.hashCode());
+            result = prime * result + ((publicAddr == null) ? 0 : publicAddr.hashCode());
             result = prime * result + (int) (heartbeat ^ (heartbeat >>> 32));
             result = prime * result + port;
             return result;
@@ -250,6 +273,11 @@ public class PNPAgent {
                     return false;
             } else if (!addr.equals(other.addr))
                 return false;
+            if (publicAddr == null) {
+                if (other.publicAddr != null)
+                    return false;
+            } else if (!publicAddr.equals(other.publicAddr))
+                return false;
             if (heartbeat != other.heartbeat)
                 return false;
             if (port != other.port)
@@ -259,7 +287,7 @@ public class PNPAgent {
 
         @Override
         public String toString() {
-            return addr + ":" + port + "(" + heartbeat + ")";
+            return (publicAddr != null ? publicAddr + "@" : "") + addr + ":" + port + "(" + heartbeat + ")";
         }
     }
 
@@ -295,13 +323,15 @@ public class PNPAgent {
          * If the channel is not already in the cache, a new connexion is opened.
          *
          * @param addr The remote inet address
+         * @param publicAddr The public remote inet address
          * @param port The remote port
          * @param heartbeat The heartbeat period of the channel
          * @return a {@link PNPClientChannel} corresponding to the parameter
          * @throws PNPException If the channel cannot be opened
          */
-        public PNPClientChannel getChannel(InetAddress addr, int port, long heartbeat) throws PNPException {
-            return getChannel(new PNPChannelId(addr, port, heartbeat));
+        public PNPClientChannel getChannel(InetAddress addr, InetAddress publicAddr, int port, long heartbeat)
+                throws PNPException {
+            return getChannel(new PNPChannelId(addr, publicAddr, port, heartbeat));
         }
 
         /** Gets a {@link PNPClientChannel} for the channel ID
@@ -348,7 +378,7 @@ public class PNPAgent {
         final private PNPChannelId channelId;
 
         /** The Netty channel */
-        final private Channel channel;
+        private Channel channel;
 
         /** To park calling thread until the response is received */
         final private Parking parking;
@@ -366,30 +396,17 @@ public class PNPAgent {
             this.channelId = channelId;
             this.parking = new Parking(this.channelId, timer);
             this.cache = cache;
-
-            SocketAddress sa = new InetSocketAddress(this.channelId.addr, this.channelId.port);
-            ChannelFuture cf = bootstrap.connect(sa);
-
-            long timeout = channelId.heartbeat > 0 ? channelId.heartbeat : DEFAULT_CONNECT_TIMEOUT;
-            if (cf.awaitUninterruptibly(timeout)) {
-                if (cf.isSuccess()) {
-                    this.channel = cf.getChannel();
-                } else {
-                    throw new PNPIOException("Failed to connect to " + sa, cf.getCause());
+            try {
+                createAndConnectSocket(bootstrap, channelId.addr, channelId.port, channelId.heartbeat);
+            } catch (Exception e) {
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Could not connect to address " + channelId.addr + ", trying public address " +
+                                 channelId.publicAddr, e);
                 }
-            } else {
-                // Cancel the IO to avoid resource leak
-                if (cf.cancel()) {
-                    throw new PNPTimeoutException("Failed to connect to " + sa + ". Timeout Reached");
-                } else {
-                    // IO already succeeded
-                    if (cf.isSuccess()) {
-                        this.channel = cf.getChannel();
-                    } else {
-                        throw new PNPIOException("Failed to connect to " + sa, cf.getCause());
-                    }
-                }
+                createAndConnectSocket(bootstrap, channelId.publicAddr, channelId.port, channelId.heartbeat);
             }
+            ChannelFuture cf;
+            long timeout;
 
             PNPClientHandler clientHandler;
             clientHandler = (PNPClientHandler) this.channel.getPipeline().get(PNPClientHandler.NAME);
@@ -420,6 +437,34 @@ public class PNPAgent {
             }
 
             logger.debug("Successfully opened channel " + this.channel);
+        }
+
+        private SocketAddress createAndConnectSocket(ClientBootstrap bootstrap, InetAddress address, int port,
+                long heartbeat) throws PNPIOException, PNPTimeoutException {
+            SocketAddress sa = new InetSocketAddress(address, port);
+            ChannelFuture cf = bootstrap.connect(sa);
+
+            long timeout = heartbeat > 0 ? heartbeat : DEFAULT_CONNECT_TIMEOUT;
+            if (cf.awaitUninterruptibly(timeout)) {
+                if (cf.isSuccess()) {
+                    this.channel = cf.getChannel();
+                } else {
+                    throw new PNPIOException("Failed to connect to " + sa, cf.getCause());
+                }
+            } else {
+                // Cancel the IO to avoid resource leak
+                if (cf.cancel()) {
+                    throw new PNPTimeoutException("Failed to connect to " + sa + ". Timeout Reached");
+                } else {
+                    // IO already succeeded
+                    if (cf.isSuccess()) {
+                        this.channel = cf.getChannel();
+                    } else {
+                        throw new PNPIOException("Failed to connect to " + sa, cf.getCause());
+                    }
+                }
+            }
+            return sa;
         }
 
         /** Perform send a call through this channel

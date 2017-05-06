@@ -195,6 +195,17 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_HOSTNAME = new PAPropertyString("proactive.hostname", false);
 
     /**
+     * ProActive Runtime Public Address (or IP Address)
+     * <p/>
+     * This option can be used when a host is behind a NAT. In that case, the host IP address is not visible outside the NAT,
+     * and a public IP address with a NAT port forwarding must be used to contact the ProActive Node.
+     *
+     * The underlying ProActive protocol must support this parameter in order to be effective.
+     * Currently, only PNP supports this parameter.
+     */
+    static public PAPropertyString PA_PUBLIC_ADDRESS = new PAPropertyString("proactive.net.public_address", false);
+
+    /**
      * Toggle DNS resolution
      * <p/>
      * When true IP addresses are used instead of FQDNs. Can be useful with misconfigured DNS servers

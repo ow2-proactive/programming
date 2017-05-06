@@ -29,6 +29,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
@@ -38,6 +39,8 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+import com.google.common.base.Splitter;
 
 
 /**
@@ -64,7 +67,7 @@ public class URIBuilder {
         String hostname;
         try {
             hostname = fromLocalhostToHostname(u.getHost());
-            URI u2 = buildURI(hostname, u.getPath(), u.getScheme(), u.getPort());
+            URI u2 = buildURI(u.getUserInfo(), hostname, u.getPath(), u.getScheme(), u.getPort(), u.getQuery());
             return u2;
         } catch (UnknownHostException e) {
             throw new URISyntaxException(url, "host unknow");
@@ -78,7 +81,13 @@ public class URIBuilder {
      * @return the new URI which the new name part
      */
     public static URI buildURI(URI baseURI, String name) {
-        return buildURI(getHostNameFromUrl(baseURI), name, getProtocol(baseURI), getPortNumber(baseURI), false);
+        return buildURI(baseURI.getUserInfo(),
+                        getHostNameFromUrl(baseURI),
+                        name,
+                        getProtocol(baseURI),
+                        getPortNumber(baseURI),
+                        baseURI.getQuery(),
+                        false);
     }
 
     /**
@@ -122,21 +131,39 @@ public class URIBuilder {
      * @returnan url under the form [protocol:][//host[:port]][[/]name]
      */
     public static URI buildURI(String host, String name, String protocol, int port) {
-        return buildURI(host, name, protocol, port, false);
+        return buildURI(null, host, name, protocol, port, null, false);
     }
 
     /**
-     * Returns an url compliant with RFC 2396 [protocol:][//host[:port]][[/]name]
+     * Returns an url compliant with RFC 2396 [protocol:][//userinfo@host[:port]][[/]path][?query]
+     * loopback address is replaced by a non-loopback address localhost -> [DNS/IP] Address
+     * @param userInfo Url's userInfo
      * @param host Url's hostname
      * @param name Url's Path
      * @param protocol Url's protocol
      * @param port Url's port
+     * @param query Url's query
+     * @returnan url under the form [protocol:][//userinfo@host[:port]][[/]name][?query]
+     */
+    public static URI buildURI(String userInfo, String host, String name, String protocol, int port, String query) {
+        return buildURI(userInfo, host, name, protocol, port, query, false);
+    }
+
+    /**
+     * Returns an url compliant with RFC 2396 [protocol:][//host[:port]][[/]name]
+     * @param userInfo Url's userInfo
+     * @param host Url's hostname
+     * @param name Url's Path
+     * @param protocol Url's protocol
+     * @param port Url's port
+     * @param query Url's query
      * @param replaceHost indicate if internal hooks regarding how to resolve the hostname have to be used
      * @see #fromLocalhostToHostname(String localName)
      * @see #getHostNameorIP(InetAddress address)
      * @returnan url under the form [protocol:][//host[:port]][[/]name]
      */
-    public static URI buildURI(String host, String name, String protocol, int port, boolean replaceHost) {
+    public static URI buildURI(String userInfo, String host, String name, String protocol, int port, String query,
+            boolean replaceHost) {
         //        if (protocol == null) {
         //            protocol = System.getProperty(Constants.PROPERTY_PA_COMMUNICATION_PROTOCOL);
         //        }
@@ -158,7 +185,7 @@ public class URIBuilder {
                  */
                 name = "/" + name;
             }
-            return new URI(protocol, null, host, port, name, null, null);
+            return new URI(protocol, userInfo, host, port, name, query, null);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (UnknownHostException e) {
@@ -250,8 +277,8 @@ public class URIBuilder {
      * @param uri
      * @return the name included in the url
      */
-    public static String getNameFromURI(URI u) {
-        String path = u.getPath();
+    public static String getNameFromURI(URI uri) {
+        String path = uri.getPath();
         if ((path != null) && (path.startsWith("/"))) {
             // remove the intial '/'
             return path.substring(1);
@@ -285,7 +312,26 @@ public class URIBuilder {
      * Returns the url without protocol
      */
     public static URI removeProtocol(URI uri) {
-        return buildURI(getHostNameFromUrl(uri), uri.getPath(), null, uri.getPort(), false);
+        return buildURI(uri.getUserInfo(),
+                        getHostNameFromUrl(uri),
+                        uri.getPath(),
+                        null,
+                        uri.getPort(),
+                        uri.getQuery(),
+                        false);
+    }
+
+    /**
+     * Returns the url without query
+     */
+    public static URI removeQuery(URI uri) {
+        return buildURI(uri.getUserInfo(),
+                        getHostNameFromUrl(uri),
+                        uri.getPath(),
+                        uri.getScheme(),
+                        uri.getPort(),
+                        null,
+                        false);
     }
 
     public static URI removeProtocol(String url) {
@@ -338,6 +384,18 @@ public class URIBuilder {
     }
 
     /**
+     * parse the provided URI's query part and return a key/value map
+     * @param uri uri to parse
+     * @return a map containing each query parameter or null if the query is empty
+     */
+    public static Map<String, String> parseQuery(URI uri) {
+        if (uri.getQuery() == null) {
+            return null;
+        }
+        return Splitter.on('&').trimResults().withKeyValueSeparator("=").split(uri.getQuery());
+    }
+
+    /**
      * evaluate if localName is a loopback entry, if yes calls {@link getHostNameorIP(InetAddress address)}
      * @param localName
      * @return a remotely accessible host name if exists
@@ -382,16 +440,22 @@ public class URIBuilder {
      * @param port the new port number
      * @return the url with the new port
      */
-    public static URI setPort(URI u, int port) {
+    public static URI setPort(URI uri, int port) {
         URI u2;
         try {
-            u2 = new URI(u.getScheme(), u.getUserInfo(), u.getHost(), port, u.getPath(), u.getQuery(), u.getFragment());
+            u2 = new URI(uri.getScheme(),
+                         uri.getUserInfo(),
+                         uri.getHost(),
+                         port,
+                         uri.getPath(),
+                         uri.getQuery(),
+                         uri.getFragment());
             return u2;
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
-        return u;
+        return uri;
     }
 
     public static String ipv6withoutscope(String address) {

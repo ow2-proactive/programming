@@ -177,7 +177,12 @@ public class RemoteObjectExposer<T> {
             // select the factory matching the required protocol
             // here is an implicit check for protocol validity
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
-            URI uri = URIBuilder.buildURI(rof.getBaseURI().getHost(), name, rof.getProtocolId(), rof.getPort());
+            URI uri = URIBuilder.buildURI(rof.getBaseURI().getUserInfo(),
+                                          rof.getBaseURI().getHost(),
+                                          name,
+                                          rof.getProtocolId(),
+                                          rof.getPort(),
+                                          null);
             InternalRemoteRemoteObject irro = activeRemoteRemoteObjects.get(uri);
             if (irro == null) {
                 irro = rof.createRemoteObject(this.remoteObject, name, rebind);

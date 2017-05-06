@@ -238,6 +238,13 @@ public class ProActiveInet {
         return new ArrayList<>(result);
     }
 
+    public static String getPublicAddress() {
+        if (CentralPAPropertyRepository.PA_PUBLIC_ADDRESS.isSet()) {
+            return CentralPAPropertyRepository.PA_PUBLIC_ADDRESS.getValue();
+        }
+        return null;
+    }
+
     /**
      * Returns true if the hostname property is set (force binding).
      * False otherwise
