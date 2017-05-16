@@ -27,8 +27,6 @@ package org.objectweb.proactive.core.body.future;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,9 +135,9 @@ public class LocalFutureUpdateCallbacks {
 
     public static class MethodAndArguments {
 
-        private Method method;
+        final private Method method;
 
-        private Object[] arguments;
+        final private Object[] arguments;
 
         public MethodAndArguments(Method method, Object[] arguments) {
             this.method = method;
