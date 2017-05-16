@@ -308,6 +308,15 @@ public class NodeImpl implements Node, Serializable {
         }
     }
 
+    @Override
+    public String toString() {
+        if (nodeInformation != null) {
+            return nodeInformation.getURL();
+        } else {
+            return super.toString();
+        }
+    }
+
     // SECURITY
 
     /**
