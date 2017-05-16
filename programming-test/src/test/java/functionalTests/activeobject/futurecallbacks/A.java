@@ -40,9 +40,10 @@ public class A {
     public A() {
     }
 
-    public void myCallback(Future<MutableInteger> f) throws Exception {
+    public void myCallback(Future<MutableInteger> f, String arg) throws Exception {
         MutableInteger i = f.get();
         i.getValue();
+        System.out.println(arg);
         synchronized (A.class) {
             A.counter++;
             A.class.notifyAll();
@@ -51,10 +52,10 @@ public class A {
 
     public void start() throws NoSuchMethodException {
         MutableInteger slow = this.brother.slow();
-        PAEventProgramming.addActionOnFuture(slow, "myCallback");
+        PAEventProgramming.addActionOnFuture(slow, "myCallback", "test");
         MutableInteger fast = this.brother.fast();
         PAFuture.waitFor(fast);
-        PAEventProgramming.addActionOnFuture(fast, "myCallback");
+        PAEventProgramming.addActionOnFuture(fast, "myCallback", "test");
     }
 
     public MutableInteger slow() {
