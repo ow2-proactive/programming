@@ -29,12 +29,15 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
+
+import com.google.common.collect.Lists;
 
 
 /**
@@ -74,15 +77,15 @@ class ProActiveFuture implements java.util.concurrent.Future<Object> {
 }
 
 /**
- * A callback is method declared as 'void myCallback(java.util.concurrent.Future fr)'
- * It is added using addFutureCallback(myFuture, "myCallback"), and will be
+ * A callback is method declared as 'void myCallback(java.util.concurrent.Future fr, ...)'
+ * It is added using addFutureCallback(myFuture, "myCallback", ...), and will be
  * queued when the future is updated on ProActive.getBodyOnThis()
  * Callbacks are local, so are not copied when a future is serialized.
  */
 public class LocalFutureUpdateCallbacks {
     private BodyImpl body;
 
-    private Collection<Method> methods;
+    private Collection<MethodAndArguments> methods;
 
     private FutureProxy future;
 
@@ -92,11 +95,11 @@ public class LocalFutureUpdateCallbacks {
         } catch (ClassCastException e) {
             throw new IllegalStateException("Can only be called in a body");
         }
-        this.methods = new LinkedList<Method>();
+        this.methods = new LinkedList<MethodAndArguments>();
         this.future = future;
     }
 
-    void add(String methodName) throws NoSuchMethodException {
+    void add(String methodName, Object... arguments) throws NoSuchMethodException {
         if (PAActiveObject.getBodyOnThis() != this.body) {
             throw new IllegalStateException("Callbacks added by different " +
                                             "bodies on the same future, this cannot be possible" +
@@ -104,22 +107,49 @@ public class LocalFutureUpdateCallbacks {
         }
         Object target = this.body.getReifiedObject();
         Class<?> c = target.getClass();
-        Method m;
-        m = c.getMethod(methodName, java.util.concurrent.Future.class);
-        this.methods.add(m);
+
+        Class[] argumentTypes = new Class[1 + arguments.length];
+        argumentTypes[0] = java.util.concurrent.Future.class;
+        for (int i = 0; i < arguments.length; i++) {
+            argumentTypes[i + 1] = arguments[i].getClass();
+        }
+        Method m = c.getMethod(methodName, argumentTypes);
+        this.methods.add(new MethodAndArguments(m, arguments));
     }
 
     void run() {
-        ProActiveFuture[] args = new ProActiveFuture[] { new ProActiveFuture(this.future.getMethodCallResult()) };
 
-        for (Method m : this.methods) {
-            MethodCall mc = MethodCall.getMethodCall(m, args, null);
+        for (MethodAndArguments m : this.methods) {
+            List<Object> updatedArguments = m.getArguments();
+
+            updatedArguments.add(0, new ProActiveFuture(this.future.getMethodCallResult()));
+            MethodCall mc = MethodCall.getMethodCall(m.getMethod(), updatedArguments.toArray(), null);
 
             try {
                 this.body.sendRequest(mc, null, this.body);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static class MethodAndArguments {
+
+        final private Method method;
+
+        final private Object[] arguments;
+
+        public MethodAndArguments(Method method, Object[] arguments) {
+            this.method = method;
+            this.arguments = arguments;
+        }
+
+        public Method getMethod() {
+            return method;
+        }
+
+        public List<Object> getArguments() {
+            return Lists.newArrayList(arguments);
         }
     }
 }
