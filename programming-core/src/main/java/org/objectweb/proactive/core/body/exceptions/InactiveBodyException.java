@@ -33,7 +33,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 // end inner class LocalInactiveBody
 public class InactiveBodyException extends ProActiveRuntimeException {
     public InactiveBodyException(UniversalBody body) {
-        super("Cannot perform this call because body " + body.getID() + "is inactive");
+        super("Cannot perform this call because body " + body.getID() + " is inactive");
     }
 
     public InactiveBodyException(UniversalBody body, String nodeURL, UniqueID id, String remoteMethodCallName) {
