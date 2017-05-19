@@ -360,6 +360,18 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         }
         ArrayList<UniversalBody> destinations = new ArrayList<UniversalBody>();
         destinations.add(this.universalBody.getRemoteAdapter());
+        if (!sourceBody.isActive() && sourceBody.getFuturePool() == null) {
+            throw new InactiveBodyException(sourceBody,
+                                            this.universalBody.getNodeURL(),
+                                            this.universalBody.getID(),
+                                            methodCall.getName());
+        }
+        if (sourceBody.getFuturePool() == null) {
+            throw new IllegalStateException("Cannot send request \"" + methodCall.getName() + "\" to Body \"" +
+                                            this.universalBody.getID() + "\" located at " +
+                                            this.universalBody.getNodeURL() + " because body " + sourceBody.getID() +
+                                            " does not have a valid Future Pool");
+        }
         sourceBody.getFuturePool().registerDestinations(destinations);
 
         // Modify result object

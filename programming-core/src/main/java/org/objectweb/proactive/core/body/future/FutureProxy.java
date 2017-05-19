@@ -182,6 +182,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         try {
             result = new FutureProxy();
         } catch (ConstructionOfReifiedObjectFailedException e) {
+            logger.error("Could not create future proxy", e);
             result = null;
         }
         return result;
