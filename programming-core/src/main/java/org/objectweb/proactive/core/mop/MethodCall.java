@@ -66,29 +66,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
 
     static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
 
-    /**
-     *        The size of the pool we use for recycling MethodCall objects.
-     */
-    private static int RECYCLE_POOL_SIZE = 30;
-
-    /**
-     * The pool of recycled methodcall objects
-     */
-    private static MethodCall[] recyclePool;
-
-    /**
-     * Position inside the pool
-     */
-    private static int index;
-
-    /**        Indicates if the recycling of MethodCall object is on. */
-    private static boolean recycleMethodCallObject;
-
     private static java.util.Hashtable<String, Method> reifiedMethodsTable = new java.util.Hashtable<String, Method>();
-
-    static {
-        MethodCall.setRecycleMethodCallObject(true);
-    }
 
     //
     // --- PRIVATE MEMBERS -----------------------------------------------------------------------
@@ -139,39 +117,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     }
 
     /**
-     * Sets recycling of MethodCall objects on/off. Note that turning the recycling
-     * off and on again results in the recycling pool being flushed, thus damaging
-     * performances.
-     * @param value        sets the recycling on if <code>true</code>, otherwise turns it off.
-     */
-    public static synchronized void setRecycleMethodCallObject(boolean value) {
-        if (recycleMethodCallObject == value) {
-            return;
-        } else {
-            recycleMethodCallObject = value;
-            if (value) {
-                // Creates the recycle poll for MethodCall objects
-                recyclePool = new MethodCall[RECYCLE_POOL_SIZE];
-                index = 0;
-            } else {
-                // If we do not want to recycle MethodCall objects anymore,
-                // let's free some memory by permitting the reyclePool to be
-                // garbage-collecting
-                recyclePool = null;
-            }
-        }
-    }
-
-    /**
-     * Indicates if the recycling of MethodCall objects is currently running or not.
-     *
-     * @return                        <code>true</code> if recycling is on, <code>false</code> otherwise
-     */
-    public static synchronized boolean getRecycleMethodCallObject() {
-        return MethodCall.recycleMethodCallObject;
-    }
-
-    /**
      *        Factory method for getting MethodCall objects
      *
      *        @param reifiedMethod a <code>Method</code> object that represents
@@ -189,24 +134,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
             MethodCallExceptionContext exceptioncontext) {
         exceptioncontext = MethodCallExceptionContext.optimize(exceptioncontext);
 
-        if (MethodCall.getRecycleMethodCallObject()) {
-            // Finds a recycled MethodCall object in the pool, cleans it and
-            // eventually returns it
-            if (MethodCall.index > 0) {
-                // gets the object from the pool
-                MethodCall.index--;
-                MethodCall result = MethodCall.recyclePool[MethodCall.index];
-                MethodCall.recyclePool[MethodCall.index] = null;
-                // Refurbishes the object
-                result.reifiedMethod = reifiedMethod;
-                result.genericTypesMapping = genericTypesMapping;
-                result.effectiveArguments = effectiveArguments;
-                result.key = buildKey(reifiedMethod, genericTypesMapping);
-                result.exceptioncontext = exceptioncontext;
-                return result;
-            }
-        }
-
         return new MethodCall(reifiedMethod, genericTypesMapping, effectiveArguments, exceptioncontext);
     }
 
@@ -214,35 +141,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
             Map<TypeVariable<?>, Class<?>> genericTypesMapping) {
         MethodCallExceptionContext exceptioncontext = ExceptionHandler.getContextForCall(reifiedMethod);
         return getMethodCall(reifiedMethod, genericTypesMapping, effectiveArguments, exceptioncontext);
-    }
-
-    /**
-     *        Tells the recycling process that the MethodCall object passed as parameter
-     *        is ready for recycling. It is the responsibility of the caller of this
-     *        method to make sure that this object can safely be disposed of.
-     */
-    public synchronized static void setMethodCall(MethodCall mc) {
-        if (MethodCall.getRecycleMethodCallObject()) {
-            // If there's still one slot left in the pool
-            if (MethodCall.recyclePool[MethodCall.index] == null) {
-                // Cleans up a MethodCall object
-                // It is preferable to do it here rather than at the moment
-                // the object is picked out of the pool, because it allows
-                // garbage-collecting the objects referenced in here                
-                mc.reifiedMethod = null;
-                mc.genericTypesMapping = null;
-                mc.effectiveArguments = null;
-                mc.tagsForBarrier = null;
-                mc.key = null;
-                mc.exceptioncontext = null;
-                // Inserts the object in the pool
-                MethodCall.recyclePool[MethodCall.index] = mc;
-                MethodCall.index++;
-                if (MethodCall.index == RECYCLE_POOL_SIZE) {
-                    MethodCall.index = RECYCLE_POOL_SIZE - 1;
-                }
-            }
-        }
     }
 
     /**
@@ -350,11 +248,6 @@ public class MethodCall implements java.io.Serializable, Cloneable {
                                                          " are invalids: " + e + "for the object " + targetObject +
                                                          "(" + targetObject.getClass().getName() + ")", e);
         }
-    }
-
-    @Override
-    protected void finalize() {
-        MethodCall.setMethodCall(this);
     }
 
     public Method getReifiedMethod() {
