@@ -300,7 +300,7 @@ project('programming-extensions:programming-extension-gcmdeployment') {
 project('programming-extensions:programming-extension-pnp') {
     dependencies {
         compile(
-                'io.netty:netty:3.10.4.Final',
+                'io.netty:netty:3.10.6.Final',
                 'com.google.guava:guava:19.0',
                 'org.apache.commons:commons-collections4:4.0'
         )
@@ -310,7 +310,7 @@ project('programming-extensions:programming-extension-pnp') {
 project('programming-extensions:programming-extension-pnpssl') {
     dependencies {
         compile(
-                'io.netty:netty:3.10.4.Final',
+                'io.netty:netty:3.10.6.Final',
                 'org.bouncycastle:bcprov-ext-jdk15on:1.52',
 
                 project(':programming-extensions:programming-extension-pnp')
