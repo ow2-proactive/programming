@@ -43,6 +43,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 @PublicAPI
 public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
+
+    // Unique ID to prevent compatibility issues.
+    private static final long serialVersionUID = 1L;
+
     private java.rmi.server.UID id;
 
     private java.rmi.dgc.VMID vmID;
