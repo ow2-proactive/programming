@@ -584,6 +584,24 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyString PA_DATASPACES_SCRATCH_PATH = new PAPropertyString("proactive.dataspaces.scratch_path",
                                                                                      false);
 
+    /**
+     * This property sets the vfs cache type to use for all dataspaces. It can be null, default, softref, lru, weakref. Default is softref.
+     *
+     * @see <a href="https://commons.apache.org/proper/commons-vfs/apidocs/org/apache/commons/vfs2/cache/package-frame.html"></a>
+     */
+    static public PAPropertyString PA_DATASPACES_CACHE_TYPE = new PAPropertyString("proactive.dataspaces.cache_type",
+                                                                                   false,
+                                                                                   "softref");
+
+    /**
+     * This property sets the vfs cache strategy to use for all dataspaces. It can be onresolve, oncall or manual. Default is onresolve.
+     *
+     * @see <a href="https://commons.apache.org/proper/commons-vfs/apidocs/org/apache/commons/vfs2/CacheStrategy.html"></a>
+     */
+    static public PAPropertyString PA_DATASPACES_CACHE_STRATEGY = new PAPropertyString("proactive.dataspaces.cache_strategy",
+                                                                                       false,
+                                                                                       "onresolve");
+
     // -------------- VFS PROVIDER
 
     /**
