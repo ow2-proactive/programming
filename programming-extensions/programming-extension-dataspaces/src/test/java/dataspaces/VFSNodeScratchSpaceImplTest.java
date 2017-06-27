@@ -35,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
@@ -109,6 +110,9 @@ public class VFSNodeScratchSpaceImplTest {
     @Before
     public void setUp() throws ConfigurationException, IOException {
         testDir = new File(System.getProperty("java.io.tmpdir"), "ProActiveVFSNodeScratchSpaceImplTest");
+        if (testDir.exists()) {
+            FileUtils.deleteDirectory(testDir);
+        }
         assertTrue(testDir.mkdir());
         testDirPath = testDir.getCanonicalPath();
         localAccessConfig = new BaseScratchSpaceConfiguration(SCRATCH_URL, testDirPath);

@@ -26,9 +26,15 @@
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
 import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.commons.vfs2.CacheStrategy;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemOptions;
+import org.apache.commons.vfs2.FilesCache;
+import org.apache.commons.vfs2.cache.DefaultFilesCache;
+import org.apache.commons.vfs2.cache.LRUFilesCache;
 import org.apache.commons.vfs2.cache.NullFilesCache;
+import org.apache.commons.vfs2.cache.SoftRefFilesCache;
+import org.apache.commons.vfs2.cache.WeakRefFilesCache;
 import org.apache.commons.vfs2.impl.DefaultFileReplicator;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.apache.commons.vfs2.impl.PrivilegedFileReplicator;
@@ -41,6 +47,7 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.commons.vfs2.provider.url.UrlFileProvider;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
@@ -84,7 +91,7 @@ public class VFSFactory {
 
     /**
      * Creates new DefaultSystemManager instance with configured providers, replicator, temporary
-     * storage and files cache - as described in class description.
+     * storage - as described in class description, <strong>files cache</strong> if required, and configured cache strategy.
      * <p>
      * Returned instance is initialized and it is a caller responsibility to close it to release
      * resources.
@@ -94,28 +101,68 @@ public class VFSFactory {
      *             when initialization or configuration process fails
      */
     public static DefaultFileSystemManager createDefaultFileSystemManager() throws FileSystemException {
-        return createDefaultFileSystemManager(true);
+        return createAndConfigureFileSystemManager(ManagerType.BOTH);
     }
 
     /**
-     * Creates new DefaultSystemManager instance with configured providers, replicator, temporary
+     * Creates new DefaultSystemManager instance with configured non-proactive providers, replicator, temporary
+     * storage - as described in class description, and <strong>files cache</strong> if required.
+     * <p>
+     * Returned instance is initialized and it is a caller responsibility to close it to release
+     * resources.
+     *
+     * @return configured and initialized DefaultFileSystemManager instance
+     * @throws FileSystemException
+     *             when initialization or configuration process fails
+     */
+    public static DefaultFileSystemManager createNonProActiveDefaultFileSystemManager() throws FileSystemException {
+        return createAndConfigureFileSystemManager(ManagerType.NON_PROACTIVE);
+    }
+
+    /**
+     * Creates new DefaultSystemManager instance with configured ProActive providers, replicator, temporary
      * storage - as described in class description, and <strong>DISABLED files cache</strong>
      * (NullFilesCache) .
      * <p>
      * Returned instance is initialized and it is a caller responsibility to close it to release
      * resources.
      *
-     * @param enableFilesCache
-     *            when <code>true</code> DefaultFilesCache is configured for returned manager; when
-     *            <code>false</code> file caching is disabled - NullFilesCache is configured
      * @return configured and initialized DefaultFileSystemManager instance
      * @throws FileSystemException
      *             when initialization or configuration process fails
      */
-    public static DefaultFileSystemManager createDefaultFileSystemManager(boolean enableFilesCache)
+    public static DefaultFileSystemManager createProActiveDefaultFileSystemManager() throws FileSystemException {
+        return createAndConfigureFileSystemManager(ManagerType.PROACTIVE);
+    }
+
+    private static DefaultFileSystemManager createAndConfigureFileSystemManager(ManagerType managerType)
             throws FileSystemException {
         logger.debug("Creating new VFS manager");
 
+        final DefaultFileSystemManager manager = buildManager();
+
+        if (managerType == ManagerType.PROACTIVE) {
+            // WISH: one beautiful day one may try to use FilesCache aware of AO instead of NullFilesCache
+            manager.setFilesCache(new NullFilesCache());
+        } else {
+            manager.setFilesCache(getCacheType());
+            manager.setCacheStrategy(getCacheStrategy());
+        }
+
+        if (managerType == ManagerType.NON_PROACTIVE || managerType == ManagerType.BOTH) {
+            addNonProActiveProviders(manager);
+        }
+
+        if (managerType == ManagerType.PROACTIVE || managerType == ManagerType.BOTH) {
+            addProActiveProviders(manager);
+        }
+
+        manager.init();
+        logger.debug("Created and initialized new VFS manager");
+        return manager;
+    }
+
+    private static DefaultFileSystemManager buildManager() throws FileSystemException {
         FileSystemOptions opts = createDefaultFileSystemOptions();
         final DefaultFileSystemManager manager = new DefaultOptionsFileSystemManager(opts);
         manager.setLogger(logger);
@@ -123,29 +170,71 @@ public class VFSFactory {
         final DefaultFileReplicator replicator = new DefaultFileReplicator();
         manager.setReplicator(new PrivilegedFileReplicator(replicator));
         manager.setTemporaryFileStore(replicator);
-        if (!enableFilesCache) {
-            // WISH: one beautiful day one may try to use FilesCache aware of AO instead of NullFilesCache
-            manager.setFilesCache(new NullFilesCache());
-        }
+        return manager;
+    }
 
+    private static void addProActiveProviders(DefaultFileSystemManager manager) throws FileSystemException {
+        final ProActiveFileProvider proactiveProvider = new ProActiveFileProvider();
+        for (final String scheme : ProActiveFileName.getAllVFSSchemes()) {
+            manager.addProvider(scheme, proactiveProvider);
+        }
+    }
+
+    private static void addNonProActiveProviders(DefaultFileSystemManager manager) throws FileSystemException {
         manager.addProvider("file", new DefaultLocalFileProvider());
         manager.addProvider("http", new HttpFileProvider());
         manager.addProvider("https", new HttpsFileProvider());
         manager.addProvider("ftp", new FtpFileProvider());
         manager.addProvider("sftp", new SftpFileProvider());
         manager.addProvider("s3", new S3FileProvider());
-        final ProActiveFileProvider proactiveProvider = new ProActiveFileProvider();
-        for (final String scheme : ProActiveFileName.getAllVFSSchemes()) {
-            manager.addProvider(scheme, proactiveProvider);
-        }
-
         manager.addOperationProvider("s3", new S3FileOperationsProvider());
-
         manager.setDefaultProvider(new UrlFileProvider());
+    }
 
-        manager.init();
-        logger.debug("Created and initialized new VFS manager");
-        return manager;
+    private static CacheStrategy getCacheStrategy() {
+        String configuredStrategy = CentralPAPropertyRepository.PA_DATASPACES_CACHE_STRATEGY.getValue();
+        CacheStrategy strategy;
+        switch (configuredStrategy.trim()) {
+            case "onresolve":
+                strategy = CacheStrategy.ON_RESOLVE;
+                break;
+            case "oncall":
+                strategy = CacheStrategy.ON_CALL;
+                break;
+            case "manual":
+                strategy = CacheStrategy.MANUAL;
+                break;
+            default:
+                logger.error("Unrecognized cache strategy : " + configuredStrategy + " revert to default");
+                strategy = CacheStrategy.ON_RESOLVE;
+        }
+        return strategy;
+    }
+
+    private static FilesCache getCacheType() {
+        String configuredType = CentralPAPropertyRepository.PA_DATASPACES_CACHE_TYPE.getValue();
+        FilesCache cache;
+        switch (configuredType.trim()) {
+            case "default":
+                cache = new DefaultFilesCache();
+                break;
+            case "null":
+                cache = new NullFilesCache();
+                break;
+            case "softref":
+                cache = new SoftRefFilesCache();
+                break;
+            case "weakref":
+                cache = new WeakRefFilesCache();
+                break;
+            case "lru":
+                cache = new LRUFilesCache();
+                break;
+            default:
+                logger.error("Unrecognized cache type : " + configuredType + " revert to default");
+                cache = new SoftRefFilesCache();
+        }
+        return cache;
     }
 
     private static FileSystemOptions createDefaultFileSystemOptions() throws FileSystemException {
@@ -153,5 +242,11 @@ public class VFSFactory {
         // TODO or try to configure known hosts somehow (look for OpenSSH file etc.)
         SftpFileSystemConfigBuilder.getInstance().setStrictHostKeyChecking(options, "no");
         return options;
+    }
+
+    public enum ManagerType {
+        PROACTIVE,
+        NON_PROACTIVE,
+        BOTH
     }
 }
