@@ -93,7 +93,10 @@ public class AbstractLimitingFileObjectTest {
 
         realFile.delete();
 
-        assertFalse(readWriteFile.exists());
+        readOnlyFile.refresh();
+        readWriteFile.refresh();
+
+        assertFalse(readOnlyFile.exists());
         assertFalse(readWriteFile.exists());
         assertTrue(anotherFile.exists());
     }

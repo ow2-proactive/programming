@@ -276,6 +276,7 @@ project('programming-extensions:programming-extension-dataspaces') {
     test {
         forkEvery 1
         systemProperties << ['proactive.classloading.useHTTP': false]
+        systemProperties << ['java.security.policy': file('$rootDir/compile/proactive.java.policy').absolutePath]
     }
     task stub(type: StubTask) {
         classes = ['org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService']
