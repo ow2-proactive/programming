@@ -76,11 +76,8 @@ public class VFSMountManagerHelper {
 
     static final ReentrantReadWriteLock.WriteLock writeLock = rwlock.writeLock();
 
-    // vfsManager for standard vfs file systems
+    // vfsManager for standard or ProActive vfs file systems
     static DefaultFileSystemManager vfsManager;
-
-    // vfsManager for ProActive file systems (disabled files cache)
-    static DefaultFileSystemManager vfsProActiveManager;
 
     private static void initManager() throws FileSystemException {
         if (vfsManager == null) {
@@ -93,8 +90,7 @@ public class VFSMountManagerHelper {
                     // in vanilla VFS version, this manager will always return FileObjects with broken
                     // delete(FileSelector) method. Anyway, it is rather better to do it this way, than returning
                     // shared FileObjects with broken concurrency
-                    vfsManager = VFSFactory.createNonProActiveDefaultFileSystemManager();
-                    vfsProActiveManager = VFSFactory.createProActiveDefaultFileSystemManager();
+                    vfsManager = VFSFactory.createDefaultFileSystemManager();
                 } catch (FileSystemException x) {
                     logger.error("Could not create and configure VFS manager", x);
                     throw x;
@@ -310,11 +306,8 @@ public class VFSMountManagerHelper {
                                                                                     fo),
                                                                       x);
                                 }
-                                if (isProActiveBased(uri)) {
-                                    vfsProActiveManager.closeFileSystem(spaceFileSystem);
-                                } else {
-                                    vfsManager.closeFileSystem(spaceFileSystem);
-                                }
+
+                                vfsManager.closeFileSystem(spaceFileSystem);
 
                                 if (logger.isDebugEnabled())
                                     logger.debug("Unmounted space: " + fo);
@@ -350,10 +343,6 @@ public class VFSMountManagerHelper {
                 if (vfsManager != null) {
                     vfsManager.close();
                     vfsManager = null;
-                }
-                if (vfsProActiveManager != null) {
-                    vfsProActiveManager.close();
-                    vfsProActiveManager = null;
                 }
             }
         } finally {
@@ -399,11 +388,7 @@ public class VFSMountManagerHelper {
                 logger.debug("[" + VFSMountManagerHelper.class.getSimpleName() + "] Mounting " + uriToMount);
                 FileObject mounted = null;
                 try {
-                    if (isProActiveBased(uriToMount)) {
-                        mounted = vfsProActiveManager.resolveFile(uriToMount);
-                    } else {
-                        mounted = vfsManager.resolveFile(uriToMount);
-                    }
+                    mounted = vfsManager.resolveFile(uriToMount);
                 } catch (Exception e) {
                     // failure in mounting
 

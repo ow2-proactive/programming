@@ -54,6 +54,8 @@ import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileType;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.StreamMode;
 
+import com.google.common.collect.Sets;
+
 
 // TODO idea: now we export existing directory, shall we allow to export a file?
 /**
@@ -391,7 +393,7 @@ public class FileSystemServerImpl implements FileSystemServer {
         if (list == null) {
             return null;
         }
-        return new HashSet<String>(Arrays.asList(list));
+        return Sets.newHashSet(list);
     }
 
     public Map<String, FileInfo> fileListChildrenInfo(String path) throws IOException {

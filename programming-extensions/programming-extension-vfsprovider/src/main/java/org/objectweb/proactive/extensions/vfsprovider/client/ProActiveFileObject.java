@@ -31,10 +31,13 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.RandomAccessContent;
@@ -95,6 +98,12 @@ public class ProActiveFileObject extends AbstractFileObject {
     protected ProActiveFileObject(AbstractFileName name, ProActiveFileSystem fs) {
         super(name, fs);
         this.proactiveFS = fs;
+    }
+
+    private ProActiveFileObject(AbstractFileName name, FileInfo info, ProActiveFileSystem fs) {
+        super(name, fs);
+        this.proactiveFS = fs;
+        this.fileInfo = info;
     }
 
     // let's access server this way, as ProActiveFileSystem is responsible
@@ -191,42 +200,78 @@ public class ProActiveFileObject extends AbstractFileObject {
 
     @Override
     protected String[] doListChildren() throws Exception {
-        final Set<String> files = getServer().fileListChildren(getPath());
-        if (files == null) {
-            return null;
-        }
+        synchronized (proactiveFS) {
+            final Set<String> files = getServer().fileListChildren(getPath());
+            if (files == null) {
+                return null;
+            }
 
-        final String result[] = new String[files.size()];
-        int i = 0;
-        for (final String f : files) {
-            result[i++] = UriParser.encode(f);
+            final String result[] = new String[files.size()];
+            int i = 0;
+            for (final String f : files) {
+                result[i++] = UriParser.encode(f);
+            }
+            return result;
         }
-        return result;
+    }
+
+    @Override
+    protected FileObject[] doListChildrenResolved() throws Exception {
+        synchronized (proactiveFS) {
+
+            String[] childrenNames = doListChildren();
+            Map<String, FileInfo> fileInfoMap = getServer().fileListChildrenInfo(getPath());
+
+            ProActiveFileNameParser parser = ProActiveFileNameParser.getInstance();
+
+            FileObject[] fileObjects = new FileObject[childrenNames.length];
+            for (int i = 0; i < childrenNames.length; i++) {
+                String currenURI = getName().getURI();
+                if (!currenURI.endsWith("/")) {
+                    currenURI = currenURI + "/";
+                }
+                ProActiveFileName name = (ProActiveFileName) parser.parseUri(null, null, currenURI + childrenNames[i]);
+                fileObjects[i] = new ProActiveFileObject(name, fileInfoMap.get(childrenNames[i]), proactiveFS);
+            }
+
+            return fileObjects;
+        }
     }
 
     @Override
     protected void doCreateFolder() throws Exception {
-        getServer().fileCreate(getPath(), org.objectweb.proactive.extensions.vfsprovider.protocol.FileType.DIRECTORY);
+        synchronized (proactiveFS) {
+            getServer().fileCreate(getPath(),
+                                   org.objectweb.proactive.extensions.vfsprovider.protocol.FileType.DIRECTORY);
+        }
     }
 
     @Override
     protected void doDelete() throws Exception {
-        getServer().fileDelete(getPath(), false);
+        synchronized (proactiveFS) {
+            getServer().fileDelete(getPath(), false);
+        }
     }
 
     @Override
     protected InputStream doGetInputStream() throws Exception {
-        return new MonitorInputStream(new ProActiveInputStream());
+        synchronized (proactiveFS) {
+            return new MonitorInputStream(new ProActiveInputStream());
+        }
     }
 
     @Override
     protected OutputStream doGetOutputStream(boolean append) throws Exception {
-        return new MonitorOutputStream(new ProActiveOutputStream(append));
+        synchronized (proactiveFS) {
+            return new MonitorOutputStream(new ProActiveOutputStream(append));
+        }
     }
 
     @Override
     protected RandomAccessContent doGetRandomAccessContent(RandomAccessMode mode) throws Exception {
-        return new ProActiveRandomAccessContent(mode);
+        synchronized (proactiveFS) {
+            return new ProActiveRandomAccessContent(mode);
+        }
     }
 
     private class ProActiveInputStream extends AbstractProActiveInputStreamAdapter {

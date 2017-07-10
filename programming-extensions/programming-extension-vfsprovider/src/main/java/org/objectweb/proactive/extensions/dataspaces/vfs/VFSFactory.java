@@ -141,13 +141,8 @@ public class VFSFactory {
 
         final DefaultFileSystemManager manager = buildManager();
 
-        if (managerType == ManagerType.PROACTIVE) {
-            // WISH: one beautiful day one may try to use FilesCache aware of AO instead of NullFilesCache
-            manager.setFilesCache(new NullFilesCache());
-        } else {
-            manager.setFilesCache(getCacheType());
-            manager.setCacheStrategy(getCacheStrategy());
-        }
+        manager.setFilesCache(getCacheType());
+        manager.setCacheStrategy(getCacheStrategy());
 
         if (managerType == ManagerType.NON_PROACTIVE || managerType == ManagerType.BOTH) {
             addNonProActiveProviders(manager);
