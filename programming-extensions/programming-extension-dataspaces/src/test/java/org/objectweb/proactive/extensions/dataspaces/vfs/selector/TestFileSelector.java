@@ -33,12 +33,16 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.vfs2.FileSystemException;
@@ -88,121 +92,146 @@ public class TestFileSelector {
 
     @Test
     public void testFileSelectionWithImplicitGlobPattern() throws IOException {
-        testFileSelectionWithPattern("**/[o]?/*");
+        testFileSelectionWithPattern("**/[o]?/*", true, -1);
     }
 
     @Test
     public void testFileSelectionWithExplicitGlobPattern() throws IOException {
-        testFileSelectionWithPattern("glob:**/[o]?/*");
+        testFileSelectionWithPattern("glob:**/o?/*", true, -1);
+        testFileSelectionWithPattern("glob:oh/o?/*", true, -1);
     }
 
     @Test
     public void testFileSelectionWithRegex() throws IOException {
-        testFileSelectionWithPattern("regex:^.*[_]chocolate$");
+        testFileSelectionWithPattern("regex:^.*[_]chocolate$", true, -1);
     }
 
-    private void testFileSelectionWithPattern(String pattern) {
+    private void testFileSelectionWithPattern(String pattern, boolean expectedResult, int nonTraversableDepth) {
         Path root = folder.getRoot().toPath();
 
         Path dir = root.resolve("oh/oh");
         Path file = dir.resolve("i_love_chocolate");
 
-        testWithIncludePattern(root.relativize(file).toString(), pattern, true);
+        testWithIncludePattern(root.relativize(file).toString(), pattern, expectedResult, nonTraversableDepth);
     }
 
     @Test
     public void testIncludePatternUnixPath() throws IOException {
-        testWithIncludePattern("/home/bobot/documents/test", "**/test", true);
+        assumeFalse(isRunningOnWindows());
+        testWithIncludePattern("/home/bobot/documents/test", "**/test", true, -1);
     }
 
     @Test
     public void testIncludePatternWindowsPath() throws IOException {
-        testWithIncludePattern("C:\\Users\\Bobot\\Documents\\test", "**\\test", true);
+        assumeTrue(isRunningOnWindows());
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents\\test", "**\\test", true, -1);
     }
 
     @Test
     public void testIncludePatternUnixPathWithSpaces() throws IOException {
-        testWithIncludePattern("/home/bobot/documents and more/test", "**/test", true);
+        assumeFalse(isRunningOnWindows());
+        testWithIncludePattern("/home/bobot/documents and more/test", "**/test", true, -1);
+        testWithIncludePattern("/home/bobot/documents and more/test", "**/documents?and?more/test", true, -1);
+        testWithIncludePattern("/home/bobot/documents and more/test", "home/bobot/documents/**", false, 2);
     }
 
     @Test
     public void testIncludePatternWindowsPathWithSpaces() throws IOException {
-        testWithIncludePattern("C:\\Users\\Bobot\\Documents And More\\test", "**\\test", true);
+        assumeTrue(isRunningOnWindows());
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents And More\\test", "**\\test", true, -1);
+        // for a strange reason the following pattern only works with forward slashes
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents And More\\test", "**/Documents?And?More/test", true, -1);
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents And More\\test", "Users\\Bobot\\Documents\\**", false, 2);
     }
 
     @Test
     public void testIncludePatternWindowsPathUppercasePath() throws IOException {
         assumeTrue(isRunningOnWindows());
-        testWithIncludePattern("C:\\Users\\BOBOT\\Documents\\TEST", "**\\test", true);
+        testWithIncludePattern("C:\\Users\\BOBOT\\Documents\\TEST", "**\\test", true, -1);
     }
 
     @Test
     public void testIncludePatternWindowsPathUppercasePattern() throws IOException {
         assumeTrue(isRunningOnWindows());
-        testWithIncludePattern("C:\\Users\\Bobot\\Documents\\test", "**\\TEST", true);
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents\\test", "**\\TEST", true, -1);
     }
 
     @Test
     public void testIncludePatternUnixPathUppercasePathAndPattern() throws IOException {
-        testWithIncludePattern("/home/bobot/documents/test", "**/test", true);
+        assumeFalse(isRunningOnWindows());
+        testWithIncludePattern("/home/bobot/documents/test", "**/test", true, -1);
+        testWithIncludePattern("/home/bobot/documents/test", "**/myfolder/test", false, -1);
+        testWithIncludePattern("/home/bobot/documents/test", "home/bobot/myfolder/**", false, 2);
     }
 
     @Test
     public void testIncludePatternWindowsPathUppercasePathAndPattern() throws IOException {
-        testWithIncludePattern("C:\\Users\\BOBOT\\Documents\\TEST", "**\\TEST", true);
+        assumeTrue(isRunningOnWindows());
+        testWithIncludePattern("C:\\Users\\BOBOT\\Documents\\TEST", "**\\TEST", true, -1);
+        testWithIncludePattern("C:\\Users\\BOBOT\\Documents\\TEST", "**\\MyFolder\\TEST", false, -1);
+        testWithIncludePattern("C:\\Users\\BOBOT\\Documents\\TEST", "Users\\BOBOT\\MyFolder\\**", false, 2);
     }
 
     @Test
     public void testIncludeExcludePatternUnixPath() throws IOException {
-        testWithIncludeAndExcludePattern("/home/bobot/documents/test", "**/test", "**/test", false);
+        assumeFalse(isRunningOnWindows());
+        testWithIncludeAndExcludePattern("/home/bobot/documents/test", "**/test", "**/test", false, -1);
     }
 
     @Test
     public void testIncludeExcludePatternWindowsPath() throws IOException {
-        testWithIncludeAndExcludePattern("C:\\Users\\Bobot\\Documents\\test", "**\\test", "**\\test", false);
+        assumeTrue(isRunningOnWindows());
+        testWithIncludeAndExcludePattern("C:\\Users\\Bobot\\Documents\\test", "**\\test", "**\\test", false, -1);
     }
 
     @Test
     public void testIncludeExcludePatternEmptyUnixPath() {
-        testWithIncludeAndExcludePattern("/home/bobot/documents/test", null, null, false);
+        assumeFalse(isRunningOnWindows());
+        testWithIncludeAndExcludePattern("/home/bobot/documents/test", null, null, false, 0);
     }
 
     @Test
     public void testIncludeExcludePatternEmptyWindowsPath() {
-        testWithIncludeAndExcludePattern("C:\\Users\\Bobot\\Documents\\test", null, null, false);
+        assumeTrue(isRunningOnWindows());
+        testWithIncludeAndExcludePattern("C:\\Users\\Bobot\\Documents\\test", null, null, false, 0);
     }
 
     @Test
     public void testExcludePatternUnixPath() {
-        testWithExcludePattern("/home/bobot/documents/test", "**", false);
+        assumeFalse(isRunningOnWindows());
+        testWithExcludePattern("/home/bobot/documents/test", "**", false, -1);
     }
 
     @Test
     public void testExcludePatternWindowsPath() {
-        testWithExcludePattern("C:\\Users\\Bobot\\Documents\\test", "**", false);
+        assumeTrue(isRunningOnWindows());
+        testWithExcludePattern("C:\\Users\\Bobot\\Documents\\test", "**", false, -1);
     }
 
     @Test
     public void testIncludePatternUnixPathWindowsPathPattern() throws IOException {
-        testWithIncludePattern("/home/bobot/documents/test", "**\\test", true);
+        assumeFalse(isRunningOnWindows());
+        testWithIncludePattern("/home/bobot/documents/test", "**\\test", true, -1);
     }
 
     @Test
     public void testIncludePatternWindowsPathUnixPathPattern() throws IOException {
         assumeTrue(isRunningOnWindows());
-        testWithIncludePattern("C:\\Users\\Bobot\\Documents\\test", "**/test", true);
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents\\test", "**/test", true, -1);
     }
 
-    private void testWithIncludePattern(String path, String includePattern, boolean expectedResult) {
-        testWithIncludeAndExcludePattern(path, includePattern, null, expectedResult);
+    private void testWithIncludePattern(String path, String includePattern, boolean expectedResult,
+            int nonTraversableDepth) {
+        testWithIncludeAndExcludePattern(path, includePattern, null, expectedResult, nonTraversableDepth);
     }
 
-    private void testWithExcludePattern(String path, String excludePattern, boolean expectedResult) {
-        testWithIncludeAndExcludePattern(path, null, excludePattern, expectedResult);
+    private void testWithExcludePattern(String path, String excludePattern, boolean expectedResult,
+            int nonTraversableDepth) {
+        testWithIncludeAndExcludePattern(path, null, excludePattern, expectedResult, nonTraversableDepth);
     }
 
     private void testWithIncludeAndExcludePattern(String path, String includePattern, String excludePattern,
-            boolean expectedResult) {
+            boolean expectedResult, int nonTraversableDepth) {
         Path p = Paths.get(path);
 
         if (includePattern != null) {
@@ -216,6 +245,29 @@ public class TestFileSelector {
         boolean result = fileSelector.matches(p);
 
         assertEquals(expectedResult, result);
+
+        if (expectedResult) {
+            Path appendedPath = p.getRoot();
+            int depth = 0;
+            for (Iterator<Path> it = p.iterator(); it.hasNext();) {
+                Path name = it.next();
+                if (appendedPath == null) {
+                    appendedPath = name;
+                } else {
+                    appendedPath = appendedPath.resolve(name);
+                }
+
+                if (depth == nonTraversableDepth) {
+                    assertFalse("Path " + appendedPath + " should not be traversable",
+                                fileSelector.traverseDescendents(appendedPath));
+                } else {
+                    assertTrue("Path " + appendedPath + " should be traversable",
+                               fileSelector.traverseDescendents(appendedPath));
+                }
+
+            }
+        }
+
     }
 
     private boolean isRunningOnWindows() {
