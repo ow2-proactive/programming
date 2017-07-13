@@ -618,6 +618,13 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyInteger PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS = new PAPropertyInteger("proactive.vfsprovider.server.stream_open_maximum_period_millis",
                                                                                                                     false);
 
+    /**
+     * This property indicates the number of threads used to find files in a remote ProActive virtual file system.
+     * A number <= 1 indicates that parallel processing is disabled when finding files
+     */
+    static public PAPropertyInteger PA_VFSPROVIDER_CLIENT_FIND_FILES_THREAD_NUMBER = new PAPropertyInteger("proactive.vfsprovider.client.find_files_thread_number",
+                                                                                                           false);
+
     // -------------- Misc
 
     /**

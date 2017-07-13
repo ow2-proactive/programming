@@ -32,7 +32,9 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -42,6 +44,7 @@ import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.springframework.util.AntPathMatcher;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -81,11 +84,14 @@ public class FileSelector implements org.apache.commons.vfs2.FileSelector, Seria
 
     private final transient FileSystem fileSystem;
 
+    private final transient Map<String, PathMatcher> pathMatcherCache;
+
     public FileSelector() {
         fileSystem = FileSystems.getDefault();
 
         includes = new HashSet<>();
         excludes = new HashSet<>();
+        pathMatcherCache = new HashMap<>();
     }
 
     public FileSelector(Collection<String> includes, Collection<String> excludes) {
@@ -204,13 +210,63 @@ public class FileSelector implements org.apache.commons.vfs2.FileSelector, Seria
         if (!pattern.startsWith(PREFIX_GLOB_PATTERN) && !pattern.startsWith(PREFIX_REGEX_PATTERN)) {
             pattern = PREFIX_GLOB_PATTERN + pattern;
         }
+        if (pathMatcherCache.containsKey(pattern)) {
+            return pathMatcherCache.get(pattern);
+        }
 
-        return fileSystem.getPathMatcher(pattern);
+        PathMatcher matcher = fileSystem.getPathMatcher(pattern);
+        pathMatcherCache.put(pattern, matcher);
+        return matcher;
+    }
+
+    private String convertPathForAntPathMatcher(Path path, String targetSeparator) {
+        String convertedPath = path.toString().replace("\\", targetSeparator).replace("/", targetSeparator);
+        if (convertedPath.startsWith(targetSeparator)) {
+            convertedPath = convertedPath.substring(targetSeparator.length());
+        }
+        return convertedPath;
     }
 
     @Override
     public boolean traverseDescendents(FileSelectInfo fileInfo) throws Exception {
-        return true;
+        Path path = getFilePathRelativeToBaseURI(fileInfo);
+        return traverseDescendents(path);
+    }
+
+    public boolean traverseDescendents(Path path) {
+        boolean atLeastOnePatternMatchSoFar = false;
+
+        // Only include patterns can be handled, as if an exclude pattern is for example **/dir, it is not possible to decide on a parent folder if the folder should be skipped
+
+        for (String include : includes) {
+            if (include.startsWith(PREFIX_GLOB_PATTERN)) {
+                include = include.replace(PREFIX_GLOB_PATTERN, "");
+            } else if (include.startsWith(PREFIX_REGEX_PATTERN)) {
+                return true;
+            }
+            if (include.contains("[") || include.contains("{")) {
+                // AntPathMatcher does not support square or curly brackets expression, simply return true
+                return true;
+            }
+            String targetSeparator = include.contains("\\") ? "\\" : "/";
+
+            String convertedPath = convertPathForAntPathMatcher(path, targetSeparator);
+
+            AntPathMatcher pathMatcher = new AntPathMatcher();
+            pathMatcher.setPathSeparator(targetSeparator);
+            // set case sensitive false by default, as it's better to traverse descendants as to exclude wrong files
+            pathMatcher.setCaseSensitive(false);
+            try {
+                atLeastOnePatternMatchSoFar = atLeastOnePatternMatchSoFar ||
+                                              pathMatcher.matchStart(include, convertedPath.toString());
+            } catch (Exception e) {
+                // maybe the pattern uses a syntax not supported by AntPathMatcher.
+                log.debug("Exception occurred while using AntPathMatcher with the pattern " + include, e);
+                // in that case we cannot take a decision and must traverse the folder.
+                atLeastOnePatternMatchSoFar = true;
+            }
+        }
+        return atLeastOnePatternMatchSoFar;
     }
 
     public void addIncludes(Collection<String> patterns) {

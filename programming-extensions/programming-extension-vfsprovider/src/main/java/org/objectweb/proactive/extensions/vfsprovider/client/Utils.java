@@ -28,6 +28,7 @@ package org.objectweb.proactive.extensions.vfsprovider.client;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.StreamNotFoundException;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.WrongStreamTypeException;
@@ -43,12 +44,28 @@ class Utils {
                                 e);
     }
 
+    public static IOException generateAndLogIOExceptionWrongStreamType(Logger log, WrongStreamTypeException e) {
+        log.error("File server unexpectedly does not allow to perform some type of operation on an opened stream");
+        return new IOException6("File server unexpectedly does not allow to perform some type of operation on an opened stream",
+                                e);
+    }
+
     public static IOException generateAndLogIOExceptionStreamNotFound(Log log, StreamNotFoundException e) {
         log.error("File server unexpectedly closed (possibly reopened) file stream");
         return new IOException6("File server unexpectedly closed (possibly reopened) file stream", e);
     }
 
+    public static IOException generateAndLogIOExceptionStreamNotFound(Logger log, StreamNotFoundException e) {
+        log.error("File server unexpectedly closed (possibly reopened) file stream");
+        return new IOException6("File server unexpectedly closed (possibly reopened) file stream", e);
+    }
+
     public static IOException generateAndLogIOExceptionCouldNotReopen(Log log, Exception x) {
+        log.error("Could not reopen stream correctly");
+        return new IOException6("Could not reopen stream correctly", x);
+    }
+
+    public static IOException generateAndLogIOExceptionCouldNotReopen(Logger log, Exception x) {
         log.error("Could not reopen stream correctly");
         return new IOException6("Could not reopen stream correctly", x);
     }

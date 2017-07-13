@@ -31,10 +31,16 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSelectInfo;
+import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.RandomAccessContent;
@@ -45,11 +51,17 @@ import org.apache.commons.vfs2.provider.UriParser;
 import org.apache.commons.vfs2.util.MonitorInputStream;
 import org.apache.commons.vfs2.util.MonitorOutputStream;
 import org.apache.commons.vfs2.util.RandomAccessMode;
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.StreamNotFoundException;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.WrongStreamTypeException;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileInfo;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.StreamMode;
+
+import com.google.common.collect.Lists;
 
 
 /**
@@ -57,9 +69,26 @@ import org.objectweb.proactive.extensions.vfsprovider.protocol.StreamMode;
  *
  * @see ProActiveFileProvider
  */
-public class ProActiveFileObject extends AbstractFileObject {
-    // logging in VFS (not ProActive) way
-    private static Log log = LogFactory.getLog(ProActiveFileObject.class);
+public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem> {
+
+    private static final int DEFAULT_NUMBER_OF_THREADS = Runtime.getRuntime().availableProcessors() * 2 - 1;
+
+    // log4j logger
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.VFS_PROVIDER_SERVER);
+
+    // fork join pool is supposed to be thread safe, and all threads started are in daemon mode, not requiring an explicit shutdown
+    private static final ForkJoinPool forkJoinPool;
+
+    static {
+        int configuredNumberOfThreads = getConfiguredNumberOfThreads();
+        if (configuredNumberOfThreads > 1) {
+            forkJoinPool = new ForkJoinPool(getConfiguredNumberOfThreads());
+        } else {
+            // find files parallelization disabled
+            forkJoinPool = null;
+        }
+
+    }
 
     private static final FileInfo IMAGINARY_FILE_INFO = new FileInfo() {
 
@@ -95,6 +124,11 @@ public class ProActiveFileObject extends AbstractFileObject {
     protected ProActiveFileObject(AbstractFileName name, ProActiveFileSystem fs) {
         super(name, fs);
         this.proactiveFS = fs;
+    }
+
+    private ProActiveFileObject(AbstractFileName name, FileInfo info, ProActiveFileSystem fs) {
+        this(name, fs);
+        this.fileInfo = info;
     }
 
     // let's access server this way, as ProActiveFileSystem is responsible
@@ -191,42 +225,119 @@ public class ProActiveFileObject extends AbstractFileObject {
 
     @Override
     protected String[] doListChildren() throws Exception {
-        final Set<String> files = getServer().fileListChildren(getPath());
-        if (files == null) {
+        synchronized (proactiveFS) {
+            final Set<String> files = getServer().fileListChildren(getPath());
+            if (files == null) {
+                return null;
+            }
+
+            final String result[] = new String[files.size()];
+            int i = 0;
+            for (final String f : files) {
+                result[i++] = UriParser.encode(f);
+            }
+            return result;
+        }
+    }
+
+    @Override
+    protected FileObject[] doListChildrenResolved() throws Exception {
+        synchronized (proactiveFS) {
+
+            String[] childrenNames = doListChildren();
+            Map<String, FileInfo> fileInfoMap = getServer().fileListChildrenInfo(getPath());
+
+            ProActiveFileNameParser parser = ProActiveFileNameParser.getInstance();
+
+            FileObject[] fileObjects = new FileObject[childrenNames.length];
+            for (int i = 0; i < childrenNames.length; i++) {
+                String currenURI = getName().getURI();
+                if (!currenURI.endsWith("/")) {
+                    currenURI = currenURI + "/";
+                }
+                ProActiveFileName name = (ProActiveFileName) parser.parseUri(null, null, currenURI + childrenNames[i]);
+                fileObjects[i] = new ProActiveFileObject(name, fileInfoMap.get(childrenNames[i]), proactiveFS);
+            }
+
+            return fileObjects;
+        }
+    }
+
+    @Override
+    public List<FileObject> listFiles(final FileSelector selector) throws FileSystemException {
+        if (!exists() || selector == null) {
             return null;
         }
 
-        final String result[] = new String[files.size()];
-        int i = 0;
-        for (final String f : files) {
-            result[i++] = UriParser.encode(f);
+        final ArrayList<FileObject> list = new ArrayList<FileObject>();
+        this.findFiles(selector, true, list);
+        return list;
+    }
+
+    @Override
+    public FileObject[] findFiles(final FileSelector selector) throws FileSystemException {
+        final List<FileObject> list = this.listFiles(selector);
+        return list == null ? null : list.toArray(new FileObject[list.size()]);
+    }
+
+    @Override
+    public void findFiles(final FileSelector selector, final boolean depthwise, final List<FileObject> selected)
+            throws FileSystemException {
+        if (forkJoinPool == null) {
+            // findFiles parallelization is disabled, use default implementation
+            super.findFiles(selector, depthwise, selected);
+        } else {
+            // findFiles parallelization is enabled, use custom parallel implementation
+            try {
+                if (exists()) {
+                    // Traverse starting at this file
+                    final DefaultFileSelectorInfo info = new DefaultFileSelectorInfo();
+                    info.setBaseFolder(this);
+                    info.setDepth(0);
+                    info.setFile(this);
+
+                    selected.addAll(forkJoinPool.invoke(new TraverseFilesTask(info, selector, depthwise)));
+                }
+            } catch (final Exception e) {
+                throw new FileSystemException("vfs.provider/find-files.error", getName(), e);
+            }
         }
-        return result;
     }
 
     @Override
     protected void doCreateFolder() throws Exception {
-        getServer().fileCreate(getPath(), org.objectweb.proactive.extensions.vfsprovider.protocol.FileType.DIRECTORY);
+        synchronized (proactiveFS) {
+            getServer().fileCreate(getPath(),
+                                   org.objectweb.proactive.extensions.vfsprovider.protocol.FileType.DIRECTORY);
+        }
     }
 
     @Override
     protected void doDelete() throws Exception {
-        getServer().fileDelete(getPath(), false);
+        synchronized (proactiveFS) {
+            getServer().fileDelete(getPath(), false);
+        }
     }
 
     @Override
     protected InputStream doGetInputStream() throws Exception {
-        return new MonitorInputStream(new ProActiveInputStream());
+        synchronized (proactiveFS) {
+            return new MonitorInputStream(new ProActiveInputStream());
+        }
     }
 
     @Override
     protected OutputStream doGetOutputStream(boolean append) throws Exception {
-        return new MonitorOutputStream(new ProActiveOutputStream(append));
+        synchronized (proactiveFS) {
+            return new MonitorOutputStream(new ProActiveOutputStream(append));
+        }
     }
 
     @Override
     protected RandomAccessContent doGetRandomAccessContent(RandomAccessMode mode) throws Exception {
-        return new ProActiveRandomAccessContent(mode);
+        synchronized (proactiveFS) {
+            return new ProActiveRandomAccessContent(mode);
+        }
     }
 
     private class ProActiveInputStream extends AbstractProActiveInputStreamAdapter {
@@ -264,7 +375,7 @@ public class ProActiveFileObject extends AbstractFileObject {
 
         @Override
         protected void reopenStream() throws IOException {
-            ProActiveFileObject.log.debug("Reopening input stream: " + streamId);
+            ProActiveFileObject.logger.debug("Reopening input stream: " + streamId);
             try {
                 streamId = getServer().streamOpen(getPath(), StreamMode.SEQUENTIAL_READ);
                 if (position > 0) {
@@ -275,7 +386,7 @@ public class ProActiveFileObject extends AbstractFileObject {
                     }
                 }
             } catch (Exception x) {
-                throw Utils.generateAndLogIOExceptionCouldNotReopen(log, x);
+                throw Utils.generateAndLogIOExceptionCouldNotReopen(logger, x);
             }
         }
     }
@@ -314,11 +425,11 @@ public class ProActiveFileObject extends AbstractFileObject {
 
         @Override
         protected void reopenStream() throws IOException {
-            ProActiveFileObject.log.debug("Reopening output stream: " + streamId);
+            ProActiveFileObject.logger.debug("Reopening output stream: " + streamId);
             try {
                 streamId = getServer().streamOpen(getPath(), StreamMode.SEQUENTIAL_APPEND);
             } catch (Exception x) {
-                throw Utils.generateAndLogIOExceptionCouldNotReopen(log, x);
+                throw Utils.generateAndLogIOExceptionCouldNotReopen(logger, x);
             }
         }
     }
@@ -525,11 +636,11 @@ public class ProActiveFileObject extends AbstractFileObject {
         }
 
         private void reopenStream() throws IOException {
-            ProActiveFileObject.log.debug("Reopening random access stream: " + streamId);
+            ProActiveFileObject.logger.debug("Reopening random access stream: " + streamId);
             try {
                 streamId = getServer().streamOpen(getPath(), streamMode);
             } catch (Exception x) {
-                throw Utils.generateAndLogIOExceptionCouldNotReopen(log, x);
+                throw Utils.generateAndLogIOExceptionCouldNotReopen(logger, x);
             }
 
             if (position > 0) {
@@ -537,7 +648,7 @@ public class ProActiveFileObject extends AbstractFileObject {
                     getServer().streamSeek(streamId, position);
                 } catch (Exception x) {
                     close();
-                    throw Utils.generateAndLogIOExceptionCouldNotReopen(log, x);
+                    throw Utils.generateAndLogIOExceptionCouldNotReopen(logger, x);
                 }
             }
         }
@@ -582,9 +693,9 @@ public class ProActiveFileObject extends AbstractFileObject {
                     return getServer().streamGetLength(streamId);
                 }
             } catch (WrongStreamTypeException e) {
-                throw Utils.generateAndLogIOExceptionWrongStreamType(log, e);
+                throw Utils.generateAndLogIOExceptionWrongStreamType(logger, e);
             } catch (StreamNotFoundException e) {
-                throw Utils.generateAndLogIOExceptionStreamNotFound(log, e);
+                throw Utils.generateAndLogIOExceptionStreamNotFound(logger, e);
             }
         }
 
@@ -602,9 +713,9 @@ public class ProActiveFileObject extends AbstractFileObject {
                     getDataInputStream().close();
                 }
             } catch (WrongStreamTypeException e) {
-                throw Utils.generateAndLogIOExceptionWrongStreamType(log, e);
+                throw Utils.generateAndLogIOExceptionWrongStreamType(logger, e);
             } catch (StreamNotFoundException e) {
-                throw Utils.generateAndLogIOExceptionStreamNotFound(log, e);
+                throw Utils.generateAndLogIOExceptionStreamNotFound(logger, e);
             }
         }
 
@@ -690,6 +801,131 @@ public class ProActiveFileObject extends AbstractFileObject {
         public void writeUTF(String str) throws IOException {
             checkStreamModeReadWrite();
             getDataOutputStream().writeUTF(str);
+        }
+    }
+
+    static final class DefaultFileSelectorInfo implements FileSelectInfo {
+        private FileObject baseFolder;
+
+        private FileObject file;
+
+        private int depth;
+
+        @Override
+        public FileObject getBaseFolder() {
+            return baseFolder;
+        }
+
+        public void setBaseFolder(final FileObject baseFolder) {
+            this.baseFolder = baseFolder;
+        }
+
+        @Override
+        public FileObject getFile() {
+            return file;
+        }
+
+        public void setFile(final FileObject file) {
+            this.file = file;
+        }
+
+        @Override
+        public int getDepth() {
+            return depth;
+        }
+
+        public void setDepth(final int depth) {
+            this.depth = depth;
+        }
+    }
+
+    private static int getConfiguredNumberOfThreads() {
+        if (CentralPAPropertyRepository.PA_VFSPROVIDER_CLIENT_FIND_FILES_THREAD_NUMBER.isSet()) {
+            try {
+                return CentralPAPropertyRepository.PA_VFSPROVIDER_CLIENT_FIND_FILES_THREAD_NUMBER.getValue();
+            } catch (Exception e) {
+                logger.error("Invalid value for " +
+                             CentralPAPropertyRepository.PA_VFSPROVIDER_CLIENT_FIND_FILES_THREAD_NUMBER.getName(), e);
+                return DEFAULT_NUMBER_OF_THREADS;
+            }
+        } else {
+            return DEFAULT_NUMBER_OF_THREADS;
+        }
+    }
+
+    static final class TraverseFilesTask extends RecursiveTask<List<FileObject>> {
+
+        final DefaultFileSelectorInfo fileInfo;
+
+        final FileSelector selector;
+
+        final boolean depthwise;
+
+        public TraverseFilesTask(DefaultFileSelectorInfo fileSelectorInfo, FileSelector selector, boolean depthwise) {
+            this.fileInfo = fileSelectorInfo;
+            this.selector = selector;
+            this.depthwise = depthwise;
+        }
+
+        @Override
+        protected List<FileObject> compute() {
+            // Check the file itself
+            final FileObject file = fileInfo.getFile();
+
+            final int curDepth = fileInfo.getDepth();
+
+            List<FileObject> answer = Lists.newArrayList();
+
+            try {
+
+                if (depthwise && selector.includeFile(fileInfo)) {
+                    if (logger.isTraceEnabled()) {
+                        logger.trace("Selector ( " + selector + " ) Found file : " + file.getName() + " depth=" +
+                                     curDepth);
+                    }
+                    answer.add(file);
+                } else if (logger.isTraceEnabled()) {
+                    logger.trace("Selector ( " + selector + " ) Rejected file : " + file.getName() + " depth=" +
+                                 curDepth);
+                }
+
+                // If the file is a folder, traverse it
+                if (file.getType().hasChildren() && selector.traverseDescendents(fileInfo)) {
+
+                    // Traverse the children
+                    final FileObject[] children = file.getChildren();
+                    List<TraverseFilesTask> subTasks = Lists.newArrayListWithCapacity(children.length);
+                    for (final FileObject child : children) {
+                        final DefaultFileSelectorInfo subInfo = new DefaultFileSelectorInfo();
+                        subInfo.setBaseFolder(fileInfo.getBaseFolder());
+                        subInfo.setDepth(curDepth + 1);
+                        subInfo.setFile(child);
+                        if (logger.isTraceEnabled()) {
+                            logger.trace("Selector ( " + selector + " ) Traversing : " + child.getName());
+                        }
+
+                        TraverseFilesTask subTask = new TraverseFilesTask(subInfo, selector, depthwise);
+                        subTasks.add(subTask);
+
+                        subTask.fork();
+                    }
+                    for (TraverseFilesTask subTask : subTasks) {
+                        answer.addAll(subTask.join());
+                    }
+                }
+                if (!depthwise && selector.includeFile(fileInfo)) {
+                    if (logger.isTraceEnabled()) {
+                        logger.trace("Selector ( " + selector + " ) Found file : " + file.getName());
+                    }
+                    answer.add(file);
+                }
+            } catch (Exception e) {
+                logger.error("Error occurred when recursively analysing " + file.getName() + " for selector " +
+                             selector, e);
+                throw new RuntimeException("Error occurred when recursively analysing " + file.getName() +
+                                           " for selector " + selector, e);
+            }
+            return answer;
         }
     }
 }
