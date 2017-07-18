@@ -53,6 +53,8 @@ public class HTTPServer {
 
     private static HTTPServer httpServer;
 
+    final private UnboundedThreadPool threadPool;
+
     /* The Jetty server */
     final private Server server;
 
@@ -72,9 +74,9 @@ public class HTTPServer {
     }
 
     private HTTPServer() throws Exception {
-        UnboundedThreadPool utp = new UnboundedThreadPool();
+        this.threadPool = new UnboundedThreadPool();
 
-        this.server = new Server(utp);
+        this.server = new Server(threadPool);
 
         final ServerConnector connector = new ServerConnector(server);
 
@@ -122,12 +124,13 @@ public class HTTPServer {
         this.server.stop();
     }
 
-    /** destroy the HTTP server, terminates the http server thread 
+    /** destroy the HTTP server, terminates the http server threads
      * 
      * @throws Exception If the HTTP server fails to stop
      */
     public void destroy() throws Exception {
         this.server.destroy();
+        this.threadPool.terminate();
     }
 
     public boolean isMapped(String mapping) {
