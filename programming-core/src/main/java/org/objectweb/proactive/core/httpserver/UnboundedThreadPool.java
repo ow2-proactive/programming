@@ -89,4 +89,8 @@ public class UnboundedThreadPool implements ThreadPool {
         threadPool.execute(command);
     }
 
+    public void terminate() {
+        threadPool.shutdownNow();
+    }
+
 }
