@@ -30,6 +30,11 @@ import static java.util.Collections.sort;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -398,22 +403,23 @@ public class FileSystemServerImpl implements FileSystemServer {
 
     public Map<String, FileInfo> fileListChildrenInfo(String path) throws IOException {
         final File file = resolvePath(path);
-        final File[] children;
         final Map<String, FileInfo> infos;
 
-        try {
-            children = file.listFiles();
-        } catch (SecurityException sec) {
-            throw new IOException6(sec);
-        }
-        if (children == null) {
+        Path folderPath = Paths.get(file.toURI());
+
+        infos = new HashMap<>();
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folderPath)) {
+            for (Path entry : stream) {
+                File child = entry.toFile();
+                infos.put(child.getName(), new FileInfoImpl(child));
+            }
+        } catch (NotDirectoryException nde) {
             return null;
+        } catch (IOException | SecurityException ex) {
+            throw new IOException6(ex);
         }
-        infos = new HashMap<String, FileInfo>(children.length);
-        for (int i = 0; i < children.length; i++) {
-            File ch = children[i];
-            infos.put(ch.getName(), new FileInfoImpl(ch));
-        }
+
         return infos;
     }
 
