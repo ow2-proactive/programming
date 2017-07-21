@@ -225,42 +225,39 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
 
     @Override
     protected String[] doListChildren() throws Exception {
-        synchronized (proactiveFS) {
-            final Set<String> files = getServer().fileListChildren(getPath());
-            if (files == null) {
-                return null;
-            }
-
-            final String result[] = new String[files.size()];
-            int i = 0;
-            for (final String f : files) {
-                result[i++] = UriParser.encode(f);
-            }
-            return result;
+        final Set<String> files = getServer().fileListChildren(getPath());
+        if (files == null) {
+            return null;
         }
+
+        final String result[] = new String[files.size()];
+        int i = 0;
+        for (final String f : files) {
+            result[i++] = UriParser.encode(f);
+        }
+        return result;
     }
 
     @Override
     protected FileObject[] doListChildrenResolved() throws Exception {
-        synchronized (proactiveFS) {
 
-            String[] childrenNames = doListChildren();
-            Map<String, FileInfo> fileInfoMap = getServer().fileListChildrenInfo(getPath());
+        Map<String, FileInfo> fileInfoMap = getServer().fileListChildrenInfo(getPath());
 
-            ProActiveFileNameParser parser = ProActiveFileNameParser.getInstance();
+        ProActiveFileNameParser parser = ProActiveFileNameParser.getInstance();
 
-            FileObject[] fileObjects = new FileObject[childrenNames.length];
-            for (int i = 0; i < childrenNames.length; i++) {
-                String currenURI = getName().getURI();
-                if (!currenURI.endsWith("/")) {
-                    currenURI = currenURI + "/";
-                }
-                ProActiveFileName name = (ProActiveFileName) parser.parseUri(null, null, currenURI + childrenNames[i]);
-                fileObjects[i] = new ProActiveFileObject(name, fileInfoMap.get(childrenNames[i]), proactiveFS);
+        FileObject[] fileObjects = new FileObject[fileInfoMap.keySet().size()];
+        int i = 0;
+        for (String childName : fileInfoMap.keySet()) {
+            String currenURI = getName().getURI();
+            if (!currenURI.endsWith("/")) {
+                currenURI = currenURI + "/";
             }
-
-            return fileObjects;
+            ProActiveFileName name = (ProActiveFileName) parser.parseUri(null, null, currenURI + childName);
+            fileObjects[i] = new ProActiveFileObject(name, fileInfoMap.get(childName), proactiveFS);
+            i++;
         }
+
+        return fileObjects;
     }
 
     @Override
