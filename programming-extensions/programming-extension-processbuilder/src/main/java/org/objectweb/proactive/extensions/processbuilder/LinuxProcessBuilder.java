@@ -681,8 +681,9 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                     logger.debug("token: " + this.token + " exitval:" + p.exitValue());
                 }
             } catch (Exception e) {
-                printStderr(p, Level.WARN);
                 logger.warn("Failed to destroy OS process with token: " + this.token, e);
+                printStdout(p, Level.WARN);
+                printStderr(p, Level.WARN);
             }
 
         }
@@ -707,12 +708,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
                 for (String line = br.readLine(); line != null; line = br.readLine()) {
-                    if (Level.DEBUG == logLevel) {
-                        logger.debug("token: " + this.token + " " + messageType + ":" + line);
-                    }
-                    if (Level.WARN == logLevel) {
-                        logger.warn("token: " + this.token + " " + messageType + ":" + line);
-                    }
+                    logger.log(logLevel, "token: " + this.token + " " + messageType + ":" + line);
                 }
             } catch (IOException ioe) {
 
