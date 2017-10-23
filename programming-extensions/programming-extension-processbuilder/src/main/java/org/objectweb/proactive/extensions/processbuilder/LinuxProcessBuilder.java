@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -663,6 +664,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
 
         @Override
         public void destroy() {
+            Process p = null;
             try {
                 LinuxProcessBuilder lpb = new LinuxProcessBuilder(user, null, scriptBaseFolder);
                 String killProcessTreeScript = new File(scriptBaseFolder,
@@ -670,26 +672,48 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
                 lpb.directory(new File(System.getProperty("java.io.tmpdir")));
                 lpb.command(killProcessTreeScript, this.cleanupTimeoutGetter.getCleanupTimeSecondsString());
                 lpb.environment().put("PROCESS_KILL_TOKEN", this.token);
-                Process p = lpb.start();
+                p = lpb.start();
                 p.waitFor();
 
                 if (logger.isDebugEnabled()) {
-                    BufferedReader br;
-
-                    br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                    for (String line = br.readLine(); line != null; line = br.readLine()) {
-                        logger.debug("token: " + this.token + " stdout:" + line);
-                    }
-                    br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-                    for (String line = br.readLine(); line != null; line = br.readLine()) {
-                        logger.debug("token: " + this.token + " stderr:" + line);
-                    }
-
+                    printStdout(p, Level.DEBUG);
+                    printStderr(p, Level.DEBUG);
                     logger.debug("token: " + this.token + " exitval:" + p.exitValue());
                 }
             } catch (Exception e) {
-                logger.info("Failed to destroy OS process with token: " + this.token);
+                logger.warn("Failed to destroy OS process with token: " + this.token, e);
+                printStdout(p, Level.WARN);
+                printStderr(p, Level.WARN);
             }
+
+        }
+
+        private void printStderr(Process p, Level logLevel) {
+            if (p == null) {
+                return;
+            }
+            printStream(p.getErrorStream(), "stderr", logLevel);
+
+        }
+
+        private void printStdout(Process p, Level logLevel) {
+            if (p == null) {
+                return;
+            }
+            printStream(p.getInputStream(), "stdout", logLevel);
+        }
+
+        private void printStream(InputStream inputStream, String messageType, Level logLevel) {
+
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+                for (String line = br.readLine(); line != null; line = br.readLine()) {
+                    logger.log(logLevel, "token: " + this.token + " " + messageType + ":" + line);
+                }
+            } catch (IOException ioe) {
+
+            }
+
         }
 
         @Override
