@@ -834,6 +834,13 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
     @Override
     public List<UniversalBody> getActiveObjects(String nodeName, String className) {
         // the array to return
+
+        Class requiredClass = null;
+        try {
+            requiredClass = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Invalid class name " + className, e);
+        }
         ArrayList<UniversalBody> localBodies = new ArrayList<UniversalBody>();
         LocalBodyStore localBodystore = LocalBodyStore.getInstance();
         List<UniqueID> bodyList = this.nodeMap.get(nodeName).getActiveObjectsId();
@@ -856,11 +863,11 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
                     // unregister it from this ProActiveRuntime
                     iterator.remove();
                 } else {
-                    String objectClass = body.getReifiedObject().getClass().getName();
+                    Class objectClass = body.getReifiedObject().getClass();
 
                     // if the reified object is of the specified type
                     // return the body adapter
-                    if (objectClass.equals(className)) {
+                    if (requiredClass.isAssignableFrom(objectClass)) {
                         localBodies.add(body.getRemoteAdapter());
                     }
                 }
