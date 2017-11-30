@@ -250,7 +250,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 this.te = null;
             } catch (Exception e) {
                 logger.warn("PAMR Router " + this.routerAddr + ":" + this.routerPort + " is unreachable (" +
-                            e.getMessage() + "). Will try to estalish a new tunnel in " + (delay / 1000) + " seconds");
+                            e.getMessage() + "). Will try to establish a new tunnel in " + (delay / 1000) + " seconds");
 
                 // To have the full stack trace in case something goes really wrong
                 logger.debug("Failed to connect to the PAMR router", e);
@@ -271,8 +271,11 @@ public class AgentImpl implements Agent, AgentImplMBean {
      */
     private Tunnel __reconnectToRouter() throws Exception {
         Tunnel t = null;
+        String hostAddress = this.routerAddr.getHostAddress();
+        int routerPort = this.routerPort;
 
-        Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
+        logger.debug("Opening socket to " + hostAddress + ":" + routerPort);
+        Socket s = socketFactory.createSocket(hostAddress, routerPort);
         Tunnel tunnel = new Tunnel(s);
 
         // start router handshake
@@ -610,7 +613,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
         /**
          * Unblock the Patient waiting on a particular messageID
-         * @param agentId
+         * @param messageId
          */
         private Patient unlockDueToCorruption(Long messageId) {
             AgentID agent = null;

@@ -310,6 +310,22 @@ public class SshConfig {
     }
 
     /**
+     * Returns a resolvable host name for the associated public <code>host</code> provided.
+     * If none is defined, returns the public host provided.
+     *
+     * @param host the public host name of the remote-side of the SSH Tunnel
+     * @return A host name the remote-side of the SSH Tunnel can resolve
+     */
+    public String getHostName(String host) {
+        String hostName = getInformation(host, SshToken.HOSTNAME);
+        if (hostName != null) {
+            return hostName;
+        } else {
+            return host;
+        }
+    }
+
+    /**
      * Never return null, if no information stored, return ssh default private key
      */
     public String[] getPrivateKeyPath(String host) throws IOException {
@@ -427,9 +443,9 @@ public class SshConfig {
         this.sshDirPath = sshDirPath;
     }
 
-    public void setKnowHostFile(String knownHostfile) {
+    public void setKnowHostFile(String knownHostFile) {
         checkReadOnly();
-        this.knownHostFile = knownHostfile;
+        this.knownHostFile = knownHostFile;
     }
 
     public String getKnowHostFile() {
