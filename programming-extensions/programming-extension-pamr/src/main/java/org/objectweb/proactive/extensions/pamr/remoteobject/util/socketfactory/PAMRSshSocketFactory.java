@@ -73,8 +73,8 @@ public class PAMRSshSocketFactory implements PAMRSocketFactorySPI {
         }
 
         if (PAMRConfig.PA_PAMRSSH_KNOWN_HOSTS.isSet()) {
-            String knownhost = PAMRConfig.PA_PAMRSSH_KNOWN_HOSTS.getValue();
-            this.config.setKnowHostFile(knownhost);
+            String knownHost = PAMRConfig.PA_PAMRSSH_KNOWN_HOSTS.getValue();
+            this.config.setKnowHostFile(knownHost);
         }
 
         if (PAMRConfig.PA_PAMRSSH_REMOTE_PORT.isSet()) {
@@ -85,6 +85,11 @@ public class PAMRSshSocketFactory implements PAMRSocketFactorySPI {
         if (PAMRConfig.PA_PAMRSSH_REMOTE_USERNAME.isSet()) {
             String username = PAMRConfig.PA_PAMRSSH_REMOTE_USERNAME.getValue();
             this.config.addDefaultHostInformation(SshToken.USERNAME, username);
+        }
+
+        if (PAMRConfig.PA_PAMRSSH_REMOTE_ADDRESS.isSet()) {
+            String sshHost = PAMRConfig.PA_PAMRSSH_REMOTE_ADDRESS.getValue();
+            this.config.addDefaultHostInformation(SshToken.HOSTNAME, sshHost);
         }
 
         this.tp = new SshTunnelPool(this.config);

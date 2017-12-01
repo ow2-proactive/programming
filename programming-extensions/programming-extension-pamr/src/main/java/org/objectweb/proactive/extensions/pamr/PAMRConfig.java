@@ -120,7 +120,11 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      * PAMR over SSH
      */
 
-    /** this property identifies the location of RMISSH key directory */
+    /**
+     * This property identifies the location of SSH key directory.
+     * This directory shall contain both public and private keys.
+     *
+     * */
     static public PAPropertyString PA_PAMRSSH_KEY_DIR = new PAPropertyString("proactive.pamrssh.key_directory", false);
 
     /** this property identifies the PAMR over SSH garbage collector period
@@ -150,11 +154,25 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
                                                                                        false,
                                                                                        60000);
 
-    // Not documented, temporary workaround until 4.3.0
+    /**
+     * This property is used when a SSH Tunnel is opened. The address can be either a hostname or an IP.
+     * The value will be used to bind the remote-side of the SSH Tunnel to the same network interface as the
+     * PAMR Router (by resolving the hostname to the IP, then to the right interface).
+     *
+     */
+    static public PAPropertyString PA_PAMRSSH_REMOTE_ADDRESS = new PAPropertyString("proactive.pamrssh.address", false);
+
+    /**
+     * This property defines which username to use to SSH into the remote machine hosting the PAMR router.
+     *
+     */
     static public PAPropertyString PA_PAMRSSH_REMOTE_USERNAME = new PAPropertyString("proactive.pamrssh.username",
                                                                                      false);
 
-    // Not documented, temporary workaround until 4.3.0
+    /**
+     * This property defines which SSH port to use to establish the SSH Connection. Usually binds to 22.
+     *
+     */
     static public PAPropertyInteger PA_PAMRSSH_REMOTE_PORT = new PAPropertyInteger("proactive.pamrssh.port", false);
 
     /*
