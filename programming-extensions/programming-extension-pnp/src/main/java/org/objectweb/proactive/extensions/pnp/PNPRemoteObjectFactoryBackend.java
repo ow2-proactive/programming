@@ -67,6 +67,8 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
 
     final private PNPRegistry registry;
 
+    final private int PNPPublicPort;
+
     /** Exception that should have been thrown by ctor.
      *
      * ROF ctor are not allowed to throw exception. To ease troubleshooting, we keep a
@@ -87,6 +89,7 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
         this.ctorException = exception;
         this.registry = PNPRegistry.singleton;
         this.protoId = proto;
+        this.PNPPublicPort = config.getPublicPort();
     }
 
     private void throwIfAgentIsNul(String msg) throws ProActiveException {
@@ -204,10 +207,20 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
                 name = "/" + name;
             }
 
+            // Retrieve if specified the PNP(S) public address and  public port,
+            // and embed this information inside the 'user info' URI field (RFC 2396)
+            // Note: if no public address is provided, we do not use public port
+            String publicAddress = ProActiveInet.getPublicAddress(), uriUserInfo;
+            if (publicAddress != null) {
+                uriUserInfo = (PNPPublicPort != -1) ? ProActiveInet.getPublicAddress() + ':' + PNPPublicPort
+                                                    : ProActiveInet.getPublicAddress();
+            } else
+                uriUserInfo = null;
+
             // the URI is constructed with a userinfo parameter if the property proactive.net.public_address is enabled
             // in that case, the PNP remote object will have a uri such as pnp://public_address@host:port/name
             URI uri = new URI(this.getProtocolId(),
-                              ProActiveInet.getPublicAddress(),
+                              uriUserInfo,
                               URIBuilder.getHostNameorIP(this.agent.getInetAddress()),
                               this.agent.getPort(),
                               name,
@@ -245,7 +258,12 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
 
     private String getUserInfoString() {
         String publicAddress = ProActiveInet.getPublicAddress();
-        return (publicAddress != null) ? publicAddress + "@" : "";
+        // Note: if no public address is provided, we do not use public port
+        if (publicAddress != null) {
+            return (PNPPublicPort != -1) ? ProActiveInet.getPublicAddress() + ':' + PNPPublicPort + '@'
+                                         : ProActiveInet.getPublicAddress() + '@';
+        } else
+            return "";
     }
 
     private URI createInvalidURI() {
