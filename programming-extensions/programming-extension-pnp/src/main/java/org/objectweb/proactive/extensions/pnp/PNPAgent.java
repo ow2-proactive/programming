@@ -155,13 +155,26 @@ public class PNPAgent {
     public InputStream sendMsg(URI uri, PNPFrameCall msgReq) throws PNPException {
         InetAddress address;
         InetAddress publicAddress = null;
-        String publicAddressString = uri.getUserInfo();
+        String publicAddressString;
+        int publicPort = PNPConfig.PA_PNP_PUBLIC_PORT.getDefaultValue(); // -1
 
-        if (publicAddressString != null) {
-            try {
-                publicAddress = InetAddress.getByName(publicAddressString);
-            } catch (UnknownHostException e) {
-                logger.debug("Unknown public address " + publicAddressString, e);
+        String userInfoString = uri.getUserInfo();
+        if (userInfoString != null) {
+            // userInfoString possible syntax is "public_IP:public_port" or "public_IP"
+            if (userInfoString.contains(":")) {
+                String parts[] = userInfoString.split("\\:");
+                publicAddressString = parts[0];
+                publicPort = Integer.parseInt(parts[1]);
+            } else {
+                publicAddressString = userInfoString;
+            }
+
+            if (publicAddressString != null) {
+                try {
+                    publicAddress = InetAddress.getByName(publicAddressString);
+                } catch (UnknownHostException e) {
+                    logger.debug("Unknown public address " + publicAddressString, e);
+                }
             }
         }
 
@@ -176,7 +189,7 @@ public class PNPAgent {
         }
 
         int port = uri.getPort();
-        return sendMsg(address, publicAddress, port, msgReq);
+        return sendMsg(address, publicAddress, port, publicPort, msgReq);
     }
 
     /** Sends a call to a remote PNP server
@@ -184,13 +197,18 @@ public class PNPAgent {
      * @param addr The inet address of the recipient
      * @param publicAddr The public inet address of the recipient
      * @param port The port on which the recipient is listening
+     * @param publicPort The public port on which the recipient is listening
      * @param msgReq The call
      * @return The result of the call
      * @throws PNPException If the call failed to execute successfully
      */
-    public InputStream sendMsg(InetAddress addr, InetAddress publicAddr, int port, PNPFrameCall msgReq)
+    public InputStream sendMsg(InetAddress addr, InetAddress publicAddr, int port, int publicPort, PNPFrameCall msgReq)
             throws PNPException {
-        PNPClientChannel channel = channelCache.getChannel(addr, publicAddr, port, msgReq.getHearthbeatPeriod());
+        PNPClientChannel channel = channelCache.getChannel(addr,
+                                                           publicAddr,
+                                                           port,
+                                                           publicPort,
+                                                           msgReq.getHearthbeatPeriod());
         return channel.sendMessage(msgReq);
     }
 
@@ -234,17 +252,21 @@ public class PNPAgent {
         /** The remote public inet address  */
         final private InetAddress publicAddr;
 
-        /** The remote port*/
+        /** The remote private PNP port*/
         final private int port;
+
+        /** The remote public PNP port*/
+        final private int publicPort;
 
         /** The heartbeat period of the channel*/
         final private long heartbeat;
 
-        public PNPChannelId(final InetAddress addr, final InetAddress publicAddr, final int port,
+        public PNPChannelId(final InetAddress addr, final InetAddress publicAddr, final int port, final int publicPort,
                 final long heartbeat) {
             this.addr = addr;
             this.publicAddr = publicAddr;
             this.port = port;
+            this.publicPort = publicPort;
             this.heartbeat = heartbeat;
         }
 
@@ -256,6 +278,7 @@ public class PNPAgent {
             result = prime * result + ((publicAddr == null) ? 0 : publicAddr.hashCode());
             result = prime * result + (int) (heartbeat ^ (heartbeat >>> 32));
             result = prime * result + port;
+            result = prime * result + publicPort;
             return result;
         }
 
@@ -282,12 +305,15 @@ public class PNPAgent {
                 return false;
             if (port != other.port)
                 return false;
+            if (publicPort != other.publicPort)
+                return false;
             return true;
         }
 
         @Override
         public String toString() {
-            return (publicAddr != null ? publicAddr + "@" : "") + addr + ":" + port + "(" + heartbeat + ")";
+            return (publicAddr != null ? publicAddr + (publicPort != -1 ? ":" + publicPort : "") + "@" : "") + addr +
+                   ":" + port + "(" + heartbeat + ")";
         }
     }
 
@@ -325,13 +351,14 @@ public class PNPAgent {
          * @param addr The remote inet address
          * @param publicAddr The public remote inet address
          * @param port The remote port
+         * @param publicPort The remote public port
          * @param heartbeat The heartbeat period of the channel
          * @return a {@link PNPClientChannel} corresponding to the parameter
          * @throws PNPException If the channel cannot be opened
          */
-        public PNPClientChannel getChannel(InetAddress addr, InetAddress publicAddr, int port, long heartbeat)
-                throws PNPException {
-            return getChannel(new PNPChannelId(addr, publicAddr, port, heartbeat));
+        public PNPClientChannel getChannel(InetAddress addr, InetAddress publicAddr, int port, int publicPort,
+                long heartbeat) throws PNPException {
+            return getChannel(new PNPChannelId(addr, publicAddr, port, publicPort, heartbeat));
         }
 
         /** Gets a {@link PNPClientChannel} for the channel ID
@@ -403,7 +430,11 @@ public class PNPAgent {
                     logger.trace("Could not connect to address " + channelId.addr + ", trying public address " +
                                  channelId.publicAddr, e);
                 }
-                createAndConnectSocket(bootstrap, channelId.publicAddr, channelId.port, channelId.heartbeat);
+                createAndConnectSocket(bootstrap,
+                                       channelId.publicAddr,
+                                       // use public/NATed port if specified, otherwise keep private port
+                                       (channelId.publicPort != -1 ? channelId.publicPort : channelId.port),
+                                       channelId.heartbeat);
             }
             ChannelFuture cf;
             long timeout;
@@ -441,6 +472,7 @@ public class PNPAgent {
 
         private SocketAddress createAndConnectSocket(ClientBootstrap bootstrap, InetAddress address, int port,
                 long heartbeat) throws PNPIOException, PNPTimeoutException {
+
             SocketAddress sa = new InetSocketAddress(address, port);
             ChannelFuture cf = bootstrap.connect(sa);
 

@@ -37,6 +37,7 @@ public class PNPRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
 
         PNPConfig config = new PNPConfig();
         config.setPort(PNPConfig.PA_PNP_PORT.getValue());
+        config.setPublicPort(PNPConfig.PA_PNP_PUBLIC_PORT.getValue());
         config.setIdleTimeout(PNPConfig.PA_PNP_IDLE_TIMEOUT.getValue());
         config.setDefaultHeartbeat(PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getValue());
         config.setHeartbeatFactor(PNPConfig.PA_PNP_HEARTBEAT_FACTOR.getValue());

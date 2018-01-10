@@ -72,6 +72,7 @@ public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
         // Handle standard pnp options
         PNPConfig config = new PNPConfig();
         config.setPort(PNPSslConfig.PA_PNPSSL_PORT.getValue());
+        config.setPublicPort(PNPSslConfig.PA_PNPSSL_PUBLIC_PORT.getValue());
         config.setIdleTimeout(PNPSslConfig.PA_PNPSSL_IDLE_TIMEOUT.getValue());
         config.setDefaultHeartbeat(PNPSslConfig.PA_PNPSSL_DEFAULT_HEARTBEAT.getValue());
         config.setHeartbeatFactor(PNPSslConfig.PA_PNPSSL_HEARTBEAT_FACTOR.getValue());
