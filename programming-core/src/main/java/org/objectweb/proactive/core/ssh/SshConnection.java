@@ -129,29 +129,27 @@ public class SshConnection {
     /** Open a SSH tunnel to remoteHost:remotePort over the SSH connection
      * 
      * A free port is automatically chosen as local port
-     * 
-     * @param connection The SSH connection to use to create the tunnel
+     *
      * @param remoteHost The remote host
      * @param remotePort The remote TCP port 
      * 
      * @throws IOException if the tunnel cannot be opened
      */
-    synchronized public SshTunnel getSSHTunnel(String remotetHost, int remotePort) throws IOException {
-        return SshTunnel.getSshTunnel(this, remotetHost, remotePort);
+    synchronized public SshTunnel getSSHTunnel(String remoteHost, int remotePort) throws IOException {
+        return SshTunnel.getSshTunnel(this, remoteHost, remotePort);
     }
 
     /** Open a SSH tunnel to remoteHost:remotePort over the SSH connection
-     * 
-     * @param connection The SSH connection to use to create the tunnel
+     *
      * @param remoteHost The remote host
      * @param remotePort The remote TCP port
-     * @param localport  The local TCP port to bind to
+     * @param localPort  The local TCP port to bind to
      * 
      * @throws IOException if the tunnel cannot be opened
-     * @throws BindException if localport is not free
+     * @throws BindException if localPort is not free
      */
-    synchronized public SshTunnel getSSHTunnel(String remotetHost, int remotePort, int localport) throws IOException {
-        return new SshTunnel(this, remotetHost, remotePort, localport);
+    synchronized public SshTunnel getSSHTunnel(String remoteHost, int remotePort, int localPort) throws IOException {
+        return new SshTunnel(this, remoteHost, remotePort, localPort);
     }
 
     /** Close this connection

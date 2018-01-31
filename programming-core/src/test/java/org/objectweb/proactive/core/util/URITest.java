@@ -42,7 +42,7 @@ public class URITest {
     @Test
     public void checkURI() throws Exception {
         String protocol = "pnp";
-        String userInfo = "machine";
+        String userInfo = "machine:45678";
         String host = "localhost.localdomain";
         String path = "apath";
         String query = "toto=value";
@@ -63,11 +63,11 @@ public class URITest {
 
         // check the remove protocol method
         URI u = URIBuilder.removeProtocol(uri);
-        assertTrue("//machine@localhost.localdomain:1258/apath?toto=value".equals(u.toString()));
+        assertTrue("//machine:45678@localhost.localdomain:1258/apath?toto=value".equals(u.toString()));
 
         // check the remove query method
         u = URIBuilder.removeQuery(uri);
-        assertTrue("pnp://machine@localhost.localdomain:1258/apath".equals(u.toString()));
+        assertTrue("pnp://machine:45678@localhost.localdomain:1258/apath".equals(u.toString()));
 
         // check the setPort method
         int port2 = 5656;
@@ -76,7 +76,7 @@ public class URITest {
 
         // check the setProtocol
         u = URIBuilder.setProtocol(uri, "http");
-        assertTrue("http://machine@localhost.localdomain:1258/apath?toto=value".equals(u.toString()));
+        assertTrue("http://machine:45678@localhost.localdomain:1258/apath?toto=value".equals(u.toString()));
 
         // validate an URI
         try {

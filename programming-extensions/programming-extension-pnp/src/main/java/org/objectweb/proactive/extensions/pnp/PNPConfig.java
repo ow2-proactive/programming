@@ -46,6 +46,18 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
     static final public PAPropertyInteger PA_PNP_PORT = new PAPropertyInteger("proactive.pnp.port", false, 0);
 
     /**
+     * ProActive Runtime Public PNP port
+     * <p/>
+     * This option can be used when a host is behind a NAT. In that case, the original PNP port used by the host is rewritten
+     * by the NAT, and that rewritten port must be advertised to the remote host in order to make PNP communication possible.
+     *
+     * The way for the host behind the NAT to know/predict the new value (i.e. after NAT rewriting) of the PNP port is left out of this scope.
+     */
+    static final public PAPropertyInteger PA_PNP_PUBLIC_PORT = new PAPropertyInteger("proactive.pnp.public_port",
+                                                                                     false,
+                                                                                     -1);
+
+    /**
      * The default heartbeat period (in milliseconds)
      *
      * PNP offers an heartbeat mechanism to detect network failure. If set to 0 heartbeats are disabled and
@@ -106,6 +118,8 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
 
     private int port;
 
+    private int publicPort;
+
     private int idleTimeout;
 
     private int defaultHeartbeat;
@@ -116,6 +130,7 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
 
     public PNPConfig() {
         this.port = PA_PNP_PORT.getDefaultValue();
+        this.publicPort = PA_PNP_PUBLIC_PORT.getDefaultValue();
         this.idleTimeout = PA_PNP_IDLE_TIMEOUT.getDefaultValue();
         this.defaultHeartbeat = PA_PNP_DEFAULT_HEARTBEAT.getDefaultValue();
         this.heartbeatFactor = PA_PNP_HEARTBEAT_FACTOR.getDefaultValue();
@@ -124,6 +139,10 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public void setPublicPort(int publicPort) {
+        this.publicPort = publicPort;
     }
 
     public void setIdleTimeout(int idleTimeout) {
@@ -152,6 +171,10 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
 
     public int getPort() {
         return port;
+    }
+
+    public int getPublicPort() {
+        return publicPort;
     }
 
     public int getIdleTimeout() {

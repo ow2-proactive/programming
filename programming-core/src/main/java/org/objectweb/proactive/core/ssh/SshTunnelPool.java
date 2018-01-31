@@ -122,27 +122,27 @@ public class SshTunnelPool {
     }
 
     /**
-     * Return a socket connected to the remote host
+     * Return a socket connected to the remote sshHost
      *
-     * @param host the remote host to connect to
+     * @param sshHost the remote SSH host to connect to
      * @param port the remote port  to connect to
      * @return A socket connected to the remote endpoint
      * @throws IOException If the connection cannot be opened
      */
-    public Socket getSocket(String host, int port) throws IOException {
+    public Socket getSocket(String sshHost, int port) throws IOException {
         Socket socket = null;
 
         if (config.tryPlainSocket()) {
             // Try plain socket connections
-            if (this.tryCache.shouldTryDirect(host, port)) {
+            if (this.tryCache.shouldTryDirect(sshHost, port)) {
                 try {
                     // Try direct connection (never tried or was successful)
-                    InetSocketAddress address = new InetSocketAddress(host, port);
+                    InetSocketAddress address = new InetSocketAddress(sshHost, port);
                     socket = new Socket();
                     socket.connect(address, this.config.getConnectTimeout());
-                    this.tryCache.recordTrySuccess(host, port);
+                    this.tryCache.recordTrySuccess(sshHost, port);
                 } catch (IOException ioe) {
-                    this.tryCache.recordTryFailure(host, port);
+                    this.tryCache.recordTryFailure(sshHost, port);
                     socket = null;
                 }
             }
@@ -150,8 +150,8 @@ public class SshTunnelPool {
 
         // Try proxy command
         if (socket == null && config.tryProxyCommand() &&
-            !InetAddress.getByName(host).equals(ProActiveInet.getInstance().getInetAddress())) {
-            String gateway = config.getGateway(host);
+            !InetAddress.getByName(sshHost).equals(ProActiveInet.getInstance().getInetAddress())) {
+            String gateway = config.getGateway(sshHost);
             String outGateway = ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT.isSet() ? ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT.getValue()
                                                                                         : null;
             // if proxyCommand command mechanism is needed
@@ -173,7 +173,7 @@ public class SshTunnelPool {
                         try {
                             cnx = (SshProxyConnection) pairs.get(i).cnx;
                             // Always create a new session because there are not Thread-Safe
-                            session = cnx.getSession(host, port);
+                            session = cnx.getSession(sshHost, port);
                             pairs.get(i).registerSession(session);
                             break;
                         } catch (IOException channelException) {
@@ -185,7 +185,7 @@ public class SshTunnelPool {
                         // No Connections permit to open a new session
                         // Create a new connection
                         cnx = SshProxyConnection.getInstance(gateway, outGateway, (SshConfig) config);
-                        session = cnx.getSession(host, port);
+                        session = cnx.getSession(sshHost, port);
                         ProxyPair pair = new ProxyPair(cnx);
                         pair.registerSession(session);
                         pairs.add(pair);
@@ -200,21 +200,25 @@ public class SshTunnelPool {
         if (socket == null) {
             // SSH tunnel must be used
             synchronized (this.cache) {
-                int sshPort = this.config.getPort(host);
-                String username = this.config.getUsername(host);
-
-                Pair pair = this.cache.get(host);
+                // if a remote-side-resolvable hostname is defined, use it instead for the tunnel
+                String remoteHost = this.config.getHostName(sshHost);
+                int sshPort = this.config.getPort(sshHost);
+                String username = this.config.getUsername(sshHost);
+                Pair pair = this.cache.get(sshHost);
                 if (pair == null) {
                     // Open a SSH connection
-                    SshConnection cnx = new SshConnection(username, host, sshPort, config.getPrivateKeyPath(host));
+                    SshConnection cnx = new SshConnection(username,
+                                                          sshHost,
+                                                          sshPort,
+                                                          config.getPrivateKeyPath(sshHost));
                     pair = new Pair(cnx);
-                    this.cache.put(host, pair);
+                    this.cache.put(sshHost, pair);
                 }
-
-                SshTunnelStatefull tunnel = pair.getTunnel(host, port);
+                logger.debug("Ssh connection " + username + "@" + sshHost + ":" + sshPort + " established");
+                SshTunnelStateful tunnel = pair.getTunnel(remoteHost, port);
                 if (tunnel == null) {
                     // Open a tunnel
-                    tunnel = createSshTunStatefull(pair.cnx, host, port);
+                    tunnel = createSshTunStateful(pair.cnx, remoteHost, port);
                     pair.registerTunnel(tunnel);
                 }
                 // Grab a socket
@@ -277,8 +281,8 @@ public class SshTunnelPool {
         }
     }
 
-    // Cannot be static in SshTunnelStatefull 
-    private SshTunnelStatefull createSshTunStatefull(SshConnection connection, String remoteHost, int remotePort)
+    // Cannot be static in SshTunnelStateful
+    private SshTunnelStateful createSshTunStateful(SshConnection connection, String remoteHost, int remotePort)
             throws IOException {
         int initialPort = ProActiveRandom.nextInt(65536 - 1024) + 1024;
         for (int localPort = (initialPort == 65535) ? 1024
@@ -289,7 +293,7 @@ public class SshTunnelPool {
 
             try {
                 logger.trace("initialPort:" + initialPort + " localPort:" + localPort);
-                SshTunnelStatefull tunnel = new SshTunnelStatefull(connection, remoteHost, remotePort, localPort);
+                SshTunnelStateful tunnel = new SshTunnelStateful(connection, remoteHost, remotePort, localPort);
                 return tunnel;
             } catch (BindException e) {
                 // Try another port
@@ -305,14 +309,14 @@ public class SshTunnelPool {
     /**
      * A SshTunnel which manage statistics about the number of opened sockets
      */
-    private class SshTunnelStatefull extends SshTunnel {
+    private class SshTunnelStateful extends SshTunnel {
         /** number of currently open sockets */
         final private AtomicInteger users = new AtomicInteger();
 
         /** If users == 0, the timestamp of the last call to close() */
         final private AtomicLong unusedSince = new AtomicLong();
 
-        SshTunnelStatefull(SshConnection connection, String distantHost, int distantPort, int localPort)
+        SshTunnelStateful(SshConnection connection, String distantHost, int distantPort, int localPort)
                 throws IOException {
             super(connection, distantHost, distantPort, localPort);
         }
@@ -348,18 +352,18 @@ public class SshTunnelPool {
     private static class Pair {
         final private SshConnection cnx;
 
-        final private Map<String, SshTunnelStatefull> tunnels;
+        final private Map<String, SshTunnelStateful> tunnels;
 
         private Pair(SshConnection cnx) {
             this.cnx = cnx;
-            this.tunnels = new HashMap<String, SshTunnelStatefull>();
+            this.tunnels = new HashMap<String, SshTunnelStateful>();
         }
 
-        public SshTunnelStatefull getTunnel(String host, int port) {
+        public SshTunnelStateful getTunnel(String host, int port) {
             return this.tunnels.get(buildKey(host, port));
         }
 
-        public void registerTunnel(SshTunnelStatefull tunnel) {
+        public void registerTunnel(SshTunnelStateful tunnel) {
             String host = tunnel.getDistantHost();
             int port = tunnel.getRemotePort();
 
@@ -410,8 +414,8 @@ public class SshTunnelPool {
 
                     // Purge unused tunnels
                     for (Pair p : cache.values()) {
-                        for (Iterator<SshTunnelStatefull> iT = p.tunnels.values().iterator(); iT.hasNext();) {
-                            SshTunnelStatefull t = iT.next();
+                        for (Iterator<SshTunnelStateful> iT = p.tunnels.values().iterator(); iT.hasNext();) {
+                            SshTunnelStateful t = iT.next();
                             if (ctime - t.unusedSince() > config.getGcInterval()) {
                                 try {
                                     t.close();

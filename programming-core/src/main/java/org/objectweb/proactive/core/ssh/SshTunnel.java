@@ -95,27 +95,27 @@ public class SshTunnel {
         throw new BindException("No free local port found");
     }
 
-    /** Open a SSH tunnel between the localhost:localport and remoteHost:remotePort over the SSH connection
+    /** Open a SSH tunnel between the localhost:localPort and remoteHost:remotePort over the SSH connection
      * 
      * @param connection The SSH connection to use to create the tunnel
      * @param remoteHost The remote host
      * @param remotePort The remote TCP port 
-     * @param localport  The local TCP port to bind to. 
+     * @param localPort  The local TCP port to bind to.
      * 
      * @throws IOException if the tunnel cannot be opened
      * 
      * @see {@link #getSshTunnel(SshConnection, String, int)}
      */
-    SshTunnel(SshConnection connection, String remoteHost, int remotePort, int localport) throws IOException {
+    SshTunnel(SshConnection connection, String remoteHost, int remotePort, int localPort) throws IOException {
         this.remoteHost = remoteHost;
         this.remotePort = remotePort;
-        this.localPort = localport;
-        InetSocketAddress isa = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(), localport);
+        this.localPort = localPort;
+        InetSocketAddress isa = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(), localPort);
         this.lpf = connection.getTrileadConnection().createLocalPortForwarder(isa, remoteHost, remotePort);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Opened SSH tunnel localport=" + localPort + " distantHost=" + remoteHost + " distantPort=" +
-                         remotePort);
+            logger.debug("Opened SSH tunnel localPort=" + this.localPort + " distantHost=" + remoteHost +
+                         " distantPort=" + remotePort);
         }
     }
 
