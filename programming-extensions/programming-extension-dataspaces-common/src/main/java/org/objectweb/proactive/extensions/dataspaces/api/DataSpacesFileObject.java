@@ -48,11 +48,11 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundExc
  * switchTo
  * The user can know the list of all available uris by using the method getAllUris
  * <p>
- * Instances of this interface are to be returned by resolve* methods from {@link PADataSpaces}
+ * Instances of this interface are to be returned by resolve* methods from PADataSpaces
  * class, and therefore refer to its documentation.
  * <p>
  * Some operations may be limited according to the caller's context and granted privileges, see
- * {@link PADataSpaces} documentation for the details.
+ * PADataSpaces documentation for the details.
  * <p>
  * All implementors must provide equals method logic. Two DataSpacesFileObject as equal if their URI
  * strings are equal.
@@ -67,7 +67,7 @@ public interface DataSpacesFileObject {
     /**
      * Returns the file's URI in the ProActive Data Spaces virtual file system. It remains valid when passed
      * to active ActiveObject, and hence can be resolved there trough
-     * {@link PADataSpaces#resolveFile(String)} method call.
+     * PADataSpaces#resolveFile(String) method call.
      *
      * @return URI of a represented file without the trailing slash
      */

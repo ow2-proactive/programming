@@ -135,7 +135,7 @@ public enum Capability {
     VIRTUAL,
 
     /**
-     * Provides directories which allows you to read its content through {@link org.apache.commons.vfs2.FileContent#getInputStream()}
+     * Provides directories which allows you to read its content through org.apache.commons.vfs2.FileContent#getInputStream()
      */
     DIRECTORY_READ_CONTENT;
 }
