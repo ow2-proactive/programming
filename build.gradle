@@ -265,12 +265,21 @@ project('programming-extensions:programming-extension-vfsprovider') {
         compile(
                 project(':programming-core'),
                 vfs2CompileDependencies,
-                'activeeon:vfs-s3:2.4.7',
                 project(':programming-extensions:programming-extension-annotation'),
                 project(':programming-extensions:programming-extension-dataspaces-common')
         )
+
+        compile('activeeon:vfs-s3:2.4.8') {
+            exclude group: 'com.fasterxml.jackson.core'
+            exclude group: 'com.fasterxml.jackson.dataformat'
+        }
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9'
+        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9'
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9'
+        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9'
         testCompile 'org.apache.commons:commons-vfs2:2.1.1744488.1:tests'
         runtime vfs2RuntimeDependencies
+
     }
     test {
         systemProperties << ['proactive.classloading.useHTTP': false]
