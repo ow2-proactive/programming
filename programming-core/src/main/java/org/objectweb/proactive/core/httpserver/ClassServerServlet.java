@@ -117,7 +117,7 @@ public class ClassServerServlet extends HttpServlet {
         final FileProcess fp = new FileProcess(null, className);
 
         boolean ok = true;
-        byte[] bytes;
+        byte[] bytes = null;
         try {
             bytes = fp.getBytes();
             resp.setContentType("application/java");
@@ -132,7 +132,10 @@ public class ClassServerServlet extends HttpServlet {
         if (logger.isDebugEnabled()) {
             final String from = req.getLocalAddr() + ":" + req.getLocalPort();
             final String status = ok ? "OK" : "Class Not Found";
-            logger.debug("Served request from " + from + " for " + className + " status: " + status);
+
+            logger.debug("Served request from " + from + " for " + className + " status: " + status +
+                         (bytes != null ? " bytes: " + bytes.length : ""));
+
         }
     }
 }
