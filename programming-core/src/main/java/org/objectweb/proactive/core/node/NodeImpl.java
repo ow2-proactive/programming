@@ -65,6 +65,8 @@ import org.objectweb.proactive.core.runtime.VMInformation;
 
 public class NodeImpl implements Node, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     protected NodeInformation nodeInformation;
 
     protected ProActiveRuntime proActiveRuntime;
