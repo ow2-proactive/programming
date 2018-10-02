@@ -27,9 +27,12 @@ package org.objectweb.proactive.extensions.processbuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Level;
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
@@ -102,6 +105,45 @@ public class BasicProcessBuilder implements OSProcessBuilder {
     }
 
     public Process start() throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
-        return this.pb.start();
+        return new BasicProcess(this.pb.start());
+
+    }
+
+    public final class BasicProcess extends Process {
+        final private Process process;
+
+        public BasicProcess(Process p) {
+            this.process = p;
+        }
+
+        @Override
+        public void destroy() {
+            process.destroy();
+        }
+
+        @Override
+        public OutputStream getOutputStream() {
+            return this.process.getOutputStream();
+        }
+
+        @Override
+        public InputStream getInputStream() {
+            return this.process.getInputStream();
+        }
+
+        @Override
+        public InputStream getErrorStream() {
+            return this.process.getErrorStream();
+        }
+
+        @Override
+        public int waitFor() throws InterruptedException {
+            return this.process.waitFor();
+        }
+
+        @Override
+        public int exitValue() {
+            return this.process.exitValue();
+        }
     }
 }
