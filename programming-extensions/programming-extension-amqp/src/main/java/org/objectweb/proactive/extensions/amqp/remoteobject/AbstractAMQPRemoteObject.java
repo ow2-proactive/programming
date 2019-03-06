@@ -69,6 +69,9 @@ import com.rabbitmq.client.QueueingConsumer.Delivery;
  *
  */
 public abstract class AbstractAMQPRemoteObject implements RemoteRemoteObject, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     final static private Logger logger = ProActiveLogger.getLogger(AMQPConfig.Loggers.AMQP_REMOTE_OBJECT);
 
     private final String rpcExchangeName;

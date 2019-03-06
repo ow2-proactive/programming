@@ -73,6 +73,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public interface ProActiveRuntime {
+
+    // this field declaration is used to force stubs generated from this interface
+    // to contain a fixed serialuid
+    static final long serialVersionUID = 1L;
+
     static Logger runtimeLogger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     /**

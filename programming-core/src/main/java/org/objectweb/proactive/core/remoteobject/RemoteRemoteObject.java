@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.body.request.Request;
  */
 public interface RemoteRemoteObject extends Serializable {
 
+    // this field declaration is used to force stubs generated from this interface
+    // to contain a fixed serialuid
+    static final long serialVersionUID = 1L;
+
     /**
      * Send a message containing a reified method call to a remote object. the target of the message
      * could be either the reified object or the remote object itself
