@@ -33,6 +33,8 @@ import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectImpl;
 
 public class RmiSshRemoteObjectImpl extends RmiRemoteObjectImpl {
 
+    private static final long serialVersionUID = 1L;
+
     public RmiSshRemoteObjectImpl(InternalRemoteRemoteObject target) throws java.rmi.RemoteException {
         super(target, RMISocketFactory.getDefaultSocketFactory(), RmiSshRemoteObjectFactory.sf);
     }

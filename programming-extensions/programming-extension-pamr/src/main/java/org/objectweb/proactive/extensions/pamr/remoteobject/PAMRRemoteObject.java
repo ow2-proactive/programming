@@ -49,6 +49,9 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRemoteOb
  */
 
 public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     final static private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */

@@ -56,6 +56,8 @@ import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 
 public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntime> implements ProActiveRuntime {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * generated serial uid
      */

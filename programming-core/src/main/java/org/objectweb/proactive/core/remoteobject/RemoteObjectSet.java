@@ -68,6 +68,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class RemoteObjectSet implements Serializable, Observer {
 
+    private static final long serialVersionUID = 1L;
+
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
     public static final int UNREACHABLE_VALUE = Integer.MIN_VALUE;
