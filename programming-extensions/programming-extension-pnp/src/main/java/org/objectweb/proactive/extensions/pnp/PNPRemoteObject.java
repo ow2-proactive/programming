@@ -45,6 +45,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since ProActive 4.3.0
  */
 class PNPRemoteObject implements RemoteRemoteObject, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     final static private Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP);
 
     /** The URL of the RemoteObject */

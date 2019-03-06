@@ -49,6 +49,8 @@ import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
  */
 public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObject {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * the remote remote object of the internal remote remote object.
      * Remote method calls are received by this remote remote object,

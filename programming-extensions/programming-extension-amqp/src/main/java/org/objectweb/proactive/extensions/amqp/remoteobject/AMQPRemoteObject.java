@@ -48,6 +48,8 @@ import org.objectweb.proactive.extensions.amqp.AMQPConfig;
  */
 public class AMQPRemoteObject extends AbstractAMQPRemoteObject {
 
+    private static final long serialVersionUID = 1L;
+
     private static final String RPC_EXCHANGE_NAME = AMQPConfig.PA_AMQP_RPC_EXCHANGE_NAME.getValue();
 
     private static final long RPC_REPLY_TIMEOUT = AMQPConfig.PA_AMQP_RPC_TIMEOUT.getValue();

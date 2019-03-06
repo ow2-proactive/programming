@@ -237,6 +237,8 @@ public class NodeImpl implements Node, Serializable {
     //
     protected class NodeInformationImpl implements NodeInformation {
 
+        private static final long serialVersionUID = 1L;
+
         final private String nodeName;
 
         final private String nodeURL;
