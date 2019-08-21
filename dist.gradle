@@ -48,7 +48,7 @@ task ProActiveJar(type: Jar, group: 'ProActive', dependsOn: ['ProActiveLibs', 'M
 
 task MergeMetaInfServices {
     inputs.file distSubProjects.jar.outputs
-    outputs.file fileTree("$buildDir/jar/META-INF/services/")
+    outputs.file "$buildDir/jar/META-INF/services/"
     doLast {
         def serviceFile = distSubProjects.collect {
             it.jar.outputs.files.collect {
