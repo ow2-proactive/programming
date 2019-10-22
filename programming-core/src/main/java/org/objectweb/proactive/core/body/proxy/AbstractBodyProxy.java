@@ -279,6 +279,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         // Set the id of the body creator in the created future
         FutureProxy fp = (FutureProxy) (futureobject.getProxy());
         fp.setCreatorID(this.getBodyID());
+        fp.setCreator(this.getBody());
         fp.setUpdater(this.getBody());
         fp.setOriginatingProxy(this);
         Method m = methodCall.getReifiedMethod();
@@ -306,6 +307,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
         // Setting methodCall.res to null means that we do not use the future mechanism
         FutureProxy fp = FutureProxy.getFutureProxy();
         fp.setCreatorID(this.getBodyID());
+        fp.setCreator(this.getBody());
         fp.setUpdater(this.getBody());
         Method m = methodCall.getReifiedMethod();
         fp.setCreatorStackTraceElement(new StackTraceElement(m.getDeclaringClass().getName(),
