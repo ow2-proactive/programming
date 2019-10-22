@@ -44,16 +44,16 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class FutureMonitoring implements Runnable {
 
-    /** Ping one body every 21s */
-    private static int TTM = 21000;
+    /** Ping one body every 15s */
+    private static int TTM = 15000;
 
     /**
      * For each body, the list of futures to monitor. We ping the updater body,
      * so we should detect a broken automatic continuations chain.
      */
-    private static final Map<UniqueID, ConcurrentLinkedQueue<FutureProxy>> futuresToMonitor = new ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>>();
+    private static final Map<UniqueID, ConcurrentLinkedQueue<FutureProxy>> futuresToMonitor = new ConcurrentHashMap<>();
 
-    private static final ConcurrentHashMap<UniqueID, String> nodeUrls = new ConcurrentHashMap<UniqueID, String>();
+    private static final ConcurrentHashMap<UniqueID, String> nodeUrls = new ConcurrentHashMap<>();
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
     static {
@@ -84,7 +84,8 @@ public class FutureMonitoring implements Runnable {
         try {
             Thread.sleep(TTM);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.warn("Monitoring interrupted", e);
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -93,34 +94,40 @@ public class FutureMonitoring implements Runnable {
      */
     private static boolean pingBody(UniqueID bodyId) {
         boolean pinged = false;
-        FutureMonitoringPingFailureException bodyException = null;
-        Collection<FutureProxy> futures = futuresToMonitor.get(bodyId);
         String nodeUrl = nodeUrls.get(bodyId);
-        if (futures == null) {
 
-            /*
-             * By the time we got to iterate over these futures, they have all
-             * been updated, so the body entry was removed.
-             */
-            return false;
+        Collection<FutureProxy> futureProxies = futuresToMonitor.get(bodyId);
+
+        if (futureProxies != null) {
+            pinged = pingBodyAndUpdateFutures(futureProxies, bodyId, nodeUrl);
         }
 
+        return pinged;
+    }
+
+    private static boolean pingBodyAndUpdateFutures(Collection<FutureProxy> futures, UniqueID bodyId, String nodeUrl) {
+        boolean pinged = false;
+        FutureMonitoringPingFailureException bodyException = null;
         for (FutureProxy fp : futures) {
             if (!pinged) {
 
                 /* Not yet pinged somebody */
-                UniversalBody body = null;
+                UniversalBody remoteBody = null;
 
                 synchronized (fp) {
                     if (fp.isAwaited()) {
-                        body = fp.getUpdater();
+                        if (fp.getCreatorID().equals(bodyId)) {
+                            remoteBody = fp.getCreator();
+                        } else {
+                            remoteBody = fp.getUpdater();
+                        }
                     }
                 }
-                if (body != null) {
+                if (remoteBody != null) {
                     /* OK, Found somebody to ping */
                     pinged = true;
                     try {
-                        Integer state = (Integer) body.receiveHeartbeat();
+                        Integer state = (Integer) remoteBody.receiveHeartbeat();
                         /* If the object is dead, ping failed ... */
                         if (state.equals(HeartbeatResponse.IS_DEAD)) {
                             throw new ProActiveRuntimeException("Awaited body " + bodyId + " on " + nodeUrl +
@@ -154,18 +161,11 @@ public class FutureMonitoring implements Runnable {
      * it will end with the JVM.
      */
     public void run() {
-        for (;;) {
-            boolean pingedOneBody = false;
+        while (!Thread.currentThread().isInterrupted()) {
             for (UniqueID bodyId : futuresToMonitor.keySet()) {
-                boolean pingedThisBody = pingBody(bodyId);
-                if (pingedThisBody) {
-                    pingedOneBody = true;
-                    monitoringDelay();
-                }
+                pingBody(bodyId);
             }
-            if (!pingedOneBody) {
-                monitoringDelay();
-            }
+            monitoringDelay();
         }
     }
 
@@ -178,8 +178,16 @@ public class FutureMonitoring implements Runnable {
         return body.getID();
     }
 
-    private static ActiveObjectLocationInfo getUpdaterLocationInfo(FutureProxy fp) {
-        UniversalBody body = fp.getUpdater();
+    private static UniqueID getCreatorBodyId(FutureProxy fp) {
+        UniversalBody body = fp.getCreator();
+        if (body == null) {
+            new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
+            return null;
+        }
+        return body.getID();
+    }
+
+    private static ActiveObjectLocationInfo getLocationInfo(UniversalBody body) {
         if (body == null) {
             new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
             return null;
@@ -199,16 +207,25 @@ public class FutureMonitoring implements Runnable {
         if (updaterId == null) {
             return;
         }
-        synchronized (futuresToMonitor) {
+        UniqueID creatorId = getCreatorBodyId(fp);
+        if (creatorId == null) {
+            return;
+        }
+        removeBodyId(fp, updaterId, futuresToMonitor);
+    }
+
+    private static void removeBodyId(FutureProxy fp, UniqueID bodyId,
+            Map<UniqueID, ConcurrentLinkedQueue<FutureProxy>> monitors) {
+        synchronized (monitors) {
             /*
              * Avoid a race with monitorFutureProxy(FutureProxy)
              */
-            ConcurrentLinkedQueue<FutureProxy> futures = futuresToMonitor.get(updaterId);
+            ConcurrentLinkedQueue<FutureProxy> futures = monitors.get(bodyId);
             if (futures != null) {
                 futures.remove(fp);
                 if (futures.isEmpty()) {
-                    futuresToMonitor.remove(updaterId);
-                    nodeUrls.remove(updaterId);
+                    monitors.remove(bodyId);
+                    nodeUrls.remove(bodyId);
                 }
             }
         }
@@ -218,22 +235,29 @@ public class FutureMonitoring implements Runnable {
         if (fp.isAvailable()) {
             return;
         }
-        ActiveObjectLocationInfo info = getUpdaterLocationInfo(fp);
-        UniqueID updaterId = info.getBodyId();
-        if (updaterId == null) {
+        ActiveObjectLocationInfo infoUpdater = getLocationInfo(fp.getUpdater());
+        monitorActiveObject(fp, infoUpdater, futuresToMonitor);
+        ActiveObjectLocationInfo infoCreator = getLocationInfo(fp.getCreator());
+        monitorActiveObject(fp, infoCreator, futuresToMonitor);
+    }
+
+    private static void monitorActiveObject(FutureProxy fp, ActiveObjectLocationInfo locationInfo,
+            Map<UniqueID, ConcurrentLinkedQueue<FutureProxy>> monitors) {
+        UniqueID bodyId = locationInfo.getBodyId();
+        if (bodyId == null) {
             return;
         }
-        String nodeUrl = info.getNodeUrl();
-        synchronized (futuresToMonitor) {
+        String nodeUrl = locationInfo.getNodeUrl();
+        synchronized (monitors) {
             /*
              * Avoid a race with the suppression in the ConcurrentHashMap when the
              * ConcurrentLinkedQueue is empty.
              */
-            ConcurrentLinkedQueue<FutureProxy> futures = futuresToMonitor.get(updaterId);
+            ConcurrentLinkedQueue<FutureProxy> futures = monitors.get(bodyId);
             if (futures == null) {
-                futures = new ConcurrentLinkedQueue<FutureProxy>();
-                futuresToMonitor.put(updaterId, futures);
-                nodeUrls.put(updaterId, nodeUrl);
+                futures = new ConcurrentLinkedQueue<>();
+                monitors.put(bodyId, futures);
+                nodeUrls.put(bodyId, nodeUrl);
             }
             if (!futures.contains(fp)) {
                 futures.add(fp);

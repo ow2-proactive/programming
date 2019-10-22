@@ -832,6 +832,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
      * @inheritDoc
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<UniversalBody> getActiveObjects(String nodeName, String className) {
         // the array to return
 

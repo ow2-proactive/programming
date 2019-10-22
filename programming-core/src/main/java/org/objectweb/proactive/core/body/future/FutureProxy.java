@@ -107,6 +107,11 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
     private transient UniversalBody updater;
 
     /**
+     * Similarly, ping the creator of this future
+     */
+    private UniversalBody creator;
+
+    /**
      * The exception level in the stack in which this future is
      * registered
      */
@@ -394,6 +399,17 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         return this.updater;
     }
 
+    public void setCreator(UniversalBody creator) {
+        if (this.creator != null) {
+            new IllegalStateException("Creator already set to: " + this.creator).printStackTrace();
+        }
+        this.creator = creator;
+    }
+
+    public UniversalBody getCreator() {
+        return this.creator;
+    }
+
     public void setCallerContext(StackTraceElement[] context) {
         this.callerContext = context;
     }
@@ -506,7 +522,6 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
             // if copy mode, no need for registering AC
             if (this.isAwaited() && !this.copyMode) {
                 boolean continuation = (FuturePool.getBodiesDestination() != null);
-
                 // if continuation=false, no destination is registred:
                 // - either ac are disabled,
                 // - or this future is serialized in a migration forwarder.
@@ -553,6 +568,8 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         out.writeObject(id);
         // Pass a reference to the updater
         out.writeObject(writtenUpdater.getRemoteAdapter());
+        // Pass a reference to the creator
+        out.writeObject(this.creator.getRemoteAdapter());
 
         // serialize the stack context or null
         if (enableStack) {
@@ -573,6 +590,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         target = (MethodCallResult) in.readObject();
         id = (FutureID) in.readObject();
         updater = (UniversalBody) in.readObject();
+        creator = (UniversalBody) in.readObject();
         callerContext = (StackTraceElement[]) in.readObject();
         currentMainStackElement = (StackTraceElement) in.readObject();
         // register all incoming futures, even for migration or checkpointing

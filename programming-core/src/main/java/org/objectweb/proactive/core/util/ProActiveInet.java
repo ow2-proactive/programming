@@ -421,7 +421,7 @@ public class ProActiveInet {
                         // try to connect to *somewhere*
                         socket.connect(new InetSocketAddress(InetAddress.getByName(serverToConnectTo), port));
                         long end = System.currentTimeMillis();
-                        return new AbstractMap.SimpleImmutableEntry(address, (int) (end - start));
+                        return new AbstractMap.SimpleImmutableEntry<>(address, (int) (end - start));
                     }
                 }
             });
