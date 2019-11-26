@@ -54,7 +54,7 @@ subprojects {
     audit {
          failOnError = false
          rateLimitAsError = false
-         cache = "/tmp/ossindex.cache"
+         cache = System.getProperty("java.io.tmpdir") +"/ossindex.cache"
     }
     compileJava.dependsOn 'audit'
 
