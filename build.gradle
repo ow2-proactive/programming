@@ -356,7 +356,7 @@ project('programming-extensions:programming-extension-pnp') {
                 project(':programming-core'),
                 'io.netty:netty:3.10.6.Final',
                 'com.google.guava:guava:19.0',
-                'org.apache.commons:commons-collections4:4.0'
+                'org.apache.commons:commons-collections4:4.4'
         )
     }
 }
@@ -366,7 +366,7 @@ project('programming-extensions:programming-extension-pnpssl') {
         compile(
                 project(':programming-core'),
                 'io.netty:netty:3.10.6.Final',
-                'org.bouncycastle:bcprov-ext-jdk15on:1.52',
+                'org.bouncycastle:bcprov-ext-jdk15on:1.64',
 
                 project(':programming-extensions:programming-extension-pnp')
         )
