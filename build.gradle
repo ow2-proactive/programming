@@ -37,10 +37,6 @@ buildscript {
 
 ext.serialver = programmingSerialver
 
-audit {
-    failOnError = false
-}
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -53,6 +49,14 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_7
 
     compileJava.options.compilerArgs << '-Xlint:-options' // remove warning about bootstrap class path
+
+
+    audit {
+         failOnError = false
+         rateLimitAsError = false
+         cache = "/tmp/ossindex.cache"
+    }
+    compileJava.dependsOn 'audit'
 
     rootProject.buildscript.repositories.each {
         repositories.add(it)
@@ -515,7 +519,6 @@ project(':doc').subprojects {
 }
 
 apply from: 'dist.gradle'
-
 
 licenseReport {
     configurations = ['runtime']
