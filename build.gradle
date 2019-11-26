@@ -20,7 +20,7 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
         maven { url 'http://repository.activeeon.com/content/groups/proactive/'}
-        
+
     }
 
     dependencies {
