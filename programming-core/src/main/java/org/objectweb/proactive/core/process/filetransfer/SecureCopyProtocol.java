@@ -91,8 +91,7 @@ public class SecureCopyProtocol extends AbstractCopyProtocol {
                     globalReturnCode = returnCode; //One succes is good enough to return global success
                 }
             } catch (Exception e) {
-                logger.error("Error forking scp");
-                e.printStackTrace();
+                logger.error("Error forking scp", e);
             }
         }
 

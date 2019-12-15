@@ -332,7 +332,7 @@ public class FuturePool extends Object implements java.io.Serializable {
             try {
                 this.receiveFutureValue(id, creatorID, valuesForFutures.remove("" + id + creatorID), null);
             } catch (java.io.IOException e) {
-                e.printStackTrace();
+                logger.error("Error while receiving future value", e);
             }
         }
     }
@@ -361,7 +361,7 @@ public class FuturePool extends Object implements java.io.Serializable {
             try {
                 wait(timeout);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error("Waiting for reply interrupted", e);
             }
         }
     }
@@ -585,7 +585,7 @@ public class FuturePool extends Object implements java.io.Serializable {
                     wait();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error("Waiting for automatic continuation interrupted", e);
             }
         }
     }

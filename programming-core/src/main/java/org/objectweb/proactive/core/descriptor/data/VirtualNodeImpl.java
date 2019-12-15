@@ -432,8 +432,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                             try {
                                 waitForAllNodesCreation();
                             } catch (NodeException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
+                                logger.error("", e);
                             }
                         } else {
                             ExternalProcess firstProcess = ((AbstractSequentialListProcessDecorator) process).getFirstProcess();
@@ -451,10 +450,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                                 this.proActiveRuntimeImpl.createVM(firstProcess);
                                 this.globalTimeOut = System.currentTimeMillis() + this.timeout;
                                 waitForAllNodesCreation();
-                            } catch (java.io.IOException e) {
-                                e.printStackTrace();
-                            } catch (NodeException e1) {
-                                e1.printStackTrace();
+                            } catch (java.io.IOException | NodeException e) {
+                                logger.error("", e);
                             }
                         }
 
@@ -496,10 +493,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                                     this.mpiProcess = nextProcess;
                                 }
                             }
-                        } catch (java.io.IOException e) {
-                            e.printStackTrace();
-                        } catch (NodeException e1) {
-                            e1.printStackTrace();
+                        } catch (java.io.IOException | NodeException e) {
+                            logger.error("", e);
                         }
                     } else {
                         // Test if that is this virtual Node that originates the creation of the vm
@@ -513,9 +508,8 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                                 // It is this virtual Node that originates the creation of the vm
                                 this.proActiveRuntimeImpl.createVM(process);
                             } catch (java.io.IOException e) {
-                                e.printStackTrace();
                                 logger.error("cannot activate virtualNode " + this.name + " with the process " +
-                                             process.getCommand());
+                                             process.getCommand(), e);
                             }
                         }
                     }
@@ -834,7 +828,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                         //					the node is local, unregister it.
                         part.killNode(node.getNodeInformation().getURL());
                     } catch (ProActiveException e) {
-                        e.printStackTrace();
+                        logger.error("", e);
                     }
                 }
             }
@@ -851,7 +845,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                     this.proActiveRuntimeImpl.unregisterVirtualNode(this.name);
                 }
             } catch (ProActiveException e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
 
             // if not activated unregister it from the local runtime
@@ -883,7 +877,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
 
                 this.uniqueActiveObject = node.getActiveObjects()[0];
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
         }
 
@@ -1105,7 +1099,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                 mbean.sendNotification(NotificationType.nodeCreated, notificationData);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 
@@ -1118,7 +1112,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                 try {
                     wait(getTimeToSleep());
                 } catch (InterruptedException e2) {
-                    e2.printStackTrace();
+                    logger.error("", e2);
                 } catch (IllegalStateException e) {
                     // it may happen that we entered in the loop and just after
                     // the timeToSleep is < 0. It means that the timeout expired
@@ -1145,7 +1139,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
             try {
                 Thread.sleep(this.timeout);
             } catch (InterruptedException e2) {
-                e2.printStackTrace();
+                logger.error("", e2);
             }
         } else {
             //behavior has to be moved in a synchronized method to avoid useless lock
@@ -1193,7 +1187,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                 try {
                     wait(getTimeToSleep());
                 } catch (InterruptedException e2) {
-                    e2.printStackTrace();
+                    logger.error("", e2);
                 } catch (IllegalStateException e) {
                     // it may happen that we entered in the loop and just after
                     // the timeToSleep is < 0. It means that the timeout expired
@@ -1287,7 +1281,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
                     localruntimeURL = System.getProperty("user.name") + "@" + localruntimeURL;
                 }
             } catch (ProActiveException e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
 
             if (logger.isDebugEnabled()) {
@@ -1330,7 +1324,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
             return MakeDeepCopy.WithObjectStream.makeDeepCopy(process);
         } catch (Exception e) {
             //TODO dangerous code as the deep copy didn't occurs.
-            e.printStackTrace();
+            logger.error("Deep copy could not be performed, this can lead to errors", e);
         }
         return null;
     }
@@ -1373,7 +1367,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl
         } catch (NodeException e) {
             logger.error(e.getMessage());
         } catch (ProActiveException e) {
-            e.printStackTrace();
+            logger.error("", e);
         } catch (AlreadyBoundException e) {
             logger.warn("The Virtual Node name " + this.getName() + " is already bound in the registry", e);
         }

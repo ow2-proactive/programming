@@ -1068,8 +1068,7 @@ public class PAActiveObject {
                 activeNames[i] = uris[i].toString();
             }
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Error while retrieving active objects", e);
         }
 
         return activeNames;

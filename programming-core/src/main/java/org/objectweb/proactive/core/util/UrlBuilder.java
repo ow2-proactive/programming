@@ -97,8 +97,7 @@ public class UrlBuilder {
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
             return buildUrl(host, name, protocol, rof.getPort());
         } catch (UnknownProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("", e);
         }
         return null;
     }
@@ -162,10 +161,8 @@ public class UrlBuilder {
             }
 
             return new URI(protocol, null, host, port, name, null, null).toString();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | UnknownHostException e) {
+            logger.error("", e);
         }
         return null;
     }
@@ -187,8 +184,7 @@ public class UrlBuilder {
             try {
                 RemoteObjectHelper.getRemoteObjectFactory(protocol);
             } catch (UnknownProtocolException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("", e);
             }
             port = CentralPAPropertyRepository.PA_XMLHTTP_PORT.getValueAsString();
         }
@@ -285,7 +281,7 @@ public class UrlBuilder {
             URI uri = new URI(hostname);
             return uri.getHost();
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("", e);
             return hostname;
         }
     }
@@ -299,8 +295,8 @@ public class UrlBuilder {
         try {
             URI uri = new URI(url);
             return uri.getPort();
-        } catch (URISyntaxException e1) {
-            e1.printStackTrace();
+        } catch (URISyntaxException e) {
+            logger.error("", e);
             return -1;
         }
     }
@@ -397,7 +393,7 @@ public class UrlBuilder {
             u2 = new URI(u.getScheme(), u.getUserInfo(), u.getHost(), port, u.getPath(), u.getQuery(), u.getFragment());
             return u2.toString();
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         return url;
@@ -432,8 +428,7 @@ public class UrlBuilder {
                 }
             }
         } catch (SocketException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("", e);
         }
         return null;
     }

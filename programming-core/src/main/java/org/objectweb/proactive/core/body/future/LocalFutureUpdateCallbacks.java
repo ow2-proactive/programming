@@ -33,9 +33,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 import com.google.common.collect.Lists;
 
@@ -83,6 +86,8 @@ class ProActiveFuture implements java.util.concurrent.Future<Object> {
  * Callbacks are local, so are not copied when a future is serialized.
  */
 public class LocalFutureUpdateCallbacks {
+    final static protected Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
+
     private BodyImpl body;
 
     private Collection<MethodAndArguments> methods;
@@ -128,7 +133,7 @@ public class LocalFutureUpdateCallbacks {
             try {
                 this.body.sendRequest(mc, null, this.body);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Error while sending request", e);
             }
         }
     }

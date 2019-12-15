@@ -383,8 +383,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                         this.currentReceiver.serve(this.currentRequest);
                     } catch (Throwable e) {
                         logger.error("An exception occured in the service of " + this.currentRequest.getMethodName() +
-                                     " by " + this);
-                        e.printStackTrace();
+                                     " by " + this, e);
                     }
                     // the following set do not have to be synchronized since only one deleguateServe call at a time is possible 
                     this.currentRequest = null;

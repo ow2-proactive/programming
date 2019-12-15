@@ -83,8 +83,7 @@ public class VariablesHandler extends PassiveCompositeUnmarshaller implements Pr
             sr.read();
             //return (cast) vh.getResultObject();
         } catch (Exception e) {
-            logger.error("Unable to load Variable Contract from:" + filename);
-            e.printStackTrace();
+            logger.error("Unable to load Variable Contract from:" + filename, e);
         }
     }
 

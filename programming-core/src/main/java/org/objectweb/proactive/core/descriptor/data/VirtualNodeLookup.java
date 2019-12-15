@@ -155,7 +155,7 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
                 this.virtualNode = PADeployment.lookupVirtualNode(urlForLookup).getVirtualNodeInternal();
                 isActivated = true;
             } catch (ProActiveException e) {
-                e.printStackTrace();
+                vnLogger.error("", e);
                 throw new ProActiveRuntimeException(e);
             }
         } else {

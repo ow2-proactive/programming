@@ -243,7 +243,7 @@ public class HttpSshUrlConnection extends java.net.HttpURLConnection {
         try {
             connection.setRequestMethod(getRequestMethod());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         Set<Map.Entry<String, List<String>>> set = _properties.entrySet();
@@ -256,7 +256,7 @@ public class HttpSshUrlConnection extends java.net.HttpURLConnection {
                 try {
                     connection.addRequestProperty(key, val);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
         }

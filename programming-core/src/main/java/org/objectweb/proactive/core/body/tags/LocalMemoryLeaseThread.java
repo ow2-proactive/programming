@@ -69,7 +69,7 @@ public class LocalMemoryLeaseThread implements Runnable {
             try {
                 Thread.sleep(period * 1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.warn("", e);
             }
             Iterator<UniversalBody> iter = LocalBodyStore.getInstance().getLocalBodies().bodiesIterator();
             while (iter.hasNext()) {

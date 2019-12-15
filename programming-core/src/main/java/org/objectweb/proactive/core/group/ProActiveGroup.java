@@ -1232,11 +1232,9 @@ public class ProActiveGroup {
         try {
             result = ProActiveGroup.newGroup(ProActiveGroup.getType(ogroup), (Class<?>[]) null);
         } catch (ClassNotReifiableException e) {
-            logger.error("**** ClassNotReifiableException ****");
-            e.printStackTrace();
+            logger.error("**** ClassNotReifiableException ****", e);
         } catch (ClassNotFoundException e) {
-            logger.error("**** ClassNotFoundException ****");
-            e.printStackTrace();
+            logger.error("**** ClassNotFoundException ****", e);
         }
 
         Group go = ProActiveGroup.getGroup(ogroup);

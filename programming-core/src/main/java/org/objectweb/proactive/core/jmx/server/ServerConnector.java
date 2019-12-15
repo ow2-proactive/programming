@@ -34,8 +34,11 @@ import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.jmx.ProActiveJMXConstants;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -44,6 +47,8 @@ import org.objectweb.proactive.core.jmx.ProActiveJMXConstants;
  *
  */
 public class ServerConnector {
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
+
     private MBeanServer mbs;
 
     private JMXConnectorServer cs;
@@ -72,10 +77,8 @@ public class ServerConnector {
             cs = JMXConnectorServerFactory.newJMXConnectorServer(jmxUrl,
                                                                  ProActiveJMXConstants.PROACTIVE_JMX_ENV,
                                                                  this.mbs);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 

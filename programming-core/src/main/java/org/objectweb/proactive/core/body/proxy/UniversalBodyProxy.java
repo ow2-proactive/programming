@@ -223,7 +223,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
                 } catch (MOPException e) {
                     throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
                 } catch (InactiveBodyException e) {
-                    e.printStackTrace();
+                    logger.error("Error while creating local Body, Body is inactive", e);
                 }
 
             }
@@ -237,12 +237,8 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
                 try {
                     objectReplacer.restoreObject();
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    logger.error("Error while restoring object", e);
                 }
             }
 
@@ -292,7 +288,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
                 } catch (MOPException e) {
                     throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
                 } catch (InactiveBodyException e) {
-                    e.printStackTrace();
+                    logger.error("Error while creating remote Body, Body is inactive", e);
                 }
 
             }
@@ -304,12 +300,8 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
                 try {
                     objectReplacer.restoreObject();
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    logger.error("Error while restoring object", e);
                 }
             }
 
@@ -395,7 +387,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             } catch (MOPException e) {
                 throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
             } catch (InactiveBodyException e) {
-                e.printStackTrace();
+                logger.error("Error while sending request, Body is inactive", e);
             }
 
         }
@@ -420,12 +412,8 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
             try {
                 objectReplacer.restoreObject();
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                logger.error("Error while restoring object", e);
             }
         }
 

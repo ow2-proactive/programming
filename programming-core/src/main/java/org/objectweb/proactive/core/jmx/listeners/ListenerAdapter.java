@@ -72,10 +72,8 @@ public class ListenerAdapter implements NotificationListener {
                                    ") while sending the notification -- removing the listener");
             try {
                 mbs.removeNotificationListener(name, this);
-            } catch (InstanceNotFoundException e1) {
-                e1.printStackTrace();
-            } catch (ListenerNotFoundException e1) {
-                e1.printStackTrace();
+            } catch (InstanceNotFoundException | ListenerNotFoundException e1) {
+                JMX_NOTIFICATION.error("", e);
             }
         }
     }

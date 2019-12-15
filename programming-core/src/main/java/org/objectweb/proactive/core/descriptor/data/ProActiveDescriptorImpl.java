@@ -457,8 +457,7 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
                 jvmProcess.setExtendedJVM(process);
             }
         } catch (ClassCastException e) {
-            logger.fatal("ERROR: a jvmProcess can only extend another jvmProcess. Correct the Descriptor");
-            e.printStackTrace();
+            logger.fatal("ERROR: a jvmProcess can only extend another jvmProcess. Correct the Descriptor", e);
         }
     }
 
@@ -485,9 +484,8 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
             try {
                 serviceUser.setService(service);
             } catch (ProActiveException e) {
-                e.printStackTrace();
                 logger.error("the given service " + service.getServiceName() + " cannot be set for class " +
-                             serviceUser.getUserClass());
+                             serviceUser.getUserClass(), e);
             }
         }
     }
@@ -768,9 +766,8 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
             try {
                 serviceUser.setService(s);
             } catch (ProActiveException e) {
-                e.printStackTrace();
                 logger.error("the given service " + s.getServiceName() + " cannot be set for class " +
-                             serviceUser.getUserClass());
+                             serviceUser.getUserClass(), e);
             }
         }
     }

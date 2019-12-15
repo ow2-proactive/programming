@@ -35,12 +35,15 @@ import javax.management.MBeanServer;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXServiceURL;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.jmx.ProActiveJMXConstants;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -51,6 +54,8 @@ import org.objectweb.proactive.core.node.NodeException;
  * @author The ProActive Team
  */
 public class ProActiveConnectorServer extends JMXConnectorServer {
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
+
     private JMXServiceURL address;
 
     private ProActiveServerImpl paServer;
@@ -148,12 +153,9 @@ public class ProActiveConnectorServer extends JMXConnectorServer {
             paServer.setMBeanServer(mbs);
             paServer = (ProActiveServerImpl) PAActiveObject.turnActive(paServer);
             id = paServer.getUniqueID();
-        } catch (ActiveObjectCreationException e) {
-            e.printStackTrace();
-        } catch (NodeException e) {
-            e.printStackTrace();
+        } catch (ActiveObjectCreationException | NodeException e) {
+            logger.error("", e);
         }
-
         //Server registrations
         //        String url = ClassServer.getUrl();
         //        String url = "";

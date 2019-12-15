@@ -64,7 +64,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
      */
     private static transient java.util.Hashtable<String, ReifiableAndExceptions> REIF_AND_EXCEP = new java.util.Hashtable<String, ReifiableAndExceptions>();
 
-    static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
 
     private static java.util.Hashtable<String, Method> reifiedMethodsTable = new java.util.Hashtable<String, Method>();
 
@@ -109,7 +109,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
             try {
                 this.serializedEffectiveArguments = ObjectToByteConverter.MarshallStream.convert(this.effectiveArguments);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
 
             this.effectiveArguments = null;
@@ -217,7 +217,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
             try {
                 this.effectiveArguments = (Object[]) ProActiveByteToObjectConverter.MarshallStream.convert(this.serializedEffectiveArguments);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
 
             this.serializedEffectiveArguments = null;
@@ -386,7 +386,7 @@ public class MethodCall implements java.io.Serializable, Cloneable {
             try {
                 this.effectiveArguments = (Object[]) ProActiveByteToObjectConverter.MarshallStream.convert(this.serializedEffectiveArguments);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
 
             this.serializedEffectiveArguments = null;

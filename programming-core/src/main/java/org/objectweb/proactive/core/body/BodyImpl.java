@@ -621,11 +621,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                     objectReplacer = new ObjectReferenceReplacer(BodyImpl.this.getReifiedObject(), stubOnActiveObject);
                     modifiedObject = objectReplacer.replaceObject(initialObject);
                     reply.getResult().setResult(modifiedObject);
-                } catch (InactiveBodyException e) {
-                    e.printStackTrace();
-                } catch (MOPException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (InactiveBodyException | MOPException e) {
+                    bodyLogger.error("Error while serving request " + request.getMethodName(), e);
                 }
 
             }
@@ -665,12 +662,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
                 try {
                     objectReplacer.restoreObject();
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    bodyLogger.error("Error while serving request " + request.getMethodName(), e);
                 }
             }
         }

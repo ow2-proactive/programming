@@ -31,6 +31,10 @@ import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
 /*
  * This is the nasty hack to bypass java checked exceptions
  */
@@ -46,6 +50,9 @@ interface Thrower {
 }
 
 public class ExceptionThrower {
+
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
+
     private static final String THROWER_CLASS_NAME = "TheActualExceptionThrower";
 
     private static final String THROWER_CLASS_PACKAGE = ExceptionThrower.class.getPackage().getName();
@@ -64,7 +71,7 @@ public class ExceptionThrower {
             throwerClass.addMethod(throwException);
             return loadClass(THROWER_CLASS_FULLNAME, throwerClass.toBytecode());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return null;
     }
@@ -95,7 +102,7 @@ public class ExceptionThrower {
             Class<?> clazz = loadClassJavassist();
             thrower = (Thrower) clazz.newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 

@@ -541,8 +541,8 @@ public class JMXNotificationManager implements NotificationListener {
 
             //System.out.println("Unregistered the JMXNotificationListener for IC2D from the regisrty.");
         } catch (Exception e) {
-            System.out.println("Could not unregistered the JMXNotificationListener for IC2D from the regisrty.");
-            e.printStackTrace();
+            System.out.println("Could not unregistered the JMXNotificationListener for IC2D from the registry.");
+            logger.error("", e);
         }
 
         //The localBody for this thread will be removed by the unregisterAllHalfBodiesFromRegistry()

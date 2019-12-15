@@ -131,7 +131,7 @@ public class Torus<E> extends Ring<E> { // implements Topology2D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         int begining = Ring * this.getWidth();
         for (int i = begining; i < (begining + this.getWidth()); i++) {
@@ -141,7 +141,7 @@ public class Torus<E> extends Ring<E> { // implements Topology2D {
         try {
             result = new Ring<E>(tmp, this.getWidth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }
@@ -168,7 +168,7 @@ public class Torus<E> extends Ring<E> { // implements Topology2D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         for (int i = 0; i < this.getHeight(); i++) {
@@ -178,7 +178,7 @@ public class Torus<E> extends Ring<E> { // implements Topology2D {
         try {
             result = new Ring<E>(tmp, this.getWidth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }

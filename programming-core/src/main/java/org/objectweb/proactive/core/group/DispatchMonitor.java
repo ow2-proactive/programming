@@ -36,11 +36,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
 import org.objectweb.proactive.core.mop.Proxy;
 import org.objectweb.proactive.core.mop.StubObject;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -61,6 +64,8 @@ import org.objectweb.proactive.core.mop.StubObject;
  */
 @PublicAPI
 public class DispatchMonitor {
+
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
 
     int instance;
 
@@ -116,7 +121,7 @@ public class DispatchMonitor {
         try {
             availableSlots.take();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.warn("", e);
         }
         synchronized (rankedWorkers) {
             Collections.sort(rankedWorkers);

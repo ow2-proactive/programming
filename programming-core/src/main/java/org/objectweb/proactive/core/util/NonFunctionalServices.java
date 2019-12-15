@@ -29,8 +29,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.Proxy;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -42,6 +45,8 @@ import org.objectweb.proactive.core.mop.Proxy;
  *
  */
 public class NonFunctionalServices {
+    static Logger logger = ProActiveLogger.getLogger(Loggers.UTIL);
+
     static Class<?> nonFunctionalServicesClass = null;
 
     static Method terminateAOMethod = null;
@@ -57,12 +62,8 @@ public class NonFunctionalServices {
             paramTypes[0] = java.lang.Class.forName(Proxy.class.getName());
             terminateAOMethod = nonFunctionalServicesClass.getMethod("_terminateAO", paramTypes);
             terminateAOImmediatelyMethod = nonFunctionalServicesClass.getMethod("_terminateAOImmediately", paramTypes);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SecurityException es) {
-            es.printStackTrace();
-        } catch (NoSuchMethodException en) {
-            en.printStackTrace();
+        } catch (ClassNotFoundException | SecurityException | NoSuchMethodException e) {
+            logger.error("", e);
         }
     }
 

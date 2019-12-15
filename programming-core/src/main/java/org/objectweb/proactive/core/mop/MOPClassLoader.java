@@ -134,7 +134,7 @@ public class MOPClassLoader extends URLClassLoader {
             Class<?> c = Class.forName("org.objectweb.proactive.core.mop.MOPClassLoader");
             currentClassLoader = c.getClassLoader();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         URL[] urls = null;
@@ -208,7 +208,7 @@ public class MOPClassLoader extends URLClassLoader {
                     return clazz;
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    logger.debug(ex);
+                    logger.debug("", ex);
                     throw new ClassNotFoundException(ex.getMessage());
                 }
 
@@ -227,7 +227,7 @@ public class MOPClassLoader extends URLClassLoader {
                         //                    callDefineClassUsingReflection(classname, data);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        logger.debug(ex);
+                        logger.debug("", ex);
                         throw new ClassNotFoundException(ex.getMessage());
                     }
                 }
@@ -314,7 +314,7 @@ public class MOPClassLoader extends URLClassLoader {
                 try {
                     url = new URL("pamop:///" + name);
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
         }

@@ -109,7 +109,7 @@ public class StartRuntime {
                 try {
                     o.wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.warn("", e);
                 }
             }
         }
@@ -137,12 +137,11 @@ public class StartRuntime {
                     try {
                         o.wait();
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.warn("", e);
                     }
                 }
             } catch (ProActiveException e) {
-                e.printStackTrace();
+                logger.error("", e);
                 //				 if we cannot get the parent, this jvm is useless
                 System.exit(0);
             }
@@ -164,7 +163,7 @@ public class StartRuntime {
                           CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue(),
                           this.vmName);
         } catch (ProActiveException e) {
-            e.printStackTrace();
+            logger.error("", e);
 
             // if we cannot register, this jvm is useless
             System.exit(0);

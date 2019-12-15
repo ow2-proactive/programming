@@ -95,7 +95,7 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
                 service.blockingServeOldest(new RequestFilterOnAllowedMethods(allowedMethodNames));
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.warn("", e);
         }
     }
 

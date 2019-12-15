@@ -107,7 +107,7 @@ abstract public class PAProperties {
                     PAProperty prop = PAProperty.class.cast(field.get(null));
                     properties.add(prop);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
         }

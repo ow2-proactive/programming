@@ -29,6 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.TypeVariable;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.message.MessageImpl;
@@ -36,9 +37,13 @@ import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class BodyRequest extends MessageImpl implements Request, java.io.Serializable {
+    final static protected Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);
+
     protected MethodCall methodCall;
 
     protected boolean isPriority;
@@ -147,10 +152,8 @@ public class BodyRequest extends MessageImpl implements Request, java.io.Seriali
     protected void serveInternal(Body targetBody) {
         try {
             methodCall.execute(targetBody);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (MethodCallExecutionFailedException e) {
-            e.printStackTrace();
+        } catch (InvocationTargetException | MethodCallExecutionFailedException e) {
+            logger.error("Error while executing request " + methodCall.getName() + " on " + targetBody.getID(), e);
         }
     }
 

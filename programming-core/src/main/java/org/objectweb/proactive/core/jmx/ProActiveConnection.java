@@ -51,6 +51,7 @@ import javax.management.ObjectName;
 import javax.management.QueryExp;
 import javax.management.ReflectionException;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.ProActiveInternalObject;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -60,6 +61,8 @@ import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.jmx.listeners.ListenerAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper;
 
 
@@ -69,6 +72,8 @@ import org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper;
  *
  */
 public class ProActiveConnection implements Serializable, MBeanServerConnection, ProActiveInternalObject {
+
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
 
     /**
     
@@ -249,7 +254,7 @@ public class ProActiveConnection implements Serializable, MBeanServerConnection,
             this.objectNameToListenerMap.put(name, tl);
             this.mbs.addNotificationListener(name, tl, filter, handback);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 
@@ -520,7 +525,7 @@ public class ProActiveConnection implements Serializable, MBeanServerConnection,
                 roe.unregisterAll();
             } catch (ProActiveException e) {
                 // see PROACTIVE-416
-                e.printStackTrace();
+                logger.error("", e);
             }
         }
     }

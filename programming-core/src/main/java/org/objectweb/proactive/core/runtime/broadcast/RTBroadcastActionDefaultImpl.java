@@ -28,12 +28,17 @@ package org.objectweb.proactive.core.runtime.broadcast;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 class RTBroadcastActionDefaultImpl implements RTBroadcastAction {
+
+    public static Logger logger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     //
     // -- CONSTRUCTOR -----------------------------------------------
@@ -64,10 +69,8 @@ class RTBroadcastActionDefaultImpl implements RTBroadcastAction {
         try {
             rtCallback = (BTCallback) PARemoteObject.lookup(new URI(url));
             rtCallback.register(ProActiveRuntimeImpl.getProActiveRuntime().getURL());
-        } catch (ProActiveException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        } catch (ProActiveException | URISyntaxException e) {
+            logger.error("", e);
         }
     }
 

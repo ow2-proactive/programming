@@ -848,7 +848,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         try { // a new proxy is generated
             result = MOP.newInstance(this.className, null, null, ProxyForGroup.class.getName(), null);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
             return null;
         }
         @SuppressWarnings("unchecked")
@@ -896,10 +896,8 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 }
                 return result;
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | ConstructionOfReifiedObjectFailedException e) {
+            logger.error("", e);
         }
 
         // the group are incompatible (i.e. they have not members of the the
@@ -932,10 +930,8 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 }
                 return result;
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | ConstructionOfReifiedObjectFailedException e) {
+            logger.error("", e);
         }
 
         // the group are incompatible (i.e. they have not members of the the
@@ -966,10 +962,8 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 }
                 return result;
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | ConstructionOfReifiedObjectFailedException e) {
+            logger.error("", e);
         }
 
         // the group are incompatible (i.e. they have not members of the the
@@ -1010,10 +1004,8 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 }
                 return result;
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | ConstructionOfReifiedObjectFailedException e) {
+            logger.error("", e);
         }
 
         // the group are incompatible (i.e. they have not members of the the
@@ -1050,7 +1042,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
             }
             return result;
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
             return null;
         }
     }
@@ -1065,10 +1057,9 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         try {
             this.reify(new MethodCallSetSPMDGroup(spmdGroup));
         } catch (InvocationTargetException e) {
-            logger.info("Unable to set the SPMD group");
-            e.printStackTrace();
+            logger.warn("Unable to set the SPMD group", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 
@@ -1267,8 +1258,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         try {
             doneSignal.await();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.warn("", e);
         }
     }
 
@@ -1303,8 +1293,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         try {
             doneSignal.await();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.warn("", e);
         }
     }
 

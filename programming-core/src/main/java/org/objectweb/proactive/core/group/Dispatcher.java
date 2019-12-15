@@ -32,10 +32,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.NamedThreadFactory;
 import org.objectweb.proactive.utils.ThreadPools;
 
@@ -57,6 +60,8 @@ import org.objectweb.proactive.utils.ThreadPools;
  */
 @PublicAPI
 public class Dispatcher {
+
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
 
     ThreadPoolExecutor threadPool;
 
@@ -173,7 +178,7 @@ public class Dispatcher {
         try {
             doneSignal.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.warn("", e);
         }
 
     }

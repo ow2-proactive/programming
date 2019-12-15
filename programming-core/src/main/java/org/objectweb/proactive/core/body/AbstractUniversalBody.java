@@ -196,8 +196,7 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
             this.remoteBody = (UniversalBody) new RemoteObjectAdapter(rro).getObjectProxy();
 
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            bodyLogger.error("Error while reading object", e);
         }
     }
 
