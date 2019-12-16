@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
@@ -40,6 +41,8 @@ import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.StubObject;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.utils.TimeoutAccounter;
 
 
@@ -53,6 +56,8 @@ import org.objectweb.proactive.utils.TimeoutAccounter;
  */
 @PublicAPI
 public class PAFuture {
+
+    protected final static Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
 
     /**
      * This negative value is returned by waitForAny(List futures) if the parameter
@@ -71,7 +76,7 @@ public class PAFuture {
             return getFutureValue(future, 0);
         } catch (ProActiveTimeoutException e) {
             //Exception above should never be thrown since timeout=0 means no timeout
-            e.printStackTrace();
+            logger.error("Timeout while receiving future", e);
             return null;
         }
     }
@@ -255,7 +260,7 @@ public class PAFuture {
             PAFuture.waitForAll(futures, 0);
         } catch (ProActiveTimeoutException e) {
             //Exception above should never be thrown since timeout=0 means no timeout
-            e.printStackTrace();
+            logger.error("Timeout while receiving future", e);
         }
     }
 
@@ -298,7 +303,7 @@ public class PAFuture {
             return PAFuture.waitForAny(futures, 0);
         } catch (ProActiveException e) {
             //Exception above should never be thrown since timeout=0 means no timeout
-            e.printStackTrace();
+            logger.error("Timeout while receiving future", e);
             return -1;
         }
     }

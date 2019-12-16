@@ -27,13 +27,18 @@ package org.objectweb.proactive.core.group;
 
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.Proxy;
 import org.objectweb.proactive.core.mop.StubObject;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public abstract class AbstractProcessForGroup implements Runnable {
+
+    protected static final Logger logger = ProActiveLogger.getLogger(Loggers.GROUPS);
 
     protected static Proxy findLastProxy(Object obj) {
         if (!MOP.isReifiedObject(obj)) {

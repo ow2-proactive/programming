@@ -58,10 +58,8 @@ public class HalfBody extends AbstractBody {
     public synchronized static HalfBody getHalfBody(MetaObjectFactory factory) {
         try {
             return new HalfBody(factory);
-        } catch (ActiveObjectCreationException e) {
-            e.printStackTrace();
-        } catch (NodeException e) {
-            e.printStackTrace();
+        } catch (ActiveObjectCreationException | NodeException e) {
+            bodyLogger.error("", e);
         }
         return null;
     }

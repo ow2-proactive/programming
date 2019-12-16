@@ -216,7 +216,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         int begining = (posZ * (this.getHeight() * this.getWidth())) + (posY * this.getWidth());
@@ -227,7 +227,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             result = new Line<E>(tmp, this.getWidth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }
@@ -246,7 +246,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         int begining = (posZ * (this.getHeight() * this.getWidth())) + posX;
@@ -257,7 +257,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             result = new Line<E>(tmp, this.getWidth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }
@@ -275,7 +275,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         int begining = (posY * this.getWidth()) + posY;
@@ -286,7 +286,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             result = new Line<E>(tmp, this.getWidth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }
@@ -301,7 +301,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         int begining = this.getX(this.indexOf(o));
@@ -314,7 +314,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             result = new Plan<E>(tmp, this.getWidth(), this.getDepth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }
@@ -329,7 +329,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         int begining = this.getY(this.indexOf(o)) * this.getWidth();
@@ -342,7 +342,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             result = new Plan<E>(tmp, this.getWidth(), this.getDepth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }
@@ -357,7 +357,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         int begining = this.getZ(this.indexOf(o)) * (this.getWidth() * this.getHeight());
@@ -368,7 +368,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
         try {
             result = new Plan<E>(tmp, this.getWidth(), this.getDepth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }

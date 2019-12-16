@@ -464,7 +464,7 @@ public class JavassistByteCodeStubBuilder {
                                                     body.toString(),
                                                     generatedClass);
             } catch (RuntimeException e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
 
             generatedClass.addMethod(methodToGenerate);

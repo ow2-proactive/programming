@@ -233,7 +233,7 @@ public abstract class AbstractCopyProtocol implements CopyProtocol {
 
                 sb.append(new String(b, 0, read));
             } catch (IOException e1) {
-                e1.printStackTrace();
+                logger.error("", e1);
             }
         }
         return sb.toString();

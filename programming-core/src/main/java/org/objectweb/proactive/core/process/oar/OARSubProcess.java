@@ -262,7 +262,7 @@ public class OARSubProcess extends AbstractExternalProcessDecorator {
         } catch (java.io.IOException e) {
             isFinished = true;
             //throw e;
-            e.printStackTrace();
+            logger.error("", e);
         }
     }
 

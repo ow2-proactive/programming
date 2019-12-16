@@ -188,7 +188,7 @@ public class Plan<E> extends Line<E> { // implements Topology2D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         int begining = line * this.getWidth();
         for (int i = begining; i < (begining + this.getWidth()); i++) {
@@ -198,7 +198,7 @@ public class Plan<E> extends Line<E> { // implements Topology2D {
         try {
             result = new Line<E>(tmp, this.getWidth());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }
@@ -225,7 +225,7 @@ public class Plan<E> extends Line<E> { // implements Topology2D {
         try {
             tmp = new ProxyForGroup<E>(this.getTypeName());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         for (int i = 0; i < this.getHeight(); i++) {
             tmp.add(this.get(column + (i * this.getWidth())));
@@ -234,7 +234,7 @@ public class Plan<E> extends Line<E> { // implements Topology2D {
         try {
             result = new Line<E>(tmp, this.getHeight());
         } catch (ConstructionOfReifiedObjectFailedException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return result;
     }

@@ -40,6 +40,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXServiceURL;
 import javax.security.auth.Subject;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -48,6 +49,8 @@ import org.objectweb.proactive.core.jmx.ProActiveConnection;
 import org.objectweb.proactive.core.jmx.ProActiveJMXConstants;
 import org.objectweb.proactive.core.jmx.listeners.ProActiveConnectionNotificationEmitter;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -56,6 +59,9 @@ import org.objectweb.proactive.core.util.URIBuilder;
  *
  */
 public class ProActiveConnector implements JMXConnector, Serializable, NotificationListener {
+
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
+
     private static final int CLOSED = 0;
 
     private static final int OPEN = 1;
@@ -127,14 +133,10 @@ public class ProActiveConnector implements JMXConnector, Serializable, Notificat
             ProActiveServerImpl paServer = PAActiveObject.lookupActive(ProActiveServerImpl.class, lookupUrl);
 
             this.connection = paServer.newClient();
-        } catch (ActiveObjectCreationException e) {
-            e.printStackTrace();
+        } catch (ActiveObjectCreationException | IOException e) {
+            logger.error("", e);
             this.emitter.sendConnectionNotificationFailed();
-            throw new IOException(e.getMessage());
-        } catch (IOException e) {
-            this.emitter.sendConnectionNotificationFailed();
-            e.printStackTrace();
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getMessage(), e);
         }
         this.state = OPEN;
         emitter.sendConnectionNotificationOpened();

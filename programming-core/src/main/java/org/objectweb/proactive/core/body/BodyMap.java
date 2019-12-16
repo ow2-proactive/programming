@@ -29,8 +29,11 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.UniqueID;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -51,6 +54,9 @@ import org.objectweb.proactive.core.UniqueID;
  * @since   ProActive 0.9
  */
 public class BodyMap /* extends AbstractEventProducer */ implements Cloneable, java.io.Externalizable {
+
+    Logger bodyLogger = ProActiveLogger.getLogger(Loggers.BODY);
+
     //
     // -- PRIVATE MEMBER -----------------------------------------------
     //
@@ -76,7 +82,7 @@ public class BodyMap /* extends AbstractEventProducer */ implements Cloneable, j
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                bodyLogger.error("", e);
             }
         }
         idToBodyMap.put(id, b);

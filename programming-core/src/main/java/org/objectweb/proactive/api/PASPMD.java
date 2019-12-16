@@ -409,8 +409,7 @@ public class PASPMD {
             ProxyForGroup<Object> proxy = (ProxyForGroup<Object>) PAGroup.getGroup(group);
             proxy.reify(new MethodCallBarrier(barrierName));
         } catch (InvocationTargetException e) {
-            System.err.println("Unable to invoke a method call to control groups");
-            e.printStackTrace();
+            PAGroup.logger.error("Unable to invoke a method call to control groups", e);
         }
     }
 
@@ -424,11 +423,9 @@ public class PASPMD {
         try {
             (PAActiveObject.getStubOnThis()).getProxy().reify(new MethodCallBarrierWithMethodName(methodNames));
         } catch (InvocationTargetException e) {
-            System.err.println("Unable to invoke a method call to control groups");
-            e.printStackTrace();
+            PAGroup.logger.error("Unable to invoke a method call to control groups", e);
         } catch (Throwable e) {
-            System.err.println("Unable to invoke a method call to control groups");
-            e.printStackTrace();
+            PAGroup.logger.error("Unable to invoke a method call to control groups", e);
         }
     }
 }

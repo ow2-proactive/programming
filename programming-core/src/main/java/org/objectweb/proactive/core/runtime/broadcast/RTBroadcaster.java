@@ -36,13 +36,18 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcasterMessage {
+
+    public static Logger logger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     //
     // -- CONSTANT -----------------------------------------------
@@ -197,10 +202,8 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
             // --Close connection
             socket.leaveGroup(address);
             socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BroadcastDisabledException e) {
-            e.printStackTrace();
+        } catch (IOException | BroadcastDisabledException e) {
+            logger.error("", e);
         }
 
     }

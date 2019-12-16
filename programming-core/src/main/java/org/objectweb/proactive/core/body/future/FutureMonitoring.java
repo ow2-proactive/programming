@@ -172,7 +172,7 @@ public class FutureMonitoring implements Runnable {
     private static UniqueID getUpdaterBodyId(FutureProxy fp) {
         UniversalBody body = fp.getUpdater();
         if (body == null) {
-            new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
+            logger.error("", new Exception("Cannot monitor this future, unknown updater body"));
             return null;
         }
         return body.getID();
@@ -181,7 +181,7 @@ public class FutureMonitoring implements Runnable {
     private static UniqueID getCreatorBodyId(FutureProxy fp) {
         UniversalBody body = fp.getCreator();
         if (body == null) {
-            new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
+            logger.error("", new Exception("Cannot monitor this future, unknown updater body"));
             return null;
         }
         return body.getID();
@@ -189,7 +189,7 @@ public class FutureMonitoring implements Runnable {
 
     private static ActiveObjectLocationInfo getLocationInfo(UniversalBody body) {
         if (body == null) {
-            new Exception("Cannot monitor this future, unknown updater body").printStackTrace();
+            logger.error("", new Exception("Cannot monitor this future, unknown updater body"));
             return null;
         }
         UniqueID id = body.getID();

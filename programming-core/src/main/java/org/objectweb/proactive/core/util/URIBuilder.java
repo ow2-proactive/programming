@@ -104,7 +104,7 @@ public class URIBuilder {
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
             return buildURI(host, name, protocol, rof.getPort());
         } catch (UnknownProtocolException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return null;
     }
@@ -186,10 +186,8 @@ public class URIBuilder {
                 name = "/" + name;
             }
             return new URI(protocol, userInfo, host, port, name, query, null);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        } catch (URISyntaxException | UnknownHostException e) {
+            logger.error("", e);
         }
         return null;
     }
@@ -204,7 +202,7 @@ public class URIBuilder {
                            uri.getQuery(),
                            uri.getFragment());
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
         return null;
     }
@@ -353,7 +351,7 @@ public class URIBuilder {
             URI uri = new URI(hostname);
             return uri.getHost();
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("", e);
             return hostname;
         }
     }
@@ -452,7 +450,7 @@ public class URIBuilder {
                          uri.getFragment());
             return u2;
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         return uri;

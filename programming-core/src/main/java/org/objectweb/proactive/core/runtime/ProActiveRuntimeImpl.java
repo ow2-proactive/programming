@@ -712,7 +712,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
                 body = bodies.next();
                 ((Body) body).terminate();
             } catch (Throwable e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
         }
 
@@ -724,7 +724,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
                 halfBody = halfBodies.next();
                 ((Body) halfBody).terminate();
             } catch (Throwable e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
         }
 
@@ -739,8 +739,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
             HTTPServer.get().stop();
             HTTPServer.get().destroy();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("", e);
         }
 
         this.roe = null;
@@ -1177,18 +1176,14 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl
             if (this.launchMain) {
                 try {
                     this.mainMethod.invoke(null, new Object[] { this.parameters });
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                } catch (InvocationTargetException | IllegalAccessException e) {
+                    logger.error("", e);
                 }
             } else {
                 try {
                     this.remoteClass.newInstance();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
+                } catch (IllegalAccessException | InstantiationException e) {
+                    logger.error("", e);
                 }
             }
         }

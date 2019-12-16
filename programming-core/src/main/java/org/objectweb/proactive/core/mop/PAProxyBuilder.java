@@ -227,7 +227,7 @@ public class PAProxyBuilder {
                              Modifier.toString(m.getCtMethod().getModifiers()));
                 generatedCtClass.addMethod(methodToGenerate);
             } catch (RuntimeException e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
 
         }
@@ -272,7 +272,7 @@ public class PAProxyBuilder {
 
                     methodToGenerate.setModifiers(methodToGenerate.getModifiers() & ~Modifier.ABSTRACT);
                 } catch (RuntimeException e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
             generatedCtClass.addMethod(methodToGenerate);

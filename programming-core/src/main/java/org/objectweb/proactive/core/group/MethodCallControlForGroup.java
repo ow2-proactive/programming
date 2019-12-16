@@ -55,8 +55,7 @@ public abstract class MethodCallControlForGroup extends MethodCall {
             try {
                 reifiedMethod = getClass().getMethod("mockReifiedMethod", new Class[] {});
             } catch (SecurityException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("", e);
             } catch (NoSuchMethodException e) {
 
             }

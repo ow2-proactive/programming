@@ -60,10 +60,7 @@ public class PAAgentServiceRMIStarter {
             // TODO: localhost?
             Node n = NodeFactory.createLocalNode(nodeName, false, null);
             System.out.println("The node was registered at " + n.getNodeInformation().getURL());
-        } catch (ProActiveException e) {
-            e.printStackTrace();
-            return;
-        } catch (AlreadyBoundException e) {
+        } catch (ProActiveException | AlreadyBoundException e) {
             e.printStackTrace();
             return;
         }

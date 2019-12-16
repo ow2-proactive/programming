@@ -127,7 +127,7 @@ public class AwaitedRequest implements Request, java.io.Serializable {
                     logger.info("[WAIT] " + waiter + " is waiting for a request from " + this.awaitedSender);
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.warn("Interrupted while waiting for request", e);
             }
         }
     }

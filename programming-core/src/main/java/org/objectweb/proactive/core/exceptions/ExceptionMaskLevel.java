@@ -30,11 +30,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class ExceptionMaskLevel {
+
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
 
     /* Exception types in the catch blocks */
     private Collection<Class<?>> caughtExceptionTypes;
@@ -122,7 +127,7 @@ public class ExceptionMaskLevel {
             try {
                 wait();
             } catch (InterruptedException ie) {
-                ie.printStackTrace();
+                logger.error("", ie);
                 break;
             }
             parent.throwArrivedException();
@@ -167,7 +172,7 @@ public class ExceptionMaskLevel {
             try {
                 wait();
             } catch (InterruptedException ie) {
-                ie.printStackTrace();
+                logger.error("", ie);
                 break;
             }
         }

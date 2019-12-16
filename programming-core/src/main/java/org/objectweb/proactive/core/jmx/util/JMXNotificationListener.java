@@ -144,7 +144,7 @@ public class JMXNotificationListener implements NotificationListener, ProActiveI
             }
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
             return false;
         }
     }

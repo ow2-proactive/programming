@@ -29,6 +29,7 @@ import java.io.Serializable;
 
 import javax.management.MBeanServer;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.ProActiveInternalObject;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -36,6 +37,8 @@ import org.objectweb.proactive.api.PAVersion;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.jmx.ProActiveConnection;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -43,6 +46,8 @@ import org.objectweb.proactive.core.node.NodeException;
  * @author The ProActive Team
  */
 public class ProActiveServerImpl implements Serializable, ProActiveInternalObject {
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
+
     private transient MBeanServer mbeanServer;
 
     private UniqueID id;
@@ -65,10 +70,8 @@ public class ProActiveServerImpl implements Serializable, ProActiveInternalObjec
             client = new ProActiveConnection(this.mbeanServer);
             client = (ProActiveConnection) PAActiveObject.turnActive(client);
             return client;
-        } catch (ActiveObjectCreationException e) {
-            e.printStackTrace();
-        } catch (NodeException e) {
-            e.printStackTrace();
+        } catch (ActiveObjectCreationException | NodeException e) {
+            logger.error("", e);
         }
         return client;
     }

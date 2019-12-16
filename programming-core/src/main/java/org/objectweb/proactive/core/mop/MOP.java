@@ -436,30 +436,14 @@ public abstract class MOP {
                     //                } catch (IOException e) {
                     //                    // TODO Auto-generated catch block
                     //                    e.printStackTrace();
-                } catch (SecurityException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException
+                        | IllegalAccessException | InvocationTargetException e) {
+                    logger.error("", e);
                 }
 
             }
         } catch (NotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            logger.error("", e1);
         }
 
         // Instanciates the stub object
@@ -756,18 +740,13 @@ public abstract class MOP {
                     targetClass = proxyClass;
                     nameOfBaseClass = proxyName;
                     baseClass = targetClass;
-                } catch (SecurityException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (SecurityException | IllegalArgumentException e) {
+                    logger.error("", e);
                 }
 
             }
         } catch (NotFoundException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            logger.error("", e1);
         }
 
         //        if (isPAProxy) {
@@ -1457,12 +1436,8 @@ public abstract class MOP {
                         }
                     }
                 }
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                logger.error("", e);
             }
             fields[i].setAccessible(false);
         }

@@ -1115,11 +1115,9 @@ public class PAGroup {
         try {
             result = newGroup(getType(ogroup), (Class<?>[]) null);
         } catch (ClassNotReifiableException e) {
-            PAGroup.logger.error("**** ClassNotReifiableException ****");
-            e.printStackTrace();
+            PAGroup.logger.error("**** ClassNotReifiableException ****", e);
         } catch (ClassNotFoundException e) {
-            PAGroup.logger.error("**** ClassNotFoundException ****");
-            e.printStackTrace();
+            PAGroup.logger.error("**** ClassNotFoundException ****", e);
         }
 
         Group<Object> go = getGroup(ogroup);

@@ -390,7 +390,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
     public void setUpdater(UniversalBody updater) {
         if (this.updater != null) {
-            new IllegalStateException("Updater already set to: " + this.updater).printStackTrace();
+            logger.error("", new IllegalStateException("Updater already set to: " + this.updater));
         }
         this.updater = updater;
     }
@@ -401,7 +401,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
     public void setCreator(UniversalBody creator) {
         if (this.creator != null) {
-            new IllegalStateException("Creator already set to: " + this.creator).printStackTrace();
+            logger.error("", new IllegalStateException("Creator already set to: " + this.updater));
         }
         this.creator = creator;
     }

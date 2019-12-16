@@ -250,7 +250,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
                 this.collectorKnow.set(true);
                 this.bufferedEvents.clear();
             } else {
-                System.err.println("ProActiveAppender loaed but" +
+                System.err.println("ProActiveAppender loaded but" +
                                    CentralPAPropertyRepository.PA_LOG4J_COLLECTOR.getName() + " is null");
             }
         } catch (ProActiveException e) {

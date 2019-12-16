@@ -1099,10 +1099,8 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                 if (checkNonEmpty(mpiCommandOptions)) {
                     ((MPIProcess) targetProcess).setMpiCommandOptions(mpiCommandOptions);
                 }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
         }
 
@@ -1142,10 +1140,8 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
                     } else {
                         super.notifyEndActiveHandler(name, activeHandler);
                     }
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
         }
@@ -1175,8 +1171,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             try {
                 targetProcess = proActiveDescriptor.createProcess(id, className);
             } catch (ProActiveException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("", e);
             }
         }
 
@@ -1226,8 +1221,7 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
             try {
                 targetProcess = proActiveDescriptor.createProcess(id, className);
             } catch (ProActiveException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("", e);
             }
         }
 

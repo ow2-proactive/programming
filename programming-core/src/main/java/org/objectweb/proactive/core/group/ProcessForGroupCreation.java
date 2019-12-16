@@ -65,7 +65,7 @@ public class ProcessForGroupCreation extends AbstractProcessForGroup implements 
         try {
             this.proxyGroup.set(this.groupIndex, PAActiveObject.newActive(className, genericParameters, param, node));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("", e);
             // FIXME throw exception (using Callable task)
         }
         doneSignal.countDown();
