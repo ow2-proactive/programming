@@ -47,11 +47,11 @@ import functionalTests.pamr.BlackBox;
 public class TestReconnection extends BlackBox {
 
     @Test
-    public void test() throws IOException, MalformedMessageException {
+    public void testReconnectionOnSameRouter() throws IOException, MalformedMessageException {
         MagicCookie magicCookie = new MagicCookie();
         Message message = new RegistrationRequestMessage(null,
                                                          ProActiveRandom.nextLong(),
-                                                         RouterImpl.DEFAULT_ROUTER_ID,
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
                                                          magicCookie);
         tunnel.write(message.toByteArray());
 
@@ -66,6 +66,37 @@ public class TestReconnection extends BlackBox {
         this.tunnel.shutdown();
         Socket s = new Socket(InetAddress.getLocalHost(), this.router.getPort());
         this.tunnel = new Tunnel(s);
+
+        message = new RegistrationRequestMessage(reply.getAgentID(), ProActiveRandom.nextLong(), routerID, magicCookie);
+        tunnel.write(message.toByteArray());
+
+        resp = tunnel.readMessage();
+        reply = new RegistrationReplyMessage(resp, 0);
+        AgentID secondID = reply.getAgentID();
+
+        Assert.assertEquals(firstID, secondID);
+
+    }
+
+    @Test
+    public void testReconnectionOnDifferentRouter() throws Exception {
+        MagicCookie magicCookie = new MagicCookie();
+        Message message = new RegistrationRequestMessage(null,
+                                                         ProActiveRandom.nextLong(),
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
+                                                         magicCookie);
+        tunnel.write(message.toByteArray());
+
+        byte[] resp = tunnel.readMessage();
+        RegistrationReplyMessage reply = new RegistrationReplyMessage(resp, 0);
+        AgentID firstID = reply.getAgentID();
+        long routerID = reply.getRouterID();
+        magicCookie = reply.getMagicCookie();
+
+        // Ok it's time to reconnect, let's restart the router
+
+        afterBlackBox();
+        beforeBlackbox();
 
         message = new RegistrationRequestMessage(reply.getAgentID(), ProActiveRandom.nextLong(), routerID, magicCookie);
         tunnel.write(message.toByteArray());

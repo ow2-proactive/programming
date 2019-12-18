@@ -68,7 +68,7 @@ public class ProcessorRegistrationRequest extends Processor {
             AgentID agentId = message.getAgentID();
 
             if (agentId == null) {
-                standardConnection(message);
+                standardConnection(message, false);
             } else {
                 if (agentId.isReserved()) {
                     // Reserved connection & reconnection
@@ -94,12 +94,25 @@ public class ProcessorRegistrationRequest extends Processor {
 
         AgentID agentId = message.getAgentID();
 
-        // Check that it is not an "old" client
+        if (message.getRouterID() == RouterImpl.UNKNOWN_ROUTER_ID) {
+            logger.warn("AgentId " + agentId +
+                        " asked to reconnect but does not provide a valid router id. Remote endpoint is: " +
+                        attachment.getRemoteEndpointName());
+            notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
+        }
+
+        // Check if the router has not been restarted
         if (message.getRouterID() != this.router.getId()) {
             logger.warn("AgentId " + agentId +
                         " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
                         attachment.getRemoteEndpointName());
-            notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
+            if (router.getClient(agentId) == null) {
+                logger.info("Generate new connection for agent " + agentId);
+                standardConnection(message, true);
+            } else {
+                logger.warn("Another agent using the same ID has already been registered.");
+                notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
+            }
             return;
         }
 
@@ -164,12 +177,11 @@ public class ProcessorRegistrationRequest extends Processor {
             return;
         }
 
-        if (message.getRouterID() != RouterImpl.DEFAULT_ROUTER_ID && message.getRouterID() != this.router.getId()) {
+        if (message.getRouterID() != RouterImpl.UNKNOWN_ROUTER_ID && message.getRouterID() != this.router.getId()) {
             logger.warn("AgentId " + agentId +
                         " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
                         attachment.getRemoteEndpointName());
-            notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
-            return;
+            logger.info("Generate new connection for agent " + agentId);
         }
 
         // Disconnect the client if needed
@@ -197,19 +209,27 @@ public class ProcessorRegistrationRequest extends Processor {
         }
     }
 
-    private void standardConnection(RegistrationRequestMessage message) {
+    private void standardConnection(RegistrationRequestMessage message, boolean afterRouterRestart) {
         // agentId == null, magicCookie != null, routerId == null
 
         long routerId = message.getRouterID();
-        if (routerId != RouterImpl.DEFAULT_ROUTER_ID) {
-            logger.warn("Invalid connection request. router ID must be " + RouterImpl.DEFAULT_ROUTER_ID +
+        if (!afterRouterRestart && routerId != RouterImpl.UNKNOWN_ROUTER_ID) {
+            logger.warn("Invalid connection request. router ID must be " + RouterImpl.UNKNOWN_ROUTER_ID +
                         ". Remote endpoint is: " + attachment.getRemoteEndpointName());
 
             this.attachment.dtor();
             return;
         }
 
-        AgentID agentId = AgentIdGenerator.getId();
+        AgentID agentId;
+        if (afterRouterRestart && message.getAgentID() != null) {
+            // an agent is re-initializing its connection after router restart
+            agentId = message.getAgentID();
+        } else {
+            // standard new agent connection
+            agentId = AgentIdGenerator.getId();
+        }
+
         MagicCookie magicCookie = message.getMagicCookie();
         RegistrationMessage reply = new RegistrationReplyMessage(agentId,
                                                                  message.getMessageID(),

@@ -182,7 +182,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         this.socketFactory = socketFactory;
         this.agentID = agentId; // Check the agentId number
         this.magicCookie = magicCookie;
-        this.routerID = RouterImpl.DEFAULT_ROUTER_ID;
+        this.routerID = RouterImpl.UNKNOWN_ROUTER_ID;
 
         try {
             Constructor<? extends MessageHandler> mhConstructor;
@@ -360,11 +360,12 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 }
             }
 
-            if (this.routerID == Long.MIN_VALUE) {
+            if (this.routerID == RouterImpl.UNKNOWN_ROUTER_ID) {
                 this.routerID = rrm.getRouterID();
             } else if (this.routerID != rrm.getRouterID()) {
-                throw new RouterHandshakeException("Invalid router response: previous router ID  was " + this.agentID +
-                                                   " but server now advertises " + rrm.getRouterID());
+                logger.warn("Router ID has changed, was previously " + this.routerID + " but is now " +
+                            rrm.getRouterID());
+                this.routerID = rrm.getRouterID();
             }
 
             int hb = rrm.getHeartbeatPeriod();

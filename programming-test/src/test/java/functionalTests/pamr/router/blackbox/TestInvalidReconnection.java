@@ -28,6 +28,7 @@ package functionalTests.pamr.router.blackbox;
 import java.io.IOException;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
@@ -46,19 +47,16 @@ import functionalTests.pamr.BlackBox;
 public class TestInvalidReconnection extends BlackBox {
 
     /*
-     * Send an invalid Registration Request with an AgentID.
-     * Since this AgentID is not know by the router, an error message
-     * if expected in response
-     *
-     * An error message is expected is expected
+     * Send a Registration Request for standard connection with AgentID instead of a null value.
+     * Since this AgentID is not known by the router, an error message is expected in response.
      */
     @Test
-    public void testInvalidAgentId() throws IOException, MalformedMessageException {
+    public void testInvalidAgentIdStandardConnection() throws IOException, MalformedMessageException {
         AgentID agentID = new AgentID(0xcafe);
         long messageID = ProActiveRandom.nextPosLong();
         Message message = new RegistrationRequestMessage(agentID,
                                                          messageID,
-                                                         RouterImpl.DEFAULT_ROUTER_ID,
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
                                                          new MagicCookie());
         tunnel.write(message.toByteArray());
 
@@ -71,18 +69,15 @@ public class TestInvalidReconnection extends BlackBox {
     }
 
     /*
-     * Send an invalid Registration Request with an AgentID.
-     * Since this AgentID is not know by the router, an error message
-     * if expected in response
-     *
-     * An error message is expected is expected
+     * Send a Registration Request for reconnection using an invalid agent id.
+     * Since this AgentID is not know by the router, an error message is expected in response.
      */
     @Test
-    public void testInvalidAgentId2() throws IOException, MalformedMessageException {
+    public void testInvalidAgentIdReconnectionOnSameRouter() throws IOException, MalformedMessageException {
         MagicCookie magicCookie = new MagicCookie();
         Message message = new RegistrationRequestMessage(null,
                                                          ProActiveRandom.nextPosLong(),
-                                                         RouterImpl.DEFAULT_ROUTER_ID,
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
                                                          magicCookie);
         tunnel.write(message.toByteArray());
 
@@ -102,12 +97,42 @@ public class TestInvalidReconnection extends BlackBox {
         Assert.assertEquals(messageID, error.getMessageID());
     }
 
+    /*
+     * Send a Registration Request for reconnection from a different router using an agent id
+     * already registered on this router.
+     * Since this AgentID is already used by the router, an error message is expected in response.
+     */
+    @Test
+    public void testInvalidAgentIdReconnectionOnDifferentRouter() throws IOException, MalformedMessageException {
+        MagicCookie magicCookie = new MagicCookie();
+        Message message = new RegistrationRequestMessage(null,
+                                                         ProActiveRandom.nextPosLong(),
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
+                                                         magicCookie);
+        tunnel.write(message.toByteArray());
+
+        byte[] resp = tunnel.readMessage();
+        RegistrationReplyMessage reply = (RegistrationReplyMessage) Message.constructMessage(resp, 0);
+        AgentID resgisteredAgentId = reply.getAgentID();
+
+        long messageID = ProActiveRandom.nextLong();
+        message = new RegistrationRequestMessage(resgisteredAgentId, messageID, 0xbadbad, magicCookie);
+        tunnel.write(message.toByteArray());
+
+        resp = tunnel.readMessage();
+        ErrorMessage error = (ErrorMessage) Message.constructMessage(resp, 0);
+        Assert.assertEquals(ErrorType.ERR_INVALID_ROUTER_ID, error.getErrorType());
+        Assert.assertEquals(resgisteredAgentId, error.getRecipient());
+        Assert.assertEquals(resgisteredAgentId, error.getSender());
+        Assert.assertEquals(messageID, error.getMessageID());
+    }
+
     @Test
     public void testInvalidRouterID() throws IOException, InstantiationException, MalformedMessageException {
         MagicCookie magicCookie = new MagicCookie();
         Message message = new RegistrationRequestMessage(null,
                                                          ProActiveRandom.nextLong(),
-                                                         RouterImpl.DEFAULT_ROUTER_ID,
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
                                                          magicCookie);
         tunnel.write(message.toByteArray());
 
