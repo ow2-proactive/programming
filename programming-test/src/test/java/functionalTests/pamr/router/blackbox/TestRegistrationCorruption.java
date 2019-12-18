@@ -64,7 +64,7 @@ public class TestRegistrationCorruption extends BlackBox {
         MagicCookie magicCookie = new MagicCookie();
         Message message = new RegistrationRequestMessage(new AgentID(invalidAgentID),
                                                          msgId,
-                                                         RouterImpl.DEFAULT_ROUTER_ID,
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
                                                          magicCookie);
         tunnel.write(message.toByteArray());
 
@@ -78,7 +78,7 @@ public class TestRegistrationCorruption extends BlackBox {
         Assert.assertEquals(unknown, err.getFaulty());
 
         // Connect
-        message = new RegistrationRequestMessage(null, msgId, RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
+        message = new RegistrationRequestMessage(null, msgId, RouterImpl.UNKNOWN_ROUTER_ID, magicCookie);
         tunnel.write(message.toByteArray());
 
         resp = tunnel.readMessage();

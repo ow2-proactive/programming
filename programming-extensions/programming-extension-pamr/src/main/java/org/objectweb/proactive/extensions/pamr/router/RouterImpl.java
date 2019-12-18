@@ -93,7 +93,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
     /** Read {@link ByteBuffer} size. */
     private final static int READ_BUFFER_SIZE = 4096;
 
-    public final static long DEFAULT_ROUTER_ID = Long.MIN_VALUE;
+    public final static long UNKNOWN_ROUTER_ID = Long.MIN_VALUE;
 
     /** True is the router must stop or is stopped*/
     private final AtomicBoolean stopped = new AtomicBoolean(false);

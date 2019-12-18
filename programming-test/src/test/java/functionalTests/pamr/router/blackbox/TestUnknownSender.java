@@ -81,7 +81,7 @@ public class TestUnknownSender extends BlackBox {
         // Connect
         Message message = new RegistrationRequestMessage(null,
                                                          ProActiveRandom.nextPosLong(),
-                                                         RouterImpl.DEFAULT_ROUTER_ID,
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
                                                          new MagicCookie());
         tunnel.write(message.toByteArray());
 

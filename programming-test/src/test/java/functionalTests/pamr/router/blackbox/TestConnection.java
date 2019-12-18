@@ -53,7 +53,7 @@ public class TestConnection extends BlackBox {
         MagicCookie magicCookie = new MagicCookie();
         Message message = new RegistrationRequestMessage(null,
                                                          ProActiveRandom.nextPosLong(),
-                                                         RouterImpl.DEFAULT_ROUTER_ID,
+                                                         RouterImpl.UNKNOWN_ROUTER_ID,
                                                          magicCookie);
         tunnel.write(message.toByteArray());
 
