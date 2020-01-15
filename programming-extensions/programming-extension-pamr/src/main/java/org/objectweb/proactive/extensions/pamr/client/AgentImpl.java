@@ -239,9 +239,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
             // Compute next sleep duration
             subtry = ++subtry % 3;
             if (subtry == 0) {
-                if (delay < 1000 * 60) {
-                    delay *= 2;
-                }
+                delay = Math.min(delay * 2, MAXIMUM_RETRY_DELAY_MS);
             }
 
             // Connect to the router

@@ -44,6 +44,8 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessa
  */
 public interface Agent {
 
+    int MAXIMUM_RETRY_DELAY_MS = 32000;
+
     /** Send a message to a remote {@link Agent}.
      * 
      * if oneWay, the result returned is null. if not, this call is blocked
