@@ -212,6 +212,7 @@ public class FutureMonitoring implements Runnable {
             return;
         }
         removeBodyId(fp, updaterId, futuresToMonitor);
+        removeBodyId(fp, creatorId, futuresToMonitor);
     }
 
     private static void removeBodyId(FutureProxy fp, UniqueID bodyId,
