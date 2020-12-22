@@ -38,6 +38,8 @@ import org.apache.commons.vfs2.cache.WeakRefFilesCache;
 import org.apache.commons.vfs2.impl.DefaultFileReplicator;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.apache.commons.vfs2.impl.PrivilegedFileReplicator;
+import org.apache.commons.vfs2.operations.FileOperationProvider;
+import org.apache.commons.vfs2.provider.FileProvider;
 import org.apache.commons.vfs2.provider.ftp.FtpFileProvider;
 import org.apache.commons.vfs2.provider.http.HttpFileProvider;
 import org.apache.commons.vfs2.provider.https.HttpsFileProvider;
@@ -53,9 +55,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
-
-import com.github.vfss3.S3FileProvider;
-import com.github.vfss3.operations.S3FileOperationsProvider;
 
 
 /**
@@ -181,9 +180,22 @@ public class VFSFactory {
         manager.addProvider("https", new HttpsFileProvider());
         manager.addProvider("ftp", new FtpFileProvider());
         manager.addProvider("sftp", new SftpFileProvider());
-        manager.addProvider("s3", new S3FileProvider());
-        manager.addOperationProvider("s3", new S3FileOperationsProvider());
+
+        loadS3ExtensionIfPresent(manager);
         manager.setDefaultProvider(new UrlFileProvider());
+    }
+
+    private static void loadS3ExtensionIfPresent(DefaultFileSystemManager manager) {
+        try {
+            Class S3FileProviderClass = Class.forName("com.github.vfss3.S3FileProvider");
+            Object S3FileProviderInstance = S3FileProviderClass.newInstance();
+            Class S3FileOperationsProviderClass = Class.forName("com.github.vfss3.operations.S3FileOperationsProvider");
+            Object S3FileOperationsProviderInstance = S3FileOperationsProviderClass.newInstance();
+            manager.addProvider("s3", (FileProvider) S3FileProviderInstance);
+            manager.addOperationProvider("s3", (FileOperationProvider) S3FileOperationsProviderInstance);
+        } catch (Exception e) {
+            logger.debug("S3 library cannot be found, disabling it", e);
+        }
     }
 
     private static CacheStrategy getCacheStrategy() {
