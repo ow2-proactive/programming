@@ -269,9 +269,13 @@ project('programming-extensions:programming-extension-vfsprovider') {
                 project(':programming-extensions:programming-extension-dataspaces-common')
         )
 
-        compile('activeeon:vfs-s3:2.4.8') {
-            exclude group: 'com.fasterxml.jackson.core'
-            exclude group: 'com.fasterxml.jackson.dataformat'
+        // in order to enable s3 support, run for example ./gradlew build -Ps3
+
+        if (rootProject.hasProperty('s3')) {
+            compile('activeeon:vfs-s3:2.4.8') {
+                exclude group: 'com.fasterxml.jackson.core'
+                exclude group: 'com.fasterxml.jackson.dataformat'
+            }
         }
         compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9'
         compile 'com.fasterxml.jackson.core:jackson-core:2.7.9'
