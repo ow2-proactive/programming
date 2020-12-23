@@ -28,6 +28,7 @@ package org.objectweb.proactive.extensions.dataspaces.core;
 import java.util.Map;
 
 import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
+import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.dataspaces.core.naming.SpacesDirectory;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
@@ -79,6 +80,8 @@ public interface SpacesMountManager {
      *            Id of active object requesting this file, that will become owner of returned
      *            {@link DataSpacesFileObject} instance. May be <code>null</code>, which corresponds
      *            to anonymous (unimportant) owner.
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
      * @return {@link DataSpacesFileObject} instance that can be used to access this URI content;
      *         returned DataSpacesFileObject is not opened nor attached in any way; this
      *         DataSpacesFileObject instance will never be shared, i.e. individual instances are
@@ -92,8 +95,8 @@ public interface SpacesMountManager {
      *             when provided queryUri is not suitable for user path
      * @see DataSpacesURI#isSuitableForUserPath()
      */
-    public abstract DataSpacesFileObject resolveFile(final DataSpacesURI queryUri, final String ownerActiveObjectId)
-            throws FileSystemException, SpaceNotFoundException;
+    DataSpacesFileObject resolveFile(final DataSpacesURI queryUri, final String ownerActiveObjectId,
+            UserCredentials credentials) throws FileSystemException, SpaceNotFoundException;
 
     /**
      * Resolve query for URI without space part being fully defined, resulting in file-level access
@@ -118,6 +121,8 @@ public interface SpacesMountManager {
      *            Id of active object requesting this files, that will become owner of returned
      *            {@link DataSpacesFileObject} instances. May be <code>null</code>, which
      *            corresponds to anonymous (unimportant) owner.
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
      * @return map of data spaces URIs suitable for user path that match the query, pointing to
      *         {@link DataSpacesFileObject} instances that can be used to access their content;
      *         returned DataSpacesFileObject are not opened nor attached in any way; these
@@ -132,8 +137,8 @@ public interface SpacesMountManager {
      * @see DataSpacesURI#isSpacePartFullyDefined()
      * @see DataSpacesURI#isSuitableForUserPath()
      */
-    public abstract Map<DataSpacesURI, DataSpacesFileObject> resolveSpaces(final DataSpacesURI queryUri,
-            final String ownerActiveObjectId) throws FileSystemException;
+    Map<DataSpacesURI, DataSpacesFileObject> resolveSpaces(final DataSpacesURI queryUri,
+            final String ownerActiveObjectId, UserCredentials credentials) throws FileSystemException;
 
     /**
      * Closes this manager instance, releasing any opened resources.
@@ -144,5 +149,5 @@ public interface SpacesMountManager {
      * <p>
      * Subsequent calls to these method may result in undefined behavior.
      */
-    public abstract void close();
+    void close();
 }

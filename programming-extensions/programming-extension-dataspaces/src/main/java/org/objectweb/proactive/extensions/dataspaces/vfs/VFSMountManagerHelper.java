@@ -46,6 +46,7 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.MutableInteger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.utils.StackTraceUtil;
 import org.objectweb.proactive.utils.ThreadPools;
@@ -76,11 +77,15 @@ public class VFSMountManagerHelper {
 
     static final ReentrantReadWriteLock.WriteLock writeLock = rwlock.writeLock();
 
-    // vfsManager for standard or ProActive vfs file systems
-    static DefaultFileSystemManager vfsManager;
+    static final Map<UserCredentials, DefaultFileSystemManager> perUserManager = new HashMap<>();
 
-    private static void initManager() throws FileSystemException {
-        if (vfsManager == null) {
+    static final UserCredentials emptyUser = new UserCredentials();
+
+    private static void initManager(UserCredentials credentials) throws FileSystemException {
+        if (credentials == null) {
+            credentials = emptyUser;
+        }
+        if (!perUserManager.containsKey(credentials)) {
             try {
                 writeLock.lock();
                 logger.debug("Initializing spaces mount manager");
@@ -90,7 +95,8 @@ public class VFSMountManagerHelper {
                     // in vanilla VFS version, this manager will always return FileObjects with broken
                     // delete(FileSelector) method. Anyway, it is rather better to do it this way, than returning
                     // shared FileObjects with broken concurrency
-                    vfsManager = VFSFactory.createDefaultFileSystemManager();
+                    DefaultFileSystemManager vfsManager = VFSFactory.createDefaultFileSystemManager(credentials);
+                    perUserManager.put(credentials, vfsManager);
                 } catch (FileSystemException x) {
                     logger.error("Could not create and configure VFS manager", x);
                     throw x;
@@ -115,11 +121,11 @@ public class VFSMountManagerHelper {
      * @return a successfully mounted file system
      * @throws FileSystemException if an error occurred during the mounting process
      */
-    public static FileObject mount(String uri) throws FileSystemException {
-        initManager();
+    public static FileObject mount(UserCredentials credentials, String uri) throws FileSystemException {
+        initManager(credentials);
 
         try {
-            return executor.submit(new Mounter(uri, null)).get();
+            return executor.submit(new Mounter(uri, credentials, null)).get();
         } catch (InterruptedException e) {
             throw new FileSystemException("Interruption occurred when trying to mount " + uri, e);
         } catch (ExecutionException e) {
@@ -136,10 +142,10 @@ public class VFSMountManagerHelper {
      * @return a successfully mounted file system
      * @throws FileSystemException if all mounting operations led to exceptions
      */
-    public static void mountAny(List<String> uris, ConcurrentHashMap<String, FileObject> fileSystems)
-            throws FileSystemException {
+    public static void mountAny(UserCredentials credentials, List<String> uris,
+            ConcurrentHashMap<String, FileObject> fileSystems) throws FileSystemException {
 
-        initManager();
+        initManager(credentials);
 
         ArrayList<String> urisfiltered = filterDuplicates(uris);
 
@@ -170,11 +176,11 @@ public class VFSMountManagerHelper {
         ArrayList<Mounter> otherMounters = new ArrayList<Mounter>();
 
         for (String uri : fileUris) {
-            fileMounters.add(new Mounter(uri, fileSystems));
+            fileMounters.add(new Mounter(uri, credentials, fileSystems));
         }
 
         for (String uri : otherUris) {
-            otherMounters.add(new Mounter(uri, fileSystems));
+            otherMounters.add(new Mounter(uri, credentials, fileSystems));
         }
 
         boolean atLeastOneFileDeployed = false;
@@ -282,10 +288,13 @@ public class VFSMountManagerHelper {
      *
      * @param uris file system uris
      */
-    public static void closeFileSystems(Collection<String> uris) {
+    public static void closeFileSystems(UserCredentials credentials, Collection<String> uris) {
+        if (credentials == null) {
+            credentials = emptyUser;
+        }
         try {
             writeLock.lock();
-            if (vfsManager != null) {
+            if (perUserManager.containsKey(credentials)) {
                 logger.debug("Closing file systems : " + uris);
                 for (String uri : uris) {
                     if (alreadyMountedSpaces.containsKey(uri)) {
@@ -307,7 +316,7 @@ public class VFSMountManagerHelper {
                                                                       x);
                                 }
 
-                                vfsManager.closeFileSystem(spaceFileSystem);
+                                perUserManager.get(credentials).closeFileSystem(spaceFileSystem);
 
                                 if (logger.isDebugEnabled())
                                     logger.debug("Unmounted space: " + fo);
@@ -321,6 +330,7 @@ public class VFSMountManagerHelper {
                         }
                     }
                 }
+                perUserManager.remove(credentials);
             }
         } finally {
             writeLock.unlock();
@@ -335,15 +345,18 @@ public class VFSMountManagerHelper {
         try {
 
             writeLock.lock();
-            if (vfsManager != null) {
+            if (!perUserManager.isEmpty()) {
                 logger.debug("Terminating spaces mount manager");
 
                 executor.shutdownNow();
 
-                if (vfsManager != null) {
-                    vfsManager.close();
-                    vfsManager = null;
+                for (DefaultFileSystemManager vfsManager : perUserManager.values()) {
+                    if (vfsManager != null) {
+                        vfsManager.close();
+                    }
                 }
+                perUserManager.clear();
+
             }
         } finally {
             writeLock.unlock();
@@ -359,9 +372,15 @@ public class VFSMountManagerHelper {
 
         private Map<String, FileObject> fileSystems;
 
-        public Mounter(String uriToMount, Map<String, FileObject> fileSystems) {
+        private UserCredentials credentials;
+
+        public Mounter(String uriToMount, UserCredentials credentials, Map<String, FileObject> fileSystems) {
             this.uriToMount = uriToMount;
             this.fileSystems = fileSystems;
+            if (credentials == null) {
+                credentials = emptyUser;
+            }
+            this.credentials = credentials;
         }
 
         @Override
@@ -388,7 +407,7 @@ public class VFSMountManagerHelper {
                 logger.debug("[" + VFSMountManagerHelper.class.getSimpleName() + "] Mounting " + uriToMount);
                 FileObject mounted = null;
                 try {
-                    mounted = vfsManager.resolveFile(uriToMount);
+                    mounted = perUserManager.get(credentials).resolveFile(uriToMount);
                 } catch (Exception e) {
                     // failure in mounting
 

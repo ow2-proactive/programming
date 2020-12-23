@@ -25,17 +25,23 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.commons.vfs2.CacheStrategy;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.FilesCache;
+import org.apache.commons.vfs2.UserAuthenticator;
+import org.apache.commons.vfs2.auth.StaticUserAuthenticator;
 import org.apache.commons.vfs2.cache.DefaultFilesCache;
 import org.apache.commons.vfs2.cache.LRUFilesCache;
 import org.apache.commons.vfs2.cache.NullFilesCache;
 import org.apache.commons.vfs2.cache.SoftRefFilesCache;
 import org.apache.commons.vfs2.cache.WeakRefFilesCache;
 import org.apache.commons.vfs2.impl.DefaultFileReplicator;
+import org.apache.commons.vfs2.impl.DefaultFileSystemConfigBuilder;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.apache.commons.vfs2.impl.PrivilegedFileReplicator;
 import org.apache.commons.vfs2.operations.FileOperationProvider;
@@ -44,6 +50,7 @@ import org.apache.commons.vfs2.provider.ftp.FtpFileProvider;
 import org.apache.commons.vfs2.provider.http.HttpFileProvider;
 import org.apache.commons.vfs2.provider.https.HttpsFileProvider;
 import org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider;
+import org.apache.commons.vfs2.provider.sftp.IdentityInfo;
 import org.apache.commons.vfs2.provider.sftp.SftpFileProvider;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.commons.vfs2.provider.url.UrlFileProvider;
@@ -52,9 +59,13 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
+
+import com.google.common.base.Strings;
+import com.google.common.io.Files;
 
 
 /**
@@ -100,7 +111,24 @@ public class VFSFactory {
      *             when initialization or configuration process fails
      */
     public static DefaultFileSystemManager createDefaultFileSystemManager() throws FileSystemException {
-        return createAndConfigureFileSystemManager(ManagerType.BOTH);
+        return createAndConfigureFileSystemManager(ManagerType.BOTH, null);
+    }
+
+    /**
+     * Creates new DefaultSystemManager instance with configured providers, replicator, temporary
+     * storage - as described in class description, <strong>files cache</strong> if required, and configured cache strategy.
+     * This system manager will use the provided user credentials on providers which support it
+     * <p>
+     * Returned instance is initialized and it is a caller responsibility to close it to release
+     * resources.
+     * @param credentials
+     *             credentials used to access the file system (for implementations which support it)
+     * @return
+     * @throws FileSystemException
+     */
+    public static DefaultFileSystemManager createDefaultFileSystemManager(UserCredentials credentials)
+            throws FileSystemException {
+        return createAndConfigureFileSystemManager(ManagerType.BOTH, credentials);
     }
 
     /**
@@ -110,12 +138,15 @@ public class VFSFactory {
      * Returned instance is initialized and it is a caller responsibility to close it to release
      * resources.
      *
+     * @param credentials
+     *             credentials used to access the file system (for implementations which support it)
      * @return configured and initialized DefaultFileSystemManager instance
      * @throws FileSystemException
      *             when initialization or configuration process fails
      */
-    public static DefaultFileSystemManager createNonProActiveDefaultFileSystemManager() throws FileSystemException {
-        return createAndConfigureFileSystemManager(ManagerType.NON_PROACTIVE);
+    public static DefaultFileSystemManager createNonProActiveDefaultFileSystemManager(UserCredentials credentials)
+            throws FileSystemException {
+        return createAndConfigureFileSystemManager(ManagerType.NON_PROACTIVE, credentials);
     }
 
     /**
@@ -126,19 +157,22 @@ public class VFSFactory {
      * Returned instance is initialized and it is a caller responsibility to close it to release
      * resources.
      *
+     * @param credentials
+     *             credentials used to access the file system (for implementations which support it)
      * @return configured and initialized DefaultFileSystemManager instance
      * @throws FileSystemException
      *             when initialization or configuration process fails
      */
-    public static DefaultFileSystemManager createProActiveDefaultFileSystemManager() throws FileSystemException {
-        return createAndConfigureFileSystemManager(ManagerType.PROACTIVE);
+    public static DefaultFileSystemManager createProActiveDefaultFileSystemManager(UserCredentials credentials)
+            throws FileSystemException {
+        return createAndConfigureFileSystemManager(ManagerType.PROACTIVE, credentials);
     }
 
-    private static DefaultFileSystemManager createAndConfigureFileSystemManager(ManagerType managerType)
-            throws FileSystemException {
+    private static synchronized DefaultFileSystemManager createAndConfigureFileSystemManager(ManagerType managerType,
+            UserCredentials credentials) throws FileSystemException {
         logger.debug("Creating new VFS manager");
 
-        final DefaultFileSystemManager manager = buildManager();
+        final DefaultFileSystemManager manager = buildManager(credentials);
 
         manager.setFilesCache(getCacheType());
         manager.setCacheStrategy(getCacheStrategy());
@@ -156,8 +190,8 @@ public class VFSFactory {
         return manager;
     }
 
-    private static DefaultFileSystemManager buildManager() throws FileSystemException {
-        FileSystemOptions opts = createDefaultFileSystemOptions();
+    private static DefaultFileSystemManager buildManager(UserCredentials credentials) throws FileSystemException {
+        FileSystemOptions opts = createDefaultFileSystemOptions(credentials);
         final DefaultFileSystemManager manager = new DefaultOptionsFileSystemManager(opts);
         manager.setLogger(logger);
 
@@ -244,8 +278,38 @@ public class VFSFactory {
         return cache;
     }
 
-    private static FileSystemOptions createDefaultFileSystemOptions() throws FileSystemException {
+    private static synchronized FileSystemOptions createDefaultFileSystemOptions(UserCredentials credentials)
+            throws FileSystemException {
+
         final FileSystemOptions options = new FileSystemOptions();
+        if (logger.isTraceEnabled()) {
+            logger.trace("CREDENTIALS = " + credentials);
+        }
+        if (credentials != null && !credentials.isEmpty()) {
+            if (Strings.isNullOrEmpty(credentials.getPassword()) &&
+                (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0)) {
+                try {
+                    // unfortunately, the current vfs2 sftp api allows only to provide an identify as a file
+                    File tempFile = File.createTempFile("sftp", "");
+                    Files.write(credentials.getPrivateKey(), tempFile);
+                    IdentityInfo identityInfo = new IdentityInfo(tempFile);
+                    SftpFileSystemConfigBuilder.getInstance().setIdentityInfo(options, identityInfo);
+                } catch (IOException e) {
+                    logger.error("Error when setting user authentication", e);
+                }
+            } else {
+                UserAuthenticator auth = new StaticUserAuthenticator(credentials.getDomain(),
+                                                                     credentials.getLogin(),
+                                                                     credentials.getPassword());
+                try {
+                    DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, auth);
+                } catch (FileSystemException ex) {
+                    logger.error("Error when setting user authentication", ex);
+                }
+            }
+        } else {
+            DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, null);
+        }
         // TODO or try to configure known hosts somehow (look for OpenSSH file etc.)
         SftpFileSystemConfigBuilder.getInstance().setStrictHostKeyChecking(options, "no");
         return options;

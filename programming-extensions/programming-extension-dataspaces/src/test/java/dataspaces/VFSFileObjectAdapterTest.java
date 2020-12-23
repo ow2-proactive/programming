@@ -132,7 +132,7 @@ public class VFSFileObjectAdapterTest {
         rootUris.add(rootFileUri);
         rootUris.add(vfsServerUrl);
 
-        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName, rootUris, rootFileUri);
+        dsFileObject = new VFSFileObjectAdapter(adaptee, spaceURI, mountintPointFileName, rootUris, rootFileUri, null);
     }
 
     @After
@@ -156,7 +156,8 @@ public class VFSFileObjectAdapterTest {
                                                                  spaceURI,
                                                                  mountintPointFileName,
                                                                  rootUris,
-                                                                 rootFileUri);
+                                                                 rootFileUri,
+                                                                 null);
 
         assertEquals(spaceURI.toString(), fo.getVirtualURI());
     }
@@ -224,7 +225,8 @@ public class VFSFileObjectAdapterTest {
                                                                  spaceURI,
                                                                  mountintPointFileName,
                                                                  fos,
-                                                                 "file:///");
+                                                                 "file:///",
+                                                                 null);
         fo.getParent();
     }
 
@@ -238,7 +240,7 @@ public class VFSFileObjectAdapterTest {
         final FileName diffName;
         diffName = fileSystemManager.resolveFile(differentDirPath).getName();
 
-        new VFSFileObjectAdapter(adaptee, spaceURI, diffName, rootUris, rootUris.get(0));
+        new VFSFileObjectAdapter(adaptee, spaceURI, diffName, rootUris, rootUris.get(0), null);
     }
 
     private void assertIsSomeDir(DataSpacesFileObject parent) throws FileSystemException {

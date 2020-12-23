@@ -42,6 +42,7 @@ import org.objectweb.proactive.extensions.dataspaces.Utils;
 import org.objectweb.proactive.extensions.dataspaces.api.Capability;
 import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
 import org.objectweb.proactive.extensions.dataspaces.api.PADataSpaces;
+import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.dataspaces.core.naming.SpacesDirectory;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
@@ -158,9 +159,9 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveDefaultInput()
      * @see PADataSpaces#resolveDefaultOutput()
      */
-    public DataSpacesFileObject resolveDefaultInputOutput(SpaceType type, String path)
+    public DataSpacesFileObject resolveDefaultInputOutput(SpaceType type, String path, UserCredentials credentials)
             throws IllegalArgumentException, FileSystemException, SpaceNotFoundException, ConfigurationException {
-        return resolveInputOutput(PADataSpaces.DEFAULT_IN_OUT_NAME, type, path);
+        return resolveInputOutput(PADataSpaces.DEFAULT_IN_OUT_NAME, type, path, credentials);
     }
 
     /**
@@ -170,9 +171,10 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveDefaultInputBlocking(long)
      * @see PADataSpaces#resolveDefaultOutputBlocking(long)
      */
-    public DataSpacesFileObject resolveDefaultInputOutputBlocking(long timeoutMillis, SpaceType type, String path)
+    public DataSpacesFileObject resolveDefaultInputOutputBlocking(long timeoutMillis, SpaceType type, String path,
+            UserCredentials credentials)
             throws IllegalArgumentException, FileSystemException, ProActiveTimeoutException, ConfigurationException {
-        return resolveInputOutputBlocking(PADataSpaces.DEFAULT_IN_OUT_NAME, timeoutMillis, type, path);
+        return resolveInputOutputBlocking(PADataSpaces.DEFAULT_IN_OUT_NAME, timeoutMillis, type, path, credentials);
     }
 
     /**
@@ -181,7 +183,8 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveInput(String)
      * @see PADataSpaces#resolveOutput(String)
      */
-    public DataSpacesFileObject resolveInputOutput(String name, SpaceType type, String path)
+    public DataSpacesFileObject resolveInputOutput(String name, SpaceType type, String path,
+            UserCredentials credentials)
             throws FileSystemException, IllegalArgumentException, SpaceNotFoundException, ConfigurationException {
         if (logger.isTraceEnabled())
             logger.trace(String.format("Resolving request for %s with name %s", type, name));
@@ -198,7 +201,7 @@ public class DataSpacesImpl {
 
         try {
             final String aoId = Utils.getActiveObjectId(Utils.getCurrentActiveObjectBody());
-            final DataSpacesFileObject fo = spacesMountManager.resolveFile(uri, aoId);
+            final DataSpacesFileObject fo = spacesMountManager.resolveFile(uri, aoId, credentials);
             if (logger.isTraceEnabled())
                 logger.trace(String.format("Resolved request for %s with name %s (%s)", type, name, uri));
 
@@ -219,7 +222,8 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveInputBlocking(String, long)
      * @see PADataSpaces#resolveOutputBlocking(String, long)
      */
-    public DataSpacesFileObject resolveInputOutputBlocking(String name, long timeoutMillis, SpaceType type, String path)
+    public DataSpacesFileObject resolveInputOutputBlocking(String name, long timeoutMillis, SpaceType type, String path,
+            UserCredentials credentials)
             throws FileSystemException, IllegalArgumentException, ProActiveTimeoutException, ConfigurationException {
         if (logger.isTraceEnabled())
             logger.trace(String.format("Resolving blocking request for %s with name %s", type, name));
@@ -243,7 +247,7 @@ public class DataSpacesImpl {
         while (currTime < startTime + timeoutMillis) {
             try {
                 final String aoId = Utils.getActiveObjectId(Utils.getCurrentActiveObjectBody());
-                final DataSpacesFileObject fo = spacesMountManager.resolveFile(uri, aoId);
+                final DataSpacesFileObject fo = spacesMountManager.resolveFile(uri, aoId, credentials);
                 if (logger.isTraceEnabled()) {
                     final String message = String.format("Resolved blocking request for %s with name %s (%s)",
                                                          type,
@@ -286,7 +290,7 @@ public class DataSpacesImpl {
     /**
      * @see PADataSpaces#resolveScratchForAO()
      */
-    public DataSpacesFileObject resolveScratchForAO(String path)
+    public DataSpacesFileObject resolveScratchForAO(String path, UserCredentials credentials)
             throws FileSystemException, NotConfiguredException, ConfigurationException {
         logger.trace("Resolving scratch for an Active Object");
         if (appScratchSpace == null) {
@@ -299,7 +303,7 @@ public class DataSpacesImpl {
             final DataSpacesURI scratchURI = appScratchSpace.getScratchForAO(body);
             final DataSpacesURI queryURI = scratchURI.withUserPath(path);
             final String aoId = Utils.getActiveObjectId(Utils.getCurrentActiveObjectBody());
-            final DataSpacesFileObject fo = spacesMountManager.resolveFile(queryURI, aoId);
+            final DataSpacesFileObject fo = spacesMountManager.resolveFile(queryURI, aoId, credentials);
 
             if (logger.isTraceEnabled())
                 logger.trace("Resolved scratch for an Active Object: " + queryURI);
@@ -346,7 +350,7 @@ public class DataSpacesImpl {
      * @see PADataSpaces#resolveAllKnownInputs()
      * @see PADataSpaces#resolveAllKnownOutputs()
      */
-    public Map<String, DataSpacesFileObject> resolveAllKnownInputsOutputs(SpaceType type)
+    public Map<String, DataSpacesFileObject> resolveAllKnownInputsOutputs(SpaceType type, UserCredentials credentials)
             throws FileSystemException, IllegalArgumentException, ConfigurationException {
         if (logger.isTraceEnabled())
             logger.trace(String.format("Resolving known %s spaces: ", type));
@@ -356,7 +360,7 @@ public class DataSpacesImpl {
         final Map<DataSpacesURI, DataSpacesFileObject> spaces;
         try {
             final String aoId = Utils.getActiveObjectId(Utils.getCurrentActiveObjectBody());
-            spaces = spacesMountManager.resolveSpaces(uri, aoId);
+            spaces = spacesMountManager.resolveSpaces(uri, aoId, credentials);
         } catch (FileSystemException x) {
             logger.debug(String.format("VFS-level problem during resolving known %s spaces: ", type), x);
             throw x;
@@ -383,7 +387,7 @@ public class DataSpacesImpl {
     /**
      * @see PADataSpaces#resolveFile(String)
      */
-    public DataSpacesFileObject resolveFile(String uri)
+    public DataSpacesFileObject resolveFile(String uri, UserCredentials credentials)
             throws MalformedURIException, FileSystemException, SpaceNotFoundException, ConfigurationException {
         if (logger.isTraceEnabled())
             logger.trace("Resolving file: " + uri);
@@ -394,7 +398,7 @@ public class DataSpacesImpl {
                 throw new MalformedURIException("Specified URI represents internal high-level directories");
 
             final String aoId = Utils.getActiveObjectId(Utils.getCurrentActiveObjectBody());
-            final DataSpacesFileObject fo = spacesMountManager.resolveFile(dataSpacesURI, aoId);
+            final DataSpacesFileObject fo = spacesMountManager.resolveFile(dataSpacesURI, aoId, credentials);
             SpaceType type = dataSpacesURI.getSpaceType(); // as isComplete cannot be null
 
             if (logger.isTraceEnabled())

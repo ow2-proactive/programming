@@ -64,7 +64,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundExc
  * {@link #getAllKnownInputNames()} and {@link #getAllKnownOutputNames()}</li>
  * <li>Methods for resolving {@link DataSpacesFileObject} instances from data spaces, all
  * <code>resolve*</code> methods. Those instances <b>must not</b> be shared between two different
- * ActiveObjects. Instead use {@link DataSpacesFileObject#getURI()} method for obtaining particular
+ * ActiveObjects. Instead use {@link DataSpacesFileObject#getRealURI()} ()} method for obtaining particular
  * file's URI, that is <b>allowed</b> to pass between two different ActiveObjects.</li>
  * </ol>
  * <p>
@@ -167,7 +167,31 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveDefaultInput()
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, null);
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, null, null);
+    }
+
+    /**
+     * Returns file handle to the <i>default input data space</i>. This method call is equal to
+     * {@link #resolveDefaultInput(String)} with null path argument.
+     *
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
+     * @return file handle to the default input data space of caller's application
+     * @throws SpaceNotFoundException
+     *             when there is no default input data space defined
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveDefaultInputBlocking(long)
+     * @see #resolveDefaultInput(String)
+     */
+    public static DataSpacesFileObject resolveDefaultInput(UserCredentials credentials)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, null, credentials);
     }
 
     /**
@@ -201,7 +225,43 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveDefaultInput(String path)
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, path);
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, path, null);
+    }
+
+    /**
+     * Returns file handle to file specified by path in the <i>default input data space</i>, as
+     * defined in application descriptor or dynamically set through API during application
+     * execution.
+     * <p>
+     * Returned file handle can be directly used to perform operations on the file/directory,
+     * regardless of the underlying protocol. Closing returned DataSpacesFileObject is a caller's
+     * responsibility.
+     * <p>
+     * As input data space minimal capabilities are checked locally, its content is expected to be
+     * readable from any node of this application if it was defined correctly. It is intended to
+     * provide any form of input to the application.
+     *
+     * @param path
+     *            path of a file in the default input data space; <code>null</code> denotes request
+     *            for data space root
+     * @param credentials
+     *            credentials used to mount the file system
+     * @return file handle to file specified by path in the default input data space of caller's
+     *         application
+     * @throws SpaceNotFoundException
+     *             when there is no default input data space defined
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveDefaultInputBlocking(String, long)
+     */
+    public static DataSpacesFileObject resolveDefaultInput(String path, UserCredentials credentials)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.INPUT, path, credentials);
     }
 
     /**
@@ -223,7 +283,31 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveDefaultOutput()
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, null);
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, null, null);
+    }
+
+    /**
+     * Returns file handle to the <i>default output data space</i>. This method call is equal to
+     * {@link #resolveDefaultOutput(String)} with null path argument.
+     *
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
+     * @return file handle to the default output data space of caller's application
+     * @throws SpaceNotFoundException
+     *             when there is no default output data space defined
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveDefaultOutputBlocking(long)
+     * @see #resolveDefaultOutput(String)
+     */
+    public static DataSpacesFileObject resolveDefaultOutput(UserCredentials credentials)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, null, credentials);
     }
 
     /**
@@ -259,7 +343,45 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveDefaultOutput(String path)
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, path);
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, path, null);
+    }
+
+    /**
+     * Returns file handle to file specified by path in the <i>default output data space</i>, as
+     * defined in application descriptor or dynamically set through API during application
+     * execution.
+     * <p>
+     * Returned file handle can be directly used to perform operations on the file/directory,
+     * regardless of the underlying protocol. If specified file does not exist, one should call
+     * {@link DataSpacesFileObject#createFile()} or {@link DataSpacesFileObject#createFolder()}
+     * method. Closing returned DataSpacesFileObject is a caller's responsibility.
+     * <p>
+     * As output data space minimal capabilities are checked locally, its content is expected to be
+     * writable from any node of this application if it was defined correctly. It is intended to
+     * store globally any computation results. Writes synchronization is a developer’s
+     * responsibility.
+     *
+     * @param path
+     *            path of a file in the default output data space; <code>null</code> denotes request
+     *            for data space root
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
+     * @return file handle to file specified by path in the default output data space of caller's
+     *         application
+     * @throws SpaceNotFoundException
+     *             when there is no default output data space defined
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveDefaultOutputBlocking(String, long)
+     */
+    public static DataSpacesFileObject resolveDefaultOutput(String path, UserCredentials credentials)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveDefaultInputOutput(SpaceType.OUTPUT, path, credentials);
     }
 
     /**
@@ -288,7 +410,7 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveDefaultInputBlocking(long timeoutMillis)
             throws ProActiveTimeoutException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.INPUT, null);
+        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.INPUT, null, null);
     }
 
     /**
@@ -322,7 +444,7 @@ public class PADataSpaces {
     public static DataSpacesFileObject resolveDefaultInputBlocking(String path, long timeoutMillis)
             throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
             ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.INPUT, path);
+        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.INPUT, path, null);
     }
 
     /**
@@ -351,7 +473,7 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveDefaultOutputBlocking(long timeoutMillis) throws IllegalArgumentException,
             ProActiveTimeoutException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.OUTPUT, null);
+        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.OUTPUT, null, null);
     }
 
     /**
@@ -385,7 +507,7 @@ public class PADataSpaces {
     public static DataSpacesFileObject resolveDefaultOutputBlocking(String path, long timeoutMillis)
             throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
             ConfigurationException {
-        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.OUTPUT, path);
+        return getMyDataSpacesImpl().resolveDefaultInputOutputBlocking(timeoutMillis, SpaceType.OUTPUT, path, null);
     }
 
     /**
@@ -409,7 +531,33 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveInput(String name)
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, null);
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, null, null);
+    }
+
+    /**
+     * Returns file handle to the <i>input data space</i> with specific name. This method call is
+     * equal to {@link #resolveInput(String, String)} with null path argument.
+     *
+     * @param name
+     *            name of an input data space to resolve
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
+     * @return file handle to the input data space with provided name, for caller's application
+     * @throws SpaceNotFoundException
+     *             when there is no input data space defined with specified name
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveInputBlocking(String, long)
+     * @see #resolveInput(String, String)
+     */
+    public static DataSpacesFileObject resolveInput(String name, UserCredentials credentials)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, null, credentials);
     }
 
     /**
@@ -445,7 +593,45 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveInput(String name, String path)
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, path);
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, path, null);
+    }
+
+    /**
+     * Returns file handle to file specified by path in the <i>input data space</i> with specific
+     * name, as defined in application descriptor or dynamically set through API during application
+     * execution.
+     * <p>
+     * Returned file handle can be directly used to perform operations on the file/directory,
+     * regardless of the underlying protocol. Closing returned DataSpacesFileObject is a caller's
+     * responsibility.
+     * <p>
+     * As input data space capabilities are checked locally, its content is expected to be readable
+     * from any node of this application if it was defined correctly. It is intended to provide any
+     * form of input to the application.
+     *
+     * @param name
+     *            name of an input data space to resolve
+     * @param path
+     *            path of a file in the named input data space; <code>null</code> denotes request
+     *            for data space root
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
+     * @return file handle to file specified by path in the input data space with provided name, for
+     *         caller's application
+     * @throws SpaceNotFoundException
+     *             when there is no input data space defined with specified name
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveInputBlocking(String, String, long)
+     */
+    public static DataSpacesFileObject resolveInput(String name, UserCredentials credentials, String path)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.INPUT, path, credentials);
     }
 
     /**
@@ -469,7 +655,33 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveOutput(String name)
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, null);
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, null, null);
+    }
+
+    /**
+     * Returns file handle to the <i>output data space</i> with specific name. This method call is
+     * equal to {@link #resolveOutput(String, String)} with null path argument.
+     *
+     * @param name
+     *            name of an output data space to resolve
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
+     * @return file handle to the output data space with provided name, for caller's application
+     * @throws SpaceNotFoundException
+     *             when there is no output data space defined with specified name
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveOutputBlocking(String, long)
+     * @see #resolveOutput(String, String)
+     */
+    public static DataSpacesFileObject resolveOutput(String name, UserCredentials credentials)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, null, credentials);
     }
 
     /**
@@ -506,7 +718,46 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveOutput(String name, String path)
             throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, path);
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, path, null);
+    }
+
+    /**
+     * Returns file handle to file specified by path in the <i>output data space</i> with specific
+     * name, as defined in application descriptor or dynamically set through API during application
+     * execution.
+     * <p>
+     * Returned file handle can be directly used to perform operations on the file/directory,
+     * regardless of the underlying protocol. If specified file does not exist, one should call
+     * {@link DataSpacesFileObject#createFile()} or {@link DataSpacesFileObject#createFolder()}
+     * method. Closing returned DataSpacesFileObject is a caller's responsibility.
+     * <p>
+     * Output data space content is expected to be writable from any node of this application if it
+     * was defined correctly. It is intended to store globally any computation results. Writes
+     * synchronization is a developer’s responsibility.
+     *
+     * @param name
+     *            name of an output data space to resolve
+     * @param path
+     *            path of a file in the named output data space; <code>null</code> denotes request
+     *            for data space root
+     * @param credentials
+     *             credentials used to access the file (for implementations which support it)
+     * @return file handle to file specified by path in the output data space with provided name,
+     *         for caller's application
+     * @throws SpaceNotFoundException
+     *             when there is no output data space defined with specified name
+     * @throws FileSystemException
+     *             indicates VFS related exception
+     * @throws NotConfiguredException
+     *             when caller's node is not configured for Data Spaces application
+     * @throws ConfigurationException
+     *             when resolved space's file system has not enough capabilities (because of wrong
+     *             configuration)
+     * @see #resolveOutputBlocking(String, String, long)
+     */
+    public static DataSpacesFileObject resolveOutput(String name, UserCredentials credentials, String path)
+            throws SpaceNotFoundException, FileSystemException, NotConfiguredException, ConfigurationException {
+        return getMyDataSpacesImpl().resolveInputOutput(name, SpaceType.OUTPUT, path, credentials);
     }
 
     /**
@@ -539,7 +790,7 @@ public class PADataSpaces {
     public static DataSpacesFileObject resolveInputBlocking(String name, long timeoutMillis)
             throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
             ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.INPUT, null);
+        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.INPUT, null, null);
     }
 
     /**
@@ -576,7 +827,7 @@ public class PADataSpaces {
     public static DataSpacesFileObject resolveInputBlocking(String name, String path, long timeoutMillis)
             throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
             ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.INPUT, path);
+        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.INPUT, path, null);
     }
 
     /**
@@ -609,7 +860,7 @@ public class PADataSpaces {
     public static DataSpacesFileObject resolveOutputBlocking(String name, long timeoutMillis)
             throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
             ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.OUTPUT, null);
+        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.OUTPUT, null, null);
     }
 
     /**
@@ -646,7 +897,7 @@ public class PADataSpaces {
     public static DataSpacesFileObject resolveOutputBlocking(String name, String path, long timeoutMillis)
             throws IllegalArgumentException, ProActiveTimeoutException, FileSystemException, NotConfiguredException,
             ConfigurationException {
-        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.OUTPUT, path);
+        return getMyDataSpacesImpl().resolveInputOutputBlocking(name, timeoutMillis, SpaceType.OUTPUT, path, null);
     }
 
     /**
@@ -669,7 +920,7 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveScratchForAO()
             throws FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveScratchForAO(null);
+        return getMyDataSpacesImpl().resolveScratchForAO(null, null);
     }
 
     /**
@@ -705,7 +956,7 @@ public class PADataSpaces {
      */
     public static DataSpacesFileObject resolveScratchForAO(String path)
             throws FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveScratchForAO(path);
+        return getMyDataSpacesImpl().resolveScratchForAO(path, null);
     }
 
     /**
@@ -785,7 +1036,7 @@ public class PADataSpaces {
      */
     public static Map<String, DataSpacesFileObject> resolveAllKnownInputs()
             throws FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveAllKnownInputsOutputs(SpaceType.INPUT);
+        return getMyDataSpacesImpl().resolveAllKnownInputsOutputs(SpaceType.INPUT, null);
     }
 
     /**
@@ -823,7 +1074,7 @@ public class PADataSpaces {
      */
     public static Map<String, DataSpacesFileObject> resolveAllKnownOutputs()
             throws FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveAllKnownInputsOutputs(SpaceType.OUTPUT);
+        return getMyDataSpacesImpl().resolveAllKnownInputsOutputs(SpaceType.OUTPUT, null);
     }
 
     /**
@@ -848,7 +1099,7 @@ public class PADataSpaces {
      *
      * @param uri
      *            valid URI within an existing data space, returned by
-     *            {@link DataSpacesFileObject#getURI()}
+     *            {@link DataSpacesFileObject#getRealURI()}
      * @return handle for specified file
      * @throws MalformedURIException
      *             passed URI is invalid or not suitable for use by user (accessing internal
@@ -862,11 +1113,11 @@ public class PADataSpaces {
      * @throws ConfigurationException
      *             when resolved space's file system has not enough capabilities (because of wrong
      *             configuration)
-     * @see DataSpacesFileObject#getURI()
+     * @see DataSpacesFileObject#getRealURI()
      */
     public static DataSpacesFileObject resolveFile(String uri) throws MalformedURIException, SpaceNotFoundException,
             FileSystemException, NotConfiguredException, ConfigurationException {
-        return getMyDataSpacesImpl().resolveFile(uri);
+        return getMyDataSpacesImpl().resolveFile(uri, null);
     }
 
     /**

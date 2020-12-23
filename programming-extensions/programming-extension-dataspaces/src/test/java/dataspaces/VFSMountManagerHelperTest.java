@@ -48,6 +48,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSMountManagerHelper;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.router.Router;
@@ -138,7 +139,7 @@ public class VFSMountManagerHelperTest {
             uriToMount.add(spacesDir.toURI().toString()); // adds a valid file uri
             uriToMount.addAll(fakeUrls);
             uriToMount.add((int) Math.floor(Math.random() * uriToMount.size()), validUrl);
-            VFSMountManagerHelper.mountAny(uriToMount, fileSystems);
+            VFSMountManagerHelper.mountAny(new UserCredentials(), uriToMount, fileSystems);
             logger.info("Content of map : " + fileSystems.toString());
             Assert.assertTrue("map contains valid Url", fileSystems.containsKey(validUrl));
         }
@@ -154,7 +155,7 @@ public class VFSMountManagerHelperTest {
         ArrayList<String> urlsToMount = new ArrayList<String>(fakeFileUrls);
         urlsToMount.addAll(fakeUrls);
         ConcurrentHashMap<String, FileObject> fileSystems = new ConcurrentHashMap<String, FileObject>();
-        VFSMountManagerHelper.mountAny(urlsToMount, fileSystems);
+        VFSMountManagerHelper.mountAny(new UserCredentials(), urlsToMount, fileSystems);
     }
 
     /**
@@ -166,7 +167,7 @@ public class VFSMountManagerHelperTest {
         logger.info("*************** testMountOk");
         String[] validUrls = server.getVFSRootURLs();
         for (String validUrl : validUrls) {
-            FileObject mounted = VFSMountManagerHelper.mount(validUrl);
+            FileObject mounted = VFSMountManagerHelper.mount(new UserCredentials(), validUrl);
             Assert.assertTrue(mounted.exists());
         }
     }
@@ -179,7 +180,7 @@ public class VFSMountManagerHelperTest {
     public void testMountKo() throws Exception {
         logger.info("*************** testMountKo");
         for (String fakeUrl : fakeUrls) {
-            FileObject mounted = VFSMountManagerHelper.mount(fakeUrl);
+            FileObject mounted = VFSMountManagerHelper.mount(new UserCredentials(), fakeUrl);
         }
     }
 
@@ -194,12 +195,12 @@ public class VFSMountManagerHelperTest {
         String[] validUrls = server.getVFSRootURLs();
         ArrayList<FileObject> fos = new ArrayList<FileObject>();
         for (String validUrl : validUrls) {
-            FileObject mounted = VFSMountManagerHelper.mount(validUrl);
+            FileObject mounted = VFSMountManagerHelper.mount(new UserCredentials(), validUrl);
             Assert.assertTrue(mounted.exists());
             fos.add(mounted);
         }
 
-        VFSMountManagerHelper.closeFileSystems(Arrays.asList(validUrls));
+        VFSMountManagerHelper.closeFileSystems(new UserCredentials(), Arrays.asList(validUrls));
 
         boolean onlyExceptions = true;
         for (FileObject closedFo : fos) {

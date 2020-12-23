@@ -39,6 +39,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.dataspaces.vfs.VFSMountManagerHelper;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 
@@ -66,17 +67,17 @@ public class VFSMountManagerHelperTerminateTest {
 
         String[] validUrls = server.getVFSRootURLs();
         for (String validUrl : validUrls) {
-            FileObject mounted = VFSMountManagerHelper.mount(validUrl);
+            FileObject mounted = VFSMountManagerHelper.mount(new UserCredentials(), validUrl);
             Assert.assertTrue(mounted.exists());
         }
 
         VFSMountManagerHelper.terminate();
 
-        VFSMountManagerHelper.closeFileSystems(Arrays.asList(validUrls));
+        VFSMountManagerHelper.closeFileSystems(new UserCredentials(), Arrays.asList(validUrls));
 
         // Ensure that we can regenerate the mount helper
         for (String validUrl : validUrls) {
-            FileObject mounted = VFSMountManagerHelper.mount(validUrl);
+            FileObject mounted = VFSMountManagerHelper.mount(new UserCredentials(), validUrl);
             Assert.assertTrue(mounted.exists());
         }
 
