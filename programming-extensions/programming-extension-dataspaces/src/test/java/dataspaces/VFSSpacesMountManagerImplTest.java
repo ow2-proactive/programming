@@ -258,7 +258,7 @@ public class VFSSpacesMountManagerImplTest {
 
     @Test
     public void testResolveFileForInputSpace() throws IOException, SpaceNotFoundException {
-        fileObject = manager.resolveFile(inputUri, null);
+        fileObject = manager.resolveFile(inputUri, null, null);
         assertIsWorkingInputSpaceDir(fileObject);
     }
 
@@ -276,14 +276,14 @@ public class VFSSpacesMountManagerImplTest {
 
     @Test
     public void testResolveFileForOutputSpace() throws IOException, SpaceNotFoundException {
-        fileObject = manager.resolveFile(outputUri, null);
+        fileObject = manager.resolveFile(outputUri, null, null);
         assertIsWorkingOutputSpaceDir(fileObject);
     }
 
     @Test
     public void testResolveFilesNotSharedFileObject() throws IOException, SpaceNotFoundException {
-        final DataSpacesFileObject fileObject1 = manager.resolveFile(inputUri, null);
-        final DataSpacesFileObject fileObject2 = manager.resolveFile(inputUri, null);
+        final DataSpacesFileObject fileObject1 = manager.resolveFile(inputUri, null, null);
+        final DataSpacesFileObject fileObject2 = manager.resolveFile(inputUri, null, null);
 
         assertNotSame(fileObject1, fileObject2);
     }
@@ -291,7 +291,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveFileForUnexistingSpace() throws SpaceNotFoundException, IOException {
         try {
-            manager.resolveFile(NONEXISTING_SPACE, null);
+            manager.resolveFile(NONEXISTING_SPACE, null, null);
             fail("Exception expected");
         } catch (SpaceNotFoundException x) {
         }
@@ -302,7 +302,7 @@ public class VFSSpacesMountManagerImplTest {
         final DataSpacesURI uri = DataSpacesURI.createURI(inputUri.getAppId());
         assertFalse(uri.isSpacePartFullyDefined());
         try {
-            manager.resolveFile(uri, null);
+            manager.resolveFile(uri, null, null);
             fail("Exception expected");
         } catch (IllegalArgumentException x) {
         }
@@ -312,7 +312,7 @@ public class VFSSpacesMountManagerImplTest {
     public void testResolveFileForNotSuitableForUserPath() throws SpaceNotFoundException, IOException {
         assertFalse(scratchUri.isSuitableForUserPath());
         try {
-            manager.resolveFile(scratchUri, null);
+            manager.resolveFile(scratchUri, null, null);
             fail("Exception expected");
         } catch (IllegalArgumentException x) {
         }
@@ -338,7 +338,8 @@ public class VFSSpacesMountManagerImplTest {
                                                                                      fileObjectWithWrongFileUri.getName(),
                                                                                      rootUrisWithWrongFileUri,
                                                                                      wrongpath,
-                                                                                     manager2);
+                                                                                     manager2,
+                                                                                     null);
 
         // switch to existing
         DataSpacesFileObject newfo = dsFileObjectWithWrongFileUri.ensureExistingOrSwitch(true);
@@ -489,7 +490,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveFileForFileInInputSpace() throws SpaceNotFoundException, IOException {
         final DataSpacesURI fileUri = inputUri.withUserPath(INPUT_FILE);
-        fileObject = manager.resolveFile(fileUri, null);
+        fileObject = manager.resolveFile(fileUri, null, null);
 
         assertTrue(fileObject.exists());
         // is it that file?
@@ -514,7 +515,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveFileForFileInScratchSpaceForOwner() throws SpaceNotFoundException, IOException {
         final DataSpacesURI fileUri = scratchUri.withActiveObjectId(SCRATCH_ACTIVE_OBJECT_ID);
-        fileObject = manager.resolveFile(fileUri, SCRATCH_ACTIVE_OBJECT_ID);
+        fileObject = manager.resolveFile(fileUri, SCRATCH_ACTIVE_OBJECT_ID, null);
         assertIsWorkingScratchForAODir(fileObject, fileUri, true);
     }
 
@@ -522,14 +523,14 @@ public class VFSSpacesMountManagerImplTest {
     public void testResolveFileForFileInScratchSpaceForOtherAO() throws SpaceNotFoundException, IOException {
         final DataSpacesURI fileUri = scratchUri.withActiveObjectId(SCRATCH_ACTIVE_OBJECT_ID);
         final String nonexistingActiveObjectId = SCRATCH_ACTIVE_OBJECT_ID + "toto";
-        fileObject = manager.resolveFile(fileUri, nonexistingActiveObjectId);
+        fileObject = manager.resolveFile(fileUri, nonexistingActiveObjectId, null);
         assertIsWorkingScratchForAODir(fileObject, fileUri, false);
     }
 
     @Test
     public void testResolveFileForFileInScratchSpaceForAnonymousOwner() throws SpaceNotFoundException, IOException {
         final DataSpacesURI fileUri = scratchUri.withActiveObjectId(SCRATCH_ACTIVE_OBJECT_ID);
-        fileObject = manager.resolveFile(fileUri, null);
+        fileObject = manager.resolveFile(fileUri, null, null);
         assertIsWorkingScratchForAODir(fileObject, fileUri, false);
     }
 
@@ -576,7 +577,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveFileForUnexistingFileInSpace() throws SpaceNotFoundException, IOException {
         final DataSpacesURI fileUri = inputUri.withUserPath(NONEXISTING_FILE);
-        fileObject = manager.resolveFile(fileUri, null);
+        fileObject = manager.resolveFile(fileUri, null, null);
         assertFalse(fileObject.exists());
     }
 
@@ -598,7 +599,7 @@ public class VFSSpacesMountManagerImplTest {
     public void testResolveFileForFileInNonexistingSpace() throws SpaceNotFoundException, IOException {
         final DataSpacesURI fileUri = NONEXISTING_SPACE.withUserPath(NONEXISTING_FILE);
         try {
-            manager.resolveFile(fileUri, null);
+            manager.resolveFile(fileUri, null, null);
             fail("Exception expected");
         } catch (SpaceNotFoundException x) {
         }
@@ -607,7 +608,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveSpaces() throws Exception {
         final DataSpacesURI queryUri = DataSpacesURI.createURI(inputUri.getAppId(), inputUri.getSpaceType());
-        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces = manager.resolveSpaces(queryUri, null);
+        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces = manager.resolveSpaces(queryUri, null, null);
         assertEquals(1, spaces.size());
 
         fileObject = spaces.get(inputUri);
@@ -631,18 +632,18 @@ public class VFSSpacesMountManagerImplTest {
     public void testResolveSpacesNonexisting() throws SpaceNotFoundException, IOException {
         final String nonexistingRuntimeId = scratchUri.getRuntimeId() + "toto";
         final DataSpacesURI queryUri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(), nonexistingRuntimeId);
-        assertEquals(0, manager.resolveSpaces(queryUri, null).size());
+        assertEquals(0, manager.resolveSpaces(queryUri, null, null).size());
     }
 
     @Test
     public void testResolveSpacesNotSharedFileObject() throws IOException {
         final DataSpacesURI queryUri = DataSpacesURI.createURI(inputUri.getAppId(), inputUri.getSpaceType());
 
-        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces1 = manager.resolveSpaces(queryUri, null);
+        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces1 = manager.resolveSpaces(queryUri, null, null);
         assertEquals(1, spaces1.size());
         final DataSpacesFileObject fileObject1 = spaces1.get(inputUri);
 
-        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces2 = manager.resolveSpaces(queryUri, null);
+        final Map<DataSpacesURI, ? extends DataSpacesFileObject> spaces2 = manager.resolveSpaces(queryUri, null, null);
         assertEquals(1, spaces2.size());
         final DataSpacesFileObject fileObject2 = spaces2.get(inputUri);
         assertNotSame(fileObject1, fileObject2);
@@ -651,7 +652,7 @@ public class VFSSpacesMountManagerImplTest {
     @Test
     public void testResolveSpacesForSpacePartFullyDefined() throws SpaceNotFoundException, IOException {
         try {
-            manager.resolveSpaces(inputUri, null);
+            manager.resolveSpaces(inputUri, null, null);
             fail("Exception expected");
         } catch (IllegalArgumentException x) {
         }
@@ -661,7 +662,7 @@ public class VFSSpacesMountManagerImplTest {
     public void testResolveSpacesForNotSuitableForUserPath() throws SpaceNotFoundException, IOException {
         final DataSpacesURI uri = DataSpacesURI.createScratchSpaceURI(scratchUri.getAppId(), scratchUri.getRuntimeId());
         try {
-            manager.resolveSpaces(uri, null);
+            manager.resolveSpaces(uri, null, null);
             fail("Exception expected");
         } catch (IllegalArgumentException x) {
         }

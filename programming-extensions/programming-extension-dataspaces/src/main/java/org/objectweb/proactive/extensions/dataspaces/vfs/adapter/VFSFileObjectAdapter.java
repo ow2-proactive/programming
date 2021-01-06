@@ -48,6 +48,7 @@ import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
 import org.objectweb.proactive.extensions.dataspaces.api.FileContent;
 import org.objectweb.proactive.extensions.dataspaces.api.FileSelector;
 import org.objectweb.proactive.extensions.dataspaces.api.FileType;
+import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.dataspaces.core.DataSpacesURI;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.DataSpacesException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemException;
@@ -94,15 +95,17 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
 
     private final String ownerActiveObjectId;
 
+    private final UserCredentials credentials;
+
     public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI, FileName dataSpaceVFSFileName,
-            ArrayList<String> spaceRoots, String currentRoot) throws FileSystemException {
-        this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, currentRoot, null, null);
+            ArrayList<String> spaceRoots, String currentRoot, UserCredentials credentials) throws FileSystemException {
+        this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, currentRoot, null, null, credentials);
     }
 
     public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI, FileName dataSpaceVFSFileName,
-            ArrayList<String> spaceRoots, String currentRoot, VFSSpacesMountManagerImpl manager)
-            throws FileSystemException {
-        this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, currentRoot, manager, null);
+            ArrayList<String> spaceRoots, String currentRoot, VFSSpacesMountManagerImpl manager,
+            UserCredentials credentials) throws FileSystemException {
+        this(adaptee, dataSpaceURI, dataSpaceVFSFileName, spaceRoots, currentRoot, manager, null, credentials);
     }
 
     /**
@@ -115,7 +118,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
      */
     public VFSFileObjectAdapter(FileObject adaptee, DataSpacesURI dataSpaceURI, FileName dataSpaceVFSFileName,
             ArrayList<String> spaceRoots, String currentRoot, VFSSpacesMountManagerImpl manager,
-            String ownerActiveObjectId) throws FileSystemException {
+            String ownerActiveObjectId, UserCredentials credentials) throws FileSystemException {
         this.dataSpaceURI = dataSpaceURI;
         this.dataSpaceVFSFileName = dataSpaceVFSFileName;
         this.currentFileObject = adaptee;
@@ -123,6 +126,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         this.manager = manager;
         this.ownerActiveObjectId = ownerActiveObjectId;
         this.currentRootFOUri = currentRoot;
+        this.credentials = credentials;
         checkFileNamesConsistencyOrWound();
     }
 
@@ -134,7 +138,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
              new ArrayList<String>(fileObjectAdapter.rootFOUriSet),
              fileObjectAdapter.currentRootFOUri,
              fileObjectAdapter.manager,
-             fileObjectAdapter.ownerActiveObjectId);
+             fileObjectAdapter.ownerActiveObjectId,
+             fileObjectAdapter.credentials);
     }
 
     public void close() throws FileSystemException {
@@ -666,7 +671,8 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         String relativePath = computeRelativePath();
         DataSpacesFileObject newDsfo = manager.resolveFile(dataSpaceURI.withRelativeToSpace(relativePath),
                                                            ownerActiveObjectId,
-                                                           spaceRootUri);
+                                                           spaceRootUri,
+                                                           credentials);
         logger.debug("switched to " + newDsfo.getRealURI());
         return newDsfo;
     }
