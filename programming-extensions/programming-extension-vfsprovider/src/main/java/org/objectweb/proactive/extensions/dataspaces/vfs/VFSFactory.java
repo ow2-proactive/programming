@@ -25,9 +25,6 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.commons.vfs2.CacheStrategy;
 import org.apache.commons.vfs2.FileSystemException;
@@ -50,7 +47,7 @@ import org.apache.commons.vfs2.provider.ftp.FtpFileProvider;
 import org.apache.commons.vfs2.provider.http.HttpFileProvider;
 import org.apache.commons.vfs2.provider.https.HttpsFileProvider;
 import org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider;
-import org.apache.commons.vfs2.provider.sftp.IdentityInfo;
+import org.apache.commons.vfs2.provider.sftp.BytesIdentityInfo;
 import org.apache.commons.vfs2.provider.sftp.SftpFileProvider;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.apache.commons.vfs2.provider.url.UrlFileProvider;
@@ -65,7 +62,6 @@ import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvid
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 
 import com.google.common.base.Strings;
-import com.google.common.io.Files;
 
 
 /**
@@ -286,27 +282,25 @@ public class VFSFactory {
             logger.trace("CREDENTIALS = " + credentials);
         }
         if (credentials != null && !credentials.isEmpty()) {
-            if (Strings.isNullOrEmpty(credentials.getPassword()) &&
-                (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0)) {
+            if (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0) {
                 try {
-                    // unfortunately, the current vfs2 sftp api allows only to provide an identify as a file
-                    File tempFile = File.createTempFile("sftp", "");
-                    Files.write(credentials.getPrivateKey(), tempFile);
-                    IdentityInfo identityInfo = new IdentityInfo(tempFile);
-                    SftpFileSystemConfigBuilder.getInstance().setIdentityInfo(options, identityInfo);
-                } catch (IOException e) {
-                    logger.error("Error when setting user authentication", e);
-                }
-            } else {
-                UserAuthenticator auth = new StaticUserAuthenticator(credentials.getDomain(),
-                                                                     credentials.getLogin(),
-                                                                     credentials.getPassword());
-                try {
-                    DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, auth);
-                } catch (FileSystemException ex) {
-                    logger.error("Error when setting user authentication", ex);
+                    BytesIdentityInfo identityInfo = new BytesIdentityInfo(credentials.getPrivateKey(), null);
+                    SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, identityInfo);
+                    SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options,
+                                                                                          "publickey,password");
+                } catch (FileSystemException e) {
+                    logger.error("Error when adding private key information", e);
                 }
             }
+            UserAuthenticator auth = new StaticUserAuthenticator(credentials.getDomain(),
+                                                                 credentials.getLogin(),
+                                                                 credentials.getPassword());
+            try {
+                DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, auth);
+            } catch (FileSystemException ex) {
+                logger.error("Error when setting user authentication", ex);
+            }
+
         } else {
             DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, null);
         }

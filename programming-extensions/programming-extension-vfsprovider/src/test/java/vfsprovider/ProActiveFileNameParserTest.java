@@ -31,18 +31,39 @@ import static org.junit.Assert.assertNull;
 import java.net.URISyntaxException;
 
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
+import org.objectweb.proactive.extensions.dataspaces.vfs.VFSFactory;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileNameParser;
+import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileObject;
 
 
 /**
  * ProActiveFileNameParser (and somehow ProActiveFileName) basic tests.
  */
 public class ProActiveFileNameParserTest {
-    private static ProActiveFileName parseURI(final String uri) throws FileSystemException {
-        return (ProActiveFileName) ProActiveFileNameParser.getInstance().parseUri(null, null, uri);
+
+    DefaultFileSystemManager manager;
+
+    @Before
+    public void setUp() throws FileSystemException {
+        manager = VFSFactory.createDefaultFileSystemManager();
+    }
+
+    @After
+    public void tearDown() {
+        manager.close();
+    }
+
+    private ProActiveFileName parseURI(final String uri) throws FileSystemException {
+        return (ProActiveFileName) ProActiveFileNameParser.getInstance().parseUri(
+                                                                                  new ProActiveFileObject.ProActiveVfsComponentContext(manager),
+                                                                                  null,
+                                                                                  uri);
     }
 
     private ProActiveFileName fileName;

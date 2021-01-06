@@ -27,6 +27,7 @@ package org.objectweb.proactive.extensions.vfsprovider.client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,16 +39,22 @@ import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
+import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.RandomAccessContent;
 import org.apache.commons.vfs2.provider.AbstractFileName;
 import org.apache.commons.vfs2.provider.AbstractFileObject;
 import org.apache.commons.vfs2.provider.AbstractRandomAccessStreamContent;
+import org.apache.commons.vfs2.provider.FileReplicator;
+import org.apache.commons.vfs2.provider.TemporaryFileStore;
 import org.apache.commons.vfs2.provider.UriParser;
+import org.apache.commons.vfs2.provider.VfsComponentContext;
 import org.apache.commons.vfs2.util.MonitorInputStream;
 import org.apache.commons.vfs2.util.MonitorOutputStream;
 import org.apache.commons.vfs2.util.RandomAccessMode;
@@ -137,7 +144,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
         return proactiveFS.getServer();
     }
 
-    private String getPath() throws FileSystemException {
+    private String getInternalPath() throws FileSystemException {
         return ((ProActiveFileName) getName()).getPathDecoded();
     }
 
@@ -145,7 +152,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
     protected void doAttach() throws Exception {
         synchronized (proactiveFS) {
             if (fileInfo == null) {
-                fileInfo = getServer().fileGetInfo(getPath());
+                fileInfo = getServer().fileGetInfo(getInternalPath());
                 if (fileInfo == null) {
                     fileInfo = IMAGINARY_FILE_INFO;
                 }
@@ -225,7 +232,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
 
     @Override
     protected String[] doListChildren() throws Exception {
-        final Set<String> files = getServer().fileListChildren(getPath());
+        final Set<String> files = getServer().fileListChildren(getInternalPath());
         if (files == null) {
             return null;
         }
@@ -241,7 +248,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
     @Override
     protected FileObject[] doListChildrenResolved() throws Exception {
 
-        Map<String, FileInfo> fileInfoMap = getServer().fileListChildrenInfo(getPath());
+        Map<String, FileInfo> fileInfoMap = getServer().fileListChildrenInfo(getInternalPath());
 
         ProActiveFileNameParser parser = ProActiveFileNameParser.getInstance();
 
@@ -252,7 +259,9 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
             if (!currenURI.endsWith("/")) {
                 currenURI = currenURI + "/";
             }
-            ProActiveFileName name = (ProActiveFileName) parser.parseUri(null, null, currenURI + childName);
+            ProActiveFileName name = (ProActiveFileName) parser.parseUri(new ProActiveVfsComponentContext(proactiveFS.getFileSystemManager()),
+                                                                         null,
+                                                                         currenURI + childName);
             fileObjects[i] = new ProActiveFileObject(name, fileInfoMap.get(childName), proactiveFS);
             i++;
         }
@@ -304,7 +313,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
     @Override
     protected void doCreateFolder() throws Exception {
         synchronized (proactiveFS) {
-            getServer().fileCreate(getPath(),
+            getServer().fileCreate(getInternalPath(),
                                    org.objectweb.proactive.extensions.vfsprovider.protocol.FileType.DIRECTORY);
         }
     }
@@ -312,7 +321,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
     @Override
     protected void doDelete() throws Exception {
         synchronized (proactiveFS) {
-            getServer().fileDelete(getPath(), false);
+            getServer().fileDelete(getInternalPath(), false);
         }
     }
 
@@ -343,7 +352,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
         private long streamId;
 
         public ProActiveInputStream() throws IOException {
-            streamId = getServer().streamOpen(getPath(), StreamMode.SEQUENTIAL_READ);
+            streamId = getServer().streamOpen(getInternalPath(), StreamMode.SEQUENTIAL_READ);
         }
 
         @Override
@@ -374,7 +383,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
         protected void reopenStream() throws IOException {
             ProActiveFileObject.logger.debug("Reopening input stream: " + streamId);
             try {
-                streamId = getServer().streamOpen(getPath(), StreamMode.SEQUENTIAL_READ);
+                streamId = getServer().streamOpen(getInternalPath(), StreamMode.SEQUENTIAL_READ);
                 if (position > 0) {
                     final long skipped = getServer().streamSkip(streamId, position);
                     if (skipped != position) {
@@ -393,7 +402,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
 
         private ProActiveOutputStream(final boolean append) throws IOException {
             final StreamMode mode = append ? StreamMode.SEQUENTIAL_APPEND : StreamMode.SEQUENTIAL_WRITE;
-            streamId = getServer().streamOpen(getPath(), mode);
+            streamId = getServer().streamOpen(getInternalPath(), mode);
         }
 
         @Override
@@ -424,7 +433,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
         protected void reopenStream() throws IOException {
             ProActiveFileObject.logger.debug("Reopening output stream: " + streamId);
             try {
-                streamId = getServer().streamOpen(getPath(), StreamMode.SEQUENTIAL_APPEND);
+                streamId = getServer().streamOpen(getInternalPath(), StreamMode.SEQUENTIAL_APPEND);
             } catch (Exception x) {
                 throw Utils.generateAndLogIOExceptionCouldNotReopen(logger, x);
             }
@@ -453,7 +462,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
             } else {
                 throw new IllegalArgumentException("Unexpected random access mode");
             }
-            streamId = getServer().streamOpen(getPath(), streamMode);
+            streamId = getServer().streamOpen(getInternalPath(), streamMode);
         }
 
         @Override
@@ -635,7 +644,7 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
         private void reopenStream() throws IOException {
             ProActiveFileObject.logger.debug("Reopening random access stream: " + streamId);
             try {
-                streamId = getServer().streamOpen(getPath(), streamMode);
+                streamId = getServer().streamOpen(getInternalPath(), streamMode);
             } catch (Exception x) {
                 throw Utils.generateAndLogIOExceptionCouldNotReopen(logger, x);
             }
@@ -847,6 +856,51 @@ public class ProActiveFileObject extends AbstractFileObject<ProActiveFileSystem>
             }
         } else {
             return DEFAULT_NUMBER_OF_THREADS;
+        }
+    }
+
+    public static final class ProActiveVfsComponentContext implements VfsComponentContext {
+
+        private FileSystemManager manager;
+
+        public ProActiveVfsComponentContext(FileSystemManager manager) {
+            this.manager = manager;
+        }
+
+        @Override
+        public FileObject resolveFile(FileObject baseFile, String name, FileSystemOptions fileSystemOptions)
+                throws FileSystemException {
+            return null;
+        }
+
+        @Override
+        public FileObject resolveFile(String name, FileSystemOptions fileSystemOptions) throws FileSystemException {
+            return null;
+        }
+
+        @Override
+        public FileName parseURI(String uri) throws FileSystemException {
+            return null;
+        }
+
+        @Override
+        public FileReplicator getReplicator() throws FileSystemException {
+            return null;
+        }
+
+        @Override
+        public TemporaryFileStore getTemporaryFileStore() throws FileSystemException {
+            return null;
+        }
+
+        @Override
+        public FileObject toFileObject(File file) throws FileSystemException {
+            return null;
+        }
+
+        @Override
+        public FileSystemManager getFileSystemManager() {
+            return manager;
         }
     }
 

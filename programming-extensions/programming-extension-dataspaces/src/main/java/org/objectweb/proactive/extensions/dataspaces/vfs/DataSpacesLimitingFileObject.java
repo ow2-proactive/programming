@@ -25,6 +25,9 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.NameScope;
@@ -94,10 +97,11 @@ public class DataSpacesLimitingFileObject extends AbstractLimitingFileObject<Dat
      *
      * @see DataSpacesURI#isSuitableForUserPath()
      */
-    public String getURI() {
+    @Override
+    public URI getURI() {
         try {
-            return getDataSpacesURI().toString();
-        } catch (MalformedURIException x) {
+            return new URI(getDataSpacesURI().toString());
+        } catch (MalformedURIException | URISyntaxException x) {
             ProActiveLogger.logImpossibleException(logger, x);
             throw new ProActiveRuntimeException(x);
         }

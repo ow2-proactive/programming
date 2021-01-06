@@ -74,7 +74,7 @@ public class ProActiveFileNameParser extends HostFileNameParser {
         final StringBuilder name = new StringBuilder();
 
         // Extract the scheme and authority parts
-        final Authority auth = extractToPath(filename, name);
+        final Authority auth = extractToPath(context, filename, name);
 
         // Extract the server service path before processing the file path.
         final String servicePath = extractServicePath(name);
