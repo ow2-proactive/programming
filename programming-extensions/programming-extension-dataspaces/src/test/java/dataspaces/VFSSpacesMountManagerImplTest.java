@@ -36,8 +36,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 import org.apache.log4j.Level;
@@ -147,19 +149,22 @@ public class VFSSpacesMountManagerImplTest {
 
         ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
         spacesDir = new File(System.getProperty("java.io.tmpdir"), "ProActive SpaceMountManagerTest");
+        if (spacesDir.exists()) {
+            FileUtils.forceDelete(spacesDir);
+        }
 
         // input space
         inputSpaceDir = new File(spacesDir, "input");
         assertTrue(inputSpaceDir.mkdirs());
         if (serverInput == null) {
             serverInput = new FileSystemServerDeployer("inputserver", inputSpaceDir.toString(), true, true);
-            System.out.println("Started Input File Server at " + serverInput.getVFSRootURLs());
+            System.out.println("Started Input File Server at " + Arrays.toString(serverInput.getVFSRootURLs()));
         }
 
         final File inputSpaceFile = new File(inputSpaceDir, INPUT_FILE);
-        final OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(inputSpaceFile));
-        osw.write(INPUT_FILE_CONTENT);
-        osw.close();
+        try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(inputSpaceFile))) {
+            osw.write(INPUT_FILE_CONTENT);
+        }
         inputSpaceFileUrl = inputSpaceDir.toURI().toURL().toString();
         ArrayList<String> rootinputuris = new ArrayList<String>();
         rootinputuris.add(inputSpaceFileUrl);
@@ -178,7 +183,7 @@ public class VFSSpacesMountManagerImplTest {
 
         if (serverOutput == null) {
             serverOutput = new FileSystemServerDeployer("outputserver", outputSpaceDir.toString(), true, true);
-            System.out.println("Started Output File Server at " + serverOutput.getVFSRootURLs());
+            System.out.println("Started Output File Server at " + Arrays.toString(serverOutput.getVFSRootURLs()));
         }
 
         outputSpaceFileUrl = outputSpaceDir.toURI().toURL().toString();
@@ -199,7 +204,7 @@ public class VFSSpacesMountManagerImplTest {
 
         if (serverScratch == null) {
             serverScratch = new FileSystemServerDeployer("scratchserver", scratchSpaceDir.toString(), true, true);
-            System.out.println("Started Scratch File Server at " + serverScratch.getVFSRootURLs());
+            System.out.println("Started Scratch File Server at " + Arrays.toString(serverScratch.getVFSRootURLs()));
         }
 
         final File scratchSpaceSubdir = new File(scratchSpaceDir, SCRATCH_ACTIVE_OBJECT_ID);
@@ -227,7 +232,7 @@ public class VFSSpacesMountManagerImplTest {
     }
 
     @After
-    public void tearDown() throws ProActiveException {
+    public void tearDown() throws ProActiveException, IOException {
         closeFileObject(fileObject);
         fileObject = null;
 
@@ -237,7 +242,7 @@ public class VFSSpacesMountManagerImplTest {
         }
 
         if (spacesDir != null && spacesDir.exists()) {
-            assertTrue(AbstractIOOperationsBase.deleteRecursively(spacesDir));
+            FileUtils.forceDelete(spacesDir);
             spacesDir = null;
         }
 
@@ -494,9 +499,12 @@ public class VFSSpacesMountManagerImplTest {
 
         assertTrue(fileObject.exists());
         // is it that file?
-        final InputStream io = fileObject.getContent().getInputStream();
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(io));
-        assertEquals(INPUT_FILE_CONTENT, reader.readLine());
+        String line;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileObject.getContent()
+                                                                                        .getInputStream()))) {
+            line = reader.readLine();
+        }
+        assertEquals(INPUT_FILE_CONTENT, line);
         assertEquals(fileUri.toString(), fileObject.getVirtualURI());
     }
 
