@@ -30,6 +30,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.provider.UriParser;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.springframework.util.AntPathMatcher;
@@ -121,23 +123,25 @@ public class FileSelector implements org.apache.commons.vfs2.FileSelector, Seria
         return matches(getFilePathRelativeToBaseURI(fileInfo));
     }
 
-    public boolean matches(Path path) {
+    public boolean matches(Path path) throws FileSystemException {
 
         boolean isDebugEnabled = log.isDebugEnabled();
 
+        Path unescapedPath = Paths.get(UriParser.decode(path.toString()));
+
         if (isDebugEnabled) {
-            log.debug("Checking file '" + path + "'");
+            log.debug("Checking file '" + unescapedPath + "'");
         }
 
-        if (matches(path, includes)) {
+        if (matches(unescapedPath, includes)) {
             if (isDebugEnabled) {
-                log.debug("Path '" + path + "' matches an include pattern " + includes);
+                log.debug("Path '" + unescapedPath + "' matches an include pattern " + includes);
             }
 
-            if (!matches(path, excludes)) {
+            if (!matches(unescapedPath, excludes)) {
                 if (isDebugEnabled) {
-                    log.debug("Path '" + path + "' matches no exclude pattern");
-                    log.debug("Path '" + path + "' selected for copy.");
+                    log.debug("Path '" + unescapedPath + "' matches no exclude pattern");
+                    log.debug("Path '" + unescapedPath + "' selected for copy.");
                 }
 
                 return true;
@@ -161,7 +165,7 @@ public class FileSelector implements org.apache.commons.vfs2.FileSelector, Seria
      * <p>
      * It is assumed that the {@code baseURI} is always present in {@code fileURI}.
      */
-    protected String getFilePathRelativeToBaseURI(String baseURI, String fileURI) {
+    protected String getFilePathRelativeToBaseURI(String baseURI, String fileURI) throws FileSystemException {
         int nbSlashToIgnore = 0;
 
         // compute begin indexing for substring
@@ -173,7 +177,7 @@ public class FileSelector implements org.apache.commons.vfs2.FileSelector, Seria
             }
         }
 
-        return fileURI.substring(baseURI.length() + nbSlashToIgnore);
+        return UriParser.decode(fileURI.substring(baseURI.length() + nbSlashToIgnore));
     }
 
     private boolean matches(Path path, Set<String> patterns) {
