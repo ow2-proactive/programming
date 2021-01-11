@@ -79,6 +79,20 @@ public class TestFileSelector {
     }
 
     @Test
+    public void testGetFilePathRelativeToBaseURIWithSpaces() throws FileSystemException {
+        testGetFilePathRelativeToBaseURI("/home/bobot/",
+                                         "/home/bobot/documents and more/test",
+                                         "documents and more/test");
+    }
+
+    @Test
+    public void testGetFilePathRelativeToBaseURIEscaped() throws FileSystemException {
+        testGetFilePathRelativeToBaseURI("/home/bobot/",
+                                         "/home/bobot/documents%20and%20more/test",
+                                         "documents and more/test");
+    }
+
+    @Test
     public void testGetFilePathRelativeToBaseURIWithScheme() throws FileSystemException {
         String baseURI = "file:///home/bobot/Projects/scheduling/data/";
         baseURI += "defaultuser/admin/bobot_2015-05-10_17.40.43.585/input";
@@ -86,7 +100,8 @@ public class TestFileSelector {
         testGetFilePathRelativeToBaseURI(baseURI, baseURI + "/input_3.txt", "input_3.txt");
     }
 
-    private void testGetFilePathRelativeToBaseURI(String baseURI, String fileURI, String expectedResult) {
+    private void testGetFilePathRelativeToBaseURI(String baseURI, String fileURI, String expectedResult)
+            throws FileSystemException {
         assertThat(fileSelector.getFilePathRelativeToBaseURI(baseURI, fileURI), equalTo(expectedResult));
     }
 
@@ -106,7 +121,8 @@ public class TestFileSelector {
         testFileSelectionWithPattern("regex:^.*[_]chocolate$", true, -1);
     }
 
-    private void testFileSelectionWithPattern(String pattern, boolean expectedResult, int nonTraversableDepth) {
+    private void testFileSelectionWithPattern(String pattern, boolean expectedResult, int nonTraversableDepth)
+            throws FileSystemException {
         Path root = folder.getRoot().toPath();
 
         Path dir = root.resolve("oh/oh");
@@ -142,6 +158,29 @@ public class TestFileSelector {
         // for a strange reason the following pattern only works with forward slashes
         testWithIncludePattern("C:\\Users\\Bobot\\Documents And More\\test", "**/Documents?And?More/test", true, -1);
         testWithIncludePattern("C:\\Users\\Bobot\\Documents And More\\test", "Users\\Bobot\\Documents\\**", false, 2);
+    }
+
+    @Test
+    public void testIncludePatternUnixPathEscaped() throws IOException {
+        assumeFalse(isRunningOnWindows());
+        testWithIncludePattern("/home/bobot/documents%20and%20more/test", "**/test", true, -1);
+        testWithIncludePattern("/home/bobot/documents%20and%20more/test", "**/documents?and?more/test", true, -1);
+        testWithIncludePattern("/home/bobot/documents%20and%20more/test", "home/bobot/documents/**", false, 2);
+    }
+
+    @Test
+    public void testIncludePatternWindowsPathEscaped() throws IOException {
+        assumeTrue(isRunningOnWindows());
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents%20And%20More\\test", "**\\test", true, -1);
+        // for a strange reason the following pattern only works with forward slashes
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents%20And%20More\\test",
+                               "**/Documents?And?More/test",
+                               true,
+                               -1);
+        testWithIncludePattern("C:\\Users\\Bobot\\Documents%20And%20More\\test",
+                               "Users\\Bobot\\Documents\\**",
+                               false,
+                               2);
     }
 
     @Test
@@ -185,25 +224,25 @@ public class TestFileSelector {
     }
 
     @Test
-    public void testIncludeExcludePatternEmptyUnixPath() {
+    public void testIncludeExcludePatternEmptyUnixPath() throws FileSystemException {
         assumeFalse(isRunningOnWindows());
         testWithIncludeAndExcludePattern("/home/bobot/documents/test", null, null, false, 0);
     }
 
     @Test
-    public void testIncludeExcludePatternEmptyWindowsPath() {
+    public void testIncludeExcludePatternEmptyWindowsPath() throws FileSystemException {
         assumeTrue(isRunningOnWindows());
         testWithIncludeAndExcludePattern("C:\\Users\\Bobot\\Documents\\test", null, null, false, 0);
     }
 
     @Test
-    public void testExcludePatternUnixPath() {
+    public void testExcludePatternUnixPath() throws FileSystemException {
         assumeFalse(isRunningOnWindows());
         testWithExcludePattern("/home/bobot/documents/test", "**", false, -1);
     }
 
     @Test
-    public void testExcludePatternWindowsPath() {
+    public void testExcludePatternWindowsPath() throws FileSystemException {
         assumeTrue(isRunningOnWindows());
         testWithExcludePattern("C:\\Users\\Bobot\\Documents\\test", "**", false, -1);
     }
@@ -221,17 +260,17 @@ public class TestFileSelector {
     }
 
     private void testWithIncludePattern(String path, String includePattern, boolean expectedResult,
-            int nonTraversableDepth) {
+            int nonTraversableDepth) throws FileSystemException {
         testWithIncludeAndExcludePattern(path, includePattern, null, expectedResult, nonTraversableDepth);
     }
 
     private void testWithExcludePattern(String path, String excludePattern, boolean expectedResult,
-            int nonTraversableDepth) {
+            int nonTraversableDepth) throws FileSystemException {
         testWithIncludeAndExcludePattern(path, null, excludePattern, expectedResult, nonTraversableDepth);
     }
 
     private void testWithIncludeAndExcludePattern(String path, String includePattern, String excludePattern,
-            boolean expectedResult, int nonTraversableDepth) {
+            boolean expectedResult, int nonTraversableDepth) throws FileSystemException {
         Path p = Paths.get(path);
 
         if (includePattern != null) {
