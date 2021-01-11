@@ -272,6 +272,11 @@ project('programming-extensions:programming-extension-dataspaces-common') {
                 'org.springframework:spring-core:4.2.5.RELEASE',
                 'com.google.guava:guava:19.0'
         )
+        def forced = { force = true }
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9.6', forced
+        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9', forced
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9', forced
+        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9', forced
     }
 }
 
@@ -292,10 +297,11 @@ project('programming-extensions:programming-extension-vfsprovider') {
                 exclude group: 'com.fasterxml.jackson.dataformat'
             }
         }
-        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9.6'
-        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9'
-        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9'
-        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9'
+        def forced = { force = true }
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9.6', forced
+        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9', forced
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9', forced
+        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9', forced
         testCompile 'org.apache.commons:commons-vfs2:2.7.0:tests'
         runtime vfs2RuntimeDependencies
 
@@ -320,6 +326,11 @@ project('programming-extensions:programming-extension-dataspaces') {
                 project(':programming-util'),
                 'com.google.guava:guava:19.0'
         )
+        def forced = { force = true }
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9.6', forced
+        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9', forced
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9', forced
+        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9', forced
         testCompile(
                 project(':programming-extensions:programming-extension-vfsprovider').sourceSets.test.output,
                 project(':programming-extensions:programming-extension-pamr'),
