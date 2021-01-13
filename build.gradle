@@ -10,10 +10,9 @@ allprojects {
     apply plugin: "net.ossindex.audit"
 }
 
-def forced = { force = true }
-def jacksonExclude =  {
-    exclude group: 'com.fasterxml.jackson.core'
-    exclude group: 'com.fasterxml.jackson.dataformat'
+def vfsExclude =  {
+    exclude group: 'org.apache.hadoop'
+    exclude group: 'org.apache.jackrabbit'
 }
 
 buildscript {
@@ -265,7 +264,6 @@ def vfs2RuntimeDependencies = [
         'commons-net:commons-net:3.5',
         'commons-httpclient:commons-httpclient:3.1',
         'com.jcraft:jsch:0.1.55',
-        'org.apache.jackrabbit:jackrabbit-webdav:1.5.5',
         'org.slf4j:slf4j-api:1.7.12']
 
 project('programming-extensions:programming-extension-dataspaces-common') {
@@ -275,12 +273,7 @@ project('programming-extensions:programming-extension-dataspaces-common') {
                 'org.springframework:spring-core:4.2.5.RELEASE',
                 'com.google.guava:guava:19.0'
         )
-        compile 'org.apache.commons:commons-vfs2:2.7.0', jacksonExclude
-        compile 'org.apache.commons:commons-vfs2-jackrabbit2:2.7.0', jacksonExclude
-        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9.6', forced
-        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9', forced
-        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9', forced
-        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9', forced
+        compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
     }
 }
 
@@ -293,15 +286,10 @@ project('programming-extensions:programming-extension-vfsprovider') {
         )
 
         // in order to enable s3 support, run for example ./gradlew build -Ps3
-        compile 'org.apache.commons:commons-vfs2:2.7.0', jacksonExclude
-        compile 'org.apache.commons:commons-vfs2-jackrabbit2:2.7.0', jacksonExclude
+        compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
         if (rootProject.hasProperty('s3')) {
-            compile 'com.github.abashev:vfs-s3:4.3.4', jacksonExclude
+            compile 'com.github.abashev:vfs-s3:4.3.4'
         }
-        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9.6', forced
-        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9', forced
-        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9', forced
-        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9', forced
         testCompile 'org.apache.commons:commons-vfs2:2.7.0:tests'
         runtime vfs2RuntimeDependencies
 
@@ -325,12 +313,7 @@ project('programming-extensions:programming-extension-dataspaces') {
                 project(':programming-util'),
                 'com.google.guava:guava:19.0'
         )
-        compile 'org.apache.commons:commons-vfs2:2.7.0', jacksonExclude
-        compile 'org.apache.commons:commons-vfs2-jackrabbit2:2.7.0', jacksonExclude
-        compile 'com.fasterxml.jackson.core:jackson-databind:2.7.9.6', forced
-        compile 'com.fasterxml.jackson.core:jackson-core:2.7.9', forced
-        compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9', forced
-        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9', forced
+        compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
         testCompile(
                 project(':programming-extensions:programming-extension-vfsprovider').sourceSets.test.output,
                 project(':programming-extensions:programming-extension-pamr'),
