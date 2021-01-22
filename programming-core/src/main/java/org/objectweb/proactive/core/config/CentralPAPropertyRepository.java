@@ -625,6 +625,21 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyInteger PA_VFSPROVIDER_CLIENT_FIND_FILES_THREAD_NUMBER = new PAPropertyInteger("proactive.vfsprovider.client.find_files_thread_number",
                                                                                                            false);
 
+    /**
+     * This property contains a comma-separated list of user environment variables resolved and used as root directories for the VSFTP protocol.
+     * Example: "HOME,SCRATCH,WORK". Default is the HOME environment variable.
+     */
+    static public PAPropertyList PA_VFSPROVIDER_VSFTP_VAR_NAMES = new PAPropertyList("proactive.vfsprovider.vsftp.var_names",
+                                                                                     ",",
+                                                                                     false,
+                                                                                     "HOME");
+
+    /**
+     * This property contains a command which will be executed on the SFTP server to resolve user variables defined in proactive.vfsprovider.vsftp.var_names. The %VAR% pattern will be replaced at execution with the variable name.
+     */
+    static public PAPropertyString PA_VFSPROVIDER_VSFTP_VAR_COMMAND = new PAPropertyString("proactive.vfsprovider.vsftp.var_command",
+                                                                                           false,
+                                                                                           "echo $%VAR%");
     // -------------- Misc
 
     /**

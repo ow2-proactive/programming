@@ -59,6 +59,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.dataspaces.api.UserCredentials;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
+import org.objectweb.proactive.extensions.vfsprovider.client.vsftp.VSftpFileProvider;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 
 import com.google.common.base.Strings;
@@ -210,6 +211,7 @@ public class VFSFactory {
         manager.addProvider("https", new HttpsFileProvider());
         manager.addProvider("ftp", new FtpFileProvider());
         manager.addProvider("sftp", new SftpFileProvider());
+        manager.addProvider("vsftp", new VSftpFileProvider());
 
         loadS3ExtensionIfPresent(manager);
         manager.setDefaultProvider(new UrlFileProvider());
