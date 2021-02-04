@@ -390,31 +390,47 @@ public class VSftpFileObject extends AbstractFileObject<VSftpFileSystem> {
         // List the contents of the folder
         Vector vector = null;
         final ChannelSftp channel = fileSystem.getChannel();
+        try {
 
-        logger.info("relPath = " + relPath);
+            logger.debug("relPath = " + relPath);
 
-        if (relPath.equals("/") || relPath.isEmpty() || relPath.equals(".") || relPath.equals("./")) {
-            vector = new Vector();
-            Map<String, String> envVariables = fileSystem.getEnvironmentVariables();
-            logger.info("Env vars: " + envVariables);
-            for (Map.Entry<String, String> variable : fileSystem.getEnvironmentVariables().entrySet()) {
-                Vector<?> subVector = listFileOrDirectory(variable.getValue(), channel);
-                for (@SuppressWarnings("unchecked") // OK because ChannelSftp.ls() is documented to return Vector<LsEntry>
-                final Iterator<ChannelSftp.LsEntry> iterator = (Iterator<ChannelSftp.LsEntry>) subVector.iterator(); iterator.hasNext();) {
-                    final ChannelSftp.LsEntry stat = iterator.next();
-                    String name = stat.getFilename();
-                    if (name.equals(".") || name.equals("./")) {
-                        VLsEntry newEntry = new VLsEntry(variable.getKey(), variable.getKey(), stat.getAttrs());
-                        vector.add(newEntry);
+            if (relPath.equals("/") || relPath.isEmpty() || relPath.equals(".") || relPath.equals("./")) {
+                vector = new Vector();
+                Map<String, String> envVariables = fileSystem.getEnvironmentVariables();
+                logger.debug("Env vars: " + envVariables);
+                for (Map.Entry<String, String> variable : fileSystem.getEnvironmentVariables().entrySet()) {
+                    Vector<?> subVector = listFileOrDirectory(variable.getValue(), channel);
+                    if (subVector == null) {
+                        logger.warn("Listing of " + variable.getValue() + " failed, is it a readable directory?");
+                        continue;
+                    }
+                    for (@SuppressWarnings("unchecked")
+                    // OK because ChannelSftp.ls() is documented to return Vector<LsEntry>
+                    final Iterator<ChannelSftp.LsEntry> iterator = (Iterator<ChannelSftp.LsEntry>) subVector.iterator(); iterator.hasNext();) {
+                        final ChannelSftp.LsEntry stat = iterator.next();
+                        String name = stat.getFilename();
+                        if (name.equals(".") || name.equals("./")) {
+                            VLsEntry newEntry = new VLsEntry(variable.getKey(), variable.getKey(), stat.getAttrs());
+                            vector.add(newEntry);
+                        }
                     }
                 }
+
+            } else {
+                vector = listFileOrDirectory(getResolvedPath(), channel);
             }
 
-        } else {
-            vector = listFileOrDirectory(getResolvedPath(), channel);
+        } finally {
+            fileSystem.putChannel(channel);
         }
 
-        logger.info("vector = " + vector);
+        if (logger.isTraceEnabled()) {
+            logger.trace("vector = " + vector);
+        }
+
+        if (vector == null) {
+            logger.warn("Listing of " + relPath + " failed");
+        }
 
         FileSystemException.requireNonNull(vector, "vfs.provider.sftp/list-children.error");
 
@@ -470,6 +486,9 @@ public class VSftpFileObject extends AbstractFileObject<VSftpFileSystem> {
             vector = channel.ls(path);
         } catch (final SftpException e) {
             String workingDirectory = null;
+            if (logger.isTraceEnabled()) {
+                logger.trace("Error when doing ls " + path, e);
+            }
             try {
                 if (relPath != null) {
                     workingDirectory = channel.pwd();
@@ -477,6 +496,9 @@ public class VSftpFileObject extends AbstractFileObject<VSftpFileSystem> {
                 }
             } catch (final SftpException ex) {
                 // VFS-210: seems not to be a directory
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Error when doing cd " + path, ex);
+                }
                 return null;
             }
 
@@ -500,8 +522,6 @@ public class VSftpFileObject extends AbstractFileObject<VSftpFileSystem> {
             if (lsEx != null) {
                 throw lsEx;
             }
-        } finally {
-            fileSystem.putChannel(channel);
         }
         return vector;
     }
