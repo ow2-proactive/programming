@@ -63,6 +63,9 @@ import org.objectweb.proactive.extensions.vfsprovider.client.vsftp.VSftpFileProv
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 
 import com.google.common.base.Strings;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.KeyPair;
 
 
 /**
@@ -286,13 +289,18 @@ public class VFSFactory {
         if (credentials != null && !credentials.isEmpty()) {
             if (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0) {
                 try {
+                    final JSch jsch = new JSch();
+                    KeyPair.load(jsch, credentials.getPrivateKey(), null);
                     BytesIdentityInfo identityInfo = new BytesIdentityInfo(credentials.getPrivateKey(), null);
                     SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, identityInfo);
                     SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options,
                                                                                           "publickey,password");
-                } catch (FileSystemException e) {
-                    logger.error("Error when adding private key information", e);
+                } catch (FileSystemException | JSchException e) {
+                    logger.warn("Error when adding private key information", e);
                 }
+            } else {
+                SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, null);
+                SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options, "password");
             }
             UserAuthenticator auth = new StaticUserAuthenticator(credentials.getDomain(),
                                                                  credentials.getLogin(),
