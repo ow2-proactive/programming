@@ -330,7 +330,6 @@ public class VFSMountManagerHelper {
                         }
                     }
                 }
-                perUserManager.remove(credentials);
             }
         } finally {
             writeLock.unlock();
