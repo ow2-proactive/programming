@@ -97,7 +97,9 @@ public final class StackTraceUtil {
             StringBuffer threadInfo = new StringBuffer();
             threadInfo.append("\"" + thread.getName() + "\"");
             threadInfo.append(" #" + thread.getId());
-            threadInfo.append(" group=" + thread.getThreadGroup().getName());
+            if (thread.getThreadGroup() != null) {
+                threadInfo.append(" group=" + thread.getThreadGroup().getName());
+            }
             threadInfo.append(thread.isDaemon() ? " daemon" : "");
             threadInfo.append(" prio=" + thread.getPriority());
 
