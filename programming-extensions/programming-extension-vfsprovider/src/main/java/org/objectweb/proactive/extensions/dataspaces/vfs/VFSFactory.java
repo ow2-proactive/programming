@@ -25,6 +25,8 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
+import java.nio.charset.Charset;
+
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.commons.vfs2.CacheStrategy;
 import org.apache.commons.vfs2.FileSystemException;
@@ -288,15 +290,25 @@ public class VFSFactory {
         }
         if (credentials != null && !credentials.isEmpty()) {
             if (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0) {
+                String privateKeyAsString = null;
                 try {
-                    final JSch jsch = new JSch();
-                    KeyPair.load(jsch, credentials.getPrivateKey(), null);
-                    BytesIdentityInfo identityInfo = new BytesIdentityInfo(credentials.getPrivateKey(), null);
-                    SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, identityInfo);
-                    SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options,
-                                                                                          "publickey,password");
-                } catch (FileSystemException | JSchException e) {
-                    logger.warn("Error when adding private key information", e);
+                    privateKeyAsString = new String(credentials.getPrivateKey(), Charset.defaultCharset());
+                } catch (Throwable t) {
+                    // private key cannot be decoded as string
+                }
+                if (privateKeyAsString == null ||
+                    (!privateKeyAsString.isEmpty() && !privateKeyAsString.equals("undefined") &&
+                     !privateKeyAsString.equals("null"))) {
+                    try {
+                        final JSch jsch = new JSch();
+                        KeyPair.load(jsch, credentials.getPrivateKey(), null);
+                        BytesIdentityInfo identityInfo = new BytesIdentityInfo(credentials.getPrivateKey(), null);
+                        SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, identityInfo);
+                        SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options,
+                                                                                              "publickey,password");
+                    } catch (FileSystemException | JSchException e) {
+                        logger.warn("Error when adding private key information : " + privateKeyAsString, e);
+                    }
                 }
             } else {
                 SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, null);
