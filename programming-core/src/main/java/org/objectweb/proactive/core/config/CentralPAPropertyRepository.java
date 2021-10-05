@@ -602,6 +602,13 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
                                                                                        false,
                                                                                        "onresolve");
 
+    /**
+     * This property disable using private key for SFTP or VSFTP dataspaces
+     */
+    static public PAPropertyBoolean PA_DATASPACES_SFTP_DISABLE_PRIVATEKEY = new PAPropertyBoolean("proactive.dataspaces.sftp.disablePrivateKey",
+                                                                                                  false,
+                                                                                                  true);
+
     // -------------- VFS PROVIDER
 
     /**
