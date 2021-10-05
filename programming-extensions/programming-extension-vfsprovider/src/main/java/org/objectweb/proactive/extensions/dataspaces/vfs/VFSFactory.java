@@ -296,7 +296,8 @@ public class VFSFactory {
                 } catch (Throwable t) {
                     // private key cannot be decoded as string
                 }
-                if (privateKeyAsString == null ||
+                if (!CentralPAPropertyRepository.PA_DATASPACES_SFTP_DISABLE_PRIVATEKEY.isTrue() &&
+                    privateKeyAsString != null &&
                     (!privateKeyAsString.isEmpty() && !privateKeyAsString.equals("undefined") &&
                      !privateKeyAsString.equals("null"))) {
                     try {
