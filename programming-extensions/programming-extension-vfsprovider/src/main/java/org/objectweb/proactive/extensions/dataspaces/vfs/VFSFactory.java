@@ -25,6 +25,7 @@
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
+import java.io.File;
 import java.nio.charset.Charset;
 
 import org.apache.commons.logging.impl.Log4JLogger;
@@ -288,7 +289,9 @@ public class VFSFactory {
         if (logger.isTraceEnabled()) {
             logger.trace("CREDENTIALS = " + credentials);
         }
+
         if (credentials != null && !credentials.isEmpty()) {
+            createEmptySshFolderForSftp();
             if (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0) {
                 String privateKeyAsString = null;
                 try {
@@ -310,6 +313,9 @@ public class VFSFactory {
                     } catch (FileSystemException | JSchException e) {
                         logger.warn("Error when adding private key information : " + privateKeyAsString, e);
                     }
+                } else {
+                    SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, null);
+                    SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options, "password");
                 }
             } else {
                 SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, null);
@@ -330,6 +336,23 @@ public class VFSFactory {
         // TODO or try to configure known hosts somehow (look for OpenSSH file etc.)
         SftpFileSystemConfigBuilder.getInstance().setStrictHostKeyChecking(options, "no");
         return options;
+    }
+
+    private static synchronized void createEmptySshFolderForSftp() {
+        // VFS SFTP provider force usage of a private key if it's present in the .ssh folder of the current user (the user which runs proactive)
+        // This prevents using proper user credentials as the system user is different from the credentials user
+        // the following code asks VFS to use an empty ssh directory, thus no private key will be loaded and it will not prevent proper authentication
+        File emptySshFolder = new File(System.getProperty("java.io.tmpdir"), "PA_SSH_EMPTY");
+        if (!emptySshFolder.exists()) {
+            try {
+                emptySshFolder.mkdir();
+            } catch (Exception e) {
+                logger.error("Error when creating empty ssh folder", e);
+            }
+            if (emptySshFolder.exists()) {
+                System.setProperty("vfs.sftp.sshdir", emptySshFolder.getAbsolutePath());
+            }
+        }
     }
 
     public enum ManagerType {
