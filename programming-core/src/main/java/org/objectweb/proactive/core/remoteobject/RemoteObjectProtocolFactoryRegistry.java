@@ -28,8 +28,7 @@ package org.objectweb.proactive.core.remoteobject;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
@@ -52,7 +51,7 @@ public class RemoteObjectProtocolFactoryRegistry {
         remoteObjectFactories.put(Constants.XMLHTTP_PROTOCOL_IDENTIFIER, HTTPRemoteObjectFactory.class);
         remoteObjectFactories.put(Constants.RMISSH_PROTOCOL_IDENTIFIER, RmiSshRemoteObjectFactory.class);
 
-        Iterator<RemoteObjectFactorySPI> iter = ServiceRegistry.lookupProviders(RemoteObjectFactorySPI.class);
+        Iterator<RemoteObjectFactorySPI> iter = ServiceLoader.load(RemoteObjectFactorySPI.class).iterator();
         while (iter.hasNext()) {
             try {
                 RemoteObjectFactorySPI remoteObjectFactorySPI = iter.next();

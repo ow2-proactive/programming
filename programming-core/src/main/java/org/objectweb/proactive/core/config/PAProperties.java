@@ -32,8 +32,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
@@ -70,8 +69,7 @@ abstract public class PAProperties {
         // Loads the default central repository
         map = new HashMap<Class<?>, List<PAProperty>>();
 
-        Iterator<PAPropertiesLoaderSPI> iter;
-        iter = ServiceRegistry.lookupProviders(PAPropertiesLoaderSPI.class);
+        Iterator<PAPropertiesLoaderSPI> iter = ServiceLoader.load(PAPropertiesLoaderSPI.class).iterator();
 
         while (iter.hasNext()) {
             try {
