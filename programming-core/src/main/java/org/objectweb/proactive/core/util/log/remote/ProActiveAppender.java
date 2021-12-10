@@ -29,11 +29,10 @@ import java.net.URI;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
@@ -153,7 +152,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
         if (provider != null) {
             // User asked for a specific provider
             Iterator<LoggingEventSenderSPI> iter;
-            iter = ServiceRegistry.lookupProviders(LoggingEventSenderSPI.class);
+            iter = ServiceLoader.load(LoggingEventSenderSPI.class).iterator();
             while (iter.hasNext()) {
                 LoggingEventSenderSPI next = iter.next();
                 if (next.getClass().getName().equals(provider)) {
@@ -172,7 +171,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
         // Use the first provider as fallback
         if (spi == null) {
             Iterator<LoggingEventSenderSPI> iter;
-            iter = ServiceRegistry.lookupProviders(LoggingEventSenderSPI.class);
+            iter = ServiceLoader.load(LoggingEventSenderSPI.class).iterator();
             spi = iter.next();
         }
 

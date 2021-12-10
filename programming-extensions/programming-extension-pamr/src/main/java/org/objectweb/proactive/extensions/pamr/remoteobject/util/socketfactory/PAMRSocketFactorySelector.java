@@ -26,8 +26,7 @@
 package org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory;
 
 import java.util.Iterator;
-
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -56,7 +55,7 @@ public class PAMRSocketFactorySelector {
 
         String socketFactory = PAMRConfig.PA_PAMR_SOCKET_FACTORY.getValue();
 
-        Iterator<PAMRSocketFactorySPI> socketFactories = ServiceRegistry.lookupProviders(PAMRSocketFactorySPI.class);
+        Iterator<PAMRSocketFactorySPI> socketFactories = ServiceLoader.load(PAMRSocketFactorySPI.class).iterator();
         try {
             while (socketFactories.hasNext()) {
                 PAMRSocketFactorySPI factory = socketFactories.next();
