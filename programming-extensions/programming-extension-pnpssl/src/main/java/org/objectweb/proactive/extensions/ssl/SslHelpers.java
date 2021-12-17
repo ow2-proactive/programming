@@ -49,7 +49,7 @@ public class SslHelpers {
 
     static public String DEFAULT_ALIAS_PATTERN = ".*";
 
-    static public String DEFAULT_PROTOCOL = "TLSv1";
+    static public String DEFAULT_PROTOCOL = "TLSv1.2";
 
     /**
      * Insert Bouncy castle as a security provider if needed
