@@ -10,8 +10,7 @@ buildscript {
         if (project.hasProperty('local')) {
             mavenLocal()
         }
-        jcenter()
-		mavenCentral()
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
