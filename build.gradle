@@ -240,7 +240,7 @@ project('programming-extensions:programming-extension-annotation') {
     }
 }
 
-def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.1.1744488.1']
+def vfs2CompileDependencies = ['org.apache.commons:commons-vfs2:2.1']
 
 def vfs2RuntimeDependencies = [
         'commons-net:commons-net:3.5',
@@ -277,7 +277,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
         compile 'com.fasterxml.jackson.core:jackson-core:2.7.9'
         compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.9'
         compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.7.9'
-        testCompile 'org.apache.commons:commons-vfs2:2.1.1744488.1:tests'
+        testCompile 'org.apache.commons:commons-vfs2:2.1:tests'
         runtime vfs2RuntimeDependencies
 
     }
@@ -416,7 +416,7 @@ project(':programming-test') {
     dependencies {
         testCompile(
                 'commons-io:commons-io:2.5',
-                'org.apache.commons:commons-vfs2:2.1.1744488.1',
+                'org.apache.commons:commons-vfs2:2.1',
 
                 project(':programming-annotation'),
                 project(':programming-core'),
