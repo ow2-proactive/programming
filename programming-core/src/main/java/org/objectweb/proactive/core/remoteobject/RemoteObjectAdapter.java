@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
+import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObject;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -272,7 +273,14 @@ public class RemoteObjectAdapter implements RemoteObject, Serializable {
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
             // Use the first created RRO for finding all possible others
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) rro.receiveMessage(r);
+            SynchronousReplyImpl reply;
+            if (rro instanceof RmiRemoteObject) {
+                // due to https://bugs.openjdk.java.net/browse/JDK-8237213 RmiRemoteObject must be handled differently
+                RmiRemoteObject rmirro = (RmiRemoteObject) rro;
+                reply = (SynchronousReplyImpl) rmirro.receiveMessage(r);
+            } else {
+                reply = (SynchronousReplyImpl) rro.receiveMessage(r);
+            }
 
             RemoteObjectSet ros = (RemoteObjectSet) reply.getResult().getResult();
             return ros;

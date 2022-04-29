@@ -25,8 +25,20 @@
  */
 package org.objectweb.proactive.core.remoteobject.rmi;
 
+import java.io.IOException;
+import java.net.URI;
+
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.body.reply.Reply;
+import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 
 
+// due to https://bugs.openjdk.java.net/browse/JDK-8237213 RmiRemoteObject must duplicate declarations in RemoteRemoteObject
 public interface RmiRemoteObject extends java.rmi.Remote, RemoteRemoteObject {
+
+    Reply receiveMessage(Request message) throws ProActiveException, IOException;
+
+    URI getURI() throws ProActiveException, IOException;
+
 }
