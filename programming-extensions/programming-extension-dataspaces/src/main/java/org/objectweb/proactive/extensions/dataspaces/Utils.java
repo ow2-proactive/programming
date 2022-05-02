@@ -99,9 +99,17 @@ public class Utils {
      * @return an identifier of a Body
      */
     public static String getActiveObjectId(Body body) {
-        // shorten the oaid for path length reduction
+        // shorten the active object id for path length reduction
         // TODO Handle properly collisions (PROACTIVE-1021)
-        return String.valueOf(body.getID().hashCode());
+        long signedCode = body.getID().hashCode();
+        long unsignedCode;
+        if (signedCode < 0) {
+            // avoid negative numbers
+            unsignedCode = Long.MAX_VALUE + signedCode;
+        } else {
+            unsignedCode = signedCode;
+        }
+        return String.valueOf(unsignedCode);
     }
 
     /**

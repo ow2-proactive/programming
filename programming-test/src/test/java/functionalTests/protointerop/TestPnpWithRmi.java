@@ -44,7 +44,7 @@ public class TestPnpWithRmi extends AbstractProtoInterop {
         super("rmi");
     }
 
-    @Test(timeout = 10000)
+    @Test(timeout = 30000)
     public void test() throws ActiveObjectCreationException, NodeException, UnknownProtocolException,
             RemoteObjectSet.NotYetExposedException {
         super.test();

@@ -25,6 +25,8 @@
  */
 package functionalTests.protointerop;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
@@ -32,6 +34,7 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
+import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
@@ -42,6 +45,7 @@ public class AbstractProtoInterop extends GCMFunctionalTest {
 
     public AbstractProtoInterop(String protocol) throws ProActiveException {
         super(1, 1);
+        Logger.getLogger(Loggers.CORE).setLevel(Level.DEBUG);
         super.setOptionalJvmParamters("-Dproactive.communication.protocol=" + protocol);
         super.startDeployment();
     }
