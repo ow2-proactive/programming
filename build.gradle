@@ -61,7 +61,6 @@ subprojects {
          rateLimitAsError = false
          cache = System.getProperty("java.io.tmpdir") + File.separator + "ossindex.cache"
     }
-    compileJava.dependsOn 'audit'
 
     rootProject.buildscript.repositories.each {
         repositories.add(it)
