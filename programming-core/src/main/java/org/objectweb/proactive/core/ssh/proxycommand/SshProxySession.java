@@ -27,6 +27,7 @@ package org.objectweb.proactive.core.ssh.proxycommand;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
@@ -57,11 +58,16 @@ public class SshProxySession extends Socket {
 
     public void close() throws IOException {
         this.flush();
-        this.session.waitForCondition(ChannelCondition.EOF, 1);
-        /* Now its hopefully safe to close the session */
-        this.session.close();
-        // Socket::close()
-        this.unused = true;
+        try {
+            this.session.waitForCondition(ChannelCondition.EOF, 1);
+        } catch (InterruptedException e) {
+            throw new InterruptedIOException();
+        } finally {
+            /* Now its hopefully safe to close the session */
+            this.session.close();
+            // Socket::close()
+            this.unused = true;
+        }
     }
 
     public boolean isUnused() {

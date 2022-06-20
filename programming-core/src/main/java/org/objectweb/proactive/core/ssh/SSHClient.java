@@ -28,6 +28,7 @@ package org.objectweb.proactive.core.ssh;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -166,139 +167,154 @@ public class SSHClient {
         try {
             Connection conn = new Connection(hostname);
             conn.connect();
+            try {
+                boolean isAuthenticated = false;
 
-            boolean isAuthenticated = false;
-
-            // 1. Password authentication requested
-            if (password != null) {
-                isAuthenticated = conn.authenticateWithPassword(username, password);
-                if (isAuthenticated) {
-                    info("Password authentication succeeded");
-                } else {
-                    info("Password authentication failed");
-                }
-            } else {
-                // 2. Pubkey authentication
-
-                // 2.1 An identity file is specified use it 
-                if (identity != null) {
-                    isAuthenticated = conn.authenticateWithPublicKey(username, identity, identityPassword);
+                // 1. Password authentication requested
+                if (password != null) {
+                    isAuthenticated = conn.authenticateWithPassword(username, password);
                     if (isAuthenticated) {
-                        info("Pubkey authentication succeeded with " + identity);
+                        info("Password authentication succeeded");
                     } else {
-                        info("Pubkey authentication failed with " + identity);
+                        info("Password authentication failed");
                     }
                 } else {
-                    // 2.2 Try to find identity files automagically
-                    SshConfig config = new SshConfig();
-                    SSHKeys keys = new SSHKeys(config.getKeyDir());
-                    for (String id : keys.getKeys()) {
-                        File f = new File(id);
-                        if (!(f.exists() && f.isFile() && f.canRead())) {
-                            continue;
-                        }
+                    // 2. Pubkey authentication
 
-                        isAuthenticated = conn.authenticateWithPublicKey(username, f, identityPassword);
-                        info("Pubkey authentication succeeded with " + f);
+                    // 2.1 An identity file is specified use it
+                    if (identity != null) {
+                        isAuthenticated = conn.authenticateWithPublicKey(username, identity, identityPassword);
                         if (isAuthenticated) {
-                            break;
+                            info("Pubkey authentication succeeded with " + identity);
+                        } else {
+                            info("Pubkey authentication failed with " + identity);
+                        }
+                    } else {
+                        // 2.2 Try to find identity files automagically
+                        SshConfig config = new SshConfig();
+                        SSHKeys keys = new SSHKeys(config.getKeyDir());
+                        for (String id : keys.getKeys()) {
+                            File f = new File(id);
+                            if (!(f.exists() && f.isFile() && f.canRead())) {
+                                continue;
+                            }
+
+                            isAuthenticated = conn.authenticateWithPublicKey(username, f, identityPassword);
+                            info("Pubkey authentication succeeded with " + f);
+                            if (isAuthenticated) {
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            if (!isAuthenticated) {
-                System.err.println("[E] Authentication failed");
-                System.exit(2);
-            }
+                if (!isAuthenticated) {
+                    System.err.println("[E] Authentication failed");
+                    System.exit(2);
+                }
 
-            conn.setTCPNoDelay(true);
-            Session sess = conn.openSession();
+                conn.setTCPNoDelay(true);
+                Session sess = conn.openSession();
 
-            sess.execCommand(buildCmdLine(remArgs));
+                try {
 
-            InputStream stdout = sess.getStdout();
-            InputStream stderr = sess.getStderr();
+                    sess.execCommand(buildCmdLine(remArgs));
 
-            byte[] buffer = new byte[8192];
+                    InputStream stdout = sess.getStdout();
+                    InputStream stderr = sess.getStderr();
 
-            while (true) {
-                if ((stdout.available() == 0) && (stderr.available() == 0)) {
+                    byte[] buffer = new byte[8192];
 
-                    /*
-                     * Even though currently there is no data available, it may be that new data
-                     * arrives
-                     * and the session's underlying channel is closed before we call
-                     * waitForCondition().
-                     * This means that EOF and STDOUT_DATA (or STDERR_DATA, or both) may
-                     * be set together.
-                     */
-                    int conditions = sess.waitForCondition(ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA |
-                                                           ChannelCondition.EOF, 0);
+                    while (true) {
+                        if ((stdout.available() == 0) && (stderr.available() == 0)) {
 
-                    /* Wait no longer than 2 seconds (= 2000 milliseconds) */
-                    if ((conditions & ChannelCondition.TIMEOUT) != 0) {
+                            /*
+                             * Even though currently there is no data available, it may be that new
+                             * data
+                             * arrives
+                             * and the session's underlying channel is closed before we call
+                             * waitForCondition().
+                             * This means that EOF and STDOUT_DATA (or STDERR_DATA, or both) may
+                             * be set together.
+                             */
+                            int conditions = -1;
+                            try {
+                                conditions = sess.waitForCondition(ChannelCondition.STDOUT_DATA |
+                                                                   ChannelCondition.STDERR_DATA | ChannelCondition.EOF,
+                                                                   0);
+                            } catch (InterruptedException e) {
+                                throw new InterruptedIOException();
+                            }
 
-                        /* A timeout occured. */
-                        throw new IOException("Timeout while waiting for data from peer.");
-                    }
+                            /* Wait no longer than 2 seconds (= 2000 milliseconds) */
+                            if ((conditions & ChannelCondition.TIMEOUT) != 0) {
 
-                    /*
-                     * Here we do not need to check separately for CLOSED, since CLOSED implies EOF
-                     */
-                    if ((conditions & ChannelCondition.EOF) != 0) {
+                                /* A timeout occured. */
+                                throw new IOException("Timeout while waiting for data from peer.");
+                            }
 
-                        /* The remote side won't send us further data... */
-                        if ((conditions & (ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA)) == 0) {
-                            // PROACTIVE-879: Ugly fix
-                            // Calling Session.getExitStatus() can throw an NPE for an unknown reason
-                            // After some investigation, I noticed that a subsequent call to this method could succeed
-                            // So we try to call session.getExitStatus() until it does not throw an NPE or the timeout expires
-                            TimeoutAccounter ta = TimeoutAccounter.getAccounter(1000);
-                            while (!ta.isTimeoutElapsed()) {
-                                try {
-                                    exitCode = sess.getExitStatus();
+                            /*
+                             * Here we do not need to check separately for CLOSED, since CLOSED
+                             * implies EOF
+                             */
+                            if ((conditions & ChannelCondition.EOF) != 0) {
+
+                                /* The remote side won't send us further data... */
+                                if ((conditions & (ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA)) == 0) {
+                                    // PROACTIVE-879: Ugly fix
+                                    // Calling Session.getExitStatus() can throw an NPE for an unknown reason
+                                    // After some investigation, I noticed that a subsequent call to this method could succeed
+                                    // So we try to call session.getExitStatus() until it does not throw an NPE or the timeout expires
+                                    TimeoutAccounter ta = TimeoutAccounter.getAccounter(1000);
+                                    while (!ta.isTimeoutElapsed()) {
+                                        try {
+                                            exitCode = sess.getExitStatus();
+                                            break;
+                                        } catch (NullPointerException e) {
+                                            Thread.yield();
+                                        }
+                                    }
                                     break;
-                                } catch (NullPointerException e) {
-                                    Thread.yield();
                                 }
                             }
 
-                            break;
+                            /* OK, either STDOUT_DATA or STDERR_DATA (or both) is set. */
+
+                            // You can be paranoid and check that the library is not going nuts:
+                            // if ((conditions & (ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA)) == 0)
+                            //	throw new IllegalStateException("Unexpected condition result (" + conditions + ")");
+                        }
+
+                        /*
+                         * If you below replace "while" with "if", then the way the output appears
+                         * on the
+                         * local
+                         * stdout and stder streams is more "balanced". Addtionally reducing the
+                         * buffer size
+                         * will also improve the interleaving, but performance will slightly suffer.
+                         * OKOK, that all matters only if you get HUGE amounts of stdout and stderr
+                         * data =)
+                         */
+                        while (stdout.available() > 0) {
+                            int len = stdout.read(buffer);
+                            if (len > 0) { // this check is somewhat paranoid
+                                System.out.write(buffer, 0, len);
+                            }
+                        }
+
+                        while (stderr.available() > 0) {
+                            int len = stderr.read(buffer);
+                            if (len > 0) { // this check is somewhat paranoid
+                                System.err.write(buffer, 0, len);
+                            }
                         }
                     }
-
-                    /* OK, either STDOUT_DATA or STDERR_DATA (or both) is set. */
-
-                    // You can be paranoid and check that the library is not going nuts:
-                    // if ((conditions & (ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA)) == 0)
-                    //	throw new IllegalStateException("Unexpected condition result (" + conditions + ")");
+                } finally {
+                    sess.close();
                 }
-
-                /*
-                 * If you below replace "while" with "if", then the way the output appears on the
-                 * local
-                 * stdout and stder streams is more "balanced". Addtionally reducing the buffer size
-                 * will also improve the interleaving, but performance will slightly suffer.
-                 * OKOK, that all matters only if you get HUGE amounts of stdout and stderr data =)
-                 */
-                while (stdout.available() > 0) {
-                    int len = stdout.read(buffer);
-                    if (len > 0) { // this check is somewhat paranoid
-                        System.out.write(buffer, 0, len);
-                    }
-                }
-
-                while (stderr.available() > 0) {
-                    int len = stderr.read(buffer);
-                    if (len > 0) { // this check is somewhat paranoid
-                        System.err.write(buffer, 0, len);
-                    }
-                }
+            } finally {
+                conn.close();
             }
-
-            sess.close();
-            conn.close();
         } catch (IOException e) {
             e.printStackTrace(System.err);
             System.exit(EXIT_ERROR);
