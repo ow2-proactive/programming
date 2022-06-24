@@ -222,6 +222,11 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         return true;
     }
 
+    @Override
+    public String getShortPath(String longPath) throws IOException {
+        return WindowsProcess.getShortPath(longPath);
+    }
+
     /**
      * Create a native representation of a process that will run in background
      * that means no interaction with the desktop 

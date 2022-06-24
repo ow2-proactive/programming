@@ -66,17 +66,23 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
 
     private static OSUser osUser;
 
+    public static final String PROCESSBUILDER_USERNAME_PROPNAME = "runasme.user";
+
+    public static final String PROCESSBUILDER_PASSWORD_PROPNAME = "runasme.pwd";
+
+    public static final String PROCESSBUILDER_DOMAIN_PROPNAME = "runasme.domain";
+
     @BeforeClass
     static public void setOSRuntime() throws ProActiveException {
         assumeTrue(isWindows); // run only on windows
 
-        String user = System.getenv("OSPB_TEST_USER");
+        String user = System.getProperty(PROCESSBUILDER_USERNAME_PROPNAME);
         assumeNotNull(user, "process builder not tested because OSPB_TEST_USER is not set");
 
-        String pass = System.getenv("OSPB_TEST_PASS");
+        String pass = System.getProperty(PROCESSBUILDER_PASSWORD_PROPNAME);
         assumeNotNull(pass, "process builder not tested because OSPB_TEST_PASS is not set");
 
-        String domain = System.getenv("USERDOMAIN");
+        String domain = System.getProperty(PROCESSBUILDER_DOMAIN_PROPNAME);
         osUser = new OSUser(user, pass);
         osUser.setDomain(domain);
 
@@ -132,7 +138,7 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
                 //ok the process is still running
             }
 
-            boolean res = f.get(1000, TimeUnit.MILLISECONDS);
+            boolean res = f.get(5000, TimeUnit.MILLISECONDS);
             org.junit.Assert.assertEquals("The waitFor() didn't throw the InterruptedException", true, res);
         } finally {
             if (p != null) {
@@ -278,17 +284,20 @@ public class WindowsProcessBuilderTests extends FunctionalTest {
     @Test
     public void testProcessEnv() throws Exception {
         OSProcessBuilder builder = factory.getBuilder(osUser);
-        builder.command("cmd.exe", "/c", "echo %USERNAME%");
+        builder.command("cmd.exe", "/c", "echo User=%USERNAME%");
         Process p = builder.start();
         try {
             checkIsRunningOrFail(p);
             InputStreamReader isr = new InputStreamReader(p.getInputStream());
             BufferedReader br = new BufferedReader(isr);
             String line;
+            boolean userNameFound = false;
             while ((line = br.readLine()) != null) {
-                if (!osUser.getUserName().equals(line)) {
-                    fail("PROBLEM: Unable to load the user env, the  WindowsProcess.internalGetUserEnv() seems broken");
-                }
+                userNameFound = userNameFound || line.toLowerCase().contains(osUser.getUserName().toLowerCase());
+                System.out.println(line);
+            }
+            if (!userNameFound) {
+                fail("PROBLEM: Unable to load the user env, the  WindowsProcess.internalGetUserEnv() seems broken");
             }
         } finally {
             if (p != null) {

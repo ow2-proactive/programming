@@ -101,6 +101,11 @@ public class BasicProcessBuilder implements OSProcessBuilder {
         return this;
     }
 
+    @Override
+    public String getShortPath(String longPath) {
+        return longPath;
+    }
+
     public Process start() throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
         return this.pb.start();
     }

@@ -39,12 +39,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 import org.objectweb.proactive.extensions.processbuilder.WindowsProcess.MyKernel32.PROCESSENTRY32;
@@ -56,12 +51,8 @@ import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
-import com.sun.jna.platform.win32.Advapi32;
+import com.sun.jna.platform.win32.*;
 import com.sun.jna.platform.win32.BaseTSD.ULONG_PTR;
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.Kernel32Util;
-import com.sun.jna.platform.win32.WinBase;
-import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
 import com.sun.jna.ptr.IntByReference;
@@ -327,9 +318,6 @@ public final class WindowsProcess extends Process {
             final String path // can be null 
     ) throws IOException, OSUserException, FileNotFoundException {
 
-        // Merge the command array into a single string
-        final String lpCommandLine = this.internalMergeCommand(cmd);
-
         // The handle must be always closed
         final HANDLEByReference hTokenRef = new HANDLEByReference();
 
@@ -394,6 +382,11 @@ public final class WindowsProcess extends Process {
                 lpPath = m.getString(0, true);
             }
 
+            if (lpPath != null) {
+                // check that a process can be started inside the provided path
+                checkPath(lpPath);
+            }
+
             /////////////////////////////////////////////////////////////////////////////////////
             // If the environment is NULL, the new process uses the environment of the calling
             // process. An env block consists of a null-terminated block of null-terminated strings.
@@ -420,9 +413,29 @@ public final class WindowsProcess extends Process {
         }
     }
 
+    public static String getShortPath(String lpszLongPath) throws IOException {
+
+        int requiredSize = Kernel32.INSTANCE.GetShortPathName(lpszLongPath, null, 0);
+        if (requiredSize == 0) {
+            final int shortPathWError = Kernel32.INSTANCE.GetLastError();
+            final String messageFromLastErrorCode = Kernel32Util.formatMessageFromLastErrorCode(shortPathWError);
+            throw new IOException("GetShortPathName error=" + shortPathWError + ", " + messageFromLastErrorCode +
+                                  " [lpszLongPath=" + lpszLongPath + "]");
+        }
+        char[] lpdzShortPath = new char[requiredSize];
+        int finalSize = Kernel32.INSTANCE.GetShortPathName(lpszLongPath, lpdzShortPath, requiredSize);
+
+        return new String(Arrays.copyOfRange(lpdzShortPath, 0, finalSize));
+    }
+
     public void startWithLogon(final String cmd[], String lpEnvironment, String lpPath) throws IOException {
         // Merge the command array into a single string
         final String lpCommandLine = this.internalMergeCommand(cmd);
+
+        if (lpCommandLine.length() > 1024) {
+            throw new IOException("The provided command exceeds CreateProcessWithLogonW length limit of 1024 characters: " +
+                                  lpCommandLine);
+        }
 
         try {
 
@@ -547,6 +560,25 @@ public final class WindowsProcess extends Process {
             }
         }
         return cmdbuf.toString();
+    }
+
+    private void checkPath(final String path) throws IOException, InterruptedException {
+        WindowsProcess envProcess = new WindowsProcess(this.domain, this.user, this.password);
+        try {
+            envProcess.startWithLogon(new String[] { "cmd.exe", "/c", "set" }, null, path);
+
+            int exitCode = envProcess.waitFor();
+            if (exitCode != 0) {
+                throw win32ErrorIOException("Unable to start a process as " +
+                                            (this.domain != null ? this.domain + "\\" : "") + this.user +
+                                            " inside the specified path, please check that the path exists and that the user has access to it: " +
+                                            path + ", exitCode=" + exitCode);
+            }
+        } finally {
+            // Always destroy, close the process
+            envProcess.destroy();
+            envProcess.close();
+        }
     }
 
     /** overrideEnv must be an instance of java.lang.ProcessEnvironment */
