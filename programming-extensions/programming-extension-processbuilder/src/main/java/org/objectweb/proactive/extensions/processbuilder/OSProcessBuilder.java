@@ -267,6 +267,8 @@ public interface OSProcessBuilder {
      */
     OSProcessBuilder redirectErrorStream(boolean redirectErrorStream);
 
+    String getShortPath(String longPath) throws IOException;
+
     /**
      * Starts a new process using the attributes of this process builder.
      * 

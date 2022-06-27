@@ -61,6 +61,12 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
     final static boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");
 
+    public static final String PROCESSBUILDER_USERNAME_PROPNAME = "runasme.user";
+
+    public static final String PROCESSBUILDER_PASSWORD_PROPNAME = "runasme.pwd";
+
+    public static final String PROCESSBUILDER_TMP_PROPNAME = "runasme.tmp";
+
     // Modify these to fit your environment
     OSUser userPasswd;
 
@@ -78,10 +84,10 @@ public class WindowsAndLinuxTester extends FunctionalTest {
     // ------------------------------------ 
     @Before
     public void shouldRun() throws ProActiveException {
-        String suser = System.getenv("OSPB_TEST_USER");
+        String suser = System.getProperty(PROCESSBUILDER_USERNAME_PROPNAME);
         Assume.assumeNotNull(suser, "process builder not tested because OSPB_TEST_USER is not set");
 
-        String pass = System.getenv("OSPB_TEST_PASS");
+        String pass = System.getProperty(PROCESSBUILDER_PASSWORD_PROPNAME);
         Assume.assumeNotNull(pass, "process builder not tested because OSPB_TEST_PASS is not set");
         userPasswd = new OSUser(suser, pass);
 
@@ -89,7 +95,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         //        Assume.assumeNotNull(pass, "process builder not tested because OSPB_TEST_ is not set");
         //        userPasswd = new OSUser(suser, null);
 
-        tempPath = System.getenv("OSPB_TEST_TEMP");
+        tempPath = System.getProperty(PROCESSBUILDER_TMP_PROPNAME);
         Assume.assumeNotNull(tempPath, "process builder not tested because OSPB_TEST_TEMP is not set");
         if (isLinux) {
             String paHome = ProActiveRuntimeImpl.getProActiveRuntime().getProActiveHome();

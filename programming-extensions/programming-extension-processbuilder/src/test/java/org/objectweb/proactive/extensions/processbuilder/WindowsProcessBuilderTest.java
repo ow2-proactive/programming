@@ -25,34 +25,47 @@
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.junit.Before;
 import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.utils.OperatingSystem;
 
 
 public class WindowsProcessBuilderTest extends ProcessBuilderTest {
 
+    OSUser osUser;
+
     @Before
-    public void before() {
+    public void before() throws ProActiveException {
         assumeTrue(OperatingSystem.getOperatingSystem() == OperatingSystem.windows);
 
         BasicConfigurator.resetConfiguration();
         BasicConfigurator.configure();
         ProActiveLogger.getLogger(Loggers.OSPB).setLevel(Level.DEBUG);
+
+        osUser = new OSUser(username, password);
     }
 
     @Test
     public void runas() throws Exception {
-        WindowsProcessBuilder processBuilder = new WindowsProcessBuilder(new OSUser(username, password), null, null);
+        WindowsProcessBuilder processBuilder = new WindowsProcessBuilder(osUser, null, null);
 
         Process process = processBuilder.command("hostname").start();
         int exitCode = process.waitFor();
@@ -62,9 +75,18 @@ public class WindowsProcessBuilderTest extends ProcessBuilderTest {
         assertEquals(0, exitCode);
     }
 
+    @Test
+    public void shortPath() throws Exception {
+        WindowsProcessBuilder processBuilder = new WindowsProcessBuilder(osUser, null, null);
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        String shortPath = processBuilder.getShortPath(tmpDir);
+        System.out.println("shortPath=" + shortPath);
+        assertNotNull(shortPath);
+    }
+
     @Test(timeout = 7000)
     public void runas_destroy_process() throws Exception {
-        WindowsProcessBuilder processBuilder = new WindowsProcessBuilder(new OSUser(username, password), null, null);
+        WindowsProcessBuilder processBuilder = new WindowsProcessBuilder(osUser, null, null);
 
         Process process = processBuilder.command("ping", "-n", "20", "localhost").start();
         process.destroy();
@@ -74,7 +96,7 @@ public class WindowsProcessBuilderTest extends ProcessBuilderTest {
 
     @Test
     public void runasEnvVar() throws Exception {
-        WindowsProcessBuilder processBuilder = new WindowsProcessBuilder(new OSUser(username, password), null, null);
+        WindowsProcessBuilder processBuilder = new WindowsProcessBuilder(osUser, null, null);
 
         processBuilder.environment().put("MYVAR1", "MYVALUE1");
         processBuilder.environment().put("MYVAR2", "MYVALUE2");

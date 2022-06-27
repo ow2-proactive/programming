@@ -308,6 +308,11 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
         return this;
     }
 
+    @Override
+    public String getShortPath(String longPath) {
+        return longPath;
+    }
+
     /*
      * (non-Javadoc)
      * 
