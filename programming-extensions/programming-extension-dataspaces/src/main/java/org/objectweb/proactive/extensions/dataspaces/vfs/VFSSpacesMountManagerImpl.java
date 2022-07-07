@@ -50,6 +50,9 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.FileSystemExcept
 import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
 import org.objectweb.proactive.extensions.dataspaces.vfs.adapter.VFSFileObjectAdapter;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 
 /**
  * Implementation of SpacesMountManager using Apache Commons VFS library.
@@ -98,6 +101,8 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
     private final Map<DataSpacesURI, ConcurrentHashMap<String, FileObject>> mountedSpaces = new HashMap<DataSpacesURI, ConcurrentHashMap<String, FileObject>>();
 
     private final Map<DataSpacesURI, UserCredentials> mountedSpacesCredentials = new HashMap<>();
+
+    private final Cache<String, Exception> exceptionCache = CacheBuilder.newBuilder().maximumSize(1000).build();
 
     /**
      * For each virtual dataspace, it stores the list of accessible Apache FileObject Urls
@@ -249,7 +254,8 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             }
             if (info == null) {
                 logger.warn("[VFSMountManager] Could not find data space in spaces directory: " + spacePart);
-                throw new SpaceNotFoundException("Requested data space is not registered in spaces directory.");
+                throw new SpaceNotFoundException("Requested data space is not registered in spaces directory: " +
+                                                 spacePart);
             }
 
             try {
@@ -328,6 +334,7 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
             } catch (org.apache.commons.vfs2.FileSystemException e) {
                 mountedSpaces.remove(mountingPoint);
                 mountedSpacesCredentials.remove(mountingPoint);
+                exceptionCache.put(mountingPoint.toString(), e);
                 throw new FileSystemException("An error occurred while trying to mount " + spaceInfo.getName(), e);
             }
         } finally {
@@ -349,6 +356,16 @@ public class VFSSpacesMountManagerImpl implements SpacesMountManager {
         try {
             readLock.lock();
             fileSystems = mountedSpaces.get(spacePart);
+            if (fileSystems == null) {
+                String spaceUriString = spacePart.toString();
+                Exception lastException = exceptionCache.getIfPresent(spaceUriString);
+                if (lastException != null) {
+                    throw new FileSystemException("VFS Space was not mounted successfully with uri " + spaceUriString,
+                                                  lastException);
+                } else {
+                    throw new FileSystemException("Unknown VFS Space with uri " + spaceUriString);
+                }
+            }
             // already mounted
             if (fileSystems.get(spaceRootFOUri) != null) {
                 return true;
