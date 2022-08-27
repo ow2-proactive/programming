@@ -381,8 +381,18 @@ public class FileSystemServerImpl implements FileSystemServer {
 
     public FileInfo fileGetInfo(String path) throws IOException {
         final File file = resolvePath(path);
-        if (file.exists())
-            return new FileInfoImpl(file);
+        try {
+            if (file.exists()) {
+                return new FileInfoImpl(file);
+            }
+        } catch (IOException e) {
+            if (logger.isDebugEnabled()) {
+                logger.warn(e.getMessage(), e);
+            } else {
+                logger.warn(e.getMessage());
+            }
+            return null;
+        }
         return null;
     }
 
