@@ -56,10 +56,12 @@ public class FileInfoImpl implements FileInfo {
             readable = file.canRead();
             writable = file.canWrite();
         } catch (SecurityException sec) {
-            throw new IOException6("", sec);
+            throw new IOException6(sec);
         }
-        if (lastModifiedTime == 0)
-            throw new IOException("Unable to read \"last modified time\" attribute");
+        if (lastModifiedTime == 0) {
+            throw new IOException("An error occurred while reading \"last modified time\" attribute on " +
+                                  (file.isDirectory() ? "directory" : "file") + " " + file.getPath());
+        }
     }
 
     public long getLastModifiedTime() {
