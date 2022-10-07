@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
@@ -621,7 +622,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
                 // File.canWrite() cannot be trusted, especially over network drives, it is often returning
                 // true even though a file write will fail or vice-versa. A solution is to create a file to
                 // check real write permission
-                File tryFile = new File(file, "proactive-test-write-permission.ack");
+                File tryFile = new File(file, "proactive-test-write-permission-" + UUID.randomUUID() + ".ack");
 
                 try {
                     tryFile.createNewFile();
