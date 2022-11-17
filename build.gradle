@@ -271,7 +271,7 @@ project('programming-extensions:programming-extension-dataspaces-common') {
     dependencies {
         compile (
                 project(':programming-util'),
-                'org.springframework:spring-core:4.2.8.RELEASE',
+                'org.springframework:spring-core:4.3.30.RELEASE',
                 'com.google.guava:guava:19.0'
         )
         compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
