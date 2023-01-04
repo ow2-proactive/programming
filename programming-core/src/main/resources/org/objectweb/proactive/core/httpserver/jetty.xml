@@ -4,11 +4,14 @@
 <Configure id="Server" class="org.eclipse.jetty.server.Server">
 
 	<!-- 
-		The HashSessionIdManager class by default will use the java.security.SecureRandom random 
+		The DefaultSessionIdManager class by default will use the java.security.SecureRandom random
 		number generator. It uses the operating system's source to provide entropy. 
 	 -->
 	<Set name="sessionIdManager">
-		<New class="org.eclipse.jetty.server.session.HashSessionIdManager">
+		<New class="org.eclipse.jetty.server.session.DefaultSessionIdManager">
+			<Arg>
+				<Ref refid="Server"/>
+			</Arg>
 			<Arg>
 				<New class="java.util.Random" />
 			</Arg>
