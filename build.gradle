@@ -172,9 +172,9 @@ project(':programming-core') {
 
     dependencies {
         compile(
-                'org.eclipse.jetty:jetty-server:9.2.29.v20191105',
-                'org.eclipse.jetty:jetty-servlet:9.2.29.v20191105',
-                'org.eclipse.jetty:jetty-xml:9.2.29.v20191105',
+                'org.eclipse.jetty:jetty-server:9.4.50.v20221201',
+                'org.eclipse.jetty:jetty-servlet:9.4.50.v20221201',
+                'org.eclipse.jetty:jetty-xml:9.4.50.v20221201',
 
                 // Patched trilead-ssh2 used in Jenkins
                 'org.jenkins-ci:trilead-ssh2:build-217-jenkins-27',
