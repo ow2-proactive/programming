@@ -144,6 +144,13 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
                                                                                       false,
                                                                                       "pkpass");
 
+    /**
+     * The protocol used to encrypt communications, default is TLSv1.3
+     */
+    static final public PAPropertyString PA_PNPSSL_PROTOCOL = new PAPropertyString("proactive.pnps.protocol",
+                                                                                   false,
+                                                                                   "TLSv1.3");
+
     public interface Loggers {
         static final public String PNPSSL = org.objectweb.proactive.core.util.log.Loggers.CORE + ".pnpssl";
 

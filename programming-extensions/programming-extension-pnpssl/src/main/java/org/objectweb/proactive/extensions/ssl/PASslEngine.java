@@ -28,6 +28,7 @@ package org.objectweb.proactive.extensions.ssl;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,6 +44,8 @@ import javax.net.ssl.TrustManager;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.pnpssl.PNPSslConfig;
+
+import com.google.common.collect.Sets;
 
 
 /**
@@ -62,8 +65,11 @@ public class PASslEngine extends SSLEngine {
                                                      "TLS_KRB5_WITH_RC4_128_SHA", "TLS_RSA_WITH_AES_128_CBC_SHA",
                                                      "TLS_KRB5_WITH_3DES_EDE_CBC_MD5", "TLS_KRB5_WITH_3DES_EDE_CBC_SHA",
                                                      "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
-                                                     "TLS_DHE_DSS_WITH_AES_256_CBC_SHA",
-                                                     "TLS_RSA_WITH_AES_256_CBC_SHA" };
+                                                     "TLS_DHE_DSS_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA",
+                                                     // the following algorithms are used by TLSv1.3
+                                                     "TLS_AES_128_GCM_SHA256", "TLS_AES_256_GCM_SHA384",
+                                                     "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
+                                                     "TLS_AES_128_CCM_8_SHA256" };
 
     final private SSLEngine sslEngine;
 
@@ -72,12 +78,14 @@ public class PASslEngine extends SSLEngine {
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(keystore, PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray());
 
+            String encryptionProtocol = PNPSslConfig.PA_PNPSSL_PROTOCOL.getValue();
+
             // Initialize the SSLContext to work with our key managers.
-            SSLContext ctxt = SSLContext.getInstance(SslHelpers.DEFAULT_PROTOCOL);
+            SSLContext ctxt = SSLContext.getInstance(encryptionProtocol);
             ctxt.init(kmf.getKeyManagers(), new TrustManager[] { trustManager }, null);
 
             this.sslEngine = ctxt.createSSLEngine();
-            this.sslEngine.setEnabledProtocols(new String[] { SslHelpers.DEFAULT_PROTOCOL });
+            this.sslEngine.setEnabledProtocols(new String[] { encryptionProtocol });
             this.sslEngine.setEnableSessionCreation(true);
             String[] supportedCiphers = this.sslEngine.getSupportedCipherSuites();
             this.sslEngine.setEnabledCipherSuites(this.getEnabledCiphers(supportedCiphers, STRONG_CIPHERS));
@@ -109,17 +117,10 @@ public class PASslEngine extends SSLEngine {
      * @return List of supported and strong enough ciphers
      */
     private String[] getEnabledCiphers(String[] supportedCiphers, String[] wantedCiphers) {
-        Set<String> enabled = new HashSet<String>(wantedCiphers.length);
+        Set<String> supportedCiphersSet = new HashSet<String>(Arrays.asList(supportedCiphers));
+        Set<String> wantedCiphersSet = new HashSet<String>(Arrays.asList(wantedCiphers));
 
-        for (String wanted : wantedCiphers) {
-            for (String supported : supportedCiphers) {
-                if (wanted.equals(supported)) {
-                    enabled.add(wanted);
-                }
-            }
-        }
-
-        return enabled.toArray(new String[enabled.size()]);
+        return Sets.intersection(wantedCiphersSet, supportedCiphersSet).toArray(new String[0]);
     }
 
     @Override
