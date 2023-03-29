@@ -83,7 +83,7 @@ public class PASslServerSocketFactory extends SSLServerSocketFactory {
                 throw new SecurityException("Unsupported secure mode");
         }
 
-        this.sslContext = SSLContext.getInstance(SslHelpers.DEFAULT_PROTOCOL);
+        this.sslContext = SSLContext.getInstance(PNPSslConfig.PA_PNPSSL_PROTOCOL.getValue());
         this.sslContext.init(kmf.getKeyManagers(), tms, null);
         this.ssf = this.sslContext.getServerSocketFactory();
     }
