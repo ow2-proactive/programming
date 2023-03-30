@@ -439,7 +439,7 @@ project(':programming-test') {
                 project(':programming-core'),
                 project(':programming-extensions').subprojects,
 
-                files("${rootDir}/lib/node/sigar/sigar.jar")
+                files("${rootDir}/lib/node/sigar/sigar-1.7.0-proactive.jar")
         )
         testRuntime fileTree(dir: "${rootDir}/lib/node/sigar/", exclude: "*.jar")
         testRuntime 'org.slf4j:slf4j-log4j12:1.7.12'
