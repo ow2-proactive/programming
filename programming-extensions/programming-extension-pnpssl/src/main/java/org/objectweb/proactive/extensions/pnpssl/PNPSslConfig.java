@@ -145,11 +145,16 @@ final public class PNPSslConfig implements PAPropertiesLoaderSPI {
                                                                                       "pkpass");
 
     /**
-     * The protocol used to encrypt communications, default is TLSv1.3
+     * The protocol used to encrypt communications, default is TLSv1.2.
+     *
+     * TLSv1.3 show some instability of TestPASslSocketFactory on Windows with the error "Software caused connection abort: recv failed"
+     * This seems to be a deep issue within the socket windows stack as explained in https://issues.apache.org/jira/browse/SOLR-13778
+     * With an OpenJDK issue raised: https://bugs.openjdk.org/browse/JDK-8236498
+     * No fix or backport of a fix is for now scheduled in OpenJDK.
      */
     static final public PAPropertyString PA_PNPSSL_PROTOCOL = new PAPropertyString("proactive.pnps.protocol",
                                                                                    false,
-                                                                                   "TLSv1.3");
+                                                                                   "TLSv1.2");
 
     public interface Loggers {
         static final public String PNPSSL = org.objectweb.proactive.core.util.log.Loggers.CORE + ".pnpssl";

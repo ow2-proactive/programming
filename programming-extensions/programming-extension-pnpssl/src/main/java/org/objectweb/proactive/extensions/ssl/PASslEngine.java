@@ -56,20 +56,18 @@ import com.google.common.collect.Sets;
  * @since ProActive 5.0.0
  */
 public class PASslEngine extends SSLEngine {
-    static final private String[] STRONG_CIPHERS = { "SSL_RSA_WITH_RC4_128_MD5", "SSL_RSA_WITH_RC4_128_SHA",
-                                                     "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
-                                                     "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA",
-                                                     "SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA",
-                                                     "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
-                                                     "TLS_DHE_DSS_WITH_AES_128_CBC_SHA", "TLS_KRB5_WITH_RC4_128_MD5",
-                                                     "TLS_KRB5_WITH_RC4_128_SHA", "TLS_RSA_WITH_AES_128_CBC_SHA",
-                                                     "TLS_KRB5_WITH_3DES_EDE_CBC_MD5", "TLS_KRB5_WITH_3DES_EDE_CBC_SHA",
-                                                     "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
-                                                     "TLS_DHE_DSS_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA",
-                                                     // the following algorithms are used by TLSv1.3
-                                                     "TLS_AES_128_GCM_SHA256", "TLS_AES_256_GCM_SHA384",
-                                                     "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
-                                                     "TLS_AES_128_CCM_8_SHA256" };
+    static final public String[] STRONG_CIPHERS = { "SSL_RSA_WITH_RC4_128_MD5", "SSL_RSA_WITH_RC4_128_SHA",
+                                                    "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
+                                                    "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA",
+                                                    "SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA",
+                                                    "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+                                                    "TLS_DHE_DSS_WITH_AES_128_CBC_SHA", "TLS_RSA_WITH_AES_128_CBC_SHA",
+                                                    "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
+                                                    "TLS_DHE_DSS_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA",
+                                                    // the following algorithms are used by TLSv1.3
+                                                    "TLS_AES_128_GCM_SHA256", "TLS_AES_256_GCM_SHA384",
+                                                    "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
+                                                    "TLS_AES_128_CCM_8_SHA256" };
 
     final private SSLEngine sslEngine;
 
@@ -116,7 +114,7 @@ public class PASslEngine extends SSLEngine {
      * @param wantedCiphers    List of cipher considered as strong enough to be used
      * @return List of supported and strong enough ciphers
      */
-    private String[] getEnabledCiphers(String[] supportedCiphers, String[] wantedCiphers) {
+    public static String[] getEnabledCiphers(String[] supportedCiphers, String[] wantedCiphers) {
         Set<String> supportedCiphersSet = new HashSet<String>(Arrays.asList(supportedCiphers));
         Set<String> wantedCiphersSet = new HashSet<String>(Arrays.asList(wantedCiphers));
 
