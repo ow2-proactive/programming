@@ -27,12 +27,15 @@ package functionalTests.ssl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.KeyStore;
+import java.security.*;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 
 import org.junit.Assert;
@@ -49,6 +52,8 @@ import org.objectweb.proactive.extensions.ssl.SecureMode;
  */
 public class TestPASslSocketFactory extends AbstractSSL {
     static String PAYLOAD = "Chuck Norris can touch MC Hammer";
+
+    static int NB_TESTS = 100;
 
     // Generating certificate is an expensive process, so precompute some
     static KeyPairAndCert[] kpAndCerts;
@@ -69,7 +74,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
      * </ul>
      */
     @Test
-    public void testChiperedOnlyOkSameKS() throws Exception {
+    public void testChiperedOnlyOkSameKS() throws Throwable {
+        System.out.println("testChiperedOnlyOkSameKS");
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(),
@@ -81,7 +87,13 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore serverKs = clientKs;
         X509Certificate[] serverTrustedCerts = clientTrustedCerts;
 
-        connectAndExchange(SecureMode.CIPHERED_ONLY, clientKs, clientTrustedCerts, serverKs, serverTrustedCerts);
+        connectAndExchange(SecureMode.CIPHERED_ONLY,
+                           clientKs,
+                           clientTrustedCerts,
+                           serverKs,
+                           serverTrustedCerts,
+                           false,
+                           false);
     }
 
     /**
@@ -93,7 +105,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
      * </ul>
      */
     @Test
-    public void testChiperedOnlyOkDifferentKS() throws Exception {
+    public void testChiperedOnlyOkDifferentKS() throws Throwable {
+        System.out.println("testChiperedOnlyOkDifferentKS");
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(),
@@ -110,7 +123,13 @@ public class TestPASslSocketFactory extends AbstractSSL {
                              kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[1].getCertAsCertArray();
 
-        connectAndExchange(SecureMode.CIPHERED_ONLY, clientKs, clientTrustedCerts, serverKs, serverTrustedCerts);
+        connectAndExchange(SecureMode.CIPHERED_ONLY,
+                           clientKs,
+                           clientTrustedCerts,
+                           serverKs,
+                           serverTrustedCerts,
+                           false,
+                           false);
 
     }
 
@@ -122,7 +141,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
      * </ul>
      */
     @Test
-    public void testAuthAndChiperedOkSameKsAndCert() throws Exception {
+    public void testAuthAndChiperedOkSameKsAndCert() throws Throwable {
+        System.out.println("testAuthAndChiperedOkSameKsAndCert");
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(),
@@ -134,7 +154,13 @@ public class TestPASslSocketFactory extends AbstractSSL {
         KeyStore serverKs = clientKs;
         X509Certificate[] serverTrustedCerts = clientTrustedCerts;
 
-        connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs, serverTrustedCerts);
+        connectAndExchange(SecureMode.AUTH_AND_CIPHERED,
+                           clientKs,
+                           clientTrustedCerts,
+                           serverKs,
+                           serverTrustedCerts,
+                           false,
+                           false);
     }
 
     /**
@@ -145,7 +171,8 @@ public class TestPASslSocketFactory extends AbstractSSL {
      * </ul>
      */
     @Test
-    public void testAuthAndChiperedOkCrossCredential() throws Exception {
+    public void testAuthAndChiperedOkCrossCredential() throws Throwable {
+        System.out.println("testAuthAndChiperedOkCrossCredential");
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(),
@@ -162,21 +189,28 @@ public class TestPASslSocketFactory extends AbstractSSL {
                              kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
-        connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs, serverTrustedCerts);
+        connectAndExchange(SecureMode.AUTH_AND_CIPHERED,
+                           clientKs,
+                           clientTrustedCerts,
+                           serverKs,
+                           serverTrustedCerts,
+                           false,
+                           false);
     }
 
     /**
      * Client does not allows server and server does not allows client
      */
-    @Test(expected = SSLHandshakeException.class)
-    public void testAuthAndChiperedNOK() throws Exception {
+    @Test
+    public void testAuthAndChiperedNOK() throws Throwable {
+        System.out.println("testAuthAndChiperedNOK");
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(),
                              kpAndCerts[0].getPrivateKey(),
                              PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
                              kpAndCerts[0].getCertAsCertArray());
-        X509Certificate[] clientTrustedCerts = kpAndCerts[0].getCertAsCertArray();
+        X509Certificate[] clientTrustedCerts = kpAndCerts[2].getCertAsCertArray();
 
         KeyStore serverKs = KeyStore.getInstance("PKCS12");
         serverKs.load(null, null);
@@ -184,17 +218,24 @@ public class TestPASslSocketFactory extends AbstractSSL {
                              kpAndCerts[1].getPrivateKey(),
                              PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
                              kpAndCerts[1].getCertAsCertArray());
-        X509Certificate[] serverTrustedCerts = kpAndCerts[1].getCertAsCertArray();
+        X509Certificate[] serverTrustedCerts = kpAndCerts[2].getCertAsCertArray();
 
-        connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs, serverTrustedCerts);
+        connectAndExchange(SecureMode.AUTH_AND_CIPHERED,
+                           clientKs,
+                           clientTrustedCerts,
+                           serverKs,
+                           serverTrustedCerts,
+                           true,
+                           true);
 
     }
 
     /**
      * Client does not allows server
      */
-    @Test(expected = SSLHandshakeException.class)
-    public void testAuthAndChiperedNOKClientRejectServer() throws Exception {
+    @Test
+    public void testAuthAndChiperedNOKClientRejectServer() throws Throwable {
+        System.out.println("testAuthAndChiperedNOKClientRejectServer");
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(),
@@ -211,15 +252,22 @@ public class TestPASslSocketFactory extends AbstractSSL {
                              kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[0].getCertAsCertArray();
 
-        connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs, serverTrustedCerts);
+        connectAndExchange(SecureMode.AUTH_AND_CIPHERED,
+                           clientKs,
+                           clientTrustedCerts,
+                           serverKs,
+                           serverTrustedCerts,
+                           false,
+                           true);
 
     }
 
     /**
      * Server does not allows client
      */
-    @Test(expected = SSLHandshakeException.class)
-    public void testAuthAndChiperedNOKServerRejectClient() throws Exception {
+    @Test
+    public void testAuthAndChiperedNOKServerRejectClient() throws Throwable {
+        System.out.println("testAuthAndChiperedNOKServerRejectClient");
         KeyStore clientKs = KeyStore.getInstance("PKCS12");
         clientKs.load(null, null);
         clientKs.setKeyEntry(kpAndCerts[0].cert.getSubjectDN().toString(),
@@ -236,44 +284,88 @@ public class TestPASslSocketFactory extends AbstractSSL {
                              kpAndCerts[1].getCertAsCertArray());
         X509Certificate[] serverTrustedCerts = kpAndCerts[2].getCertAsCertArray();
 
-        connectAndExchange(SecureMode.AUTH_AND_CIPHERED, clientKs, clientTrustedCerts, serverKs, serverTrustedCerts);
+        connectAndExchange(SecureMode.AUTH_AND_CIPHERED,
+                           clientKs,
+                           clientTrustedCerts,
+                           serverKs,
+                           serverTrustedCerts,
+                           true,
+                           false);
 
     }
 
     private void connectAndExchange(final SecureMode sm, final KeyStore clientKs,
             final X509Certificate[] clientTrustedCerts, final KeyStore serverKs,
-            final X509Certificate[] serverTrustedCerts) throws Exception {
+            final X509Certificate[] serverTrustedCerts, boolean expectedServerHandshakeFailure,
+            boolean expectedClientHandhsakeFailure) throws Throwable {
 
-        PASslServerSocketFactory ssf;
-        ssf = new PASslServerSocketFactory(sm, serverKs, serverTrustedCerts);
-        final ServerSocket serverSocket = ssf.createServerSocket();
-        serverSocket.bind(null);
+        for (int i = 0; i < NB_TESTS; i++) {
+            PASslServerSocketFactory ssf;
+            ssf = new PASslServerSocketFactory(sm, serverKs, serverTrustedCerts);
+            final ServerSocket serverSocket = ssf.createServerSocket();
+            serverSocket.bind(null);
 
-        final AtomicReference<Throwable> clientError = new AtomicReference<Throwable>(null);
-        Thread clientThread = new Thread() {
+            final AtomicReference<Throwable> clientError = new AtomicReference<Throwable>(null);
+            final AtomicReference<Throwable> serverError = new AtomicReference<Throwable>(null);
+            Thread clientThread = new Thread() {
 
-            public void run() {
-                try {
-                    PASslSocketFactory sf = new PASslSocketFactory(sm, clientKs, clientTrustedCerts);
-                    Socket client = sf.createSocket("localhost", serverSocket.getLocalPort());
-
-                    client.getOutputStream().write(PAYLOAD.getBytes());
-                    client.close();
-                } catch (Throwable t) {
-                    clientError.set(t);
+                public void run() {
+                    PASslSocketFactory sf = null;
+                    try {
+                        Thread.sleep(100);
+                        sf = new PASslSocketFactory(sm, clientKs, clientTrustedCerts);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try (Socket client = sf.createSocket("localhost", serverSocket.getLocalPort())) {
+                        PrintWriter writer = new PrintWriter(client.getOutputStream());
+                        writer.println(PAYLOAD);
+                        writer.flush();
+                        writer.close();
+                    } catch (Throwable t) {
+                        clientError.set(t);
+                    }
                 }
+            };
+            clientThread.start();
+            Socket server = serverSocket.accept();
+            String rPayload = null;
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(server.getInputStream()))) {
+                try {
+                    rPayload = br.readLine();
+                } catch (Throwable t) {
+                    serverError.set(t);
+                }
+            } finally {
+                serverSocket.close();
             }
-        };
-        clientThread.start();
-
-        Socket server = serverSocket.accept();
-        BufferedReader br = new BufferedReader(new InputStreamReader(server.getInputStream()));
-        String rPayload = br.readLine();
-
-        br.close();
-        serverSocket.close();
-
-        Assert.assertNull(clientError.get());
-        Assert.assertEquals(PAYLOAD, rPayload);
+            if (serverError.get() != null) {
+                System.err.println("Server error received:");
+                serverError.get().printStackTrace();
+            }
+            if (clientError.get() != null) {
+                System.err.println("Client error received:");
+                clientError.get().printStackTrace();
+            }
+            if (expectedClientHandhsakeFailure | expectedServerHandshakeFailure) {
+                Assert.assertTrue(clientError.get() != null || serverError.get() != null);
+                if (clientError.get() != null) {
+                    Assert.assertTrue(clientError.get() instanceof SSLHandshakeException ||
+                                      clientError.get() instanceof SSLException);
+                }
+                if (serverError.get() != null) {
+                    Assert.assertTrue(serverError.get() instanceof SSLHandshakeException ||
+                                      serverError.get() instanceof SSLException);
+                }
+            } else {
+                Assert.assertNull(clientError.get());
+                Assert.assertNull(serverError.get());
+            }
+            if (expectedClientHandhsakeFailure || expectedServerHandshakeFailure) {
+                Assert.assertNull(rPayload);
+            } else {
+                Assert.assertEquals(PAYLOAD, rPayload);
+            }
+        }
     }
 }
