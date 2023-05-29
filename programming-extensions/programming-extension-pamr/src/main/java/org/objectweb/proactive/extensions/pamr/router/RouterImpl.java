@@ -48,13 +48,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Timer;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -137,6 +131,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     private final long clientEvictionTimeout;
 
+    private final int pingerThreadCount;
+
+    private final boolean isDaemon;
+
     /** Create a new router
      * 
      * When a new router is created it binds onto the given port.
@@ -150,17 +148,25 @@ public class RouterImpl extends RouterInternal implements Runnable {
      *  t.start();
      * </code>
      * 
-     * @param port port number to bind to
+     * @param config router configuration
      * @throws IOException if the router failed to bind
      */
     RouterImpl(RouterConfig config) throws Exception {
         this.configFile = config.getReservedAgentConfigFile();
         this.heartbeatTimeout = config.getHeartbeatTimeout();
         this.clientEvictionTimeout = config.getClientEvictionTimeout();
+        this.pingerThreadCount = config.getNbPingerThreads();
+        this.isDaemon = config.isDaemon();
 
         init(config);
-        ThreadFactory tf = new NamedThreadFactory("Proactive PAMR router worker");
-        tpe = Executors.newFixedThreadPool(config.getNbWorkerThreads(), tf);
+        ThreadFactory tf = new NamedThreadFactory("Proactive PAMR router worker",
+                                                  config.isDaemon(),
+                                                  Thread.MAX_PRIORITY - 1);
+        tpe = ThreadPools.newCachedBoundedThreadPool(config.getNbWorkerThreads(),
+                                                     config.getNbPingerThreads(),
+                                                     60L,
+                                                     TimeUnit.SECONDS,
+                                                     tf);
 
         long rand = 0;
         while (rand == 0) {
@@ -217,13 +223,16 @@ public class RouterImpl extends RouterInternal implements Runnable {
         /** Used to send the heartbeat asynchrnously */
         final private ThreadPoolExecutor tpe;
 
-        public HeartbeatTimerTask(long maxTime) {
+        /** reference to the router executor */
+        final private ExecutorService parentTpe;
+
+        public HeartbeatTimerTask(long maxTime, int pingerThreadCount, boolean isDaemon, ExecutorService parentTpe) {
             this.maxTime = maxTime;
             this.heartbeatId = 0;
 
-            int maxThreads = 32;
-            ThreadFactory tf = new NamedThreadFactory("Hearbeat sender", false, Thread.MAX_PRIORITY);
-            this.tpe = ThreadPools.newBoundedThreadPool(maxThreads, tf);
+            ThreadFactory tf = new NamedThreadFactory("Heartbeat sender", isDaemon, Thread.MAX_PRIORITY);
+            this.tpe = ThreadPools.newBoundedThreadPool(pingerThreadCount, tf);
+            this.parentTpe = parentTpe;
         }
 
         @Override
@@ -296,6 +305,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
         private void checkHeartbeat(Collection<Client> clients) {
             long currentTime = System.currentTimeMillis();
 
+            List<Client> connectedClients = new ArrayList<>(clients);
+            List<AgentID> disconnectedAgentsIds = new ArrayList<>();
+
             for (Client client : clients) {
                 if (client.isConnected()) {
                     final long diff = currentTime - client.getLastSeen();
@@ -312,9 +324,14 @@ public class RouterImpl extends RouterInternal implements Runnable {
                         // If client is null, then the handshake has not completed and we
                         // don't need to broadcast the disconnection
                         AgentID disconnectedAgent = client.getAgentId();
-                        tpe.submit(new DisconnectionBroadcaster(clients, disconnectedAgent));
+                        connectedClients.remove(client);
+                        disconnectedAgentsIds.add(disconnectedAgent);
                     }
                 }
+            }
+            // broadcast disconnection message to clients still connected
+            for (AgentID disconnectedAgent : disconnectedAgentsIds) {
+                parentTpe.submit(new DisconnectionBroadcaster(connectedClients, disconnectedAgent));
             }
         }
 
@@ -385,7 +402,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
         Timer timer = new Timer("Heartbeat timer", true);
         long delay = this.heartbeatTimeout / 3;
-        HeartbeatTimerTask hbtt = new HeartbeatTimerTask(delay);
+        HeartbeatTimerTask hbtt = new HeartbeatTimerTask(delay, pingerThreadCount, isDaemon, tpe);
         timer.scheduleAtFixedRate(hbtt, new Date(), delay);
 
         if (clientEvictionTimeout >= 0) {

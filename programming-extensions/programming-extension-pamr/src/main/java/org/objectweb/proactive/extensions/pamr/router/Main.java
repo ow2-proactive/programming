@@ -55,6 +55,32 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurat
 public class Main {
     static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
+    public static final String IP_V4_OPTION = "4";
+
+    public static final String IP_V6_OPTION = "6";
+
+    public static final String HELP_OPTION = "h";
+
+    public static final String BIND_IP_OPTION = "i";
+
+    public static final String HEARTBEAT_OPTION = "t";
+
+    public static final String EVICT_TIMEOUT_OPTION = "e";
+
+    public static final String NB_WORKERS_OPTION = "w";
+
+    public static final String PORT_OPTION = "p";
+
+    public static final String NB_PINGER_THREADS_OPTION = "N";
+
+    public static final String CONFIG_FILE_OPTION = "f";
+
+    public static final String VERBOSE_MODE = "v";
+
+    public static final String RELOAD_CONFIGURATION = "r";
+
+    public static final String ADMIN_COOKIE = "c";
+
     public static void main(String[] args) throws IOException {
         new PAMRLog4jCompat().ensureCompat();
         new Main(args, null);
@@ -72,13 +98,13 @@ public class Main {
             CommandLineParser parser = new PosixParser();
             CommandLine line = parser.parse(options, args);
 
-            if (line.hasOption("h")) {
+            if (line.hasOption(HELP_OPTION)) {
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("router", options);
                 System.exit(0);
             }
 
-            boolean reload = line.hasOption("r");
+            boolean reload = line.hasOption(RELOAD_CONFIGURATION);
             if (reload) {
                 reloadConfiguration(options, line);
             } else {
@@ -111,7 +137,7 @@ public class Main {
 
         // Check incompatible options
         boolean error = false;
-        error |= line.hasOption("c");
+        error |= line.hasOption(ADMIN_COOKIE);
         if (error) {
             printHelpAndExit("", options);
             printHelpAndExit("Option -c is only compatible with -r", options);
@@ -119,7 +145,7 @@ public class Main {
         }
 
         // Parses option to fill config
-        arg = line.getOptionValue("p");
+        arg = line.getOptionValue(PORT_OPTION);
         if (arg == null) {
             config.setPort(RouterImpl.DEFAULT_PORT);
         } else {
@@ -133,15 +159,15 @@ public class Main {
             }
         }
 
-        if (line.hasOption("4")) {
+        if (line.hasOption(IP_V4_OPTION)) {
             System.setProperty("java.net.preferIPv4Stack", "true");
         }
 
-        if (line.hasOption("6")) {
+        if (line.hasOption(IP_V6_OPTION)) {
             System.setProperty("java.net.preferIPv6Stack", "true");
         }
 
-        arg = line.getOptionValue("i");
+        arg = line.getOptionValue(BIND_IP_OPTION);
         if (arg != null) { // null by default is ok -> wildcard !
             try {
                 InetAddress addr = InetAddress.getByName(arg);
@@ -151,7 +177,7 @@ public class Main {
             }
         }
 
-        arg = line.getOptionValue("w");
+        arg = line.getOptionValue(NB_WORKERS_OPTION);
         if (arg == null) {
             int n = Runtime.getRuntime().availableProcessors();
             config.setNbWorkerThreads(n);
@@ -164,7 +190,20 @@ public class Main {
             }
         }
 
-        arg = line.getOptionValue("f");
+        arg = line.getOptionValue(NB_PINGER_THREADS_OPTION);
+        if (arg == null) {
+            int n = 32;
+            config.setNbPingerThreads(n);
+        } else {
+            try {
+                int i = new Integer(arg);
+                config.setNbPingerThreads(i);
+            } catch (NumberFormatException e) {
+                printHelpAndExit("Invalid pinger thread number: " + arg, options);
+            }
+        }
+
+        arg = line.getOptionValue(CONFIG_FILE_OPTION);
         if (arg == null) {
             arg = defaultConfigFile;
         }
@@ -186,12 +225,12 @@ public class Main {
             config.setReservedAgentConfigFile(f);
         }
 
-        if (line.hasOption("v")) {
+        if (line.hasOption(VERBOSE_MODE)) {
             Logger l = Logger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
             l.setLevel(Level.DEBUG);
         }
 
-        arg = line.getOptionValue("t");
+        arg = line.getOptionValue(HEARTBEAT_OPTION);
         if (arg != null) {
             try {
                 int i = Integer.parseInt(arg);
@@ -204,7 +243,7 @@ public class Main {
             }
         }
 
-        arg = line.getOptionValue("e");
+        arg = line.getOptionValue(EVICT_TIMEOUT_OPTION);
         if (arg != null) {
             try {
                 long i = Long.parseLong(arg);
@@ -225,14 +264,15 @@ public class Main {
 
         // Check incompatible options
         boolean error = false;
-        error |= line.hasOption("4");
-        error |= line.hasOption("6");
-        error |= line.hasOption("w");
-        error |= line.hasOption("f");
-        error |= line.hasOption("t");
-        error |= line.hasOption("e");
+        error |= line.hasOption(IP_V4_OPTION);
+        error |= line.hasOption(IP_V6_OPTION);
+        error |= line.hasOption(NB_WORKERS_OPTION);
+        error |= line.hasOption(NB_PINGER_THREADS_OPTION);
+        error |= line.hasOption(CONFIG_FILE_OPTION);
+        error |= line.hasOption(HEARTBEAT_OPTION);
+        error |= line.hasOption(EVICT_TIMEOUT_OPTION);
         if (error) {
-            printHelpAndExit("Options -4 -6 -w -f -t -e are not compatible with -r", options);
+            printHelpAndExit("Options -4 -6 -w -N -f -t -e are not compatible with -r", options);
         }
 
         int port = -1;
@@ -240,7 +280,7 @@ public class Main {
         MagicCookie magicCookie = null;
 
         // Parse options
-        arg = line.getOptionValue("p");
+        arg = line.getOptionValue(PORT_OPTION);
         if (arg == null) {
             port = RouterImpl.DEFAULT_PORT;
         } else {
@@ -253,7 +293,7 @@ public class Main {
             }
         }
 
-        arg = line.getOptionValue("i");
+        arg = line.getOptionValue(BIND_IP_OPTION);
         if (arg == null) {
             try {
                 ia = InetAddress.getLocalHost();
@@ -268,7 +308,7 @@ public class Main {
             }
         }
 
-        arg = line.getOptionValue("c");
+        arg = line.getOptionValue(ADMIN_COOKIE);
         if (arg == null) {
             printHelpAndExit("The --cookie option is mandatory when reloading the configuration", options);
         } else {
@@ -279,7 +319,7 @@ public class Main {
             }
         }
 
-        if (line.hasOption("v")) {
+        if (line.hasOption(VERBOSE_MODE)) {
             Logger l = Logger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
             l.setLevel(Level.DEBUG);
         }
@@ -300,24 +340,28 @@ public class Main {
 
     private Options createOptions() {
         Options options = new Options();
-        options.addOption("p",
+        options.addOption(PORT_OPTION,
                           "port",
                           true,
                           "Specifies the port on which the server listens for connections (default 33647).");
-        options.addOption("i", "ip", true, "Bind to a given IP address or hostname");
-        options.addOption("4", "ipv4", false, "Force the router to use IPv4 addresses only");
-        options.addOption("6", "ipv6", false, "Force the router to use IPv6 addresses only");
-        options.addOption("t", "timeout", true, "The heartbeat timeout value");
-        options.addOption("e",
+        options.addOption(BIND_IP_OPTION, "ip", true, "Bind to a given IP address or hostname");
+        options.addOption(IP_V4_OPTION, "ipv4", false, "Force the router to use IPv4 addresses only");
+        options.addOption(IP_V6_OPTION, "ipv6", false, "Force the router to use IPv6 addresses only");
+        options.addOption(HEARTBEAT_OPTION, "timeout", true, "The heartbeat timeout value");
+        options.addOption(EVICT_TIMEOUT_OPTION,
                           "evictTimeout",
                           true,
                           "Timeout for the eviction of disconnected clients (default: -1, means no eviction)");
-        options.addOption("w", "nbWorkers", true, "Size of the worker thread pool");
-        options.addOption("f", "configFile", true, "configuration file");
-        options.addOption("h", "help", false, "Print help message");
-        options.addOption("v", "verbose", false, "Verbose mode. Print clients (dis)connections");
-        options.addOption("r", "reload", false, "Reload configuration file");
-        options.addOption("c", "cookie", true, "This admin cookie to provide to reload the configuration");
+        options.addOption(NB_WORKERS_OPTION, "nbWorkers", true, "Minimum size of the worker thread pool");
+        options.addOption(NB_PINGER_THREADS_OPTION,
+                          "nbPingers",
+                          true,
+                          "Size of the agent pinger thread pool. Also used as the maximum size of the worker thread pool");
+        options.addOption(CONFIG_FILE_OPTION, "configFile", true, "configuration file");
+        options.addOption(HELP_OPTION, "help", false, "Print help message");
+        options.addOption(VERBOSE_MODE, "verbose", false, "Verbose mode. Print clients (dis)connections");
+        options.addOption(RELOAD_CONFIGURATION, "reload", false, "Reload configuration file");
+        options.addOption(ADMIN_COOKIE, "cookie", true, "This admin cookie to provide to reload the configuration");
         return options;
     }
 

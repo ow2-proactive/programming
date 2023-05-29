@@ -26,13 +26,7 @@
 package org.objectweb.proactive.utils;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 
 /**
@@ -155,16 +149,8 @@ final public class ThreadPools {
         final ThreadPoolExecutor tpe;
         tpe = new ThreadPoolExecutor(maxThreads, maxThreads, keepAliveTime, unit, new LinkedBlockingQueue<Runnable>());
 
-        try {
-            // Enable dynamic sizing by allowing core threads to terminate on timeout
-            // This method has been added by Java 6. 
-            // With Java 5 the thread pool has a fixed size
-            @RefactorWhenDroppingJava5
-            Method m = tpe.getClass().getDeclaredMethod("allowCoreThreadTimeOut", boolean.class);
-            m.invoke(tpe, true);
-        } catch (Throwable t) {
-            // Ok Java 5
-        }
+        // Enable dynamic sizing by allowing core threads to terminate on timeout
+        tpe.allowCoreThreadTimeOut(true);
 
         return tpe;
     }
@@ -241,5 +227,50 @@ final public class ThreadPools {
                                       unit,
                                       new SynchronousQueue<Runnable>(),
                                       threadFactory);
+    }
+
+    /**
+     * Similar to Executors.newCachedThreadPool but allows a maximum pool size.
+     * Cached thread pool are interesting in the sense that they can grow and shrink at will.
+     * Default cachedThreadPool implementation does not allow to have a maximum capacity
+     * @param corePoolSize the number of threads to keep in the pool, even if they are idle
+     * @param maximumPoolSize the maximum number of threads to allow in the pool
+     * @param keepAliveTime when the number of threads is greater than the core, this is the maximum time that excess idle threads
+     *        will wait for new tasks before terminating.
+     * @param timeUnit the time unit for the {@code keepAliveTime} argument
+     * @param threadFactory the factory to use when the executor
+     *        creates a new thread
+     * @return the newly created thread pool
+     */
+    public static ExecutorService newCachedBoundedThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime,
+            TimeUnit timeUnit, ThreadFactory threadFactory) {
+        ArgCheck.requirePostive(corePoolSize);
+        ArgCheck.requireStrictlyPostive(maximumPoolSize);
+        ArgCheck.requireNonNull(timeUnit);
+        ArgCheck.requireNonNull(threadFactory);
+        ArgCheck.requirePostive(keepAliveTime);
+        BlockingQueue<Runnable> queue = new LinkedTransferQueue<Runnable>() {
+            @Override
+            public boolean offer(Runnable e) {
+                return tryTransfer(e);
+            }
+        };
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(corePoolSize,
+                                                               maximumPoolSize,
+                                                               keepAliveTime,
+                                                               timeUnit,
+                                                               queue,
+                                                               threadFactory);
+        threadPool.setRejectedExecutionHandler(new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                try {
+                    executor.getQueue().put(r);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+        return threadPool;
     }
 }
