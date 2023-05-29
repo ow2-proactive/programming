@@ -51,6 +51,8 @@ public class RouterConfig {
 
     private int nbWorkerThreads;
 
+    private int nbPingerThreads;
+
     private InetAddress inetAddress;
 
     private File reservedAgentConfigFile;
@@ -62,7 +64,8 @@ public class RouterConfig {
     public RouterConfig() {
         this.port = 0;
         this.isDaemon = false;
-        this.nbWorkerThreads = 4;
+        this.nbWorkerThreads = Runtime.getRuntime().availableProcessors();
+        this.nbPingerThreads = 50;
         this.inetAddress = null;
         this.heartbeatTimeout = 180000;
         this.clientEvictionTimeout = 86400000;
@@ -110,11 +113,14 @@ public class RouterConfig {
         return nbWorkerThreads;
     }
 
-    /** Set the number of worker threads
+    /**
+     * Set the minimum number of worker threads
      * 
      * Each received message is handled asynchronously by a pool of workers. 
      * Increasing the amount of worker will increase the parallelism of message
-     * handling and sending. 
+     * handling and sending.
+     *
+     * Default is the number of available cores on the machine.
      * 
      * Incoming messages are read by a single thread.
      * 
@@ -122,6 +128,22 @@ public class RouterConfig {
     public void setNbWorkerThreads(int nbWorkerThreads) {
         checkReadOnly();
         this.nbWorkerThreads = nbWorkerThreads;
+    }
+
+    public int getNbPingerThreads() {
+        return nbPingerThreads;
+    }
+
+    /**
+     * Set the maximum number of pinger threads and maximum number of worker threads
+     *
+     * Pinger threads determine if the router agents are alive or not.
+     * Default is 50
+     *
+     */
+    public void setNbPingerThreads(int nbPingerThreads) {
+        checkReadOnly();
+        this.nbPingerThreads = nbPingerThreads;
     }
 
     InetAddress getInetAddress() {
