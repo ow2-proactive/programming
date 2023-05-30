@@ -25,18 +25,12 @@
  */
 package org.objectweb.proactive.core.body;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PALifeCycle;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
@@ -87,7 +81,7 @@ public class LocalBodyStore {
      */
     private BodyMap localHalfBodyMap = new BodyMap();
 
-    private Map<Thread, HalfBody> halfbodiesThreadMap = new HashMap<Thread, HalfBody>();
+    private Map<Thread, HalfBody> halfbodiesThreadMap = new ConcurrentHashMap<>();
 
     /**
      * This table maps all known Forwarder's in this JVM with their UniqueID
@@ -211,8 +205,8 @@ public class LocalBodyStore {
             s.push(c);
             this.contexts.set(s);
             registerHalfBody(body);
-
-            updateHalfbodiesThreadMap(body);
+            removeUnreferencedHalfBodies();
+            removeHalfBodiesOfDeadThreads();
 
             return c;
         } else {
@@ -220,34 +214,50 @@ public class LocalBodyStore {
         }
     }
 
-    private void updateHalfbodiesThreadMap(HalfBody body) {
-        List<HalfBody> toRemove = null;
-
-        synchronized (halfbodiesThreadMap) {
-            for (Iterator<Map.Entry<Thread, HalfBody>> i = halfbodiesThreadMap.entrySet().iterator(); i.hasNext();) {
-                Map.Entry<Thread, HalfBody> entry = i.next();
-                if (!entry.getKey().isAlive()) {
-                    i.remove();
-                    if (toRemove == null) {
-                        toRemove = new ArrayList<HalfBody>();
-                    }
-                    toRemove.add(entry.getValue());
-                }
-            }
-
-            halfbodiesThreadMap.put(Thread.currentThread(), body);
-        }
-
-        if (toRemove != null) {
-            for (HalfBody halfBody : toRemove) {
-                LocalBodyStore.getInstance().unregisterHalfBody(halfBody);
-                try {
-                    halfBody.getRemoteObjectExposer().unregisterAll();
-                } catch (ProActiveException e) {
-                    logger.error("Failed to unregister halfBody remote object", e);
-                }
+    private void removeHalfBodiesOfDeadThreads() {
+        for (Iterator<Map.Entry<Thread, HalfBody>> i = halfbodiesThreadMap.entrySet().iterator(); i.hasNext();) {
+            Map.Entry<Thread, HalfBody> entry = i.next();
+            if (!entry.getKey().isAlive()) {
+                unregisterHalfBodies(Collections.singletonList(entry.getValue()));
+                i.remove();
             }
         }
+    }
+
+    private void unregisterHalfBodies(List<HalfBody> toRemove) {
+        for (HalfBody halfBody : toRemove) {
+            LocalBodyStore.getInstance().unregisterHalfBody(halfBody);
+            try {
+                halfBody.terminate();
+            } catch (Exception e) {
+                logger.warn("Error when terminating half body " + halfBody.name, e);
+            }
+
+        }
+    }
+
+    private boolean isReferenced(UniversalBody body) {
+        for (UniversalBody referencedBody : halfbodiesThreadMap.values()) {
+            if (referencedBody.getID().equals(body.getID())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove all halfBodies not referenced in the thread map
+     */
+    private void removeUnreferencedHalfBodies() {
+        List<HalfBody> toRemove = new ArrayList<>();
+        for (Iterator<UniversalBody> i = localHalfBodyMap.bodiesIterator(); i.hasNext();) {
+            HalfBody halfBody = (HalfBody) i.next();
+            if (!isReferenced(halfBody)) {
+                toRemove.add(halfBody);
+            }
+        }
+
+        unregisterHalfBodies(toRemove);
     }
 
     /**
@@ -320,17 +330,6 @@ public class LocalBodyStore {
         return this.localHalfBodyMap.size();
     }
 
-    /**
-     * Adds a listener of body events. The listener is notified every time a body
-     * (active or not) is registered or unregistered in this JVM.
-     * @param listener the listener of body events to add
-     */
-
-    /**
-     * Removes a listener of body events.
-     * @param listener the listener of body events to remove
-     */
-
     //
     // -- FRIENDLY METHODS -----------------------------------------------
     //
@@ -370,7 +369,8 @@ public class LocalBodyStore {
         }
     }
 
-    void registerHalfBody(AbstractBody body) {
+    void registerHalfBody(HalfBody body) {
+        halfbodiesThreadMap.put(Thread.currentThread(), body);
         this.localHalfBodyMap.putBody(body.bodyID, body);
     }
 
