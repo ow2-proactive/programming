@@ -64,7 +64,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      */
     static public PAPropertyInteger PA_PAMR_CONNECT_TIMEOUT = new PAPropertyInteger("proactive.pamr.connect_timeout",
                                                                                     false,
-                                                                                    30000);
+                                                                                    120000);
 
     /** The agent ID to use.
      *
@@ -152,7 +152,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      */
     static public PAPropertyInteger PA_PAMRSSH_CONNECT_TIMEOUT = new PAPropertyInteger("proactive.pamrssh.connect_timeout",
                                                                                        false,
-                                                                                       60000);
+                                                                                       120000);
 
     /**
      * This property is used when a SSH Tunnel is opened. The address can be either a hostname or an IP.
