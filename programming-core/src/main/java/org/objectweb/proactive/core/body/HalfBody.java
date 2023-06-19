@@ -60,8 +60,8 @@ public class HalfBody extends AbstractBody {
             return new HalfBody(factory);
         } catch (ActiveObjectCreationException | NodeException e) {
             bodyLogger.error("", e);
+            throw new IllegalStateException("Cannot create half-body", e);
         }
-        return null;
     }
 
     //
