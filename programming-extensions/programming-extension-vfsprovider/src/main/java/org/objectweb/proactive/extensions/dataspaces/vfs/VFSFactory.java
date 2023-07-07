@@ -27,6 +27,10 @@ package org.objectweb.proactive.extensions.dataspaces.vfs;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.commons.vfs2.CacheStrategy;
@@ -335,6 +339,7 @@ public class VFSFactory {
         }
         // TODO or try to configure known hosts somehow (look for OpenSSH file etc.)
         SftpFileSystemConfigBuilder.getInstance().setStrictHostKeyChecking(options, "no");
+        configureJSch();
         return options;
     }
 
@@ -351,6 +356,41 @@ public class VFSFactory {
             }
             if (emptySshFolder.exists()) {
                 System.setProperty("vfs.sftp.sshdir", emptySshFolder.getAbsolutePath());
+            }
+        }
+    }
+
+    private static void configureJSch() {
+        // configure JSCH to enable legacy algorithms that may be used by old ssh servers
+        List<String> additionalCiphers = CentralPAPropertyRepository.PA_DATASPACES_JSCH_ADDITIONAL_CIPHERS.getValue();
+
+        Set<String> defaultCipherSet = new HashSet(Arrays.asList(JSch.getConfig("cipher.s2c").split(",")));
+        for (String cipher : additionalCiphers) {
+            if (!cipher.isEmpty() && !defaultCipherSet.contains(cipher)) {
+                JSch.setConfig("cipher.s2c", JSch.getConfig("cipher.s2c") + "," + cipher);
+                JSch.setConfig("cipher.c2s", JSch.getConfig("cipher.c2s") + "," + cipher);
+                defaultCipherSet.add(cipher);
+            }
+        }
+
+        List<String> additionalKex = CentralPAPropertyRepository.PA_DATASPACES_JSCH_ADDITIONAL_KEX.getValue();
+        Set<String> defaultKexSet = new HashSet(Arrays.asList(JSch.getConfig("kex").split(",")));
+        for (String kex : additionalKex) {
+            if (!kex.isEmpty() && !defaultKexSet.contains(kex)) {
+                JSch.setConfig("kex", JSch.getConfig("kex") + "," + kex);
+                defaultKexSet.add(kex);
+            }
+        }
+
+        if (CentralPAPropertyRepository.PA_DATASPACES_JSCH_ADDITIONAL_MACS.isSet()) {
+            List<String> additionalMacs = CentralPAPropertyRepository.PA_DATASPACES_JSCH_ADDITIONAL_MACS.getValue();
+            Set<String> defaultMacSet = new HashSet(Arrays.asList(JSch.getConfig("mac.s2c").split(",")));
+            for (String mac : additionalMacs) {
+                if (!mac.isEmpty() && !defaultMacSet.contains(mac)) {
+                    JSch.setConfig("mac.s2c", JSch.getConfig("mac.s2c") + "," + mac);
+                    JSch.setConfig("mac.c2s", JSch.getConfig("mac.c2s") + "," + mac);
+                    defaultMacSet.add(mac);
+                }
             }
         }
     }

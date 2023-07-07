@@ -609,6 +609,29 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
                                                                                                   false,
                                                                                                   true);
 
+    /**
+     * This property enables legacy ciphers that maybe be used by old SSH servers
+     */
+    static public PAPropertyList PA_DATASPACES_JSCH_ADDITIONAL_CIPHERS = new PAPropertyList("proactive.jsch.additional.ciphers",
+                                                                                            ",",
+                                                                                            false,
+                                                                                            "aes128-cbc,aes192-cbc,aes256-cbc,3des-cbc");
+
+    /**
+     * This property enables legacy key exchange algorithms that maybe be used by old SSH servers
+     */
+    static public PAPropertyList PA_DATASPACES_JSCH_ADDITIONAL_KEX = new PAPropertyList("proactive.jsch.additional.kexalgorithms",
+                                                                                        ",",
+                                                                                        false,
+                                                                                        "diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1");
+
+    /**
+     * This property enables legacy message authentication codes that maybe be used by old SSH servers
+     */
+    static public PAPropertyList PA_DATASPACES_JSCH_ADDITIONAL_MACS = new PAPropertyList("proactive.jsch.additional.macs",
+                                                                                         ",",
+                                                                                         false);
+
     // -------------- VFS PROVIDER
 
     /**

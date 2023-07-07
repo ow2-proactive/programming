@@ -264,7 +264,7 @@ project('programming-extensions:programming-extension-annotation') {
 def vfs2RuntimeDependencies = [
         'commons-net:commons-net:3.5',
         'commons-httpclient:commons-httpclient:3.1',
-        'com.jcraft:jsch:0.1.55',
+        'com.github.mwiede:jsch:0.2.9',
         'org.slf4j:slf4j-api:1.7.12']
 
 project('programming-extensions:programming-extension-dataspaces-common') {
@@ -288,7 +288,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
 
         // in order to enable s3 support, run for example ./gradlew build -Ps3
         compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
-        compile 'com.jcraft:jsch:0.1.55'
+        compile 'com.github.mwiede:jsch:0.2.9'
         if (rootProject.hasProperty('s3')) {
             compile 'com.github.abashev:vfs-s3:4.3.4'
         }
