@@ -632,6 +632,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
                                                                                          ",",
                                                                                          false);
 
+    /**
+     * This property enables legacy server host key format that maybe be used by old SSH servers
+     */
+    static public PAPropertyList PA_DATASPACES_JSCH_ADDITIONAL_SERVER_HOST_KEYS = new PAPropertyList("proactive.jsch.additional.host.keys",
+                                                                                                     ",",
+                                                                                                     false,
+                                                                                                     "ssh-rsa");
+
     // -------------- VFS PROVIDER
 
     /**

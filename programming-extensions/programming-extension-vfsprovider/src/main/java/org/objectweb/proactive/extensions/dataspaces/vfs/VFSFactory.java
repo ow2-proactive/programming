@@ -393,6 +393,15 @@ public class VFSFactory {
                 }
             }
         }
+        List<String> additionalHostKey = CentralPAPropertyRepository.PA_DATASPACES_JSCH_ADDITIONAL_SERVER_HOST_KEYS.getValue();
+        Set<String> defaultHostKeySet = new HashSet(Arrays.asList(JSch.getConfig("server_host_key").split(",")));
+        for (String hostKey : additionalHostKey) {
+            if (!hostKey.isEmpty() && !defaultHostKeySet.contains(hostKey)) {
+                JSch.setConfig("server_host_key", JSch.getConfig("server_host_key") + "," + hostKey);
+                JSch.setConfig("PubkeyAcceptedAlgorithms", JSch.getConfig("PubkeyAcceptedAlgorithms") + "," + hostKey);
+                defaultHostKeySet.add(hostKey);
+            }
+        }
     }
 
     public enum ManagerType {
