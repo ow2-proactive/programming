@@ -379,7 +379,7 @@ public final class WindowsProcess extends Process {
                     // No way to get the user profile, we cannot let the process start in C:\Windows
                     win32ErrorIOException("GetUserProfileDirectoryW");
                 }
-                lpPath = m.getString(0, true);
+                lpPath = m.getWideString(0);
             }
 
             if (lpPath != null) {
