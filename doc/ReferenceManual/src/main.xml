@@ -7,7 +7,7 @@
 
 	<!-- This has been added to write some special characters such as en and em dashes -->
 	<!ENTITY % iso-pub PUBLIC "ISO 8879:1986//ENTITIES Publishing//EN//XML"
-		"http://www.oasis-open.org/docbook/xmlcharent/0.3/iso-pub.ent">
+		"https://www.w3.org/2003/entities/2007/isopub.ent">
 		%iso-pub;
 
 	<!ENTITY BookInfo SYSTEM "BookInfo.xml">
