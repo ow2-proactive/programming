@@ -92,6 +92,8 @@ public class VFSSpacesMountManagerImplTest {
                                                                                              SpaceType.OUTPUT,
                                                                                              "dummy");
 
+    private File write_p;
+
     private static void closeFileObject(final DataSpacesFileObject file) {
         if (file != null) {
             try {
@@ -150,6 +152,9 @@ public class VFSSpacesMountManagerImplTest {
         ProActiveLogger.getLogger(Loggers.DATASPACES).setLevel(Level.DEBUG);
         spacesDir = new File(System.getProperty("java.io.tmpdir"), "ProActive SpaceMountManagerTest");
         if (spacesDir.exists()) {
+            if (write_p != null && write_p.exists()) {
+                write_p.setWritable(true);
+            }
             FileUtils.forceDelete(spacesDir);
         }
 
@@ -242,6 +247,9 @@ public class VFSSpacesMountManagerImplTest {
         }
 
         if (spacesDir != null && spacesDir.exists()) {
+            if (write_p != null && write_p.exists()) {
+                write_p.setWritable(true);
+            }
             FileUtils.forceDelete(spacesDir);
             spacesDir = null;
         }
@@ -365,7 +373,7 @@ public class VFSSpacesMountManagerImplTest {
     }
 
     private String createWriteProtectedFile() throws IOException {
-        File write_p = new File(outputSpaceDir, "write_p.txt");
+        write_p = new File(outputSpaceDir, "write_p.txt");
 
         // we create a file instead of a directory (as setWritable fails on windows for directories)
         write_p.createNewFile();
