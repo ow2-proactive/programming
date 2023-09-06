@@ -186,7 +186,7 @@ project(':programming-core') {
 
                 'xerces:xercesImpl:2.11.0',
 
-                'com.google.guava:guava:19.0',
+                'com.google.guava:guava:32.0.1-jre',
 
                 project(':programming-annotation'),
                 project(':programming-util')
@@ -274,7 +274,7 @@ project('programming-extensions:programming-extension-dataspaces-common') {
         compile (
                 project(':programming-util'),
                 'org.springframework:spring-core:4.3.30.RELEASE',
-                'com.google.guava:guava:19.0'
+                'com.google.guava:guava:32.0.1-jre'
         )
         compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
     }
@@ -315,7 +315,7 @@ project('programming-extensions:programming-extension-dataspaces') {
                 project(':programming-extensions:programming-extension-vfsprovider'),
                 project(':programming-extensions:programming-extension-dataspaces-common'),
                 project(':programming-util'),
-                'com.google.guava:guava:19.0'
+                'com.google.guava:guava:32.0.1-jre'
         )
         compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
         testCompile(
@@ -357,7 +357,7 @@ project('programming-extensions:programming-extension-pnp') {
         compile(
                 project(':programming-core'),
                 'io.netty:netty:3.10.6.Final',
-                'com.google.guava:guava:19.0',
+                'com.google.guava:guava:32.0.1-jre',
                 'org.apache.commons:commons-collections4:4.4'
         )
     }
