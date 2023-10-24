@@ -178,6 +178,7 @@ project(':programming-core') {
                 "org.eclipse.jetty:jetty-xml:${jettyVersion}",
 
                 // Patched trilead-ssh2 used in Jenkins
+                'org.json:json:20231013',
                 'org.jenkins-ci:trilead-ssh2:build-217-jenkins-27',
                 'com.google.protobuf:protobuf-java:3.16.3',
 
