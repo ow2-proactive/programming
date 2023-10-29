@@ -84,7 +84,7 @@ subprojects {
     }
 
     dependencies {
-        compile 'log4j:log4j:1.2.17'
+        compile 'ch.qos.reload4j:reload4j:1.2.25'
         testCompile 'junit:junit:4.12'
     }
 
@@ -163,7 +163,7 @@ project(':programming-build-utils') {
         compile gradleApi()
         compile 'ant:ant:1.7.0'
         compile 'commons-cli:commons-cli:1.3.1'
-        compile "log4j:log4j:1.2.17"
+        compile "ch.qos.reload4j:reload4j:1.2.25"
         compile 'org.jvnet.winp:winp:1.28'
     }
 }
@@ -268,7 +268,7 @@ def vfs2RuntimeDependencies = [
         'commons-net:commons-net:3.9.0',
         'commons-httpclient:commons-httpclient:3.1',
         'com.github.mwiede:jsch:0.2.9',
-        'org.slf4j:slf4j-api:1.7.12']
+        'org.slf4j:slf4j-api:1.7.36']
 
 project('programming-extensions:programming-extension-dataspaces-common') {
     dependencies {
@@ -445,7 +445,7 @@ project(':programming-test') {
                 files("${rootDir}/lib/node/sigar/sigar-1.7.0-proactive.jar")
         )
         testRuntime fileTree(dir: "${rootDir}/lib/node/sigar/", exclude: "*.jar")
-        testRuntime 'org.slf4j:slf4j-log4j12:1.7.12'
+        testRuntime 'org.slf4j:slf4j-reload4j:1.7.36'
     }
 
     def testConfiguration = { Test task ->
