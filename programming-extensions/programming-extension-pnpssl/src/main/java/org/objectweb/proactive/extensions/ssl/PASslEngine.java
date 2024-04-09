@@ -25,12 +25,12 @@
  */
 package org.objectweb.proactive.extensions.ssl;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -56,17 +56,29 @@ import com.google.common.collect.Sets;
  * @since ProActive 5.0.0
  */
 public class PASslEngine extends SSLEngine {
-    static final public String[] STRONG_CIPHERS = { "SSL_RSA_WITH_RC4_128_MD5", "SSL_RSA_WITH_RC4_128_SHA",
-                                                    "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
-                                                    "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA",
-                                                    "SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA",
-                                                    "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
-                                                    "TLS_DHE_DSS_WITH_AES_128_CBC_SHA", "TLS_RSA_WITH_AES_128_CBC_SHA",
-                                                    "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
-                                                    "TLS_DHE_DSS_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA",
+    static final public String[] STRONG_CIPHERS = { "TLS_ECDHE_PSK_WITH_AES_128_CCM_SHA256",
+                                                    "TLS_ECDHE_PSK_WITH_AES_256_GCM_SHA384",
+                                                    "TLS_ECDHE_PSK_WITH_AES_128_GCM_SHA256",
+                                                    "TLS_DHE_PSK_WITH_CHACHA20_POLY1305_SHA256",
+                                                    "TLS_ECDHE_PSK_WITH_CHACHA20_POLY1305_SHA256",
+                                                    "TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+                                                    "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+                                                    "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+                                                    "TLS_DHE_PSK_WITH_AES_256_CCM", "TLS_DHE_PSK_WITH_AES_128_CCM",
+                                                    "TLS_DHE_RSA_WITH_AES_256_CCM", "TLS_DHE_RSA_WITH_AES_128_CCM",
+                                                    "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                                                    "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                                                    "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+                                                    "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+                                                    "TLS_DHE_PSK_WITH_AES_256_GCM_SHA384",
+                                                    "TLS_DHE_PSK_WITH_AES_128_GCM_SHA256",
+                                                    "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384",
+                                                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+
                                                     // the following algorithms are used by TLSv1.3
-                                                    "TLS_AES_128_GCM_SHA256", "TLS_AES_256_GCM_SHA384",
-                                                    "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
+                                                    "TLS_AES_128_CCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256",
+                                                    "TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256",
+
                                                     "TLS_AES_128_CCM_8_SHA256" };
 
     final private SSLEngine sslEngine;
@@ -85,8 +97,7 @@ public class PASslEngine extends SSLEngine {
             this.sslEngine = ctxt.createSSLEngine();
             this.sslEngine.setEnabledProtocols(new String[] { encryptionProtocol });
             this.sslEngine.setEnableSessionCreation(true);
-            String[] supportedCiphers = this.sslEngine.getSupportedCipherSuites();
-            this.sslEngine.setEnabledCipherSuites(this.getEnabledCiphers(supportedCiphers, STRONG_CIPHERS));
+            this.sslEngine.setEnabledCipherSuites(getEnabledCiphers());
             if (client) {
                 this.sslEngine.setUseClientMode(true);
             } else {
@@ -116,9 +127,24 @@ public class PASslEngine extends SSLEngine {
      */
     public static String[] getEnabledCiphers(String[] supportedCiphers, String[] wantedCiphers) {
         Set<String> supportedCiphersSet = new HashSet<String>(Arrays.asList(supportedCiphers));
-        Set<String> wantedCiphersSet = new HashSet<String>(Arrays.asList(wantedCiphers));
+        final List<String> wantedCiphersList = Arrays.asList(wantedCiphers);
+        Set<String> wantedCiphersSet = new HashSet<String>(wantedCiphersList);
+        Set<String> acceptedCiphersSet = Sets.intersection(wantedCiphersSet, supportedCiphersSet);
+        List<String> sortedCiphersSet = new ArrayList(acceptedCiphersSet);
+        // sort ciphers according to the wanted cipher order
+        Collections.sort(sortedCiphersSet, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return wantedCiphersList.indexOf(o1) - wantedCiphersList.indexOf(o2);
+            }
+        });
 
-        return Sets.intersection(wantedCiphersSet, supportedCiphersSet).toArray(new String[0]);
+        return sortedCiphersSet.toArray(new String[0]);
+    }
+
+    public String[] getEnabledCiphers() {
+        String[] supportedCiphers = this.sslEngine.getSupportedCipherSuites();
+        return this.getEnabledCiphers(supportedCiphers, STRONG_CIPHERS);
     }
 
     @Override
