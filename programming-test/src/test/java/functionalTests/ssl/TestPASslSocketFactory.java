@@ -25,26 +25,26 @@
  */
 package functionalTests.ssl;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.*;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.TrustManager;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.proactive.extensions.pnpssl.PNPSslConfig;
-import org.objectweb.proactive.extensions.ssl.PASslServerSocketFactory;
-import org.objectweb.proactive.extensions.ssl.PASslSocketFactory;
-import org.objectweb.proactive.extensions.ssl.SecureMode;
+import org.objectweb.proactive.extensions.pnpssl.PNPSslConfigurationException;
+import org.objectweb.proactive.extensions.pnpssl.PNPSslException;
+import org.objectweb.proactive.extensions.ssl.*;
 
 
 /**
@@ -291,6 +291,42 @@ public class TestPASslSocketFactory extends AbstractSSL {
                            serverTrustedCerts,
                            true,
                            false);
+
+    }
+
+    @Test
+    public void testSupportedCiphers() throws Exception {
+        SslHelpers.insertBouncyCastle();
+        String PROTO_ID = "pnps";
+
+        KeyStore ks;
+        TrustManager tm = new PermissiveTrustManager();
+        SecureMode sm = SecureMode.CIPHERED_ONLY;
+        try {
+            CertificateGenerator gen = new CertificateGenerator();
+            KeyPair pair = gen.generateRSAKeyPair();
+            X509Certificate cert = gen.generateCertificate(SslHelpers.DEFAULT_SUBJET_DN, pair);
+
+            ks = KeyStore.getInstance("PKCS12");
+            ks.load(null, null);
+            ks.setKeyEntry(SslHelpers.DEFAULT_SUBJET_DN,
+                           pair.getPrivate(),
+                           PNPSslConfig.PA_PNPSSL_KEYSTORE_PASSWORD.getValue().toCharArray(),
+                           new X509Certificate[] { cert });
+        } catch (KeyStoreException e) {
+            throw new PNPSslConfigurationException("Failed to create or fill the keystore for " + PROTO_ID, e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new PNPSslConfigurationException("Failed to create the keystore for " + PROTO_ID, e);
+        } catch (CertificateException e) {
+            throw new PNPSslException("Failed to load a certificate in the user specified keystore for " + PROTO_ID, e);
+        } catch (IOException e) {
+            throw new PNPSslConfigurationException("Failed to load user specified keystore for " + PROTO_ID, e);
+        } catch (SslException e) {
+            throw new PNPSslConfigurationException("Failed to create a certificate for " + PROTO_ID, e);
+        }
+        PASslEngine sslEngine = new PASslEngine(true, sm, ks, tm);
+
+        System.out.println(Arrays.toString(sslEngine.getEnabledCiphers()));
 
     }
 
