@@ -28,6 +28,7 @@ package org.objectweb.proactive.core.body;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
@@ -60,13 +61,13 @@ public class BodyMap /* extends AbstractEventProducer */ implements Cloneable, j
     //
     // -- PRIVATE MEMBER -----------------------------------------------
     //
-    private Hashtable<UniqueID, UniversalBody> idToBodyMap;
+    private ConcurrentHashMap<UniqueID, UniversalBody> idToBodyMap;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
     public BodyMap() {
-        idToBodyMap = new Hashtable<UniqueID, UniversalBody>();
+        idToBodyMap = new ConcurrentHashMap<UniqueID, UniversalBody>();
     }
 
     //
@@ -168,7 +169,7 @@ public class BodyMap /* extends AbstractEventProducer */ implements Cloneable, j
     public Object clone() {
         BodyMap newLocationTable = new BodyMap();
 
-        newLocationTable.idToBodyMap = (Hashtable<UniqueID, UniversalBody>) idToBodyMap.clone();
+        newLocationTable.idToBodyMap = new ConcurrentHashMap<>(idToBodyMap);
 
         return newLocationTable;
     }
