@@ -26,18 +26,16 @@
 package org.objectweb.proactive.extensions.dataspaces.vfs;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.impl.Log4JLogger;
-import org.apache.commons.vfs2.CacheStrategy;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemOptions;
-import org.apache.commons.vfs2.FilesCache;
-import org.apache.commons.vfs2.UserAuthenticator;
+import org.apache.commons.vfs2.*;
 import org.apache.commons.vfs2.auth.StaticUserAuthenticator;
 import org.apache.commons.vfs2.cache.DefaultFilesCache;
 import org.apache.commons.vfs2.cache.LRUFilesCache;
@@ -69,7 +67,9 @@ import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvid
 import org.objectweb.proactive.extensions.vfsprovider.client.vsftp.VSftpFileProvider;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
@@ -294,23 +294,36 @@ public class VFSFactory {
             logger.trace("CREDENTIALS = " + credentials);
         }
 
-        if (credentials != null && !credentials.isEmpty()) {
+        if (credentials != null && !credentials.isEmpty() ||
+            CentralPAPropertyRepository.PA_DATASPACES_SFTP_USE_SYSTEM_PRIVATEKEY.isSet()) {
             createEmptySshFolderForSftp();
-            if (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0) {
-                String privateKeyAsString = null;
+            String privateKeyAsString = null;
+            byte[] privateKeyAsBytes = null;
+            if (CentralPAPropertyRepository.PA_DATASPACES_SFTP_USE_SYSTEM_PRIVATEKEY.isSet()) {
+                String systemKeyPath = CentralPAPropertyRepository.PA_DATASPACES_SFTP_USE_SYSTEM_PRIVATEKEY.getValueAsString();
+                try {
+                    privateKeyAsString = FileUtils.readFileToString(new File(systemKeyPath), Charset.defaultCharset());
+                    privateKeyAsBytes = privateKeyAsString.getBytes();
+                } catch (IOException e) {
+                    logger.error("Cannot read from private key file " + systemKeyPath, e);
+                }
+            } else if (credentials.getPrivateKey() != null && credentials.getPrivateKey().length > 0) {
                 try {
                     privateKeyAsString = new String(credentials.getPrivateKey(), Charset.defaultCharset());
                 } catch (Throwable t) {
                     // private key cannot be decoded as string
                 }
-                if (!CentralPAPropertyRepository.PA_DATASPACES_SFTP_DISABLE_PRIVATEKEY.isTrue() &&
-                    privateKeyAsString != null &&
+                privateKeyAsBytes = credentials.getPrivateKey();
+            }
+            if (privateKeyAsString != null) {
+                if ((!CentralPAPropertyRepository.PA_DATASPACES_SFTP_DISABLE_PRIVATEKEY.isTrue() ||
+                     CentralPAPropertyRepository.PA_DATASPACES_SFTP_USE_SYSTEM_PRIVATEKEY.isSet()) &&
                     (!privateKeyAsString.isEmpty() && !privateKeyAsString.equals("undefined") &&
                      !privateKeyAsString.equals("null"))) {
                     try {
                         final JSch jsch = new JSch();
-                        KeyPair.load(jsch, credentials.getPrivateKey(), null);
-                        BytesIdentityInfo identityInfo = new BytesIdentityInfo(credentials.getPrivateKey(), null);
+                        KeyPair.load(jsch, privateKeyAsBytes, null);
+                        BytesIdentityInfo identityInfo = new BytesIdentityInfo(privateKeyAsBytes, null);
                         SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, identityInfo);
                         SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options,
                                                                                               "publickey,password");
@@ -325,13 +338,15 @@ public class VFSFactory {
                 SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, null);
                 SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options, "password");
             }
-            UserAuthenticator auth = new StaticUserAuthenticator(credentials.getDomain(),
-                                                                 credentials.getLogin(),
-                                                                 credentials.getPassword());
-            try {
-                DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, auth);
-            } catch (FileSystemException ex) {
-                logger.error("Error when setting user authentication", ex);
+            if (!CentralPAPropertyRepository.PA_DATASPACES_SFTP_USE_SYSTEM_PRIVATEKEY.isSet()) {
+                UserAuthenticator auth = new StaticUserAuthenticator(credentials.getDomain(),
+                                                                     credentials.getLogin(),
+                                                                     credentials.getPassword());
+                try {
+                    DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, auth);
+                } catch (FileSystemException ex) {
+                    logger.error("Error when setting user authentication", ex);
+                }
             }
 
         } else {
@@ -402,6 +417,14 @@ public class VFSFactory {
                 defaultHostKeySet.add(hostKey);
             }
         }
+        if (CentralPAPropertyRepository.PA_DATASPACES_JSCH_PUBKEY_REJECTED_ALGORITHMS.isSet()) {
+            Set<String> rejectedPubKeyAlgorithms = new HashSet<>(CentralPAPropertyRepository.PA_DATASPACES_JSCH_PUBKEY_REJECTED_ALGORITHMS.getValue());
+            Set<String> pubkeyAlgorithms = new HashSet(Arrays.asList(JSch.getConfig("PubkeyAcceptedAlgorithms")
+                                                                         .split(",")));
+            Set<String> retainedPubkeyAlgorithms = Sets.difference(pubkeyAlgorithms, rejectedPubKeyAlgorithms);
+            JSch.setConfig("PubkeyAcceptedAlgorithms", Joiner.on(",").join(retainedPubkeyAlgorithms));
+        }
+
     }
 
     public enum ManagerType {

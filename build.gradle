@@ -292,6 +292,7 @@ project('programming-extensions:programming-extension-vfsprovider') {
         // in order to enable s3 support, run for example ./gradlew build -Ps3
         compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
         compile 'com.github.mwiede:jsch:0.2.9'
+        compile 'commons-io:commons-io:2.7'
         if (rootProject.hasProperty('s3')) {
             compile 'com.github.abashev:vfs-s3:4.3.4'
         }

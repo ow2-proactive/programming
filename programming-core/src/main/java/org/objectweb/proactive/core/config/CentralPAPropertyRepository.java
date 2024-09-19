@@ -610,6 +610,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
                                                                                                   true);
 
     /**
+     * This property enables using a specific system private key for SFTP or VSFTP dataspaces
+     * The value must be the absolute path to the private key that will be used
+     * This private key can be overridden by login into ProActive with a specific private key
+     */
+    static public PAPropertyString PA_DATASPACES_SFTP_USE_SYSTEM_PRIVATEKEY = new PAPropertyString("proactive.dataspaces.sftp.useSystemPrivateKey",
+                                                                                                   false);
+
+    /**
      * This property enables legacy ciphers that maybe be used by old SSH servers
      */
     static public PAPropertyList PA_DATASPACES_JSCH_ADDITIONAL_CIPHERS = new PAPropertyList("proactive.jsch.additional.ciphers",
@@ -631,6 +639,14 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     static public PAPropertyList PA_DATASPACES_JSCH_ADDITIONAL_MACS = new PAPropertyList("proactive.jsch.additional.macs",
                                                                                          ",",
                                                                                          false);
+
+    /**
+     * This property can be used to disable some public key algorithms when using SFTP dataspaces
+     * Example: "rsa-sha2-256,rsa-sha2-512"
+     */
+    static public PAPropertyList PA_DATASPACES_JSCH_PUBKEY_REJECTED_ALGORITHMS = new PAPropertyList("proactive.jsch.pubkey.rejected.algorithms",
+                                                                                                    ",",
+                                                                                                    false);
 
     /**
      * This property enables legacy server host key format that maybe be used by old SSH servers
