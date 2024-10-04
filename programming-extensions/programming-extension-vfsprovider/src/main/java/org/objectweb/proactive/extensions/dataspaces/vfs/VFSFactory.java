@@ -327,7 +327,7 @@ public class VFSFactory {
                         SftpFileSystemConfigBuilder.getInstance().setIdentityProvider(options, identityInfo);
                         SftpFileSystemConfigBuilder.getInstance().setPreferredAuthentications(options,
                                                                                               "publickey,password");
-                    } catch (FileSystemException | JSchException e) {
+                    } catch (Exception e) {
                         logger.warn("Error when adding private key information : " + privateKeyAsString, e);
                     }
                 } else {
@@ -344,7 +344,7 @@ public class VFSFactory {
                                                                      credentials.getPassword());
                 try {
                     DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(options, auth);
-                } catch (FileSystemException ex) {
+                } catch (Exception ex) {
                     logger.error("Error when setting user authentication", ex);
                 }
             }
