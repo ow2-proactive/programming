@@ -39,14 +39,14 @@ import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.vfs2.AbstractProviderTestCase;
+import org.apache.commons.AbstractVfsTestCase;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FilesCache;
-import org.apache.commons.vfs2.ProviderTestConfig;
-import org.apache.commons.vfs2.ProviderTestSuite;
 import org.apache.commons.vfs2.cache.SoftRefFilesCache;
 import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.test.ProviderTestConfig;
+import org.apache.commons.vfs2.test.ProviderTestSuite;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
@@ -146,7 +146,7 @@ public class TestProActiveProvider implements ProviderTestConfig {
     }
 
     private void startDeployer() throws IOException {
-        deployer = new FileSystemServerDeployer(AbstractProviderTestCase.getTestDirectory(), false);
+        deployer = new FileSystemServerDeployer(AbstractVfsTestCase.getTestDirectory(), false);
     }
 
     private void stopDeployer() throws ProActiveException {

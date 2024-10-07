@@ -277,7 +277,7 @@ project('programming-extensions:programming-extension-dataspaces-common') {
                 'org.springframework:spring-core:4.3.30.RELEASE',
                 'com.google.guava:guava:32.0.1-jre'
         )
-        compile 'org.apache.commons:commons-vfs2:2.9.0', vfsExclude
+        compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
     }
 }
 
@@ -290,13 +290,13 @@ project('programming-extensions:programming-extension-vfsprovider') {
         )
 
         // in order to enable s3 support, run for example ./gradlew build -Ps3
-        compile 'org.apache.commons:commons-vfs2:2.9.0', vfsExclude
+        compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
         compile 'com.github.mwiede:jsch:0.2.9'
         compile 'commons-io:commons-io:2.14.0'
         if (rootProject.hasProperty('s3')) {
             compile 'com.github.abashev:vfs-s3:4.3.4'
         }
-        testCompile 'org.apache.commons:commons-vfs2:2.9.0:tests'
+        testCompile 'org.apache.commons:commons-vfs2:2.7.0:tests'
         runtime vfs2RuntimeDependencies
 
     }
@@ -319,7 +319,7 @@ project('programming-extensions:programming-extension-dataspaces') {
                 project(':programming-util'),
                 'com.google.guava:guava:32.0.1-jre'
         )
-        compile 'org.apache.commons:commons-vfs2:2.9.0', vfsExclude
+        compile 'org.apache.commons:commons-vfs2:2.7.0', vfsExclude
         testCompile(
                 project(':programming-extensions:programming-extension-vfsprovider').sourceSets.test.output,
                 project(':programming-extensions:programming-extension-pamr'),
@@ -436,8 +436,8 @@ project(':programming-test') {
     dependencies {
         testCompile(
                 'commons-io:commons-io:2.14.0',
-                'org.apache.commons:commons-vfs2:2.9.0',
-                'org.apache.commons:commons-vfs2-jackrabbit2:2.9.0',
+                'org.apache.commons:commons-vfs2:2.7.0',
+                'org.apache.commons:commons-vfs2-jackrabbit2:2.7.0',
 
                 project(':programming-annotation'),
                 project(':programming-core'),
