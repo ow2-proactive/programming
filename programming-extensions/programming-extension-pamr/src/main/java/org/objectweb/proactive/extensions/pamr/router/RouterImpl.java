@@ -163,7 +163,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
                                                   config.isDaemon(),
                                                   Thread.MAX_PRIORITY - 1);
         tpe = ThreadPools.newCachedBoundedThreadPool(config.getNbWorkerThreads(),
-                                                     config.getNbPingerThreads(),
+                                                     Math.max(config.getNbWorkerThreads(), config.getNbPingerThreads()),
                                                      60L,
                                                      TimeUnit.SECONDS,
                                                      tf);
